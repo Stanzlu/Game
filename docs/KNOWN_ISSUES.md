@@ -13,3 +13,8 @@
 | 9 | Testoptionen aus dem Pause-Menü werden nicht gespeichert. | Nach Neustart wieder Standard. | Settings-Autoload in Phase 2. | geplant |
 | 10 | Alle Geräusche sind synthetische Platzhalter. | Footsteps klingen generisch. | CC0-Sounds bzw. Sounddesign in Phase 3. | geplant |
 | 11 | Controller-Hotplug und Tastenbeschriftung auf echtem Gamepad sind nicht auf Hardware getestet. | Beschriftung könnte bei exotischen Pads „A“ zeigen. | Beim Playtest prüfen. | offen |
+| 12 | Die Look-Szenen sind auf Zielhardware nicht gemessen (große Bodentexturen, Partikel, Lichter, Post-Process). Im Container gibt es nur Software-OpenGL. | Framerate auf schwachen Geräten unbekannt. | Beim Playtest Info-Anzeige (F3) prüfen; Messung in `PERFORMANCE.md` nachtragen. | offen |
+| 13 | Gebackene Böden müssen nach jeder Kartenänderung neu erzeugt werden. Der Test erkennt nur eine falsche Größe, nicht veralteten Inhalt. | Grafik und Kollision könnten auseinanderlaufen. | Backen gehört zum Kartenändern (`CONTENT_GUIDE.md`). | akzeptiert |
+| 14 | Regenspritzer erscheinen auch auf Dächern und Baumkronen. | Nur bei genauem Hinsehen. | Später Spritzer auf Bodenmaske begrenzen. | akzeptiert |
+| 15 | Organische Ufer- und Wegkanten weichen um wenige Pixel von der Kachel-Kollision ab. | Füße können am Ufer minimal über Wasser stehen. | Wasser ist beim Backen leicht nach innen versetzt. Feinschliff mit finalen Karten. | akzeptiert |
+| 16 | Die erzeugte Spielfigur hat nur Grundposen, keine Idle-Variationen und keine Anpassung. | Wirkt steifer als handgezeichnete Figuren. | Handgepixelte Figur nach Abnahme der Richtung (ART_DIRECTION, nächste Schritte). | geplant |

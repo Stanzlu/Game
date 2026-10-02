@@ -42,6 +42,24 @@ G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "gar
 - Platzierungen: `@` Startpunkt · `"` hohes Gras · `o` Pfütze · `*` Busch · `B` Bank (2 Tiles breit).
 - Alle Zeilen gleich lang. Fehler erscheinen mit Datei, Zeile und Spalte im Log und lassen Tests scheitern.
 - Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
+- Das Symbol ist immer das erste Zeichen der Zeile, deshalb kann auch `=` lokal definiert werden (`= = {...}`).
+
+### Look-Karten (ADR-017)
+
+```
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/look_elysia_ground.png"
+water = "res://assets/generated/maps/look_elysia_water.png"
+[legend]
+f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
+```
+
+- `[meta]`: `key = <JSON-Wert>`. `ground` ersetzt die Kachelgrafik durch eine gebackene Textur; Kollision und Oberflächen kommen weiter aus den Kacheln. `water` ist die Maske für den Wasser-Shader, `style` wählt die Paletten beim Backen.
+- `paint` legt fest, wie der Baker ein Tile malt: `grass`, `meadow` (Gras mit Blumenteppich), `path`, `mud`, `puddle`, `cobble`, `water`, `planks_v`, `planks_h`, `hedge` (Laubkronen, fest), `cliff` (Felswand unter der Kante), `void` (durchsichtig, Himmel dahinter). Ohne `paint` wird aus `surface` abgeleitet.
+- Deko: `world/props/decor.tscn` mit `params.sprite` = Katalog-ID (`<stil>/<name>`, siehe `assets/generated/props/catalog.json`). Bänke nehmen ebenfalls `params.sprite`.
+- Nach jeder Kartenänderung neu backen: `.venv/bin/python tools/art/bake_ground.py content/maps/<karte>.txt`. Ein Test meldet, wenn die Texturgröße nicht mehr zur Karte passt.
 
 ## Dialogformat (Dialogue Manager 4)
 

@@ -14,6 +14,11 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | `assets/placeholder/characters/{player,npc,antreiber}.png` | 16×24-Figuren, 8 Richtungen, Idle/Walk/Run/Sit | projekt-eigen, programmatisch | projekt-eigen | finales Figurendesign |
 | `assets/placeholder/props/*.png` | Bank, Schild, Hebel, Tor, Grasbüschel, Pfütze, Spritzer, Busch, Flagge, Vogel, Staub | projekt-eigen, programmatisch | projekt-eigen | CC0 bzw. finale Art |
 | `assets/placeholder/audio/*.wav` | Schritte je Oberfläche, Rascheln, Platschen, UI, Hebel, Tor, Sitzen, Vogel, Antreiber-Murmeln | projekt-eigen, synthetisch | projekt-eigen | CC0-Sounds bzw. Sounddesign |
+| `assets/generated/maps/look_*_{ground,water}.png` | gebackene Böden und Wassermasken der Look-Karten | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalte Böden bzw. Tilesets (ADR-017) |
+| `assets/generated/props/**` | Bäume, Riesenblumen, Formschnitt, Felsen, Brunnen, Laternen, Zäune, Bänke, Haus, Wolken, Partikel, `catalog.json` | projekt-eigen, programmatisch (`tools/art/make_sprites.py`) | projekt-eigen | handgepixelte Assets |
+| `assets/generated/characters/player.png` | Spielfigur 24×32, 8 Richtungen | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | finales Figurendesign |
+| `assets/generated/audio/*_loop.wav` | Regen, Garten, Wasser (Ambience-Loops) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Field Recordings bzw. Sounddesign |
+| `content/maps/look_{elysia,tal}.txt` | Look-Karten Elysia-Garten und Tal | projekt-eigen | projekt-eigen | Slice-Karten (Phase 3) |
 | `content/dialogue/**/*.dialogue` | Schildtexte und Antreiber-Sätze (alle `[#ph]`) | Entwurf Claude | projekt-eigen | Writing-Pass mit Voice-Sheets (Phase 4) |
 | `icon.svg` | siehe oben | | | |
 
