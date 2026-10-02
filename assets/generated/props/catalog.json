@@ -1,0 +1,450 @@
+{
+ "elysia/bench": {
+  "anchor": [
+   10,
+   18
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/bench.png"
+  ]
+ },
+ "elysia/cloud": {
+  "anchor": [
+   0,
+   0
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/cloud_0.png",
+   "res://assets/generated/props/elysia/cloud_1.png",
+   "res://assets/generated/props/elysia/cloud_2.png"
+  ]
+ },
+ "elysia/fence": {
+  "anchor": [
+   9,
+   14
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    16,
+    4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/fence.png"
+  ]
+ },
+ "elysia/fountain": {
+  "anchor": [
+   30,
+   42
+  ],
+  "loop_sound": "res://assets/generated/audio/water_loop.wav",
+  "shadow": [
+   28,
+   6
+  ],
+  "shape": {
+   "circle": 23,
+   "offset": [
+    0,
+    -5
+   ]
+  },
+  "sparkle": true,
+  "textures": [
+   "res://assets/generated/props/elysia/fountain.png"
+  ]
+ },
+ "elysia/giant_flower": {
+  "anchor": [
+   16,
+   45
+  ],
+  "shadow": [
+   9,
+   3
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "sway": 2.0,
+  "textures": [
+   "res://assets/generated/props/elysia/giant_flower_0.png",
+   "res://assets/generated/props/elysia/giant_flower_1.png",
+   "res://assets/generated/props/elysia/giant_flower_2.png",
+   "res://assets/generated/props/elysia/giant_flower_3.png"
+  ]
+ },
+ "elysia/lantern": {
+  "anchor": [
+   6,
+   38
+  ],
+  "shadow": [
+   5,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/lantern.png"
+  ]
+ },
+ "elysia/lily_pad": {
+  "anchor": [
+   7,
+   5
+  ],
+  "bob": 1.0,
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/elysia/lily_pad_0.png",
+   "res://assets/generated/props/elysia/lily_pad_1.png",
+   "res://assets/generated/props/elysia/lily_pad_2.png"
+  ]
+ },
+ "elysia/reeds": {
+  "anchor": [
+   8,
+   23
+  ],
+  "sway": 2.0,
+  "textures": [
+   "res://assets/generated/props/elysia/reeds_0.png",
+   "res://assets/generated/props/elysia/reeds_1.png"
+  ]
+ },
+ "elysia/rock": {
+  "anchor": [
+   13,
+   16
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    18,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/rock_0.png",
+   "res://assets/generated/props/elysia/rock_1.png"
+  ]
+ },
+ "elysia/topiary": {
+  "anchor": [
+   15,
+   29
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "circle": 9,
+   "offset": [
+    0,
+    -4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/topiary_0.png",
+   "res://assets/generated/props/elysia/topiary_1.png"
+  ]
+ },
+ "elysia/tree": {
+  "anchor": [
+   32,
+   76
+  ],
+  "shadow": [
+   22,
+   7
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/elysia/tree_0.png",
+   "res://assets/generated/props/elysia/tree_1.png",
+   "res://assets/generated/props/elysia/tree_2.png"
+  ]
+ },
+ "tal/barrel": {
+  "anchor": [
+   8,
+   18
+  ],
+  "shadow": [
+   8,
+   3
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/barrel.png"
+  ]
+ },
+ "tal/bench": {
+  "anchor": [
+   10,
+   18
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/bench.png"
+  ]
+ },
+ "tal/fence": {
+  "anchor": [
+   9,
+   14
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    16,
+    4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fence.png"
+  ]
+ },
+ "tal/fence_post": {
+  "anchor": [
+   4,
+   22
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -8
+   ],
+   "rect": [
+    4,
+    16
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fence_post.png"
+  ]
+ },
+ "tal/house": {
+  "anchor": [
+   58,
+   105
+  ],
+  "lights": [
+   {
+    "color": "#ffb85c",
+    "energy": 1.1,
+    "offset": [
+     -30,
+     -15
+    ],
+    "range": 72
+   },
+   {
+    "color": "#ffb85c",
+    "energy": 1.1,
+    "offset": [
+     30,
+     -15
+    ],
+    "range": 72
+   }
+  ],
+  "shadow": [
+   52,
+   6
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -12
+   ],
+   "rect": [
+    96,
+    40
+   ]
+  },
+  "smoke": [
+   26,
+   -102
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/house.png"
+  ]
+ },
+ "tal/lantern": {
+  "anchor": [
+   6,
+   38
+  ],
+  "flicker": true,
+  "lights": [
+   {
+    "color": "#ffc070",
+    "energy": 1.2,
+    "offset": [
+     0,
+     -29
+    ],
+    "range": 64
+   }
+  ],
+  "shadow": [
+   5,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/lantern.png"
+  ]
+ },
+ "tal/pine": {
+  "anchor": [
+   20,
+   68
+  ],
+  "shadow": [
+   16,
+   5
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 0.8,
+  "textures": [
+   "res://assets/generated/props/tal/pine_0.png",
+   "res://assets/generated/props/tal/pine_1.png"
+  ]
+ },
+ "tal/rock": {
+  "anchor": [
+   13,
+   16
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    18,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rock_0.png",
+   "res://assets/generated/props/tal/rock_1.png"
+  ]
+ },
+ "tal/tall_grass": {
+  "anchor": [
+   9,
+   18
+  ],
+  "rustle": true,
+  "surface": "tall_grass",
+  "sway": 2.5,
+  "textures": [
+   "res://assets/generated/props/tal/tall_grass_0.png",
+   "res://assets/generated/props/tal/tall_grass_1.png",
+   "res://assets/generated/props/tal/tall_grass_2.png"
+  ]
+ },
+ "tal/tree": {
+  "anchor": [
+   32,
+   76
+  ],
+  "shadow": [
+   22,
+   7
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/tal/tree_0.png",
+   "res://assets/generated/props/tal/tree_1.png"
+  ]
+ },
+ "tal/woodpile": {
+  "anchor": [
+   15,
+   18
+  ],
+  "shadow": [
+   14,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    26,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/woodpile.png"
+  ]
+ }
+}
