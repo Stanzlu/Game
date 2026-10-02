@@ -51,6 +51,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/PLACEHOLDERS.md`](docs/PLACEHOLDERS.md) | alle Platzhalter-Assets mit Lizenz |
 | [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Abhängigkeiten, Versionen, Lizenzen |
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
+| [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 
 ## Lizenzen
 

@@ -9,8 +9,9 @@ on:
   push:
   workflow_dispatch:
 
+# Separate groups per trigger: a manual export run must not cancel the push checks.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 permissions:
