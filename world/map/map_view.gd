@@ -7,6 +7,7 @@ extends Node2D
 signal built(data: MapData)
 
 const DEFAULT_LEGEND := "res://content/maps/legend.json"
+const GROUND_SHADER := preload("res://world/shaders/ground.gdshader")
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
@@ -16,6 +17,9 @@ const DEFAULT_LEGEND := "res://content/maps/legend.json"
 
 var data: MapData
 var ground: TileMapLayer
+## Painted ground from the map's [meta] "ground" texture (ADR-017). The tile layer then
+## stays hidden but keeps collision and surface data.
+var ground_art: Sprite2D
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
 var _external_props: Array[Node] = []
@@ -57,6 +61,8 @@ func build_from_text(text: String, source: String = "") -> bool:
 		return false
 	_clear()
 	_build_ground(atlas)
+	if data.meta.has("ground"):
+		_apply_baked_ground()
 	_spawn_props()
 	Log.info(
 		Log.Category.CONTENT,
@@ -164,6 +170,38 @@ func _build_ground(atlas: Texture2D) -> void:
 			var entry: Array = _symbol_tiles.get(data.ground_rows[y][x], [])
 			if not entry.is_empty():
 				ground.set_cell(Vector2i(x, y), 0, entry[0], entry[1])
+
+
+func _apply_baked_ground() -> void:
+	var texture := load(str(data.meta["ground"])) as Texture2D
+	if texture == null:
+		Log.error(Log.Category.CONTENT, "baked ground missing", {"path": data.meta["ground"]})
+		return
+	var expected := Vector2i(data.width, data.height) * data.tile_size
+	if Vector2i(texture.get_size()) != expected:
+		Log.warn(
+			Log.Category.CONTENT,
+			"baked ground size differs from map, re-run tools/art/bake_ground.py",
+			{"path": data.meta["ground"], "size": texture.get_size(), "expected": expected}
+		)
+	ground_art = Sprite2D.new()
+	ground_art.name = "GroundArt"
+	ground_art.centered = false
+	ground_art.texture = texture
+	ground_art.z_index = -10
+	var mat := ShaderMaterial.new()
+	mat.shader = GROUND_SHADER
+	if data.meta.has("water"):
+		var mask := load(str(data.meta["water"])) as Texture2D
+		if mask == null:
+			Log.error(Log.Category.CONTENT, "water mask missing", {"path": data.meta["water"]})
+		else:
+			mat.set_shader_parameter("water_mask", mask)
+			mat.set_shader_parameter("has_water", true)
+	ground_art.material = mat
+	add_child(ground_art)
+	move_child(ground_art, 0)
+	ground.visible = false
 
 
 func _spawn_props() -> void:

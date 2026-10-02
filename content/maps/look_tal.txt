@@ -1,0 +1,64 @@
+; Look-Prototyp: Tal im Regen (ADR-017). Boden wird mit tools/art/bake_ground.py gebacken,
+; Props kommen aus assets/generated/props (tools/art/make_sprites.py).
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/look_tal_ground.png"
+water = "res://assets/generated/maps/look_tal_water.png"
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+= = {"atlas": [6, 0], "surface": "wood", "paint": "planks_v"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+@ = {"ground": ",", "marker": "player_spawn"}
+H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/house"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence"}}
+E = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_post"}}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/lantern"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel"}}
+W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhh^^^^^^hhhhhhhhhhhhhhhhhhh^^^hhhhhhhhhhh^^
+^hhhhh^^^^^^^^^^^^^^^^^hhhhhh^^^^^^^^^^^^^^^^^hhhhhh^^^^
+^^^^^^^^^^^^^^^......^^^^^^^^^^^^^^^^^^^~~~^^^^^^^^^^^hh
+h^^^^^.................^^^^^^...........~~~...^^^^^^.hhh
+hhh......P..T...........................~~~....P.....hhh
+hhh.............P........................~~~.........hhh
+hhh...T.............................P....~~~.........hhh
+hhh......................................~~~......T..hhh
+hhh................E.............E.......~~~.........hhh
+hhh................E.............E.......~~~g........hhh
+hhh.........g......E......H......E......~~~~.........hhh
+hhh................E.K........WK.E....R.~~~..........hhh
+hhh................E..b...,......E......~~~.........Phhh
+hhh........R.......E.....,,,.....E......~~~..........hhh
+hhh..T.............FFFFFF,,,FFFFFF.....~~~~...R......hhh
+hhh.....................l,,,............~~~..........hhh
+hhh.................mmm.p,,,.......g....~~~..........hhh
+hhh.....gg.........mmmmmm,@,............~~~..........hhh
+hhh................m,,,,,,,p,...........~~~~.........hhh
+hhh...........,,,,,,p,,,,,,,,,,,,,,,,,,,,====,,,,....hhh
+hhh,,,,,,,,,,p,,,,,,,,,,,,,,,,,p,,,,,,,,,====,,,,,,,,hhh
+hhh,,,,,,p,,,,,,.................,,,,,,,,====,,,,,,,,hhh
+hhh,,,,,,,,,........................m.....~~~.......,hhh
+hhh............gg.............gg..........~~~~.......hhh
+hhh........................................~~~..g....hhh
+hhh............................R...........~~~......Thhh
+hhh.P..........T............................~~~......hhh
+hhh...............................T.........~~~......hhh
+hhh.....T.............T.....................~~~......hhh
+hhh..............R...........P..............~~~..P...hhh
+hhh.........................................~~~......hhh
+hhh.........................................~~~......hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

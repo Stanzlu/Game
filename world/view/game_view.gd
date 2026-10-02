@@ -60,6 +60,11 @@ func _ready() -> void:
 	display.texture = viewport.get_texture()
 
 
+## Post-process for the whole world image (color grading, bloom, vignette; ADR-017).
+func set_post_material(material: Material) -> void:
+	display.material = material
+
+
 ## Follow this node (usually the player). Uses its interpolated_position() when available.
 func follow(node: Node2D, snap_now: bool = true) -> void:
 	target = node

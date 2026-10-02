@@ -1,0 +1,11 @@
+[
+  {"t": 0.4, "press": ["move_right"], "log": "walk to the plaza"},
+  {"t": 2.2, "press": ["move_up"]},
+  {"t": 2.6, "release": ["move_up"]},
+  {"t": 4.0, "press": ["move_down"], "log": "past the fountain toward the cliff"},
+  {"t": 6.4, "release": ["move_right"]},
+  {"t": 7.4, "release": ["move_down"]},
+  {"t": 7.8, "press": ["interact"], "log": "sit on the bench above the clouds"},
+  {"t": 7.9, "release": ["interact"]},
+  {"t": 10.5, "log": "end of walk"}
+]

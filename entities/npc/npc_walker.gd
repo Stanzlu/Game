@@ -29,6 +29,7 @@ func _ready() -> void:
 	motion_mode = MOTION_MODE_FLOATING
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
+	sheet.add_shadow_to(self)
 	_origin = position
 	_play("idle")
 

@@ -1,10 +1,12 @@
 keys,de
 BOOT_TITLE,REAL
-BOOT_SUBTITLE,Prototyp · Phase 1
+BOOT_SUBTITLE,Prototyp · Look-Phase
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
 MENU_ANTREIBER,Antreiber-Prototyp
+MENU_LOOK_ELYSIA,Look: Elysia-Garten
+MENU_LOOK_TAL,Look: Tal im Regen
 MENU_QUIT,Beenden
 MENU_CONTROLS_HINT,Bewegen: WASD/Stick · Sprinten: Shift/X · Interagieren: E/A · Menü: Esc/Start
 PAUSE_TITLE,Pause

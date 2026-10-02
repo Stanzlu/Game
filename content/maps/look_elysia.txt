@@ -1,0 +1,68 @@
+; Look-Prototyp: Elysia-Garten (ADR-017). Boden wird mit tools/art/bake_ground.py gebacken,
+; Props kommen aus assets/generated/props (tools/art/make_sprites.py).
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/look_elysia_ground.png"
+water = "res://assets/generated/maps/look_elysia_water.png"
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+_ = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+= = {"atlas": [6, 0], "surface": "wood", "paint": "planks_v"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+% = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+@ = {"ground": ",", "marker": "player_spawn"}
+U = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fountain"}}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
+Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/giant_flower"}}
+O = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/topiary"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rock"}}
+l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lantern"}}
+w = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lily_pad"}}
+r = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/reeds"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fence"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh.....hhhhhhhhhhhhhhh......hhhhhhhhhhhhhhh.....hhhhh
+hhh....hhh..........hhhhh................hhhhh...............hhh
+hh...........T...........T.......ff....T......................hh
+hh...T...fff.................ffffffff.........................hh
+hh.....fffff................ffffffff.....................T....hh
+hh.....fffffffff..............ffffff....~~r~~~~...............hh
+hh.....ffffffffff.................ff...r~~~~~w~~..............hh
+hh.....ffYffffff......................~~w~~~~~~~~~............hh
+hh....ffffffff........................r~~~~~~~~~~w~~..........hh
+hh.....ff......Y.............Y....l...~~~~~~~~~~~~~~~.........hh
+hh..............................,,,,,,================,,......hh
+hh..T............O...___...O..,,,,,,,=================,,......hh
+hh................._______.,,,,,,,...r~~~~~~~~~~~~~~~~,,l.....hh
+hh................._______,,,,,......~~w~~~~~~~w~~~r..,,,..T..hh
+hh..............l.____U____,,........~~~~~~~~~~r~~....,,,.....hh
+hh.............,,,_________...........~~r~~..~........,,......hh
+hh..........,,,,,,,_______...........................,,,......hh
+hh.,,,,,,,,,,,@,,.._______..........................,Y,.......hh
+hh,,,,,,,,,,,,...O...___...O........................,,,.......hh
+hh.,,,,,,,,..........b.......Y.....................,,,ffffff..hh
+hh..................................T............,,,,fffffff..hh
+hh............Y.................................,,,,.fffffff..hh
+hh.T...........................................,,,,..ffffYff..hh
+hh...ff.fff..................fff..f...........,,,......fff....hh
+hh...fffffff................ffffffff.........,,,.......fff....hh
+hh...fffffff.......T........fffffffY.........,,...............hh
+hh...ffffff..................ffffff.........,,,............T..hh
+hh......ff...................fff...R........,,,...............hh
+hh.......fR........^^^^^^R....f.............,,.......R........hh
+hh.....^^^^^^^^^^^^^^^^^^^^^.......^^.....l.,,......^^^.......^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.......,,......^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^%%%%%%^^^^^^^^^^^^^FFFFFb,,FFFFF^^^^^^^^^^^^^
+^^^^^^^%%%%%%%%%%%%%%%%%%%%%^^^^^^^%%^^^^^^^^^^^^^^^%%%^^^^^^^%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

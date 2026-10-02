@@ -50,6 +50,7 @@ func _ready() -> void:
 		tuning = load("res://entities/player/tuning/direkt.tres")
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
+	sheet.add_shadow_to(self)
 	sensor.target_changed.connect(prompt.show_for)
 	_update_animation(0.0)
 
