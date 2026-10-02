@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Placeholder icon (see docs/PLACEHOLDERS.md): a calm field with a crack of light. -->
+  <rect width="128" height="128" rx="16" fill="#15151b"/>
+  <rect x="8" y="8" width="112" height="112" rx="10" fill="#2a3346"/>
+  <polyline points="70,14 60,40 72,58 56,82 66,100 58,116" fill="none" stroke="#f3eedf" stroke-width="6" stroke-linejoin="miter"/>
+</svg>

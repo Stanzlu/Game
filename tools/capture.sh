@@ -4,6 +4,8 @@
 #   scene   res:// path, default: the main scene
 #   out_dir default: captures/<timestamp>
 #   frames  default: 30 (at 30 fps); the last frame is copied to <out_dir>/last.png
+# Frames are written at the native viewport size (640x360). last_x2.png is a
+# nearest-neighbor upscale for easier review (needs ffmpeg).
 # Uses Xvfb + OpenGL3 because the cloud container has no Vulkan driver.
 set -euo pipefail
 # shellcheck source=tools/godot_env.sh
@@ -16,7 +18,7 @@ frames="${3:-30}"
 mkdir -p "$out_dir"
 out_abs="$(cd "$out_dir" && pwd)"
 
-args=(--rendering-driver opengl3 --audio-driver Dummy --resolution 1280x720
+args=(--rendering-driver opengl3 --audio-driver Dummy
   --fixed-fps 30 --write-movie "${out_abs}/frame.png" --quit-after "$frames")
 [ -n "$scene" ] && args+=("$scene")
 
@@ -27,4 +29,7 @@ xvfb-run -a -s "-screen 0 1920x1080x24" tools/godot.sh "${args[@]}" >"${out_abs}
 last="$(find "$out_abs" -name 'frame*.png' | sort | tail -1)"
 [ -n "$last" ] || { echo "capture: no frames written" >&2; cat "${out_abs}/godot.log"; exit 1; }
 cp "$last" "${out_abs}/last.png"
+if command -v ffmpeg >/dev/null; then
+  ffmpeg -v error -y -i "${out_abs}/last.png" -vf "scale=iw*2:ih*2:flags=neighbor" "${out_abs}/last_x2.png"
+fi
 echo "capture: $(find "$out_abs" -name 'frame*.png' | wc -l) frames, last frame: ${out_abs}/last.png"

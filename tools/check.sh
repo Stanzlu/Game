@@ -30,6 +30,9 @@ step "gdformat --check"
 "$GDFORMAT" --check "${GD_FILES[@]}"
 
 step "godot import"
+# Warm-up import: on a fresh checkout Godot loads the project theme before the font
+# is imported and logs spurious errors. Only the second, warm import must be clean.
+tools/godot.sh --headless --import >/dev/null 2>&1 || true
 import_log="$(mktemp)"
 tools/godot.sh --headless --import >"$import_log" 2>&1 || { cat "$import_log"; exit 1; }
 if grep -Eq "$ERROR_PATTERN" "$import_log"; then

@@ -1,0 +1,14 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/tiny5/Tiny5-Regular.ttf" id="1_font"]
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 8
+Label/colors/font_color = Color(0.93, 0.91, 0.86, 1)
+TitleLabel/base_type = &"Label"
+TitleLabel/font_sizes/font_size = 32
+SubtitleLabel/base_type = &"Label"
+SubtitleLabel/font_sizes/font_size = 16
+MutedLabel/base_type = &"Label"
+MutedLabel/colors/font_color = Color(0.55, 0.55, 0.6, 1)
