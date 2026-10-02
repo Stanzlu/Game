@@ -25,7 +25,7 @@ shape = SubResource("RectangleShape2D_body")
 position = Vector2(0, 2)
 script = ExtResource("9_inter")
 prompt_key = "INTERACT_READ"
-prompt_offset = Vector2(0, -16)
+prompt_offset = Vector2(0, -22)
 
 [node name="Shape" type="CollisionShape2D" parent="Interactable"]
 shape = SubResource("RectangleShape2D_use")

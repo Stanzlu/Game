@@ -25,12 +25,17 @@ func _ready() -> void:
 ## Loads, validates and builds the map. Returns false (and logs errors) on invalid content.
 func load_map(path: String) -> bool:
 	map_path = path
-	var legend := load_legend(legend_path)
 	var text := FileAccess.get_file_as_string(path)
 	if text.is_empty():
 		Log.error(Log.Category.CONTENT, "map file missing or empty", {"path": path})
 		return false
-	data = MapData.parse(text, legend, path)
+	return build_from_text(text, path)
+
+
+## Builds from map text directly (tests, generated chunks). `source` is used in messages.
+func build_from_text(text: String, source: String = "") -> bool:
+	var legend := load_legend(legend_path)
+	data = MapData.parse(text, legend, source)
 	for message: String in data.errors:
 		Log.error(Log.Category.CONTENT, message)
 	if not data.is_valid():
@@ -45,7 +50,7 @@ func load_map(path: String) -> bool:
 	Log.info(
 		Log.Category.CONTENT,
 		"map built",
-		{"path": path, "size": [data.width, data.height], "placements": data.placements.size()}
+		{"path": source, "size": [data.width, data.height], "placements": data.placements.size()}
 	)
 	built.emit(data)
 	return true
@@ -160,7 +165,9 @@ func _spawn_props() -> void:
 			Log.error(Log.Category.CONTENT, "prop scene missing", {"scene": scene_path})
 			continue
 		var prop := scene.instantiate() as Node2D
-		prop.position = cell_to_world(placement["cell"]) - global_position
+		var cell: Vector2i = placement["cell"]
+		prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
+		prop.position = cell_to_world(cell) - global_position
 		entities.add_child(prop)
 		if prop.has_method("apply_params"):
 			prop.call("apply_params", placement["params"])

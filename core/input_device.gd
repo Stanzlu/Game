@@ -55,7 +55,10 @@ static func key_label(physical: Key) -> String:
 			return TranslationServer.translate("KEY_SHIFT")
 		KEY_ENTER, KEY_KP_ENTER:
 			return "Enter"
-	var logical := DisplayServer.keyboard_get_keycode_from_physical(physical)
+	var logical := KEY_NONE
+	# Layout lookup needs a real display server (not available headless).
+	if DisplayServer.get_name() != "headless":
+		logical = DisplayServer.keyboard_get_keycode_from_physical(physical)
 	return OS.get_keycode_string(logical if logical != KEY_NONE else physical)
 
 
