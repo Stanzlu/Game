@@ -23,7 +23,7 @@ import pixelart as pa  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 T = 16
 MATERIALS = ["void", "grass", "path", "mud", "puddle", "cobble", "water", "planks_v", "planks_h",
-             "hedge", "cliff"]
+             "hedge", "cliff", "marble", "stairs", "fall"]
 M = {name: i for i, name in enumerate(MATERIALS)}
 SURFACE_PAINT = {"grass": "grass", "dirt": "path", "stone": "cobble", "water": "water",
                  "wood": "planks_h", "puddle": "puddle"}
@@ -32,7 +32,7 @@ SOFT = {"grass": (0.30, 0.0), "path": (0.30, 0.03), "mud": (0.40, 0.0), "cobble"
         "water": (0.18, -0.04), "cliff": (0.10, 0.0), "void": (0.10, 0.0)}
 BLUR = 7
 # Materials drawn as smooth shapes on top of the soft blend (plazas): (blur, threshold).
-SMOOTH = {"cobble": (12, 0.5)}
+SMOOTH = {"cobble": (12, 0.5), "marble": (14, 0.5)}
 
 # Pixel stamps for grass tufts: (dy, dx, index delta). Shadow row at the bottom.
 TUFTS = [
@@ -152,6 +152,7 @@ class Baker:
         self.ramp_ids = {}
         for name in ("grass", "path", "mud", "stone", "water", "wood", "foliage", "cliff"):
             self._ramp(name, self.style[name])
+        self._ramp("marble", self.style.get("marble", self.style["stone"]))
         for i, fl in enumerate(self.style["flowers"]):
             self._ramp("flower%d" % i, fl)
         self.rid = np.zeros((self.h, self.w), np.int32)
@@ -218,7 +219,10 @@ class Baker:
         self._mud(is_["mud"] | is_["puddle"])
         self._cobble(is_["cobble"])
         self._planks(is_)
+        self._marble(is_["marble"])
+        self._stairs(is_["stairs"])
         deep = self._water(is_)
+        self._fall(is_["fall"])
         self._puddles(is_["puddle"])
         self._edges(is_)
         self._meadow(is_["grass"])
@@ -236,12 +240,18 @@ class Baker:
             idx[sel] = np.clip(idx[sel], 0, len(r) - 1)
         rgb = table[self.rid, idx]
         alpha = np.where(self.lab == M["void"], 0.0, 255.0)
+        # waterfalls dropping into the sky fade out over the last cells of the map (dithered)
+        fall = self.lab == M["fall"]
+        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        fade = np.clip((self.h - np.arange(self.h)[:, None]) / (3.0 * T), 0, 1)
+        alpha = np.where(fall & (fade < b), 0.0, alpha)
         ground = np.concatenate([rgb, alpha[..., None]], -1)
         water = np.zeros((self.h, self.w, 4), np.float32)
         wt, pd = self.lab == M["water"], self.lab == M["puddle"]
-        water[..., 0] = (wt | pd) * 255.0
-        water[..., 1] = deep * 255.0 * wt
-        water[..., 2] = pd * 255.0
+        water[..., 0] = (wt | pd | fall) * 255.0
+        water[..., 1] = deep * 255.0 * wt + fall * 128.0
+        # B: 255 puddle, 128 waterfall, 0 open water
+        water[..., 2] = pd * 255.0 + fall * 128.0
         water[..., 3] = 255.0
         return ground, water
 
@@ -251,7 +261,7 @@ class Baker:
         v = 0.5 + 0.13 * centered(big) + 0.07 * centered(mid)
         self.put(g, "grass", v, contrast=3.0)
         # tufts in loose clusters: shapes, not per-pixel noise
-        n = self.h * self.w // 260
+        n = self.h * self.w // 420
         cy = self.rng.integers(3, self.h - 3, n)
         cx = self.rng.integers(3, self.w - 3, n)
         dens = self.noise(20, 1)
@@ -338,6 +348,52 @@ class Baker:
             self.idx[shift(end, -1, 0) & pk & ~end] = 1
             self.planks = pk if not hasattr(self, "planks") else self.planks | pk
 
+    def _marble(self, mb):
+        """White stone slabs in staggered rows with a bright curb (Elysia's architecture)."""
+        if not mb.any():
+            return
+        yy, xx = np.mgrid[0:self.h, 0:self.w]
+        row = yy // 8
+        slab = (xx + (row % 2) * 6) // 12
+        tone = ((row * 7919 + slab * 104729) % 97) / 97.0
+        v = 0.66 + 0.08 * centered(tone) + 0.05 * centered(self.noise(9))
+        seam = ((yy % 8) == 7) | (((xx + (row % 2) * 6) % 12) == 11)
+        v = np.where(seam, 0.38, v)
+        v = np.where(((yy % 8) == 0) & ~seam, v + 0.12, v)
+        self.put(mb, "marble", v, contrast=3.0, dither=False)
+        edge = near(~mb, 2) & mb
+        self.idx[edge] = 4
+        self.idx[near(~mb, 1) & mb] = 3
+        self.idx[shift(~mb, -1, 0) & mb] = 1
+        low = shift(mb, 1, 0) & ~mb & ~near(self.lab == M["water"], 0)
+        self.rid[low] = self.ramp_ids["marble"]
+        self.idx[low] = 0
+
+    def _stairs(self, st):
+        """Stone steps down a cliff: light treads, dark risers, darker side walls."""
+        if not st.any():
+            return
+        yy = np.mgrid[0:self.h, 0:self.w][0]
+        v = np.where((yy % 5) == 4, 0.15, np.where((yy % 5) == 0, 0.85, 0.62))
+        self.put(st, "stone", v, contrast=3.0, dither=False)
+        walls = st & (near(~st, 2) & ~(shift(~st, 2, 0) | shift(~st, -2, 0)))
+        self.idx[walls] = 1
+        self.idx[st & near(~st, 0) & ~shift(st, 0, 1)] = 0
+        self.idx[st & ~shift(st, 0, -1)] = 0
+
+    def _fall(self, fl):
+        """Waterfall: vertical streaks, white lip on top, foam where it lands."""
+        if not fl.any():
+            return
+        col = (self.noise((40, 1), 1) * 3).astype(int)
+        v = 0.45 + 0.13 * col + 0.08 * centered(self.noise((14, 1), 1))
+        self.put(fl, "water", np.clip(v, 0, 1), contrast=3.0, dither=False)
+        self.idx[fl & ~shift(fl, 1, 0)] = 4
+        self.idx[fl & ~shift(fl, 2, 0) & shift(fl, 1, 0)] = 3
+        self.idx[fl & (~shift(fl, 0, 1) | ~shift(fl, 0, -1))] = 1
+        land = (self.lab == M["water"]) & within_below(fl, 4)
+        self.idx[land] = 4
+
     def _water(self, is_):
         wt = is_["water"]
         depth = pa.box_blur(wt.astype(np.float32), 9)
@@ -345,7 +401,7 @@ class Baker:
         v = 0.8 - 0.68 * deep + 0.05 * centered(self.noise(12))
         self.put(wt, "water", v, contrast=2.0)
         planks = getattr(self, "planks", np.zeros_like(wt))
-        land = ~wt & ~is_["void"] & ~planks
+        land = ~wt & ~is_["void"] & ~planks & ~is_["fall"]
         bank = within_below(land, 4) & wt
         self.idx[bank] = np.maximum(self.idx[bank] - 1, 0)
         self.idx[within_below(land, 2) & wt] = 0
@@ -431,13 +487,12 @@ class Baker:
                 if hd[iy, ix]:
                     blobs.append((y, x, self.rng.uniform(6.5, 11.0)))
         reach = pa.box_blur(hd.astype(np.float32), 5) + centered(self.noise(5)) * 0.2
-        clip = (hd | (reach > 0.12)) & (lab != M["void"]) & (lab != M["cliff"])
-        _, alpha, value = pa.render_blobs((self.h, self.w), blobs, self.style["foliage"], self.rng,
-                                          clip=clip)
+        clip = (hd | (reach > 0.12)) & (lab != M["void"]) & (lab != M["cliff"]) & (lab != M["fall"])
+        alpha, value = pa.render_foliage((self.h, self.w), blobs, self.rng, clip=clip)
         fid = self.ramp_ids["foliage"]
         self.rid[hd] = fid
         self.idx[hd] = 0
-        idx = pa.quantize(value, self.n("foliage"), 2.0)
+        idx = pa.quantize(value, self.n("foliage"), 3.0, dither=False)
         self.rid[alpha] = fid
         self.idx[alpha] = idx[alpha]
         cover = alpha | hd

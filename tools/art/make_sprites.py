@@ -26,11 +26,10 @@ RES = "res://assets/generated/props"
 
 EXTRA = {
     "elysia": {
-        "bark": ramp("#3d2422", "#62392b", "#8a5636", "#b07a48", "#d3a86a"),
+        "bark": ramp("#2f1f2a", "#4d3036", "#71493f", "#966a4f", "#bd9168"),
         "white_wood": ramp("#5b5470", "#9a93a8", "#d2cdd4", "#f4f1ea", "#ffffff"),
         "iron": ramp("#1f1a2c", "#38304a", "#5a5070", "#857a96"),
         "glass": ramp("#c98a2e", "#ffd36e", "#fff2b8", "#fffbe8"),
-        "blossom": ramp("#8f2f5f", "#c64f86", "#ee86b2", "#ffbfd8", "#fff0f6"),
         "lily": ramp("#123f2e", "#1f6a3a", "#3b9446", "#76c25a"),
         "cloud": ramp("#a3a9d6", "#c4cbec", "#e3e8f8", "#f8faff", "#ffffff"),
         "petals": [ramp("#9c1f5a", "#e04a8a", "#ff8fbf", "#ffd0e4"),
@@ -159,24 +158,164 @@ def trunk(c, st, bark, x_mid, y_top, y_base, width, rng):
     return shape
 
 
-def tree(style, seed, blossom=False):
+def tree(style, seed, leaves="foliage"):
+    """Round tree: short trunk, crown of clustered leaf clumps (render_foliage)."""
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES[style], EXTRA[style]
     c = Canvas(64, 80)
-    trunk(c, st, ex["bark"], 32, 40, 77, 8, rng)
-    # two small branches into the crown
-    blobs = crown_blobs(rng, 32, 30, 22, 17, 16, 7, 11)
-    leaves = ex["blossom"] if blossom else st["foliage"]
-    rgb, alpha, value = pa.render_blobs((c.h, c.w), blobs, leaves, rng, leaf_cell=4)
-    c.paint(alpha, leaves, value, contrast=2.0)
-    if style == "elysia" and not blossom:
-        # a few blossoms / fruits catching the light
-        for _ in range(9):
-            y, x = int(rng.uniform(16, 40)), int(rng.uniform(14, 50))
-            if alpha[y, x] and value[y, x] > 0.45:
-                fl = EXTRA["elysia"]["petals"][rng.integers(0, 2)]
-                c.fill(c.rect(x, y, x + 2, y + 2), fl[2])
-                c.fill(c.rect(x, y, x + 1, y + 1), fl[3])
+    trunk(c, st, ex["bark"], 32, 42, 77, 8, rng)
+    blobs = crown_blobs(rng, 32, 31, 21, 16, 12, 8, 12)
+    alpha, value = pa.render_foliage((c.h, c.w), blobs, rng)
+    ramp_colors = st[leaves] if leaves in st else ex[leaves]
+    c.paint(alpha, ramp_colors, value, contrast=3.0, dither=False)
+    if leaves == "blossom":
+        for _ in range(26):
+            y, x = int(rng.uniform(14, 44)), int(rng.uniform(12, 52))
+            if alpha[y, x] and value[y, x] > 0.5:
+                c.fill(c.rect(x, y, x + 1, y + 1), ramp_colors[-1])
+    c.outline(st["outline"])
+    return c
+
+
+def bush(style, seed, leaves="foliage", w=26, h=22):
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES[style]
+    c = Canvas(w, h)
+    blobs = [(h * 0.55, w * 0.5, w * 0.36), (h * 0.62, w * 0.3, w * 0.24), (h * 0.62, w * 0.7, w * 0.24),
+             (h * 0.42, w * 0.45, w * 0.26)]
+    alpha, value = pa.render_foliage((h, w), blobs, rng, small=(2.8, 4.2))
+    c.paint(alpha, st[leaves], value, contrast=3.0, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def sacred_tree(seed=7):
+    """Elysia's landmark: twisted dark trunk with roots, huge blossom crown, hanging wisteria."""
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES["elysia"]
+    W, H = 208, 190
+    c = Canvas(W, H)
+    cx, base = 104, 182
+    bark = st["bark"]
+
+    def strand(points, w0, w1, tone):
+        pts = np.array(points, np.float32)
+        n = 60
+        for i in range(n + 1):
+            t = i / n
+            k = min(int(t * (len(pts) - 1)), len(pts) - 2)
+            f = t * (len(pts) - 1) - k
+            y, x = pts[k] * (1 - f) + pts[k + 1] * f
+            r = (w0 + (w1 - w0) * t) / 2
+            m = c.ellipse(x, y, r + 0.5, r * 0.8 + 0.5)
+            c.paint(m, bark, tone + 0.55 * c.cylinder(x - r - 1, x + r + 1), contrast=3.0, dither=False)
+
+    # roots spreading into the water, back ones first
+    for side in (-1, 1):
+        for k, (dx, dy, w) in enumerate(((58, -6, 7), (34, 2, 8), (76, 4, 5))):
+            p0 = (base - 14, cx + side * 6)
+            p1 = (base - 6 + dy * 0.3, cx + side * dx * 0.45)
+            p2 = (base + dy * 0.5, cx + side * dx)
+            strand([p0, p1, p2], w + 4, 3, 0.1 + 0.06 * k)
+    # twisted trunk from three strands
+    for i, phase in enumerate((0.0, 2.1, 4.2)):
+        pts = []
+        for t in np.linspace(0, 1, 7):
+            y = base - 10 - t * 98
+            x = cx + np.sin(t * 5.5 + phase) * 9 * (1 - t * 0.35) + (i - 1) * 7 * (1 - t * 0.5)
+            pts.append((y, x))
+        strand(pts, 17, 9, 0.12 + 0.08 * i)
+    # branches into the crown
+    for ex, ey in ((52, 58), (156, 58), (80, 44), (128, 44), (104, 36)):
+        strand([(base - 104, cx), ((base - 104 + ey) / 2, (cx + ex) / 2 + rng.uniform(-6, 6)), (ey, ex)], 7, 3, 0.1)
+    # blossom crown
+    blobs = []
+    # a filled core on a jittered grid (no holes), then a bumpy rim
+    for gy in np.arange(30, 92, 14):
+        for gx in np.arange(cx - 80, cx + 81, 16):
+            if ((gx - cx) / 84) ** 2 + ((gy - 60) / 42) ** 2 <= 1.0:
+                blobs.append((gy + rng.uniform(-4, 4), gx + rng.uniform(-5, 5), rng.uniform(14, 19)))
+    for k in range(16):
+        a = k / 16 * 2 * np.pi
+        blobs.append((60 + np.sin(a) * 42, cx + np.cos(a) * 84, rng.uniform(11, 16)))
+    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(4.0, 6.5), density=1.2)
+    c.paint(alpha, st["blossom"], value, contrast=3.0, dither=False)
+    for _ in range(140):
+        y, x = int(rng.uniform(16, 100)), int(rng.uniform(20, 188))
+        if alpha[y, x] and value[y, x] > 0.55:
+            c.fill(c.rect(x, y, x + 1, y + 1), st["blossom"][-1])
+    # hanging wisteria strands below the crown edge
+    bottom = np.full(W, -1)
+    for x in range(W):
+        ys = np.nonzero(alpha[:, x])[0]
+        if len(ys):
+            bottom[x] = ys.max()
+    wis = st["wisteria"]
+    for x in range(8, W - 8, 3):
+        if bottom[x] < 0 or rng.random() < 0.2:
+            continue
+        side = abs(x - cx) / 100.0
+        if rng.random() < 0.25:
+            continue
+        length = int(rng.uniform(6, 30) + 12 * side)
+        y0 = bottom[x] - 6
+        for k in range(0, length, 2):
+            t = k / max(length, 1)
+            wobble = int(round(np.sin(k * 0.6 + x) * 0.6))
+            tone = 0.85 - 0.5 * t if k % 4 == 0 else 0.55 - 0.3 * t
+            width = 2 if t < 0.6 else 1
+            m = c.rect(x + wobble, y0 + k, x + wobble + width, y0 + k + 2)
+            c.paint(m, wis, tone, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def marble_pillar(crystal=True):
+    st = pa.STYLES["elysia"]
+    c = Canvas(20, 48)
+    m = st["marble"]
+    c.paint(c.rect(4, 18, 16, 44), m, 0.15 + 0.85 * c.cylinder(3, 17), contrast=3.0, dither=False)
+    c.paint(c.rect(4, 18, 16, 44) & ((c.xx.astype(int) % 4) == 1), m, 0.35, dither=False)
+    c.paint(c.rect(2, 42, 18, 47), m, np.where(c.yy < 44, 0.85, 0.35), dither=False)
+    c.paint(c.rect(2, 14, 18, 19), m, np.where(c.yy < 16, 0.95, 0.45), dither=False)
+    if crystal:
+        cr = st["crystal"]
+        gem = (np.abs(c.xx + 0.5 - 10) * 1.4 + np.abs(c.yy + 0.5 - 8) * 0.8) <= 6.5
+        left = c.xx < 10
+        c.paint(gem, cr, np.where(left, 0.9, 0.45) + np.where(c.yy < 7, 0.1, -0.05), dither=False)
+        c.fill(c.rect(8, 4, 9, 7), cr[-1])
+    c.outline(st["outline"])
+    return c
+
+
+def crystal_pedestal():
+    st = pa.STYLES["elysia"]
+    c = Canvas(30, 50)
+    m, cr = st["marble"], st["crystal"]
+    c.paint(c.ellipse(15, 44, 14, 5), m, 0.25 + 0.7 * c.sphere(11, 42, 15, 6), dither=False)
+    c.paint(c.rect(9, 30, 21, 44), m, 0.15 + 0.85 * c.cylinder(8, 22), contrast=3.0, dither=False)
+    c.paint(c.ellipse(15, 30, 9, 3.5), m, 0.9, dither=False)
+    gem = (np.abs(c.xx + 0.5 - 15) * 1.25 + np.abs(c.yy + 0.5 - 14) * 0.62) <= 9.5
+    facet = np.where(c.xx < 15, 0.85, 0.4) + np.where(c.yy < 12, 0.12, -0.05)
+    facet = np.where(np.abs(c.xx + 0.5 - 15) < 1.0, 1.0, facet)
+    c.paint(gem, cr, facet, dither=False)
+    c.fill(c.rect(12, 6, 13, 11), cr[-1])
+    c.outline(st["outline"])
+    return c
+
+
+def glow_flowers(seed):
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES["elysia"]
+    c = Canvas(18, 14)
+    cr, vi = st["crystal"], st["flowers"][4]
+    for k in range(4):
+        x, y = int(rng.uniform(3, 14)), int(rng.uniform(4, 9))
+        c.paint(c.rect(x, y + 1, x + 1, 13), EXTRA["elysia"]["stem"], 0.5, dither=False)
+        col = cr if k % 2 == 0 else vi
+        for dy, dx in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+            c.fill(c.rect(x + dx, y + dy, x + dx + 1, y + dy + 1), col[1])
+        c.fill(c.rect(x, y, x + 1, y + 1), col[-1])
     c.outline(st["outline"])
     return c
 
@@ -576,8 +715,26 @@ def build():
     for style in ("elysia", "tal"):
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
     # elysia
-    save("elysia", "tree", [tree("elysia", 1), tree("elysia", 2), tree("elysia", 3, blossom=True)],
-         (32, 76), shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
+    tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
+    save("elysia", "tree", [tree("elysia", 1), tree("elysia", 2)], (32, 76), **tree_entry)
+    save("elysia", "tree_blue", [tree("elysia", 4, "foliage_blue"), tree("elysia", 5, "foliage_blue")],
+         (32, 76), **tree_entry)
+    save("elysia", "tree_purple", [tree("elysia", 6, "foliage_purple"), tree("elysia", 7, "foliage_purple")],
+         (32, 76), **tree_entry)
+    save("elysia", "tree_blossom", [tree("elysia", 8, "blossom"), tree("elysia", 9, "blossom")],
+         (32, 76), **tree_entry)
+    save("elysia", "bush", [bush("elysia", 80), bush("elysia", 81, "foliage_blue"),
+                            bush("elysia", 82, "foliage_purple"), bush("elysia", 83)],
+         (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
+    save("elysia", "sacred_tree", sacred_tree(), (104, 182), shape={"circle": 14, "offset": [0, -6]},
+         shadow=[70, 16], sway=0.5, petal_rain={"extents": [84, 36], "offset": [0, -120], "amount": 16})
+    glow = "#8fe9f5"
+    save("elysia", "pillar", marble_pillar(), (10, 46), shape={"circle": 6, "offset": [0, -2]},
+         shadow=[8, 3], glow={"offset": [0, -38], "color": glow, "radius": 18})
+    save("elysia", "crystal", crystal_pedestal(), (15, 47), shape={"circle": 11, "offset": [0, -3]},
+         shadow=[13, 4], glow={"offset": [0, -33], "color": glow, "radius": 34})
+    save("elysia", "glow_flower", [glow_flowers(90), glow_flowers(91), glow_flowers(92)], (9, 12),
+         sway=1.0, glow={"offset": [0, -7], "color": "#a8eeff", "radius": 12})
     save("elysia", "giant_flower", [giant_flower(10 + i, EXTRA["elysia"]["petals"][i]) for i in range(4)],
          (16, 45), shape={"circle": 4, "offset": [0, -1]}, sway=2.0, shadow=[9, 3])
     save("elysia", "topiary", [topiary(20), topiary(21)], (15, 29),
@@ -597,10 +754,10 @@ def build():
     # tal
     save("tal", "house", house(), (58, 105), shape={"rect": [96, 40], "offset": [0, -12]},
          shadow=[52, 6], lights=[
-             {"offset": [-30, -15], "color": "#ffb85c", "energy": 1.1, "range": 72},
-             {"offset": [30, -15], "color": "#ffb85c", "energy": 1.1, "range": 72},
+             {"offset": [-30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
+             {"offset": [30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
          ], smoke=[26, -102])
-    save("tal", "tree", [tree("tal", 101), tree("tal", 102)], (32, 76),
+    save("tal", "tree", [tree("tal", 101), tree("tal", 102, "foliage_blue"), tree("tal", 103)], (32, 76),
          shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
     save("tal", "pine", [pine("tal", 110), pine("tal", 111)], (20, 68),
          shape={"circle": 5, "offset": [0, -2]}, sway=0.8, shadow=[16, 5])
@@ -609,7 +766,7 @@ def build():
     save("tal", "tall_grass", [tall_grass("tal", 130 + i) for i in range(3)], (9, 18), sway=2.5,
          surface="tall_grass", rustle=True)
     save("tal", "lantern", lantern("tal"), (6, 38), shape={"circle": 3, "offset": [0, -1]},
-         shadow=[5, 2], lights=[{"offset": [0, -29], "color": "#ffc070", "energy": 1.2, "range": 64}],
+         shadow=[5, 2], lights=[{"offset": [0, -29], "color": "#ff8a45", "energy": 1.4, "range": 72}],
          flicker=True)
     save("tal", "barrel", barrel(140), (8, 18), shape={"circle": 6, "offset": [0, -2]}, shadow=[8, 3])
     save("tal", "woodpile", woodpile(141), (15, 18), shape={"rect": [26, 8], "offset": [0, -3]},
@@ -619,6 +776,16 @@ def build():
          shape={"rect": [4, 16], "offset": [0, -8]})
     save("tal", "bench", bench("tal"), (10, 18))
     particles()
+    # remove sprites (and their .import files) that are no longer part of the catalog
+    used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"]}
+    for style in ("elysia", "tal"):
+        for name in sorted(os.listdir(os.path.join(OUT, style))):
+            if name.endswith(".png") and "%s/%s" % (style, name) not in used:
+                for stale in (name, name + ".import"):
+                    path = os.path.join(OUT, style, stale)
+                    if os.path.exists(path):
+                        os.remove(path)
+                print("removed stale sprite", "%s/%s" % (style, name))
     with open(os.path.join(OUT, "catalog.json"), "w", encoding="utf-8") as f:
         json.dump(CATALOG, f, indent=1, sort_keys=True)
         f.write("\n")

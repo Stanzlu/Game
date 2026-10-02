@@ -61,68 +61,98 @@ class Grid:
 
 
 def elysia():
+    """Sacred tree in a symmetric marble pool, a terrace with stairs and a waterfall into the
+    pool, a stream that falls off the island edge into the clouds."""
     w, h = 64, 40
     g = Grid(w, h)
-    # Cliff edge: wavy line with a promontory (overlook) in the south-east.
+    # island edge in the south: wavy cliff, then sky
     edge = []
     for x in range(w):
-        e = 31 + round(0.8 * math.sin(x / 4.0) + 0.6 * math.sin(x / 2.3 + 1))
-        if 37 <= x <= 51:
-            e = 34 if 39 <= x <= 49 else 33
+        e = 32 + round(0.8 * math.sin(x / 4.0) + 0.6 * math.sin(x / 2.3 + 1))
+        if 27 <= x <= 37:
+            e = 34
         edge.append(e)
     for x in range(w):
         for y in range(edge[x], h):
             g.set(x, y, "^" if y < edge[x] + 3 else "%")
-    # Hedge border north and sides (until the cliff).
+    # hedge border north and sides
     for x in range(w):
-        bottom = 3 + round(0.9 * math.sin(x / 3.1) + 0.5 * math.sin(x / 1.7 + 2))
+        bottom = 2 + round(0.6 * math.sin(x / 3.1) + 0.4 * math.sin(x / 1.7 + 2))
         for y in range(0, bottom):
             g.set(x, y, "h")
     for y in range(h):
         for x in (0, 1, w - 2, w - 1):
             if g.get(x, y) == ".":
                 g.set(x, y, "h")
-    # Meadows (dense small flowers).
-    g.ellipse(10, 8, 5, 3, "f", only=".", wobble=0.4, seed=1)
-    g.ellipse(31, 27, 4, 2.5, "f", only=".", wobble=0.4, seed=2)
-    g.ellipse(56, 23, 3.5, 3, "f", only=".", wobble=0.4, seed=3)
-    g.ellipse(8, 27, 3.5, 2.5, "f", only=".", wobble=0.4, seed=4)
-    g.ellipse(33, 6, 4, 2, "f", only=".", wobble=0.4, seed=5)
-    # Pond with a wooden bridge.
-    g.ellipse(44, 12, 8.2, 5.4, "~", only=".f", wobble=0.25, seed=0.7)
-    # Paths.
-    g.path([(3, 20), (9, 20), (14, 18.5), (17.5, 17.5)], 2.6, ",", only=".f")
-    g.path([(26.5, 15.5), (31, 13.5), (35, 12.5)], 2.4, ",", only=".f")
-    g.path([(53, 12.5), (55, 15), (52, 21), (46, 26), (44.5, 32)], 2.4, ",", only=".f")
-    for y in (12, 13):
-        for x in range(33, 56):
+    # terrace: cliff face below it, stairs on the west side
+    for x in range(2, w - 2):
+        top = 9 - (1 if math.sin(x / 3.3) + 0.5 * math.sin(x / 1.6) > 0.6 else 0)
+        for y in range(top, 11):
+            g.set(x, y, "^", only=".")
+    for x in (11, 12, 13):
+        for y in (8, 9, 10):
+            if g.get(x, y) == "^" or y == 10:
+                g.set(x, y, "s")
+    # meadows
+    g.ellipse(7, 5, 4, 2, "f", only=".", wobble=0.4, seed=1)
+    g.ellipse(55, 5, 4, 2, "f", only=".", wobble=0.4, seed=2)
+    g.ellipse(9, 28, 4, 2.5, "f", only=".", wobble=0.4, seed=3)
+    g.ellipse(56, 27, 3.5, 2.5, "f", only=".", wobble=0.4, seed=4)
+    g.ellipse(20, 14, 2.5, 1.5, "f", only=".", wobble=0.4, seed=5)
+    g.ellipse(45, 13, 2.5, 1.5, "f", only=".", wobble=0.4, seed=6)
+    # marble ring and front platform, then the pool inside
+    g.ellipse(32, 16.5, 8.4, 5.9, "M", only=".f")
+    for y in (21, 22, 23):
+        for x in range(27, 38):
+            g.set(x, y, "M", only=".f")
+    g.ellipse(32, 16.5, 6.3, 4.2, "~", only="M")
+    # terrace stream and waterfall into the pool
+    g.path([(45, 1), (45.5, 4), (44, 6.5), (43, 8.6)], 2.1, "~", only=".f")
+    for y in (8, 9, 10):
+        for x in (42, 43):
+            if g.get(x, y) == "^":
+                g.set(x, y, "v")
+
+    # paths
+    g.path([(3, 26), (10, 26), (18, 25), (26, 23.5)], 2.6, ",", only=".f")
+    g.path([(38, 23.5), (46, 24), (54, 25), (61, 25)], 2.6, ",", only=".f")
+    g.path([(32, 24), (32, 28), (32, 32)], 2.4, ",", only=".f")
+    g.path([(12, 9), (12, 7), (14, 5), (22, 4)], 2.2, ",", only=".f")
+    # stream from the pool to the island edge, falling into the sky
+    # the waterfall's stream runs past the pool (which stays a closed, symmetric ring)
+    g.path([(42.5, 10.5), (44, 14), (45, 19), (45.5, 25), (47, 29), (47.5, 33)], 2.2, "~", only=".f,")
+    for y in range(25, h):
+        if g.get(47, y) in ("^", "%"):
+            g.set(47, y, "v")
+            g.set(48, y, "v")
+    for y in (23, 24, 25):
+        for x in range(43, 48):
             if g.get(x, y) == "~":
                 g.set(x, y, "=")
-            elif g.get(x, y) in ".f":
-                g.set(x, y, ",")
-    # Plaza.
-    g.ellipse(22, 16.5, 4.4, 3.6, "_", only=".f,")
-    # Props (decor and furniture).
+    # props: the sacred tree in the middle, symmetric pillars, crystal in front
     props = {
-        "U": [(22, 16)],
-        "T": [(5, 5), (13, 4), (25, 4), (39, 4), (57, 6), (4, 13), (59, 15), (3, 24), (59, 28), (19, 27), (36, 22)],
-        "Y": [(15, 11), (29, 11), (14, 23), (29, 21), (53, 19), (9, 9), (35, 27), (57, 24)],
-        "O": [(17, 13), (27, 13), (17, 20), (27, 20)],
-        "R": [(35, 29), (53, 30), (25, 30), (10, 30)],
-        "l": [(16, 16), (34, 11), (56, 14), (42, 31)],
-        "w": [(40, 9), (47, 15), (49, 10), (39, 15), (45, 8)],
-        "b": [(21, 21), (43, 33)],
-        "F": [(x, 33) for x in range(38, 51) if x not in (43, 44, 45)],
-        "@": [(14, 19)],
+        "W": [(32, 17)],
+        "I": [(24, 16), (40, 16), (27, 21), (37, 21)],
+        "C": [(32, 22)],
+        "T": [(4, 5), (47, 4), (8, 15), (57, 19), (19, 30)],
+        "U": [(18, 4), (60, 7), (53, 14), (5, 21)],
+        "P": [(27, 4), (14, 20), (59, 29), (42, 29)],
+        "K": [(9, 3), (57, 4), (50, 20), (13, 28)],
+        "o": [(16, 7), (31, 6), (48, 6), (22, 11), (46, 12), (23, 23), (41, 23), (29, 27), (35, 27),
+              (6, 12), (58, 11), (26, 30), (38, 30), (52, 31), (17, 25)],
+        "g": [(21, 15), (42, 15), (21, 19), (42, 19), (29, 25), (35, 25), (6, 6), (54, 6), (24, 3),
+              (40, 4), (10, 30), (55, 28)],
+        "Y": [(20, 6), (51, 8), (24, 27), (52, 26)],
+        "O": [(30, 26), (34, 26), (30, 29), (34, 29)],
+        "R": [(23, 30), (41, 31), (8, 30), (55, 30)],
+        "w": [(27, 15), (36, 18), (29, 19), (35, 14)],
+        "b": [(31, 33)],
+        "F": [(x, 33) for x in range(26, 38) if x not in (31, 32)],
+        "@": [(10, 26)],
     }
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
-    edge_water = [(x, y) for y in range(h) for x in range(w) if g.get(x, y) == "~"
-                  and any(g.get(x + dx, y + dy) in (".", "f") for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
-    for i, (x, y) in enumerate(edge_water):
-        if i % 5 == 2:
-            g.set(x, y, "r")
     return g
 
 

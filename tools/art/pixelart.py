@@ -21,37 +21,48 @@ def ramp(*hexes):
 
 # --------------------------------------------------------------------------- palettes
 STYLES = {
+    # Elysia: teal-leaning greens, violet shadows, warm light, white stone, turquoise water.
     "elysia": {
-        "grass": ramp("#245a40", "#347d46", "#529f4b", "#86c35a", "#c3e486"),
-        "path": ramp("#a06c49", "#c99a69", "#e6c58e", "#f6e3b2", "#fff6dc"),
-        "dirt": ramp("#7a4c34", "#a06a45", "#c6905c", "#e2b77f", "#f5daa6"),
-        "stone": ramp("#4f4a63", "#77718a", "#a19cad", "#cbc7cc", "#f0ede6"),
-        "water": ramp("#17457f", "#2370b0", "#36a0d6", "#76d3ee", "#d6f6ff"),
-        "wood": ramp("#5a3127", "#874d30", "#b5743d", "#d9a259", "#f1cf86"),
-        "rock": ramp("#3a2f4b", "#5c4d6d", "#857799", "#b3a7c4", "#e3dbeb"),
-        "mud": ramp("#5a3a2a", "#7a5136", "#9d6c47", "#c08d5d", "#ddb37c"),
-        "foliage": ramp("#0f2f2c", "#17493a", "#226b3f", "#3a9442", "#6fbf45", "#b4e05c"),
-        "cliff": ramp("#2e2238", "#4b3448", "#714c58", "#9a6b66", "#c2927a", "#e6c29a"),
-        "outline": hex_rgb("#1c1630"),
-        "flowers": [ramp("#c2246a", "#ff6fae", "#ffd2e7"), ramp("#d98a00", "#ffd23f", "#fff3a8"),
-                    ramp("#2d5fd6", "#5aa8ff", "#c7e4ff"), ramp("#b8b8d8", "#f4f4ff", "#ffffff"),
-                    ramp("#c22d2d", "#ff5a52", "#ffc0b0")],
+        "grass": ramp("#1f4b4a", "#2b6a53", "#3f8c56", "#6aaf58", "#a7d06a"),
+        "path": ramp("#7a6555", "#a08a72", "#c4ad8c", "#e0cfab", "#f3e9cb"),
+        "dirt": ramp("#6e5148", "#93705c", "#b69276", "#d4b693", "#ecd8b6"),
+        "stone": ramp("#56526f", "#85819f", "#b4b1c6", "#dad8e4", "#f6f5fa"),
+        "marble": ramp("#6b6788", "#9d9ab4", "#c9c7d8", "#e8e7ef", "#ffffff"),
+        "water": ramp("#1a4a78", "#2177a0", "#2cabc2", "#69d9d6", "#cdf8ef"),
+        "wood": ramp("#4e2f2c", "#774634", "#a2683f", "#c99358", "#e8c182"),
+        "rock": ramp("#2f2840", "#4b3f5e", "#6e6082", "#9a8daa", "#cbc1d6"),
+        "mud": ramp("#4e3a35", "#6c5145", "#8c6c58", "#ad8c70", "#cbab8a"),
+        "foliage": ramp("#10322f", "#185243", "#22714f", "#3d9454", "#74b85e", "#b6dc78"),
+        "foliage_blue": ramp("#16264a", "#1f3c6e", "#2b5a97", "#3f80bf", "#6aaee0", "#a9d8f4"),
+        "foliage_purple": ramp("#271a45", "#3f2a6a", "#5c3f92", "#7f5bb8", "#a886d8", "#d3bcf0"),
+        "blossom": ramp("#6e3462", "#9e5288", "#cf7fae", "#ecaccb", "#fbd5e5", "#fff3f8"),
+        "wisteria": ramp("#4d3478", "#7454a6", "#9c7fcf", "#c3abe9", "#e6d9fb"),
+        "bark": ramp("#18132a", "#2b2340", "#41365a", "#5f5278", "#8a7ca3"),
+        "crystal": ramp("#1b6f9a", "#2fb3d8", "#7ee6f2", "#d7fbff", "#ffffff"),
+        "cliff": ramp("#2a2140", "#43335a", "#644a6e", "#87627e", "#ad7f8c", "#d3a6a4"),
+        "outline": hex_rgb("#1a1530"),
+        "flowers": [ramp("#b2306f", "#f06ba6", "#ffd0e4"), ramp("#c98a1c", "#f7cf4a", "#fff3b0"),
+                    ramp("#3b55c4", "#6f9ef5", "#cfe2ff"), ramp("#a9a6cf", "#efeefe", "#ffffff"),
+                    ramp("#7b3cc0", "#b07cf0", "#e7d3ff")],
     },
+    # Tal: night after rain. Deep blue and violet shadows, teal greens, reddish earth.
     "tal": {
-        "grass": ramp("#18291f", "#24402b", "#355a38", "#4c7444", "#6c8d55"),
-        "path": ramp("#2a211c", "#3e3027", "#574334", "#735a43", "#937654"),
-        "dirt": ramp("#2a211c", "#3e3027", "#574334", "#735a43", "#937654"),
-        "stone": ramp("#262a33", "#3a3f4a", "#525865", "#6f7684", "#939aa6"),
-        "water": ramp("#152331", "#1e3446", "#2b4c62", "#456e84", "#7c9fae"),
-        "wood": ramp("#291b15", "#43291e", "#633f2b", "#875b3d", "#a87a52"),
-        "rock": ramp("#22252c", "#353943", "#4c515d", "#686f7b", "#8e95a0"),
-        "mud": ramp("#241c16", "#372a21", "#4c3a2d", "#64503e", "#806952"),
-        "foliage": ramp("#0a120f", "#101e17", "#172b1f", "#22392a", "#304b35", "#455f43"),
-        "cliff": ramp("#16181d", "#22252c", "#2f333c", "#3f444f", "#535a66", "#6c7480"),
-        "outline": hex_rgb("#0f1114"),
-        "flowers": [ramp("#5e3a5c", "#8b5d87", "#b58ab0"), ramp("#6d6234", "#9c8e4c", "#c4b774"),
-                    ramp("#3c4f6e", "#5d7699", "#8ea6c4"), ramp("#7c8088", "#a9adb5", "#d3d6db"),
-                    ramp("#6a3434", "#955050", "#bd7a74")],
+        "grass": ramp("#101c27", "#16302f", "#1f4339", "#2d5945", "#457252"),
+        "path": ramp("#211820", "#33252a", "#4a3533", "#644940", "#836252"),
+        "dirt": ramp("#211820", "#33252a", "#4a3533", "#644940", "#836252"),
+        "stone": ramp("#1c1e2b", "#2b2e40", "#3e4258", "#575c74", "#787e96"),
+        "water": ramp("#0d1832", "#13284c", "#1b3d6b", "#2b5c8f", "#5a8fc0"),
+        "wood": ramp("#25181a", "#3d2622", "#5a3a2c", "#7d553b", "#a3764f"),
+        "rock": ramp("#1a1a28", "#2a2a3c", "#3d3c53", "#56546e", "#76738f"),
+        "mud": ramp("#1d151b", "#2c2023", "#3f2e2e", "#56403b", "#71574c"),
+        "foliage": ramp("#0a1119", "#0e1d27", "#152c34", "#1e4042", "#2c5752", "#437162"),
+        "foliage_blue": ramp("#0a1020", "#0f1a33", "#16284a", "#203a63", "#305380", "#4a719c"),
+        "foliage_purple": ramp("#120d1f", "#1d1533", "#2a1f4a", "#3b2c63", "#513f80", "#6d5a9c"),
+        "cliff": ramp("#13121c", "#1e1b2b", "#2b263b", "#3b344e", "#4f4664", "#685d7e"),
+        "outline": hex_rgb("#0b0c14"),
+        "flowers": [ramp("#4e2c59", "#7a4f88", "#a77bb8"), ramp("#5e5634", "#8a7f4a", "#b4a86d"),
+                    ramp("#2c4170", "#4a679c", "#7a98c8"), ramp("#6a7086", "#959bb0", "#c3c8d8"),
+                    ramp("#5c2f45", "#874d68", "#b27a92")],
     },
 }
 
@@ -194,7 +205,8 @@ def save_rgb(path, rgb):
     save_rgba(path, rgba)
 
 
-def render_blobs(shape, blobs, ramp_colors, rng, clip=None, leaf_cell=4, outline_rim=True):
+def render_blobs(shape, blobs, ramp_colors, rng, clip=None, leaf_cell=4, outline_rim=True,
+                 leaf_weight=0.16):
     """Paints overlapping leafy spheres (tree crowns, hedges, bushes) back to front.
 
     blobs: list of (cy, cx, r). Lower blobs (larger cy) are drawn last, so they overlap the
@@ -222,7 +234,10 @@ def render_blobs(shape, blobs, ramp_colors, rng, clip=None, leaf_cell=4, outline
         t = np.clip(d / np.maximum(reff, 1e-3), 0, 1)
         nz = np.sqrt(np.clip(1 - t * t, 0, 1))
         lam = sphere_light(dx / max(r, 1), dy / max(r, 1), nz)
-        v = 0.08 + 0.62 * lam + 0.3 * (leaf[y0:y1, x0:x1] - 0.5) + 0.12
+        lf = leaf[y0:y1, x0:x1]
+        v = 0.14 + 0.7 * lam + leaf_weight * 2 * (lf - 0.5)
+        # crisp highlight clusters on the lit side read as leaves, not as noise
+        v = np.where((lam > 0.72) & (lf > 0.62), v + 0.16, v)
         if outline_rim:
             rim = (t > 0.86) & ((dx + dy) > 0)
             v = np.where(rim, np.minimum(v, 0.1), v)
@@ -231,3 +246,60 @@ def render_blobs(shape, blobs, ramp_colors, rng, clip=None, leaf_cell=4, outline
         alpha[y0:y1, x0:x1] |= inside
     rgb = shade(ramp_colors, np.clip(value, 0, 1))
     return rgb, alpha, value
+
+
+def render_foliage(shape, blobs, rng, clip=None, small=(3.5, 5.5), density=1.1):
+    """Hand-drawn style foliage: every big blob is filled with small leaf clumps.
+
+    Each clump gets local sphere shading and a dark lower-right rim; the big blob's light
+    sets the overall tone. Gives clearly separated clusters instead of noisy texture.
+    Returns (alpha, value) with value in 0..1 (quantize with high contrast).
+    """
+    h, w = shape
+    value = np.zeros((h, w), np.float32)
+    alpha = np.zeros((h, w), bool)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    # base silhouettes in shadow tone, so gaps between clumps read as depth, not holes
+    for cy, cx, r in sorted(blobs, key=lambda b: b[0]):
+        y0, y1 = int(max(cy - r - 1, 0)), int(min(cy + r + 2, h))
+        x0, x1 = int(max(cx - r - 1, 0)), int(min(cx + r + 2, w))
+        if y0 >= y1 or x0 >= x1:
+            continue
+        gy, gx = (yy[y0:y1, x0:x1] + 0.5 - cy) / r, (xx[y0:y1, x0:x1] + 0.5 - cx) / r
+        gt = np.hypot(gx, gy)
+        inside = gt <= 0.92
+        if clip is not None:
+            inside &= clip[y0:y1, x0:x1]
+        big = sphere_light(gx, gy, np.sqrt(np.clip(1 - np.clip(gt, 0, 1) ** 2, 0, 1)))
+        sub = value[y0:y1, x0:x1]
+        sub[inside] = (0.02 + 0.45 * big)[inside]
+        alpha[y0:y1, x0:x1] |= inside
+    clumps = []
+    for cy, cx, r in blobs:
+        n = max(3, int(density * (r * r) / (small[0] * small[1]) * 1.6))
+        for _ in range(n):
+            a = rng.uniform(0, 2 * np.pi)
+            d = np.sqrt(rng.uniform(0, 1)) * r * 0.78
+            clumps.append((cy + np.sin(a) * d, cx + np.cos(a) * d, rng.uniform(*small), cy, cx, r))
+    for y, x, r, by, bx, br in sorted(clumps, key=lambda c: c[0]):
+        y0, y1 = int(max(y - r - 1, 0)), int(min(y + r + 2, h))
+        x0, x1 = int(max(x - r - 1, 0)), int(min(x + r + 2, w))
+        if y0 >= y1 or x0 >= x1:
+            continue
+        dy, dx = yy[y0:y1, x0:x1] + 0.5 - y, xx[y0:y1, x0:x1] + 0.5 - x
+        d = np.hypot(dx, dy)
+        inside = d <= r
+        if clip is not None:
+            inside &= clip[y0:y1, x0:x1]
+        t = np.clip(d / r, 0, 1)
+        local = sphere_light(dx / r, dy / r, np.sqrt(np.clip(1 - t * t, 0, 1)))
+        gy, gx = (yy[y0:y1, x0:x1] - by) / br, (xx[y0:y1, x0:x1] - bx) / br
+        gt = np.clip(np.hypot(gx, gy), 0, 1)
+        big = sphere_light(gx, gy, np.sqrt(np.clip(1 - gt * gt, 0, 1)))
+        v = 0.1 + 0.62 * big + 0.36 * (local - 0.45)
+        rim = (t > 0.78) & ((dx + dy) > 0.5)
+        v = np.where(rim, v - 0.22, v)
+        sub = value[y0:y1, x0:x1]
+        sub[inside] = v[inside]
+        alpha[y0:y1, x0:x1] |= inside
+    return alpha, np.clip(value, 0, 1)
