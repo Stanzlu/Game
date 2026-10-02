@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/dialogue/dialogue_box.gd" id="1_box"]
+[ext_resource type="PackedScene" path="res://addons/dialogue_manager/nodes/dialogue_label/dialogue_label.tscn" id="2_label"]
+[ext_resource type="Script" path="res://addons/dialogue_manager/nodes/responses_menu/dialogue_responses_menu.gd" id="3_menu"]
+
+[node name="DialogueBox" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_box")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -76.0
+offset_right = -24.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"DialoguePanel"
+
+[node name="Rows" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Name" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DialogueName"
+
+[node name="Text" parent="Panel/Rows" instance=ExtResource("2_label")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Responses" type="VBoxContainer" parent="Panel/Rows" node_paths=PackedStringArray("response_template")]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("3_menu")
+response_template = NodePath("ResponseTemplate")
+next_action = &"interact"
+
+[node name="ResponseTemplate" type="Button" parent="Panel/Rows/Responses"]
+layout_mode = 2
+theme_type_variation = &"DialogueResponse"
+text = "Antwort"
+alignment = 0

@@ -2,13 +2,87 @@
 
 [ext_resource type="FontFile" path="res://assets/fonts/tiny5/Tiny5-Regular.ttf" id="1_font"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.07, 0.07, 0.09, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.07, 0.07, 0.09, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.55, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_response_focus"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+bg_color = Color(0.93, 0.91, 0.86, 0.14)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_response"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.07, 0.07, 0.09, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.55, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+content_margin_left = 4.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0.6)
+
 [resource]
 default_font = ExtResource("1_font")
 default_font_size = 8
 Label/colors/font_color = Color(0.93, 0.91, 0.86, 1)
+RichTextLabel/colors/default_color = Color(0.93, 0.91, 0.86, 1)
 TitleLabel/base_type = &"Label"
 TitleLabel/font_sizes/font_size = 32
 SubtitleLabel/base_type = &"Label"
 SubtitleLabel/font_sizes/font_size = 16
 MutedLabel/base_type = &"Label"
 MutedLabel/colors/font_color = Color(0.55, 0.55, 0.6, 1)
+PromptLabel/base_type = &"Label"
+PromptLabel/styles/normal = SubResource("StyleBoxFlat_prompt")
+DialoguePanel/base_type = &"PanelContainer"
+DialoguePanel/styles/panel = SubResource("StyleBoxFlat_panel")
+DialogueName/base_type = &"Label"
+DialogueName/colors/font_color = Color(0.98, 0.84, 0.45, 1)
+DialogueResponse/base_type = &"Button"
+DialogueResponse/colors/font_color = Color(0.75, 0.75, 0.78, 1)
+DialogueResponse/colors/font_focus_color = Color(0.98, 0.84, 0.45, 1)
+DialogueResponse/colors/font_hover_color = Color(0.98, 0.84, 0.45, 1)
+DialogueResponse/styles/normal = SubResource("StyleBoxEmpty_response")
+DialogueResponse/styles/hover = SubResource("StyleBoxFlat_response_focus")
+DialogueResponse/styles/pressed = SubResource("StyleBoxFlat_response_focus")
+DialogueResponse/styles/focus = SubResource("StyleBoxFlat_response_focus")
+MenuPanel/base_type = &"PanelContainer"
+MenuPanel/styles/panel = SubResource("StyleBoxFlat_menu")
+OverlayPanel/base_type = &"PanelContainer"
+OverlayPanel/styles/panel = SubResource("StyleBoxFlat_overlay")
+MenuEntry/base_type = &"Button"
+MenuEntry/colors/font_color = Color(0.75, 0.75, 0.78, 1)
+MenuEntry/colors/font_focus_color = Color(0.98, 0.84, 0.45, 1)
+MenuEntry/colors/font_hover_color = Color(0.98, 0.84, 0.45, 1)
+MenuEntry/styles/normal = SubResource("StyleBoxEmpty_response")
+MenuEntry/styles/hover = SubResource("StyleBoxFlat_response_focus")
+MenuEntry/styles/pressed = SubResource("StyleBoxFlat_response_focus")
+MenuEntry/styles/focus = SubResource("StyleBoxFlat_response_focus")

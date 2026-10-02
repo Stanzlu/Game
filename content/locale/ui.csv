@@ -1,5 +1,35 @@
 keys,de
 BOOT_TITLE,REAL
-BOOT_SUBTITLE,Prototyp · Phase 0
+BOOT_SUBTITLE,Prototyp · Phase 1
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
+MENU_SANDBOX,Bewegungs-Sandbox
+MENU_ANTREIBER,Antreiber-Prototyp
+MENU_QUIT,Beenden
+MENU_CONTROLS_HINT,Bewegen: WASD/Stick · Sprinten: Shift/X · Interagieren: E/A · Menü: Esc/Start
+PAUSE_TITLE,Pause
+PAUSE_RESUME,Weiter
+PAUSE_TUNING,Bewegungsgefühl
+PAUSE_CAMERA,Kamera
+PAUSE_DIRECTIONS,Richtungen
+PAUSE_SPRINT,Sprinten
+PAUSE_OVERLAY,Info-Anzeige
+PAUSE_TO_MENU,Zum Startmenü
+PAUSE_QUIT,Spiel beenden
+TUNING_DIREKT,Direkt
+TUNING_WEICH,Weich
+TUNING_SCHWER,Schwer
+CAMERA_SMOOTH,Weich
+CAMERA_PIXEL,Pixelgenau
+DIRECTIONS_EIGHT,8 Richtungen
+DIRECTIONS_FREE,Frei
+SPRINT_HOLD,Halten
+SPRINT_TOGGLE,Umschalten
+OPTION_ON,An
+OPTION_OFF,Aus
+INTERACT_EXAMINE,Ansehen
+INTERACT_READ,Lesen
+INTERACT_SIT,Hinsetzen
+INTERACT_PULL,Ziehen
+KEY_SPACE,Leertaste
+KEY_SHIFT,Umschalt

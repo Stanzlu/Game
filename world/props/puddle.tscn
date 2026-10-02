@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/props/surface_patch.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/props/puddle.png" id="2_t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a"]
+size = Vector2(13, 7)
+
+[node name="Puddle" type="Node2D"]
+z_index = -5
+script = ExtResource("1_s")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_t")
+
+[node name="Area" type="Area2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Area"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_a")

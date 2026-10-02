@@ -1,0 +1,23 @@
+~ sign_default
+Ein Schild. Es hat heute nichts zu sagen. [#ph]
+=> END
+
+~ sign_parcours
+Hindernisparcours. Wände, Gänge, Türen. Bitte nicht die Wände umarmen. [#ph]
+=> END
+
+~ sign_pond
+Steg. Hält mehr aus, als er aussieht. [#ph]
+=> END
+
+~ sign_meadow
+Hohes Gras. Raschelt, wenn man es lässt. [#ph]
+- …
+	Es raschelt trotzdem. [#ph]
+- Ich lasse es.
+	Das Gras nimmt es zur Kenntnis. [#ph]
+=> END
+
+~ sign_garden
+Garten. Das Tor reagiert auf Hebelwirkung. [#ph]
+=> END

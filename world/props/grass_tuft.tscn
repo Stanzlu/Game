@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/props/grass_tuft.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/props/grass_tuft.png" id="2_t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a"]
+size = Vector2(14, 10)
+
+[node name="GrassTuft" type="Node2D"]
+script = ExtResource("1_s")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_t")
+offset = Vector2(0, -4)
+
+[node name="Area" type="Area2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Area"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_a")
