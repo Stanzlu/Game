@@ -18,3 +18,4 @@
 | 14 | Regenspritzer erscheinen auch auf Dächern und Baumkronen. | Nur bei genauem Hinsehen. | Später Spritzer auf Bodenmaske begrenzen. | akzeptiert |
 | 15 | Organische Ufer- und Wegkanten weichen um wenige Pixel von der Kachel-Kollision ab. | Füße können am Ufer minimal über Wasser stehen. | Wasser ist beim Backen leicht nach innen versetzt. Feinschliff mit finalen Karten. | akzeptiert |
 | 16 | Die erzeugte Spielfigur hat nur Grundposen, keine Idle-Variationen und keine Anpassung. | Wirkt steifer als handgezeichnete Figuren. | Handgepixelte Figur nach Abnahme der Richtung (ART_DIRECTION, nächste Schritte). | geplant |
+| 17 | Warmes Lampenlicht wirkt auf dem türkisgrünen Nachtgras leicht grünlich, weil 2D-Licht die Grundfarbe multipliziert. | Lichtkegel im Tal sind weniger warm als gewünscht. | Rötlicher Lichtton gewählt; endgültig mit handgemalter Palette oder eigenem Licht-Shader. | akzeptiert |
