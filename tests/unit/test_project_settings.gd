@@ -17,14 +17,33 @@ const UI_CSV := "res://content/locale/ui.csv"
 
 
 func test_pixel_art_display_settings() -> void:
+	# ADR-012: UI renders at window resolution (canvas_items, integer scale); the world is
+	# rendered pixel-snapped in its own SubViewport (see GameView), so the root does not snap.
 	assert_eq(ProjectSettings.get_setting("display/window/size/viewport_width"), 640)
 	assert_eq(ProjectSettings.get_setting("display/window/size/viewport_height"), 360)
-	assert_eq(ProjectSettings.get_setting("display/window/stretch/mode"), "viewport")
+	assert_eq(ProjectSettings.get_setting("display/window/stretch/mode"), "canvas_items")
 	assert_eq(ProjectSettings.get_setting("display/window/stretch/scale_mode"), "integer")
 	assert_eq(
 		ProjectSettings.get_setting("rendering/textures/canvas_textures/default_texture_filter"), 0
 	)
-	assert_true(ProjectSettings.get_setting("rendering/2d/snap/snap_2d_transforms_to_pixel"))
+	assert_false(ProjectSettings.get_setting("rendering/2d/snap/snap_2d_transforms_to_pixel"))
+	assert_true(ProjectSettings.get_setting("physics/common/physics_interpolation"))
+
+
+func test_physics_layer_names_match_constants() -> void:
+	var expected := {
+		PhysicsLayers.WORLD: "world",
+		PhysicsLayers.PLAYER: "player",
+		PhysicsLayers.NPC: "npc",
+		PhysicsLayers.INTERACTABLE: "interactable",
+		PhysicsLayers.SURFACE: "surface",
+		PhysicsLayers.TRIGGER: "trigger",
+	}
+	for bit: int in expected:
+		var index := int(log(float(bit)) / log(2.0)) + 1
+		assert_eq(
+			ProjectSettings.get_setting("layer_names/2d_physics/layer_%d" % index), expected[bit]
+		)
 
 
 func test_main_scene_loads() -> void:
@@ -79,6 +98,7 @@ func test_every_ui_string_has_a_german_translation() -> void:
 func test_autoloads_are_present() -> void:
 	assert_true(get_tree().root.has_node("Log"), "Log autoload missing")
 	assert_true(get_tree().root.has_node("DialogueManager"), "DialogueManager autoload missing")
+	assert_true(get_tree().root.has_node("InputDevice"), "InputDevice autoload missing")
 
 
 func test_translation_templates_never_include_test_files() -> void:

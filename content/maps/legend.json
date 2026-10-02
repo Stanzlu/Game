@@ -1,0 +1,19 @@
+{
+  "tile_size": 16,
+  "atlas": "res://assets/placeholder/tiles/greybox_tiles.png",
+  "symbols": {
+    ".": { "atlas": [0, 0], "surface": "grass" },
+    ":": { "atlas": [1, 0], "surface": "grass" },
+    ",": { "atlas": [2, 0], "surface": "dirt" },
+    "_": { "atlas": [3, 0], "surface": "stone" },
+    "#": { "atlas": [4, 0], "surface": "stone", "solid": true },
+    "~": { "atlas": [5, 0], "surface": "water", "solid": true },
+    "=": { "atlas": [6, 0], "surface": "wood" },
+    "X": { "atlas": [7, 0], "surface": "stone", "solid": true },
+    "@": { "ground": ".", "marker": "player_spawn" },
+    "\"": { "ground": ".", "prop": "res://world/props/grass_tuft.tscn" },
+    "o": { "ground": ",", "prop": "res://world/props/puddle.tscn" },
+    "*": { "ground": ".", "prop": "res://world/props/bush.tscn" },
+    "B": { "ground": ",", "prop": "res://world/props/bench.tscn" }
+  }
+}

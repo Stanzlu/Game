@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MovementTuning" format=3]
+
+[ext_resource type="Script" path="res://entities/player/movement_tuning.gd" id="1_tuning"]
+
+[resource]
+script = ExtResource("1_tuning")
+display_key = "TUNING_SCHWER"
+walk_speed = 80.0
+run_speed = 132.0
+acceleration = 480.0
+deceleration = 520.0
+turn_acceleration = 900.0
