@@ -1,6 +1,7 @@
 # REAL – continuous integration.
-# Budget rule (ADR-009): Ubuntu runners only. Exports run on main and on manual
-# dispatch, not on every push, to stay within the private-repo artifact quota.
+# Budget rule (ADR-009): Ubuntu runners only. Exports run on main, on manual
+# dispatch, or when the head commit message contains "[export]" – not on every
+# push, to stay within the private-repo artifact quota.
 name: CI
 
 # Push runs also report their status on pull requests, so no separate PR trigger.
@@ -45,7 +46,10 @@ jobs:
   export:
     name: Export builds
     needs: checks
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[export]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
