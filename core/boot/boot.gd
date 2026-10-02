@@ -36,7 +36,8 @@ func _ready() -> void:
 	Log.info(Log.Category.BOOT, "boot screen ready", info)
 	if not _start_arg_consumed:
 		SessionOptions.apply_args(OS.get_cmdline_user_args())
-		load("res://tools/autopilot/autopilot.gd").call(&"start_if_requested", get_tree())
+		if OS.is_debug_build():
+			load("res://tools/autopilot/autopilot.gd").call(&"start_if_requested", get_tree())
 	var start := start_argument(OS.get_cmdline_user_args())
 	if not start.is_empty() and not _start_arg_consumed:
 		_start_arg_consumed = true

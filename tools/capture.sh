@@ -18,6 +18,9 @@ frames="${3:-30}"
 shift $(( $# < 3 ? $# : 3 ))
 user_args=("$@")
 mkdir -p "$out_dir"
+# Keep Godot from importing (and exporting) captured frames.
+mkdir -p captures && touch captures/.gdignore
+[ -f "$(dirname "$out_dir")/.gdignore" ] || touch "$(dirname "$out_dir")/.gdignore"
 out_abs="$(cd "$out_dir" && pwd)"
 
 args=(--rendering-driver opengl3 --audio-driver Dummy

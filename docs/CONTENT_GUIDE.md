@@ -18,10 +18,30 @@ Regeln für alles, was Spielerinnen und Spieler lesen, hören oder anklicken. Ve
 | UI-Texte | `content/locale/ui.csv` | Spalten `keys,de` |
 | Dialoge | `content/dialogue/<bereich>/<szene>.dialogue` | Dialogue Manager 4 |
 | Quests, Items, Kuriositäten | `content/quests/`, `content/items/` | `.tres` (ab Phase 2) |
-| Karten | `content/maps/<map>.txt` | Textkarte (ab Phase 1) |
+| Karten | `content/maps/<map>.txt` | Textkarte, siehe unten |
 
 Neue Dialogdateien werden ab Phase 2 bewusst in die Übersetzungsvorlagen eingetragen. Die automatische
 Eintragung des Dialogue Managers ist aus (ADR-006). Testdateien liegen nur unter `tests/`.
+
+## Kartenformat (ADR-004, ADR-013)
+
+```
+; Kommentare sind vor dem [map]-Block erlaubt
+[legend]
+1 = {"ground": "_", "prop": "res://world/props/sign.tscn", "params": {"cue": "sign_parcours"}}
+L = {"ground": ".", "prop": "res://world/props/lever.tscn", "params": {"target": "garden_gate"}}
+G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "garden_gate"}}
+[map]
+#######
+#@.1LG#
+#######
+```
+
+- Globale Symbole stehen in `content/maps/legend.json`. Lokale Symbole im `[legend]`-Block überschreiben sie.
+- Tiles: `.` `:` Gras · `,` Erde · `_` Stein · `#` Mauer (fest) · `~` Wasser (fest) · `=` Holz · `X` dunkel (fest).
+- Platzierungen: `@` Startpunkt · `"` hohes Gras · `o` Pfütze · `*` Busch · `B` Bank (2 Tiles breit).
+- Alle Zeilen gleich lang. Fehler erscheinen mit Datei, Zeile und Spalte im Log und lassen Tests scheitern.
+- Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
 
 ## Dialogformat (Dialogue Manager 4)
 
@@ -38,7 +58,8 @@ Mira: Du stehst im Regen.
 - Cues (`~ name`) in `snake_case`.
 - „…“ ist eine vollwertige Antwort und bekommt eine eigene Reaktion.
 - Keine Fake Choices: Jede Antwortgruppe braucht mindestens eine wahrnehmbare Konsequenz (andere Reaktion, Zustand, spätere Erinnerung). Ab Phase 2 prüft ein Validator das.
-- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein.
+- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede Entwurfszeile markiert ist.
+- Neue Dialogdateien in `internationalization/locale/translations_pot_files` eintragen. Ein Test prüft das.
 - Statische Zeilen-IDs für Übersetzungen werden in Phase 2 eingeführt.
 
 ## Schreibregeln
