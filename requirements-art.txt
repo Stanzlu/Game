@@ -1,0 +1,4 @@
+# Generators for the look prototype (tools/art, tools/audio; ADR-017). Dev-only, not in builds or CI.
+# Install: .venv/bin/pip install -r requirements-art.txt
+numpy==2.4.6
+pillow==12.3.0
