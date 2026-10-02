@@ -10,6 +10,7 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 
 ## Befehle
 - `tools/check.sh` vor jedem Push (Lint, Format, Import, Smoke-Run, GUT). Muss grün sein.
+- Einzelne Testdatei: `tools/godot.sh --headless -s addons/gut/gut_cmdln.gd -gselect=test_log -gexit`
 - `tools/export.sh <ziel>` und `tools/smoke_export.sh` für Builds; `tools/capture.sh` für Screenshots.
 - gdtoolkit liegt in `.venv/` (`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`).
 
