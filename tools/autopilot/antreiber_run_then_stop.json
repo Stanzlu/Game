@@ -1,0 +1,6 @@
+[
+  {"t": 0.5, "press": ["move_right"], "log": "start walking"},
+  {"t": 3.0, "press": ["sprint"], "log": "sprint"},
+  {"t": 9.0, "release": ["sprint", "move_right"], "log": "stop and stand still"},
+  {"t": 15.0, "log": "end"}
+]

@@ -95,3 +95,9 @@ func test_shipped_legend_and_maps_are_valid() -> void:
 				)
 		checked += 1
 	assert_gt(checked, 0, "no maps found")
+
+
+func test_comments_before_the_map_block_are_ignored() -> void:
+	var data := MapData.parse("; a comment\n[legend]\n; another\n[map]\n..", LEGEND)
+	assert_true(data.is_valid(), str(data.errors))
+	assert_eq(data.height, 1)

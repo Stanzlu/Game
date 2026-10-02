@@ -10,16 +10,27 @@ const DEFAULT_LEGEND := "res://content/maps/legend.json"
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
+## Optional shared y-sorted parent for props (e.g. endless segments that share one actor
+## layer). Props spawned there are freed together with this map.
+@export var props_parent: Node2D
 
 var data: MapData
 var ground: TileMapLayer
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
+var _external_props: Array[Node] = []
 
 
 func _ready() -> void:
 	if not map_path.is_empty():
 		load_map(map_path)
+
+
+func _exit_tree() -> void:
+	for prop in _external_props:
+		if is_instance_valid(prop):
+			prop.queue_free()
+	_external_props.clear()
 
 
 ## Loads, validates and builds the map. Returns false (and logs errors) on invalid content.
@@ -167,7 +178,12 @@ func _spawn_props() -> void:
 		var prop := scene.instantiate() as Node2D
 		var cell: Vector2i = placement["cell"]
 		prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
-		prop.position = cell_to_world(cell) - global_position
-		entities.add_child(prop)
+		if props_parent != null:
+			props_parent.add_child(prop)
+			prop.global_position = cell_to_world(cell)
+			_external_props.append(prop)
+		else:
+			prop.position = cell_to_world(cell) - global_position
+			entities.add_child(prop)
 		if prop.has_method("apply_params"):
 			prop.call("apply_params", placement["params"])

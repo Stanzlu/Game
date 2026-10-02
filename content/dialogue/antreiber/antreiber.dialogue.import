@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bts0l6pce80oe"
+path="res://.godot/imported/antreiber.dialogue-f8a175d44bffa9b94dc0cc07be032011.tres"
+
+[deps]
+
+source_file="res://content/dialogue/antreiber/antreiber.dialogue"
+dest_files=["res://.godot/imported/antreiber.dialogue-f8a175d44bffa9b94dc0cc07be032011.tres"]
+
+[params]
+
+defaults=true

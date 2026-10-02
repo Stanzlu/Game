@@ -3,6 +3,7 @@ extends RefCounted
 ## Parsed, validated text map (ADR-004). Pure data: no nodes, fully unit-testable.
 ##
 ## File format (content/maps/*.txt):
+##   ; comment                    allowed before the [map] block
 ##   [legend]                     optional, map-local symbols as JSON objects
 ##   1 = {"ground": ",", "prop": "res://world/props/sign.tscn", "params": {"cue": "x"}}
 ##   [map]
@@ -75,8 +76,11 @@ static func parse(map_text: String, legend: Dictionary, source_name: String = ""
 			section = stripped.trim_prefix("[").trim_suffix("]")
 			saw_section_header = true
 			continue
+		var in_map_block := section == "map" and saw_section_header
+		if stripped.begins_with(";") and not in_map_block:
+			continue
 		if section == "legend":
-			if stripped.is_empty() or stripped.begins_with(";"):
+			if stripped.is_empty():
 				continue
 			data._parse_local_symbol(stripped, line_no, symbols)
 		else:

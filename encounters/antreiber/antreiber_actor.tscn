@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://encounters/antreiber/antreiber_actor.gd" id="1_s"]
+[ext_resource type="Resource" path="res://entities/character/sheet_antreiber.tres" id="2_sheet"]
+[ext_resource type="Resource" path="res://content/dialogue/antreiber/antreiber.dialogue" id="3_dlg"]
+
+[node name="Antreiber" type="Node2D"]
+script = ExtResource("1_s")
+sheet = ExtResource("2_sheet")
+dialogue = ExtResource("3_dlg")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+
+[node name="Bark" type="Label" parent="."]
+z_index = 40
+offset_top = -40.0
+offset_bottom = -30.0
+theme_type_variation = &"PromptLabel"

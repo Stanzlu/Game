@@ -20,6 +20,9 @@ mapfile -t GD_FILES < <(find . -name '*.gd' \
 
 # Godot prints these markers for script and resource problems but may still exit 0.
 ERROR_PATTERN='SCRIPT ERROR|Parse Error|Failed to load script|ERROR: '
+# Known exit-time report caused by Dialogue Manager keeping a resource (KNOWN_ISSUES #2).
+IGNORE_PATTERN='resources still in use at exit'
+has_errors() { grep -E "$ERROR_PATTERN" "$1" | grep -vEq "$IGNORE_PATTERN"; }
 
 step() { echo; echo "== $*"; }
 
@@ -35,22 +38,32 @@ step "godot import"
 tools/godot.sh --headless --import >/dev/null 2>&1 || true
 import_log="$(mktemp)"
 tools/godot.sh --headless --import >"$import_log" 2>&1 || { cat "$import_log"; exit 1; }
-if grep -Eq "$ERROR_PATTERN" "$import_log"; then
-  grep -E "$ERROR_PATTERN" "$import_log"
+if has_errors "$import_log"; then
+  grep -E "$ERROR_PATTERN" "$import_log" | grep -vE "$IGNORE_PATTERN"
   echo "check: import reported errors" >&2
   exit 1
 fi
 echo "import ok"
 
-step "smoke: run main scene headless"
-smoke_log="$(mktemp)"
-tools/godot.sh --headless --quit-after 120 >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
-if grep -Eq "$ERROR_PATTERN" "$smoke_log"; then
-  grep -E "$ERROR_PATTERN" "$smoke_log"
-  echo "check: main scene reported errors" >&2
-  exit 1
-fi
-echo "smoke ok"
+# Each start target runs a few hundred frames headless and must log its ready line.
+for target in "" sandbox antreiber; do
+  step "smoke: ${target:-main menu}"
+  smoke_log="$(mktemp)"
+  args=(--headless --quit-after 240)
+  [ -n "$target" ] && args+=(-- "--start=$target")
+  tools/godot.sh "${args[@]}" >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
+  if has_errors "$smoke_log"; then
+    grep -E "$ERROR_PATTERN" "$smoke_log" | grep -vE "$IGNORE_PATTERN"
+    echo "check: smoke run reported errors" >&2
+    exit 1
+  fi
+  if [ -n "$target" ] && ! grep -q "scene ready" "$smoke_log"; then
+    cat "$smoke_log"
+    echo "check: scene '$target' did not report ready" >&2
+    exit 1
+  fi
+  echo "smoke ok"
+done
 
 step "unit tests (GUT)"
 tools/godot.sh --headless -s addons/gut/gut_cmdln.gd -gexit
