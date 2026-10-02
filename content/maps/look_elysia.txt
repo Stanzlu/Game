@@ -1,5 +1,6 @@
 ; Look-Prototyp: Elysia-Garten (ADR-017). Boden wird mit tools/art/bake_ground.py gebacken,
-; Props kommen aus assets/generated/props (tools/art/make_sprites.py).
+; Props kommen aus assets/generated/props (tools/art/make_sprites.py). Layout-Hilfe:
+; tools/art/layout_look_maps.py elysia --write (ersetzt den [map]-Block).
 [meta]
 style = "elysia"
 ground = "res://assets/generated/maps/look_elysia_ground.png"
@@ -8,61 +9,68 @@ water = "res://assets/generated/maps/look_elysia_water.png"
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
 , = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
-_ = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+M = {"atlas": [3, 0], "surface": "stone", "paint": "marble"}
+s = {"atlas": [3, 0], "surface": "stone", "paint": "stairs"}
 ~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
 = = {"atlas": [6, 0], "surface": "wood", "paint": "planks_v"}
 h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
 ^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
 % = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
 @ = {"ground": ",", "marker": "player_spawn"}
-U = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fountain"}}
+W = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/sacred_tree"}}
+I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar"}}
+C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal"}}
 T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
+U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_blue"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_purple"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_blossom"}}
+o = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/bush"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/glow_flower"}}
 Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/giant_flower"}}
 O = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/topiary"}}
 R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rock"}}
-l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lantern"}}
 w = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lily_pad"}}
-r = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/reeds"}}
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fence"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhh.....hhhhhhhhhhhhhhh......hhhhhhhhhhhhhhh.....hhhhh
-hhh....hhh..........hhhhh................hhhhh...............hhh
-hh...........T...........T.......ff....T......................hh
-hh...T...fff.................ffffffff.........................hh
-hh.....fffff................ffffffff.....................T....hh
-hh.....fffffffff..............ffffff....~~r~~~~...............hh
-hh.....ffffffffff.................ff...r~~~~~w~~..............hh
-hh.....ffYffffff......................~~w~~~~~~~~~............hh
-hh....ffffffff........................r~~~~~~~~~~w~~..........hh
-hh.....ff......Y.............Y....l...~~~~~~~~~~~~~~~.........hh
-hh..............................,,,,,,================,,......hh
-hh..T............O...___...O..,,,,,,,=================,,......hh
-hh................._______.,,,,,,,...r~~~~~~~~~~~~~~~~,,l.....hh
-hh................._______,,,,,......~~w~~~~~~~w~~~r..,,,..T..hh
-hh..............l.____U____,,........~~~~~~~~~~r~~....,,,.....hh
-hh.............,,,_________...........~~r~~..~........,,......hh
-hh..........,,,,,,,_______...........................,,,......hh
-hh.,,,,,,,,,,,@,,.._______..........................,Y,.......hh
-hh,,,,,,,,,,,,...O...___...O........................,,,.......hh
-hh.,,,,,,,,..........b.......Y.....................,,,ffffff..hh
-hh..................................T............,,,,fffffff..hh
-hh............Y.................................,,,,.fffffff..hh
-hh.T...........................................,,,,..ffffYff..hh
-hh...ff.fff..................fff..f...........,,,......fff....hh
-hh...fffffff................ffffffff.........,,,.......fff....hh
-hh...fffffff.......T........fffffffY.........,,...............hh
-hh...ffffff..................ffffff.........,,,............T..hh
-hh......ff...................fff...R........,,,...............hh
-hh.......fR........^^^^^^R....f.............,,.......R........hh
-hh.....^^^^^^^^^^^^^^^^^^^^^.......^^.....l.,,......^^^.......^^
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.......,,......^^^^^^^^^^^^
-^^^^^^^^^^^^^^^^^^^%%%%%%^^^^^^^^^^^^^FFFFFb,,FFFFF^^^^^^^^^^^^^
-^^^^^^^%%%%%%%%%%%%%%%%%%%%%^^^^^^^%%^^^^^^^^^^^^^^^%%%^^^^^^^%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^^^^^%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hhhhhhhhhhhhh.....hhhhhhhhhhhhhhhh....hhhhhhhhhhhhhhhhhh..hhhhhh
+hh...................hhh.................hhhh~~..............hhh
+hh....ff.K............,.g....................~~.......f.......hh
+hh...fffffff..,,,,U,,,,,...P............g....~~T....fffffKff..hh
+hh..Tfffffff,,,,,,,,,,,.....................~~~.....ffffffff..hh
+hh..ffgfffff,,,.....Y..........o............~~..o....fgffff...hh
+hh...ff....,,,..o..........................~~.........ff....U.hh
+hh^^^^^....,,.........^^^^^...............vv^^^....Y..........hh
+hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
+hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
+hh....................o......MMMMMMM......~~..............o...hh
+hh....o....................MMMMMMMMMMM....~~~fo...............hh
+hh..................ff....MMM~~~~~~~MMM....~~fff..............hh
+hh...............fffff...MM~~~~~~~~w~~MM...~~~ff.....U........hh
+hh......T..........ffg..MMMw~~~~~~~~~~MMM.g.~~................hh
+hh......................IM~~~~~~~~~~~~~MI...~~................hh
+hh......................MM~~~~~~W~~~~~~MM...~~................hh
+hh......................MMM~~~~~~~~~w~MMM...~~................hh
+hh...................g...MM~~w~~~~~~~~MM..g.~~~..........T....hh
+hh............P...........MMM~~~~~~~MMM......~~...K...........hh
+hh...U.....................IMMMMMMMMMI.......~~...............hh
+hh.........................MMMMMCMMMMM.......~~...............hh
+hh....................,o,,,MMMMMMMMMMM,,,o,,,==,,.............hh
+hh..............,,,,,,,,,,,,...,,,...,,,,,,,,==,,,,,,,,,,,,,,,hh
+hh.,,,,,,,,,,,,,,o,,,,,,,,...g.,,,.g......,,,==,,,,,,,,,,,,,,,hh
+hh,,,,,,,,@,,,,,,,,,..........O,,,O..........~~.....Y,,,,,,,,,hh
+hh.,,,,,,,,,,,..........Y....o.,,,.o.........~~~.....fffffff..hh
+hh...ffffffffK.................,,,............~~.....ffgfff...hh
+hh....fffffff.................O,,,O.......P...~~~.......ff.P..hh
+hh......Rfg........T...R..o....,,,....o........~~......R.f....hh
+hh.......f.........^^^^^^......,,,....^^^R.....~~...o.........hh
+hh.....^^^^^^^^^^^^^^^^^^^^....,,,....^^^^^^^^^vv^^^^^^.......^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^FFFFFb,FFFFF^^^^^^^^^vv^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^%%%%%%^^^^^^^^^^^^^%%%%^^^^^vv^^^^^^^^^^^^^^^
+^^^^^^^%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%^^^^^^^%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%

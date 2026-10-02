@@ -1,0 +1,7 @@
+[
+  {"t": 0.4, "press": ["move_right"], "log": "walk east along the path"},
+  {"t": 5.6, "press": ["move_down"], "log": "toward the island edge and the waterfall"},
+  {"t": 6.2, "release": ["move_right"]},
+  {"t": 7.4, "release": ["move_down"], "log": "end of walk"},
+  {"t": 8.6, "log": "end of capture"}
+]

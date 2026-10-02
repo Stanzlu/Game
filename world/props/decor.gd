@@ -15,6 +15,7 @@ var lights: Array[PointLight2D] = []
 var _light_energy: Array[float] = []
 var _bob := 0.0
 var _time := 0.0
+var _glow: Sprite2D
 
 
 func _ready() -> void:
@@ -53,15 +54,23 @@ func apply_params(params: Dictionary) -> void:
 		_add_sparkles()
 	if entry.has("loop_sound"):
 		_add_loop_sound(str(entry["loop_sound"]))
+	if entry.has("glow"):
+		_add_glow(entry["glow"])
+	if entry.has("petal_rain"):
+		_add_petal_rain(entry["petal_rain"])
 	_bob = float(entry.get("bob", 0.0))
 	_time = fmod(global_position.x * 0.13 + global_position.y * 0.07, TAU)
-	set_process(_bob > 0.0 or (entry.get("flicker", false) and not lights.is_empty()))
+	set_process(
+		_bob > 0.0 or _glow != null or (entry.get("flicker", false) and not lights.is_empty())
+	)
 
 
 func _process(delta: float) -> void:
 	_time += delta
 	if _bob > 0.0:
 		sprite.position.y = roundf(sin(_time * 1.3) * _bob)
+	if _glow != null:
+		_glow.modulate.a = 0.55 + 0.2 * sin(_time * 1.7)
 	for i in lights.size():
 		var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
 		lights[i].energy = _light_energy[i] * f
@@ -206,6 +215,50 @@ func _add_loop_sound(path: String) -> void:
 	player.max_distance = 260.0
 	player.autoplay = true
 	add_child(player)
+
+
+## Soft additive halo (crystals, glowing plants). Elysia's "leuchtende Pflanzen".
+func _add_glow(spec: Dictionary) -> void:
+	_glow = Sprite2D.new()
+	_glow.name = "Glow"
+	_glow.texture = light_texture()
+	var radius := float(spec.get("radius", 16))
+	_glow.scale = Vector2.ONE * radius / 32.0
+	_glow.position = _vec(spec.get("offset", [0, 0]))
+	_glow.self_modulate = Color(str(spec.get("color", "#ffffff")))
+	_glow.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_glow.material = mat
+	add_child(_glow)
+
+
+func _add_petal_rain(spec: Dictionary) -> void:
+	var petals := CPUParticles2D.new()
+	petals.name = "PetalRain"
+	petals.position = _vec(spec.get("offset", [0, 0]))
+	petals.texture = load(FX_DIR + "petal.png")
+	petals.amount = int(spec.get("amount", 12))
+	petals.lifetime = 6.0
+	petals.preprocess = 6.0
+	petals.local_coords = false
+	petals.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	petals.emission_rect_extents = _vec(spec.get("extents", [40, 20]))
+	petals.direction = Vector2(0.4, 1)
+	petals.spread = 25.0
+	petals.gravity = Vector2(3, 6)
+	petals.initial_velocity_min = 4.0
+	petals.initial_velocity_max = 10.0
+	petals.angular_velocity_min = -90.0
+	petals.angular_velocity_max = 90.0
+	var fade := Gradient.new()
+	fade.set_color(0, Color(1, 1, 1, 0))
+	fade.add_point(0.15, Color(1, 1, 1, 1))
+	fade.add_point(0.8, Color(1, 1, 1, 1))
+	fade.set_color(1, Color(1, 1, 1, 0))
+	petals.color_ramp = fade
+	petals.z_index = 20
+	add_child(petals)
 
 
 static func _vec(a: Variant) -> Vector2:
