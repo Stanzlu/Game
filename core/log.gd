@@ -4,12 +4,19 @@ extends Node
 ## Usage: Log.info(Log.Category.SAVE, "slot written", {"slot": 1})
 ## Debug builds log everything from DEBUG upwards; release builds only WARN and ERROR.
 ## ERROR goes through push_error() so it is never silent and fails tools/check.sh smoke runs.
+## Release builds accept the user argument "--log-debug" (e.g. `REAL.exe -- --log-debug`)
+## so playtesters can send full logs.
 
 enum Level { DEBUG, INFO, WARN, ERROR }
 enum Category { BOOT, SAVE, QUEST, DIALOGUE, WORLD_STATE, INTERACTION, AUDIO, INPUT, UI, CONTENT }
 
 var min_level: Level = Level.DEBUG if OS.is_debug_build() else Level.WARN
 var muted_categories: Array[Category] = []
+
+
+func _init() -> void:
+	if "--log-debug" in OS.get_cmdline_user_args():
+		min_level = Level.DEBUG
 
 
 func debug(category: Category, message: String, data: Dictionary = {}) -> void:

@@ -24,6 +24,8 @@ commit="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
 if [ -n "$(git status --porcelain --untracked-files=no 2>/dev/null)" ]; then
   commit="${commit}+dirty"
 fi
+# The stamp is only for the exported build; remove it afterwards so dev runs show "dev".
+trap 'rm -f core/build_info.cfg' EXIT
 cat > core/build_info.cfg <<CFG
 [build]
 commit="${commit}"

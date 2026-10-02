@@ -1,0 +1,94 @@
+# REAL – continuous integration.
+# Budget rule (ADR-009): Ubuntu runners only. Exports run on main and on manual
+# dispatch, not on every push, to stay within the private-repo artifact quota.
+name: CI
+
+# Push runs also report their status on pull requests, so no separate PR trigger.
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Lint, import, tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install gdtoolkit
+        run: pip install -r requirements-dev.txt
+
+      - name: Cache Godot editor
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/real/godot
+          key: godot-editor-${{ hashFiles('tools/godot_env.sh') }}
+
+      - name: Set up Godot
+        run: tools/setup_godot.sh
+
+      - name: Run checks
+        run: tools/check.sh
+
+  export:
+    name: Export builds
+    needs: checks
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cache Godot editor
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/real/godot
+          key: godot-editor-${{ hashFiles('tools/godot_env.sh') }}
+
+      - name: Cache export templates
+        uses: actions/cache@v6
+        with:
+          path: ~/.local/share/godot/export_templates
+          key: godot-templates-${{ hashFiles('tools/godot_env.sh') }}
+
+      - name: Set up Godot and export templates
+        run: tools/setup_godot.sh --templates
+
+      - name: Export Linux build and verify it boots
+        run: |
+          tools/export.sh linux
+          tools/smoke_export.sh build/linux/REAL.x86_64
+
+      - name: Export Windows build
+        run: tools/export.sh windows
+
+      - name: Export macOS build
+        run: tools/export.sh macos
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v7
+        with:
+          name: REAL-windows
+          path: build/windows/REAL.exe
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload macOS build
+        uses: actions/upload-artifact@v7
+        with:
+          name: REAL-macos
+          path: build/macos/REAL.zip
+          retention-days: 7
+          if-no-files-found: error

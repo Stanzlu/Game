@@ -19,3 +19,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Build stamp written by tools/export.sh (removed after export)
+core/build_info.cfg
