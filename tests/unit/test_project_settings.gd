@@ -79,3 +79,17 @@ func test_every_ui_string_has_a_german_translation() -> void:
 func test_autoloads_are_present() -> void:
 	assert_true(get_tree().root.has_node("Log"), "Log autoload missing")
 	assert_true(get_tree().root.has_node("DialogueManager"), "DialogueManager autoload missing")
+
+
+func test_translation_templates_never_include_test_files() -> void:
+	var pot_files: PackedStringArray = ProjectSettings.get_setting(
+		"internationalization/locale/translations_pot_files", PackedStringArray()
+	)
+	for path: String in pot_files:
+		assert_false(path.begins_with("res://tests/"), "test file in POT list: " + path)
+	assert_false(
+		ProjectSettings.get_setting(
+			"dialogue_manager/editor/translations/UPDATE_TRANSLATION_TEMPLATES_AUTOMATICALLY", true
+		),
+		"Dialogue Manager must not edit the POT list automatically (see CONTENT_GUIDE)"
+	)
