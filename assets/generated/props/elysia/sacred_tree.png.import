@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bylux0rq8pdsa"
-path="res://.godot/imported/tree_2.png-7ecb6a6e1bceae50ffc037d4d8cc8939.ctex"
+uid="uid://cehhb58mv8gp3"
+path="res://.godot/imported/sacred_tree.png-94e5aea8f8bcfb1fb72e38cf2ce391b5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/generated/props/elysia/tree_2.png"
-dest_files=["res://.godot/imported/tree_2.png-7ecb6a6e1bceae50ffc037d4d8cc8939.ctex"]
+source_file="res://assets/generated/props/elysia/sacred_tree.png"
+dest_files=["res://.godot/imported/sacred_tree.png-94e5aea8f8bcfb1fb72e38cf2ce391b5.ctex"]
 
 [params]
 
