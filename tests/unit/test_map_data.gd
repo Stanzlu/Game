@@ -97,6 +97,27 @@ func test_shipped_legend_and_maps_are_valid() -> void:
 	assert_gt(checked, 0, "no maps found")
 
 
+func test_equals_sign_can_be_a_local_symbol() -> void:
+	var data := MapData.parse(
+		'[legend]\n= = {"atlas": [6, 0], "surface": "wood"}\n[map]\n.=', LEGEND
+	)
+	assert_true(data.is_valid(), str(data.errors))
+	assert_eq(data.surface_at_cell(Vector2i(1, 0)), &"wood")
+
+
+func test_meta_block_is_parsed() -> void:
+	var text := '[meta]\nstyle = "tal"\nground = "res://x.png"\n[map]\n..'
+	var data := MapData.parse(text, LEGEND)
+	assert_true(data.is_valid(), str(data.errors))
+	assert_eq(data.meta.get("style"), "tal")
+	assert_eq(data.meta.get("ground"), "res://x.png")
+
+
+func test_invalid_meta_line_is_reported() -> void:
+	var data := MapData.parse("[meta]\nbroken\n[map]\n..", LEGEND)
+	assert_eq(data.errors.size(), 1, str(data.errors))
+
+
 func test_comments_before_the_map_block_are_ignored() -> void:
 	var data := MapData.parse("; a comment\n[legend]\n; another\n[map]\n..", LEGEND)
 	assert_true(data.is_valid(), str(data.errors))
