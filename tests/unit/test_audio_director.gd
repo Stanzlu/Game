@@ -1,6 +1,8 @@
 extends GutTest
 ## AudioDirector: music states, crossfade players, ducking, tape stop, ambience.
 
+const RAIN := preload("res://assets/generated/audio/rain_loop.wav")
+
 var audio: AudioDirectorService
 
 
@@ -49,14 +51,48 @@ func test_tape_stop_slows_down_and_ends_silent() -> void:
 	audio.play_music("elysia", 0.0)
 	await wait_physics_frames(2)
 	await audio.tape_stop(0.3)
+	# leave the signal's call stack before the test frees the director
+	await wait_physics_frames(1)
 	assert_eq(audio.current, "")
 	for player: AudioStreamPlayer in audio._music:
 		assert_false(player.playing)
 
 
 func test_ambience_crossfades_and_fades_out() -> void:
-	var rain: AudioStream = load("res://assets/generated/audio/rain_loop.wav")
+	var rain: AudioStream = RAIN
 	audio.set_ambience(rain, -4.0, 0.0)
 	assert_eq(audio.ambience_stream, rain)
 	audio.set_ambience(null, -4.0, 0.0)
 	assert_null(audio.ambience_stream)
+
+
+func test_silence_twice_does_not_revive_a_fading_bed() -> void:
+	var rain: AudioStream = RAIN
+	audio.set_ambience(rain, -6.0, 0.0)
+	audio.set_ambience(null, -6.0, 0.3)
+	await wait_seconds(0.1)
+	audio.set_ambience(null)
+	await wait_seconds(0.5)
+	for player: AudioStreamPlayer in audio._ambience:
+		assert_false(player.playing, "the old bed faded out and stopped")
+
+
+func test_tape_stop_wait_ends_when_new_music_cuts_in() -> void:
+	audio.play_music("elysia", 0.0)
+	await wait_physics_frames(2)
+	var done := [false]
+	audio.tape_stopped.connect(func() -> void: done[0] = true, CONNECT_ONE_SHOT)
+	audio.tape_stop(2.0)
+	audio.play_music("valley", 0.0)
+	await wait_physics_frames(1)
+	assert_true(done[0], "whoever waits on the tape stop is released")
+
+
+func test_ui_sounds_exist_in_both_skins() -> void:
+	for skin: String in ["elysia", "real"]:
+		for sound in AudioDirectorService.UI_SOUNDS:
+			var stream := SoundBank.stream("ui_%s_%s" % [skin, sound]) as AudioStreamRandomizer
+			assert_gt(stream.streams_count, 0, "%s %s" % [skin, sound])
+	audio.ui("move")
+	audio.ui("whistle")
+	assert_push_error("unknown ui sound")

@@ -2,8 +2,10 @@ class_name SoundBank
 extends RefCounted
 ## Builds randomized streams from numbered files: <dir>/<prefix>_0.wav, _1.wav, ...
 ## or a single <dir>/<prefix>.wav. Swapping placeholder audio means replacing files only.
+## Generated sounds (tools/audio/make_sfx.py) are looked up first, then the placeholders.
 
 const SOUND_DIR := "res://assets/placeholder/audio/"
+const GENERATED_DIR := "res://assets/generated/sfx/"
 const MAX_VARIANTS := 8
 
 static var _cache: Dictionary = {}
@@ -12,23 +14,27 @@ static var _cache: Dictionary = {}
 static func stream(
 	prefix: String, pitch_spread: float = 1.08, volume_spread_db: float = 1.5
 ) -> AudioStream:
-	if _cache.has(prefix):
-		return _cache[prefix]
+	var key := "%s|%s|%s" % [prefix, pitch_spread, volume_spread_db]
+	if _cache.has(key):
+		return _cache[key]
 	var randomizer := AudioStreamRandomizer.new()
 	randomizer.random_pitch = pitch_spread
 	randomizer.random_volume_offset_db = volume_spread_db
-	for i in MAX_VARIANTS:
-		var path := "%s%s_%d.wav" % [SOUND_DIR, prefix, i]
-		if not ResourceLoader.exists(path):
+	for dir: String in [GENERATED_DIR, SOUND_DIR]:
+		for i in MAX_VARIANTS:
+			var path := "%s%s_%d.wav" % [dir, prefix, i]
+			if not ResourceLoader.exists(path):
+				break
+			randomizer.add_stream(-1, load(path))
+		if randomizer.streams_count == 0:
+			var single := "%s%s.wav" % [dir, prefix]
+			if ResourceLoader.exists(single):
+				randomizer.add_stream(-1, load(single))
+		if randomizer.streams_count > 0:
 			break
-		randomizer.add_stream(-1, load(path))
-	if randomizer.streams_count == 0:
-		var single := "%s%s.wav" % [SOUND_DIR, prefix]
-		if ResourceLoader.exists(single):
-			randomizer.add_stream(-1, load(single))
 	if randomizer.streams_count == 0:
 		Log.error(Log.Category.AUDIO, "no sound files for prefix", {"prefix": prefix})
-	_cache[prefix] = randomizer
+	_cache[key] = randomizer
 	return randomizer
 
 
