@@ -56,6 +56,17 @@ class Grid:
                 if d <= width / 2:
                     self.set(x, y, c, only)
 
+    def add_rails(self):
+        """Railing placements along the north and south edges of every plank bridge."""
+        for y in range(self.h):
+            for x in range(self.w):
+                if self.g[y][x] != "=":
+                    continue
+                if self.get(x, y - 1) not in ("=", "q"):
+                    self.g[y][x] = "q"
+                elif self.get(x, y + 1) not in ("=", "Q", None):
+                    self.g[y][x] = "Q"
+
     def text(self):
         return "\n".join("".join(r) for r in self.g)
 
@@ -155,6 +166,7 @@ def elysia():
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
+    g.add_rails()
     return g
 
 
@@ -223,6 +235,7 @@ def tal():
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
+    g.add_rails()
     return g
 
 
@@ -285,6 +298,7 @@ def wald():
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
+    g.add_rails()
     return g
 
 

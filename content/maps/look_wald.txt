@@ -27,6 +27,8 @@ n = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/log"}}
 R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/rock"}}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/splash"}}
+q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/rail_n"}}
+Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/rail_s"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -50,9 +52,9 @@ hh....T...ffffffffffffffk........n..~~~............hhhhh
 hh........fufffffZfffffff..........~~~....R........hhhhh
 hh........fffffffffffff,..n.......~~~..............hhhhh
 hhh....n...fffffffffff,,,,,......~~~.......,,,,,,,,hhhhh
-hhhh......cfffffffffff.,,,,,,,=====,,,,,,,,,,,,,,,,hhhhh
+hhhh......cfffffffffff.,,,,,,,qqqqq,,,,,,,,,,,,,,,,hhhhh
 hhhh.......,,,ffffffff....,,,,=====,,,,,,,,,,,......hhhh
-hhhh......,,,,..fffff.c.......=====,,,,.........n...hhhh
+hhhh......,,,,..fffff.c.......QQQQQ,,,,.........n...hhhh
 hhhh.n..,,,,......ffk..........~~...........c.......hhhh
 hhhh,,,,,,,...n..............R.~~....k...............hhh
 hhhh,@,,,.................u...~~~........n...........hhh

@@ -869,6 +869,38 @@ def light_beam(w=96, h=220):
     return rgba
 
 
+def bridge_rail(style):
+    """One cell of bridge railing: a post on the left and two rails across (tiles side by side)."""
+    st = pa.STYLES[style]
+    wood = st["wood"]
+    c = Canvas(18, 12)
+    for y0 in (1, 5):
+        c.paint(c.rect(1, y0, 18, y0 + 2), wood, np.where(c.yy == y0, 0.8, 0.45), dither=False)
+    c.paint(c.rect(1, 0, 4, 12), wood, np.where(c.xx < 2, 0.85, np.where(c.xx > 2, 0.3, 0.55)), dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def fog_bank(seed, w=180, h=44):
+    """Soft ground fog in a few alpha bands (stays pixel art). Tinted by the scene."""
+    rng = np.random.default_rng(seed)
+    out = np.zeros((h, w, 4), np.float32)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    density = np.zeros((h, w), np.float32)
+    for _ in range(9):
+        cx, cy = rng.uniform(w * 0.15, w * 0.85), rng.uniform(h * 0.35, h * 0.65)
+        rx, ry = rng.uniform(w * 0.12, w * 0.25), rng.uniform(h * 0.2, h * 0.32)
+        density += np.clip(1 - ((xx - cx) / rx) ** 2 - ((yy - cy) / ry) ** 2, 0, 1)
+    density = np.clip(density, 0, 1)
+    bands = np.floor(density * 4) / 4
+    b = pa.BAYER4[np.arange(h)[:, None] % 4, np.arange(w)[None, :] % 4]
+    edge = (density * 4 - np.floor(density * 4)) > b
+    bands = np.where(edge, bands + 0.25, bands)
+    out[..., :3] = 255
+    out[..., 3] = np.clip(bands, 0, 1) * 255
+    return out
+
+
 def floating_islet(seed, w=56, h=52):
     """Small floating island for the sky: grass cap, tapering mauve rock, hanging roots."""
     rng = np.random.default_rng(seed)
@@ -1052,6 +1084,12 @@ def build():
     CATALOG["wald/light_beam"] = {"textures": [RES + "/wald/light_beam.png"], "anchor": [48, 200],
                                   "beam": True, "lights": [{"offset": [0, -10], "color": "#9ff2d8",
                                                             "energy": 1.1, "range": 120}]}
+    for style in ("elysia", "tal", "wald"):
+        rail = bridge_rail(style)
+        # north rail: base on the top edge of its cell; south rail: base on the bottom edge
+        save(style, "rail_n", rail, (9, 20), shape={"rect": [16, 3], "offset": [0, -7]})
+        save(style, "rail_s", rail, (9, 4), shape={"rect": [16, 3], "offset": [0, 7]})
+    pa.save_rgba(os.path.join(OUT, "fx", "fog.png"), fog_bank(300))
     particles()
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}

@@ -30,6 +30,8 @@ v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
 d = {"atlas": [2, 0], "surface": "dirt", "paint": "field"}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/splash"}}
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres"}}
+q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_n"}}
+Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_s"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -52,9 +54,9 @@ hhh.....................l,,,............~~~..........hhh
 hhh.................mmm.p,,,.......g....~~~..........hhh
 hhh.....gg.........mmmmmm,@,............~~~..........hhh
 hhh................m,,,,,,,p,...........~~~~.........hhh
-hhh...........,,,,,,p,,,,,,,,,,,,,,,,,,,,====,,,,....hhh
+hhh...........,,,,,,p,,,,,,,,,,,,,,,,,,,,qqqq,,,,....hhh
 hhh,,,,,,,,,,p,,,,,,,,,,,,,,,,,p,,,,,,,,,====,,,,,,,,hhh
-hhh,,,,,,p,,,,,,.................,,,,,,,,====,,,,,,,,hhh
+hhh,,,,,,p,,,,,,.................,,,,,,,,QQQQ,,,,,,,,hhh
 hhh,,,,,,,,,........................m.....~~~...g...,hhh
 hhh............gg.............gg...^^^^^^^~~~~......^hhh
 hhh...............................^^^^^^^^^vvv^^^^^^^hhh

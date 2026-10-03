@@ -228,6 +228,44 @@
    "res://assets/generated/props/elysia/pillar.png"
   ]
  },
+ "elysia/rail_n": {
+  "anchor": [
+   9,
+   20
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/rail_n.png"
+  ]
+ },
+ "elysia/rail_s": {
+  "anchor": [
+   9,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/rail_s.png"
+  ]
+ },
  "elysia/rainbow": {
   "anchor": [
    0,
@@ -602,6 +640,44 @@
    "res://assets/generated/props/tal/pine_1.png"
   ]
  },
+ "tal/rail_n": {
+  "anchor": [
+   9,
+   20
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rail_n.png"
+  ]
+ },
+ "tal/rail_s": {
+  "anchor": [
+   9,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rail_s.png"
+  ]
+ },
  "tal/rock": {
   "anchor": [
    13,
@@ -935,6 +1011,44 @@
   "textures": [
    "res://assets/generated/props/wald/pine_0.png",
    "res://assets/generated/props/wald/pine_1.png"
+  ]
+ },
+ "wald/rail_n": {
+  "anchor": [
+   9,
+   20
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/rail_n.png"
+  ]
+ },
+ "wald/rail_s": {
+  "anchor": [
+   9,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    7
+   ],
+   "rect": [
+    16,
+    3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/rail_s.png"
   ]
  },
  "wald/rock": {

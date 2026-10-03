@@ -21,6 +21,9 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var petals := false
 @export var motes := false
 @export var fireflies := false
+## Number of drifting fog banks and their tint (alpha = density).
+@export var fog_banks := 0
+@export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
 @export var ambience: AudioStream
@@ -73,6 +76,11 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.motes(view))
 	if fireflies:
 		glow_layer.add_child(AmbientParticles.fireflies(view))
+	if fog_banks > 0:
+		var fog := FogDrift.new()
+		fog.name = "Fog"
+		view.world_root.add_child(fog)
+		fog.setup(map.world_rect(), fog_banks, fog_color)
 	for i in butterfly_cells.size():
 		var butterfly := Butterfly.new()
 		view.world_root.add_child(butterfly)
