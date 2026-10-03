@@ -209,12 +209,12 @@ func _animate_open() -> void:
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
 	_root.modulate.a = 0.0
-	_root.position.y = 6.0
+	offset.y = 6.0
 	_tween = create_tween().set_parallel()
 	_tween.tween_property(_root, ^"modulate:a", 1.0, OPEN_SECONDS)
 	(
 		_tween
-		. tween_property(_root, ^"position:y", 0.0, OPEN_SECONDS)
+		. tween_property(self, ^"offset:y", 0.0, OPEN_SECONDS)
 		. set_trans(Tween.TRANS_QUAD)
 		. set_ease(Tween.EASE_OUT)
 	)

@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://world/props/rift.gd" id="1_s"]
 [ext_resource type="Texture2D" path="res://assets/generated/ui/rift.png" id="2_t"]
 [ext_resource type="Script" path="res://entities/interaction/interactable.gd" id="9_inter"]
+[ext_resource type="Shader" path="res://world/shaders/rift_warp.gdshader" id="3_warp"]
+[ext_resource type="AudioStream" path="res://assets/generated/sfx/rift_hum.wav" id="4_hum"]
+[ext_resource type="Texture2D" path="res://assets/generated/props/fx/mote.png" id="5_mote"]
 
 [sub_resource type="Gradient" id="Gradient_glow"]
 colors = PackedColorArray(0.6, 0.9, 1, 1, 0.6, 0.9, 1, 0)
@@ -15,11 +18,47 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_warp"]
+shader = ExtResource("3_warp")
+
+[sub_resource type="Gradient" id="Gradient_motes"]
+colors = PackedColorArray(0.7, 0.95, 1, 0, 0.75, 0.95, 1, 1, 0.9, 0.8, 1, 0)
+offsets = PackedFloat32Array(0, 0.3, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_use"]
 size = Vector2(22, 24)
 
 [node name="Rift" type="Node2D"]
 script = ExtResource("1_s")
+
+[node name="Warp" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_warp")
+offset_left = -22.0
+offset_top = -70.0
+offset_right = 22.0
+offset_bottom = 12.0
+mouse_filter = 2
+
+[node name="Motes" type="CPUParticles2D" parent="."]
+position = Vector2(0, -28)
+amount = 14
+lifetime = 1.6
+texture = ExtResource("5_mote")
+emission_shape = 1
+emission_sphere_radius = 26.0
+gravity = Vector2(0, 0)
+radial_accel_min = -34.0
+radial_accel_max = -22.0
+tangential_accel_min = 6.0
+tangential_accel_max = 12.0
+color_ramp = SubResource("Gradient_motes")
+
+[node name="Hum" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_hum")
+volume_db = -3.0
+autoplay = true
+max_distance = 240.0
+bus = &"SFX"
 
 [node name="Glow" type="PointLight2D" parent="."]
 position = Vector2(0, -26)

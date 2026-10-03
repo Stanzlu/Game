@@ -381,6 +381,21 @@ def glitch(rng, variant):
     return sig * gate * np.exp(-t / (seconds * 0.6)) * 0.6
 
 
+def rift_hum(rng):
+    """Seamless 4 s loop near the rift: a low beating drone, a thin high whine that swells,
+    and sparse crackles. Every partial completes whole cycles in 4 s, so the loop is clean."""
+    seconds = 4.0
+    t = secs(seconds)
+    drone = sine(55.0, t) + 0.7 * sine(55.5, t) + 0.25 * sine(110.25, t)
+    whine = sine(1760.25, t) * (0.5 + 0.5 * np.sin(2 * np.pi * 0.25 * t)) * 0.08
+    crackle = np.zeros(len(t))
+    for _ in range(14):
+        start = int(rng.uniform(0, len(t) - 800))
+        burst = noise(400, rng) * env(secs(400 / RATE), 0.0005, 0.004)
+        crackle[start:start + 400] += highpass(burst, 2000) * rng.uniform(0.2, 0.5)
+    return lowpass(drone, 400) * 0.6 + whine + crackle
+
+
 def rift_touch(rng):
     """A deep, wrong whoomp: falling sine, sub rumble and a reversed shimmer."""
     t = secs(1.6)
@@ -398,9 +413,9 @@ def normalize(x, peak_db=-3.0):
     return x / peak * 10 ** (peak_db / 20)
 
 
-def write(name, x, peak_db):
+def write(name, x, peak_db, loop=False):
     os.makedirs(OUT, exist_ok=True)
-    x = fade_tail(normalize(x, peak_db))
+    x = normalize(x, peak_db) if loop else fade_tail(normalize(x, peak_db))
     data = (np.clip(x, -1, 1) * 32767).astype("<i2")
     path = os.path.join(OUT, name + ".wav")
     with wave.open(path, "wb") as w:
@@ -409,7 +424,7 @@ def write(name, x, peak_db):
         w.setframerate(RATE)
         w.writeframes(data.tobytes())
     with open(path + ".import", "w", encoding="utf-8") as f:
-        f.write(IMPORT)
+        f.write(IMPORT.replace("edit/loop_mode=0", "edit/loop_mode=2") if loop else IMPORT)
     print(f"{path}  {len(x) / RATE:.2f}s")
 
 
@@ -427,7 +442,9 @@ GROUPS = {
     "voice": -10.0,
     "glitch": -6.0,
     "rift": -3.0,
+    "rift_hum": -8.0,
 }
+LOOPS = {"rift_hum"}
 
 
 def build(only=None):
@@ -451,10 +468,11 @@ def build(only=None):
     for i in range(3):
         sounds[f"glitch_{i}"] = (glitch(rng, i), "glitch")
     sounds["rift_touch"] = (rift_touch(rng), "rift")
+    sounds["rift_hum"] = (rift_hum(rng), "rift_hum")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue
-        write(name, sig, GROUPS[group])
+        write(name, sig, GROUPS[group], loop=group in LOOPS)
     return sounds
 
 

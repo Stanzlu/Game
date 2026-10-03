@@ -1,7 +1,7 @@
 extends Node2D
 ## The rift: a thin glowing crack in the air at the edge of Elysia. Params:
 ## {"target": "<scene key>"}. Touching it starts the RiftSequence. It flickers unless the
-## player reduced flashing effects.
+## player reduced flashing effects. The air around it bends and hums; motes drift into it.
 
 var target := "look_tal"
 var _time := 0.0
@@ -36,6 +36,9 @@ func _process(delta: float) -> void:
 
 func _on_interacted(_actor: Node) -> void:
 	($Interactable as Interactable).enabled = false
+	AudioDirector.sfx("rift_touch")
+	var hum := $Hum as AudioStreamPlayer2D
+	hum.create_tween().tween_property(hum, ^"volume_db", -40.0, 2.0)
 	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
 	if scene == null:
 		Log.error(Log.Category.WORLD_STATE, "rift outside a game scene")

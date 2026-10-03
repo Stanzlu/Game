@@ -138,13 +138,14 @@ func _animate_open() -> void:
 	if _open_tween != null and _open_tween.is_valid():
 		_open_tween.kill()
 	frame.modulate.a = 0.0
-	frame.position.y = 6.0
+	# The layer moves, not the anchored container (moving that would bake its size).
+	offset.y = 6.0
 	material.set_shader_parameter(&"amount", 0.0)
 	_open_tween = create_tween().set_parallel()
 	_open_tween.tween_property(frame, ^"modulate:a", 1.0, OPEN_SECONDS)
 	(
 		_open_tween
-		. tween_property(frame, ^"position:y", 0.0, OPEN_SECONDS)
+		. tween_property(self, ^"offset:y", 0.0, OPEN_SECONDS)
 		. set_trans(Tween.TRANS_QUAD)
 		. set_ease(Tween.EASE_OUT)
 	)
@@ -162,7 +163,7 @@ func close() -> void:
 	if _open_tween != null and _open_tween.is_valid():
 		_open_tween.kill()
 	frame.modulate.a = 1.0
-	frame.position.y = 0.0
+	offset.y = 0.0
 	hide()
 	AudioDirector.ui("close", list.sound_skin)
 	# The key that confirmed the last row must not also trigger the world when the game resumes.
