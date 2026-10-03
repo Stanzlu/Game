@@ -27,6 +27,7 @@ Log="*res://core/log.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 InputDevice="*res://core/input_device.gd"
 WorldState="*res://core/world_state.gd"
+SaveSystem="*res://core/save_system.gd"
 
 [debug]
 
