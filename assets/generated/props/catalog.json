@@ -686,5 +686,335 @@
   "textures": [
    "res://assets/generated/props/tal/woodpile.png"
   ]
+ },
+ "wald/crystals": {
+  "anchor": [
+   15,
+   27
+  ],
+  "emissive": [
+   "res://assets/generated/props/wald/crystals_emit_0.png",
+   "res://assets/generated/props/wald/crystals_emit_1.png"
+  ],
+  "glow": {
+   "color": "#f070e0",
+   "offset": [
+    0,
+    -12
+   ],
+   "radius": 30
+  },
+  "lights": [
+   {
+    "color": "#e060d8",
+    "energy": 0.8,
+    "offset": [
+     0,
+     -12
+    ],
+    "range": 64
+   }
+  ],
+  "shadow": [
+   13,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    22,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/crystals_0.png",
+   "res://assets/generated/props/wald/crystals_1.png"
+  ]
+ },
+ "wald/fern": {
+  "anchor": [
+   13,
+   17
+  ],
+  "rustle": true,
+  "surface": "tall_grass",
+  "sway": 1.5,
+  "textures": [
+   "res://assets/generated/props/wald/fern_0.png",
+   "res://assets/generated/props/wald/fern_1.png",
+   "res://assets/generated/props/wald/fern_2.png"
+  ]
+ },
+ "wald/glow_tree": {
+  "anchor": [
+   44,
+   106
+  ],
+  "emissive": [
+   "res://assets/generated/props/wald/glow_tree_emit_0.png",
+   "res://assets/generated/props/wald/glow_tree_emit_1.png"
+  ],
+  "lights": [
+   {
+    "color": "#5fb8ff",
+    "energy": 0.55,
+    "offset": [
+     0,
+     -70
+    ],
+    "range": 90
+   }
+  ],
+  "shadow": [
+   30,
+   9
+  ],
+  "shape": {
+   "circle": 9,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "sway": 0.5,
+  "textures": [
+   "res://assets/generated/props/wald/glow_tree_0.png",
+   "res://assets/generated/props/wald/glow_tree_1.png"
+  ]
+ },
+ "wald/light_beam": {
+  "anchor": [
+   48,
+   200
+  ],
+  "beam": true,
+  "lights": [
+   {
+    "color": "#9ff2d8",
+    "energy": 1.1,
+    "offset": [
+     0,
+     -10
+    ],
+    "range": 120
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/wald/light_beam.png"
+  ]
+ },
+ "wald/log": {
+  "anchor": [
+   24,
+   15
+  ],
+  "shadow": [
+   22,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -5
+   ],
+   "rect": [
+    40,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/log.png"
+  ]
+ },
+ "wald/mushrooms_cyan": {
+  "anchor": [
+   12,
+   18
+  ],
+  "emissive": [
+   "res://assets/generated/props/wald/mushrooms_cyan_emit_0.png",
+   "res://assets/generated/props/wald/mushrooms_cyan_emit_1.png"
+  ],
+  "glow": {
+   "color": "#62e6f2",
+   "offset": [
+    0,
+    -9
+   ],
+   "radius": 20
+  },
+  "lights": [
+   {
+    "color": "#62e6f2",
+    "energy": 0.6,
+    "offset": [
+     0,
+     -8
+    ],
+    "range": 40
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/wald/mushrooms_cyan_0.png",
+   "res://assets/generated/props/wald/mushrooms_cyan_1.png"
+  ]
+ },
+ "wald/mushrooms_pink": {
+  "anchor": [
+   12,
+   18
+  ],
+  "emissive": [
+   "res://assets/generated/props/wald/mushrooms_pink_emit_0.png",
+   "res://assets/generated/props/wald/mushrooms_pink_emit_1.png"
+  ],
+  "glow": {
+   "color": "#f278d8",
+   "offset": [
+    0,
+    -9
+   ],
+   "radius": 20
+  },
+  "lights": [
+   {
+    "color": "#f278d8",
+    "energy": 0.6,
+    "offset": [
+     0,
+     -8
+    ],
+    "range": 40
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/wald/mushrooms_pink_0.png",
+   "res://assets/generated/props/wald/mushrooms_pink_1.png"
+  ]
+ },
+ "wald/mushrooms_violet": {
+  "anchor": [
+   12,
+   18
+  ],
+  "emissive": [
+   "res://assets/generated/props/wald/mushrooms_violet_emit_0.png",
+   "res://assets/generated/props/wald/mushrooms_violet_emit_1.png"
+  ],
+  "glow": {
+   "color": "#a07cff",
+   "offset": [
+    0,
+    -9
+   ],
+   "radius": 20
+  },
+  "lights": [
+   {
+    "color": "#a07cff",
+    "energy": 0.6,
+    "offset": [
+     0,
+     -8
+    ],
+    "range": 40
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/wald/mushrooms_violet_0.png",
+   "res://assets/generated/props/wald/mushrooms_violet_1.png"
+  ]
+ },
+ "wald/pine": {
+  "anchor": [
+   20,
+   68
+  ],
+  "shadow": [
+   16,
+   5
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 0.6,
+  "textures": [
+   "res://assets/generated/props/wald/pine_0.png",
+   "res://assets/generated/props/wald/pine_1.png"
+  ]
+ },
+ "wald/rock": {
+  "anchor": [
+   13,
+   16
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    18,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/rock_0.png",
+   "res://assets/generated/props/wald/rock_1.png"
+  ]
+ },
+ "wald/splash": {
+  "anchor": [
+   9,
+   6
+  ],
+  "flat": true,
+  "splash": {
+   "amount": 30,
+   "extents": [
+    20,
+    3
+   ],
+   "offset": [
+    16,
+    0
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/splash.png"
+  ]
+ },
+ "wald/tree": {
+  "anchor": [
+   44,
+   106
+  ],
+  "shadow": [
+   30,
+   9
+  ],
+  "shape": {
+   "circle": 9,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "sway": 0.5,
+  "textures": [
+   "res://assets/generated/props/wald/tree_0.png",
+   "res://assets/generated/props/wald/tree_1.png"
+  ]
  }
 }
