@@ -156,6 +156,20 @@
    "res://assets/generated/props/elysia/glow_flower_2.png"
   ]
  },
+ "elysia/grass_tuft": {
+  "anchor": [
+   7,
+   12
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/elysia/grass_tuft_0.png",
+   "res://assets/generated/props/elysia/grass_tuft_1.png",
+   "res://assets/generated/props/elysia/grass_tuft_2.png",
+   "res://assets/generated/props/elysia/grass_tuft_3.png",
+   "res://assets/generated/props/elysia/grass_tuft_4.png"
+  ]
+ },
  "elysia/islet": {
   "anchor": [
    0,
@@ -187,6 +201,19 @@
    "res://assets/generated/props/elysia/lantern.png"
   ]
  },
+ "elysia/leaves": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/elysia/leaves_0.png",
+   "res://assets/generated/props/elysia/leaves_1.png",
+   "res://assets/generated/props/elysia/leaves_2.png",
+   "res://assets/generated/props/elysia/leaves_3.png"
+  ]
+ },
  "elysia/lily_pad": {
   "anchor": [
    7,
@@ -198,6 +225,19 @@
    "res://assets/generated/props/elysia/lily_pad_0.png",
    "res://assets/generated/props/elysia/lily_pad_1.png",
    "res://assets/generated/props/elysia/lily_pad_2.png"
+  ]
+ },
+ "elysia/pebbles": {
+  "anchor": [
+   5,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/elysia/pebbles_0.png",
+   "res://assets/generated/props/elysia/pebbles_1.png",
+   "res://assets/generated/props/elysia/pebbles_2.png",
+   "res://assets/generated/props/elysia/pebbles_3.png"
   ]
  },
  "elysia/pillar": {
@@ -342,6 +382,17 @@
    "res://assets/generated/props/elysia/sacred_tree.png"
   ]
  },
+ "elysia/small_mushrooms": {
+  "anchor": [
+   5,
+   8
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/small_mushrooms_0.png",
+   "res://assets/generated/props/elysia/small_mushrooms_1.png",
+   "res://assets/generated/props/elysia/small_mushrooms_2.png"
+  ]
+ },
  "elysia/splash": {
   "anchor": [
    9,
@@ -472,6 +523,33 @@
    "res://assets/generated/props/elysia/tree_purple_1.png"
   ]
  },
+ "elysia/twig": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/elysia/twig_0.png",
+   "res://assets/generated/props/elysia/twig_1.png",
+   "res://assets/generated/props/elysia/twig_2.png"
+  ]
+ },
+ "elysia/wildflowers": {
+  "anchor": [
+   6,
+   11
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/elysia/wildflowers_0.png",
+   "res://assets/generated/props/elysia/wildflowers_1.png",
+   "res://assets/generated/props/elysia/wildflowers_2.png",
+   "res://assets/generated/props/elysia/wildflowers_3.png",
+   "res://assets/generated/props/elysia/wildflowers_4.png",
+   "res://assets/generated/props/elysia/wildflowers_5.png"
+  ]
+ },
  "tal/barrel": {
   "anchor": [
    8,
@@ -499,6 +577,29 @@
   ],
   "textures": [
    "res://assets/generated/props/tal/bench.png"
+  ]
+ },
+ "tal/bush": {
+  "anchor": [
+   13,
+   19
+  ],
+  "shadow": [
+   11,
+   4
+  ],
+  "shape": {
+   "circle": 7,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "sway": 0.6,
+  "textures": [
+   "res://assets/generated/props/tal/bush_0.png",
+   "res://assets/generated/props/tal/bush_1.png",
+   "res://assets/generated/props/tal/bush_2.png"
   ]
  },
  "tal/fence": {
@@ -537,6 +638,20 @@
   },
   "textures": [
    "res://assets/generated/props/tal/fence_post.png"
+  ]
+ },
+ "tal/grass_tuft": {
+  "anchor": [
+   7,
+   12
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/tal/grass_tuft_0.png",
+   "res://assets/generated/props/tal/grass_tuft_1.png",
+   "res://assets/generated/props/tal/grass_tuft_2.png",
+   "res://assets/generated/props/tal/grass_tuft_3.png",
+   "res://assets/generated/props/tal/grass_tuft_4.png"
   ]
  },
  "tal/house": {
@@ -618,6 +733,32 @@
    "res://assets/generated/props/tal/lantern.png"
   ]
  },
+ "tal/leaves": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/leaves_0.png",
+   "res://assets/generated/props/tal/leaves_1.png",
+   "res://assets/generated/props/tal/leaves_2.png",
+   "res://assets/generated/props/tal/leaves_3.png"
+  ]
+ },
+ "tal/pebbles": {
+  "anchor": [
+   5,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/pebbles_0.png",
+   "res://assets/generated/props/tal/pebbles_1.png",
+   "res://assets/generated/props/tal/pebbles_2.png",
+   "res://assets/generated/props/tal/pebbles_3.png"
+  ]
+ },
  "tal/pine": {
   "anchor": [
    20,
@@ -678,6 +819,17 @@
    "res://assets/generated/props/tal/rail_s.png"
   ]
  },
+ "tal/reeds": {
+  "anchor": [
+   8,
+   23
+  ],
+  "sway": 2.0,
+  "textures": [
+   "res://assets/generated/props/tal/reeds_0.png",
+   "res://assets/generated/props/tal/reeds_1.png"
+  ]
+ },
  "tal/rock": {
   "anchor": [
    13,
@@ -700,6 +852,17 @@
   "textures": [
    "res://assets/generated/props/tal/rock_0.png",
    "res://assets/generated/props/tal/rock_1.png"
+  ]
+ },
+ "tal/small_mushrooms": {
+  "anchor": [
+   5,
+   8
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/small_mushrooms_0.png",
+   "res://assets/generated/props/tal/small_mushrooms_1.png",
+   "res://assets/generated/props/tal/small_mushrooms_2.png"
   ]
  },
  "tal/splash": {
@@ -760,6 +923,33 @@
    "res://assets/generated/props/tal/tree_2.png"
   ]
  },
+ "tal/twig": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/twig_0.png",
+   "res://assets/generated/props/tal/twig_1.png",
+   "res://assets/generated/props/tal/twig_2.png"
+  ]
+ },
+ "tal/wildflowers": {
+  "anchor": [
+   6,
+   11
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/tal/wildflowers_0.png",
+   "res://assets/generated/props/tal/wildflowers_1.png",
+   "res://assets/generated/props/tal/wildflowers_2.png",
+   "res://assets/generated/props/tal/wildflowers_3.png",
+   "res://assets/generated/props/tal/wildflowers_4.png",
+   "res://assets/generated/props/tal/wildflowers_5.png"
+  ]
+ },
  "tal/woodpile": {
   "anchor": [
    15,
@@ -781,6 +971,29 @@
   },
   "textures": [
    "res://assets/generated/props/tal/woodpile.png"
+  ]
+ },
+ "wald/bush": {
+  "anchor": [
+   13,
+   19
+  ],
+  "shadow": [
+   11,
+   4
+  ],
+  "shape": {
+   "circle": 7,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "sway": 0.6,
+  "textures": [
+   "res://assets/generated/props/wald/bush_0.png",
+   "res://assets/generated/props/wald/bush_1.png",
+   "res://assets/generated/props/wald/bush_2.png"
   ]
  },
  "wald/crystals": {
@@ -879,6 +1092,33 @@
   "textures": [
    "res://assets/generated/props/wald/glow_tree_0.png",
    "res://assets/generated/props/wald/glow_tree_1.png"
+  ]
+ },
+ "wald/grass_tuft": {
+  "anchor": [
+   7,
+   12
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/wald/grass_tuft_0.png",
+   "res://assets/generated/props/wald/grass_tuft_1.png",
+   "res://assets/generated/props/wald/grass_tuft_2.png",
+   "res://assets/generated/props/wald/grass_tuft_3.png",
+   "res://assets/generated/props/wald/grass_tuft_4.png"
+  ]
+ },
+ "wald/leaves": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/wald/leaves_0.png",
+   "res://assets/generated/props/wald/leaves_1.png",
+   "res://assets/generated/props/wald/leaves_2.png",
+   "res://assets/generated/props/wald/leaves_3.png"
   ]
  },
  "wald/light_beam": {
@@ -991,6 +1231,19 @@
    "res://assets/generated/props/wald/mushrooms_violet_1.png"
   ]
  },
+ "wald/pebbles": {
+  "anchor": [
+   5,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/wald/pebbles_0.png",
+   "res://assets/generated/props/wald/pebbles_1.png",
+   "res://assets/generated/props/wald/pebbles_2.png",
+   "res://assets/generated/props/wald/pebbles_3.png"
+  ]
+ },
  "wald/pine": {
   "anchor": [
    20,
@@ -1051,6 +1304,17 @@
    "res://assets/generated/props/wald/rail_s.png"
   ]
  },
+ "wald/reeds": {
+  "anchor": [
+   8,
+   23
+  ],
+  "sway": 2.0,
+  "textures": [
+   "res://assets/generated/props/wald/reeds_0.png",
+   "res://assets/generated/props/wald/reeds_1.png"
+  ]
+ },
  "wald/rock": {
   "anchor": [
    13,
@@ -1073,6 +1337,17 @@
   "textures": [
    "res://assets/generated/props/wald/rock_0.png",
    "res://assets/generated/props/wald/rock_1.png"
+  ]
+ },
+ "wald/small_mushrooms": {
+  "anchor": [
+   5,
+   8
+  ],
+  "textures": [
+   "res://assets/generated/props/wald/small_mushrooms_0.png",
+   "res://assets/generated/props/wald/small_mushrooms_1.png",
+   "res://assets/generated/props/wald/small_mushrooms_2.png"
   ]
  },
  "wald/splash": {
@@ -1116,6 +1391,33 @@
   "textures": [
    "res://assets/generated/props/wald/tree_0.png",
    "res://assets/generated/props/wald/tree_1.png"
+  ]
+ },
+ "wald/twig": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/wald/twig_0.png",
+   "res://assets/generated/props/wald/twig_1.png",
+   "res://assets/generated/props/wald/twig_2.png"
+  ]
+ },
+ "wald/wildflowers": {
+  "anchor": [
+   6,
+   11
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/wald/wildflowers_0.png",
+   "res://assets/generated/props/wald/wildflowers_1.png",
+   "res://assets/generated/props/wald/wildflowers_2.png",
+   "res://assets/generated/props/wald/wildflowers_3.png",
+   "res://assets/generated/props/wald/wildflowers_4.png",
+   "res://assets/generated/props/wald/wildflowers_5.png"
   ]
  }
 }
