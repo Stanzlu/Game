@@ -14,6 +14,7 @@ water_ripples = 0.45
 water_glints = 0.3
 ambience = ExtResource("3_amb")
 ambience_db = -4.0
+music = "silence"
 saturation = 1.0
 contrast = 1.06
 tint = Color(0.92, 0.97, 1.05, 1)

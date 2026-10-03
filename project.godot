@@ -29,6 +29,7 @@ InputDevice="*res://core/input_device.gd"
 Settings="*res://core/settings.gd"
 WorldState="*res://core/world_state.gd"
 SaveSystem="*res://core/save_system.gd"
+AudioDirector="*res://core/audio_director.gd"
 
 [debug]
 

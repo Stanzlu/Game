@@ -14,6 +14,7 @@ fog_banks = 9
 fog_color = Color(0.62, 0.86, 1, 0.16)
 ambience = ExtResource("3_amb")
 ambience_db = -5.0
+music = "forest"
 water_glints = 0.45
 saturation = 1.1
 contrast = 1.05

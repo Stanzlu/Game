@@ -44,6 +44,8 @@ func _ready() -> void:
 	_look_wald.pressed.connect(func() -> void: open_scene("look_wald"))
 	_quit.pressed.connect(func() -> void: get_tree().quit())
 	_add_save_entries()
+	AudioDirector.stop_music(1.0)
+	AudioDirector.set_ambience(null, -6.0, 1.0)
 	var info := read_build_info()
 	_build.text = format_build_line(info)
 	(_continue if _continue.visible else _sandbox).grab_focus()

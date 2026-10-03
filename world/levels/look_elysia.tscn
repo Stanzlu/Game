@@ -15,6 +15,7 @@ petals = true
 motes = true
 butterfly_cells = PackedVector2Array(7, 5, 55, 5, 9, 28, 56, 27, 20, 14)
 ambience = ExtResource("3_amb")
+music = "elysia"
 saturation = 1.08
 contrast = 1.04
 brightness = 0.01

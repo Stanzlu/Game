@@ -41,6 +41,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if visible:
 		SaveSystem.unblock(&"dialogue")
+		AudioDirector.duck(false)
 
 
 func is_open() -> bool:
@@ -56,6 +57,7 @@ func present(dialogue: DialogueResource, start_cue: String, who: Node = null) ->
 	if actor != null and actor.has_method(&"lock"):
 		actor.call(&"lock", &"dialogue")
 	SaveSystem.block(&"dialogue")
+	AudioDirector.duck(true)
 	show()
 	Log.info(Log.Category.DIALOGUE, "dialogue start", {"cue": cue})
 	_show_line(await DialogueManager.get_next_dialogue_line(resource, cue))
@@ -123,6 +125,7 @@ func _close() -> void:
 		actor.call(&"unlock", &"dialogue")
 	actor = null
 	SaveSystem.unblock(&"dialogue")
+	AudioDirector.duck(false)
 	finished.emit()
 
 

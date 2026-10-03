@@ -19,6 +19,11 @@ const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
 @export var player_sheet: CharacterSheet
 ## False for places that cannot be resumed (encounters); autosaves wait for the next area.
 @export var saveable := true
+## Music for this place (AudioDirector); "keep" leaves whatever is playing.
+@export_enum("keep", "silence", "elysia", "valley", "forest", "antreiber") var music := "keep"
+## Ambience bed (rain, birds); none fades the previous one out.
+@export var ambience: AudioStream
+@export var ambience_db := -6.0
 
 var view: GameView
 var map: MapView
@@ -52,6 +57,9 @@ func _ready() -> void:
 		var debug_panel: CanvasLayer = DEBUG_PANEL_SCRIPT.new()
 		debug_panel.name = "DebugPanel"
 		add_child(debug_panel)
+	if music != "keep":
+		AudioDirector.play_music(music)
+	AudioDirector.set_ambience(ambience, ambience_db)
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
 	var arrival := SaveSystem.scene_entered(scene_key())

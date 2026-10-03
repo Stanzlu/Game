@@ -1,7 +1,8 @@
 class_name LookScene
 extends GameScene
 ## Mood scenes of the look prototype (ADR-017): the normal GameScene composition plus
-## weather, sky, world light, ambient particles, ambience and color grading.
+## weather, sky, world light, ambient particles and color grading. Music and ambience come
+## from the GameScene exports (AudioDirector).
 
 enum Weather { CLEAR, RAIN }
 
@@ -33,8 +34,6 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var dragonflies := 0
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
-@export var ambience: AudioStream
-@export var ambience_db := -6.0
 
 @export_group("Grading")
 @export var saturation := 1.0
@@ -101,14 +100,6 @@ func _build_world() -> void:
 		var butterfly := Butterfly.new()
 		view.world_root.add_child(butterfly)
 		butterfly.setup(map.cell_to_world(Vector2i(butterfly_cells[i])), i)
-	if ambience != null:
-		var player_node := AudioStreamPlayer.new()
-		player_node.name = "Ambience"
-		player_node.stream = ambience
-		player_node.bus = &"Ambience"
-		player_node.volume_db = ambience_db
-		player_node.autoplay = true
-		add_child(player_node)
 	view.set_post_material(_grade_material())
 
 
