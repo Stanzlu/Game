@@ -11,6 +11,13 @@ const SCENES := {
 	"look_wald": "res://world/levels/look_wald.tscn",
 }
 
+## UI mode a scene starts in when it is opened from the prototype menu (new game).
+const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA}
+
+
+static func start_mode(key: String) -> GameState.UiMode:
+	return START_MODES.get(key, GameState.UiMode.REAL)
+
 
 static func has(key: String) -> bool:
 	return SCENES.has(key)

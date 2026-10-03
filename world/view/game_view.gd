@@ -32,6 +32,9 @@ var bounds := Rect2()
 var _cam_pos := Vector2.ZERO
 var _lead := Vector2.ZERO
 var _has_position := false
+var _shake_time := 0.0
+var _shake_strength := 0.0
+var _shake_length := 0.0
 
 
 func _init() -> void:
@@ -72,6 +75,16 @@ func follow(node: Node2D, snap_now: bool = true) -> void:
 		_has_position = false
 
 
+## Screen shake in whole game pixels, fading out. Does nothing when the player turned
+## screen shake off (accessibility).
+func shake(strength: float, seconds: float) -> void:
+	if not Settings.get_bool("display.screen_shake"):
+		return
+	_shake_strength = strength
+	_shake_length = seconds
+	_shake_time = seconds
+
+
 func set_camera_mode(mode: CameraMode) -> void:
 	if mode == camera_mode:
 		return
@@ -100,7 +113,12 @@ func _process(delta: float) -> void:
 		_cam_pos = CameraMath.smooth_toward(_cam_pos, desired, follow_sharpness, delta)
 	if bounds.has_area():
 		_cam_pos = CameraMath.clamp_to_bounds(_cam_pos, Vector2(BASE_SIZE) * 0.5, bounds)
-	var parts := CameraMath.split(_cam_pos, camera_mode == CameraMode.SMOOTH)
+	var shaken := _cam_pos
+	if _shake_time > 0.0:
+		_shake_time = maxf(_shake_time - delta, 0.0)
+		var amount := _shake_strength * _shake_time / maxf(_shake_length, 0.001)
+		shaken += Vector2(randf_range(-amount, amount), randf_range(-amount, amount)).round()
+	var parts := CameraMath.split(shaken, camera_mode == CameraMode.SMOOTH)
 	# Set the canvas transform directly: a Camera2D would apply the new position one
 	# frame late while the fractional display shift applies immediately (visible jitter).
 	camera_position = parts[0]

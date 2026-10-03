@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/props/rift.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/generated/ui/rift.png" id="2_t"]
+[ext_resource type="Script" path="res://entities/interaction/interactable.gd" id="9_inter"]
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+colors = PackedColorArray(0.6, 0.9, 1, 1, 0.6, 0.9, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 96
+height = 96
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_use"]
+size = Vector2(22, 24)
+
+[node name="Rift" type="Node2D"]
+script = ExtResource("1_s")
+
+[node name="Glow" type="PointLight2D" parent="."]
+position = Vector2(0, -26)
+color = Color(0.6, 0.9, 1, 1)
+energy = 0.6
+texture = SubResource("GradientTexture2D_glow")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_t")
+offset = Vector2(0, -28)
+
+[node name="Interactable" type="Area2D" parent="."]
+position = Vector2(0, -4)
+script = ExtResource("9_inter")
+prompt_key = "INTERACT_TOUCH"
+prompt_offset = Vector2(0, -58)
+
+[node name="Shape" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_use")

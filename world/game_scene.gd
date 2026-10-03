@@ -32,6 +32,7 @@ var fx: FootstepFx
 var dialogue_box: DialogueBox
 var pause_menu: PauseMenu
 var journal: Journal
+var hud: Hud
 var overlay: InfoOverlay
 
 
@@ -43,6 +44,9 @@ func _ready() -> void:
 	fx = FootstepFx.new()
 	fx.name = "FootstepFx"
 	_build_world()
+	hud = Hud.new()
+	hud.name = "Hud"
+	add_child(hud)
 	dialogue_box = DIALOGUE_BOX_SCENE.instantiate()
 	add_child(dialogue_box)
 	journal = JOURNAL_SCENE.instantiate()
@@ -62,6 +66,8 @@ func _ready() -> void:
 	AudioDirector.set_ambience(ambience, ambience_db)
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
+	if ScreenFade.is_covered():
+		ScreenFade.fade_in(2.0)
 	var arrival := SaveSystem.scene_entered(scene_key())
 	if arrival.has("position") and player != null:
 		player.teleport(arrival["position"])

@@ -45,6 +45,8 @@ func _ready() -> void:
 	_quit.pressed.connect(func() -> void: get_tree().quit())
 	_add_save_entries()
 	AudioDirector.stop_music(1.0)
+	if ScreenFade.is_covered():
+		ScreenFade.fade_in(0.6)
 	AudioDirector.set_ambience(null, -6.0, 1.0)
 	var info := read_build_info()
 	_build.text = format_build_line(info)
@@ -76,6 +78,7 @@ func open_scene(key: String) -> void:
 		return
 	Log.info(Log.Category.BOOT, "open scene", {"key": key})
 	WorldState.new_game()
+	WorldState.set_ui_mode(SceneRegistry.start_mode(key))
 	get_tree().change_scene_to_file(SceneRegistry.path(key))
 
 

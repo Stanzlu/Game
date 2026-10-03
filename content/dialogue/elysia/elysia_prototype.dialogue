@@ -1,0 +1,9 @@
+~ elysian_praise
+% Elysianer: Du bist einfach großartig! [#ph] [ID:elysia_praise_1]
+% Elysianer: Wie du gehst! Wie du stehst! [#ph] [ID:elysia_praise_2]
+% Elysianer: Alle reden nur von dir. Nur Gutes natürlich. [#ph] [ID:elysia_praise_3]
+do WorldState.add_xp(250)
+if not WorldState.is_quest_started("side_elysia_chest")
+	Elysianer: Am Weltenbaum wartet eine Truhe. Nur auf dich. [#ph] [ID:elysia_praise_4]
+	do WorldState.start_quest("side_elysia_chest")
+=> END

@@ -36,9 +36,13 @@ F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash"}}
 ; Elysianer laufen exakt gleich: gleiche Route, gleiches Tempo, gleicher Takt (Game Bible §9).
-E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30}}
+E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/elysia/elysia_prototype.dialogue", "cue": "elysian_praise"}}
 q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_n"}}
 Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_s"}}
+; Phase 3: Truhe (Loot, Gold, XP, Quest), Stein am Becken (Seltenheit: —), Riss am Inselrand.
+Z = {"ground": "M", "prop": "res://world/props/chest.tscn", "params": {"flag": "elysia.chest_tree_opened", "actions": [{"item": "item_compliment"}, {"gold": 4200}, {"xp": 2500}, {"quest": "side_elysia_chest", "stage": "done", "start": true}]}}
+j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_stone", "flag": "elysia.stone_taken"}}
+X = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "look_tal"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh.....hhhhhhhhhhhhhhhh....hhhhhhhhhhhhhhhhhh..hhhhhh
@@ -57,20 +61,20 @@ hh..................ff....MMM~~~~~~~MMM....~~fff..............hh
 hh...............fffff...MM~~~~~~~~w~~MM...~~~ff.....U........hh
 hh......T..........ffg..MMMw~~~~~~~~~~MMM.g.~~................hh
 hh......................IM~~~~~~~~~~~~~MI...~~................hh
-hh......................MM~~~~~~W~~~~~~MM...~~................hh
+hh......................MM~~~~~~W~~~~~~MMj..~~................hh
 hh......................MMM~~~~~~~~~w~MMM...~~................hh
 hh...................g...MM~~w~~~~~~~~MM..g.~~~..........T....hh
 hh............P...........MMM~~~~~~~MMM......~~...K...........hh
 hh...U.....................IMMMMMMMMMI.......~~...............hh
 hh.........................MMMMMCMMMMM.......~~...............hh
-hh....................,o,,,MMMMMMMMMMM,,,o,,,qq,,.............hh
+hh....................,o,,,MMMZMMMMMMM,,,o,,,qq,,.............hh
 hh..............,,,,,,,,,,,,...,,,...,,,,,,,,==,,,,,,,,,,,,,,,hh
 hh.,,,,,,,,,,,,,,o,,,,,,,,...g.,,,.g......,,,QQE,,,,,,,,,,,,,,hh
 hh,,,,,,,,@,,E,,,,,,..........O,,,O..........~~.....Y,,,,,,,,,hh
 hh.,,,,,,,,,,,..........Y....o.,,,.o.........~~~.....fffffff..hh
 hh...ffffffffK.................,,,............~~.....ffgfff...hh
 hh....fffffff.................O,,,O.......P...~~~.......ff.P..hh
-hh......Rfg........T...R..o....,,,....o........~~......R.f....hh
+hh......Rfg........T...R..o....,,,....o........~~......R.f..X.hh
 hh.......f.........^^^^^^......,,,....^^^R.....~~...o.........hh
 hh.....^^^^^^^^^^^^^^^^^^^^....,,,....^^^^^^^^^vv^^^^^^.......^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^FFFFFb,FFFFF^^^^^^^^^vv^^^^^^^^^^^^^^^
