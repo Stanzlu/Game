@@ -437,12 +437,12 @@
  },
  "elysia/tree": {
   "anchor": [
-   32,
-   76
+   44,
+   101
   ],
   "shadow": [
-   22,
-   7
+   28,
+   9
   ],
   "shape": {
    "circle": 6,
@@ -454,17 +454,18 @@
   "sway": 1.0,
   "textures": [
    "res://assets/generated/props/elysia/tree_0.png",
-   "res://assets/generated/props/elysia/tree_1.png"
+   "res://assets/generated/props/elysia/tree_1.png",
+   "res://assets/generated/props/elysia/tree_2.png"
   ]
  },
  "elysia/tree_blossom": {
   "anchor": [
-   32,
-   76
+   44,
+   101
   ],
   "shadow": [
-   22,
-   7
+   28,
+   9
   ],
   "shape": {
    "circle": 6,
@@ -476,17 +477,18 @@
   "sway": 1.0,
   "textures": [
    "res://assets/generated/props/elysia/tree_blossom_0.png",
-   "res://assets/generated/props/elysia/tree_blossom_1.png"
+   "res://assets/generated/props/elysia/tree_blossom_1.png",
+   "res://assets/generated/props/elysia/tree_blossom_2.png"
   ]
  },
  "elysia/tree_blue": {
   "anchor": [
-   32,
-   76
+   44,
+   101
   ],
   "shadow": [
-   22,
-   7
+   28,
+   9
   ],
   "shape": {
    "circle": 6,
@@ -498,17 +500,18 @@
   "sway": 1.0,
   "textures": [
    "res://assets/generated/props/elysia/tree_blue_0.png",
-   "res://assets/generated/props/elysia/tree_blue_1.png"
+   "res://assets/generated/props/elysia/tree_blue_1.png",
+   "res://assets/generated/props/elysia/tree_blue_2.png"
   ]
  },
  "elysia/tree_purple": {
   "anchor": [
-   32,
-   76
+   44,
+   101
   ],
   "shadow": [
-   22,
-   7
+   28,
+   9
   ],
   "shape": {
    "circle": 6,
@@ -520,7 +523,8 @@
   "sway": 1.0,
   "textures": [
    "res://assets/generated/props/elysia/tree_purple_0.png",
-   "res://assets/generated/props/elysia/tree_purple_1.png"
+   "res://assets/generated/props/elysia/tree_purple_1.png",
+   "res://assets/generated/props/elysia/tree_purple_2.png"
   ]
  },
  "elysia/twig": {
@@ -677,6 +681,15 @@
      -15
     ],
     "range": 80
+   },
+   {
+    "color": "#ffb066",
+    "energy": 0.7,
+    "offset": [
+     12,
+     -14
+    ],
+    "range": 40
    }
   ],
   "shadow": [
@@ -902,12 +915,12 @@
  },
  "tal/tree": {
   "anchor": [
-   32,
-   76
+   44,
+   101
   ],
   "shadow": [
-   22,
-   7
+   28,
+   9
   ],
   "shape": {
    "circle": 6,
