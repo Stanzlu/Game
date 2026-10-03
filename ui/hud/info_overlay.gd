@@ -1,7 +1,7 @@
 class_name InfoOverlay
 extends CanvasLayer
-## Development info (FPS, frame time, player state, surface). Toggle with debug_overlay
-## (F3) or in the pause menu. Helps to talk about movement feel with concrete numbers.
+## Development info (FPS, frame time, player state, surface, save state). Toggle with
+## debug_overlay (F3) or in the settings. Helps to talk about movement feel with numbers.
 
 var _scene: GameScene
 var _label: Label
@@ -24,8 +24,7 @@ func attach(scene: GameScene) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"debug_overlay"):
-		SessionOptions.show_overlay = not SessionOptions.show_overlay
-		visible = SessionOptions.show_overlay
+		Settings.set_value("debug.overlay", not Settings.get_bool("debug.overlay"))
 		get_viewport().set_input_as_handled()
 
 
@@ -45,6 +44,9 @@ func _process(_delta: float) -> void:
 		lines.append("Tempo %d px/s" % roundi(p.velocity.length()))
 		lines.append("%s · %s" % [Player.State.keys()[p.state], Facing.Dir.keys()[p.facing]])
 		lines.append("Boden %s" % (p.last_surface if p.last_surface != &"" else "-"))
-	lines.append(tr(SessionOptions.tuning().display_key))
-	lines.append(tr("CAMERA_SMOOTH") if SessionOptions.smooth_camera else tr("CAMERA_PIXEL"))
+	lines.append(tr(Settings.tuning().display_key))
+	lines.append(
+		tr("CAMERA_SMOOTH") if Settings.get_bool("display.smooth_camera") else tr("CAMERA_PIXEL")
+	)
+	lines.append("Save %s" % ("ok" if SaveSystem.can_save() else ", ".join(SaveSystem.blockers())))
 	_label.text = "\n".join(lines)

@@ -10,7 +10,7 @@ fail() { echo "smoke_export: $*" >&2; exit 1; }
 # Boots the menu and each start target; every run must reach its ready line cleanly.
 for target in "" sandbox antreiber look_elysia look_tal look_wald; do
   log="$(mktemp)"
-  args=(--headless --quit-after 240 -- --log-debug)
+  args=(--headless --quit-after 240 -- --log-debug --profile=smoke)
   [ -n "$target" ] && args+=("--start=$target")
   timeout 60 "$binary" "${args[@]}" >"$log" 2>&1 || { cat "$log"; fail "build exited with an error (${target:-menu})"; }
   grep -q "boot screen ready" "$log" || { cat "$log"; fail "boot screen was not reached"; }

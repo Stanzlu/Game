@@ -37,6 +37,12 @@ func _ready() -> void:
 	WorldState.state_replaced.connect(func() -> void: _pending_autosave = "")
 
 
+## Counts play time while a game scene is running and the tree is not paused.
+func _process(delta: float) -> void:
+	if _context() != null:
+		WorldState.add_playtime(delta)
+
+
 func path_for(slot: String, backup := false) -> String:
 	return save_dir.path_join(slot + (".json.bak" if backup else ".json"))
 

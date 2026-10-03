@@ -80,6 +80,7 @@ OverlayPanel/base_type = &"PanelContainer"
 OverlayPanel/styles/panel = SubResource("StyleBoxFlat_overlay")
 MenuEntry/base_type = &"Button"
 MenuEntry/colors/font_color = Color(0.75, 0.75, 0.78, 1)
+MenuEntry/colors/font_disabled_color = Color(0.42, 0.42, 0.47, 1)
 MenuEntry/colors/font_focus_color = Color(0.98, 0.84, 0.45, 1)
 MenuEntry/colors/font_hover_color = Color(0.98, 0.84, 0.45, 1)
 MenuEntry/styles/normal = SubResource("StyleBoxEmpty_response")

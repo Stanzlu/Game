@@ -43,6 +43,7 @@ response_template = NodePath("ResponseTemplate")
 next_action = &"interact"
 
 [node name="ResponseTemplate" type="Button" parent="Panel/Rows/Responses"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DialogueResponse"
 text = "Antwort"
