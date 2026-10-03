@@ -42,3 +42,18 @@ func test_elysia_has_no_day_light() -> void:
 	add_child_autofree(scene)
 	await wait_physics_frames(2)
 	assert_null(scene.day_light, "Elysia's light never changes")
+
+
+func test_resting_on_the_bench_lets_time_pass() -> void:
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var bench: Node = null
+	for node in scene.find_children("*", "StaticBody2D", true, false):
+		if node.get("pass_time") == true:
+			bench = node
+	assert_not_null(bench, "Tal has a bench that passes time")
+	(bench.get_node("Interactable") as Interactable).interact(scene.player)
+	assert_eq(scene.player.state, Player.State.SIT)
+	await wait_seconds(2.8)
+	assert_eq(scene.day_light.preset, "regentag", "night turns into the next day")
