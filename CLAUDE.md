@@ -24,6 +24,7 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
   (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
 - In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
+- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`.
 - Karten sind Textdateien (`content/maps`, ADR-013); Platzhalter-Assets erzeugt `tools/placeholders`.
 - Look-Grafik ist prozedural (ADR-017, `docs/ART_DIRECTION.md`): `tools/art/make_sprites.py`, dann
   `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`.

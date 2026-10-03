@@ -9,7 +9,7 @@ Legende: ✅ vorhanden · 🔜 geplant (Phase)
 ## Verzeichnisse
 
 ```
-core/        Querschnitt: Autoloads, Boot/Startmenü, Physik-Layer  ✅ · state/, save/, content/ (Phase 2)
+core/        Querschnitt: Autoloads, Boot/Startmenü, Physik-Layer  ✅ · state/, save/, content/ (Phase 2) · util/, benchmark/ (Phase 3)
 entities/    Player, NPC, Interaktion, Figuren-Sheets             ✅ Phase 1
 world/       Karten, GameView, Props, FX, Shader, Szenen           ✅ Phase 1 · Look-Prototyp: Wetter, Licht, Himmel ✅
 encounters/  eigenständige Encounter-Szenen                       ✅ antreiber/ (Grey-Box)
@@ -152,6 +152,10 @@ Nachtwald, Antreiber, Stille. Während Dialogen −7 dB. Der Brunnen hat einen p
 - `DayLight` (`world/fx/day_light.gd`) in `LookScene` (`day_preset`): Regentag, Abend, Nacht.
   Die Bank im Tal (`pass_time`) und das Debug-Panel schalten weiter.
 - Elysia-Objekte: Truhe (`chest.tscn`), Aufheben (`pickup.tscn`), Lob mit XP über Dialog-Mutationen.
+- Während der Sequenz ist sie in der Gruppe `cutscene`: Pause-Menü und Tagebuch bleiben zu
+  (`MenuLayer.any_open`), Speichern ist gesperrt und wird beim vorzeitigen Verlassen freigegeben.
+- Wartezeiten in Szenenknoten laufen über `NodeTimer.after(owner, s)` statt
+  `get_tree().create_timer()`: Der Timer stirbt mit seinem Besitzer, nichts läuft auf gelöschten Knoten weiter.
 
 ## Leistungstest
 
