@@ -3,11 +3,15 @@ extends CharacterBody2D
 ## Walks a closed route of waypoints. Stops and looks at the player when they come close,
 ## continues once they leave. Params from the map: {"route": [[dx, dy], ...]} in cells,
 ## relative to the spawn cell. Basis for Elysia's identically moving NPCs later.
+## With params "cue" (and optional "dialogue") the NPC can be talked to; it stays put and
+## faces the player until the conversation ends.
 
 const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
 const ARRIVE_DISTANCE := 2.0
 const STUCK_SECONDS := 1.5
+const DEFAULT_DIALOGUE := "res://content/dialogue/sandbox/sandbox.dialogue"
+const TALK_RADIUS := 14.0
 
 @export var sheet: CharacterSheet
 @export var speed := 38.0
@@ -16,6 +20,9 @@ const STUCK_SECONDS := 1.5
 var route: Array[Vector2] = []
 var facing := Facing.Dir.S
 var attending := false
+var talking := false
+var dialogue_path := DEFAULT_DIALOGUE
+var cue := ""
 var _index := 0
 var _stuck_time := 0.0
 var _origin := Vector2.ZERO
@@ -47,6 +54,39 @@ func apply_params(params: Dictionary) -> void:
 		var p: Array = point
 		route.append(Vector2(float(p[0]), float(p[1])) * tile_size)
 	speed = float(params.get("speed", speed))
+	if params.has("cue"):
+		cue = str(params["cue"])
+		dialogue_path = str(params.get("dialogue", DEFAULT_DIALOGUE))
+		_add_talk_area()
+
+
+func _add_talk_area() -> void:
+	var area := Interactable.new()
+	area.name = "Interactable"
+	area.prompt_key = "INTERACT_TALK"
+	area.prompt_offset = Vector2(0, -36)
+	area.interact_priority = 1
+	var shape := CollisionShape2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = TALK_RADIUS
+	shape.shape = circle
+	shape.position = Vector2(0, -4)
+	area.add_child(shape)
+	add_child(area)
+	area.interacted.connect(_on_talk)
+
+
+func _on_talk(actor: Node) -> void:
+	var resource := load(dialogue_path) as DialogueResource
+	var presenter := get_tree().get_first_node_in_group(&"dialogue_presenter")
+	if resource == null or presenter == null:
+		Log.error(Log.Category.CONTENT, "npc dialogue missing", {"path": dialogue_path, "cue": cue})
+		return
+	talking = true
+	if actor is Node2D:
+		facing = Facing.from_vector((actor as Node2D).global_position - global_position)
+	presenter.connect(&"finished", func() -> void: talking = false, CONNECT_ONE_SHOT)
+	presenter.call(&"present", resource, cue, actor)
 
 
 func _apply_sheet() -> void:
@@ -59,6 +99,10 @@ func _apply_sheet() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if talking:
+		velocity = Vector2.ZERO
+		_play("idle")
+		return
 	var player := _nearest_player()
 	if player != null:
 		var dist := global_position.distance_to(player.global_position)

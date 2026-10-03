@@ -4,7 +4,8 @@
 2 = {"ground": ",", "prop": "res://world/props/sign.tscn", "params": {"cue": "sign_pond"}}
 3 = {"ground": ".", "prop": "res://world/props/sign.tscn", "params": {"cue": "sign_meadow"}}
 4 = {"ground": ",", "prop": "res://world/props/sign.tscn", "params": {"cue": "sign_garden"}}
-L = {"ground": ".", "prop": "res://world/props/lever.tscn", "params": {"target": "garden_gate"}}
+L = {"ground": ".", "prop": "res://world/props/lever.tscn", "params": {"target": "garden_gate", "flag": "sandbox.garden_gate_open", "actions": [{"quest": "side_sandbox_gate", "stage": "through_gate", "start": true}]}}
+Z = {"ground": ",", "prop": "res://world/props/trigger_zone.tscn", "params": {"flag": "sandbox.garden_entered", "actions": [{"quest": "side_sandbox_gate", "stage": "done"}, {"discover": "sandbox_garden"}]}}
 G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "garden_gate"}}
 @ = {"ground": ",", "marker": "player_spawn"}
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"route": [[0, 0], [26, 0], [26, 14], [0, 14]]}}
@@ -38,7 +39,7 @@ N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"ro
 #...."...."""".""...."""."."..*":":....,,,.........:.....L:.............:......#
 #...""..*"*"""."".::......".".."......:,,,........................:............#
 #......"....:....::."".:...."..:.......,,,........##########G##########:.......#
-#...".""":"........."""."."""..."...:..,,,..:.....#,,,,,,,,,,,,,,,,,,,#...:....#
+#...".""":"........."""."."""..."...:..,,,..:.....#,,,,,,,,,Z,,,,,,,,,#...:....#
 #.....":".."...."....".."....".."".....,,,........#,,,,,,,,,,,,,,,,,,,#:...:...#
 #:...."""".".."....:...".""".":"".:::..,,,........#,,,,,,,,,,,,,,,,,,,#.:....:.#
 #..."*........":...."."."".:"."..".....,,,........#,,,,,,,,,,,,,,,,,,,#......:.#
