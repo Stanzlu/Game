@@ -106,8 +106,8 @@ ENCOUNTER_MUCH_CALMER,Viel ruhiger
 SETTINGS_DEBUG,Entwicklung
 SETTINGS_RESET,Alles zurücksetzen
 DEBUG_TITLE,Entwicklung
-DEBUG_QUICKSAVE,Schnell speichern (Slot 3)
-DEBUG_QUICKLOAD,Schnell laden (Slot 3)
+DEBUG_QUICKSAVE,Schnell speichern (eigener Debug-Slot)
+DEBUG_QUICKLOAD,Schnell laden (Debug-Slot)
 DEBUG_ADVANCE_QUESTS,Laufende Quests eine Stufe weiter
 DEBUG_MIRA_NEXT,Mira: nächster Beziehungszustand
 DEBUG_UI_MODE,UI-Modus Elysia/Real wechseln

@@ -135,6 +135,12 @@ func test_reading_missing_broken_and_foreign_files() -> void:
 	assert_push_error("unknown slot")
 
 
+func test_debug_slot_is_separate_from_player_slots() -> void:
+	assert_eq(saves.save_slot(SaveService.DEBUG_SLOT), OK)
+	assert_true(saves.read_slot(SaveService.DEBUG_SLOT).ok)
+	assert_eq(saves.latest_slot(), "", "continue never picks the debug slot")
+
+
 func test_latest_slot_is_the_newest_readable_one() -> void:
 	var older := GameState.new()
 	older.player.map = "sandbox"

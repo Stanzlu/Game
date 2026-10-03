@@ -21,3 +21,12 @@ for target in "" sandbox antreiber look_elysia look_tal look_wald; do
   fi
   echo "smoke_export: ${target:-menu} ok"
 done
+
+# Typed content must be present in the build, and a save from the runs above must load.
+log="$(mktemp)"
+timeout 60 "$binary" --headless --quit-after 240 -- --log-debug --profile=smoke --continue >"$log" 2>&1 \
+  || { cat "$log"; fail "build exited with an error (continue)"; }
+grep -qE '"items":[1-9][0-9]*,"quests":[1-9]' "$log" || { cat "$log"; fail "quests or items missing in the build"; }
+grep -q "SAVE: loaded" "$log" || { cat "$log"; fail "continue did not load a save"; }
+grep -q "scene ready" "$log" || { cat "$log"; fail "loaded scene not ready"; }
+echo "smoke_export: content and continue ok"

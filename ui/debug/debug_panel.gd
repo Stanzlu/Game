@@ -4,7 +4,7 @@ extends MenuLayer
 ## test saving, loading, quests, relationships, items and the UI mode without playing there.
 ## Never part of release builds' behaviour: it frees itself outside debug builds.
 
-const QUICK_SLOT := "slot_3"
+const QUICK_SLOT := SaveService.DEBUG_SLOT
 
 var _state: Label
 

@@ -49,6 +49,11 @@ func _ready() -> void:
 	(_continue if _continue.visible else _sandbox).grab_focus()
 	Log.info(Log.Category.BOOT, "boot screen ready", info)
 	if not _start_arg_consumed:
+		Log.info(
+			Log.Category.CONTENT,
+			"content available",
+			{"quests": ContentDB.quest_ids().size(), "items": ContentDB.item_ids().size()}
+		)
 		if OS.is_debug_build():
 			_validate_content()
 			load("res://tools/autopilot/autopilot.gd").call(&"start_if_requested", get_tree())

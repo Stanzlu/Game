@@ -18,6 +18,9 @@ signal loaded(slot: String)
 const AUTOSAVE := "autosave"
 const SLOTS: PackedStringArray = ["autosave", "slot_1", "slot_2", "slot_3"]
 const MANUAL_SLOTS: PackedStringArray = ["slot_1", "slot_2", "slot_3"]
+## Quick save of the debug panel; never listed in menus and never used by "continue",
+## so testing never overwrites a player's slot.
+const DEBUG_SLOT := "debug"
 const CONTEXT_GROUP := &"save_context"
 
 var save_dir := ""
@@ -91,7 +94,7 @@ func _context() -> Node:
 
 ## Writes a slot from the current game. Returns ERR_BUSY while saving is not possible.
 func save_slot(slot: String) -> Error:
-	if not slot in SLOTS:
+	if not slot in SLOTS and slot != DEBUG_SLOT:
 		Log.error(Log.Category.SAVE, "unknown slot", {"slot": slot})
 		return ERR_INVALID_PARAMETER
 	if not can_save():
