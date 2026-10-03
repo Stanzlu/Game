@@ -304,7 +304,7 @@ def crystal_pedestal():
     return c
 
 
-def foam(seed, w=24, h=12):
+def foam(seed, w=24, h=12, style="elysia"):
     """White foam blob where a waterfall hits the water."""
     rng = np.random.default_rng(seed)
     c = Canvas(w, h)
@@ -314,7 +314,7 @@ def foam(seed, w=24, h=12):
     ]
     for y, x, r in blobs:
         m = c.ellipse(x, y, r * 1.3, r * 0.8)
-        c.paint(m, pa.STYLES["elysia"]["water"], 0.7 + 0.3 * c.sphere(x - 1, y - 1, r * 1.3, r), dither=False)
+        c.paint(m, pa.STYLES[style]["water"], 0.7 + 0.3 * c.sphere(x - 1, y - 1, r * 1.3, r), dither=False)
     return c
 
 
@@ -791,6 +791,8 @@ def build():
     save("tal", "fence_post", fence("tal", 151, vertical=True), (4, 22),
          shape={"rect": [4, 16], "offset": [0, -8]})
     save("tal", "bench", bench("tal"), (10, 18))
+    save("tal", "splash", foam(161, 50, 12, "tal"), (9, 6), flat=True,
+         splash={"extents": [20, 3], "offset": [16, 0], "amount": 34})
     particles()
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"]}

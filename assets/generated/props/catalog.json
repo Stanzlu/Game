@@ -606,6 +606,27 @@
    "res://assets/generated/props/tal/rock_1.png"
   ]
  },
+ "tal/splash": {
+  "anchor": [
+   9,
+   6
+  ],
+  "flat": true,
+  "splash": {
+   "amount": 34,
+   "extents": [
+    20,
+    3
+   ],
+   "offset": [
+    16,
+    0
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/splash.png"
+  ]
+ },
  "tal/tall_grass": {
   "anchor": [
    9,

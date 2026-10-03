@@ -27,19 +27,35 @@ func _ready() -> void:
 	collision_layer = PhysicsLayers.NPC
 	collision_mask = PhysicsLayers.WORLD | PhysicsLayers.PLAYER
 	motion_mode = MOTION_MODE_FLOATING
-	sprite.sprite_frames = sheet.build_frames()
-	sprite.offset = sheet.feet_offset
-	sheet.add_shadow_to(self)
+	_apply_sheet()
 	_origin = position
 	_play("idle")
 
 
+## Map params: route (cells, relative), speed, optional sheet (res:// path of a CharacterSheet).
 func apply_params(params: Dictionary) -> void:
+	if params.has("sheet"):
+		var override := load(str(params["sheet"])) as CharacterSheet
+		if override == null:
+			Log.error(Log.Category.CONTENT, "npc sheet missing", {"sheet": params["sheet"]})
+		else:
+			sheet = override
+			_apply_sheet()
+			_play("idle")
 	route.clear()
 	for point: Variant in params.get("route", []):
 		var p: Array = point
 		route.append(Vector2(float(p[0]), float(p[1])) * tile_size)
 	speed = float(params.get("speed", speed))
+
+
+func _apply_sheet() -> void:
+	sprite.sprite_frames = sheet.build_frames()
+	sprite.offset = sheet.feet_offset
+	var old_shadow := get_node_or_null("Shadow")
+	if old_shadow != null:
+		old_shadow.free()
+	sheet.add_shadow_to(self)
 
 
 func _physics_process(delta: float) -> void:

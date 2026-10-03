@@ -1,5 +1,6 @@
 ; Look-Prototyp: Tal im Regen (ADR-017). Boden wird mit tools/art/bake_ground.py gebacken,
-; Props kommen aus assets/generated/props (tools/art/make_sprites.py).
+; Props kommen aus assets/generated/props (tools/art/make_sprites.py). Layout-Hilfe:
+; tools/art/layout_look_maps.py tal --write (ersetzt den [map]-Block). N = Mira (Look-Test).
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/look_tal_ground.png"
@@ -25,6 +26,9 @@ l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel"}}
 W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
+v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
+x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/splash"}}
+N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -37,10 +41,10 @@ hhh.............P........................~~~.........hhh
 hhh...T.............................P....~~~.........hhh
 hhh......................................~~~......T..hhh
 hhh................E.............E.......~~~.........hhh
-hhh................E.............E.......~~~g........hhh
+hhh................E.............E.......~~~...g.....hhh
 hhh.........g......E......H......E......~~~~.........hhh
 hhh................E.K........WK.E....R.~~~..........hhh
-hhh................E..b...,......E......~~~.........Phhh
+hhh................E..b...,.N....E......~~~.........Phhh
 hhh........R.......E.....,,,.....E......~~~..........hhh
 hhh..T.............FFFFFF,,,FFFFFF.....~~~~...R......hhh
 hhh.....................l,,,............~~~..........hhh
@@ -50,13 +54,13 @@ hhh................m,,,,,,,p,...........~~~~.........hhh
 hhh...........,,,,,,p,,,,,,,,,,,,,,,,,,,,====,,,,....hhh
 hhh,,,,,,,,,,p,,,,,,,,,,,,,,,,,p,,,,,,,,,====,,,,,,,,hhh
 hhh,,,,,,p,,,,,,.................,,,,,,,,====,,,,,,,,hhh
-hhh,,,,,,,,,........................m.....~~~.......,hhh
-hhh............gg.............gg..........~~~~.......hhh
-hhh........................................~~~..g....hhh
-hhh............................R...........~~~......Thhh
-hhh.P..........T............................~~~......hhh
-hhh...............................T.........~~~......hhh
-hhh.....T.............T.....................~~~......hhh
+hhh,,,,,,,,,........................m.....~~~...g...,hhh
+hhh............gg.............gg...^^^^^^^~~~~......^hhh
+hhh...............................^^^^^^^^^vvv^^^^^^^hhh
+hhh............................R..^^^^^^^^^vvv^^^^^^^hhh
+hhh.P..........T...........................x~~~......hhh
+hhh.........................................~~~......hhh
+hhh.....T.............T...........T.........~~~.....Thhh
 hhh..............R...........P..............~~~..P...hhh
 hhh.........................................~~~......hhh
 hhh.........................................~~~......hhh
