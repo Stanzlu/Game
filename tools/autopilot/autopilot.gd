@@ -1,12 +1,18 @@
 extends Node
 ## Debug-only input player for reproducible captures and checks.
 ## Start with: -- --autopilot=res://tools/autopilot/<script>.json
-## Script format: [{"t": seconds, "press": ["action", ...], "release": [...], "log": "text"}]
+## Script format: [{"t": seconds, "press": ["action", ...], "release": [...], "tap": [...],
+## "log": "text"}]. "press"/"release" hold actions for polling code (movement); "tap" sends
+## real input events for menus and dialogues: pressed, released TAP_TICKS later, so the
+## press survives into a frame even at low capture frame rates.
 ## Time counts physics ticks, so runs are deterministic with --fixed-fps.
+
+const TAP_TICKS := 8
 
 var _events: Array = []
 var _index := 0
 var _ticks := 0
+var _tapped: Dictionary[String, int] = {}
 
 
 static func start_if_requested(tree: SceneTree) -> void:
@@ -37,12 +43,26 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	var t := float(_ticks) / float(Engine.physics_ticks_per_second)
 	_ticks += 1
+	for action: String in _tapped.keys():
+		if _ticks >= _tapped[action]:
+			_send(action, false)
+			_tapped.erase(action)
 	while _index < _events.size() and float((_events[_index] as Dictionary).get("t", 0.0)) <= t:
 		var event: Dictionary = _events[_index]
 		for action: String in event.get("release", []):
 			Input.action_release(action)
 		for action: String in event.get("press", []):
 			Input.action_press(action)
+		for action: String in event.get("tap", []):
+			_send(action, true)
+			_tapped[action] = _ticks + TAP_TICKS
 		if event.has("log"):
 			Log.info(Log.Category.INPUT, "autopilot", {"t": t, "note": event["log"]})
 		_index += 1
+
+
+func _send(action: String, pressed: bool) -> void:
+	var event := InputEventAction.new()
+	event.action = action
+	event.pressed = pressed
+	Input.parse_input_event(event)

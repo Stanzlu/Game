@@ -4,6 +4,7 @@ extends CanvasLayer
 ## a scrolling OptionList and a hint line. Works while the tree is paused. `cancel` closes
 ## the menu (and returns focus to whoever opened it). Subclasses fill the list in _build().
 
+signal opened
 signal closed
 
 const GROUP := &"menu_layer"
@@ -15,6 +16,7 @@ var list: OptionList
 var body: HBoxContainer
 var title: Label
 var hint: Label
+var frame: Control
 var _return_focus: Control
 
 
@@ -45,6 +47,7 @@ func _build_frame() -> void:
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
+	frame = center
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = &"MenuPanel"
 	panel.custom_minimum_size = Vector2(panel_width, 0)
@@ -89,8 +92,10 @@ func open() -> void:
 	_build()
 	list.refresh()
 	_fit_height()
+	frame.show()
 	show()
 	list.focus_first()
+	opened.emit()
 	Log.info(Log.Category.UI, "menu open", {"menu": str(name)})
 
 
@@ -117,6 +122,12 @@ func rebuild() -> void:
 	var buttons := list.buttons()
 	if not buttons.is_empty():
 		buttons[clampi(index, 0, buttons.size() - 1)].grab_focus.call_deferred()
+
+
+## Hides this menu's panel while `child` is open on top of it.
+func stack(child: MenuLayer) -> void:
+	child.opened.connect(func() -> void: frame.hide())
+	child.closed.connect(func() -> void: frame.show())
 
 
 ## Subclasses add their rows here.

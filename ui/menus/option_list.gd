@@ -52,7 +52,21 @@ func add_action(key: String, callback: Callable, enabled := true, label := "") -
 ## `values` are translation keys (or plain numbers); getter returns the index, setter takes it.
 func add_choice(key: String, values: Array, getter: Callable, setter: Callable) -> Button:
 	var button := _make_button()
-	var row := {"node": button, "key": key, "values": values, "get": getter, "set": setter}
+	var value_label := Label.new()
+	value_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	value_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	value_label.offset_right = -4
+	button.add_child(value_label)
+	var row := {
+		"node": button,
+		"key": key,
+		"values": values,
+		"get": getter,
+		"set": setter,
+		"value_label": value_label,
+	}
 	button.pressed.connect(func() -> void: _cycle(row, 1))
 	button.gui_input.connect(
 		func(event: InputEvent) -> void:
@@ -108,6 +122,17 @@ func _make_button() -> Button:
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	button.focus_mode = Control.FOCUS_ALL
+	# The interact key (E) confirms like ui_accept; keys bound to both fire only once.
+	button.gui_input.connect(
+		func(event: InputEvent) -> void:
+			if (
+				event.is_action_pressed(&"interact")
+				and not event.is_action_pressed(&"ui_accept")
+				and not button.disabled
+			):
+				button.accept_event()
+				button.pressed.emit()
+	)
 	add_child(button)
 	return button
 
@@ -127,10 +152,9 @@ func _refresh_row(row: Dictionary) -> void:
 	var text: String = row["label"] if not str(row.get("label", "")).is_empty() else tr(row["key"])
 	if row.has("values"):
 		var values: Array = row["values"]
-		var value: Variant = values[clampi(
-			int((row["get"] as Callable).call()), 0, values.size() - 1
-		)]
-		text += "    " + ARROWS % (tr(value) if value is String else str(value))
+		var index := clampi(int((row["get"] as Callable).call()), 0, values.size() - 1)
+		var value: Variant = values[index]
+		(row["value_label"] as Label).text = ARROWS % (tr(value) if value is String else str(value))
 	(node as Button).text = text
 
 
