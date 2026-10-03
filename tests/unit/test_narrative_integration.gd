@@ -207,3 +207,17 @@ func test_settings_menu_changes_values_with_left_right() -> void:
 	await _tap(&"ui_right")
 	assert_eq(Settings.get_int("audio.master"), before)
 	menu.close()
+
+
+func test_debug_panel_over_pause_menu_keeps_the_game_paused() -> void:
+	var scene := await _scene()
+	await _tap(&"menu")
+	var panel := scene.get_node("DebugPanel") as DebugPanel
+	await _tap(&"debug_panel")
+	assert_true(panel.is_open())
+	await _tap(&"debug_panel")
+	assert_false(panel.is_open())
+	assert_true(get_tree().paused, "pause menu is still open")
+	assert_true(scene.pause_menu.is_open())
+	await _tap(&"menu")
+	assert_false(get_tree().paused)

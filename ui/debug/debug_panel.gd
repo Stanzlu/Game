@@ -7,6 +7,7 @@ extends MenuLayer
 const QUICK_SLOT := SaveService.DEBUG_SLOT
 
 var _state: Label
+var _was_paused := false
 
 
 func _ready() -> void:
@@ -39,15 +40,17 @@ func _build() -> void:
 
 
 func open() -> void:
+	_was_paused = get_tree().paused
 	super()
 	get_tree().paused = true
 
 
+## Restores the pause state from before (the panel may open over the pause menu).
 func close() -> void:
 	if not visible:
 		return
 	super()
-	get_tree().paused = false
+	get_tree().paused = _was_paused
 
 
 func _unhandled_input(event: InputEvent) -> void:

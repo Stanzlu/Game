@@ -103,6 +103,8 @@ func close() -> void:
 	if not visible:
 		return
 	hide()
+	# The key that confirmed the last row must not also trigger the world when the game resumes.
+	Input.action_release(&"interact")
 	if (
 		_return_focus != null
 		and is_instance_valid(_return_focus)
