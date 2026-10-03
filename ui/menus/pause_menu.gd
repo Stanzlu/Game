@@ -19,7 +19,6 @@ func _ready() -> void:
 	save_menu = SaveMenu.new()
 	save_menu.name = "SaveMenu"
 	add_child(save_menu)
-	save_menu.closed.connect(rebuild)
 	stack(settings_menu)
 	stack(save_menu)
 

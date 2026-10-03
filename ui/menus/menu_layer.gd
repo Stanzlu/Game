@@ -105,13 +105,14 @@ func close() -> void:
 	hide()
 	# The key that confirmed the last row must not also trigger the world when the game resumes.
 	Input.action_release(&"interact")
+	# Listeners first: a parent menu shows its panel again, then it can take the focus back.
+	closed.emit()
 	if (
 		_return_focus != null
 		and is_instance_valid(_return_focus)
 		and _return_focus.is_visible_in_tree()
 	):
 		_return_focus.grab_focus()
-	closed.emit()
 
 
 ## Rebuilds the rows and keeps the focused row (after values or slots changed).

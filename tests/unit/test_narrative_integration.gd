@@ -221,3 +221,23 @@ func test_debug_panel_over_pause_menu_keeps_the_game_paused() -> void:
 	assert_true(scene.pause_menu.is_open())
 	await _tap(&"menu")
 	assert_false(get_tree().paused)
+
+
+func test_focus_returns_to_the_row_that_opened_a_submenu() -> void:
+	var scene := await _scene()
+	await _tap(&"menu")
+	var rows := scene.pause_menu.list.buttons()
+	var settings_row := rows[4]
+	assert_eq(settings_row.text, tr("PAUSE_SETTINGS"))
+	for i in 4:
+		await _tap(&"ui_down")
+	assert_true(settings_row.has_focus())
+	await _tap(&"interact")
+	assert_true(scene.pause_menu.settings_menu.is_open(), "E opens the row like Enter")
+	assert_false(scene.pause_menu.frame.visible, "pause panel hidden behind the submenu")
+	await _tap(&"cancel")
+	assert_false(scene.pause_menu.settings_menu.is_open())
+	assert_true(scene.pause_menu.frame.visible)
+	assert_true(settings_row.has_focus(), "focus is back on Einstellungen")
+	assert_true(scene.pause_menu.is_open(), "cancel closed only the submenu")
+	await _tap(&"menu")
