@@ -86,7 +86,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Konsequenzen:** Alle Werte liegen in `AntreiberModel` und sind getestet. `encounter_speed` bereitet die Accessibility-Option „Encounter-Geschwindigkeit“ vor.
 
 ## ADR-016 · Testoptionen und Autopilot in Phase 1
-- **Status:** angenommen · 2026-10-02 · wird in Phase 2 durch den Settings-Autoload ersetzt
+- **Status:** Testoptionen ersetzt durch ADR-018 (2026-10-03) · Autopilot gilt weiter
 - **Entscheidung:** Das Pause-Menü stellt Bewegungsgefühl, Kamera, Richtungen, Sprint und Info-Anzeige um (`SessionOptions`, nur für die laufende Sitzung). Dieselben Optionen gibt es als Startargumente. Ein Autopilot spielt in Debug-Builds zeitgesteuerte Eingaben ab (`--autopilot=<json>`); er wird nicht exportiert.
 - **Konsequenzen:** Varianten lassen sich ohne Neubau vergleichen. Aufnahmen und Messungen sind reproduzierbar.
 
@@ -101,3 +101,43 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Alternativen:** CC0-Packs (blockiert, Stilmischung), KI-generierte Bilder (Lizenz- und Konsistenzrisiko, laut Master-Prompt nie final), handgezeichnete Pixel-Art (beste Qualität, braucht Artist oder Budget).
 - **Konsequenzen:** Die erzeugte Grafik ist Platzhalter mit klarer Grenze: deutlich besser als die Grey-Box, aber unter Referenzbild 2. Nach jeder Kartenänderung muss neu gebacken werden (ein Test prüft die Größe). Gebackene Böden und Katalog-Sprites lassen sich später durch handgemalte Texturen oder Tilesets ersetzen, ohne Gameplay-Code zu ändern.
 - **Ergänzung (Look-Runden 2 und 3):** Leuchtende Teile sind Emissive-Ebenen mit `render_mode unshaded` direkt am Objekt (richtige Verdeckung, keine Abdunklung durch `CanvasModulate`). Dritte Szene „Wald bei Nacht“. Figuren werden aus Designs erzeugt (Spieler, Mira, Elysianer). Maßstab sind alle Referenzbilder des Projektinhabers.
+
+## ADR-018 · Einstellungen als JSON, getrennte Profile für automatische Läufe
+- **Status:** angenommen · 2026-10-03 · ersetzt die Testoptionen aus ADR-016
+- **Kontext:** Geplant war `user://settings.cfg` mit `ConfigFile`. Dessen Parser kann aus Text Objekte und Ressourcen-Verweise erzeugen. Für Saves gilt bereits „kein Code aus Nutzerdateien“ (ADR-008). Außerdem schrieben Smoke-Runs, Tests und Aufnahmen bisher in denselben Nutzerordner wie das echte Spiel.
+- **Entscheidung:**
+  - Der Autoload `Settings` speichert `settings.json` (Version, Werte, Eingabe-Overrides). Jeder Wert hat ein Schema mit Standard und Bereich; Ungültiges fällt auf den Standard zurück und wird geloggt. Geschrieben wird atomar über eine temporäre Datei.
+  - Startargumente (`--camera`, `--tuning`, `--directions`, `--sprint`, `--overlay`, `--text=instant`) gelten nur für die Sitzung und werden nie gespeichert.
+  - Eingabe-Overrides werden als einfache Daten gespeichert (Taste, Pad-Knopf, Achse, immer `device = -1`). Die Rebinding-Oberfläche folgt nach dem Slice (ADR-011).
+  - `RuntimeEnv`: GUT-Läufe nutzen `user://profiles/test/`, Läufe mit `--profile=<name>` `user://profiles/<name>/`. `check.sh` und `smoke_export.sh` nutzen `smoke`, `capture.sh` nutzt `capture`.
+- **Konsequenzen:** Keine Objekterzeugung aus Nutzerdateien. Automatische Läufe überschreiben nie Spielstände oder Einstellungen des Spielers. Die Phase-1-Testoptionen liegen jetzt dauerhaft im Einstellungsmenü.
+
+## ADR-019 · Spielzustand und Inhalte
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - `WorldState` (Autoload) ist die einzige Schreibstelle. Die Daten liegen in `GameState` mit typisierten Teilen: Flags, Quests (Stufe, Verlauf, erledigte Ziele), Beziehungen (Zustand `stranger/cautious/familiar/close/strained` plus Erinnerungen), Facetten (Flags), Haus, Inventar, entdeckte Orte, UI-Modus, Elysia-Werte (XP, Gold; Level wird aus XP berechnet), Spieler und Spielzeit. Jede Änderung wird geprüft, unter `WORLD_STATE` bzw. `QUEST` geloggt und als typisiertes Signal gemeldet. Ungültiges wird abgelehnt und als Fehler geloggt.
+  - Quests und Items sind `.tres`-Ressourcen (`QuestDef` mit `QuestStageDef`, `ItemDef`). Erlaubte Quest-Übergänge stehen in `next`; eine Stufe ohne `next` beendet die Quest mit ihrem `outcome`. Journal- und Itemtexte haben abgeleitete Schlüssel (`QUEST_<ID>_<STUFE>`, `<ITEM_ID>_NAME`). `ContentDB` lädt sie exportfest über `ResourceLoader.list_directory()`.
+  - `ContentValidator` prüft Quests (IDs, Übergänge, Erreichbarkeit, Ende, Übersetzungen), Items und Dialoge. Er läuft in den Tests und bei jedem Start eines Debug-Builds.
+  - Karten dürfen Weltzustand nur über eine feste Liste von Aktionen ändern (`StateActions`: Flag, Quest-Schritt, Item, Ort). Hebel merken sich ihren Zustand über ein Flag, Auslösezonen feuern einmal.
+  - Beziehungen und Facetten werden nie als Zahl angezeigt (Game Bible §23).
+- **Konsequenzen:** Quests lassen sich ohne Code anlegen, Fehler fallen beim Start auf. Neue Teilbereiche des Zustands brauchen Methoden in `WorldState`, Serialisierung in `GameState` und eine Testdatei.
+
+## ADR-020 · Dialoge mit statischen IDs und geprüften Zustandsaufrufen
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - Jede Dialogzeile und jede Antwort hat eine statische ID (`[ID:<bereich>_<cue>_<n>]`, Antworten `_r<n>`), projektweit eindeutig. Die IDs dienen als Übersetzungs-Kontext (`use_static_ids_as_translation_keys = false`), damit ohne Übersetzung immer der Quelltext erscheint und nie die ID.
+  - Bedingungen und Mutationen rufen nur `WorldState`-Methoden auf. Der Validator prüft Methode, Quest-, Item-, Figuren- und Facetten-IDs sowie Flag-Namensräume.
+  - Fake Choices werden erkannt: Eine Antwortgruppe, deren Antworten alle gleich weitergehen, ist ein Fehler.
+  - Die Dialogbox sperrt das Speichern; während des Dialogs angeforderte Autosaves folgen direkt nach dem Ende. Gewählte Antworten werden mit ihrer ID geloggt.
+- **Konsequenzen:** Übersetzungen können später über die Kontexte zugeordnet werden. Dialoge können keinen Zustand am Validator vorbei ändern, solange sie `WorldState` benutzen.
+
+## ADR-021 · Speichern im Spiel
+- **Status:** angenommen · 2026-10-03 · konkretisiert ADR-008
+- **Entscheidung:**
+  - Slots: `autosave` plus drei manuelle. Autosave beim Betreten eines Bereichs (nicht nach dem Laden) und bei jedem Quest-Schritt.
+  - Gespeichert werden darf nur, wenn nichts sperrt (Dialog, Ladevorgang) und die Szene speicherbar ist. Encounter sind nicht speicherbar; ihr Autosave folgt im nächsten Bereich.
+  - Vor dem Überschreiben wird die bisherige Datei zur Sicherung (`.bak`), aber nur, wenn sie lesbar ist. Eine beschädigte Datei verdrängt nie eine gute Sicherung. Das Lademenü bietet bei beschädigten Slots die Sicherung an.
+  - Laden ersetzt den Zustand, wechselt in die gespeicherte Szene und setzt die Figur an die gespeicherte Position. Weltobjekte stellen ihren Zustand aus Flags her.
+  - Spielzeit zählt nur, solange eine Spielszene läuft und nichts pausiert ist.
+- **Konsequenzen:** Keine halben Gespräche in Spielständen. Startet man im Prototyp-Menü eine Szene neu, überschreibt deren erstes Autosave den alten Autosave (die Sicherung bleibt). Das ändert sich mit dem echten Titelablauf.
+

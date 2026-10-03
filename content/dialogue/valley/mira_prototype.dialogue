@@ -1,0 +1,22 @@
+~ mira_door
+if WorldState.relationship_state("mira") == "stranger"
+	Mira: Du tropfst mir die Stufen voll. [#ph] [ID:mira_door_first_1]
+	- … [ID:mira_door_first_r1]
+		Mira: Auch eine Antwort. Eine sehr leise. [#ph] [ID:mira_door_first_2]
+		do WorldState.add_memory("mira", "door_silence")
+	- Entschuldigung. [ID:mira_door_first_r2]
+		Mira: Schon gut. Die Stufen haben Schlimmeres erlebt. [#ph] [ID:mira_door_first_3]
+		do WorldState.add_memory("mira", "door_sorry")
+	- Kann ich reinkommen? [ID:mira_door_first_r3]
+		Mira: Nein. [#ph] [ID:mira_door_first_4]
+		Mira: Ich koche gerade. Für eine Person. [#ph] [ID:mira_door_first_5]
+		do WorldState.add_memory("mira", "door_asked_in")
+	do WorldState.set_relationship("mira", "cautious")
+	do WorldState.set_flag("valley.mira_met")
+elif WorldState.has_memory("mira", "door_asked_in")
+	Mira: Immer noch nein. Aber der Regen hört bald auf. [#ph] [ID:mira_door_again_1]
+elif WorldState.has_memory("mira", "door_silence")
+	Mira: Du schon wieder. Diesmal mit Worten? [#ph] [ID:mira_door_again_2]
+else
+	Mira: Die Stufen sind immer noch nass. Nur zur Info. [#ph] [ID:mira_door_again_3]
+=> END

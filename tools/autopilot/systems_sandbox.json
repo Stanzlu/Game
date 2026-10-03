@@ -1,0 +1,23 @@
+[
+  {"t": 0.5, "press": ["move_right", "sprint"], "log": "run to the garden sign"},
+  {"t": 3.3, "release": ["move_right", "sprint"]},
+  {"t": 3.4, "press": ["move_down"]},
+  {"t": 3.55, "release": ["move_down"]},
+  {"t": 3.9, "tap": ["interact"], "log": "read the sign (starts the quest)"},
+  {"t": 5.2, "tap": ["interact"]},
+  {"t": 5.8, "tap": ["journal"], "log": "journal: running quest"},
+  {"t": 7.2, "tap": ["journal"]},
+  {"t": 7.5, "press": ["move_right", "sprint"], "log": "to the lever"},
+  {"t": 8.85, "release": ["move_right", "sprint"]},
+  {"t": 8.9, "press": ["move_down"]},
+  {"t": 9.45, "release": ["move_down"]},
+  {"t": 9.6, "tap": ["interact"], "log": "pull the lever"},
+  {"t": 10.1, "press": ["move_right"]},
+  {"t": 10.65, "release": ["move_right"]},
+  {"t": 10.7, "press": ["move_down"], "log": "through the gate"},
+  {"t": 11.7, "release": ["move_down"]},
+  {"t": 12.2, "tap": ["journal"], "log": "journal: finished quest"},
+  {"t": 13.8, "tap": ["journal"]},
+  {"t": 14.2, "tap": ["debug_panel"], "log": "debug panel"},
+  {"t": 15.8, "tap": ["debug_panel"]}
+]

@@ -73,6 +73,8 @@ func follow(node: Node2D, snap_now: bool = true) -> void:
 
 
 func set_camera_mode(mode: CameraMode) -> void:
+	if mode == camera_mode:
+		return
 	camera_mode = mode
 	Log.info(Log.Category.UI, "camera mode", {"mode": CameraMode.keys()[mode]})
 

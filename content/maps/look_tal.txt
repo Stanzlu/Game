@@ -1,6 +1,6 @@
 ; Look-Prototyp: Tal im Regen (ADR-017). Boden wird mit tools/art/bake_ground.py gebacken,
 ; Props kommen aus assets/generated/props (tools/art/make_sprites.py). Layout-Hilfe:
-; tools/art/layout_look_maps.py tal --write (ersetzt den [map]-Block). N = Mira (Look-Test).
+; tools/art/layout_look_maps.py tal --write (ersetzt den [map]-Block). N = Mira (Look-Test, Platzhalter-Dialog für die Systeme).
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/look_tal_ground.png"
@@ -30,7 +30,7 @@ b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite":
 v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
 d = {"atlas": [2, 0], "surface": "dirt", "paint": "field"}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/splash"}}
-N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres"}}
+N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/valley/mira_prototype.dialogue", "cue": "mira_door"}}
 q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_n"}}
 Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_s"}}
 [map]

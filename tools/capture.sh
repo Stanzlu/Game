@@ -26,7 +26,8 @@ out_abs="$(cd "$out_dir" && pwd)"
 args=(--rendering-driver opengl3 --audio-driver Dummy
   --fixed-fps "${CAPTURE_FPS:-30}" --write-movie "${out_abs}/frame.png" --quit-after "$frames")
 [ -n "$scene" ] && args+=("$scene")
-[ ${#user_args[@]} -gt 0 ] && args+=(-- "${user_args[@]}")
+# Captures never touch real saves or settings.
+args+=(-- --profile=capture "${user_args[@]}")
 
 xvfb-run -a -s "-screen 0 1920x1080x24" tools/godot.sh "${args[@]}" >"${out_abs}/godot.log" 2>&1 || {
   cat "${out_abs}/godot.log"

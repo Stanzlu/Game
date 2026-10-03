@@ -1,0 +1,31 @@
+{
+	"schema_version": 1,
+	"saved_at": 12,
+	"world_state": {
+		"flags": { "no_namespace": true, "valley.ok": true, "valley.text": "yes" },
+		"quests": {
+			"side_unknown": { "stage": "x" },
+			"side_sandbox_gate": { "stage": "nope" }
+		},
+		"relationships": {
+			"mira": { "state": "lover", "memories": ["ok_memory", 5, "Bad Memory"] },
+			"villain": {}
+		},
+		"facets": { "bravery": true, "care": "yes" },
+		"house": { "fire_lit": "yes", "curiosity_slots": { "shelf_1": "item_unknown" } },
+		"inventory": { "item_stone": 1.5, "item_seed": -3, "item_gold": 99, "curiosity_tiny_spoon": 1 },
+		"discovered": ["Bad Place", "ok_place", "ok_place", 7],
+		"ui_mode": "GOD",
+		"elysia": { "xp": 1e30, "gold": "lots" },
+		"player": {
+			"name": "Ein sehr, sehr langer Name mit Absicht",
+			"preset": 99,
+			"map": "../../etc/passwd",
+			"x": "left",
+			"y": 5
+		},
+		"playtime_seconds": -10,
+		"script": "res://evil.gd",
+		"extra": { "__script__": "Object(Node, \"script\": Resource(\"user://evil.gd\"))" }
+	}
+}

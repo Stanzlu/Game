@@ -24,8 +24,8 @@ func after_each() -> void:
 	for action: StringName in [&"move_right", &"sprint"]:
 		Input.action_release(action)
 	get_tree().paused = false
-	SessionOptions.tuning_index = 0
-	SessionOptions.sprint_toggle = false
+	Settings.set_value("controls.tuning", 0, false)
+	Settings.set_value("controls.sprint_toggle", false, false)
 
 
 func test_menu_action_pauses_and_options_apply() -> void:
@@ -35,9 +35,8 @@ func test_menu_action_pauses_and_options_apply() -> void:
 	await _tap(&"menu")
 	assert_true(scene.pause_menu.is_open(), "menu opened")
 	assert_true(get_tree().paused, "game paused")
-	SessionOptions.tuning_index = 2
-	scene.pause_menu.options_changed.emit()
-	assert_eq(scene.player.tuning.display_key, "TUNING_SCHWER", "preset applied to player")
+	Settings.set_value("controls.tuning", 2, false)
+	assert_eq(scene.player.tuning.display_key, "TUNING_SCHWER", "setting applied to player")
 	await _tap(&"menu")
 	assert_false(scene.pause_menu.is_open(), "menu closed")
 	assert_false(get_tree().paused, "game resumed")

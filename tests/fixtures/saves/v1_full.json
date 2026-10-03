@@ -1,0 +1,24 @@
+{
+	"schema_version": 1,
+	"game_version": "0.0.1",
+	"saved_at": "2026-10-03T12:00:00Z",
+	"world_state": {
+		"flags": { "sandbox.garden_gate_open": true, "valley.mira_met": true },
+		"quests": {
+			"side_sandbox_gate": {
+				"stage": "through_gate",
+				"history": ["find_lever", "through_gate"],
+				"objectives_done": []
+			}
+		},
+		"relationships": { "mira": { "state": "cautious", "memories": ["door_silence"] } },
+		"facets": { "courage": true },
+		"house": { "fire_lit": true, "curiosity_slots": { "shelf_1": "curiosity_tiny_spoon" } },
+		"inventory": { "item_stone": 1, "item_seed": 1 },
+		"discovered": ["sandbox_garden"],
+		"ui_mode": "REAL",
+		"elysia": { "xp": 12500, "gold": 4200 },
+		"player": { "name": "Alex", "preset": 1, "map": "sandbox", "x": 120.5, "y": 64 },
+		"playtime_seconds": 1234.5
+	}
+}

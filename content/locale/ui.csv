@@ -1,6 +1,6 @@
 keys,de
 BOOT_TITLE,REAL
-BOOT_SUBTITLE,Prototyp · Look-Phase
+BOOT_SUBTITLE,Prototyp · Systeme
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
@@ -9,7 +9,7 @@ MENU_LOOK_ELYSIA,Look: Elysia-Garten
 MENU_LOOK_TAL,Look: Tal im Regen
 MENU_LOOK_WALD,Look: Wald bei Nacht
 MENU_QUIT,Beenden
-MENU_CONTROLS_HINT,Bewegen: WASD/Stick · Sprinten: Shift/X · Interagieren: E/A · Menü: Esc/Start
+MENU_CONTROLS_HINT,Bewegen: WASD/Stick · Sprinten: Shift/X · Interagieren: E/A · Journal: J/Back · Menü: Esc/Start
 PAUSE_TITLE,Pause
 PAUSE_RESUME,Weiter
 PAUSE_TUNING,Bewegungsgefühl
@@ -36,3 +36,83 @@ INTERACT_SIT,Hinsetzen
 INTERACT_PULL,Ziehen
 KEY_SPACE,Leertaste
 KEY_SHIFT,Umschalt
+MENU_CONTINUE,Fortsetzen
+MENU_LOAD,Laden
+MENU_SETTINGS,Einstellungen
+MENU_BACK,Zurück
+PAUSE_JOURNAL,Journal
+PAUSE_SAVE,Speichern
+PAUSE_LOAD,Laden
+PAUSE_SETTINGS,Einstellungen
+OPTION_YES,Ja
+OPTION_NO,Nein
+INTERACT_TALK,Ansprechen
+SAVE_TITLE,Speichern
+LOAD_TITLE,Laden
+SAVE_NOT_HERE,Hier kann nicht gespeichert werden. Das Spiel speichert danach automatisch.
+SAVE_CONFIRM_OVERWRITE,%s überschreiben?
+LOAD_CONFIRM_BACKUP,"%s ist beschädigt. Die vorherige Sicherung laden?"
+LOAD_BROKEN_NO_BACKUP,"Dieser Spielstand ist beschädigt, und es gibt keine Sicherung."
+SAVE_DONE,Gespeichert.
+SAVE_FAILED,Speichern hat nicht geklappt.
+LOAD_FAILED,Laden hat nicht geklappt.
+SLOT_AUTOSAVE,Automatisch
+SLOT_N,Slot %s
+SLOT_EMPTY,leer
+SLOT_BROKEN,beschädigt
+TIME_MINUTES,%d min
+TIME_HOURS,%d:%02d h
+PLACE_SANDBOX,Sandbox
+PLACE_ANTREIBER,Der Weg
+PLACE_LOOK_ELYSIA,Elysia
+PLACE_LOOK_TAL,Tal
+PLACE_LOOK_WALD,Wald
+JOURNAL_TITLE,Journal
+JOURNAL_EMPTY,Noch keine Einträge.
+JOURNAL_RUNNING,Offen
+JOURNAL_FINISHED,Abgeschlossen
+JOURNAL_HINT,J oder Esc: schließen
+SETTINGS_TITLE,Einstellungen
+SETTINGS_HINT,Links/Rechts ändert den Wert. Änderungen gelten sofort.
+SETTINGS_AUDIO,Ton
+SETTINGS_VOLUME_MASTER,Gesamt
+SETTINGS_VOLUME_MUSIC,Musik
+SETTINGS_VOLUME_AMBIENCE,Umgebung
+SETTINGS_VOLUME_SFX,Effekte
+SETTINGS_VOLUME_UI,Menüs
+SETTINGS_VOLUME_VOICE,Stimmen
+SETTINGS_TEXT,Text
+SETTINGS_TEXT_SPEED,Textgeschwindigkeit
+TEXT_SPEED_SLOW,Langsam
+TEXT_SPEED_NORMAL,Normal
+TEXT_SPEED_FAST,Schnell
+TEXT_SPEED_INSTANT,Sofort
+SETTINGS_AUTO_ADVANCE,Automatisch weiter
+SETTINGS_TEXT_LARGE,Große Dialogschrift
+SETTINGS_CONTROLS,Steuerung
+SETTINGS_DISPLAY,Anzeige
+SETTINGS_FULLSCREEN,Vollbild
+SETTINGS_SCREEN_SHAKE,Bildschirmwackeln
+SETTINGS_REDUCE_FLASHING,Blitzeffekte reduzieren
+SETTINGS_ACCESS,Barrierefreiheit
+SETTINGS_TIMING,Zeitfenster
+TIMING_NORMAL,Normal
+TIMING_LONGER,Länger
+TIMING_MUCH_LONGER,Viel länger
+SETTINGS_ENCOUNTER_SPEED,Begegnungstempo
+ENCOUNTER_NORMAL,Normal
+ENCOUNTER_CALMER,Ruhiger
+ENCOUNTER_MUCH_CALMER,Viel ruhiger
+SETTINGS_DEBUG,Entwicklung
+SETTINGS_RESET,Alles zurücksetzen
+DEBUG_TITLE,Entwicklung
+DEBUG_QUICKSAVE,Schnell speichern (eigener Debug-Slot)
+DEBUG_QUICKLOAD,Schnell laden (Debug-Slot)
+DEBUG_ADVANCE_QUESTS,Laufende Quests eine Stufe weiter
+DEBUG_MIRA_NEXT,Mira: nächster Beziehungszustand
+DEBUG_UI_MODE,UI-Modus Elysia/Real wechseln
+DEBUG_ADD_STONE,Stein ins Inventar
+DEBUG_ADD_XP,+100 XP
+DEBUG_VALIDATE,Inhalte prüfen
+DEBUG_VALIDATE_RESULT,Inhalte geprüft: %d Probleme (Details im Log)
+DEBUG_NEW_GAME,Spielzustand leeren

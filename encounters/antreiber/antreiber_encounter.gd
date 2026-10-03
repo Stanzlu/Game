@@ -31,6 +31,7 @@ var _last_player_pos := Vector2.ZERO
 
 
 func _build_world() -> void:
+	saveable = false
 	_ground = Node2D.new()
 	_ground.name = "Segments"
 	view.world_root.add_child(_ground)
@@ -54,10 +55,15 @@ func _build_world() -> void:
 	antreiber = ACTOR_SCENE.instantiate()
 	_actors.add_child(antreiber)
 	antreiber.global_position = player.global_position + AntreiberActor.LEAD
-	model.stillness_seconds = stillness_seconds
-	model.encounter_speed = encounter_speed
+	# Accessibility: longer timing windows and a calmer encounter (Game Bible §50).
+	model.stillness_seconds = stillness_seconds * Settings.timing_factor()
+	model.encounter_speed = encounter_speed * Settings.encounter_speed()
 	model.resolved.connect(_on_resolved)
-	Log.info(Log.Category.ENCOUNTER, "antreiber start", {"stillness_seconds": stillness_seconds})
+	Log.info(
+		Log.Category.ENCOUNTER,
+		"antreiber start",
+		{"stillness_seconds": model.stillness_seconds, "speed": model.encounter_speed}
+	)
 
 
 func surface_at(world_pos: Vector2) -> StringName:
@@ -87,6 +93,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_resolved() -> void:
 	Log.info(Log.Category.ENCOUNTER, "antreiber resolved", model.stats())
+	WorldState.set_flag("encounter.antreiber_resolved")
 	player.speed_scale = 1.0
 	antreiber.resolve(player)
 	var beside := Vector2(player.global_position.x + 30, PATH_Y - 10)
