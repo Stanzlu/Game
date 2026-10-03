@@ -39,6 +39,16 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Tal | Nacht nach dem Regen: tiefes Blau und Violett, Grün mit Türkisstich, rötliche Erde. `CanvasModulate` dunkelt die Welt, warmes Licht nur aus Fenstern und Laterne, Regen und Ringe auf Wasser und Pfützen, starke Vignette. Das Haus ist der einzige warme Ort; Mira steht an der Tür, daneben ein Gemüsebeet, im Süden fällt der Bach über eine Geländestufe. |
 | Wald | Nacht im Wald (Akt III): fast schwarzes Türkis, violetter Fels, Licht kommt nur von leuchtenden Dingen. Lichtung mit Lichtstrahl und aufsteigenden Funken, biolumineszente blaue Bäume, Leuchtpilze in Cyan, Violett und Rosa, magentafarbene Kristalle, Glühwürmchen, Felsstufe mit Wasserfall, Baumstammbrücke. |
 
+## Phase 3: UI-Bogen, Licht, Ton
+
+| Thema | Regel |
+|-------|-------|
+| UI Elysia | Goldrahmen mit Edelsteinecken, warme Creme-Schrift, violett-dunkler Grund. HUD oben links (Level, XP, Gold), Quest oben rechts mit hüpfendem Marker, Popups laut und übertrieben. Seltenheit immer als Wort. |
+| UI Real | Keine Rahmen, gedämpftes Grau, kein HUD. Aufgehobenes erscheint als eine leise Zeile unten links. |
+| Übergang | HUD zerfällt einzeln (Gold, XP, Level), Musik läuft als Bandstopp aus, Stille, schwarz, Regen. Ohne Flackern und Wackeln, wenn der Spieler es abgeschaltet hat. |
+| Tageslicht Tal | Regentag (hell, entsättigt, flach), Abend (warmes Orange, kein Regen, Bach und leise Musik), Nacht (kühles Blau, Lampen warm). Elysia hat kein Tageslicht. |
+| Musik | Ein Motiv (Stufen 3-5-6-5-3-2) in allen Welten: Elysia perfekt, Tal menschlich, Wald versteckt, Antreiber hetzend. |
+
 ## Referenzen
 
 Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, fremdes Urheberrecht).
@@ -60,6 +70,8 @@ Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, frem
 | `tools/art/make_character.py [--preview x.png]` | `assets/generated/characters/{player,mira,elysian}.png` |
 | `tools/art/bake_ground.py <karte> [--preview-dir d]` | gebackener Boden und Wassermaske laut `[meta]` (nach `make_sprites.py`, wegen der Prop-Schatten) |
 | `tools/audio/make_ambience.py` | Regen-, Garten-, Wasser- und Nachtwald-Loops (nahtlos) |
+| `tools/audio/make_music.py [--only elysia]` | Musik-Loops Elysia, Tal, Wald, Antreiber (nahtlos, gemeinsames Motiv) |
+| `tools/art/make_ui.py [--preview x.png]` | Elysia-Rahmen, Münze, Funkeln, Riss, Truhe, Stein |
 
 Installation: `.venv/bin/pip install -r requirements-art.txt`. Alle Generatoren sind
 deterministisch (feste Seeds). Nach Änderungen an Karten oder Generatoren: erzeugen, `tools/check.sh`,

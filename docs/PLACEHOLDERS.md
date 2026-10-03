@@ -19,6 +19,8 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | `assets/generated/characters/{player,mira,elysian}.png` | Spielfigur, Mira, Elysianer; 24×32, 8 Richtungen | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | finales Figurendesign |
 | `assets/generated/audio/*_loop.wav` | Regen, Garten, Wasser, Nachtwald (Ambience-Loops) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Field Recordings bzw. Sounddesign |
 | `assets/generated/music/*_loop.wav` | Musik-Loops Elysia, Tal, Nachtwald, Antreiber mit gemeinsamem Motiv | projekt-eigen, synthetisch (`tools/audio/make_music.py`) | projekt-eigen | Komposition und Aufnahme (Phase 6 bzw. nach Budget) |
+| `assets/generated/ui/*.png` | Elysia-Rahmen mit Edelsteinen, Münze, Funkeln, Riss | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete UI im Elysia-Stil |
+| `assets/generated/objects/*.png` | Elysia-Truhe (zu/offen), Stein | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete Objekte |
 | `content/maps/look_{elysia,tal,wald}.txt` | Look-Karten Elysia-Garten, Tal, Wald bei Nacht | projekt-eigen | projekt-eigen | Slice-Karten (Phase 3) |
 | `content/dialogue/**/*.dialogue` | Schildtexte und Antreiber-Sätze (alle `[#ph]`) | Entwurf Claude | projekt-eigen | Writing-Pass mit Voice-Sheets (Phase 4) |
 | `icon.svg` | siehe oben | | | |

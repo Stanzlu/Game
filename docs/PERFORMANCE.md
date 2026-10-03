@@ -64,3 +64,22 @@ Gemessen im Cloud-Container.
 | Inhalte prüfen beim Start (Debug-Builds: 1 Quest, 3 Items, 3 Dialoge) | ca. 30 ms |
 | Exportierter Linux-Build: „Fortsetzen“ bis „scene ready“ (Wald) | Teil des 240-Frame-Smoke-Runs, ohne Fehler |
 
+## Phase 3 (2026-10-03)
+
+Renderer jetzt Compatibility (ADR-022). Messung im Container mit dem neuen Leistungstest unter Xvfb
+und **Software-Rendering** (Mesa llvmpipe, 4 vCPU Xeon). Nur ein Vergleichswert, keine Aussage über
+echte Grafikkarten.
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls |
+|-------|-------|------|---------|---------|-----------|
+| Elysia | 25 | 39,2 | 46,9 | 58,8 | 567 |
+| Tal | 27 | 37,4 | 43,6 | 50,2 | 837 |
+| Wald | 26 | 38,1 | 45,7 | 48,7 | 855 |
+
+Headless ohne Rendering (nur Skripte und Physik) laufen alle drei Szenen mit rund 7 ms pro Frame.
+
+**Für den Projektinhaber:** Startmenü → **Leistungstest** (ca. 45 Sekunden). Das Ergebnis erscheint im
+Menü, der vollständige Bericht liegt in `benchmark.txt` im Spielordner
+(`%APPDATA%\REAL\` bzw. `~/Library/Application Support/REAL/`). Ziel: Urteil „flüssig“ in allen drei
+Szenen, also 95 % der Frames unter 18 ms bei 60 Hz.
+

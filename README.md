@@ -24,6 +24,9 @@ Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
+| `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner) |
+| `.venv/bin/python tools/audio/make_music.py` | Musik-Loops neu erzeugen |
+| `.venv/bin/python tools/art/make_ui.py` | UI-Rahmen, Truhe, Stein, Riss neu erzeugen |
 | `tools/godot.sh -- --profile=test1 --start=sandbox` | eigener Ordner für Spielstände und Einstellungen (Tests, Aufnahmen) |
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
 | `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
@@ -44,7 +47,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
   blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal:
   `xattr -dr com.apple.quarantine REAL.app`
 - **Ausführliche Logs für Fehlerberichte:** mit dem Argument `-- --log-debug` starten.
-- **Steuerung:** siehe `docs/PLAYTEST_PHASE2.md`. Esc oder Start öffnet das Pause-Menü, J oder Back das
+- **Steuerung und Tests:** siehe `docs/PLAYTEST_PHASE3.md` und `docs/PLAYTEST_PHASE2.md`. Esc oder Start öffnet das Pause-Menü, J oder Back das
   Journal.
 - **Spielstände und Einstellungen** liegen lokal unter `%APPDATA%\REAL\` (Windows) bzw.
   `~/Library/Application Support/REAL/` (macOS), siehe `docs/SAVE_FORMAT.md`.
@@ -66,6 +69,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 | [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
 | [`docs/PLAYTEST_PHASE2.md`](docs/PLAYTEST_PHASE2.md) | Prüfliste für Phase 2 (Speichern, Dialoge, Journal, Menüs) |
+| [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md) | Elysia gegen Tal, Übergang, Tageszeiten, Leistungstest |
 | [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md) | Look-Regeln, Generatoren, Fragen zur Look-Phase |
 
 ## Lizenzen

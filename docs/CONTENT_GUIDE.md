@@ -57,7 +57,7 @@ stages = Array[ExtResource("2_stage")]([SubResource("Resource_find"), SubResourc
 
 - Die erste Stufe ist der Start. `next` nennt die erlaubten Folgestufen, mehrere sind möglich (unterschiedliche Ausgänge). Eine Stufe ohne `next` beendet die Quest und braucht ein `outcome` (`done`, `missed`, …). Andere Ausgänge sind kein Scheitern.
 - Texte: `QUEST_<ID>_TITLE`, `QUEST_<ID>_<STUFE>` (Journaleintrag, wenn die Stufe erreicht ist) und `QUEST_<ID>_OBJ_<ZIEL>` in `journal.csv`, alles in Großbuchstaben. Das Journal zeigt alle erreichten Einträge in Reihenfolge, darunter die Ziele der aktuellen Stufe mit `[ ]` bzw. `[x]`.
-- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze. Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`.
+- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze, `rarity` die Elysia-Seltenheit (`NONE` bis `LEGENDARY`; der Stein hat `NONE` und zeigt „Seltenheit: —“). Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`.
 - `draft = true` markiert Platzhalter-Inhalt. Vor dem Playtest-Build darf keine Quest und kein Item mehr `draft` sein (`ContentValidator.drafts()`).
 - Dateiname = ID. Keine Marker im Slice außer bewusst in Elysia.
 
@@ -82,7 +82,8 @@ G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "gar
 - Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
 - NPCs zum Ansprechen: `params.cue` und `params.dialogue`. Die Figur bleibt im Gespräch stehen und schaut den Spieler an.
 - Hebel mit Gedächtnis: `params.flag` (Zustand wird gespeichert) und `params.actions` (beim ersten Umlegen). Auslösezone `world/props/trigger_zone.tscn`: `params.flag` (feuert einmal), `params.actions`, optional `params.size` in Tiles.
-- Weltaktionen (`StateActions`, nichts anderes ist erlaubt): `{"flag": "bereich.name"}`, `{"quest": "<id>", "stage": "<stufe>", "start": true}`, `{"item": "<id>", "count": 1}`, `{"discover": "<ort>"}`. Ein Test prüft alle Aktionen in allen Karten.
+- Weltaktionen (`StateActions`, nichts anderes ist erlaubt): `{"flag": "bereich.name"}`, `{"quest": "<id>", "stage": "<stufe>", "start": true}`, `{"item": "<id>", "count": 1}`, `{"discover": "<ort>"}`, `{"xp": 250}`, `{"gold": 100}`. Ein Test prüft alle Aktionen in allen Karten.
+- Truhe `world/props/chest.tscn`: `params.flag` (öffnet einmal) und `params.actions` (Loot, Gold, XP, Quest-Schritt). Aufheben `world/props/pickup.tscn`: `params.item`, `params.flag`. Riss `world/props/rift.tscn`: `params.target` (Szenen-Schlüssel). Bank: `params.pass_time` lässt die Tageszeit weiterlaufen (nur Szenen mit `day_preset`).
 - Das Symbol ist immer das erste Zeichen der Zeile, deshalb kann auch `=` lokal definiert werden (`= = {...}`).
 
 ### Look-Karten (ADR-017)
@@ -103,6 +104,12 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - Streuen (`[meta]`): `scatter = [{"sprite": "<id>", "on": "<Bodensymbole>", "density": 0.3, "spacing": 12, "near": "<Symbole>", "radius": 1}, ...]`. Setzt kleine Deko deterministisch auf passende Zellen (nie auf Zellen mit Platzierung). `near` verlangt ein Boden- oder Platzierungssymbol in `radius` Zellen Umkreis (z. B. Laub nur unter Bäumen, Schilf nur am Wasser).
 - Figuren: `entities/npc/npc_walker.tscn` nimmt `params.sheet` (CharacterSheet-Pfad), `params.route` und `params.speed`. Ohne Route steht die Figur und schaut den Spieler an, wenn er nahe kommt.
 - Nach jeder Kartenänderung neu backen: `.venv/bin/python tools/art/bake_ground.py content/maps/<karte>.txt`. Ein Test meldet, wenn die Texturgröße nicht mehr zur Karte passt.
+
+## Szenen: Musik, Ambience, Licht
+
+- `GameScene`-Exports: `music` (`keep`, `silence`, `elysia`, `valley`, `forest`, `antreiber`), `ambience` (Loop) und `ambience_db`.
+- `LookScene.day_preset` (`keine`, `regentag`, `abend`, `nacht`) aktiviert das Tageslicht. Elysia bleibt ohne.
+- Startet man eine Szene im Prototyp-Menü, gilt ihr UI-Modus aus `SceneRegistry.START_MODES`.
 
 ## Dialogformat (Dialogue Manager 4)
 

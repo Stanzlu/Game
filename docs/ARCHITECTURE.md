@@ -13,7 +13,7 @@ core/        Querschnitt: Autoloads, Boot/Startmenü, Physik-Layer  ✅ · state
 entities/    Player, NPC, Interaktion, Figuren-Sheets             ✅ Phase 1
 world/       Karten, GameView, Props, FX, Shader, Szenen           ✅ Phase 1 · Look-Prototyp: Wetter, Licht, Himmel ✅
 encounters/  eigenständige Encounter-Szenen                       ✅ antreiber/ (Grey-Box)
-ui/          Theme, Dialogbox, Prompt, Menüs, Journal, Debug-Panel ✅ · HUD Elysia/Real, Skins 🔜 Phase 3
+ui/          Theme, Skins Elysia/Real, HUD, Dialogbox, Prompt, Menüs, Journal, Debug-Panel ✅
 content/     Daten: locale/, dialogue/, maps/, quests/, items/     ✅
 assets/      Placeholder-Grafik, -Audio, Schriften                ✅ fonts/, placeholder/, generated/ (ADR-017)
 tests/       GUT-Unit-Tests und Fixtures                           ✅
@@ -32,7 +32,8 @@ docs/        Dokumentation                                         ✅
 | `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit, Eingabe-Overrides | ✅ |
 | `WorldState` | `core/world_state.gd` | typisierter Spielzustand (`GameState`), einzige Schreibstelle (ADR-019) | ✅ |
 | `SaveSystem` | `core/save_system.gd` | JSON-Saves, Slots, Autosave, Sperren, Laden (ADR-021) | ✅ |
-| `AudioDirector` | `core/audio_director.gd` | Musikzustände, Crossfades, Ambience | 🔜 Phase 3 |
+| `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking, Bandstopp, Ambience (ADR-023) | ✅ |
+| `ScreenFade` | `core/screen_fade.gd` | schwarze Abdeckung über Szenenwechsel (ADR-025) | ✅ |
 
 ## Spielszenen
 
@@ -41,7 +42,8 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 ├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012)
 │  ├─ WorldViewport/World                MapView (Karte, Props), Player, FX, NPCs
 │  └─ WorldDisplay                       Sprite, um Bruchteile verschoben
-├─ DialogueBox (CanvasLayer 20)          Gruppe "dialogue_presenter", sperrt Speichern
+├─ Hud (CanvasLayer 12)                  Elysia: Level, XP, Gold, Quest, Popups · Real: leise Zeile
+├─ DialogueBox (CanvasLayer 20)          Gruppe "dialogue_presenter", sperrt Speichern, Musik leiser
 ├─ Journal (MenuLayer 42)                J / Back
 ├─ InfoOverlay (CanvasLayer 30)          F3
 ├─ PauseMenu (MenuLayer 40)              Esc / Start
@@ -53,6 +55,8 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 - Die Szene liefert `SaveSystem` Ort und Speicherbarkeit (`is_saveable()`, `save_location()`), wendet
   Einstellungen an und setzt die Figur nach dem Laden an die gespeicherte Position. Beim Betreten ohne
   Laden fordert sie ein Autosave an. Encounter setzen `saveable = false`.
+- Alle UI-Teile folgen dem UI-Modus über `UiSkin.attach` (ADR-024): Elysia golden und verziert,
+  Real minimal. Szenen wählen Musik und Ambience über Exports (`music`, `ambience`, ADR-023).
 - Menüs erben von `MenuLayer` (`ui/menus/menu_layer.gd`) und nutzen `OptionList`: Hoch/Runter mit
   Umbruch, Links/Rechts ändert Werte, Bestätigen mit Enter, Leertaste, E oder A, Zurück mit Esc oder B.
   Sie laufen auch bei pausiertem Baum.
@@ -102,7 +106,8 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
 der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
 `ui/theme/base_theme.tres` mit Typvariationen `TitleLabel` (32 px), `SubtitleLabel` (16 px),
-`MutedLabel`. Grundschrift Tiny5 in 8 px; Text-Skalierung später in ganzzahligen Vielfachen.
+`MutedLabel`. Grundschrift Tiny5 in 8 px; Text-Skalierung später in ganzzahligen Vielfachen. Renderer: Compatibility
+(OpenGL 3) auf allen Plattformen (ADR-022).
 
 **Look-Prototyp (ADR-017, `docs/ART_DIRECTION.md`):** `LookScene` (`world/levels/look_scene.gd`) erweitert
 `GameScene` um Atmosphäre. Ebenen in der Welt: Himmel `SkyLayer` (z −20) → gebackener Boden mit
@@ -136,7 +141,23 @@ Eingabe-Overrides liegen in den Einstellungen; die Belegungsoberfläche folgt na
 ## Audio
 
 Busse `Master`, `Music`, `Ambience`, `SFX`, `UI`, `Voice` (alle → Master) in `default_bus_layout.tres`.
-Look-Szenen spielen nahtlose Ambience-Loops auf `Ambience`; der Brunnen hat einen positionalen Wasser-Loop.
+`AudioDirector` spielt die Musik-Loops (`assets/generated/music/`, `tools/audio/make_music.py`) auf `Music`
+und die Ambience-Loops auf `Ambience`, je mit zwei Spielern zum Überblenden. Musik: Elysia, Tal (Abend),
+Nachtwald, Antreiber, Stille. Während Dialogen −7 dB. Der Brunnen hat einen positionalen Wasser-Loop.
+
+## Übergang und Licht (ADR-025)
+
+- `RiftSequence` (`world/fx/rift_sequence.gd`) inszeniert den ersten Übertritt; der Riss
+  (`world/props/rift.tscn`) startet sie. Danach UI-Modus REAL, Inventar Stein und Samen, Tal.
+- `DayLight` (`world/fx/day_light.gd`) in `LookScene` (`day_preset`): Regentag, Abend, Nacht.
+  Die Bank im Tal (`pass_time`) und das Debug-Panel schalten weiter.
+- Elysia-Objekte: Truhe (`chest.tscn`), Aufheben (`pickup.tscn`), Lob mit XP über Dialog-Mutationen.
+
+## Leistungstest
+
+`core/benchmark/`: Startmenü „Leistungstest“ oder `--benchmark` (`=quick` für Smoke-Runs) fährt Elysia,
+Tal und Wald je 12 s mit Bewegung ab und misst Frame-Zeiten (`FrameStats`). Bericht in
+`benchmark.txt` im Nutzerordner, Ergebnis im Startmenü. Speichern ist dabei gesperrt.
 
 ## Build und Prüfung
 
@@ -148,4 +169,5 @@ Look-Szenen spielen nahtlose Ambience-Loops auf `Ambience`; der Brunnen hat eine
 - `tools/capture.sh`: rendert Frames per Xvfb + OpenGL3 zur Sichtprüfung; Startargumente werden durchgereicht.
 - `tools/autopilot/`: zeitgesteuerte Eingaben für Aufnahmen (nur Debug-Builds).
 - `tools/placeholders/make_placeholders.py`: erzeugt die Grey-Box-Assets (ADR-014).
+- `tools/audio/make_music.py`, `tools/art/make_ui.py`: Musik-Loops, UI-Rahmen, Truhe, Stein, Riss.
 - CI: `.github/workflows/ci.yml` (ADR-009).

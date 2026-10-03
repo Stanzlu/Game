@@ -147,3 +147,30 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Entscheidung:** `gl_compatibility` für Desktop und Mobile.
 - **Konsequenzen:** Builds rendern wie die geprüften Aufnahmen. Breitere Hardware-Unterstützung und schnellerer Start. Funktionen, die nur Forward+ hat (z. B. 2D-Glow über `WorldEnvironment`, SDF-Effekte), sind bewusst nicht im Einsatz. Ein Wechsel bleibt eine Projekteinstellung, falls später ein Effekt Forward+ braucht.
 
+## ADR-023 · Musik: eigene prozedurale Loops und ein AudioDirector
+- **Status:** angenommen · 2026-10-03 · Platzhalter bis zur echten Komposition
+- **Kontext:** Phase 3 verlangt Musikzustände und einen Elysia-Loop. Asset-Seiten sind blockiert, die Vorgabe ist 0 € und eigene Inhalte (wie bei der Grafik, ADR-017).
+- **Entscheidung:**
+  - `tools/audio/make_music.py` (numpy) erzeugt nahtlose Loops: Elysia (C-Dur, 100 BPM, streng quantisiert, Glockenspiel und Pads), Tal (D-Dorisch, gezupft, menschliches Timing), Nachtwald (Drone, Glasglocken), Antreiber (treibend, das Motiv steigt und kommt nie an). Alle tragen dasselbe Motiv, das spätere Hauptthema (Game Bible §35).
+  - Nahtlosigkeit: Noten laufen über das Loop-Ende in den Anfang, Filter und Hall sind zirkulär (Frequenzraum).
+  - Autoload `AudioDirector`: Musik-Tracks mit Überblendung, gleicher Track läuft über Szenenwechsel weiter, leiser während Dialogen, „Bandstopp“ (Tonhöhe und Lautstärke sinken) für den Übergang, Ambience-Betten. Musik und Ambience laufen in Menüs weiter.
+  - Szenen wählen Musik und Ambience über `GameScene`-Exports.
+- **Konsequenzen:** Rund 7,6 MB WAV im Repo (22,05 kHz Stereo), im Build komprimiert. Die Klangqualität ist Platzhalter-Niveau; Komposition und Aufnahme brauchen später Budget oder Musiker. Neue Tracks: Funktion in `make_music.py` und Eintrag in `AudioDirector.TRACKS`.
+
+## ADR-024 · UI-Bogen: Elysia-Skin mit HUD, Real-Skin fast leer
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - Zwei Themes (`ui/theme/elysia_skin.tres`, `real_skin.tres`) überschreiben nur, was sich unterscheidet. `UiSkin.attach(control)` hält Dialogbox, Menüs, Journal, Prompt und HUD im Stil des aktuellen UI-Modus, auch nach dem Laden.
+  - Elysia: Goldrahmen mit Edelsteinen (`tools/art/make_ui.py`), HUD mit Level, XP-Leiste, Gold und Quest-Anzeige samt Marker, laute Popups für XP, Gold, Level-Up und Loot. Seltenheit erscheint immer auch als Wort, nie nur als Farbe.
+  - Real: keine Rahmen, gedämpfte Farben, kein HUD; nur eine leise Zeile, wenn man etwas aufhebt.
+  - Items haben eine Seltenheit; der Stein hat keine („Seltenheit: —“).
+- **Konsequenzen:** Weitere UI-Elemente bekommen `UiSkin.attach`. Der spätere persönliche Stil („Handschrift, Kritzeleien“) wird ein dritter Skin.
+
+## ADR-025 · Übergangssequenz und Tageslicht
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - `RiftSequence`: Spieler wird festgehalten, Speichern gesperrt, die Welt ruckelt (nur mit Bildschirmwackeln an), die HUD-Elemente verschwinden einzeln (ohne Flackern bei „Blitzeffekte reduzieren“), die Musik läuft als Bandstopp aus, Stille, Abblende. Danach UI-Modus REAL, Inventar Stein und Samen, Szenenwechsel ins Tal mit Regen, Autosave dort.
+  - Autoload `ScreenFade`: schwarze Abdeckung über Szenenwechsel hinweg; neue Szenen blenden selbst auf.
+  - `DayLight` für Szenen der Wirklichkeit: Presets Regentag, Abend, Nacht blenden Weltfarbe, Farbstimmung, Lampen, Regen und Ton. Im Tal lässt Ausruhen auf der Bank die Zeit weiterlaufen. Elysia hat bewusst kein Tageslicht.
+- **Konsequenzen:** Der Ablauf ist getestet und als Video belegt. Echte Story-Platzierung (Kind, versteckter Riss, Hilfe nach Zeit) folgt mit Phase 4.
+
