@@ -8,6 +8,7 @@ signal built(data: MapData)
 
 const DEFAULT_LEGEND := "res://content/maps/legend.json"
 const GROUND_SHADER := preload("res://world/shaders/ground.gdshader")
+const REFLECTION_SHADER := preload("res://world/shaders/reflection.gdshader")
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
@@ -20,6 +21,7 @@ var ground: TileMapLayer
 ## Painted ground from the map's [meta] "ground" texture (ADR-017). The tile layer then
 ## stays hidden but keeps collision and surface data.
 var ground_art: Sprite2D
+var reflection_material: ShaderMaterial
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
 var _external_props: Array[Node] = []
@@ -65,6 +67,7 @@ func build_from_text(text: String, source: String = "") -> bool:
 		_apply_baked_ground()
 	_spawn_props()
 	_spawn_scatter()
+	_add_reflections()
 	Log.info(
 		Log.Category.CONTENT,
 		"map built",
@@ -199,10 +202,68 @@ func _apply_baked_ground() -> void:
 		else:
 			mat.set_shader_parameter("water_mask", mask)
 			mat.set_shader_parameter("has_water", true)
+			reflection_material = ShaderMaterial.new()
+			reflection_material.shader = REFLECTION_SHADER
+			reflection_material.set_shader_parameter("water_mask", mask)
+			reflection_material.set_shader_parameter("map_size", Vector2(expected))
 	ground_art.material = mat
 	add_child(ground_art)
 	move_child(ground_art, 0)
 	ground.visible = false
+
+
+## Mirrored, water-masked copies of props and NPCs that stand near water. The player is
+## never reflected (Game Bible §9: water reflects everything except the protagonist).
+func _add_reflections() -> void:
+	if reflection_material == null:
+		return
+	reflection_material.set_shader_parameter("map_origin", global_position)
+	for child in entities.get_children():
+		var sprite := child.get_node_or_null("Sprite") as Node2D
+		if (
+			sprite == null
+			or child is Player
+			or not _near_water(world_to_cell(child.global_position))
+		):
+			continue
+		if child is CanvasItem and (child as CanvasItem).z_index < 0:
+			continue
+		var mirror: Node2D
+		if sprite is AnimatedSprite2D:
+			var anim := sprite as AnimatedSprite2D
+			var copy := AnimatedSprite2D.new()
+			copy.sprite_frames = anim.sprite_frames
+			copy.offset = Vector2(anim.offset.x, -anim.offset.y)
+			copy.flip_v = true
+			copy.set_meta(&"source", anim)
+			mirror = copy
+			copy.set_process(true)
+			anim.animation_changed.connect(func() -> void: copy.play(anim.animation))
+			anim.frame_changed.connect(func() -> void: copy.frame = anim.frame)
+			copy.play(anim.animation)
+		else:
+			var src := sprite as Sprite2D
+			var copy_s := Sprite2D.new()
+			copy_s.texture = src.texture
+			copy_s.centered = false
+			copy_s.flip_v = true
+			var h := float(src.texture.get_height()) if src.texture != null else 0.0
+			copy_s.offset = Vector2(src.offset.x, -src.offset.y - h)
+			mirror = copy_s
+		mirror.name = "Reflection"
+		mirror.material = reflection_material
+		mirror.z_as_relative = false
+		mirror.z_index = -7
+		mirror.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+		child.add_child(mirror)
+
+
+func _near_water(cell: Vector2i) -> bool:
+	for dy in range(-1, 4):
+		for dx in range(-2, 3):
+			if data.surface_at_cell(cell + Vector2i(dx, dy)) == &"water":
+				return true
+	return false
 
 
 ## Small decorations (grass tufts, pebbles, leaves) from [meta] "scatter" rules: plain
