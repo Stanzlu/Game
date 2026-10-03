@@ -147,3 +147,5 @@ BENCH_MOSTLY,meist flüssig
 BENCH_STUTTER,ruckelt
 BENCH_SAVED,Bericht gespeichert: %s
 BENCH_HINT,Den Bericht bitte mit deinem Feedback mitschicken.
+MENU_NEW_GAME,Neues Spiel
+MENU_PROTOTYPES,Prototypen

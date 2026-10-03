@@ -1,56 +1,42 @@
 extends Control
-## Start menu of the prototype: continue, load, settings, then the prototype scenes
-## (each starts a new game state). User argument `--start=<key>` (SceneRegistry) jumps
-## straight into a scene (smoke tests, captures). The real title flow comes with the slice.
+## Start menu: Elysia's sky with the world tree (TitleBackground), the logo and the main
+## entries: continue, new game (Elysia), load, prototypes (each scene of the slice in
+## progress and the performance test), settings, quit. User argument `--start=<key>`
+## (SceneRegistry) jumps straight into a scene (smoke tests, captures).
 ## Debug builds validate all content here, so broken content shows up in every smoke run.
 
 const BUILD_INFO_PATH := "res://core/build_info.cfg"
+const AMBIENCE := preload("res://assets/generated/audio/garden_loop.wav")
+const FADE_SECONDS := 0.4
 
 static var _start_arg_consumed := false
+static var _intro_played := false
 
+var list: OptionList
 var _continue: Button
-var _load: Button
-var _settings_button: Button
+var _quit_button: Button
 var _save_menu: SaveMenu
 var _settings_menu: SettingsMenu
+var _prototypes: PrototypeMenu
+var _leaving := false
 
-@onready var _title: Label = %Title
+@onready var _logo: TextureRect = %Logo
 @onready var _subtitle: Label = %Subtitle
+@onready var _menu_panel: PanelContainer = %MenuPanel
 @onready var _hint: Label = %Hint
 @onready var _build: Label = %Build
-@onready var _sandbox: Button = %Sandbox
-@onready var _antreiber: Button = %Antreiber
-@onready var _look_elysia: Button = %LookElysia
-@onready var _look_tal: Button = %LookTal
-@onready var _look_wald: Button = %LookWald
-@onready var _quit: Button = %Quit
-@onready var _menu: VBoxContainer = %Sandbox.get_parent()
 
 
 func _ready() -> void:
-	_title.text = tr("BOOT_TITLE")
 	_subtitle.text = tr("BOOT_SUBTITLE")
 	_hint.text = tr("MENU_CONTROLS_HINT")
-	_sandbox.text = tr("MENU_SANDBOX")
-	_antreiber.text = tr("MENU_ANTREIBER")
-	_look_elysia.text = tr("MENU_LOOK_ELYSIA")
-	_look_tal.text = tr("MENU_LOOK_TAL")
-	_look_wald.text = tr("MENU_LOOK_WALD")
-	_quit.text = tr("MENU_QUIT")
-	_sandbox.pressed.connect(func() -> void: open_scene("sandbox"))
-	_antreiber.pressed.connect(func() -> void: open_scene("antreiber"))
-	_look_elysia.pressed.connect(func() -> void: open_scene("look_elysia"))
-	_look_tal.pressed.connect(func() -> void: open_scene("look_tal"))
-	_look_wald.pressed.connect(func() -> void: open_scene("look_wald"))
-	_quit.pressed.connect(func() -> void: get_tree().quit())
-	_add_save_entries()
-	AudioDirector.stop_music(1.0)
-	if ScreenFade.is_covered():
-		ScreenFade.fade_in(0.6)
-	AudioDirector.set_ambience(null, -6.0, 1.0)
+	_build_menus()
+	AudioDirector.play_music("elysia", 2.0)
+	AudioDirector.set_ambience(AMBIENCE, -16.0, 2.0)
 	var info := read_build_info()
 	_build.text = format_build_line(info)
-	(_continue if _continue.visible else _sandbox).grab_focus()
+	_play_intro()
+	list.focus_first()
 	Log.info(Log.Category.BOOT, "boot screen ready", info)
 	if not _start_arg_consumed:
 		Log.info(
@@ -75,44 +61,105 @@ func _ready() -> void:
 		_continue_latest.call_deferred()
 	elif not start.is_empty() and not _start_arg_consumed:
 		_start_arg_consumed = true
-		open_scene.call_deferred(start)
+		open_scene.call_deferred(start, false)
 
 
-## Starts a prototype scene with a fresh game state.
-func open_scene(key: String) -> void:
+## Starts a scene with a fresh game state (fades out first unless `fade` is off).
+func open_scene(key: String, fade := true) -> void:
 	if not SceneRegistry.has(key):
 		Log.error(Log.Category.BOOT, "unknown start scene", {"key": key})
 		return
+	if _leaving:
+		return
+	_leaving = true
 	Log.info(Log.Category.BOOT, "open scene", {"key": key})
+	if fade:
+		ScreenFade.fade_out(FADE_SECONDS)
+		await NodeTimer.after(self, FADE_SECONDS)
 	WorldState.new_game()
 	WorldState.set_ui_mode(SceneRegistry.start_mode(key))
 	get_tree().change_scene_to_file(SceneRegistry.path(key))
 
 
-func _add_save_entries() -> void:
+func _build_menus() -> void:
 	_save_menu = SaveMenu.new()
 	_save_menu.name = "SaveMenu"
+	_save_menu.follow_mode = false
+	_save_menu.sound_set = AudioDirectorService.SoundSet.ELYSIA
 	add_child(_save_menu)
 	_settings_menu = SettingsMenu.new()
 	_settings_menu.name = "SettingsMenu"
+	_settings_menu.follow_mode = false
+	_settings_menu.sound_set = AudioDirectorService.SoundSet.ELYSIA
 	add_child(_settings_menu)
-	_continue = _entry("MENU_CONTINUE", 0)
-	_continue.pressed.connect(_continue_latest)
-	_continue.visible = not SaveSystem.latest_slot().is_empty()
-	_load = _entry("MENU_LOAD", 1)
-	_load.pressed.connect(func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
-	_settings_button = _entry("MENU_SETTINGS", 2)
-	_settings_button.pressed.connect(_settings_menu.open)
-	var bench := _entry("MENU_BENCHMARK", _menu.get_child_count() - 1)
-	bench.pressed.connect(func() -> void: BenchmarkRunner.start(get_tree()))
-	if not BenchmarkRunner.last_rows.is_empty():
+	_prototypes = PrototypeMenu.new()
+	_prototypes.name = "PrototypeMenu"
+	_prototypes.on_scene = open_scene
+	_prototypes.on_benchmark = func() -> void: BenchmarkRunner.start(get_tree())
+	add_child(_prototypes)
+	list = OptionList.new()
+	list.sound_skin = AudioDirectorService.SoundSet.ELYSIA
+	list.add_theme_constant_override(&"separation", 0)
+	list.custom_minimum_size = Vector2(132, 0)
+	_menu_panel.add_child(list)
+	_rebuild_list()
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes]:
+		menu.opened.connect(func() -> void: _menu_panel.hide())
+		menu.closed.connect(_on_submenu_closed)
+	if BenchmarkRunner.result_pending and not BenchmarkRunner.last_rows.is_empty():
+		BenchmarkRunner.result_pending = false
 		var result := BenchmarkResult.new()
 		result.name = "BenchmarkResult"
+		result.follow_mode = false
 		add_child(result)
+		result.opened.connect(func() -> void: _menu_panel.hide())
+		result.closed.connect(_on_submenu_closed)
 		result.open.call_deferred()
-	_save_menu.closed.connect(
-		func() -> void: _continue.visible = not SaveSystem.latest_slot().is_empty()
+
+
+func _rebuild_list() -> void:
+	list.clear_rows()
+	_continue = null
+	if not SaveSystem.latest_slot().is_empty():
+		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
+	list.add_action("MENU_NEW_GAME", func() -> void: open_scene("look_elysia"))
+	list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
+	list.add_action("MENU_PROTOTYPES", _prototypes.open)
+	list.add_action("MENU_SETTINGS", _settings_menu.open)
+	_quit_button = list.add_action("MENU_QUIT", _quit)
+	list.refresh()
+	_menu_panel.reset_size()
+
+
+func _on_submenu_closed() -> void:
+	_menu_panel.show()
+	var index := list.buttons().find(get_viewport().gui_get_focus_owner())
+	_rebuild_list()
+	list.focus_index(maxi(index, 0))
+
+
+## Logo drops in, the menu fades in; the very first start comes out of black.
+func _play_intro() -> void:
+	var first := not _intro_played
+	_intro_played = true
+	if first and not ScreenFade.is_covered():
+		ScreenFade.fade_out(0.0)
+	if ScreenFade.is_covered():
+		ScreenFade.fade_in(1.2 if first else 0.6)
+	var tween := create_tween().set_parallel()
+	_logo.modulate.a = 0.0
+	_logo.position.y -= 8.0
+	tween.tween_property(_logo, ^"modulate:a", 1.0, 0.6).set_delay(0.3)
+	(
+		tween
+		. tween_property(_logo, ^"position:y", _logo.position.y + 8.0, 0.8)
+		. set_delay(0.3)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
 	)
+	for node: CanvasItem in [_subtitle, _menu_panel, _hint, _build]:
+		node.modulate.a = 0.0
+		tween.tween_property(node, ^"modulate:a", 1.0, 0.5).set_delay(0.7)
 
 
 ## Loads the newest readable save ("Fortsetzen", `--continue`).
@@ -124,13 +171,9 @@ func _continue_latest() -> void:
 	SaveSystem.load_slot(slot)
 
 
-func _entry(key: String, index: int) -> Button:
-	var button := Button.new()
-	button.theme_type_variation = &"MenuEntry"
-	button.text = tr(key)
-	_menu.add_child(button)
-	_menu.move_child(button, index)
-	return button
+func _quit() -> void:
+	Log.info(Log.Category.BOOT, "quit requested")
+	get_tree().quit()
 
 
 func _validate_content() -> void:
@@ -144,11 +187,14 @@ func _validate_content() -> void:
 	)
 
 
+## Cancel first jumps to "Beenden"; cancel on it quits (no accidental quit).
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()
-		Log.info(Log.Category.BOOT, "quit requested")
-		get_tree().quit()
+		if get_viewport().gui_get_focus_owner() == _quit_button:
+			_quit()
+		else:
+			_quit_button.grab_focus()
 
 
 ## Returns the value of `--start=<key>` or an empty string.
