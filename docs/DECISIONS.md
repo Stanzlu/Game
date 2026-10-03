@@ -89,3 +89,15 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Status:** angenommen · 2026-10-02 · wird in Phase 2 durch den Settings-Autoload ersetzt
 - **Entscheidung:** Das Pause-Menü stellt Bewegungsgefühl, Kamera, Richtungen, Sprint und Info-Anzeige um (`SessionOptions`, nur für die laufende Sitzung). Dieselben Optionen gibt es als Startargumente. Ein Autopilot spielt in Debug-Builds zeitgesteuerte Eingaben ab (`--autopilot=<json>`); er wird nicht exportiert.
 - **Konsequenzen:** Varianten lassen sich ohne Neubau vergleichen. Aufnahmen und Messungen sind reproduzierbar.
+
+## ADR-017 · Look-Pipeline: eigene, prozedural erzeugte Pixel-Art
+- **Status:** vorläufig · 2026-10-02 · Abnahme durch den Projektinhaber anhand der Look-Szenen
+- **Kontext:** Die Grey-Box wirkte nicht wie das gewünschte Spiel. Zielstil laut Rückmeldung: moderne Top-Down-Pixel-Art wie Referenzbild 2 (Bilder liegen nicht im Repo). Vorgabe: nur eigene Grafik, 0 €. Asset-Seiten sind ohnehin blockiert (KNOWN_ISSUES #4).
+- **Entscheidung:**
+  - Böden werden aus der Textkarte **gebacken** (`tools/art/bake_ground.py`): eine Textur pro Karte mit organischen Übergängen statt sichtbarem Raster, Schattierung nur aus handgewählten Paletten pro Stil, Schattenkanten, Heckenkronen, Klippenwände, Prop-Schatten und eine Wassermaske. Die TileMap bleibt für Kollision und Oberflächen erhalten und wird ausgeblendet. Ein `[meta]`-Block der Karte nennt Stil, Boden- und Wassertextur.
+  - Props und Figur kommen aus `tools/art/make_sprites.py` und `tools/art/make_character.py`. `assets/generated/props/catalog.json` beschreibt Anker, Kollision, Wind, Lichter und Effekte; `world/props/decor.tscn` setzt sie generisch um. Varianten werden pro Position deterministisch gewählt.
+  - Atmosphäre in Godot: Shader für Wind, Wasser, Regenringe, Wolkenschatten und Farbstimmung mit Bloom und Vignette; CPU-Partikel für Regen, Blüten und Lichtpunkte; `PointLight2D` plus `CanvasModulate` für Nacht; Ambience-Loops aus `tools/audio/make_ambience.py`. Alles bleibt auf dem Spielpixel-Raster.
+  - numpy und Pillow nur für die Generatoren (`requirements-art.txt`). Nicht im Build, nicht in CI; die erzeugten Dateien sind eingecheckt.
+- **Alternativen:** CC0-Packs (blockiert, Stilmischung), KI-generierte Bilder (Lizenz- und Konsistenzrisiko, laut Master-Prompt nie final), handgezeichnete Pixel-Art (beste Qualität, braucht Artist oder Budget).
+- **Konsequenzen:** Die erzeugte Grafik ist Platzhalter mit klarer Grenze: deutlich besser als die Grey-Box, aber unter Referenzbild 2. Nach jeder Kartenänderung muss neu gebacken werden (ein Test prüft die Größe). Gebackene Böden und Katalog-Sprites lassen sich später durch handgemalte Texturen oder Tilesets ersetzen, ohne Gameplay-Code zu ändern.
+- **Ergänzung (Look-Runden 2 und 3):** Leuchtende Teile sind Emissive-Ebenen mit `render_mode unshaded` direkt am Objekt (richtige Verdeckung, keine Abdunklung durch `CanvasModulate`). Dritte Szene „Wald bei Nacht“. Figuren werden aus Designs erzeugt (Spieler, Mira, Elysianer). Maßstab sind alle Referenzbilder des Projektinhabers.

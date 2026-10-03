@@ -11,13 +11,13 @@ Legende: ✅ vorhanden · 🔜 geplant (Phase)
 ```
 core/        Querschnitt: Autoloads, Boot/Startmenü, Physik-Layer  ✅
 entities/    Player, NPC, Interaktion, Figuren-Sheets             ✅ Phase 1
-world/       Karten, GameView, Props, Footsteps/FX, Szenen         ✅ Phase 1 · Wetter/Licht 🔜 Phase 3
+world/       Karten, GameView, Props, FX, Shader, Szenen           ✅ Phase 1 · Look-Prototyp: Wetter, Licht, Himmel ✅
 encounters/  eigenständige Encounter-Szenen                       ✅ antreiber/ (Grey-Box)
 ui/          Theme, Dialogbox, Prompt, Pause-Menü, Info-Anzeige    ✅ · HUD Elysia/Real, Journal 🔜 Phase 2/3
 content/     Daten: locale/, dialogue/, maps/                      ✅ · quests/, items/ 🔜 Phase 2
-assets/      Placeholder-Grafik, -Audio, Schriften                ✅ fonts/
+assets/      Placeholder-Grafik, -Audio, Schriften                ✅ fonts/, placeholder/, generated/ (ADR-017)
 tests/       GUT-Unit-Tests und Fixtures                           ✅
-tools/       Toolchain-, Export-, Capture-Skripte                  ✅
+tools/       Toolchain-, Export-, Capture-Skripte, Generatoren     ✅ art/, audio/ (ADR-017)
 addons/      vendored: dialogue_manager, gut                       ✅
 docs/        Dokumentation                                         ✅
 ```
@@ -67,7 +67,8 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition
 | UI-Texte | CSV → Godot-Translation, Zugriff nur über `tr()` | ✅ |
 | Dialoge | Dialogue-Manager-Dateien `.dialogue` | ✅ Format verifiziert · Inhalte 🔜 |
 | Quests, Items, Kuriositäten | typisierte `.tres`-Ressourcen mit Validator | 🔜 Phase 2 |
-| Maps | Textkarten mit globaler und lokaler Legende (ADR-004, ADR-013) | ✅ |
+| Maps | Textkarten mit globaler und lokaler Legende, `[meta]` für gebackene Böden (ADR-004, ADR-013, ADR-017) | ✅ |
+| Prop-Grafik | `assets/generated/props/catalog.json` (Anker, Kollision, Wind, Licht), erzeugt von `tools/art/make_sprites.py` | ✅ Look-Prototyp |
 | Einstellungen | `user://settings.cfg` | 🔜 Phase 2 |
 | Spielstände | JSON (ADR-008) | 🔜 Phase 2 |
 
@@ -77,6 +78,17 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition
 der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
 `ui/theme/base_theme.tres` mit Typvariationen `TitleLabel` (32 px), `SubtitleLabel` (16 px),
 `MutedLabel`. Grundschrift Tiny5 in 8 px; Text-Skalierung später in ganzzahligen Vielfachen.
+
+**Look-Prototyp (ADR-017, `docs/ART_DIRECTION.md`):** `LookScene` (`world/levels/look_scene.gd`) erweitert
+`GameScene` um Atmosphäre. Ebenen in der Welt: Himmel `SkyLayer` (z −20) → gebackener Boden mit
+`ground.gdshader` (z −10, Wasser, Regenringe, Wolkenschatten) → flache Deko (z −5) → nach Fußlinie
+sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichter, Rauch) → Partikel
+(z 30). Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht
+abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tönung, Vignette) sitzt auf
+dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` streut zusätzlich
+Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und
+NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske; der Player
+bekommt keine). `AmbientLife` (`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen.
 
 ## Eingabe
 
@@ -95,6 +107,7 @@ Nur Actions (ADR-011). Belegungen in `project.godot`, Tests in `tests/unit/test_
 ## Audio
 
 Busse `Master`, `Music`, `Ambience`, `SFX`, `UI`, `Voice` (alle → Master) in `default_bus_layout.tres`.
+Look-Szenen spielen nahtlose Ambience-Loops auf `Ambience`; der Brunnen hat einen positionalen Wasser-Loop.
 
 ## Build und Prüfung
 

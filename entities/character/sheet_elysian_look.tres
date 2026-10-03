@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CharacterSheet" format=3]
+
+[ext_resource type="Script" path="res://entities/character/character_sheet.gd" id="1_sheet"]
+[ext_resource type="Texture2D" path="res://assets/generated/characters/elysian.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/generated/props/fx/shadow_small.png" id="3_shadow"]
+
+[resource]
+script = ExtResource("1_sheet")
+texture = ExtResource("2_tex")
+frame_size = Vector2i(24, 32)
+feet_offset = Vector2(0, -14)
+shadow = ExtResource("3_shadow")

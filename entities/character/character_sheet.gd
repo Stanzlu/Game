@@ -17,6 +17,8 @@ static var _cache: Dictionary = {}
 @export var frame_size := Vector2i(16, 24)
 ## Offset that puts the character's feet on the node origin.
 @export var feet_offset := Vector2(0, -9)
+## Optional contact shadow drawn under the feet (look prototype).
+@export var shadow: Texture2D
 
 
 static func animation_name(state: String, dir: Facing.Dir) -> StringName:
@@ -47,3 +49,15 @@ func build_frames() -> SpriteFrames:
 			row += 1
 	_cache[key] = frames
 	return frames
+
+
+## Adds the contact shadow (if the sheet has one) below the character's sprite.
+func add_shadow_to(character: Node2D) -> void:
+	if shadow == null:
+		return
+	var sprite := Sprite2D.new()
+	sprite.name = "Shadow"
+	sprite.texture = shadow
+	sprite.z_index = -1
+	character.add_child(sprite)
+	character.move_child(sprite, 0)

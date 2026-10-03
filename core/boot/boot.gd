@@ -1,12 +1,15 @@
 extends Control
-## Start menu of the prototype: choose the movement sandbox or the Antreiber prototype.
-## User argument `--start=sandbox|antreiber` jumps straight into a scene (smoke tests,
+## Start menu of the prototype: movement sandbox, Antreiber prototype or a look scene.
+## User argument `--start=<key>` (see SCENES) jumps straight into a scene (smoke tests,
 ## captures). The real title flow comes with the vertical slice.
 
 const BUILD_INFO_PATH := "res://core/build_info.cfg"
 const SCENES := {
 	"sandbox": "res://world/levels/sandbox.tscn",
 	"antreiber": "res://encounters/antreiber/antreiber_encounter.tscn",
+	"look_elysia": "res://world/levels/look_elysia.tscn",
+	"look_tal": "res://world/levels/look_tal.tscn",
+	"look_wald": "res://world/levels/look_wald.tscn",
 }
 
 static var _start_arg_consumed := false
@@ -17,6 +20,9 @@ static var _start_arg_consumed := false
 @onready var _build: Label = %Build
 @onready var _sandbox: Button = %Sandbox
 @onready var _antreiber: Button = %Antreiber
+@onready var _look_elysia: Button = %LookElysia
+@onready var _look_tal: Button = %LookTal
+@onready var _look_wald: Button = %LookWald
 @onready var _quit: Button = %Quit
 
 
@@ -26,9 +32,15 @@ func _ready() -> void:
 	_hint.text = tr("MENU_CONTROLS_HINT")
 	_sandbox.text = tr("MENU_SANDBOX")
 	_antreiber.text = tr("MENU_ANTREIBER")
+	_look_elysia.text = tr("MENU_LOOK_ELYSIA")
+	_look_tal.text = tr("MENU_LOOK_TAL")
+	_look_wald.text = tr("MENU_LOOK_WALD")
 	_quit.text = tr("MENU_QUIT")
 	_sandbox.pressed.connect(func() -> void: open_scene("sandbox"))
 	_antreiber.pressed.connect(func() -> void: open_scene("antreiber"))
+	_look_elysia.pressed.connect(func() -> void: open_scene("look_elysia"))
+	_look_tal.pressed.connect(func() -> void: open_scene("look_tal"))
+	_look_wald.pressed.connect(func() -> void: open_scene("look_wald"))
 	_quit.pressed.connect(func() -> void: get_tree().quit())
 	var info := read_build_info()
 	_build.text = format_build_line(info)

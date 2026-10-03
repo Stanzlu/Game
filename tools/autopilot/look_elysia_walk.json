@@ -1,0 +1,8 @@
+[
+  {"t": 0.4, "press": ["move_right"], "log": "walk along the path toward the sacred pool"},
+  {"t": 2.9, "release": ["move_right"], "press": ["move_up"], "log": "up along the west side of the pool"},
+  {"t": 5.0, "release": ["move_up"], "log": "look at the tree"},
+  {"t": 6.4, "press": ["move_right"]},
+  {"t": 7.2, "release": ["move_right"], "log": "end of walk"},
+  {"t": 8.5, "log": "end of capture"}
+]

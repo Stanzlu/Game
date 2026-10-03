@@ -46,7 +46,7 @@ fi
 echo "import ok"
 
 # Each start target runs a few hundred frames headless and must log its ready line.
-for target in "" sandbox antreiber; do
+for target in "" sandbox antreiber look_elysia look_tal look_wald; do
   step "smoke: ${target:-main menu}"
   smoke_log="$(mktemp)"
   args=(--headless --quit-after 240)

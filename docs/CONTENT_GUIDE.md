@@ -42,6 +42,26 @@ G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "gar
 - Platzierungen: `@` Startpunkt · `"` hohes Gras · `o` Pfütze · `*` Busch · `B` Bank (2 Tiles breit).
 - Alle Zeilen gleich lang. Fehler erscheinen mit Datei, Zeile und Spalte im Log und lassen Tests scheitern.
 - Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
+- Das Symbol ist immer das erste Zeichen der Zeile, deshalb kann auch `=` lokal definiert werden (`= = {...}`).
+
+### Look-Karten (ADR-017)
+
+```
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/look_elysia_ground.png"
+water = "res://assets/generated/maps/look_elysia_water.png"
+[legend]
+f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
+```
+
+- `[meta]`: `key = <JSON-Wert>`. `ground` ersetzt die Kachelgrafik durch eine gebackene Textur; Kollision und Oberflächen kommen weiter aus den Kacheln. `water` ist die Maske für den Wasser-Shader, `style` wählt die Paletten beim Backen.
+- `paint` legt fest, wie der Baker ein Tile malt: `grass`, `meadow` (Gras mit Blumenteppich), `path`, `mud`, `puddle`, `cobble`, `water`, `planks_v`, `planks_h`, `hedge` (Laubkronen, fest), `cliff` (Felswand unter der Kante), `void` (durchsichtig, Himmel dahinter), `marble` (weiße Steinplatten mit Kante), `stairs` (Stufen durch eine Felskante), `fall` (Wasserfall, fest; über `void` blendet er nach unten aus), `field` (Gemüsebeet). Ohne `paint` wird aus `surface` abgeleitet.
+- Deko: `world/props/decor.tscn` mit `params.sprite` = Katalog-ID (`<stil>/<name>`, siehe `assets/generated/props/catalog.json`). Bänke nehmen ebenfalls `params.sprite`. Katalog-Felder: `anchor`, `shape`, `sway`, `flat`, `bob`, `shadow`, `lights`, `flicker`, `surface`/`rustle`, `smoke`, `sparkle`, `loop_sound`, `glow` (Lichthof), `emissive` (leuchtende Pixel je Variante), `beam` (Lichtstrahl), `petal_rain`, `splash` (Gischt am Wasserfall).
+- Streuen (`[meta]`): `scatter = [{"sprite": "<id>", "on": "<Bodensymbole>", "density": 0.3, "spacing": 12, "near": "<Symbole>", "radius": 1}, ...]`. Setzt kleine Deko deterministisch auf passende Zellen (nie auf Zellen mit Platzierung). `near` verlangt ein Boden- oder Platzierungssymbol in `radius` Zellen Umkreis (z. B. Laub nur unter Bäumen, Schilf nur am Wasser).
+- Figuren: `entities/npc/npc_walker.tscn` nimmt `params.sheet` (CharacterSheet-Pfad), `params.route` und `params.speed`. Ohne Route steht die Figur und schaut den Spieler an, wenn er nahe kommt.
+- Nach jeder Kartenänderung neu backen: `.venv/bin/python tools/art/bake_ground.py content/maps/<karte>.txt`. Ein Test meldet, wenn die Texturgröße nicht mehr zur Karte passt.
 
 ## Dialogformat (Dialogue Manager 4)
 

@@ -24,6 +24,10 @@ Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, mit Testoptionen |
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
+| `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
+| `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
+| `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen |
+| `tools/godot.sh -- --start=look_elysia` | Look-Szene direkt starten (`look_elysia`, `look_tal`, `look_wald`) |
 | `tools/godot.sh …` | gepinntes Godot mit diesem Projekt starten |
 
 ## Builds testen
@@ -56,6 +60,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 | [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
+| [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md) | Look-Regeln, Generatoren, Fragen zur Look-Phase |
 
 ## Lizenzen
 

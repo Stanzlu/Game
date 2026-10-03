@@ -4,6 +4,7 @@ extends RefCounted
 ##
 ## File format (content/maps/*.txt):
 ##   ; comment                    allowed before the [map] block
+##   [meta]                       optional, `key = <json value>` settings (see `meta`)
 ##   [legend]                     optional, map-local symbols as JSON objects
 ##   1 = {"ground": ",", "prop": "res://world/props/sign.tscn", "params": {"cue": "x"}}
 ##   [map]
@@ -25,6 +26,8 @@ var tiles: Dictionary = {}
 var ground_rows: PackedStringArray = []
 ## Placements: {symbol, cell: Vector2i, prop: String, marker: String, params: Dictionary}
 var placements: Array[Dictionary] = []
+## Free-form settings from the [meta] block (e.g. "ground": baked ground texture, "style").
+var meta: Dictionary = {}
 var errors: PackedStringArray = []
 
 
@@ -72,17 +75,20 @@ static func parse(map_text: String, legend: Dictionary, source_name: String = ""
 	for raw_line: String in map_text.replace("\r", "").split("\n"):
 		line_no += 1
 		var stripped := raw_line.strip_edges()
-		if stripped == "[legend]" or stripped == "[map]":
+		if stripped in ["[legend]", "[map]", "[meta]"]:
 			section = stripped.trim_prefix("[").trim_suffix("]")
 			saw_section_header = true
 			continue
 		var in_map_block := section == "map" and saw_section_header
 		if stripped.begins_with(";") and not in_map_block:
 			continue
-		if section == "legend":
+		if section == "legend" or section == "meta":
 			if stripped.is_empty():
 				continue
-			data._parse_local_symbol(stripped, line_no, symbols)
+			if section == "legend":
+				data._parse_local_symbol(stripped, line_no, symbols)
+			else:
+				data._parse_meta(stripped, line_no)
 		else:
 			if stripped.is_empty() and (rows.is_empty() or not saw_section_header):
 				continue
@@ -93,19 +99,27 @@ static func parse(map_text: String, legend: Dictionary, source_name: String = ""
 
 
 func _parse_local_symbol(line: String, line_no: int, symbols: Dictionary) -> void:
-	var eq := line.find("=")
-	if eq < 1:
-		_error("line %d: expected '<symbol> = {json}'" % line_no)
-		return
-	var symbol := line.substr(0, eq).strip_edges()
-	if symbol.length() != 1:
-		_error("line %d: symbol must be one character, got '%s'" % [line_no, symbol])
+	# The symbol is the first character, so '=' itself can be a symbol ("= = {...}").
+	var symbol := line.left(1)
+	var rest := line.substr(1).strip_edges()
+	if not rest.begins_with("="):
+		_error("line %d: expected '<one-char symbol> = {json}'" % line_no)
 		return
 	var json := JSON.new()
-	if json.parse(line.substr(eq + 1).strip_edges()) != OK or not json.data is Dictionary:
+	if json.parse(rest.substr(1).strip_edges()) != OK or not json.data is Dictionary:
 		_error("line %d: invalid JSON for symbol '%s'" % [line_no, symbol])
 		return
 	symbols[symbol] = json.data
+
+
+func _parse_meta(line: String, line_no: int) -> void:
+	var eq := line.find("=")
+	var key := line.left(eq).strip_edges() if eq > 0 else ""
+	var json := JSON.new()
+	if key.is_empty() or json.parse(line.substr(eq + 1).strip_edges()) != OK:
+		_error("line %d: expected '<key> = <json value>' in [meta]" % line_no)
+		return
+	meta[key] = json.data
 
 
 func _resolve(rows: PackedStringArray, symbols: Dictionary) -> void:

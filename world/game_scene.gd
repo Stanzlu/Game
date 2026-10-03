@@ -9,6 +9,8 @@ const DIALOGUE_BOX_SCENE := preload("res://ui/dialogue/dialogue_box.tscn")
 const PAUSE_MENU_SCENE := preload("res://ui/menus/pause_menu.tscn")
 
 @export_file("*.txt") var map_path := ""
+## Optional art override for the player (look prototype uses the 24x32 sheet).
+@export var player_sheet: CharacterSheet
 
 var view: GameView
 var map: MapView
@@ -56,6 +58,8 @@ func _build_world() -> void:
 
 func spawn_player(parent: Node, at: Vector2) -> Player:
 	player = PLAYER_SCENE.instantiate()
+	if player_sheet != null:
+		player.sheet = player_sheet
 	parent.add_child(player)
 	player.teleport(at)
 	view.follow(player)

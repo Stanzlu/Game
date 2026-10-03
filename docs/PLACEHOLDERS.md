@@ -14,6 +14,11 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | `assets/placeholder/characters/{player,npc,antreiber}.png` | 16×24-Figuren, 8 Richtungen, Idle/Walk/Run/Sit | projekt-eigen, programmatisch | projekt-eigen | finales Figurendesign |
 | `assets/placeholder/props/*.png` | Bank, Schild, Hebel, Tor, Grasbüschel, Pfütze, Spritzer, Busch, Flagge, Vogel, Staub | projekt-eigen, programmatisch | projekt-eigen | CC0 bzw. finale Art |
 | `assets/placeholder/audio/*.wav` | Schritte je Oberfläche, Rascheln, Platschen, UI, Hebel, Tor, Sitzen, Vogel, Antreiber-Murmeln | projekt-eigen, synthetisch | projekt-eigen | CC0-Sounds bzw. Sounddesign |
+| `assets/generated/maps/look_*_{ground,water}.png` | gebackene Böden und Wassermasken der Look-Karten | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalte Böden bzw. Tilesets (ADR-017) |
+| `assets/generated/props/**` | Elysia: Weltenbaum, Bäume in vier Farben, Büsche, Marmorsäulen, Kristall, leuchtende Blumen, Riesenblumen, Formschnitt, Felsen, Brunnen, Laternen, Zäune, Bänke, Gischt, Wolken, Schwebeinseln, Regenbogen. Tal: Haus, Bäume, Kiefern, Zäune, Laterne, Fass, Holzstapel, Bank. Wald: Leucht- und Nachtbäume, Leuchtpilze, Kristalle, Farne, Baumstamm, Lichtstrahl. Brückengeländer je Stil, Nebelbank, Partikel, Emissive-Ebenen, `catalog.json` | projekt-eigen, programmatisch (`tools/art/make_sprites.py`) | projekt-eigen | handgepixelte Assets |
+| `assets/generated/characters/{player,mira,elysian}.png` | Spielfigur, Mira, Elysianer; 24×32, 8 Richtungen | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | finales Figurendesign |
+| `assets/generated/audio/*_loop.wav` | Regen, Garten, Wasser, Nachtwald (Ambience-Loops) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Field Recordings bzw. Sounddesign |
+| `content/maps/look_{elysia,tal,wald}.txt` | Look-Karten Elysia-Garten, Tal, Wald bei Nacht | projekt-eigen | projekt-eigen | Slice-Karten (Phase 3) |
 | `content/dialogue/**/*.dialogue` | Schildtexte und Antreiber-Sätze (alle `[#ph]`) | Entwurf Claude | projekt-eigen | Writing-Pass mit Voice-Sheets (Phase 4) |
 | `icon.svg` | siehe oben | | | |
 
