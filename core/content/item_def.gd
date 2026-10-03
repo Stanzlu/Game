@@ -8,6 +8,7 @@ enum Kind { ITEM, CURIOSITY }
 ## Elysia's loot rarity. NONE is shown as "Seltenheit: —" (the stone; Game Bible slice beat 2).
 enum Rarity { NONE, COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
 
+const ICON_DIR := "res://assets/generated/items/"
 const RARITY_COLORS: Array[Color] = [
 	Color(0.62, 0.62, 0.64),
 	Color(0.93, 0.93, 0.9),
@@ -40,3 +41,21 @@ func rarity_key() -> String:
 
 func rarity_color() -> Color:
 	return RARITY_COLORS[rarity]
+
+
+## 16x16 icon by convention: assets/generated/items/<id>.png (null if there is none yet).
+func icon() -> Texture2D:
+	var path := "%s%s.png" % [ICON_DIR, id]
+	return load(path) as Texture2D if ResourceLoader.exists(path) else null
+
+
+## Loot fanfare by rarity (tools/audio/make_sfx.py): common .. legendary.
+func loot_sound() -> String:
+	match rarity:
+		Rarity.LEGENDARY:
+			return "loot_legendary"
+		Rarity.EPIC:
+			return "loot_epic"
+		Rarity.RARE, Rarity.UNCOMMON:
+			return "loot_rare"
+	return "loot_common"

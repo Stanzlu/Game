@@ -3,6 +3,8 @@
 panel, coin and sparkle icons, the glowing crack of the rift, Elysia's treasure chest
 (closed/open) and the plain stone. The Real skin needs no art,
 it is plain style boxes on purpose (Game Bible §34: "minimalistisch, ruhig, fast leer").
+Also: item icons (16x16, assets/generated/items/<item id>.png), light rays behind rewards,
+the quest marker, and the title logo.
 
 Usage: .venv/bin/python tools/art/make_ui.py [--preview x.png]
 """
@@ -15,6 +17,7 @@ from PIL import Image
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "assets", "generated", "ui")
 OBJECTS = os.path.join(ROOT, "assets", "generated", "objects")
+ITEMS = os.path.join(ROOT, "assets", "generated", "items")
 
 GOLD_HI = (255, 240, 176, 255)
 GOLD = (242, 200, 96, 255)
@@ -188,6 +191,129 @@ def stone():
     return Image.fromarray(a, "RGBA")
 
 
+def from_ascii(rows, palette):
+    """Pixel icon from ASCII rows; '.' is transparent, other characters index the palette."""
+    h, w = len(rows), len(rows[0])
+    a = np.zeros((h, w, 4), np.uint8)
+    for y, row in enumerate(rows):
+        assert len(row) == w, (row, w)
+        for x, c in enumerate(row):
+            if c != ".":
+                a[y, x] = palette[c]
+    return Image.fromarray(a, "RGBA")
+
+
+ICON_COMPLIMENT = [
+    "................",
+    "..oooo....oooo.*",
+    ".oPPPPo..oPPPPo.",
+    "oPHHPPPooPPPPPPo",
+    "oPHHPPPPPPPPPPdo",
+    "oPHPPPPPPPPPPPdo",
+    "oPPPPPPPPPPPPddo",
+    ".oPPPPPPPPPPPdo.",
+    "..oPPPPPPPPPddo.",
+    "...oPPPPPPPddo..",
+    "....oPPPPPddo...",
+    ".....oPPPddo....",
+    "......oPddo.....",
+    ".......oo.......",
+    "................",
+    "................",
+]
+ICON_STONE = [
+    "................",
+    "................",
+    "................",
+    "................",
+    ".....oooooo.....",
+    "...ooLLLggggo...",
+    "..oLHLLgggggdo..",
+    ".oLLLggggggggdo.",
+    ".oLgggggggsgddo.",
+    ".ogggsgggggdddo.",
+    ".oggggggggddddo.",
+    "..odggggdddddo..",
+    "...oodddddddo...",
+    ".....ooooooo....",
+    "................",
+    "................",
+]
+ICON_SEED = [
+    "................",
+    ".........G......",
+    "........GGo.....",
+    ".......oGo......",
+    "......oBBBo.....",
+    ".....oBLBBBo....",
+    "....oBLLBBBBo...",
+    "....oBLBBBBBo...",
+    "...oBBLBBBBBdo..",
+    "...oBBBBBBBBdo..",
+    "...oBBBBBBBddo..",
+    "....oBBBBBddo...",
+    "....oBBBBddo....",
+    ".....oBdddo.....",
+    "......oooo......",
+    "................",
+]
+QUEST_MARK = [
+    ".oooo.",
+    "oYYYYo",
+    "oYHYYo",
+    "oYYYYo",
+    ".oYYo.",
+    ".oYYo.",
+    ".oYdo.",
+    "..oo..",
+    ".oooo.",
+    "oYHYYo",
+    "oYYddo",
+    ".oooo.",
+]
+
+
+def item_icons():
+    pink = {"o": (90, 20, 60, 255), "P": (255, 120, 180, 255), "H": (255, 230, 245, 255),
+            "d": (200, 60, 130, 255), "*": (255, 250, 200, 255)}
+    grey = {"o": (40, 40, 48, 255), "L": (176, 176, 186, 255), "H": (226, 226, 232, 255),
+            "g": (136, 136, 148, 255), "s": (110, 110, 122, 255), "d": (96, 96, 108, 255)}
+    seed = {"o": (54, 32, 20, 255), "B": (150, 96, 56, 255), "L": (204, 150, 96, 255),
+            "d": (108, 66, 38, 255), "G": (120, 196, 90, 255)}
+    return {
+        "item_compliment.png": from_ascii(ICON_COMPLIMENT, pink),
+        "item_stone.png": from_ascii(ICON_STONE, grey),
+        "item_seed.png": from_ascii(ICON_SEED, seed),
+    }
+
+
+def quest_mark():
+    pal = {"o": INK, "Y": GOLD, "H": GOLD_HI, "d": GOLD_MID}
+    return from_ascii(QUEST_MARK, pal)
+
+
+def rays(size=96, count=12, seed=2):
+    """Soft light rays from the centre, white; tinted and rotated in the game."""
+    rng = np.random.default_rng(seed)
+    y, x = np.mgrid[0:size, 0:size] - (size - 1) / 2
+    r = np.hypot(x, y) / (size / 2)
+    ang = np.arctan2(y, x)
+    widths = rng.uniform(0.35, 0.6, count)
+    beam = np.zeros_like(r)
+    for i in range(count):
+        a0 = 2 * np.pi * i / count
+        d = np.angle(np.exp(1j * (ang - a0)))
+        beam = np.maximum(beam, np.clip(1 - np.abs(d) / (widths[i] * np.pi / count), 0, 1))
+    glow = np.exp(-r * 2.2)
+    alpha = np.clip(beam * (1 - r) * 0.9 + glow * 0.6, 0, 1) * (r < 1)
+    # quantize to a few steps (pixel-art light)
+    alpha = np.round(alpha * 6) / 6
+    a = np.zeros((size, size, 4), np.uint8)
+    a[..., :3] = 255
+    a[..., 3] = (alpha * 255).astype(np.uint8)
+    return Image.fromarray(a, "RGBA")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--preview")
@@ -197,11 +323,16 @@ if __name__ == "__main__":
         "coin.png": coin(),
         "sparkle.png": sparkle(),
         "rift.png": rift(),
+        "rays.png": rays(),
+        "rays_large.png": rays(size=320, count=16, seed=4),
+        "quest_mark.png": quest_mark(),
     }
     for name, img in images.items():
         save(name, img)
     save("chest.png", chest(), OBJECTS)
     save("stone.png", stone(), OBJECTS)
+    for name, icon in item_icons().items():
+        save(name, icon, ITEMS)
     if args.preview:
         sheet = Image.new("RGBA", (200, 80), (60, 60, 70, 255))
         x = 4
