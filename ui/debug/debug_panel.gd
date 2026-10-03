@@ -16,6 +16,7 @@ func _ready() -> void:
 		return
 	title_key = "DEBUG_TITLE"
 	panel_width = 200
+	compact = true
 	layer = 60
 	super()
 	_state = Label.new()

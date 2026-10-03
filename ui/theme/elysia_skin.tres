@@ -25,15 +25,37 @@ texture_margin_right = 10.0
 texture_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
-content_margin_left = 4.0
-content_margin_right = 4.0
-bg_color = Color(0.95, 0.76, 0.3, 0.22)
-border_width_left = 2
-border_color = Color(1, 0.86, 0.45, 1)
+content_margin_left = 14.0
+content_margin_right = 6.0
+bg_color = Color(0.95, 0.76, 0.3, 0.18)
+border_width_bottom = 1
+border_color = Color(1, 0.86, 0.45, 0.55)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_entry"]
-content_margin_left = 4.0
-content_margin_right = 4.0
+content_margin_left = 14.0
+content_margin_right = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name"]
+content_margin_left = 7.0
+content_margin_top = 1.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.36, 0.18, 0.46, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.84, 0.4, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
 content_margin_left = 4.0
@@ -47,12 +69,45 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.95, 0.78, 0.36, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt_panel"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.22, 0.12, 0.34, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.84, 0.4, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt_key"]
+content_margin_left = 2.0
+content_margin_top = 0.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 0.86, 0.45, 1)
+border_width_bottom = 1
+border_color = Color(0.7, 0.42, 0.12, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
 [resource]
 Label/colors/font_color = Color(1, 0.96, 0.88, 1)
 RichTextLabel/colors/default_color = Color(1, 0.96, 0.88, 1)
 SubtitleLabel/base_type = &"Label"
 SubtitleLabel/colors/font_color = Color(1, 0.84, 0.4, 1)
+SubtitleLabel/colors/font_outline_color = Color(0.3, 0.12, 0.05, 1)
 SubtitleLabel/colors/font_shadow_color = Color(0.3, 0.12, 0.05, 1)
+SubtitleLabel/constants/outline_size = 2
 SubtitleLabel/constants/shadow_offset_x = 1
 SubtitleLabel/constants/shadow_offset_y = 1
 MutedLabel/base_type = &"Label"
@@ -62,18 +117,23 @@ PromptLabel/colors/font_color = Color(1, 0.92, 0.66, 1)
 PromptLabel/styles/normal = SubResource("StyleBoxFlat_prompt")
 DialoguePanel/base_type = &"PanelContainer"
 DialoguePanel/styles/panel = SubResource("StyleBoxTexture_panel")
+DialogueNamePlate/base_type = &"PanelContainer"
+DialogueNamePlate/styles/panel = SubResource("StyleBoxFlat_name")
 DialogueName/base_type = &"Label"
 DialogueName/colors/font_color = Color(1, 0.82, 0.36, 1)
-DialogueName/colors/font_shadow_color = Color(0.3, 0.12, 0.05, 1)
+DialogueName/colors/font_shadow_color = Color(0.16, 0.06, 0.2, 1)
 DialogueName/constants/shadow_offset_x = 1
 DialogueName/constants/shadow_offset_y = 1
 DialogueResponse/base_type = &"Button"
 DialogueResponse/colors/font_color = Color(0.86, 0.8, 0.96, 1)
 DialogueResponse/colors/font_focus_color = Color(1, 0.86, 0.42, 1)
 DialogueResponse/colors/font_hover_color = Color(1, 0.86, 0.42, 1)
+DialogueResponse/colors/font_pressed_color = Color(1, 0.86, 0.42, 1)
+DialogueResponse/colors/font_hover_pressed_color = Color(1, 0.86, 0.42, 1)
 DialogueResponse/styles/normal = SubResource("StyleBoxEmpty_entry")
 DialogueResponse/styles/hover = SubResource("StyleBoxFlat_focus")
 DialogueResponse/styles/pressed = SubResource("StyleBoxFlat_focus")
+DialogueResponse/styles/hover_pressed = SubResource("StyleBoxFlat_focus")
 DialogueResponse/styles/focus = SubResource("StyleBoxFlat_focus")
 MenuPanel/base_type = &"PanelContainer"
 MenuPanel/styles/panel = SubResource("StyleBoxTexture_menu")
@@ -82,7 +142,22 @@ MenuEntry/colors/font_color = Color(0.86, 0.8, 0.96, 1)
 MenuEntry/colors/font_disabled_color = Color(0.5, 0.44, 0.6, 1)
 MenuEntry/colors/font_focus_color = Color(1, 0.86, 0.42, 1)
 MenuEntry/colors/font_hover_color = Color(1, 0.86, 0.42, 1)
+MenuEntry/colors/font_pressed_color = Color(1, 0.86, 0.42, 1)
+MenuEntry/colors/font_hover_pressed_color = Color(1, 0.86, 0.42, 1)
 MenuEntry/styles/normal = SubResource("StyleBoxEmpty_entry")
 MenuEntry/styles/hover = SubResource("StyleBoxFlat_focus")
 MenuEntry/styles/pressed = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/hover_pressed = SubResource("StyleBoxFlat_focus")
 MenuEntry/styles/focus = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/disabled = SubResource("StyleBoxEmpty_entry")
+MenuCursor/colors/color = Color(1, 0.84, 0.36, 1)
+MenuCursor/colors/shade = Color(0.25, 0.08, 0.3, 0.9)
+MenuCursor/constants/style = 1
+PromptPanel/base_type = &"PanelContainer"
+PromptPanel/styles/panel = SubResource("StyleBoxFlat_prompt_panel")
+PromptKey/base_type = &"PanelContainer"
+PromptKey/styles/panel = SubResource("StyleBoxFlat_prompt_key")
+PromptKeyLabel/base_type = &"Label"
+PromptKeyLabel/colors/font_color = Color(0.3, 0.12, 0.05, 1)
+PromptText/base_type = &"Label"
+PromptText/colors/font_color = Color(1, 0.94, 0.75, 1)
