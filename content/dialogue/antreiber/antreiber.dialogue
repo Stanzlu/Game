@@ -1,0 +1,37 @@
+~ start
+Antreiber: Da vorne ist das Ziel. Das schaffst du locker! [#ph]
+=> END
+
+~ urging
+% Antreiber: Gut! Weiter! [#ph]
+% Antreiber: Fast da! [#ph]
+% Antreiber: Nicht nachlassen! [#ph]
+% Antreiber: Noch ein Stück! [#ph]
+=> END
+
+~ cheering
+% Antreiber: Ja! Schneller! [#ph]
+% Antreiber: So muss das! [#ph]
+% Antreiber: Perfektes Tempo! [#ph]
+=> END
+
+~ tired
+% Antreiber: Komm schon, nur noch kurz. [#ph]
+% Antreiber: Jetzt bloß nicht anhalten. [#ph]
+% Antreiber: Das Ziel ist gleich da. Wirklich. [#ph]
+=> END
+
+~ worried
+% Antreiber: Warum wirst du langsamer? [#ph]
+% Antreiber: Hey … wir sind fast da. [#ph]
+=> END
+
+~ puzzled
+% Antreiber: Was machst du? [#ph]
+% Antreiber: Wir verlieren Zeit. [#ph]
+% Antreiber: … [#ph]
+=> END
+
+~ silent
+Antreiber: … [#ph]
+=> END

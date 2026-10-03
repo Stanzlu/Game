@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://df7yar4n5dr4w"
+path="res://.godot/imported/sandbox.dialogue-6a8fe414aebb568bc86f34b190fd83c0.tres"
+
+[deps]
+
+source_file="res://content/dialogue/sandbox/sandbox.dialogue"
+dest_files=["res://.godot/imported/sandbox.dialogue-6a8fe414aebb568bc86f34b190fd83c0.tres"]
+
+[params]
+
+defaults=true

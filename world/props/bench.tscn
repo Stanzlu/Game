@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/props/bench.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/props/bench.png" id="2_t"]
+[ext_resource type="Script" path="res://entities/interaction/interactable.gd" id="9_inter"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(26, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_use"]
+size = Vector2(28, 14)
+
+[node name="Bench" type="StaticBody2D"]
+script = ExtResource("1_s")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_t")
+centered = false
+offset = Vector2(-8, -12)
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+position = Vector2(8, -3)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Interactable" type="Area2D" parent="."]
+position = Vector2(8, 4)
+script = ExtResource("9_inter")
+prompt_key = "INTERACT_SIT"
+prompt_offset = Vector2(0, -22)
+
+[node name="Shape" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_use")

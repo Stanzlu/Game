@@ -8,7 +8,9 @@ extends Node
 ## so playtesters can send full logs.
 
 enum Level { DEBUG, INFO, WARN, ERROR }
-enum Category { BOOT, SAVE, QUEST, DIALOGUE, WORLD_STATE, INTERACTION, AUDIO, INPUT, UI, CONTENT }
+enum Category {
+	BOOT, SAVE, QUEST, DIALOGUE, WORLD_STATE, INTERACTION, AUDIO, INPUT, UI, CONTENT, ENCOUNTER
+}
 
 var min_level: Level = Level.DEBUG if OS.is_debug_build() else Level.WARN
 var muted_categories: Array[Category] = []

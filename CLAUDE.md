@@ -14,6 +14,13 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - `tools/export.sh <ziel>` und `tools/smoke_export.sh` für Builds; `tools/capture.sh` für Screenshots.
 - gdtoolkit liegt in `.venv/` (`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`).
 
+## Aufbau in Kürze
+- Szenen erben von `GameScene` (`world/game_scene.gd`); die Welt lebt im SubViewport der `GameView` (ADR-012).
+- Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
+- In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
+- Karten sind Textdateien (`content/maps`, ADR-013); Platzhalter-Assets erzeugt `tools/placeholders`.
+- Autopilot für reproduzierbare Aufnahmen: `tools/autopilot/*.json` (nur Debug).
+
 ## Konventionen
 - Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs.
 - Gameplay fragt nur Input-Actions ab, nie konkrete Tasten. Events mit `device = -1`.

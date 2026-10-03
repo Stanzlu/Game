@@ -9,7 +9,13 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 |-------|-----|--------|--------|----------------|
 | `icon.svg` | App-Icon | selbst erstellt (Riss im Feld) | projekt-eigen | finales Icon nach Art-Direction |
 | `assets/fonts/tiny5/Tiny5-Regular.ttf` | UI-Schrift | google/fonts `ofl/tiny5` (Stefan Schmidt) | OFL 1.1 (`OFL.txt` liegt bei) | evtl. final; Entscheidung mit Art-Direction |
-| `core/boot/boot.tscn` | Startbildschirm | selbst erstellt | projekt-eigen | echter Titel-Flow (Phase 4) |
+| `core/boot/boot.tscn` | Startmenü des Prototyps | selbst erstellt | projekt-eigen | echter Titel-Flow (Phase 4) |
+| `assets/placeholder/tiles/greybox_tiles.png` | 16-px-Tiles (Gras, Erde, Stein, Mauer, Wasser, Holz) | projekt-eigen, programmatisch | projekt-eigen | CC0-Tileset (Phase 3), später finale Art |
+| `assets/placeholder/characters/{player,npc,antreiber}.png` | 16×24-Figuren, 8 Richtungen, Idle/Walk/Run/Sit | projekt-eigen, programmatisch | projekt-eigen | finales Figurendesign |
+| `assets/placeholder/props/*.png` | Bank, Schild, Hebel, Tor, Grasbüschel, Pfütze, Spritzer, Busch, Flagge, Vogel, Staub | projekt-eigen, programmatisch | projekt-eigen | CC0 bzw. finale Art |
+| `assets/placeholder/audio/*.wav` | Schritte je Oberfläche, Rascheln, Platschen, UI, Hebel, Tor, Sitzen, Vogel, Antreiber-Murmeln | projekt-eigen, synthetisch | projekt-eigen | CC0-Sounds bzw. Sounddesign |
+| `content/dialogue/**/*.dialogue` | Schildtexte und Antreiber-Sätze (alle `[#ph]`) | Entwurf Claude | projekt-eigen | Writing-Pass mit Voice-Sheets (Phase 4) |
+| `icon.svg` | siehe oben | | | |
 
 ## Beschaffungsliste für den Slice
 
@@ -34,5 +40,6 @@ das in Ordnung, die finalen Figuren entstehen mit der Art-Produktion.
 
 ## Programmatische Placeholder
 
-Solange keine Packs vorliegen, entstehen einfache Formen und einfarbige Tiles im Code bzw. als kleine,
-selbst erzeugte PNGs. Sie werden hier mit „projekt-eigen, programmatisch“ eingetragen.
+Alle Grey-Box-Dateien unter `assets/placeholder/` erzeugt `python3 tools/placeholders/make_placeholders.py`
+reproduzierbar (ADR-014). Wer eine Datei ersetzt, behält Name und Format bei. Klänge werden über
+`<präfix>_<n>.wav` gefunden, Figuren-Sheets über das Layout in `entities/character/character_sheet.gd`.

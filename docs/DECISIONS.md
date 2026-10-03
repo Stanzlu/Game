@@ -38,7 +38,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Konsequenzen:** Reproduzierbare Builds ohne Netz. Updates sind bewusste Schritte. Die automatische POT-Pflege des Dialogue Managers ist abgeschaltet, damit Testdateien nicht in Übersetzungsvorlagen landen. C#-Varianten des Addons werden vom Export ausgeschlossen.
 
 ## ADR-007 · Darstellung: 640×360, Integer-Scaling, Nearest
-- **Status:** vorläufig · 2026-10-02 · Abnahme durch Playsession in Phase 1, Renderer-Entscheidung in Phase 3
+- **Status:** vorläufig · 2026-10-02 · Stretch-Modus und Snapping ersetzt durch ADR-012; Renderer-Entscheidung in Phase 3
 - **Entscheidung:** Viewport 640×360, Fenster 1280×720, Stretch-Modus `viewport`, Skalierung `integer`, Texturfilter Nearest, Pixel-Snapping für 2D-Transforms. Arbeitsraster 16-px-Tiles. Renderer Forward+ mit OpenGL3-Fallback.
 - **Konsequenzen:** Scharfe Pixel bei 720p, 1080p, 1440p und 4K. Ruhiges Kamerascrolling braucht in Phase 1 einen Subpixel-Ansatz. ETC2/ASTC-Import ist aktiv, weil universelle macOS-Exporte es verlangen; Pixel-Art nutzt verlustfreie Texturen.
 
@@ -61,3 +61,31 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Status:** angenommen · 2026-10-02
 - **Entscheidung:** Gameplay-Code fragt nur Actions ab (`move_*`, `interact`, `cancel`, `sprint`, `menu`, `journal`, `debug_overlay`). Tastaturbelegungen nutzen physische Tastencodes, damit WASD auf QWERTZ, QWERTY und AZERTY an derselben Stelle liegt. Alle Events gelten für alle Geräte (`device = -1`). Ein Test sichert beides ab.
 - **Konsequenzen:** Rebinding ist technisch vorbereitet. Die Rebinding-Oberfläche folgt nach dem Slice.
+
+## ADR-012 · Welt im SubViewport, zwei Kameramodi
+- **Status:** angenommen · 2026-10-02 · Kameramodus wird nach Playtest festgelegt
+- **Kontext:** Bei reinem Pixel-Snapping ruckelt das Scrollen (abwechselnd 1 und 2 Spielpixel pro Frame). Ein Experiment hat gezeigt: Unter `canvas_items`-Stretch lässt sich ein Sprite mit der Viewport-Textur auf Bildschirmpixel genau verschieben, wenn das Hauptfenster nicht snappt. Mit Snapping springt es in ganzen Spielpixeln.
+- **Entscheidung:** Das Hauptfenster nutzt `canvas_items` mit Integer-Scaling und ohne 2D-Snapping. Die Welt rendert pixelgenau in einem SubViewport (642×362, 1 Pixel Rand) und wird als Sprite um Bruchteile eines Spielpixels verschoben. `GameView` setzt die Canvas-Transformation direkt (keine `Camera2D`). Das Anzeige-Sprite ist von der Physik-Interpolation ausgenommen. Beides ist gemessen und beseitigt einen Frame Verzögerung. Physik-Interpolation ist global an, damit 120- und 144-Hz-Bildschirme flüssig laufen. Der Player liefert seine interpolierte Position selbst.
+- **Modi:** *Weich* scrollt gleichmäßig (gemessen 3 bzw. 4 Bildschirmpixel pro Frame bei 2×), die Figur wackelt um ±0,5 Spielpixel. *Pixelgenau* scrollt in ganzen Spielpixeln (2 bzw. 4 Bildschirmpixel), die Figur steht ruhiger. Beide sind im Pause-Menü umschaltbar.
+- **Konsequenzen:** Weltknoten bekommen keine Input-Events und fragen den `Input`-Singleton ab. UI liegt in CanvasLayern außerhalb des SubViewports. Wer Knoten in `_process` bewegt, schaltet deren Physik-Interpolation ab.
+
+## ADR-013 · Kartenformat im Detail
+- **Status:** angenommen · 2026-10-02 · konkretisiert ADR-004
+- **Entscheidung:** Globale Symbole in `content/maps/legend.json`. Jede Karte darf einen `[legend]`-Block mit lokalen Symbolen (JSON pro Zeile) und Kommentaren (`;`) vor dem `[map]`-Block haben. Ein Symbol ist entweder ein Tile (`atlas`, `surface`, `solid`) oder eine Platzierung auf einem Tile (`ground` plus `prop` oder `marker`, optional `params`). `MapView` baut das TileSet zur Laufzeit; pro Symbol entsteht eine alternative Kachel, damit gleiche Grafik unterschiedliche Oberfläche oder Kollision haben kann. Props können in eine gemeinsame, nach Höhe sortierte Ebene gelegt werden (`props_parent`).
+- **Konsequenzen:** Karten sind Textdateien und werden per `include_filter` exportiert. Fehler (unbekanntes Symbol, ungleiche Zeilen, fehlende Szene) erscheinen mit Datei, Zeile und Spalte. Terrain-Autotiling folgt mit echten Tilesets in Phase 3.
+
+## ADR-014 · Programmatische Grey-Box-Platzhalter
+- **Status:** angenommen · 2026-10-02
+- **Kontext:** Asset-Seiten sind in der Cloud-Umgebung blockiert (KNOWN_ISSUES #4).
+- **Entscheidung:** `tools/placeholders/make_placeholders.py` erzeugt Tiles, Figuren, Props und Klänge reproduzierbar (nur Standardbibliothek, fester Seed). Klänge werden über Dateinamen gefunden (`SoundBank`: `<präfix>_<n>.wav`), Figuren über `CharacterSheet`.
+- **Konsequenzen:** Austausch gegen CC0-Packs oder finale Assets heißt Dateien ersetzen, nicht Code ändern.
+
+## ADR-015 · Regeln des Antreiber-Prototyps
+- **Status:** vorläufig · 2026-10-02 · Werte werden nach Playtest justiert
+- **Entscheidung:** Konzept E3 („Der Weg, der nicht endet“) mit diesen Regeln: Gehen schiebt das Ziel um Faktor 1,15 weg, Sprinten um 1,6. Sprinten ermüdet und senkt das Höchsttempo um bis zu 45 Prozent, ohne HP und ohne Scheitern. Stillstehen ohne Bewegungseingabe für 3 Sekunden löst den Encounter, auf einer Bank sitzend 1,5 Sekunden. **Ergänzung:** Die Auflösung zählt erst, wenn man mindestens 480 Pixel (1,5 Segmente) gelaufen ist. Sonst ließe sich der Encounter lösen, ohne das Weichen des Ziels je erlebt zu haben.
+- **Konsequenzen:** Alle Werte liegen in `AntreiberModel` und sind getestet. `encounter_speed` bereitet die Accessibility-Option „Encounter-Geschwindigkeit“ vor.
+
+## ADR-016 · Testoptionen und Autopilot in Phase 1
+- **Status:** angenommen · 2026-10-02 · wird in Phase 2 durch den Settings-Autoload ersetzt
+- **Entscheidung:** Das Pause-Menü stellt Bewegungsgefühl, Kamera, Richtungen, Sprint und Info-Anzeige um (`SessionOptions`, nur für die laufende Sitzung). Dieselben Optionen gibt es als Startargumente. Ein Autopilot spielt in Debug-Builds zeitgesteuerte Eingaben ab (`--autopilot=<json>`); er wird nicht exportiert.
+- **Konsequenzen:** Varianten lassen sich ohne Neubau vergleichen. Aufnahmen und Messungen sind reproduzierbar.

@@ -1,0 +1,10 @@
+[
+  {"t": 0.3, "press": ["move_left"], "log": "walk to the meadow sign"},
+  {"t": 0.62, "release": ["move_left"], "press": ["move_down"]},
+  {"t": 1.0, "release": ["move_down"]},
+  {"t": 1.2, "press": ["interact"], "log": "read sign"},
+  {"t": 1.3, "release": ["interact"]},
+  {"t": 2.6, "press": ["interact"], "log": "advance"},
+  {"t": 2.7, "release": ["interact"]},
+  {"t": 3.6, "log": "end of capture"}
+]

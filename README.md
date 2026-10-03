@@ -3,8 +3,9 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 0 (Technical Pre-Production). Ziel ist ein 45–60-minütiger Vertical Slice, danach
-Playtest-Gate. Noch kein Gameplay. Grafik, Schrift und Icon sind Platzhalter.
+**Status:** Phase 1 (Movement Sandbox). Ziel ist ein 45–60-minütiger Vertical Slice, danach
+Playtest-Gate. Spielbar sind eine Bewegungs-Sandbox und ein Grey-Box-Prototyp des Antreiber-Encounters.
+Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md).
 
 ## Entwicklung
 
@@ -20,7 +21,9 @@ Playtest-Gate. Noch kein Gameplay. Grafik, Schrift und Icon sind Platzhalter.
 | `tools/check.sh` | Lint, Format, Import, Smoke-Run, Unit-Tests |
 | `tools/export.sh windows\|macos\|linux` | Build nach `build/` |
 | `tools/smoke_export.sh` | exportierten Linux-Build starten und prüfen |
-| `tools/capture.sh` | Screenshots via Xvfb nach `captures/` |
+| `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
+| `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, mit Testoptionen |
+| `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
 | `tools/godot.sh …` | gepinntes Godot mit diesem Projekt starten |
 
 ## Builds testen
@@ -35,7 +38,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
   blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal:
   `xattr -dr com.apple.quarantine REAL.app`
 - **Ausführliche Logs für Fehlerberichte:** mit dem Argument `-- --log-debug` starten.
-- **Steuerung im Boot-Screen:** Esc oder B-Taste beendet.
+- **Steuerung:** siehe `docs/PLAYTEST_PHASE1.md`. Esc oder Start öffnet das Pause- und Testmenü.
 
 ## Dokumentation
 
@@ -52,6 +55,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Abhängigkeiten, Versionen, Lizenzen |
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
+| [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
 
 ## Lizenzen
 

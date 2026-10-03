@@ -34,6 +34,7 @@ CFG
 
 rm -rf "$(dirname "$out")"
 mkdir -p "$(dirname "$out")"
+touch build/.gdignore
 tools/godot.sh --headless --import >/dev/null 2>&1
 tools/godot.sh --headless --export-release "$preset" "$out"
 [ -s "$out" ] || { echo "export: no output produced at $out" >&2; exit 1; }
