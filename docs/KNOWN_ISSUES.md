@@ -4,7 +4,7 @@
 |---|---------|------------|--------|--------|
 | 1 | Der erste Import eines frischen Checkouts meldet Fehler zum Projekt-Theme, weil Godot das Theme vor der Schrift lädt. | Nur beim allerersten Import. | `tools/check.sh` macht einen Aufwärm-Import und prüft erst den zweiten streng. | akzeptiert |
 | 2 | Beim Beenden meldet Godot zwei bis drei noch belegte Ressourcen, die der Dialogue Manager hält. | Nur beim Programmende, keine Auswirkung im Spiel. | Kein Eingriff ins Addon. `check.sh` und `smoke_export.sh` ignorieren genau diese Meldung. | akzeptiert |
-| 3 | Der Cloud-Container hat keinen Vulkan-Treiber. | Forward+ ist dort nicht prüfbar. | Screenshots laufen über OpenGL3 (`tools/capture.sh`). Forward+ wird lokal und in Phase 3 geprüft. | akzeptiert |
+| 3 | Der Cloud-Container hat keinen Vulkan-Treiber und keine Grafikkarte. | Frame-Zeiten im Container sind Software-Werte. | Das Spiel nutzt den Compatibility-Renderer (ADR-022), Aufnahmen entsprechen damit den Builds. Echte Werte liefert der Leistungstest auf Zielhardware. | akzeptiert |
 | 4 | Asset-Seiten (kenney.nl, opengameart.org, freesound.org, itch.io, fonts.google.com) sind in der Cloud-Umgebung blockiert. | Claude kann CC0-Packs nicht selbst laden. | Domains in der Netzwerk-Allowlist freigeben oder Packs manuell committen. | offen |
 | 5 | Builds sind nicht signiert bzw. nur ad-hoc signiert. | Windows SmartScreen und macOS Gatekeeper warnen. | Anleitung im README. Echte Signierung erst nach Budgetentscheidung. | akzeptiert |
 | 6 | Windows- und macOS-Builds sind im Container gebaut, aber noch nicht auf echter Hardware gestartet. | Start auf Zielsystem unbestätigt. | Abnahme durch den Projektinhaber am Ende von Phase 0. Der Linux-Build wird in CI automatisch gestartet. | offen |

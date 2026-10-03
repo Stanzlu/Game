@@ -38,7 +38,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Konsequenzen:** Reproduzierbare Builds ohne Netz. Updates sind bewusste Schritte. Die automatische POT-Pflege des Dialogue Managers ist abgeschaltet, damit Testdateien nicht in Übersetzungsvorlagen landen. C#-Varianten des Addons werden vom Export ausgeschlossen.
 
 ## ADR-007 · Darstellung: 640×360, Integer-Scaling, Nearest
-- **Status:** vorläufig · 2026-10-02 · Stretch-Modus und Snapping ersetzt durch ADR-012; Renderer-Entscheidung in Phase 3
+- **Status:** vorläufig · 2026-10-02 · Stretch-Modus und Snapping ersetzt durch ADR-012; Renderer ersetzt durch ADR-022
 - **Entscheidung:** Viewport 640×360, Fenster 1280×720, Stretch-Modus `viewport`, Skalierung `integer`, Texturfilter Nearest, Pixel-Snapping für 2D-Transforms. Arbeitsraster 16-px-Tiles. Renderer Forward+ mit OpenGL3-Fallback.
 - **Konsequenzen:** Scharfe Pixel bei 720p, 1080p, 1440p und 4K. Ruhiges Kamerascrolling braucht in Phase 1 einen Subpixel-Ansatz. ETC2/ASTC-Import ist aktiv, weil universelle macOS-Exporte es verlangen; Pixel-Art nutzt verlustfreie Texturen.
 
@@ -140,4 +140,10 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - Laden ersetzt den Zustand, wechselt in die gespeicherte Szene und setzt die Figur an die gespeicherte Position. Weltobjekte stellen ihren Zustand aus Flags her.
   - Spielzeit zählt nur, solange eine Spielszene läuft und nichts pausiert ist.
 - **Konsequenzen:** Keine halben Gespräche in Spielständen. Startet man im Prototyp-Menü eine Szene neu, überschreibt deren erstes Autosave den alten Autosave (die Sicherung bleibt). Das ändert sich mit dem echten Titelablauf.
+
+## ADR-022 · Renderer: Compatibility (OpenGL 3) auf allen Plattformen
+- **Status:** angenommen · 2026-10-03 · ersetzt die Renderer-Angabe in ADR-007
+- **Kontext:** Geplant war Forward+ (Vulkan, Metal, D3D12) mit Compatibility als Rückfall. REAL ist reines 2D: Licht über `PointLight2D` und `CanvasModulate`, Bloom, Vignette und Farbstimmung macht ein eigener Shader (`grade.gdshader`), nicht `WorldEnvironment`. Alle Aufnahmen und Sichtprüfungen seit Phase 1 laufen im Container ohnehin über OpenGL 3. Zielhardware sind auch ältere Laptops mit integrierter Grafik.
+- **Entscheidung:** `gl_compatibility` für Desktop und Mobile.
+- **Konsequenzen:** Builds rendern wie die geprüften Aufnahmen. Breitere Hardware-Unterstützung und schnellerer Start. Funktionen, die nur Forward+ hat (z. B. 2D-Glow über `WorldEnvironment`, SDF-Effekte), sind bewusst nicht im Einsatz. Ein Wechsel bleibt eine Projekteinstellung, falls später ein Effekt Forward+ braucht.
 
