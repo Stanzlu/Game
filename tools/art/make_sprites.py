@@ -199,6 +199,63 @@ def tree(style, seed, leaves="foliage"):
     return c
 
 
+def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
+    """A less symmetric tree: leaning, tapering trunk with roots, branches forking into 3-5
+    sub-crowns with gaps, so it reads as a real tree rather than a ball on a stick."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES[style], EXTRA[style]
+    W, H, crown_r = {"small": (52, 66, 17), "medium": (68, 84, 23), "large": (88, 104, 29)}[size]
+    if canvas is not None:
+        W, H = canvas  # same canvas for all variants of an entry, so they share one anchor
+    c = Canvas(W, H)
+    cx, base = W / 2, H - 3
+    bark = ex["bark"]
+    lean = rng.uniform(-3, 3)
+    fork_y = base - crown_r * 0.95
+    crown_cy = fork_y - crown_r * 0.4
+    # roots
+    for side in (-1, 1):
+        root = limb_mask(c, cx + side * 2, base - 5, cx + side * rng.uniform(6, 9), base, 4)
+        c.paint(root, bark, 0.2 + 0.5 * c.cylinder(cx - 10, cx + 10), contrast=3.0, dither=False)
+    # trunk, tapering and leaning
+    tw = crown_r * 0.42
+    trunk_m = np.zeros((H, W), bool)
+    for y in range(int(fork_y), int(base)):
+        t = (base - y) / max(base - fork_y, 1)
+        x = cx + lean * t
+        half = tw / 2 * (1 - 0.3 * t)
+        trunk_m[y, int(round(x - half)):int(round(x + half)) + 1] = True
+    grain = pa.value_noise(H, W, (6, 1), rng)
+    c.paint(trunk_m, bark, 0.12 + 0.72 * c.cylinder(cx + lean / 2 - tw / 2 - 1, cx + lean / 2 + tw / 2 + 1)
+            + 0.14 * (grain - 0.5), contrast=3.0, dither=False)
+    # sub-crowns and the branches leading into them
+    n_sub = rng.integers(3, 6)
+    subs = []
+    for k in range(n_sub):
+        a = -np.pi / 2 + (k - (n_sub - 1) / 2) * 0.95 + rng.uniform(-0.2, 0.2)
+        d = crown_r * rng.uniform(0.5, 0.8)
+        sx, sy = cx + lean + np.cos(a) * d * 1.15, crown_cy + np.sin(a) * d * 0.75 + crown_r * 0.3
+        subs.append((sy, sx, crown_r * rng.uniform(0.5, 0.68)))
+        br = limb_mask(c, cx + lean, fork_y + 2, sx, sy + 2, max(2, tw * 0.6))
+        c.paint(br, bark, 0.25 + 0.4 * c.cylinder(sx - 3, sx + 3), contrast=3.0, dither=False)
+    subs.append((crown_cy - crown_r * 0.15, cx + lean, crown_r * 0.62))
+    blobs = []
+    for sy, sx, r in subs:
+        for _ in range(4):
+            blobs.append((sy + rng.uniform(-r * 0.3, r * 0.3), sx + rng.uniform(-r * 0.35, r * 0.35),
+                          r * rng.uniform(0.62, 0.82)))
+    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(3.0, 5.0))
+    colors = st[leaves] if leaves in st else ex[leaves]
+    c.paint(alpha, colors, value, contrast=3.0, dither=False)
+    if leaves == "blossom":
+        for _ in range(30):
+            y, x = int(rng.uniform(4, fork_y)), int(rng.uniform(4, W - 4))
+            if alpha[y, x] and value[y, x] > 0.5:
+                c.fill(c.rect(x, y, x + 1, y + 1), colors[-1])
+    c.outline(st["outline"])
+    return c
+
+
 def bush(style, seed, leaves="foliage", w=26, h=22):
     rng = np.random.default_rng(seed)
     st = pa.STYLES[style]
@@ -660,6 +717,26 @@ def house():
             c.paint(c.rect(wx, 101, wx + 16, 104), st["wood"], 0.35)
             for k in range(6):
                 c.fill(c.rect(wx + 1 + k * 3, 99, wx + 3 + k * 3, 101), EXTRA["tal"]["stem"][2 + (k % 2)])
+    # shutters beside the windows (vertical slats), a gutter under the eaves
+    shutter = ramp("#14201e", "#1e3430", "#2c4a44", "#3e625a")
+    for wx in (20, 80):
+        for sx in (wx - 5, wx + 17):
+            sm = c.rect(sx, 83, sx + 4, 98)
+            c.paint(sm, shutter, np.where(((c.xx - sx) % 2) == 0, 0.65, 0.35), dither=False)
+    c.paint(c.rect(2, wall_top + 4, 114, wall_top + 5), ex["iron"], 0.55, dither=False)
+    c.paint(c.rect(104, wall_top + 4, 106, wall_bottom - 2), ex["iron"], np.where(c.xx < 105, 0.6, 0.3),
+            dither=False)
+    # stone door step and a small lamp beside the door
+    c.paint(c.rect(46, wall_bottom - 1, 68, wall_bottom + 2), ex["stone_wall"], np.where(c.yy < wall_bottom, 0.8, 0.45),
+            dither=False)
+    c.paint(c.rect(68, 86, 72, 88), ex["iron"], 0.4, dither=False)
+    c.paint(c.rect(69, 88, 72, 93), ex["glass"], 0.9, dither=False)
+    c.paint(c.rect(68, 93, 73, 94), ex["iron"], 0.4, dither=False)
+    # moss creeping up the foundation, weathered planks
+    moss = c.rect(x0 - 1, wall_bottom - 7, x1 + 1, wall_bottom + 3) & (pa.value_noise(H, W, 2, rng) > 0.62) & c.a
+    c.paint(moss, st["foliage"], 0.55, dither=False)
+    stain = wall & (pa.value_noise(H, W, (6, 2), rng) > 0.72)
+    c.rgb[stain] *= 0.82
     # shadow of the eaves on the wall
     eave = c.rect(x0, wall_top + 6, x1, wall_top + 9) & c.a
     c.rgb[eave] *= 0.55
@@ -1104,14 +1181,14 @@ def build():
     for style in ("elysia", "tal", "wald"):
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
     # elysia
-    tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
-    save("elysia", "tree", [tree("elysia", 1), tree("elysia", 2)], (32, 76), **tree_entry)
-    save("elysia", "tree_blue", [tree("elysia", 4, "foliage_blue"), tree("elysia", 5, "foliage_blue")],
-         (32, 76), **tree_entry)
-    save("elysia", "tree_purple", [tree("elysia", 6, "foliage_purple"), tree("elysia", 7, "foliage_purple")],
-         (32, 76), **tree_entry)
-    save("elysia", "tree_blossom", [tree("elysia", 8, "blossom"), tree("elysia", 9, "blossom")],
-         (32, 76), **tree_entry)
+    tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
+    # trees: one size per catalog entry keeps anchors simple; species vary by palette
+    for name, leaves, seeds in (("tree", "foliage", (1, 2)), ("tree_blue", "foliage_blue", (4, 5)),
+                                ("tree_purple", "foliage_purple", (6, 7)), ("tree_blossom", "blossom", (8, 9))):
+        variants = [natural_tree("elysia", seeds[0], leaves, "medium", (88, 104)),
+                    natural_tree("elysia", seeds[1], leaves, "large", (88, 104)),
+                    natural_tree("elysia", seeds[1] + 40, leaves, "small", (88, 104))]
+        save("elysia", name, variants, (44, 101), **tree_entry)
     save("elysia", "bush", [bush("elysia", 80), bush("elysia", 81, "foliage_blue"),
                             bush("elysia", 82, "foliage_purple"), bush("elysia", 83)],
          (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
@@ -1151,9 +1228,12 @@ def build():
          shadow=[52, 6], lights=[
              {"offset": [-30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
              {"offset": [30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
+             {"offset": [12, -14], "color": "#ffb066", "energy": 0.7, "range": 40},
          ], smoke=[26, -102])
-    save("tal", "tree", [tree("tal", 101), tree("tal", 102, "foliage_blue"), tree("tal", 103)], (32, 76),
-         shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
+    save("tal", "tree", [natural_tree("tal", 101, "foliage", "large", (88, 104)),
+                         natural_tree("tal", 102, "foliage_blue", "medium", (88, 104)),
+                         natural_tree("tal", 103, "foliage", "medium", (88, 104))], (44, 101),
+         shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
     save("tal", "pine", [pine("tal", 110), pine("tal", 111)], (20, 68),
          shape={"circle": 5, "offset": [0, -2]}, sway=0.8, shadow=[16, 5])
     save("tal", "rock", [rock("tal", 120), rock("tal", 121, 22, 18)], (13, 16),
