@@ -63,7 +63,14 @@ func _ready() -> void:
 			load("res://tools/autopilot/autopilot.gd").call(&"start_if_requested", get_tree())
 	var args := OS.get_cmdline_user_args()
 	var start := start_argument(args)
-	if not _start_arg_consumed and "--continue" in args:
+	var bench_arg := ""
+	for arg in args:
+		if arg == "--benchmark" or arg.begins_with("--benchmark="):
+			bench_arg = arg
+	if not _start_arg_consumed and not bench_arg.is_empty():
+		_start_arg_consumed = true
+		BenchmarkRunner.start.call_deferred(get_tree(), bench_arg == "--benchmark=quick")
+	elif not _start_arg_consumed and "--continue" in args:
 		_start_arg_consumed = true
 		_continue_latest.call_deferred()
 	elif not start.is_empty() and not _start_arg_consumed:
@@ -96,6 +103,13 @@ func _add_save_entries() -> void:
 	_load.pressed.connect(func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
 	_settings_button = _entry("MENU_SETTINGS", 2)
 	_settings_button.pressed.connect(_settings_menu.open)
+	var bench := _entry("MENU_BENCHMARK", _menu.get_child_count() - 1)
+	bench.pressed.connect(func() -> void: BenchmarkRunner.start(get_tree()))
+	if not BenchmarkRunner.last_rows.is_empty():
+		var result := BenchmarkResult.new()
+		result.name = "BenchmarkResult"
+		add_child(result)
+		result.open.call_deferred()
 	_save_menu.closed.connect(
 		func() -> void: _continue.visible = not SaveSystem.latest_slot().is_empty()
 	)

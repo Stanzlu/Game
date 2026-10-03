@@ -28,6 +28,13 @@ func add_header(key: String) -> Label:
 	return label
 
 
+## Any other control (e.g. a table); removed with the rows.
+func add_custom(control: Control) -> Control:
+	add_child(control)
+	_rows.append({"node": control})
+	return control
+
+
 ## A line of text that cannot be focused (status, hints). `text` is shown as given.
 func add_info(text: String) -> Label:
 	var label := Label.new()

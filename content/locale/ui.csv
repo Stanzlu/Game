@@ -134,3 +134,16 @@ DEBUG_DAY_LIGHT_NOW,Tageszeit: %s
 DEBUG_NO_DAY_LIGHT,Diese Szene hat kein Tageslicht.
 DEBUG_MUSIC,Musik wechseln
 DEBUG_MUSIC_NOW,Musik: %s
+MENU_BENCHMARK,Leistungstest
+OPTION_OK,OK
+BENCH_TITLE,Leistungstest
+BENCH_SCENE,Szene
+BENCH_FPS,Ø fps
+BENCH_P95,langsamste 5 %
+BENCH_SLOW,unter 60 fps
+BENCH_VERDICT,Urteil
+BENCH_SMOOTH,flüssig
+BENCH_MOSTLY,meist flüssig
+BENCH_STUTTER,ruckelt
+BENCH_SAVED,Bericht gespeichert: %s
+BENCH_HINT,Den Bericht bitte mit deinem Feedback mitschicken.
