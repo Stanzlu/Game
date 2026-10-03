@@ -1,0 +1,31 @@
+# Normalize text files to LF in the repository
+* text=auto eol=lf
+
+# Godot text formats
+*.gd       text eol=lf
+*.tscn     text eol=lf
+*.tres     text eol=lf
+*.godot    text eol=lf
+*.cfg      text eol=lf
+*.import   text eol=lf
+*.uid      text eol=lf
+*.dialogue text eol=lf
+*.csv      text eol=lf
+*.md       text eol=lf
+*.sh       text eol=lf
+*.svg      text eol=lf
+
+# Binary assets
+*.png  binary
+*.jpg  binary
+*.webp binary
+*.ogg  binary
+*.wav  binary
+*.mp3  binary
+*.ttf  binary
+*.otf  binary
+*.woff2 binary
+*.tpz  binary
+*.zip  binary
+*.exe  binary
+*.pck  binary

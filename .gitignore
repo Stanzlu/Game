@@ -1,0 +1,24 @@
+# Godot 4 – import cache and generated files
+.godot/
+*.translation
+/android/
+
+# Build output
+build/
+
+# Python tooling
+.venv/
+__pycache__/
+
+# Local captures (screenshots, videos)
+captures/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Build stamp written by tools/export.sh (removed after export)
+core/build_info.cfg
