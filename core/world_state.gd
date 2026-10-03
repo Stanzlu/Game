@@ -362,6 +362,18 @@ func set_ui_mode(mode: GameState.UiMode) -> void:
 	ui_mode_changed.emit(mode)
 
 
+## Time of day of the Real world ("" if no scene with daylight has set one yet).
+func day_preset() -> String:
+	return state.day_preset
+
+
+func set_day_preset(preset: String) -> void:
+	if state.day_preset == preset or not (preset.is_empty() or preset in GameState.DAY_PRESETS):
+		return
+	state.day_preset = preset
+	Log.info(Log.Category.WORLD_STATE, "time of day", {"preset": preset})
+
+
 func elysia_level() -> int:
 	return state.elysia.level()
 

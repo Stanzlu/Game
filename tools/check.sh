@@ -81,7 +81,7 @@ echo "smoke ok"
 # Performance test, short: all look scenes in a row, saving blocked, report written.
 step "smoke: benchmark (quick)"
 smoke_log="$(mktemp)"
-tools/godot.sh --headless --quit-after 1500 -- --profile=smoke --benchmark=quick >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
+tools/godot.sh --headless --quit-after 20000 -- --profile=smoke --benchmark=quick --quit-after-benchmark >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
 if has_errors "$smoke_log" || ! grep -q "benchmark done" "$smoke_log"; then
   cat "$smoke_log"
   echo "check: benchmark did not finish" >&2

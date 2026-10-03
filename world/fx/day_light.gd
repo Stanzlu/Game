@@ -6,7 +6,7 @@ extends Node
 
 signal changed(preset: String)
 
-const ORDER: PackedStringArray = ["regentag", "abend", "nacht"]
+const ORDER := GameState.DAY_PRESETS
 ## Per preset: world tint, grading (shader parameters), lamp scale, rain, water ripples,
 ## ambience (path or "") and music track ("keep" leaves it).
 const PRESETS := {
@@ -80,6 +80,7 @@ func set_preset(preset_name: String, seconds := 4.0) -> void:
 		Log.error(Log.Category.CONTENT, "unknown day light preset", {"preset": preset_name})
 		return
 	preset = preset_name
+	WorldState.set_day_preset(preset_name)
 	var p: Dictionary = PRESETS[preset_name]
 	if _tween != null and _tween.is_valid():
 		_tween.kill()

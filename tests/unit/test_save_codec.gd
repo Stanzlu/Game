@@ -38,7 +38,11 @@ func test_roundtrip_keeps_every_part_of_the_state() -> void:
 func test_frozen_v1_file_still_loads() -> void:
 	var result := SaveCodec.decode(_fixture("v1_full.json"))
 	assert_true(result.ok, result.error)
-	assert_eq(result.warnings, PackedStringArray(), "a valid v1 file loads without repairs")
+	assert_eq(
+		result.warnings,
+		PackedStringArray(["migrated to schema 2"]),
+		"a valid v1 file loads without repairs"
+	)
 	var s := result.state
 	assert_true(s.flags.has("valley.mira_met"))
 	assert_eq(s.quests["side_sandbox_gate"].stage, "through_gate")
@@ -50,6 +54,27 @@ func test_frozen_v1_file_still_loads() -> void:
 	assert_eq(s.player.map, "sandbox")
 	assert_eq(s.player.position, Vector2(120.5, 64))
 	assert_almost_eq(s.playtime_seconds, 1234.5, 0.001)
+
+
+func test_v1_saves_take_the_ui_mode_of_their_scene() -> void:
+	var text := _fixture("v1_full.json").replace('"map": "sandbox"', '"map": "look_elysia"')
+	text = text.replace('"ui_mode": "REAL"', '"ui_mode": "ELYSIA"')
+	assert_eq(SaveCodec.decode(text).state.ui_mode, GameState.UiMode.ELYSIA)
+	text = text.replace('"map": "look_elysia"', '"map": "look_tal"')
+	var tal := SaveCodec.decode(text)
+	assert_true(tal.ok, tal.error)
+	assert_eq(tal.state.ui_mode, GameState.UiMode.REAL, "phase 2 saves in the valley are Real")
+
+
+func test_time_of_day_round_trips_and_unknown_values_are_dropped() -> void:
+	var state := GameState.new()
+	state.day_preset = "abend"
+	var back := SaveCodec.decode(SaveCodec.encode(state))
+	assert_eq(back.state.day_preset, "abend")
+	var text := SaveCodec.encode(state).replace('"abend"', '"mittag"')
+	var repaired := SaveCodec.decode(text)
+	assert_eq(repaired.state.day_preset, "")
+	assert_gt(repaired.warnings.size(), 0)
 
 
 func test_hostile_values_are_dropped_and_reported() -> void:

@@ -121,7 +121,10 @@ func _setup_day_light() -> void:
 	if map.ground_art != null:
 		day_light.ground = map.ground_art.material as ShaderMaterial
 	day_light.rain = view.viewport.get_node_or_null("WeatherLayer/Rain")
-	day_light.set_preset.call_deferred(day_preset, 0.0)
+	# The time of day is part of the game state (resting passes it); the scene's own
+	# preset only applies when none was set yet.
+	var start := WorldState.day_preset() if not WorldState.day_preset().is_empty() else day_preset
+	day_light.set_preset.call_deferred(start, 0.0)
 
 
 func _setup_ground() -> void:

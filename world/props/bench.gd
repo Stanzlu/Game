@@ -7,6 +7,8 @@ const SEAT := Vector2(8, 1)
 const REST_SECONDS := 2.5
 
 var pass_time := false
+## Each sit-down counts; only the latest one may pass time (sit, stand, sit again).
+var _rest_serial := 0
 
 
 func _ready() -> void:
@@ -36,8 +38,10 @@ func _on_interacted(actor: Node) -> void:
 
 
 func _rest(player: Player) -> void:
+	_rest_serial += 1
+	var serial := _rest_serial
 	await NodeTimer.after(self, REST_SECONDS)
-	if not is_instance_valid(player) or player.state != Player.State.SIT:
+	if serial != _rest_serial or not is_instance_valid(player) or player.state != Player.State.SIT:
 		return
 	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as LookScene
 	if scene != null and scene.day_light != null:

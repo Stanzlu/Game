@@ -4,6 +4,9 @@ extends Node
 ## walks through the look scenes while measuring frame times, then writes a report to
 ## user://benchmark.txt and shows it in the start menu. Saving is blocked the whole time,
 ## so the test never touches the player's saves; the game state is reset afterwards.
+## While it runs, pause menu and journal stay closed (group "cutscene"), so nothing can
+## pause the measured scenes. `--quit-after-benchmark` ends the program after the report
+## (tools/check.sh).
 
 const SCENES: PackedStringArray = ["look_elysia", "look_tal", "look_wald"]
 const REPORT_NAME := "benchmark.txt"
@@ -14,12 +17,15 @@ static var last_report := ""
 ## Per scene: {"scene", "stats" (FrameStats.summary())}, for the result screen.
 static var last_rows: Array[Dictionary] = []
 static var running := false
+## Set when a run finished; the start menu shows the result once and clears it.
+static var result_pending := false
 
 var settle_seconds := 1.5
 var measure_seconds := 12.0
 var _stats: Dictionary[String, FrameStats] = {}
 var _measuring: FrameStats
 var _last_usec := 0
+var _quit_when_done := false
 
 
 static func start(tree: SceneTree, quick := false) -> void:
@@ -30,6 +36,7 @@ static func start(tree: SceneTree, quick := false) -> void:
 	if quick:
 		runner.settle_seconds = 0.5
 		runner.measure_seconds = 2.0
+	runner._quit_when_done = "--quit-after-benchmark" in OS.get_cmdline_user_args()
 	tree.root.add_child(runner)
 	runner.run.call_deferred()
 
@@ -37,6 +44,12 @@ static func start(tree: SceneTree, quick := false) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_priority = -100
+	add_to_group(&"cutscene")
+
+
+## Keeps menus closed while measuring (MenuLayer.any_open).
+func is_open() -> bool:
+	return running
 
 
 func run() -> void:
@@ -46,6 +59,7 @@ func run() -> void:
 	for key in SCENES:
 		WorldState.new_game()
 		WorldState.set_ui_mode(SceneRegistry.start_mode(key))
+		get_tree().paused = false
 		get_tree().change_scene_to_file(SceneRegistry.path(key))
 		await _wait(settle_seconds)
 		_measuring = FrameStats.new()
@@ -67,6 +81,11 @@ func run() -> void:
 	_write(last_report)
 	Log.info(Log.Category.BOOT, "benchmark done", {"file": report_path(true)})
 	running = false
+	result_pending = true
+	get_tree().paused = false
+	if _quit_when_done:
+		get_tree().quit()
+		return
 	get_tree().change_scene_to_file("res://core/boot/boot.tscn")
 	queue_free()
 

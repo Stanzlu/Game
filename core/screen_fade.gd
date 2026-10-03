@@ -3,6 +3,10 @@ extends CanvasLayer
 ## Autoload "ScreenFade": a black cover over everything that survives scene changes, so a
 ## sequence can fade out in one scene and the next scene fades in from the same black.
 ## Game scenes fade in on their own when they start covered.
+## Await the returned signal: it also fires when a newer fade replaces this one, so a
+## waiting sequence never hangs.
+
+signal faded
 
 var _cover: ColorRect
 var _tween: Tween
@@ -33,6 +37,13 @@ func fade_in(seconds := 1.0) -> Signal:
 func _fade(target: Color, seconds: float) -> Signal:
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
+		faded.emit()
+	if seconds <= 0.0:
+		# at once, so is_covered() is true right away
+		_cover.color = target
+		faded.emit.call_deferred()
+		return faded
 	_tween = create_tween()
-	_tween.tween_property(_cover, ^"color", target, maxf(seconds, 0.01))
-	return _tween.finished
+	_tween.tween_property(_cover, ^"color", target, seconds)
+	_tween.tween_callback(faded.emit)
+	return faded

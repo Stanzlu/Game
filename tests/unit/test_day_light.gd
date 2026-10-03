@@ -4,8 +4,13 @@ extends GutTest
 const TAL := preload("res://world/levels/look_tal.tscn")
 
 
+func before_each() -> void:
+	WorldState.new_game()
+
+
 func after_each() -> void:
 	AudioDirector.play_music("silence", 0.0)
+	WorldState.new_game()
 
 
 func test_tal_starts_at_night_and_cycles_presets() -> void:
@@ -57,3 +62,30 @@ func test_resting_on_the_bench_lets_time_pass() -> void:
 	assert_eq(scene.player.state, Player.State.SIT)
 	await wait_seconds(2.8)
 	assert_eq(scene.day_light.preset, "regentag", "night turns into the next day")
+
+
+func test_sitting_down_twice_passes_time_only_once() -> void:
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var bench: Node = null
+	for node in scene.find_children("*", "StaticBody2D", true, false):
+		if node.get("pass_time") == true:
+			bench = node
+	var seat := bench.get_node("Interactable") as Interactable
+	seat.interact(scene.player)
+	await wait_seconds(1.0)
+	scene.player.stand_up()
+	seat.interact(scene.player)
+	await wait_seconds(3.2)
+	assert_eq(scene.day_light.preset, "regentag", "one rest, one step")
+
+
+func test_time_of_day_is_kept_in_the_game_state() -> void:
+	WorldState.set_day_preset("abend")
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	assert_eq(scene.day_light.preset, "abend", "a loaded evening stays evening")
+	scene.day_light.next_preset(0.0)
+	assert_eq(WorldState.day_preset(), "nacht")

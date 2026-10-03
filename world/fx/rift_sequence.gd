@@ -46,7 +46,8 @@ func run() -> void:
 		await _wait(PAUSE_BETWEEN_ELEMENTS)
 	AudioDirector.set_ambience(null, -6.0, 1.6 * time_scale)
 	await _wait(1.8)
-	await ScreenFade.fade_out(1.6 * time_scale)
+	ScreenFade.fade_out(1.6 * time_scale)
+	await _wait(1.6)
 	await _wait(1.4)
 	_cross_over()
 	_running = false

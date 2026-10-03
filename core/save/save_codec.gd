@@ -5,7 +5,7 @@ extends RefCounted
 ## stepwise migration, then GameState.from_dict() drops and reports anything invalid.
 ## No str_to_var, no resources, no code from save files (ADR-008).
 
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
 const MAX_BYTES := 1 << 20
 
 
@@ -51,7 +51,21 @@ static func encode(state: GameState, saved_at := timestamp()) -> String:
 ## Migration steps: entry i turns schema version i + 1 into i + 2 and returns the new data
 ## (or an empty Dictionary if it cannot). Frozen example files in tests/fixtures/saves/.
 static func migrations() -> Array[Callable]:
-	return []
+	return [migrate_1_to_2]
+
+
+## Schema 2 (Phase 3): saves of schema 1 always said ELYSIA, because nothing set the mode
+## before the rift existed. The UI mode now follows the scene the save was made in.
+## "day_preset" is new and optional.
+static func migrate_1_to_2(data: Dictionary) -> Dictionary:
+	var world: Variant = data.get("world_state")
+	if not world is Dictionary:
+		return data
+	var player: Variant = (world as Dictionary).get("player")
+	var map: Variant = (player as Dictionary).get("map") if player is Dictionary else null
+	if map is String and SceneRegistry.has(map):
+		world["ui_mode"] = str(GameState.UiMode.keys()[SceneRegistry.start_mode(map)])
+	return data
 
 
 static func decode(
