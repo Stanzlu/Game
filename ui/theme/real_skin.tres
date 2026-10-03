@@ -1,0 +1,65 @@
+[gd_resource type="Theme" format=3]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.04, 0.045, 0.05, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu"]
+content_margin_left = 14.0
+content_margin_top = 11.0
+content_margin_right = 14.0
+content_margin_bottom = 11.0
+bg_color = Color(0.04, 0.045, 0.05, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+bg_color = Color(1, 1, 1, 0.06)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_entry"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0, 0, 0, 0.5)
+
+[resource]
+Label/colors/font_color = Color(0.88, 0.88, 0.86, 1)
+RichTextLabel/colors/default_color = Color(0.88, 0.88, 0.86, 1)
+SubtitleLabel/base_type = &"Label"
+SubtitleLabel/colors/font_color = Color(0.86, 0.87, 0.85, 1)
+MutedLabel/base_type = &"Label"
+MutedLabel/colors/font_color = Color(0.5, 0.52, 0.53, 1)
+PromptLabel/base_type = &"Label"
+PromptLabel/colors/font_color = Color(0.86, 0.86, 0.84, 1)
+PromptLabel/styles/normal = SubResource("StyleBoxFlat_prompt")
+DialoguePanel/base_type = &"PanelContainer"
+DialoguePanel/styles/panel = SubResource("StyleBoxFlat_panel")
+DialogueName/base_type = &"Label"
+DialogueName/colors/font_color = Color(0.7, 0.74, 0.72, 1)
+DialogueResponse/base_type = &"Button"
+DialogueResponse/colors/font_color = Color(0.6, 0.62, 0.62, 1)
+DialogueResponse/colors/font_focus_color = Color(0.96, 0.96, 0.94, 1)
+DialogueResponse/colors/font_hover_color = Color(0.96, 0.96, 0.94, 1)
+DialogueResponse/styles/normal = SubResource("StyleBoxEmpty_entry")
+DialogueResponse/styles/hover = SubResource("StyleBoxFlat_focus")
+DialogueResponse/styles/pressed = SubResource("StyleBoxFlat_focus")
+DialogueResponse/styles/focus = SubResource("StyleBoxFlat_focus")
+MenuPanel/base_type = &"PanelContainer"
+MenuPanel/styles/panel = SubResource("StyleBoxFlat_menu")
+MenuEntry/base_type = &"Button"
+MenuEntry/colors/font_color = Color(0.6, 0.62, 0.62, 1)
+MenuEntry/colors/font_disabled_color = Color(0.34, 0.35, 0.36, 1)
+MenuEntry/colors/font_focus_color = Color(0.96, 0.96, 0.94, 1)
+MenuEntry/colors/font_hover_color = Color(0.96, 0.96, 0.94, 1)
+MenuEntry/styles/normal = SubResource("StyleBoxEmpty_entry")
+MenuEntry/styles/hover = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/pressed = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/focus = SubResource("StyleBoxFlat_focus")

@@ -33,6 +33,7 @@ func _ready() -> void:
 	add_to_group(&"dialogue_presenter")
 	_responses.response_selected.connect(_on_response_selected)
 	_text.skip_action = &""
+	UiSkin.attach(_panel)
 	Settings.changed.connect(func(_key: String) -> void: _apply_text_size())
 	_apply_text_size()
 	hide()

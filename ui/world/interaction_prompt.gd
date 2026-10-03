@@ -14,6 +14,7 @@ func _ready() -> void:
 	_label.theme_type_variation = &"PromptLabel"
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(_label)
+	UiSkin.attach(_label)
 	visible = false
 	InputDevice.device_changed.connect(func(_kind: int) -> void: _refresh())
 
@@ -32,7 +33,12 @@ func _refresh() -> void:
 
 
 func _process(_delta: float) -> void:
-	if visible and is_instance_valid(_target):
+	if visible and (not is_instance_valid(_target) or not _target.can_interact(null)):
+		# the target was taken, opened or freed (e.g. a picked-up stone)
+		_target = null
+		visible = false
+		return
+	if visible:
 		var anchor := _target.global_position + _target.prompt_offset
 		global_position = anchor.round()
 		_label.position = Vector2(-roundf(_label.size.x * 0.5), -_label.size.y)

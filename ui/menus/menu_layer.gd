@@ -48,6 +48,7 @@ func _build_frame() -> void:
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 	frame = center
+	UiSkin.attach(center)
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = &"MenuPanel"
 	panel.custom_minimum_size = Vector2(panel_width, 0)

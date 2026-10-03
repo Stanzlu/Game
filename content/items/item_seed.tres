@@ -6,4 +6,5 @@
 script = ExtResource("1_item")
 id = "item_seed"
 kind = 0
+rarity = 0
 max_stack = 9

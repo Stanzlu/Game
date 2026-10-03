@@ -1,0 +1,88 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/generated/ui/elysia_panel.png" id="1_panel"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 12.0
+content_margin_top = 9.0
+content_margin_right = 12.0
+content_margin_bottom = 9.0
+texture = ExtResource("1_panel")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_menu"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("1_panel")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+bg_color = Color(0.95, 0.76, 0.3, 0.22)
+border_width_left = 2
+border_color = Color(1, 0.86, 0.45, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_entry"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(0.16, 0.1, 0.26, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.78, 0.36, 1)
+
+[resource]
+Label/colors/font_color = Color(1, 0.96, 0.88, 1)
+RichTextLabel/colors/default_color = Color(1, 0.96, 0.88, 1)
+SubtitleLabel/base_type = &"Label"
+SubtitleLabel/colors/font_color = Color(1, 0.84, 0.4, 1)
+SubtitleLabel/colors/font_shadow_color = Color(0.3, 0.12, 0.05, 1)
+SubtitleLabel/constants/shadow_offset_x = 1
+SubtitleLabel/constants/shadow_offset_y = 1
+MutedLabel/base_type = &"Label"
+MutedLabel/colors/font_color = Color(0.78, 0.7, 0.9, 1)
+PromptLabel/base_type = &"Label"
+PromptLabel/colors/font_color = Color(1, 0.92, 0.66, 1)
+PromptLabel/styles/normal = SubResource("StyleBoxFlat_prompt")
+DialoguePanel/base_type = &"PanelContainer"
+DialoguePanel/styles/panel = SubResource("StyleBoxTexture_panel")
+DialogueName/base_type = &"Label"
+DialogueName/colors/font_color = Color(1, 0.82, 0.36, 1)
+DialogueName/colors/font_shadow_color = Color(0.3, 0.12, 0.05, 1)
+DialogueName/constants/shadow_offset_x = 1
+DialogueName/constants/shadow_offset_y = 1
+DialogueResponse/base_type = &"Button"
+DialogueResponse/colors/font_color = Color(0.86, 0.8, 0.96, 1)
+DialogueResponse/colors/font_focus_color = Color(1, 0.86, 0.42, 1)
+DialogueResponse/colors/font_hover_color = Color(1, 0.86, 0.42, 1)
+DialogueResponse/styles/normal = SubResource("StyleBoxEmpty_entry")
+DialogueResponse/styles/hover = SubResource("StyleBoxFlat_focus")
+DialogueResponse/styles/pressed = SubResource("StyleBoxFlat_focus")
+DialogueResponse/styles/focus = SubResource("StyleBoxFlat_focus")
+MenuPanel/base_type = &"PanelContainer"
+MenuPanel/styles/panel = SubResource("StyleBoxTexture_menu")
+MenuEntry/base_type = &"Button"
+MenuEntry/colors/font_color = Color(0.86, 0.8, 0.96, 1)
+MenuEntry/colors/font_disabled_color = Color(0.5, 0.44, 0.6, 1)
+MenuEntry/colors/font_focus_color = Color(1, 0.86, 0.42, 1)
+MenuEntry/colors/font_hover_color = Color(1, 0.86, 0.42, 1)
+MenuEntry/styles/normal = SubResource("StyleBoxEmpty_entry")
+MenuEntry/styles/hover = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/pressed = SubResource("StyleBoxFlat_focus")
+MenuEntry/styles/focus = SubResource("StyleBoxFlat_focus")
