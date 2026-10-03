@@ -24,6 +24,8 @@ STYLES = {
     # Elysia: teal-leaning greens, violet shadows, warm light, white stone, turquoise water.
     "elysia": {
         "grass": ramp("#1f4b4a", "#2b6a53", "#3f8c56", "#6aaf58", "#a7d06a"),
+        "grass_dry": ramp("#3a4a36", "#566a3e", "#7f8f4a", "#a9b062", "#d2cf86"),
+        "grass_lush": ramp("#173f44", "#1f5a4c", "#2d7650", "#4f9a55", "#86c06a"),
         "path": ramp("#7a6555", "#a08a72", "#c4ad8c", "#e0cfab", "#f3e9cb"),
         "dirt": ramp("#6e5148", "#93705c", "#b69276", "#d4b693", "#ecd8b6"),
         "stone": ramp("#56526f", "#85819f", "#b4b1c6", "#dad8e4", "#f6f5fa"),
@@ -49,6 +51,8 @@ STYLES = {
     # crystals, warm firefly gold. Light comes from the glowing things, not from the sky.
     "wald": {
         "grass": ramp("#0a171c", "#0f2428", "#153330", "#1e453a", "#2c5a45"),
+        "grass_dry": ramp("#12151c", "#1c2226", "#2a3029", "#3a4231", "#4e563c"),
+        "grass_lush": ramp("#08141c", "#0c2026", "#112e30", "#183f3a", "#235448"),
         "path": ramp("#17121d", "#241b28", "#352834", "#4a3a44", "#645058"),
         "dirt": ramp("#17121d", "#241b28", "#352834", "#4a3a44", "#645058"),
         "stone": ramp("#141527", "#202239", "#30334d", "#464a66", "#626785"),
@@ -71,6 +75,8 @@ STYLES = {
     # Tal: night after rain. Deep blue and violet shadows, teal greens, reddish earth.
     "tal": {
         "grass": ramp("#101c27", "#16302f", "#1f4339", "#2d5945", "#457252"),
+        "grass_dry": ramp("#181c24", "#26302c", "#36432f", "#4b5838", "#646e45"),
+        "grass_lush": ramp("#0c1824", "#112a2e", "#183c36", "#225041", "#356850"),
         "path": ramp("#211820", "#33252a", "#4a3533", "#644940", "#836252"),
         "dirt": ramp("#211820", "#33252a", "#4a3533", "#644940", "#836252"),
         "stone": ramp("#1c1e2b", "#2b2e40", "#3e4258", "#575c74", "#787e96"),

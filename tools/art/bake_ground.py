@@ -153,6 +153,8 @@ class Baker:
         for name in ("grass", "path", "mud", "stone", "water", "wood", "foliage", "cliff"):
             self._ramp(name, self.style[name])
         self._ramp("marble", self.style.get("marble", self.style["stone"]))
+        self._ramp("grass_dry", self.style.get("grass_dry", self.style["grass"]))
+        self._ramp("grass_lush", self.style.get("grass_lush", self.style["grass"]))
         for i, fl in enumerate(self.style["flowers"]):
             self._ramp("flower%d" % i, fl)
         self.rid = np.zeros((self.h, self.w), np.int32)
@@ -225,6 +227,8 @@ class Baker:
         deep = self._water(is_)
         self._fall(is_["fall"])
         self._puddles(is_["puddle"])
+        self._bare_patches(is_["grass"])
+        self._shore(is_)
         self._edges(is_)
         self._meadow(is_["grass"])
         self._grass_clumps(is_["grass"])
@@ -262,12 +266,20 @@ class Baker:
         mid = self.noise(11, 2)
         v = 0.5 + 0.13 * centered(big) + 0.07 * centered(mid)
         self.put(g, "grass", v, contrast=3.0)
+        # natural variation: drier patches and lusher, darker hollows with dithered borders
+        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        patch = self.noise(48, 3)
+        amount = {"elysia": 0.35, "tal": 0.6, "wald": 0.5}.get(self.style_name, 0.5)
+        dry = g & ((patch - 0.6) * 10 * amount > b)
+        lush = g & ((0.38 - patch) * 10 * amount > b)
+        self.rid[dry] = self.ramp_ids["grass_dry"]
+        self.rid[lush] = self.ramp_ids["grass_lush"]
         # tufts in loose clusters: shapes, not per-pixel noise
         n = self.h * self.w // 420
         cy = self.rng.integers(3, self.h - 3, n)
         cx = self.rng.integers(3, self.w - 3, n)
         dens = self.noise(20, 1)
-        gid = self.ramp_ids["grass"]
+        grass_ids = (self.ramp_ids["grass"], self.ramp_ids["grass_dry"], self.ramp_ids["grass_lush"])
         for y0, x0 in zip(cy, cx):
             k = 2 + int(dens[y0, x0] * 6)
             for _ in range(k):
@@ -276,7 +288,7 @@ class Baker:
                 stamp = TUFTS[self.rng.integers(len(TUFTS))]
                 for dy, dx, d in stamp:
                     yy, xx = y + dy, x + dx
-                    if 0 <= yy < self.h and 0 <= xx < self.w and g[yy, xx] and self.rid[yy, xx] == gid:
+                    if 0 <= yy < self.h and 0 <= xx < self.w and g[yy, xx] and self.rid[yy, xx] in grass_ids:
                         self.idx[yy, xx] = min(max(self.idx[yy, xx] + d, 0), 4)
         if self.style_name == "elysia":
             m = self.h * self.w // 700
@@ -470,6 +482,30 @@ class Baker:
         for mask, i in ((top_rim, 0), (side, 1), (low_rim, 3)):
             self.rid[mask], self.idx[mask] = mud, i
 
+    def _bare_patches(self, g):
+        """Small worn, bare spots in the grass (fewer in perfect Elysia)."""
+        rate = {"elysia": 0.0, "tal": 0.9, "wald": 0.6}.get(self.style_name, 0.5)
+        if rate <= 0:
+            return
+        spots = self.noise(7, 2)
+        bare = g & (spots > 1.0 - 0.07 * rate) & ~near(~g, 6)
+        v = 0.42 + 0.1 * centered(self.noise(3, 1))
+        idx = pa.quantize(v, self.n("path"), 2.5)
+        self.rid[bare] = self.ramp_ids["path"]
+        self.idx[bare] = idx[bare]
+
+    def _shore(self, is_):
+        """A narrow band of damp sand and earth between grass and open water."""
+        wt = is_["water"]
+        g = is_["grass"]
+        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        band = g & near(wt, 3)
+        inner = g & near(wt, 1)
+        self.rid[band & (b < 0.5)] = self.ramp_ids["path"]
+        self.idx[band & (b < 0.5)] = 1
+        self.rid[inner] = self.ramp_ids["path"]
+        self.idx[inner] = 0
+
     def _edges(self, is_):
         g = is_["grass"]
         low = is_["path"] | is_["mud"] | is_["cobble"]
@@ -569,27 +605,62 @@ class Baker:
         self.idx[sh] = np.maximum(self.idx[sh] - 1, 0)
 
     def _hedge(self, lab):
+        """Forest edges as individual tree crowns (each a cluster of leaf clumps with its own
+        tone), trunks visible where the crowns meet open ground, soft shade below."""
         hd = lab == M["hedge"]
         if not hd.any():
             return
-        blobs = []
-        for cy in range(0, self.h, 8):
-            for cx in range(0, self.w, 8):
-                y = cy + self.rng.uniform(-3, 3)
-                x = cx + self.rng.uniform(-3, 3)
-                iy, ix = int(np.clip(y, 0, self.h - 1)), int(np.clip(x, 0, self.w - 1))
-                if hd[iy, ix]:
-                    blobs.append((y, x, self.rng.uniform(6.5, 11.0)))
         reach = pa.box_blur(hd.astype(np.float32), 5) + centered(self.noise(5)) * 0.2
         clip = (hd | (reach > 0.12)) & (lab != M["void"]) & (lab != M["cliff"]) & (lab != M["fall"])
-        alpha, value = pa.render_foliage((self.h, self.w), blobs, self.rng, clip=clip)
+        trees = []
+        for cy in range(-6, self.h + 6, 17):
+            for cx in range(-6, self.w + 6, 17):
+                y = cy + self.rng.uniform(-6, 6)
+                x = cx + self.rng.uniform(-6, 6)
+                iy, ix = int(np.clip(y, 0, self.h - 1)), int(np.clip(x, 0, self.w - 1))
+                if hd[iy, ix]:
+                    trees.append((y, x, self.rng.uniform(10.5, 15.5), self.rng.uniform(-0.12, 0.1)))
+        trees.sort(key=lambda t: t[0])
+        value = np.zeros((self.h, self.w), np.float32)
+        alpha = np.zeros((self.h, self.w), bool)
+        for y, x, r, tone in trees:
+            y0, y1 = int(max(y - r - 6, 0)), int(min(y + r + 6, self.h))
+            x0, x1 = int(max(x - r - 6, 0)), int(min(x + r + 6, self.w))
+            if y0 >= y1 or x0 >= x1:
+                continue
+            blobs = [(y - y0, x - x0, r * 0.62)]
+            for k in range(7):
+                a = k / 7 * 2 * np.pi + self.rng.uniform(-0.3, 0.3)
+                d = r * self.rng.uniform(0.35, 0.62)
+                blobs.append((y - y0 + np.sin(a) * d * 0.85, x - x0 + np.cos(a) * d, r * self.rng.uniform(0.38, 0.5)))
+            a_loc, v_loc = pa.render_foliage((y1 - y0, x1 - x0), blobs, self.rng, clip=clip[y0:y1, x0:x1],
+                                             small=(3.0, 4.6))
+            sub_v, sub_a = value[y0:y1, x0:x1], alpha[y0:y1, x0:x1]
+            sub_v[a_loc] = np.clip(v_loc[a_loc] + tone, 0, 1)
+            sub_a |= a_loc
         fid = self.ramp_ids["foliage"]
         self.rid[hd] = fid
         self.idx[hd] = 0
         idx = pa.quantize(value, self.n("foliage"), 3.0, dither=False)
         self.rid[alpha] = fid
         self.idx[alpha] = idx[alpha]
-        cover = alpha | hd
+        # trunks below the crowns that stand at the edge toward open ground
+        wid = self.ramp_ids["wood"]
+        trunks = np.zeros((self.h, self.w), bool)
+        for y, x, r, _ in trees:
+            probe_y = int(y + r + 3)
+            ix = int(np.clip(x, 0, self.w - 1))
+            if probe_y >= self.h or hd[probe_y, ix] or self.lab[probe_y, ix] in (M["void"], M["cliff"]):
+                continue
+            tw = 4 if r < 13 else 5
+            for yy in range(int(y + r * 0.4), min(int(y + r + 5), self.h)):
+                for xx in range(int(x - tw / 2), int(x + tw / 2) + 1):
+                    if 0 <= xx < self.w and not alpha[yy, xx]:
+                        trunks[yy, xx] = True
+                        self.rid[yy, xx] = wid
+                        rel = (xx - (x - tw / 2)) / tw
+                        self.idx[yy, xx] = 2 if rel < 0.35 else (1 if rel < 0.75 else 0)
+        cover = alpha | hd | trunks
         below = within_below(cover, 6) & ~cover & (lab != M["void"])
         b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
         d1 = within_below(cover, 2) & below

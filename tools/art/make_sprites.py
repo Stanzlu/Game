@@ -449,9 +449,12 @@ def tall_grass(style, seed, w=18, h=20):
     return c
 
 
-def reeds(seed):
+def reeds(seed, style="elysia"):
     rng = np.random.default_rng(seed)
-    ex = EXTRA["elysia"]
+    ex = dict(EXTRA["elysia"])
+    if style != "elysia":
+        ex["stem"] = pa.STYLES[style]["grass"][1:]
+        ex["bark"] = pa.STYLES[style]["wood"]
     c = Canvas(16, 26)
     for k in range(6):
         x0 = 8 + rng.normal(0, 2.5)
@@ -462,9 +465,9 @@ def reeds(seed):
             c.paint(c.rect(x, y, x + 1, y + 1), ex["stem"], 0.3 + 0.5 * (24 - y) / 24, dither=False)
         if k % 2 == 0:
             x = int(x0 + lean * (24 - top))
-            c.paint(c.rect(x - 1, int(top), x + 1, int(top) + 4), EXTRA["elysia"]["bark"],
+            c.paint(c.rect(x - 1, int(top), x + 1, int(top) + 4), ex["bark"],
                     np.where(c.xx < x, 0.8, 0.4))
-    c.outline(pa.STYLES["elysia"]["outline"])
+    c.outline(pa.STYLES[style]["outline"])
     return c
 
 
@@ -869,6 +872,110 @@ def light_beam(w=96, h=220):
     return rgba
 
 
+# --------------------------------------------------------------------------- small scatter details
+def grass_tuft(style, seed, w=14, h=13):
+    """A natural bunch of blades: darker roots, lighter curved tips, no hard outline."""
+    rng = np.random.default_rng(seed)
+    g = pa.STYLES[style]["grass"]
+    c = Canvas(w, h)
+    for _ in range(rng.integers(6, 11)):
+        x0 = w / 2 + rng.normal(0, 2.2)
+        length = rng.uniform(4, h - 2)
+        lean = rng.uniform(-0.5, 0.5)
+        for t in np.linspace(0, 1, 16):
+            y = h - 1 - t * length
+            x = x0 + lean * t * length * 0.5 + lean * t * t * 2.5
+            tone = 0.25 + 0.7 * t if rng.random() > 0.1 else 0.95
+            c.paint(c.rect(int(x), int(y), int(x) + 1, int(y) + 1), g, tone, dither=False)
+    roots = c.a & (c.yy >= h - 2)
+    c.rgb[roots] = g[0]
+    return c
+
+
+def wildflowers(style, seed, w=12, h=12):
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES[style]
+    c = Canvas(w, h)
+    fl = st["flowers"][rng.integers(len(st["flowers"]))]
+    for _ in range(rng.integers(2, 5)):
+        x = int(rng.uniform(2, w - 2))
+        top = int(rng.uniform(2, h - 5))
+        c.paint(c.rect(x, top + 1, x + 1, h), st["grass"], 0.45, dither=False)
+        if rng.random() < 0.5:
+            c.paint(c.rect(x + 1, top + 4, x + 2, top + 5), st["grass"], 0.7, dither=False)
+        for dy, dx, i in ((0, 0, 2), (-1, 0, 1), (0, -1, 1), (0, 1, 0), (1, 0, 0)):
+            if 0 <= top + dy < h and 0 <= x + dx < w:
+                c.fill(c.rect(x + dx, top + dy, x + dx + 1, top + dy + 1), fl[i])
+    return c
+
+
+PEBBLE = {
+    "elysia": ramp("#4e4a4e", "#7a746e", "#a8a094", "#d4ccbe"),
+    "tal": ramp("#16161c", "#262830", "#3a3c44", "#55585e"),
+    "wald": ramp("#111020", "#1d1b30", "#2c2a44", "#423f5c"),
+}
+
+
+def pebbles(style, seed, w=10, h=6):
+    rng = np.random.default_rng(seed)
+    rk = PEBBLE[style]
+    c = Canvas(w, h)
+    for _ in range(rng.integers(1, 4)):
+        x, y = rng.uniform(2, w - 2), rng.uniform(2, h - 2)
+        rx, ry = rng.uniform(1.2, 2.4), rng.uniform(0.9, 1.5)
+        m = c.ellipse(x, y, rx, ry)
+        c.paint(m, rk, 0.3 + 0.65 * c.sphere(x - 0.7, y - 0.7, rx + 0.5, ry + 0.5), dither=False)
+    c.outline(rk[0])
+    return c
+
+
+def twig(style, seed, w=12, h=6):
+    rng = np.random.default_rng(seed)
+    wood = pa.STYLES[style]["wood"]
+    c = Canvas(w, h)
+    y = rng.uniform(2, 4)
+    slope = rng.uniform(-0.25, 0.25)
+    for x in range(1, w - 1):
+        yy = int(round(y + slope * (x - w / 2)))
+        c.fill(c.rect(x, yy, x + 1, yy + 1), wood[2 if x % 3 else 3])
+        c.fill(c.rect(x, yy + 1, x + 1, yy + 2), wood[0])
+    bx = int(rng.uniform(4, w - 4))
+    c.fill(c.rect(bx, int(y) - 1, bx + 1, int(y)), wood[2])
+    return c
+
+
+def small_mushrooms(style, seed, w=10, h=9):
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES[style]
+    caps = [ramp("#5a2a1e", "#8e4128", "#c26a3c", "#e8a070"), ramp("#4a3a2a", "#7a6040", "#a88a5c", "#d4ba8a")]
+    cap = caps[rng.integers(len(caps))]
+    if style == "tal":
+        cap = cap * 0.7
+    c = Canvas(w, h)
+    for x, y, r in ((4, 4, 2.6), (7, 6, 1.8)):
+        c.paint(c.rect(x - 0.5, y, x + 0.5, h - 1), EXTRA["wald"]["stalk"], 0.7, dither=False)
+        m = c.ellipse(x, y, r, r * 0.65) & (c.yy <= y + 0.5)
+        c.paint(m, cap, 0.3 + 0.7 * c.sphere(x - 0.6, y - 0.6, r + 0.5, r), dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def fallen_leaves(style, seed, w=12, h=7):
+    rng = np.random.default_rng(seed)
+    colors = [ramp("#6a3a1a", "#a85a22", "#d8873a"), ramp("#6a5014", "#a8822a", "#d8b44a"),
+              ramp("#5a2418", "#8a3a22", "#b85a34")]
+    c = Canvas(w, h)
+    for _ in range(rng.integers(3, 7)):
+        col = colors[rng.integers(len(colors))]
+        if style != "elysia":
+            col = col * 0.75
+        x, y = int(rng.uniform(1, w - 2)), int(rng.uniform(1, h - 2))
+        c.fill(c.rect(x, y, x + 2, y + 1), col[1])
+        c.fill(c.rect(x, y, x + 1, y + 1), col[2])
+        c.fill(c.rect(x + 1, y + 1, x + 2, y + 2), col[0])
+    return c
+
+
 def bridge_rail(style):
     """One cell of bridge railing: a post on the left and two rails across (tiles side by side)."""
     st = pa.STYLES[style]
@@ -976,6 +1083,18 @@ def particles():
        {"a": ("#c8ccd4", 110), "b": ("#d8dce2", 170), "c": ("#e8ebef", 220)})
     px("mote", ["a"], {"a": ("#ffffff", 200)})
     px("firefly", [".a.", "aba", ".a."], {"a": ("#ffd36a", 120), "b": ("#fff6c8", 255)})
+    # flying bird, two frames stacked (wings up / wings down)
+    px("bird_fly", ["a.....a", ".a...a.", "..aba..", "...a...", ".......", ".......",
+                    "..aba..", ".a...a.", "a.....a", "......."],
+       {"a": ("#2a2436", 255), "b": ("#5a5068", 255)})
+    px("bird_shadow", [".aaa.", "aaaaa", ".aaa."], {"a": ("#101018", 70)})
+    # koi: two frames (tail left / right)
+    px("koi", ["..abbaa.", ".abbbcaa", "..abbaa.", "........", "..abbaa.", "aabbbca.", "..abbaa."],
+       {"a": ("#f08a3a", 255), "b": ("#fff4e8", 255), "c": ("#1c1424", 255)})
+    px("fish_shadow", ["..aaaa.", ".aaaaaa", "..aaaa.", ".......", "..aaaa.", "aaaaaa.", "..aaaa."],
+       {"a": ("#0a1018", 120)})
+    px("dragonfly", [".a.a.", "abcba", ".a.a.", ".....", "a...a", ".bcb.", "a...a"],
+       {"a": ("#cfeaff", 170), "b": ("#2a6fd0", 255), "c": ("#123a80", 255)})
     px("shadow_small", [".aaaaaaaa.", "aabbbbbbaa", "abbbbbbbba", "aabbbbbbaa", ".aaaaaaaa."],
        {"a": ("#1c1630", 50), "b": ("#1c1630", 95)})
 
@@ -1084,6 +1203,17 @@ def build():
     CATALOG["wald/light_beam"] = {"textures": [RES + "/wald/light_beam.png"], "anchor": [48, 200],
                                   "beam": True, "lights": [{"offset": [0, -10], "color": "#9ff2d8",
                                                             "energy": 1.1, "range": 120}]}
+    for style in ("elysia", "tal", "wald"):
+        save(style, "grass_tuft", [grass_tuft(style, 500 + i) for i in range(5)], (7, 12), sway=1.0)
+        save(style, "wildflowers", [wildflowers(style, 520 + i) for i in range(6)], (6, 11), sway=1.0)
+        save(style, "pebbles", [pebbles(style, 540 + i) for i in range(4)], (5, 3), flat=True)
+        save(style, "twig", [twig(style, 550 + i) for i in range(3)], (6, 3), flat=True)
+        save(style, "leaves", [fallen_leaves(style, 560 + i) for i in range(4)], (6, 3), flat=True)
+        save(style, "small_mushrooms", [small_mushrooms(style, 570 + i) for i in range(3)], (5, 8))
+        if style != "elysia":
+            save(style, "reeds", [reeds(580 + i, style) for i in range(2)], (8, 23), sway=2.0)
+            save(style, "bush", [bush(style, 590 + i, "foliage") for i in range(2)] + [bush(style, 592, "foliage_blue")],
+                 (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
     for style in ("elysia", "tal", "wald"):
         rail = bridge_rail(style)
         # north rail: base on the top edge of its cell; south rail: base on the bottom edge
