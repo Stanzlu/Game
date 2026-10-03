@@ -36,7 +36,7 @@ func _on_interacted(actor: Node) -> void:
 
 
 func _rest(player: Player) -> void:
-	await get_tree().create_timer(REST_SECONDS).timeout
+	await NodeTimer.after(self, REST_SECONDS)
 	if not is_instance_valid(player) or player.state != Player.State.SIT:
 		return
 	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as LookScene

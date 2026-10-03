@@ -20,9 +20,9 @@ var frame: Control
 var _return_focus: Control
 
 
-## True while any menu or dialogue is open (then pause menu and journal stay closed).
+## True while any menu, dialogue or cutscene is open (then pause menu and journal stay closed).
 static func any_open(tree: SceneTree) -> bool:
-	for group: StringName in [GROUP, &"dialogue_presenter"]:
+	for group: StringName in [GROUP, &"dialogue_presenter", &"cutscene"]:
 		for node in tree.get_nodes_in_group(group):
 			if node.has_method(&"is_open") and bool(node.call(&"is_open")):
 				return true

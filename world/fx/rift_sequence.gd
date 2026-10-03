@@ -15,6 +15,7 @@ var target := ""
 ## Tests shorten the pauses and stay in the scene.
 var time_scale := 1.0
 var travel := true
+var _running := false
 
 
 static func play(on_scene: GameScene, target_scene: String, autostart := true) -> RiftSequence:
@@ -34,6 +35,8 @@ func run() -> void:
 		queue_free()
 		return
 	Log.info(Log.Category.WORLD_STATE, "rift sequence start", {"target": target})
+	_running = true
+	add_to_group(&"cutscene")
 	var calm := Settings.get_bool("display.reduce_flashing")
 	scene.player.lock(&"cutscene")
 	SaveSystem.block(&"cutscene")
@@ -46,6 +49,7 @@ func run() -> void:
 	await ScreenFade.fade_out(1.6 * time_scale)
 	await _wait(1.4)
 	_cross_over()
+	_running = false
 	SaveSystem.unblock(&"cutscene")
 	if travel:
 		get_tree().change_scene_to_file(SceneRegistry.path(target))
@@ -62,4 +66,16 @@ func _cross_over() -> void:
 
 
 func _wait(seconds: float) -> Signal:
-	return get_tree().create_timer(seconds * time_scale).timeout
+	return NodeTimer.after(self, seconds * time_scale)
+
+
+## While running, menus and the journal stay closed (MenuLayer.any_open).
+func is_open() -> bool:
+	return _running
+
+
+func _exit_tree() -> void:
+	# Leaving mid-sequence (e.g. loading a save): never keep saving blocked.
+	if _running:
+		SaveSystem.unblock(&"cutscene")
+		_running = false

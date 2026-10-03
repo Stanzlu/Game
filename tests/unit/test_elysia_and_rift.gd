@@ -147,3 +147,30 @@ func test_screen_shake_respects_the_setting() -> void:
 func test_prototype_scenes_start_in_their_world() -> void:
 	assert_eq(SceneRegistry.start_mode("look_elysia"), GameState.UiMode.ELYSIA)
 	assert_eq(SceneRegistry.start_mode("look_tal"), GameState.UiMode.REAL)
+
+
+func test_rift_sequence_blocks_menus_and_frees_saving_when_left_early() -> void:
+	var scene := await _scene()
+	var sequence := RiftSequence.play(scene, "look_tal", false)
+	sequence.time_scale = 0.5
+	sequence.travel = false
+	sequence.run()
+	assert_true(MenuLayer.any_open(get_tree()), "pause menu and journal stay closed")
+	assert_has(SaveSystem.blockers(), "cutscene")
+	sequence.queue_free()
+	await wait_physics_frames(2)
+	assert_false(MenuLayer.any_open(get_tree()))
+	assert_false(SaveSystem.blockers().has("cutscene"), "leaving mid-sequence unblocks saving")
+	await wait_seconds(1.0)
+	assert_eq(WorldState.ui_mode(), GameState.UiMode.ELYSIA, "a freed sequence never resumes")
+	AudioDirector.stop_music(0.0)
+
+
+func test_node_timer_dies_with_its_owner() -> void:
+	var owner := Node.new()
+	add_child(owner)
+	var fired := [false]
+	NodeTimer.after(owner, 0.05).connect(func() -> void: fired[0] = true)
+	owner.free()
+	await wait_seconds(0.2)
+	assert_false(fired[0], "no callback after the owner is gone")

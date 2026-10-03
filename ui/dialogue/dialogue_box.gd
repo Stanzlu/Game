@@ -92,7 +92,7 @@ func _show_line(next_line: DialogueLine) -> void:
 
 func _auto_advance(for_line: DialogueLine) -> void:
 	var seconds := AUTO_BASE_SECONDS + AUTO_SECONDS_PER_CHAR * for_line.text.length()
-	await get_tree().create_timer(seconds * Settings.timing_factor()).timeout
+	await NodeTimer.after(self, seconds * Settings.timing_factor())
 	if visible and _waiting and line == for_line:
 		_advance()
 

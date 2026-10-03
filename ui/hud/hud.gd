@@ -221,7 +221,7 @@ func _next_popup() -> void:
 		return
 	_busy = true
 	(_queue.pop_front() as Callable).call()
-	await get_tree().create_timer(POPUP_GAP).timeout
+	await NodeTimer.after(self, POPUP_GAP)
 	_next_popup()
 
 
