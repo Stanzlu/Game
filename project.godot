@@ -26,6 +26,7 @@ config/icon="res://icon.svg"
 Log="*res://core/log.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 InputDevice="*res://core/input_device.gd"
+WorldState="*res://core/world_state.gd"
 
 [debug]
 
@@ -38,6 +39,7 @@ gdscript/warnings/unsafe_call_argument=1
 [dialogue_manager]
 
 editor/translations/UPDATE_TRANSLATION_TEMPLATES_AUTOMATICALLY=false
+editor/translations/use_static_ids_as_translation_keys=false
 
 [display]
 
@@ -134,7 +136,7 @@ debug_overlay={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://content/locale/ui.de.translation")
+locale/translations=PackedStringArray("res://content/locale/ui.de.translation", "res://content/locale/journal.de.translation", "res://content/locale/items.de.translation")
 locale/translations_pot_files=PackedStringArray("res://content/dialogue/antreiber/antreiber.dialogue", "res://content/dialogue/sandbox/sandbox.dialogue")
 locale/fallback="de"
 

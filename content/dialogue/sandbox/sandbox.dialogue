@@ -1,23 +1,25 @@
 ~ sign_default
-Ein Schild. Es hat heute nichts zu sagen. [#ph]
+Ein Schild. Es hat heute nichts zu sagen. [#ph] [ID:sandbox_sign_default_1]
 => END
 
 ~ sign_parcours
-Hindernisparcours. Wände, Gänge, Türen. Bitte nicht die Wände umarmen. [#ph]
+Hindernisparcours. Wände, Gänge, Türen. Bitte nicht die Wände umarmen. [#ph] [ID:sandbox_sign_parcours_1]
 => END
 
 ~ sign_pond
-Steg. Hält mehr aus, als er aussieht. [#ph]
+Steg. Hält mehr aus, als er aussieht. [#ph] [ID:sandbox_sign_pond_1]
 => END
 
 ~ sign_meadow
-Hohes Gras. Raschelt, wenn man es lässt. [#ph]
-- …
-	Es raschelt trotzdem. [#ph]
-- Ich lasse es.
-	Das Gras nimmt es zur Kenntnis. [#ph]
+Hohes Gras. Raschelt, wenn man es lässt. [#ph] [ID:sandbox_sign_meadow_1]
+- … [ID:sandbox_sign_meadow_r1]
+	Es raschelt trotzdem. [#ph] [ID:sandbox_sign_meadow_2]
+- Ich lasse es. [ID:sandbox_sign_meadow_r2]
+	Das Gras nimmt es zur Kenntnis. [#ph] [ID:sandbox_sign_meadow_3]
 => END
 
 ~ sign_garden
-Garten. Das Tor reagiert auf Hebelwirkung. [#ph]
+Garten. Das Tor reagiert auf Hebelwirkung. [#ph] [ID:sandbox_sign_garden_1]
+if not WorldState.has_flag("sandbox.garden_gate_open")
+	do WorldState.start_quest("side_sandbox_gate")
 => END
