@@ -85,7 +85,10 @@ der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
 sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichter, Rauch) → Partikel
 (z 30). Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht
 abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tönung, Vignette) sitzt auf
-dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild.
+dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` streut zusätzlich
+Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und
+NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske; der Player
+bekommt keine). `AmbientLife` (`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen.
 
 ## Eingabe
 

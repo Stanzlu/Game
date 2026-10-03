@@ -28,6 +28,10 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Umrisse | Dunkler, farbiger Umriss pro Stil (Elysia violett-dunkel, Tal fast schwarz), nie reines Schwarz. Innere Kanten eine Rampenstufe dunkler. |
 | Figuren | 24×32-Rahmen, Füße auf y = 30, Chibi-Proportionen (Kopf etwa 40 Prozent). 8 Richtungen, West gespiegelt. Idle 2, Gehen 4, Laufen 4, Sitzen 1 Bild. Kontaktschatten unter den Füßen. Flache 4-Ton-Schattierung, Haar mit Glanzbogen, Augen mit Lichtpunkt, innere Konturen zwischen Teilen. Designs in `make_character.py` (Spieler, Mira, Elysianer). |
 | Klippen | Geschichtete Steinplatten (breite flache Zellen), Licht oben, dunkler zum Fuß. Gewölbte Graskappe mit heller Kante und Ranken, Schatten unter der Kappe und am Fuß. Wasserfälle mit Streifen, Gischt und Spritzpartikeln. |
+| Dichte | Kleinvegetation per Streu-Regeln im `[meta]`-Block (`scatter`): Grasbüschel, Wildblumen, Kiesel, Zweige, Laub und Pilze unter Bäumen, Schilf am Wasser, Sträucher am Waldrand, Gras, das in Wegränder wächst. Deterministisch, ohne Kollision, mit Wind. |
+| Natürlichkeit | Grasflächen mit trockenen und saftigen Flecken, kahle Stellen (Tal, Wald), feuchte Erde am Ufer, Kiesel im flachen Wasser, Waldränder aus einzelnen Kronen mit Stämmen, Bäume mit unregelmäßigen Kronen, schiefen Stämmen und drei Größen. |
+| Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser; der Protagonist nie (Game Bible §9). |
+| Tierleben | Vogelschwärme mit Schatten am Boden (Wald: Fledermäuse), Koi im heiligen Becken, Fischschatten in Bach und Teich, Libellen über dem Wasser. |
 | Leuchten | Leuchtende Teile (Pilze, Kristalle, Blätter, Lichthöfe, Lichtstrahl) sind eigene Emissive-Ebenen mit `render_mode unshaded`: richtig verdeckt, aber nicht von Nacht-Abdunklung oder Licht gedimmt. Echte `PointLight2D` nur für größere Lichtquellen. |
 | Tiefe | Props sortieren nach ihrer Fußlinie. Flaches (Seerosen) liegt auf Ebene −5, Boden auf −10, Himmel auf −20. |
 | Laub | Kronen und Hecken aus einzelnen Blattbüscheln (`render_foliage`): flache Tonstufen, Licht oben links, dunkle Kante unten rechts je Büschel. Kein Rauschen. |
@@ -44,6 +48,7 @@ Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, frem
 |-------|----------------------|
 | 1 (u. a. „Bild 2“: moderne Top-Down-Szene) | gemalte Böden ohne Raster, Klippe über Wolken, Licht, Wetter, Wasser, Wind |
 | 2 (Stadt mit heiligem Baum, schwebende Inseln, Nachtwald, Panorama, Kristall-Klippe) | Paletten mit Türkis und Violett, bunte Baumarten, Laub aus Büscheln, Wahrzeichen im Zentrum, Höhenstufen, Wasserfälle, leuchtende Kristalle und Pflanzen, Nachtpalette in Blau und Violett |
+| Rückmeldung nach Runde 3: „mehr ins Detail, Welt verdichten, natürlicher, Realismus auf gewisse Art“ | Streu-System, natürliche Bodenvariation, Spiegelungen, Tierleben, realistischere Bäume und Waldränder, Hausdetails |
 | 3 (violette Nacht mit leuchtenden Bäumen, Waldfluss mit Pilzen, gemütlicher Hof mit Kirschbäumen) | geschichtete Klippen mit Graskappe und Ranken, Gischt, Grasbüschel, Wassergrund, Gemüsebeet, Schwebeinseln und Regenbogen, Leuchtpilze, Glühwürmchen, dritte Szene „Wald bei Nacht“, detailliertere Figuren |
 
 ## Werkzeuge
