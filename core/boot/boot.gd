@@ -9,6 +9,7 @@ const SCENES := {
 	"antreiber": "res://encounters/antreiber/antreiber_encounter.tscn",
 	"look_elysia": "res://world/levels/look_elysia.tscn",
 	"look_tal": "res://world/levels/look_tal.tscn",
+	"look_wald": "res://world/levels/look_wald.tscn",
 }
 
 static var _start_arg_consumed := false
@@ -21,6 +22,7 @@ static var _start_arg_consumed := false
 @onready var _antreiber: Button = %Antreiber
 @onready var _look_elysia: Button = %LookElysia
 @onready var _look_tal: Button = %LookTal
+@onready var _look_wald: Button = %LookWald
 @onready var _quit: Button = %Quit
 
 
@@ -32,11 +34,13 @@ func _ready() -> void:
 	_antreiber.text = tr("MENU_ANTREIBER")
 	_look_elysia.text = tr("MENU_LOOK_ELYSIA")
 	_look_tal.text = tr("MENU_LOOK_TAL")
+	_look_wald.text = tr("MENU_LOOK_WALD")
 	_quit.text = tr("MENU_QUIT")
 	_sandbox.pressed.connect(func() -> void: open_scene("sandbox"))
 	_antreiber.pressed.connect(func() -> void: open_scene("antreiber"))
 	_look_elysia.pressed.connect(func() -> void: open_scene("look_elysia"))
 	_look_tal.pressed.connect(func() -> void: open_scene("look_tal"))
+	_look_wald.pressed.connect(func() -> void: open_scene("look_wald"))
 	_quit.pressed.connect(func() -> void: get_tree().quit())
 	var info := read_build_info()
 	_build.text = format_build_line(info)

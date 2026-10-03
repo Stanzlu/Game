@@ -59,6 +59,34 @@ static func motes(game_view: GameView) -> AmbientParticles:
 	return p
 
 
+static func fireflies(game_view: GameView) -> AmbientParticles:
+	var p := AmbientParticles.new()
+	p.name = "Fireflies"
+	p.view = game_view
+	p.texture = load(FX_DIR + "firefly.png")
+	p.amount = 34
+	p.lifetime = 7.0
+	p.preprocess = 7.0
+	p.emission_rect_extents = Vector2(360, 210)
+	p.direction = Vector2(1, 0)
+	p.spread = 180.0
+	p.gravity = Vector2(0, -1)
+	p.initial_velocity_min = 3.0
+	p.initial_velocity_max = 9.0
+	p.angular_velocity_min = 0.0
+	p.angular_velocity_max = 0.0
+	# blinking: several bright pulses over a lifetime
+	var blink := Gradient.new()
+	blink.set_color(0, Color(1, 1, 1, 0))
+	for i in 6:
+		var t := 0.08 + i * 0.15
+		blink.add_point(t, Color(1, 1, 1, 1.0))
+		blink.add_point(t + 0.07, Color(1, 1, 1, 0.15))
+	blink.set_color(1, Color(1, 1, 1, 0))
+	p.color_ramp = blink
+	return p
+
+
 func _init() -> void:
 	z_index = 30
 	process_priority = 10

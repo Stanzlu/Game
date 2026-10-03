@@ -28,13 +28,21 @@ static func ids() -> Array:
 
 
 ## Picks a texture variant deterministically from a position, so maps look the same each run.
-static func texture_for(data: Dictionary, seed_position: Vector2) -> Texture2D:
-	var textures: Array = data.get("textures", [])
+static func texture_for(
+	data: Dictionary, seed_position: Vector2, key: String = "textures"
+) -> Texture2D:
+	var textures: Array = data.get(key, [])
 	if textures.is_empty():
 		return null
+	var index := variant_index(data, seed_position)
+	return load(str(textures[mini(index, textures.size() - 1)])) as Texture2D
+
+
+## Same variant for the sprite and its emissive layer.
+static func variant_index(data: Dictionary, seed_position: Vector2) -> int:
+	var count: int = maxi((data.get("textures", []) as Array).size(), 1)
 	var cell := Vector2i((seed_position / 16.0).floor())
-	var index := posmod(cell.x * 7 + cell.y * 13, textures.size())
-	return load(str(textures[index])) as Texture2D
+	return posmod(cell.x * 7 + cell.y * 13, count)
 
 
 static func _ensure_loaded() -> void:

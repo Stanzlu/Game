@@ -1,0 +1,8 @@
+[
+  {"t": 0.4, "press": ["move_right", "move_up"], "log": "into the forest toward the clearing"},
+  {"t": 1.3, "release": ["move_up"]},
+  {"t": 3.2, "release": ["move_right"], "log": "stand in the light beam"},
+  {"t": 4.6, "press": ["move_right"], "log": "on to the log bridge"},
+  {"t": 7.6, "release": ["move_right"], "log": "end of walk"},
+  {"t": 8.6, "log": "end of capture"}
+]

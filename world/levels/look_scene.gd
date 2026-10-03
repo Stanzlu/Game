@@ -20,6 +20,7 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var sky_bottom := Color(1, 1, 1, 1)
 @export var petals := false
 @export var motes := false
+@export var fireflies := false
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
 @export var ambience: AudioStream
@@ -34,8 +35,17 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var vignette := 0.0
 @export var bloom := 0.0
 
+var glow_layer: CanvasLayer
+
 
 func _build_world() -> void:
+	# fireflies fly above everything and are not dimmed by the night tint
+	glow_layer = CanvasLayer.new()
+	glow_layer.name = "GlowLayer"
+	glow_layer.layer = 1
+	glow_layer.follow_viewport_enabled = true
+	glow_layer.add_to_group(&"glow_layer")
+	view.viewport.add_child(glow_layer)
 	super._build_world()
 	if map == null or map.data == null or not map.data.is_valid():
 		return
@@ -61,6 +71,8 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.petals(view))
 	if motes:
 		view.world_root.add_child(AmbientParticles.motes(view))
+	if fireflies:
+		glow_layer.add_child(AmbientParticles.fireflies(view))
 	for i in butterfly_cells.size():
 		var butterfly := Butterfly.new()
 		view.world_root.add_child(butterfly)

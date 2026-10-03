@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/look_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+[ext_resource type="AudioStream" path="res://assets/generated/audio/forest_night_loop.wav" id="3_amb"]
+
+[node name="LookWald" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/look_wald.txt"
+player_sheet = ExtResource("2_sheet")
+world_tint = Color(0.36, 0.38, 0.6, 1)
+fireflies = true
+ambience = ExtResource("3_amb")
+ambience_db = -5.0
+water_glints = 0.45
+saturation = 1.1
+contrast = 1.05
+tint = Color(0.95, 0.98, 1.06, 1)
+shadow_tint = Color(0.03, 0.02, 0.08, 1)
+vignette = 0.4
+bloom = 1.1

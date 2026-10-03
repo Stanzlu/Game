@@ -1,8 +1,16 @@
 extends GutTest
 ## Look prototype (ADR-017): generated prop catalog, baked ground and look scenes.
 
-const LOOK_MAPS := ["res://content/maps/look_elysia.txt", "res://content/maps/look_tal.txt"]
-const LOOK_SCENES := ["res://world/levels/look_elysia.tscn", "res://world/levels/look_tal.tscn"]
+const LOOK_MAPS := [
+	"res://content/maps/look_elysia.txt",
+	"res://content/maps/look_tal.txt",
+	"res://content/maps/look_wald.txt",
+]
+const LOOK_SCENES := [
+	"res://world/levels/look_elysia.tscn",
+	"res://world/levels/look_tal.tscn",
+	"res://world/levels/look_wald.tscn",
+]
 const DECOR_SCENE := preload("res://world/props/decor.tscn")
 
 
@@ -81,6 +89,13 @@ func test_look_scenes_build_their_atmosphere() -> void:
 		assert_not_null(scene.player, "%s: player spawned" % path)
 		assert_not_null(scene.view.display.material, "%s: grading applied" % path)
 		assert_not_null(scene.get_node_or_null("Ambience"), "%s: ambience" % path)
-	var tal: LookScene = get_child(get_child_count() - 1)
+	var tal: LookScene = get_child(get_child_count() - 2)
 	assert_not_null(tal.view.viewport.get_node_or_null("WeatherLayer/Rain"), "tal has rain")
 	assert_not_null(tal.view.world_root.get_node_or_null("WorldTint"), "tal is darkened")
+	var wald: LookScene = get_child(get_child_count() - 1)
+	assert_not_null(wald.glow_layer.get_node_or_null("Fireflies"), "wald has fireflies")
+	var emissive := 0
+	for node in wald.map.entities.get_children():
+		if node.get_node_or_null("Emissive") != null:
+			emissive += 1
+	assert_gt(emissive, 10, "glowing props have an unshaded emissive layer")

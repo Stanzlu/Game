@@ -79,6 +79,12 @@ layout_mode = 2
 theme_type_variation = &"MenuEntry"
 text = "Look Tal"
 
+[node name="LookWald" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MenuEntry"
+text = "Look Wald"
+
 [node name="Quit" type="Button" parent="Center/Menu"]
 unique_name_in_owner = true
 layout_mode = 2

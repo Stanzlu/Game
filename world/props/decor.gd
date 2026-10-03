@@ -2,12 +2,18 @@ extends StaticBody2D
 ## Generic decoration from the prop catalog (ADR-017): sprite variant, optional collision,
 ## wind sway, ground-level placement, footstep surface with rustle, lights, chimney smoke
 ## and sparkles. Placed by text maps with params {"sprite": "<style>/<name>"}.
+## Glowing parts (emissive layer, halos, light beams) are drawn unshaded in place: correct
+## depth sorting, and a night tint (CanvasModulate) or lights do not dim them.
 
 const SWAY_SHADER := preload("res://world/shaders/wind_sway.gdshader")
+const SWAY_EMISSIVE_SHADER := preload("res://world/shaders/wind_sway_emissive.gdshader")
+const EMISSIVE_SHADER := preload("res://world/shaders/emissive.gdshader")
 const FX_DIR := "res://assets/generated/props/fx/"
 
 static var _sway_materials: Dictionary = {}
 static var _light_texture: GradientTexture2D
+static var _emissive_material: ShaderMaterial
+static var _additive: CanvasItemMaterial
 
 var sprite_id := ""
 var sprite: Sprite2D
@@ -16,6 +22,7 @@ var _light_energy: Array[float] = []
 var _bob := 0.0
 var _time := 0.0
 var _glow: Sprite2D
+var _beam: Sprite2D
 
 
 func _ready() -> void:
@@ -39,11 +46,25 @@ func apply_params(params: Dictionary) -> void:
 	add_child(sprite)
 	if entry.get("flat", false):
 		z_index = -5
+	if entry.has("emissive"):
+		var emit := Sprite2D.new()
+		emit.name = "Emissive"
+		emit.centered = false
+		emit.texture = PropCatalog.texture_for(entry, global_position, "emissive")
+		emit.offset = sprite.offset
+		emit.material = emissive_material()
+		emit.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+		add_child(emit)
+	if entry.get("beam", false):
+		_add_beam()
 	if entry.has("shape"):
 		_add_shape(entry["shape"])
 	var sway := float(entry.get("sway", 0.0))
 	if sway > 0.0:
 		sprite.material = sway_material(sway)
+		var emit_node := get_node_or_null("Emissive") as Sprite2D
+		if emit_node != null:
+			emit_node.material = sway_material(sway, true)
 	if entry.has("surface"):
 		_add_surface(StringName(entry["surface"]), entry.get("rustle", false))
 	for light: Dictionary in entry.get("lights", []):
@@ -63,7 +84,12 @@ func apply_params(params: Dictionary) -> void:
 	_bob = float(entry.get("bob", 0.0))
 	_time = fmod(global_position.x * 0.13 + global_position.y * 0.07, TAU)
 	set_process(
-		_bob > 0.0 or _glow != null or (entry.get("flicker", false) and not lights.is_empty())
+		(
+			_bob > 0.0
+			or _glow != null
+			or _beam != null
+			or (entry.get("flicker", false) and not lights.is_empty())
+		)
 	)
 
 
@@ -73,18 +99,36 @@ func _process(delta: float) -> void:
 		sprite.position.y = roundf(sin(_time * 1.3) * _bob)
 	if _glow != null:
 		_glow.modulate.a = 0.55 + 0.2 * sin(_time * 1.7)
+	if _beam != null:
+		_beam.modulate.a = 0.8 + 0.12 * sin(_time * 0.9) + 0.06 * sin(_time * 2.3)
 	for i in lights.size():
 		var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
 		lights[i].energy = _light_energy[i] * f
 
 
-static func sway_material(amount: float) -> ShaderMaterial:
-	if not _sway_materials.has(amount):
+static func sway_material(amount: float, unshaded: bool = false) -> ShaderMaterial:
+	var key := "%s_%s" % [amount, unshaded]
+	if not _sway_materials.has(key):
 		var mat := ShaderMaterial.new()
-		mat.shader = SWAY_SHADER
+		mat.shader = SWAY_EMISSIVE_SHADER if unshaded else SWAY_SHADER
 		mat.set_shader_parameter("amount", amount)
-		_sway_materials[amount] = mat
-	return _sway_materials[amount]
+		_sway_materials[key] = mat
+	return _sway_materials[key]
+
+
+static func additive_unshaded() -> CanvasItemMaterial:
+	if _additive == null:
+		_additive = CanvasItemMaterial.new()
+		_additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+		_additive.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	return _additive
+
+
+static func emissive_material() -> ShaderMaterial:
+	if _emissive_material == null:
+		_emissive_material = ShaderMaterial.new()
+		_emissive_material.shader = EMISSIVE_SHADER
+	return _emissive_material
 
 
 static func light_texture() -> GradientTexture2D:
@@ -229,10 +273,40 @@ func _add_glow(spec: Dictionary) -> void:
 	_glow.position = _vec(spec.get("offset", [0, 0]))
 	_glow.self_modulate = Color(str(spec.get("color", "#ffffff")))
 	_glow.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-	var mat := CanvasItemMaterial.new()
-	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	_glow.material = mat
+	_glow.material = additive_unshaded()
 	add_child(_glow)
+
+
+func _add_beam() -> void:
+	_beam = Sprite2D.new()
+	_beam.name = "Beam"
+	_beam.centered = false
+	_beam.texture = sprite.texture
+	_beam.offset = sprite.offset
+	_beam.material = additive_unshaded()
+	add_child(_beam)
+	sprite.visible = false
+	var motes := CPUParticles2D.new()
+	motes.name = "BeamMotes"
+	motes.texture = load(FX_DIR + "mote.png")
+	motes.amount = 18
+	motes.lifetime = 4.0
+	motes.preprocess = 4.0
+	motes.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	motes.emission_rect_extents = Vector2(22, 30)
+	motes.direction = Vector2(0, -1)
+	motes.spread = 20.0
+	motes.gravity = Vector2(0, -3)
+	motes.initial_velocity_min = 3.0
+	motes.initial_velocity_max = 8.0
+	var fade := Gradient.new()
+	fade.set_color(0, Color(0.85, 1, 0.95, 0))
+	fade.add_point(0.4, Color(0.85, 1, 0.95, 0.9))
+	fade.set_color(1, Color(0.85, 1, 0.95, 0))
+	motes.color_ramp = fade
+	motes.material = additive_unshaded()
+	motes.position = Vector2(0, -40)
+	add_child(motes)
 
 
 func _add_petal_rain(spec: Dictionary) -> void:
