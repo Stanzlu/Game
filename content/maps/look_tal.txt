@@ -27,6 +27,7 @@ K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
 v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
+d = {"atlas": [2, 0], "surface": "dirt", "paint": "field"}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/splash"}}
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres"}}
 [map]
@@ -41,11 +42,11 @@ hhh.............P........................~~~.........hhh
 hhh...T.............................P....~~~.........hhh
 hhh......................................~~~......T..hhh
 hhh................E.............E.......~~~.........hhh
-hhh................E.............E.......~~~...g.....hhh
-hhh.........g......E......H......E......~~~~.........hhh
-hhh................E.K........WK.E....R.~~~..........hhh
+hhh.........ddddd..E.............E.......~~~...g.....hhh
+hhh.....R...ddddd..E......H......E......~~~~.........hhh
+hhh.........ddddd..E.K........WK.E....R.~~~..........hhh
 hhh................E..b...,.N....E......~~~.........Phhh
-hhh........R.......E.....,,,.....E......~~~..........hhh
+hhh.......g........E.....,,,.....E......~~~..........hhh
 hhh..T.............FFFFFF,,,FFFFFF.....~~~~...R......hhh
 hhh.....................l,,,............~~~..........hhh
 hhh.................mmm.p,,,.......g....~~~..........hhh

@@ -23,7 +23,7 @@ import pixelart as pa  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 T = 16
 MATERIALS = ["void", "grass", "path", "mud", "puddle", "cobble", "water", "planks_v", "planks_h",
-             "hedge", "cliff", "marble", "stairs", "fall"]
+             "hedge", "cliff", "marble", "stairs", "fall", "field"]
 M = {name: i for i, name in enumerate(MATERIALS)}
 SURFACE_PAINT = {"grass": "grass", "dirt": "path", "stone": "cobble", "water": "water",
                  "wood": "planks_h", "puddle": "puddle"}
@@ -220,6 +220,7 @@ class Baker:
         self._cobble(is_["cobble"])
         self._planks(is_)
         self._marble(is_["marble"])
+        self._field(is_["field"])
         self._stairs(is_["stairs"])
         deep = self._water(is_)
         self._fall(is_["fall"])
@@ -369,6 +370,34 @@ class Baker:
         low = shift(mb, 1, 0) & ~mb & ~near(self.lab == M["water"], 0)
         self.rid[low] = self.ramp_ids["marble"]
         self.idx[low] = 0
+
+    def _field(self, fd):
+        """Vegetable bed: tilled soil in furrows with rows of small plants, wooden edge."""
+        if not fd.any():
+            return
+        yy, xx = np.mgrid[0:self.h, 0:self.w]
+        furrow = (yy % 6)
+        v = np.where(furrow == 0, 0.62, np.where(furrow >= 4, 0.18, 0.4))
+        self.put(fd, "mud", v + 0.05 * centered(self.noise(4)), contrast=3.0, dither=False)
+        fid = self.ramp_ids["foliage"]
+        gid = self.ramp_ids["grass"]
+        for y in range(0, self.h, 6):
+            for x in range(3, self.w, 7):
+                py, px = y + 2, x + (y // 6) % 2 * 3
+                if not (2 <= py < self.h - 3 and 2 <= px < self.w - 3) or not fd[py, px]:
+                    continue
+                kind = (x * 31 + y * 17) % 3
+                if kind == 0:  # cabbage
+                    for dy, dx, i in ((0, 0, 4), (-1, 0, 3), (0, -1, 3), (0, 1, 2), (1, 0, 1), (-1, -1, 2),
+                                      (-1, 1, 2), (1, -1, 1), (1, 1, 1)):
+                        self.rid[py + dy, px + dx], self.idx[py + dy, px + dx] = fid, i + 1
+                else:  # sprouts
+                    for dy, dx, i in ((0, 0, 3), (-1, -1, 4), (-1, 1, 4), (1, 0, 1)):
+                        self.rid[py + dy, px + dx], self.idx[py + dy, px + dx] = gid, i
+        edge = near(~fd, 1) & fd
+        self.rid[edge] = self.ramp_ids["wood"]
+        self.idx[edge] = 2
+        self.idx[edge & shift(~fd, -1, 0)] = 1
 
     def _stairs(self, st):
         """Stone steps down a cliff: light treads, dark risers, darker side walls."""
