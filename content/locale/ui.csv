@@ -129,3 +129,8 @@ RARITY_UNCOMMON,Ungewöhnlich
 RARITY_RARE,Selten
 RARITY_EPIC,Episch
 RARITY_LEGENDARY,LEGENDÄR
+DEBUG_DAY_LIGHT,Tageszeit wechseln (Tal)
+DEBUG_DAY_LIGHT_NOW,Tageszeit: %s
+DEBUG_NO_DAY_LIGHT,Diese Szene hat kein Tageslicht.
+DEBUG_MUSIC,Musik wechseln
+DEBUG_MUSIC_NOW,Musik: %s

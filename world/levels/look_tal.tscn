@@ -9,6 +9,7 @@ script = ExtResource("1_scene")
 map_path = "res://content/maps/look_tal.txt"
 player_sheet = ExtResource("2_sheet")
 weather = 1
+day_preset = "nacht"
 world_tint = Color(0.52, 0.56, 0.78, 1)
 water_ripples = 0.45
 water_glints = 0.3

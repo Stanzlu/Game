@@ -25,6 +25,8 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 ## Number of drifting fog banks and their tint (alpha = density).
 @export var fog_banks := 0
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
+## Real-world scenes: start preset of the DayLight ("keine" = fixed look, e.g. Elysia).
+@export_enum("keine", "regentag", "abend", "nacht") var day_preset := "keine"
 @export_group("Life")
 ## Seconds between bird flocks on average (0 = none) and their tint (dark for bats).
 @export var bird_interval := 0.0
@@ -45,6 +47,7 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var bloom := 0.0
 
 var glow_layer: CanvasLayer
+var day_light: DayLight
 
 
 func _build_world() -> void:
@@ -101,6 +104,24 @@ func _build_world() -> void:
 		view.world_root.add_child(butterfly)
 		butterfly.setup(map.cell_to_world(Vector2i(butterfly_cells[i])), i)
 	view.set_post_material(_grade_material())
+	if day_preset != "keine":
+		_setup_day_light()
+
+
+func _setup_day_light() -> void:
+	day_light = DayLight.new()
+	day_light.name = "DayLight"
+	add_child(day_light)
+	day_light.world_tint = view.world_root.get_node_or_null("WorldTint")
+	if day_light.world_tint == null:
+		day_light.world_tint = CanvasModulate.new()
+		day_light.world_tint.name = "WorldTint"
+		view.world_root.add_child(day_light.world_tint)
+	day_light.grade = view.display.material as ShaderMaterial
+	if map.ground_art != null:
+		day_light.ground = map.ground_art.material as ShaderMaterial
+	day_light.rain = view.viewport.get_node_or_null("WeatherLayer/Rain")
+	day_light.set_preset.call_deferred(day_preset, 0.0)
 
 
 func _setup_ground() -> void:

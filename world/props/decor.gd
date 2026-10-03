@@ -19,6 +19,8 @@ static var _additive: CanvasItemMaterial
 var sprite_id := ""
 var sprite: Sprite2D
 var lights: Array[PointLight2D] = []
+## Scales all lamp lights of this prop (DayLight dims lamps by day).
+var light_scale := 1.0
 var _light_energy: Array[float] = []
 var _bob := 0.0
 var _time := 0.0
@@ -104,7 +106,7 @@ func _process(delta: float) -> void:
 		_beam.modulate.a = 0.8 + 0.12 * sin(_time * 0.9) + 0.06 * sin(_time * 2.3)
 	for i in lights.size():
 		var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
-		lights[i].energy = _light_energy[i] * f
+		lights[i].energy = _light_energy[i] * f * light_scale
 
 
 static func sway_material(amount: float, unshaded: bool = false) -> ShaderMaterial:
@@ -204,6 +206,7 @@ func _add_light(spec: Dictionary) -> void:
 	add_child(light)
 	lights.append(light)
 	_light_energy.append(light.energy)
+	add_to_group(&"lamp_props")
 
 
 func _add_smoke(offset: Vector2) -> void:

@@ -1,0 +1,13 @@
+[
+  {"t": 2.0, "log": "nacht"},
+  {"t": 2.5, "tap": ["debug_panel"]},
+  {"t": 3.0, "tap": ["ui_down"]}, {"t": 3.2, "tap": ["ui_down"]}, {"t": 3.4, "tap": ["ui_down"]},
+  {"t": 3.6, "tap": ["ui_down"]}, {"t": 3.8, "tap": ["ui_down"]},
+  {"t": 4.2, "tap": ["interact"], "log": "to regentag"},
+  {"t": 4.6, "tap": ["debug_panel"]},
+  {"t": 9.5, "tap": ["debug_panel"]},
+  {"t": 10.0, "tap": ["ui_down"]}, {"t": 10.2, "tap": ["ui_down"]}, {"t": 10.4, "tap": ["ui_down"]},
+  {"t": 10.6, "tap": ["ui_down"]}, {"t": 10.8, "tap": ["ui_down"]},
+  {"t": 11.2, "tap": ["interact"], "log": "to abend"},
+  {"t": 11.6, "tap": ["debug_panel"]}
+]
