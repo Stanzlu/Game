@@ -226,6 +226,7 @@ class Baker:
         self._puddles(is_["puddle"])
         self._edges(is_)
         self._meadow(is_["grass"])
+        self._grass_clumps(is_["grass"])
         self._hedge(lab)
         self._cliff(lab)
         self._prop_shadows()
@@ -375,7 +376,8 @@ class Baker:
             return
         yy = np.mgrid[0:self.h, 0:self.w][0]
         v = np.where((yy % 5) == 4, 0.15, np.where((yy % 5) == 0, 0.85, 0.62))
-        self.put(st, "stone", v, contrast=3.0, dither=False)
+        ramp_name = "marble" if "marble" in self.style else "stone"
+        self.put(st, ramp_name, v, contrast=3.0, dither=False)
         walls = st & (near(~st, 2) & ~(shift(~st, 2, 0) | shift(~st, -2, 0)))
         self.idx[walls] = 1
         self.idx[st & near(~st, 0) & ~shift(st, 0, 1)] = 0
@@ -391,8 +393,14 @@ class Baker:
         self.idx[fl & ~shift(fl, 1, 0)] = 4
         self.idx[fl & ~shift(fl, 2, 0) & shift(fl, 1, 0)] = 3
         self.idx[fl & (~shift(fl, 0, 1) | ~shift(fl, 0, -1))] = 1
-        land = (self.lab == M["water"]) & within_below(fl, 4)
-        self.idx[land] = 4
+        # foam where the fall lands: bright core, dithered spray around it
+        pool = self.lab == M["water"]
+        core = pool & within_below(fl, 4)
+        spray = pool & near(core, 3) & ~core
+        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        self.idx[core] = 4
+        self.idx[spray & (b < 0.6)] = 4
+        self.idx[spray & (b >= 0.6)] = 3
 
     def _water(self, is_):
         wt = is_["water"]
@@ -437,6 +445,34 @@ class Baker:
         lip = g & shift(low, -1, 0)
         self.idx[lip] = np.minimum(self.idx[lip] + 1, 4)
         self.idx[:] = np.maximum(self.idx, 0)
+
+    def _grass_clumps(self, g):
+        """Leafy bright grass clumps in patches (lush detail like hand-made tilesets)."""
+        density = self.noise(26, 2)
+        area = g & ~near(~g, 5)
+        blobs = []
+        for cy in range(4, self.h - 4, 9):
+            for cx in range(4, self.w - 4, 9):
+                y = int(cy + self.rng.uniform(-4, 4))
+                x = int(cx + self.rng.uniform(-4, 4))
+                if not area[y, x] or self.meadow_cells[y // T, x // T] > 0:
+                    continue
+                if density[y, x] < 0.58 or self.rng.random() < 0.35:
+                    continue
+                for _ in range(self.rng.integers(2, 6)):
+                    blobs.append((y + self.rng.uniform(-3, 3), x + self.rng.uniform(-5, 5),
+                                  self.rng.uniform(2.6, 4.0)))
+        if not blobs:
+            return
+        alpha, value = pa.render_foliage((self.h, self.w), blobs, self.rng, small=(2.0, 3.0))
+        alpha &= area
+        gid = self.ramp_ids["grass"]
+        idx = pa.quantize(np.clip(value * 0.8 + 0.28, 0, 1), self.n("grass"), 3.0, dither=False)
+        self.rid[alpha] = gid
+        self.idx[alpha] = idx[alpha]
+        # dark outline below and right of each clump
+        rim = (shift(alpha, 1, 0) | shift(alpha, 0, 1)) & ~alpha & g
+        self.idx[rim] = 0
 
     def _meadow(self, g):
         if self.meadow_cells.sum() == 0:
@@ -521,12 +557,14 @@ class Baker:
             np.maximum(sub, 0, out=sub)
 
     def _cliff(self, lab):
+        """Cliff faces in layered stone (wide flat slabs), a rounded grass cap with hanging
+        vines on top, ambient occlusion under the cap and a contact shadow at the foot."""
         cl = lab == M["cliff"]
         if not cl.any():
             return
-        f1, f2, cid = pa.worley(self.h, self.w, (22, 7), self.rng, 0.8)
-        slab = np.clip((f2 - f1) / 2.5, 0, 1)
-        light = pa.bump_light(slab * 2.5)
+        f1, f2, cid = pa.worley(self.h, self.w, (7, 16), self.rng, 0.7)
+        slab = np.clip((f2 - f1) / 2.2, 0, 1)
+        light = pa.bump_light(slab * 2.2, 1.2)
         tone = ((cid * 7919) % 97) / 97.0
         top = np.zeros((self.h, self.w), np.float32)
         run = np.zeros((self.h, self.w), np.float32)
@@ -543,30 +581,46 @@ class Baker:
                 else:
                     y += 1
         rel = np.where(run > 0, top / np.maximum(run, 1), 0)
-        wob = (self.noise((40, 12), 1) * 6).astype(int)
-        strata = ((top.astype(int) + wob) % 7) == 0
-        v = 0.7 - 0.45 * rel + 0.12 * centered(tone) + 0.45 * (light - 0.5)
-        v = np.where(strata, v - 0.14, v)
-        v = np.where(slab < 0.12, v - 0.22, v)
-        v = np.where(top < 3, v - 0.3, v)
-        self.put(cl, "cliff", np.clip(v, 0, 1), contrast=2.0)
-        # grass lip hanging over the top edge
-        grass = lab == M["grass"]
-        lip_len = (self.noise((1, 3), 1) * 4).astype(int)
-        drip = self.noise((1, 2), 1) > 0.78
+        v = 0.74 - 0.42 * rel + 0.1 * centered(tone) + 0.5 * (light - 0.5)
+        v = np.where(slab < 0.14, v - 0.26, v)
+        v = np.where(top < 4, v - 0.22, v)
+        v = np.where(top < 2, v - 0.2, v)
+        self.put(cl, "cliff", np.clip(v, 0, 1), contrast=2.6, dither=False)
+        # rounded grass cap: scallops of 8-14 px hanging over the edge, light rim on top
+        grass = (lab == M["grass"]) | (lab == M["hedge"])
         gid = self.ramp_ids["grass"]
+        fid = self.ramp_ids["foliage"]
+        period = 11.0
+        phase = self.noise((1, 30), 1) * 6.0
+        vine = self.noise((1, 1), 1)
         for x in range(self.w):
             col = cl[:, x]
             for y0 in np.nonzero(col[1:] & ~col[:-1])[0] + 1:
                 if not grass[y0 - 1, x]:
                     continue
-                n = 1 + lip_len[y0, x] + (3 if drip[y0, x] else 0)
+                u = ((x + phase[y0, x] * period) % period) / (period / 2.0) - 1.0
+                n = 3 + int(round(3.5 * np.sqrt(max(0.0, 1.0 - u * u))))
                 for k in range(n):
                     if y0 + k < self.h and cl[y0 + k, x]:
                         self.rid[y0 + k, x] = gid
-                        self.idx[y0 + k, x] = 3 if k == 0 else (2 if k < n - 1 else 0)
-                if y0 + n < self.h and cl[y0 + n, x]:
-                    self.idx[y0 + n, x] = 0
+                        self.idx[y0 + k, x] = 3 if k < n - 2 else (2 if k < n - 1 else 1)
+                # light rim on the grass right above the edge
+                for k in (1, 2):
+                    if y0 - k >= 0 and grass[y0 - k, x] and self.rid[y0 - k, x] == gid:
+                        self.idx[y0 - k, x] = 4 if k == 1 else max(self.idx[y0 - k, x], 3)
+                yb = y0 + n
+                if yb < self.h and cl[yb, x]:
+                    self.idx[yb, x] = 0
+                # hanging vines here and there
+                if vine[y0, x] > 0.93:
+                    length = 5 + int(vine[min(y0 + 3, self.h - 1), x] * 14)
+                    for k in range(length):
+                        yy = yb + 1 + k
+                        if yy < self.h and cl[yy, x]:
+                            self.rid[yy, x] = fid
+                            self.idx[yy, x] = 3 if k % 3 == 0 else 2
+                            if k % 3 == 1 and x + 1 < self.w and cl[yy, x + 1]:
+                                self.rid[yy, x + 1], self.idx[yy, x + 1] = fid, 4
         # jagged bottom above void: hanging rocks with a dark outline
         void = lab == M["void"]
         bottom = cl & shift(void, -1, 0)
@@ -577,9 +631,11 @@ class Baker:
                 if cut > 0:
                     self.lab[y - cut + 1:y + 1, x] = M["void"]
                 self.idx[y - cut, x] = 0
-        # contact shadow where the cliff meets ground below
-        foot = within_below(cl, 3) & ~cl & (self.lab != M["void"])
+        # contact shadow where the cliff meets ground below, darker right at the foot
+        foot = within_below(cl, 4) & ~cl & (self.lab != M["void"]) & (self.lab != M["fall"])
         self.idx[foot] = np.maximum(self.idx[foot] - 1, 0)
+        foot1 = within_below(cl, 1) & foot
+        self.idx[foot1] = np.maximum(self.idx[foot1] - 1, 0)
 
 
 def main():

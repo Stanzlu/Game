@@ -304,6 +304,20 @@ def crystal_pedestal():
     return c
 
 
+def foam(seed, w=24, h=12):
+    """White foam blob where a waterfall hits the water."""
+    rng = np.random.default_rng(seed)
+    c = Canvas(w, h)
+    blobs = [(h * 0.55, w * 0.5, h * 0.42)] + [
+        (h * 0.55 + rng.uniform(-1.5, 1.5), w * 0.5 + rng.uniform(-8, 8), rng.uniform(2.0, 3.5))
+        for _ in range(7)
+    ]
+    for y, x, r in blobs:
+        m = c.ellipse(x, y, r * 1.3, r * 0.8)
+        c.paint(m, pa.STYLES["elysia"]["water"], 0.7 + 0.3 * c.sphere(x - 1, y - 1, r * 1.3, r), dither=False)
+    return c
+
+
 def glow_flowers(seed):
     rng = np.random.default_rng(seed)
     st = pa.STYLES["elysia"]
@@ -728,6 +742,8 @@ def build():
          (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
     save("elysia", "sacred_tree", sacred_tree(), (104, 182), shape={"circle": 14, "offset": [0, -6]},
          shadow=[70, 16], sway=0.5, petal_rain={"extents": [84, 36], "offset": [0, -120], "amount": 16})
+    save("elysia", "splash", foam(160, 34), (9, 6), flat=True,
+         splash={"extents": [12, 3], "offset": [8, 0], "amount": 30})
     glow = "#8fe9f5"
     save("elysia", "pillar", marble_pillar(), (10, 46), shape={"circle": 6, "offset": [0, -2]},
          shadow=[8, 3], glow={"offset": [0, -38], "color": glow, "radius": 18})

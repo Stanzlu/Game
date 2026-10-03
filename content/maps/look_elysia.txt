@@ -33,6 +33,7 @@ R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 w = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lily_pad"}}
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fence"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
+x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh.....hhhhhhhhhhhhhhhh....hhhhhhhhhhhhhhhhhh..hhhhhh
@@ -45,7 +46,7 @@ hh...ff....,,,..o..........................~~.........ff....U.hh
 hh^^^^^....,,.........^^^^^...............vv^^^....Y..........hh
 hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
 hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
-hh....................o......MMMMMMM......~~..............o...hh
+hh....................o......MMMMMMM......x~..............o...hh
 hh....o....................MMMMMMMMMMM....~~~fo...............hh
 hh..................ff....MMM~~~~~~~MMM....~~fff..............hh
 hh...............fffff...MM~~~~~~~~w~~MM...~~~ff.....U........hh

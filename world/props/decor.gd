@@ -58,6 +58,8 @@ func apply_params(params: Dictionary) -> void:
 		_add_glow(entry["glow"])
 	if entry.has("petal_rain"):
 		_add_petal_rain(entry["petal_rain"])
+	if entry.has("splash"):
+		_add_splash(entry["splash"])
 	_bob = float(entry.get("bob", 0.0))
 	_time = fmod(global_position.x * 0.13 + global_position.y * 0.07, TAU)
 	set_process(
@@ -259,6 +261,48 @@ func _add_petal_rain(spec: Dictionary) -> void:
 	petals.color_ramp = fade
 	petals.z_index = 20
 	add_child(petals)
+
+
+## Droplets and mist where a waterfall lands.
+func _add_splash(spec: Dictionary) -> void:
+	var drops := CPUParticles2D.new()
+	drops.name = "Splash"
+	drops.texture = load(FX_DIR + "mote.png")
+	drops.amount = int(spec.get("amount", 24))
+	drops.lifetime = 0.7
+	drops.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	drops.emission_rect_extents = _vec(spec.get("extents", [10, 3]))
+	drops.position = _vec(spec.get("offset", [0, 0]))
+	drops.direction = Vector2(0, -1)
+	drops.spread = 55.0
+	drops.gravity = Vector2(0, 140)
+	drops.initial_velocity_min = 25.0
+	drops.initial_velocity_max = 50.0
+	var fade := Gradient.new()
+	fade.set_color(0, Color(1, 1, 1, 0.95))
+	fade.set_color(1, Color(1, 1, 1, 0))
+	drops.color_ramp = fade
+	drops.z_index = 2
+	add_child(drops)
+	var mist := CPUParticles2D.new()
+	mist.name = "Mist"
+	mist.texture = load(FX_DIR + "puff.png")
+	mist.amount = 8
+	mist.lifetime = 1.6
+	mist.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	mist.emission_rect_extents = _vec(spec.get("extents", [10, 3]))
+	mist.position = drops.position
+	mist.direction = Vector2(0, -1)
+	mist.spread = 40.0
+	mist.gravity = Vector2(0, -6)
+	mist.initial_velocity_min = 4.0
+	mist.initial_velocity_max = 10.0
+	var mist_fade := Gradient.new()
+	mist_fade.set_color(0, Color(1, 1, 1, 0.5))
+	mist_fade.set_color(1, Color(1, 1, 1, 0))
+	mist.color_ramp = mist_fade
+	mist.z_index = 2
+	add_child(mist)
 
 
 static func _vec(a: Variant) -> Vector2:

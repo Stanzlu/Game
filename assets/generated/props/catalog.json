@@ -284,6 +284,27 @@
    "res://assets/generated/props/elysia/sacred_tree.png"
   ]
  },
+ "elysia/splash": {
+  "anchor": [
+   9,
+   6
+  ],
+  "flat": true,
+  "splash": {
+   "amount": 30,
+   "extents": [
+    12,
+    3
+   ],
+   "offset": [
+    8,
+    0
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/splash.png"
+  ]
+ },
  "elysia/topiary": {
   "anchor": [
    15,
