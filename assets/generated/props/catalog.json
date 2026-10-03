@@ -844,19 +844,8 @@
     0,
     -9
    ],
-   "radius": 20
+   "radius": 22
   },
-  "lights": [
-   {
-    "color": "#62e6f2",
-    "energy": 0.6,
-    "offset": [
-     0,
-     -8
-    ],
-    "range": 40
-   }
-  ],
   "textures": [
    "res://assets/generated/props/wald/mushrooms_cyan_0.png",
    "res://assets/generated/props/wald/mushrooms_cyan_1.png"
@@ -877,19 +866,8 @@
     0,
     -9
    ],
-   "radius": 20
+   "radius": 22
   },
-  "lights": [
-   {
-    "color": "#f278d8",
-    "energy": 0.6,
-    "offset": [
-     0,
-     -8
-    ],
-    "range": 40
-   }
-  ],
   "textures": [
    "res://assets/generated/props/wald/mushrooms_pink_0.png",
    "res://assets/generated/props/wald/mushrooms_pink_1.png"
@@ -910,19 +888,8 @@
     0,
     -9
    ],
-   "radius": 20
+   "radius": 22
   },
-  "lights": [
-   {
-    "color": "#a07cff",
-    "energy": 0.6,
-    "offset": [
-     0,
-     -8
-    ],
-    "range": 40
-   }
-  ],
   "textures": [
    "res://assets/generated/props/wald/mushrooms_violet_0.png",
    "res://assets/generated/props/wald/mushrooms_violet_1.png"

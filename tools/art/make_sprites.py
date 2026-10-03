@@ -980,8 +980,7 @@ def build():
     for cap, color in (("cap_cyan", "#62e6f2"), ("cap_violet", "#a07cff"), ("cap_pink", "#f278d8")):
         ms = [mushrooms(210 + k + len(cap), cap) for k in range(2)]
         save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
-             glow={"offset": [0, -9], "color": color, "radius": 20},
-             lights=[{"offset": [0, -8], "color": color, "energy": 0.6, "range": 40}])
+             glow={"offset": [0, -9], "color": color, "radius": 22})
     cc = [crystal_cluster(220 + k) for k in range(2)]
     save("wald", "crystals", [x[0] for x in cc], (15, 27), emissive=[x[1] for x in cc],
          shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4],

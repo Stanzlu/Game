@@ -149,6 +149,7 @@ def elysia():
         "b": [(31, 33)],
         "F": [(x, 33) for x in range(26, 38) if x not in (31, 32)],
         "x": [(42, 11)],
+        "E": [(13, 26), (47, 25), (24, 4)],
         "@": [(10, 26)],
     }
     for c, pts in props.items():

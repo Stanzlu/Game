@@ -44,6 +44,9 @@ void fragment() {
 				} else if (phase > 0.86) {
 					c.rgb *= 0.86;
 				}
+			} else if (m.b < 0.25 && m.g < 0.08 && fract(t * 0.5 + hash(floor(px / 3.0)) ) < 0.18) {
+				// foam lapping at the shore, a few pixels at a time
+				c.rgb = mix(c.rgb, glint_color.rgb, 0.5);
 			} else if (wave > 0.94 && m.b < 0.25) {
 				c.rgb = mix(c.rgb, glint_color.rgb, glint_strength * (0.35 + 0.65 * m.g));
 			}

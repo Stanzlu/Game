@@ -407,7 +407,11 @@ class Baker:
         depth = pa.box_blur(wt.astype(np.float32), 9)
         deep = np.clip((depth - 0.5) * 2.0, 0, 1)
         v = 0.8 - 0.68 * deep + 0.05 * centered(self.noise(12))
-        self.put(wt, "water", v, contrast=2.0)
+        # pebbles on the bed show through where the water is shallow
+        f1, f2, _ = pa.worley(self.h, self.w, 6, self.rng, 0.9)
+        bed = np.clip(1.0 - deep * 1.6, 0, 1)
+        v = v + np.where(f2 - f1 < 1.0, -0.12, 0.05) * bed
+        self.put(wt, "water", v, contrast=2.6)
         planks = getattr(self, "planks", np.zeros_like(wt))
         land = ~wt & ~is_["void"] & ~planks & ~is_["fall"]
         bank = within_below(land, 4) & wt

@@ -45,6 +45,22 @@ DESIGNS = {
         "outfit": "jacket",
         "bag": "satchel",
     },
+    # Elysians: flawless white and gold, all a little too alike (Game Bible §9).
+    "elysian": {
+        "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
+        "hair": ramp("#6a4210", "#a8701c", "#d8a832", "#f4d46a", "#fff2b8"),
+        "top": ramp("#7c7096", "#b8b0cc", "#e8e4f0", "#ffffff"),
+        "inner": ramp("#8a6a18", "#c4982a", "#ecc84e", "#fff0a0"),
+        "belt": ramp("#6a4c14", "#a87c22", "#dcb040", "#fbe48a"),
+        "pants": ramp("#6e6688", "#a49cbc", "#d6d0e4", "#f6f4fb"),
+        "boots": ramp("#5a4214", "#94701e", "#c89c34", "#ecd070"),
+        "eye": pa.hex_rgb("#2a1f48"),
+        "blush": pa.hex_rgb("#f0a090"),
+        "outline": pa.hex_rgb("#3a2e58"),
+        "hair_style": "tousled",
+        "outfit": "cape",
+        "bag": "none",
+    },
     # Mira: practical traveler in the valley. Mustard rain cape, auburn ponytail, backpack.
     "mira": {
         "skin": ramp("#7a4438", "#b56f55", "#dea27e", "#f6cfae"),

@@ -34,12 +34,14 @@ w = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fence"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash"}}
+; Elysianer laufen exakt gleich: gleiche Route, gleiches Tempo, gleicher Takt (Game Bible §9).
+E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh.....hhhhhhhhhhhhhhhh....hhhhhhhhhhhhhhhhhh..hhhhhh
 hh...................hhh.................hhhh~~..............hhh
 hh....ff.K............,.g....................~~.......f.......hh
-hh...fffffff..,,,,U,,,,,...P............g....~~T....fffffKff..hh
+hh...fffffff..,,,,U,,,,,E..P............g....~~T....fffffKff..hh
 hh..Tfffffff,,,,,,,,,,,.....................~~~.....ffffffff..hh
 hh..ffgfffff,,,.....Y..........o............~~..o....fgffff...hh
 hh...ff....,,,..o..........................~~.........ff....U.hh
@@ -60,8 +62,8 @@ hh...U.....................IMMMMMMMMMI.......~~...............hh
 hh.........................MMMMMCMMMMM.......~~...............hh
 hh....................,o,,,MMMMMMMMMMM,,,o,,,==,,.............hh
 hh..............,,,,,,,,,,,,...,,,...,,,,,,,,==,,,,,,,,,,,,,,,hh
-hh.,,,,,,,,,,,,,,o,,,,,,,,...g.,,,.g......,,,==,,,,,,,,,,,,,,,hh
-hh,,,,,,,,@,,,,,,,,,..........O,,,O..........~~.....Y,,,,,,,,,hh
+hh.,,,,,,,,,,,,,,o,,,,,,,,...g.,,,.g......,,,==E,,,,,,,,,,,,,,hh
+hh,,,,,,,,@,,E,,,,,,..........O,,,O..........~~.....Y,,,,,,,,,hh
 hh.,,,,,,,,,,,..........Y....o.,,,.o.........~~~.....fffffff..hh
 hh...ffffffffK.................,,,............~~.....ffgfff...hh
 hh....fffffff.................O,,,O.......P...~~~.......ff.P..hh
