@@ -50,6 +50,16 @@ EXTRA = {
         "stem": ramp("#101b14", "#1a2b1f", "#27402c", "#3a5739"),
         "hoop": ramp("#121316", "#22252b", "#353942", "#4a4f59"),
     },
+    "wald": {
+        "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
+        "stem": ramp("#0b1a1a", "#12302c", "#1d4a3c", "#2e6650"),
+        "fern": ramp("#06140f", "#0c2419", "#143826", "#1f5034", "#2f6c46"),
+        "cap_cyan": ramp("#0e4656", "#18869c", "#38c4d6", "#8eeef4", "#e2ffff"),
+        "cap_violet": ramp("#2a1458", "#4e2a9a", "#8058d8", "#b896f6", "#ece0ff"),
+        "cap_pink": ramp("#4a1040", "#8a2478", "#cc4cb4", "#f490e0", "#ffd8f6"),
+        "moss": ramp("#0b1d18", "#123026", "#1c4636", "#2a5e48"),
+        "stalk": ramp("#3a3448", "#6a6278", "#a49cb0", "#dcd6e4"),
+    },
 }
 
 CATALOG = {}
@@ -120,16 +130,28 @@ class Canvas:
         self.a[ty[ok], tx[ok]] = True
 
 
-def save(style, name, canvases, anchor, **entry):
-    """Writes one or more variants and registers the catalog entry."""
+def save(style, name, canvases, anchor, emissive=None, **entry):
+    """Writes one or more variants and registers the catalog entry.
+
+    `emissive` (optional, one canvas per variant) holds only the pixels that glow; the game
+    draws them above the night tint so they stay bright."""
     if not isinstance(canvases, list):
         canvases = [canvases]
-    textures = []
+    if emissive is not None and not isinstance(emissive, list):
+        emissive = [emissive]
+    textures, emit = [], []
     for i, c in enumerate(canvases):
-        file_name = "%s%s.png" % (name, "" if len(canvases) == 1 else "_%d" % i)
+        suffix = "" if len(canvases) == 1 else "_%d" % i
+        file_name = "%s%s.png" % (name, suffix)
         pa.save_rgba(os.path.join(OUT, style, file_name), c.rgba())
         textures.append("%s/%s/%s" % (RES, style, file_name))
+        if emissive is not None:
+            emit_name = "%s_emit%s.png" % (name, suffix)
+            pa.save_rgba(os.path.join(OUT, style, emit_name), emissive[i].rgba())
+            emit.append("%s/%s/%s" % (RES, style, emit_name))
     data = {"textures": textures, "anchor": list(anchor)}
+    if emit:
+        data["emissive"] = emit
     data.update({k: v for k, v in entry.items() if v is not None})
     CATALOG["%s/%s" % (style, name)] = data
 
@@ -694,6 +716,159 @@ def cloud(seed, w, h):
     return c
 
 
+# --------------------------------------------------------------------------- wald (night forest)
+def emissive_of(c, mask):
+    """Canvas with only the masked (glowing) pixels of c."""
+    e = Canvas(c.w, c.h)
+    e.rgb[mask] = c.rgb[mask]
+    e.a = mask & c.a
+    return e
+
+
+def forest_tree(seed, glow=False):
+    """Old forest tree: thick dark trunk with roots, wide canopy. Glowing variant has
+    bioluminescent leaf clusters (ref: blue coral trees at night)."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    W, H = 88, 112
+    c = Canvas(W, H)
+    cx, base = 44, 108
+    bark = st["bark"]
+    for side in (-1, 1):
+        root = limb_mask(c, cx + side * 3, base - 10, cx + side * 15, base - 1, 5)
+        c.paint(root, bark, 0.15 + 0.6 * c.cylinder(cx - 18, cx + 18), contrast=3.0, dither=False)
+    trunk_m = c.rect(cx - 7, 46, cx + 7, base - 2) | c.ellipse(cx, base - 4, 10, 4)
+    grain = pa.value_noise(H, W, (8, 1), rng)
+    c.paint(trunk_m, bark, 0.12 + 0.72 * c.cylinder(cx - 8, cx + 8) + 0.15 * (grain - 0.5), contrast=3.0,
+            dither=False)
+    moss = trunk_m & (pa.value_noise(H, W, 4, rng) > 0.7) & (c.xx < cx)
+    c.paint(moss, ex["moss"], 0.6, dither=False)
+    blobs = crown_blobs(rng, cx, 38, 38, 26, 16, 11, 16)
+    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(4.0, 6.0))
+    leaves = st["foliage_blue"] if glow else st["foliage"]
+    c.paint(alpha, leaves, value * (0.9 if glow else 1.0), contrast=3.0, dither=False)
+    emit = None
+    if glow:
+        lit = alpha & (value > 0.6)
+        tips = alpha & (pa.value_noise(H, W, 3, rng) > 0.78)
+        c.paint(tips, leaves, 0.95, dither=False)
+        emit_mask = lit | tips
+    c.outline(st["outline"])
+    if glow:
+        emit = emissive_of(c, emit_mask)
+    return c, emit
+
+
+def limb_mask(c, x0, y0, x1, y1, width):
+    m = np.zeros((c.h, c.w), bool)
+    steps = max(int(abs(y1 - y0)), int(abs(x1 - x0)), 1)
+    for i in range(steps + 1):
+        t = i / steps
+        x, y = x0 + (x1 - x0) * t, int(round(y0 + (y1 - y0) * t))
+        w = width * (1 - 0.5 * t)
+        xa = int(round(x - w / 2))
+        if 0 <= y < c.h:
+            m[y, max(xa, 0):max(xa + int(round(w)), 0)] = True
+    return m
+
+
+def mushrooms(seed, cap):
+    rng = np.random.default_rng(seed)
+    ex = EXTRA["wald"]
+    c = Canvas(24, 20)
+    caps = np.zeros((20, 24), bool)
+    spots = [(12, 9, 5.5, 3.2), (6, 13, 3.5, 2.2), (18, 14, 3.2, 2.0), (9, 16, 2.4, 1.5)]
+    for x, y, rx, ry in spots[:rng.integers(3, 5)]:
+        stem = c.rect(x - 1, y, x + 1, 19)
+        c.paint(stem, ex["stalk"], np.where(c.xx < x, 0.85, 0.5), dither=False)
+        m = c.ellipse(x, y, rx, ry) & (c.yy <= y + 0.5)
+        c.paint(m, ex[cap], 0.35 + 0.65 * c.sphere(x - 1, y - 1, rx + 1, ry + 1), dither=False)
+        dots = m & (pa.value_noise(20, 24, 1.5, rng) > 0.78)
+        c.paint(dots, ex[cap], 1.0, dither=False)
+        caps |= m
+    c.outline(pa.STYLES["wald"]["outline"])
+    return c, emissive_of(c, caps)
+
+
+def crystal_cluster(seed):
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES["wald"]
+    c = Canvas(30, 30)
+    rock = c.ellipse(15, 24, 13, 6)
+    c.paint(rock, st["rock"], 0.2 + 0.6 * c.sphere(11, 22, 14, 7), dither=False)
+    glow = np.zeros((30, 30), bool)
+    for k in range(rng.integers(3, 6)):
+        bx = rng.uniform(7, 23)
+        h = rng.uniform(9, 19)
+        w = rng.uniform(2.5, 4.0)
+        lean = rng.uniform(-0.35, 0.35)
+        yb = 24
+        xs = c.xx + 0.5 - (bx + lean * (yb - c.yy))
+        body = (np.abs(xs) <= w * np.clip((c.yy - (yb - h)) / 3.0, 0, 1)) & (c.yy <= yb) & (c.yy >= yb - h)
+        face = np.where(xs < 0, 0.85, 0.45) + np.where(np.abs(xs) < 0.6, 0.15, 0)
+        c.paint(body, st["crystal"], face, dither=False)
+        glow |= body
+    c.outline(st["outline"])
+    return c, emissive_of(c, glow)
+
+
+def fern(seed):
+    rng = np.random.default_rng(seed)
+    ex = EXTRA["wald"]
+    c = Canvas(26, 18)
+    for k in range(7):
+        a = np.pi * (0.15 + 0.7 * k / 6) + rng.uniform(-0.1, 0.1)
+        length = rng.uniform(9, 13)
+        for t in np.linspace(0, 1, 26):
+            x = 13 - np.cos(a) * length * t
+            y = 17 - np.sin(a) * length * t + (t * t) * 4
+            leaf = 2.2 * (1 - t) + 0.6
+            m = c.ellipse(x, y, leaf, 0.9)
+            c.paint(m, ex["fern"], 0.35 + 0.55 * t, dither=False)
+    c.outline(pa.STYLES["wald"]["outline"])
+    return c
+
+
+def fallen_log(seed):
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    c = Canvas(48, 18)
+    body = c.rect(4, 4, 44, 15)
+    v = 0.15 + 0.75 * (1 - np.abs((c.yy - 9.5) / 6.0)) * np.where(c.yy < 9, 1.0, 0.7)
+    c.paint(body, st["bark"], v + 0.1 * (pa.value_noise(18, 48, (1, 6), rng) - 0.5), dither=False)
+    end = c.ellipse(44, 9.5, 3.5, 5.5)
+    rings = (np.hypot(c.xx + 0.5 - 44, (c.yy + 0.5 - 9.5) * 0.65).astype(int) % 2) == 0
+    c.paint(end, st["wood"], np.where(rings, 0.6, 0.45), dither=False)
+    moss = body & (c.yy < 8) & (pa.value_noise(18, 48, 3, rng) > 0.45)
+    c.paint(moss, ex["moss"], 0.7, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def light_beam(w=96, h=220):
+    """Soft vertical light shaft for a clearing (additive). Stripes keep it pixel-like."""
+    rng = np.random.default_rng(5)
+    c = Canvas(w, h)
+    t = c.yy / h
+    half = (w * 0.26) + t * (w * 0.2)
+    x = np.abs(c.xx + 0.5 - w / 2)
+    inside = x <= half
+    stripes = np.zeros(w)
+    for _ in range(9):
+        cx = rng.uniform(w * 0.2, w * 0.8)
+        sw = rng.uniform(2, 7)
+        stripes += np.exp(-((np.arange(w) - cx) / sw) ** 2) * rng.uniform(0.4, 1.0)
+    a = np.clip(stripes[None, :] * 0.55 + 0.25, 0, 1) * np.clip(1 - x / np.maximum(half, 1), 0, 1) ** 0.6
+    a *= np.clip(t * 4, 0, 1) * np.clip((1 - t) * 3, 0, 1)
+    a = np.floor(a * 5) / 5  # banded alpha: reads as pixel art, not a smooth gradient
+    col = pa.hex_rgb("#bff6e6")
+    c.rgb[:] = col
+    c.a = inside & (a > 0)
+    rgba = c.rgba()
+    rgba[..., 3] = np.where(c.a, a * 150, 0)
+    return rgba
+
+
 def particles():
     out = os.path.join(OUT, "fx")
     os.makedirs(out, exist_ok=True)
@@ -720,13 +895,14 @@ def particles():
     px("puff", [".aaa.", "abbba", "abcba", "abbba", ".aaa."],
        {"a": ("#c8ccd4", 110), "b": ("#d8dce2", 170), "c": ("#e8ebef", 220)})
     px("mote", ["a"], {"a": ("#ffffff", 200)})
+    px("firefly", [".a.", "aba", ".a."], {"a": ("#ffd36a", 120), "b": ("#fff6c8", 255)})
     px("shadow_small", [".aaaaaaaa.", "aabbbbbbaa", "abbbbbbbba", "aabbbbbbaa", ".aaaaaaaa."],
        {"a": ("#1c1630", 50), "b": ("#1c1630", 95)})
 
 
 # --------------------------------------------------------------------------- catalog
 def build():
-    for style in ("elysia", "tal"):
+    for style in ("elysia", "tal", "wald"):
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
     # elysia
     tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[22, 7])
@@ -793,10 +969,42 @@ def build():
     save("tal", "bench", bench("tal"), (10, 18))
     save("tal", "splash", foam(161, 50, 12, "tal"), (9, 6), flat=True,
          splash={"extents": [20, 3], "offset": [16, 0], "amount": 34})
+    # wald
+    trees = [forest_tree(200 + i, glow=(i % 2 == 1)) for i in range(4)]
+    save("wald", "tree", [t[0] for t in trees if t[1] is None], (44, 106),
+         shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9])
+    glow_trees = [t for t in trees if t[1] is not None]
+    save("wald", "glow_tree", [t[0] for t in glow_trees], (44, 106), emissive=[t[1] for t in glow_trees],
+         shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9],
+         lights=[{"offset": [0, -70], "color": "#5fb8ff", "energy": 0.55, "range": 90}])
+    for cap, color in (("cap_cyan", "#62e6f2"), ("cap_violet", "#a07cff"), ("cap_pink", "#f278d8")):
+        ms = [mushrooms(210 + k + len(cap), cap) for k in range(2)]
+        save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
+             glow={"offset": [0, -9], "color": color, "radius": 20},
+             lights=[{"offset": [0, -8], "color": color, "energy": 0.6, "range": 40}])
+    cc = [crystal_cluster(220 + k) for k in range(2)]
+    save("wald", "crystals", [x[0] for x in cc], (15, 27), emissive=[x[1] for x in cc],
+         shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4],
+         glow={"offset": [0, -12], "color": "#f070e0", "radius": 30},
+         lights=[{"offset": [0, -12], "color": "#e060d8", "energy": 0.8, "range": 64}])
+    save("wald", "fern", [fern(230 + k) for k in range(3)], (13, 17), sway=1.5,
+         surface="tall_grass", rustle=True)
+    save("wald", "log", fallen_log(240), (24, 15), shape={"rect": [40, 8], "offset": [0, -5]}, shadow=[22, 4])
+    save("wald", "rock", [rock("wald", 250), rock("wald", 251, 22, 18)], (13, 16),
+         shape={"rect": [18, 8], "offset": [0, -3]}, shadow=[12, 4])
+    save("wald", "pine", [pine("wald", 260), pine("wald", 261)], (20, 68),
+         shape={"circle": 5, "offset": [0, -2]}, sway=0.6, shadow=[16, 5])
+    save("wald", "splash", foam(262, 50, 12, "wald"), (9, 6), flat=True,
+         splash={"extents": [20, 3], "offset": [16, 0], "amount": 30})
+    beam = light_beam()
+    pa.save_rgba(os.path.join(OUT, "wald", "light_beam.png"), beam)
+    CATALOG["wald/light_beam"] = {"textures": [RES + "/wald/light_beam.png"], "anchor": [48, 200],
+                                  "beam": True, "lights": [{"offset": [0, -10], "color": "#9ff2d8",
+                                                            "energy": 1.1, "range": 120}]}
     particles()
     # remove sprites (and their .import files) that are no longer part of the catalog
-    used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"]}
-    for style in ("elysia", "tal"):
+    used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
+    for style in ("elysia", "tal", "wald"):
         for name in sorted(os.listdir(os.path.join(OUT, style))):
             if name.endswith(".png") and "%s/%s" % (style, name) not in used:
                 for stale in (name, name + ".import"):

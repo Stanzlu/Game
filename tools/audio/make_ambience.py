@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Procedural ambience loops for the look prototype (ADR-017): rain, garden, water.
+"""Procedural ambience loops for the look prototype (ADR-017): rain, garden, water, night forest.
 
 Noise beds are synthesized in the frequency domain, so every loop is periodic and repeats
 without a seam. Events (drops, bird chirps) wrap around the loop end for the same reason.
@@ -126,6 +126,33 @@ def water(seconds=8, seed=3):
     return out
 
 
+def forest_night(seconds=16, seed=4):
+    """Crickets in pulsed trills, a low wind bed, a distant owl, a soft stream."""
+    rng = np.random.default_rng(seed)
+    n = RATE * seconds
+    t = np.arange(n) / RATE
+    wind = shaped_noise(n, rng, 90, 900, tilt=-1.0) * 0.12 * (0.6 + 0.4 * lfo(n, 2, 0.7))
+    stream = shaped_noise(n, rng, 600, 5000, tilt=-0.4) * 0.05
+    out = wind + stream
+    for k in range(3):
+        f = rng.uniform(3900, 4800)
+        rate = rng.uniform(14, 22)
+        # chirp groups: trill on for ~0.4 s, off for ~0.6 s, per cricket; integer cycles keep the loop seamless
+        group = (np.sin(2 * np.pi * round(seconds * rng.uniform(0.9, 1.3)) * t / seconds + k) > 0.1)
+        pulse = (np.sin(2 * np.pi * rate * t) > 0.3).astype(np.float64)
+        out += np.sin(2 * np.pi * f * t) * pulse * group * rng.uniform(0.04, 0.07)
+    for _ in range(2):
+        length = int(RATE * 0.9)
+        tt = np.arange(length) / RATE
+        hoot = np.zeros(length)
+        for start, dur, f0 in ((0.0, 0.32, 380), (0.45, 0.42, 340)):
+            seg = (tt >= start) & (tt < start + dur)
+            env = np.sin(np.pi * np.clip((tt - start) / dur, 0, 1)) ** 2
+            hoot += np.sin(2 * np.pi * (f0 + 6 * np.sin(2 * np.pi * 5 * tt)) * tt) * env * seg
+        add_wrapped(out, rng.integers(0, n), hoot * 0.09)
+    return out
+
+
 def write(name, signal):
     os.makedirs(OUT, exist_ok=True)
     signal = signal / (np.max(np.abs(signal)) + 1e-9) * 0.8
@@ -147,3 +174,4 @@ if __name__ == "__main__":
     write("rain_loop", rain())
     write("garden_loop", garden())
     write("water_loop", water())
+    write("forest_night_loop", forest_night())

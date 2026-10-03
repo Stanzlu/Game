@@ -446,6 +446,27 @@ class Baker:
         self.idx[lip] = np.minimum(self.idx[lip] + 1, 4)
         self.idx[:] = np.maximum(self.idx, 0)
 
+    def _glow_meadow(self, g):
+        """Night clearing: soft moss with scattered small glowing flowers (no bushes)."""
+        density = pa.box_blur(up(self.meadow_cells), 6) + centered(self.noise(6)) * 0.3
+        area = g & (density > 0.45)
+        moss = area & (self.noise(5, 2) > 0.45)
+        self.idx[moss] = np.minimum(self.idx[moss] + 1, 4)
+        fl = self.style["flowers"]
+        n = int(self.meadow_cells.sum() * T * T / 22)
+        ys = self.rng.integers(2, self.h - 2, n)
+        xs = self.rng.integers(2, self.w - 2, n)
+        for y, x in zip(ys, xs):
+            if not area[y, x]:
+                continue
+            fid = self.ramp_ids["flower%d" % self.rng.integers(len(fl))]
+            if self.rng.random() < 0.4:
+                for dy, dx, i in ((0, 0, 2), (-1, 0, 1), (0, -1, 1), (0, 1, 1), (1, 0, 0)):
+                    self.rid[y + dy, x + dx], self.idx[y + dy, x + dx] = fid, i
+            else:
+                self.rid[y, x], self.idx[y, x] = fid, 2
+                self.idx[y + 1, x] = max(self.idx[y + 1, x] - 1, 0)
+
     def _grass_clumps(self, g):
         """Leafy bright grass clumps in patches (lush detail like hand-made tilesets)."""
         density = self.noise(26, 2)
@@ -457,7 +478,8 @@ class Baker:
                 x = int(cx + self.rng.uniform(-4, 4))
                 if not area[y, x] or self.meadow_cells[y // T, x // T] > 0:
                     continue
-                if density[y, x] < 0.58 or self.rng.random() < 0.35:
+                sparse = 0.75 if self.style_name == "wald" else 0.35
+                if density[y, x] < 0.58 or self.rng.random() < sparse:
                     continue
                 for _ in range(self.rng.integers(2, 6)):
                     blobs.append((y + self.rng.uniform(-3, 3), x + self.rng.uniform(-5, 5),
@@ -476,6 +498,9 @@ class Baker:
 
     def _meadow(self, g):
         if self.meadow_cells.sum() == 0:
+            return
+        if self.style_name == "wald":
+            self._glow_meadow(g)
             return
         density = pa.box_blur(up(self.meadow_cells), 6) + centered(self.noise(6)) * 0.3
         area = g & (density > 0.5)

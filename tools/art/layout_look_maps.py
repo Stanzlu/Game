@@ -6,7 +6,7 @@ Draws the [map] block of content/maps/look_elysia.txt and look_tal.txt from shap
 The map files stay the source of truth and can be edited directly; running this with
 --write replaces their [map] block, so hand edits inside it are lost.
 
-Usage: python3 tools/art/layout_look_maps.py elysia|tal [--write]
+Usage: python3 tools/art/layout_look_maps.py elysia|tal|wald [--write]
 Afterwards re-run tools/art/bake_ground.py for the map.
 """
 import math
@@ -221,6 +221,68 @@ def tal():
     return g
 
 
+def wald():
+    """Forest at night: a clearing with a light beam, a rock ledge with a waterfall and
+    crystals, a stream with a log bridge, glowing trees and mushrooms."""
+    w, h = 56, 38
+    g = Grid(w, h)
+    # thick forest border with a wavy inner edge
+    for x in range(w):
+        top = 3 + round(1.2 * math.sin(x / 3.7) + 0.7 * math.sin(x / 1.9 + 1))
+        bottom = h - 3 - round(1.0 * math.sin(x / 4.1 + 2) + 0.6 * math.sin(x / 2.2))
+        for y in range(0, max(top, 2)):
+            g.set(x, y, "h")
+        for y in range(bottom, h):
+            g.set(x, y, "h")
+    for y in range(h):
+        left = 3 + round(1.0 * math.sin(y / 3.3) + 0.5 * math.sin(y / 1.7))
+        right = w - 4 - round(1.0 * math.sin(y / 2.9 + 1))
+        for x in range(0, left):
+            g.set(x, y, "h")
+        for x in range(right, w):
+            g.set(x, y, "h")
+    # rock ledge in the north-east, stream falls over it into a pool
+    for x in range(30, w - 3):
+        top = 9 - (1 if math.sin(x / 2.5) > 0.2 else 0)
+        for y in range(top, 11):
+            g.set(x, y, "^", only=".")
+    g.path([(41, 1), (41.5, 4), (40.5, 7.5)], 2.2, "~", only=".")
+    for y in range(7, 11):
+        for x in (39, 40, 41):
+            if g.get(x, y) == "^":
+                g.set(x, y, "v")
+    g.ellipse(40.5, 13.5, 3.6, 2.3, "~", only=".", wobble=0.3, seed=2)
+    g.path([(40, 14), (37, 18), (33, 22.5), (31, 27), (29.5, 32), (29, 38)], 2.3, "~", only=".")
+    # the clearing: soft meadow with glowing flowers
+    g.ellipse(17, 19, 7.5, 5.5, "f", only=".", wobble=0.25, seed=4)
+    # paths
+    g.path([(3, 27), (8, 26), (12, 23.5)], 2.4, ",", only=".f")
+    g.path([(23, 21), (28, 22.5), (36, 23), (44, 22), (52, 21)], 2.4, ",", only=".f")
+    for y in (22, 23, 24):
+        for x in range(30, 35):
+            g.set(x, y, "=")
+    props = {
+        "Z": [(17, 19)],
+        "G": [(9, 12), (25, 13), (11, 29), (46, 28), (50, 14), (22, 31)],
+        "T": [(6, 18), (27, 17), (36, 29), (16, 9), (44, 17)],
+        "P": [(5, 7), (49, 6), (8, 33), (52, 32), (34, 14)],
+        "c": [(12, 15), (22, 24), (10, 22), (44, 25), (38, 31), (13, 30)],
+        "u": [(23, 15), (11, 19), (47, 30), (26, 27), (50, 17)],
+        "k": [(20, 25), (24, 18), (8, 13), (37, 26), (45, 15)],
+        "X": [(32, 12), (45, 11), (48, 12), (36, 11), (27, 30)],
+        "n": [(7, 21), (14, 26), (26, 20), (33, 18), (41, 27), (19, 13), (30, 15), (5, 25), (48, 24),
+              (16, 33), (39, 34), (24, 34)],
+        "l": [(19, 28)],
+        "R": [(29, 26), (42, 19), (35, 33)],
+        "x": [(39, 11)],
+        "@": [(5, 27)],
+    }
+    for c, pts in props.items():
+        for x, y in pts:
+            g.set(x, y, c)
+    return g
+
+
 def write(which, text):
     path = os.path.join(ROOT, "content", "maps", "look_%s.txt" % which)
     with open(path, encoding="utf-8") as f:
@@ -233,9 +295,10 @@ def write(which, text):
 
 if __name__ == "__main__":
     which = sys.argv[1]
-    if which not in ("elysia", "tal"):
-        sys.exit("usage: layout_look_maps.py elysia|tal [--write]")
-    grid = elysia() if which == "elysia" else tal()
+    makers = {"elysia": elysia, "tal": tal, "wald": wald}
+    if which not in makers:
+        sys.exit("usage: layout_look_maps.py elysia|tal|wald [--write]")
+    grid = makers[which]()
     if "--write" in sys.argv:
         write(which, grid.text())
     else:

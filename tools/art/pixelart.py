@@ -45,6 +45,29 @@ STYLES = {
                     ramp("#3b55c4", "#6f9ef5", "#cfe2ff"), ramp("#a9a6cf", "#efeefe", "#ffffff"),
                     ramp("#7b3cc0", "#b07cf0", "#e7d3ff")],
     },
+    # Wald: forest at night. Near-black teal ground, violet rock, bioluminescent blues, magenta
+    # crystals, warm firefly gold. Light comes from the glowing things, not from the sky.
+    "wald": {
+        "grass": ramp("#0a171c", "#0f2428", "#153330", "#1e453a", "#2c5a45"),
+        "path": ramp("#17121d", "#241b28", "#352834", "#4a3a44", "#645058"),
+        "dirt": ramp("#17121d", "#241b28", "#352834", "#4a3a44", "#645058"),
+        "stone": ramp("#141527", "#202239", "#30334d", "#464a66", "#626785"),
+        "water": ramp("#08112a", "#0d1b42", "#142d60", "#1f4a88", "#4b86c4"),
+        "wood": ramp("#1b1216", "#30201d", "#493126", "#674632", "#8a6243"),
+        "rock": ramp("#151226", "#221d3a", "#322b50", "#463d69", "#605688"),
+        "mud": ramp("#140f18", "#201822", "#30242e", "#43343e", "#5b4852"),
+        "foliage": ramp("#071118", "#0b1b25", "#112935", "#183a46", "#225058", "#31686a"),
+        "foliage_blue": ramp("#0c1c38", "#14355e", "#1f5389", "#3880b6", "#6bb5e0", "#b8e8fc"),
+        "foliage_purple": ramp("#120d24", "#1d1539", "#2a1f52", "#3b2c6e", "#52408c", "#7262ab"),
+        "glow_cyan": ramp("#0e4656", "#18869c", "#38c4d6", "#8eeef4", "#e2ffff"),
+        "crystal": ramp("#3e0e46", "#801c84", "#c43cbe", "#f07ae4", "#ffd0fb"),
+        "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
+        "cliff": ramp("#110e1c", "#1a152a", "#261e3a", "#33294e", "#443764", "#5a4a80"),
+        "outline": hex_rgb("#05060c"),
+        "flowers": [ramp("#1c3a7a", "#3a6cc8", "#9cc8ff"), ramp("#4a2a8a", "#8a5ad8", "#dcc0ff"),
+                    ramp("#145a6a", "#2aa8b8", "#a8f2f6"), ramp("#6a2a6a", "#b44cb0", "#f2b0ee"),
+                    ramp("#3a4a7a", "#6a80b8", "#c6d4f2")],
+    },
     # Tal: night after rain. Deep blue and violet shadows, teal greens, reddish earth.
     "tal": {
         "grass": ramp("#101c27", "#16302f", "#1f4339", "#2d5945", "#457252"),
