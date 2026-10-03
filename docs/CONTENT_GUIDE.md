@@ -6,7 +6,9 @@ Regeln für alles, was Spielerinnen und Spieler lesen, hören oder anklicken. Ve
 ## IDs
 
 - Stabile IDs in `snake_case`, nie Anzeigenamen in Logik: `mira`, `tess`, `antreiber`, `item_stone`, `curiosity_tiny_spoon`.
-- Story-Flags mit Namensraum: `elysia.mirror_noticed`, `valley.mira_first_no`, `house.fire_lit`.
+- Story-Flags mit Namensraum: `elysia.mirror_noticed`, `valley.mira_first_no`, `house.fire_lit`. Bereiche bisher: `elysia`, `valley`, `forest`, `house`, `encounter`, `sandbox` (nur Prototyp).
+- Figuren mit Beziehung: `mira`, `tess`, `orin`, `lio`. Erinnerungen und Orte in `snake_case` (`door_silence`, `valley_bridge`).
+- Szenen-Schlüssel (`core/scene_registry.gd`) stehen in Spielständen und werden nie umbenannt.
 - Quests: `main_<ort>_<thema>` bzw. `side_<thema>`, z. B. `main_elysia_butterflies`, `side_goat_roof`.
 - UI-Schlüssel in `content/locale/ui.csv`: `UPPER_SNAKE_CASE` mit Bereichspräfix (`BOOT_`, `MENU_`, `JOURNAL_`, `HUD_`).
 - Eine ID wird nie umbenannt, sobald Spielstände sie enthalten können. Stattdessen Migration (siehe `SAVE_FORMAT.md`).
@@ -16,12 +18,48 @@ Regeln für alles, was Spielerinnen und Spieler lesen, hören oder anklicken. Ve
 | Inhalt | Ort | Format |
 |--------|-----|--------|
 | UI-Texte | `content/locale/ui.csv` | Spalten `keys,de` |
+| Journaltexte | `content/locale/journal.csv` | Schlüssel aus Quest- und Stufen-ID |
+| Item-Texte | `content/locale/items.csv` | Schlüssel aus Item-ID |
 | Dialoge | `content/dialogue/<bereich>/<szene>.dialogue` | Dialogue Manager 4 |
-| Quests, Items, Kuriositäten | `content/quests/`, `content/items/` | `.tres` (ab Phase 2) |
+| Quests | `content/quests/<id>.tres` | `QuestDef` (ADR-019) |
+| Items, Kuriositäten | `content/items/<id>.tres` | `ItemDef` (ADR-019) |
 | Karten | `content/maps/<map>.txt` | Textkarte, siehe unten |
 
-Neue Dialogdateien werden ab Phase 2 bewusst in die Übersetzungsvorlagen eingetragen. Die automatische
-Eintragung des Dialogue Managers ist aus (ADR-006). Testdateien liegen nur unter `tests/`.
+Neue Dialogdateien werden bewusst in die Übersetzungsvorlagen eingetragen
+(`internationalization/locale/translations_pot_files`). Die automatische Eintragung des Dialogue
+Managers ist aus (ADR-006). Neue CSV-Dateien gehören in `internationalization/locale/translations`.
+Testdateien liegen nur unter `tests/`.
+
+`ContentValidator` prüft alles unter `content/` bei jedem Start eines Debug-Builds und in den Tests.
+Probleme erscheinen als `ERROR CONTENT: <datei>:<zeile>: <problem>` und lassen `tools/check.sh` scheitern.
+Im Spiel prüft das Debug-Panel (F4, „Inhalte prüfen“) auf Knopfdruck.
+
+## Quests und Items (ADR-019)
+
+```
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+[sub_resource type="Resource" id="Resource_find"]
+script = ExtResource("2_stage")
+id = "find_lever"
+objectives = PackedStringArray("look_around")
+next = PackedStringArray("done")
+[sub_resource type="Resource" id="Resource_done"]
+script = ExtResource("2_stage")
+id = "done"
+outcome = "done"
+[resource]
+script = ExtResource("1_quest")
+id = "side_sandbox_gate"
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_find"), SubResource("Resource_done")])
+```
+
+- Die erste Stufe ist der Start. `next` nennt die erlaubten Folgestufen, mehrere sind möglich (unterschiedliche Ausgänge). Eine Stufe ohne `next` beendet die Quest und braucht ein `outcome` (`done`, `missed`, …). Andere Ausgänge sind kein Scheitern.
+- Texte: `QUEST_<ID>_TITLE`, `QUEST_<ID>_<STUFE>` (Journaleintrag, wenn die Stufe erreicht ist) und `QUEST_<ID>_OBJ_<ZIEL>` in `journal.csv`, alles in Großbuchstaben. Das Journal zeigt alle erreichten Einträge in Reihenfolge, darunter die Ziele der aktuellen Stufe mit `[ ]` bzw. `[x]`.
+- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze. Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`.
+- `draft = true` markiert Platzhalter-Inhalt. Vor dem Playtest-Build darf keine Quest und kein Item mehr `draft` sein (`ContentValidator.drafts()`).
+- Dateiname = ID. Keine Marker im Slice außer bewusst in Elysia.
 
 ## Kartenformat (ADR-004, ADR-013)
 
@@ -42,6 +80,9 @@ G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "gar
 - Platzierungen: `@` Startpunkt · `"` hohes Gras · `o` Pfütze · `*` Busch · `B` Bank (2 Tiles breit).
 - Alle Zeilen gleich lang. Fehler erscheinen mit Datei, Zeile und Spalte im Log und lassen Tests scheitern.
 - Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
+- NPCs zum Ansprechen: `params.cue` und `params.dialogue`. Die Figur bleibt im Gespräch stehen und schaut den Spieler an.
+- Hebel mit Gedächtnis: `params.flag` (Zustand wird gespeichert) und `params.actions` (beim ersten Umlegen). Auslösezone `world/props/trigger_zone.tscn`: `params.flag` (feuert einmal), `params.actions`, optional `params.size` in Tiles.
+- Weltaktionen (`StateActions`, nichts anderes ist erlaubt): `{"flag": "bereich.name"}`, `{"quest": "<id>", "stage": "<stufe>", "start": true}`, `{"item": "<id>", "count": 1}`, `{"discover": "<ort>"}`. Ein Test prüft alle Aktionen in allen Karten.
 - Das Symbol ist immer das erste Zeichen der Zeile, deshalb kann auch `=` lokal definiert werden (`= = {...}`).
 
 ### Look-Karten (ADR-017)
@@ -67,20 +108,32 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 
 ```
 ~ valley_first_meeting
-Mira: Du stehst im Regen.
-- …
-	Mira: Gut. Dann stehen wir beide hier.
-- Ich weiß nicht, wo ich bin.
-	Mira: Im Tal. Hilft dir wahrscheinlich nicht.
+if not WorldState.has_flag("valley.mira_met")
+	Mira: Du stehst im Regen. [ID:valley_first_meeting_1]
+	- … [ID:valley_first_meeting_r1]
+		Mira: Gut. Dann stehen wir beide hier. [ID:valley_first_meeting_2]
+		do WorldState.add_memory("mira", "rain_silence")
+	- Ich weiß nicht, wo ich bin. [ID:valley_first_meeting_r2]
+		Mira: Im Tal. Hilft dir wahrscheinlich nicht. [ID:valley_first_meeting_3]
+	do WorldState.set_flag("valley.mira_met")
+else
+	Mira: Immer noch nass? [ID:valley_first_meeting_4]
 => END
 ```
 
 - Cues (`~ name`) in `snake_case`.
+- Jede Zeile und jede Antwort trägt eine statische ID `[ID:<bereich>_<cue>_<n>]`, Antworten `_r<n>`. IDs sind projektweit eindeutig und werden nie umbenannt; sie sind der Übersetzungs-Kontext (ADR-020).
 - „…“ ist eine vollwertige Antwort und bekommt eine eigene Reaktion.
-- Keine Fake Choices: Jede Antwortgruppe braucht mindestens eine wahrnehmbare Konsequenz (andere Reaktion, Zustand, spätere Erinnerung). Ab Phase 2 prüft ein Validator das.
-- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede Entwurfszeile markiert ist.
+- Keine Fake Choices: Jede Antwortgruppe braucht mindestens eine wahrnehmbare Konsequenz (andere Reaktion, Zustand, spätere Erinnerung). Der Validator meldet Gruppen, deren Antworten alle gleich weitergehen.
+- Zustand nur über `WorldState` (der Validator prüft Methode und IDs):
+  - Flags: `has_flag`, `set_flag`, `clear_flag` (immer mit Namensraum, z. B. `valley.mira_met`)
+  - Quests: `start_quest`, `advance_quest(id, stufe)`, `complete_objective`, `quest_stage`, `is_quest_active`, `is_quest_done`, `quest_outcome`
+  - Beziehungen: `relationship_state("mira") == "cautious"`, `set_relationship`, `add_memory`, `has_memory`
+  - Inventar und Haus: `has_item`, `add_item`, `remove_item`, `item_count`, `is_fire_lit`, `set_fire_lit`
+  - Sonstiges: `set_facet`, `has_facet`, `discover`, `is_real`, `add_xp`, `add_gold`
+- Während eines Dialogs wird nicht gespeichert; Quest-Schritte im Dialog lösen das Autosave direkt nach dem Ende aus.
+- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede gesprochene Zeile markiert ist, solange es keine finalen Texte gibt.
 - Neue Dialogdateien in `internationalization/locale/translations_pot_files` eintragen. Ein Test prüft das.
-- Statische Zeilen-IDs für Übersetzungen werden in Phase 2 eingeführt.
 
 ## Schreibregeln
 

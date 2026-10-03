@@ -22,7 +22,9 @@ Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md
 | `tools/export.sh windows\|macos\|linux` | Build nach `build/` |
 | `tools/smoke_export.sh` | exportierten Linux-Build starten und prüfen |
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
-| `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, mit Testoptionen |
+| `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
+| `tools/godot.sh -- --continue` | neuesten Spielstand laden |
+| `tools/godot.sh -- --profile=test1 --start=sandbox` | eigener Ordner für Spielstände und Einstellungen (Tests, Aufnahmen) |
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
 | `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
 | `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
@@ -42,7 +44,10 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
   blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal:
   `xattr -dr com.apple.quarantine REAL.app`
 - **Ausführliche Logs für Fehlerberichte:** mit dem Argument `-- --log-debug` starten.
-- **Steuerung:** siehe `docs/PLAYTEST_PHASE1.md`. Esc oder Start öffnet das Pause- und Testmenü.
+- **Steuerung:** siehe `docs/PLAYTEST_PHASE2.md`. Esc oder Start öffnet das Pause-Menü, J oder Back das
+  Journal.
+- **Spielstände und Einstellungen** liegen lokal unter `%APPDATA%\REAL\` (Windows) bzw.
+  `~/Library/Application Support/REAL/` (macOS), siehe `docs/SAVE_FORMAT.md`.
 
 ## Dokumentation
 
@@ -60,6 +65,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 | [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
+| [`docs/PLAYTEST_PHASE2.md`](docs/PLAYTEST_PHASE2.md) | Prüfliste für Phase 2 (Speichern, Dialoge, Journal, Menüs) |
 | [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md) | Look-Regeln, Generatoren, Fragen zur Look-Phase |
 
 ## Lizenzen

@@ -53,3 +53,14 @@ Ost-Lauf mit 88 px/s bei 60 fps, Aufnahme in 2× (1280×720), gemessen an der Ka
 Reproduzieren: `CAPTURE_FPS=60 tools/capture.sh "" captures/walk 300 --start=sandbox --camera=smooth --autopilot=res://tools/autopilot/walk_east.json`
 
 Hinweis: Die CPU-Last liegt weit unter dem Budget von 16,6 ms. Echte Frame-Zeiten auf GPU-Hardware misst du mit der Info-Anzeige (F3) im Build.
+
+## Phase 2 (2026-10-03)
+
+Gemessen im Cloud-Container.
+
+| Messung | Ergebnis |
+|---------|----------|
+| Speichern (Autosave, Prototyp-Zustand, inkl. Sicherung und Umbenennen) | 0,5–1,5 ms, Ziel < 100 ms erfüllt |
+| Inhalte prüfen beim Start (Debug-Builds: 1 Quest, 3 Items, 3 Dialoge) | ca. 30 ms |
+| Exportierter Linux-Build: „Fortsetzen“ bis „scene ready“ (Wald) | Teil des 240-Frame-Smoke-Runs, ohne Fehler |
+
