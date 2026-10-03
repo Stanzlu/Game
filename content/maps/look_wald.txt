@@ -5,6 +5,7 @@
 style = "wald"
 ground = "res://assets/generated/maps/look_wald_ground.png"
 water = "res://assets/generated/maps/look_wald_water.png"
+scatter = [{"sprite": "wald/grass_tuft", "on": ".", "density": 0.42, "spacing": 12}, {"sprite": "wald/fern", "on": ".", "density": 0.06, "spacing": 26}, {"sprite": "wald/leaves", "on": ".,", "density": 0.22, "spacing": 11}, {"sprite": "wald/twig", "on": ".", "density": 0.08, "spacing": 18}, {"sprite": "wald/small_mushrooms", "on": ".", "near": "GTPh", "radius": 1, "density": 0.18, "spacing": 14}, {"sprite": "wald/pebbles", "on": ".,", "near": "^~vX", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "wald/bush", "on": ".", "near": "h", "radius": 1, "density": 0.14, "spacing": 22}, {"sprite": "wald/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "wald/grass_tuft", "on": ",", "near": ".f", "radius": 1, "density": 0.25, "spacing": 10}]
 [legend]
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}

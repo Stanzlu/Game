@@ -24,6 +24,13 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 ## Number of drifting fog banks and their tint (alpha = density).
 @export var fog_banks := 0
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
+@export_group("Life")
+## Seconds between bird flocks on average (0 = none) and their tint (dark for bats).
+@export var bird_interval := 0.0
+@export var bird_tint := Color.WHITE
+@export var swimmers := 0
+@export_enum("koi.png", "fish_shadow.png") var swimmer_texture := "fish_shadow.png"
+@export var dragonflies := 0
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
 @export var ambience: AudioStream
@@ -76,6 +83,15 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.motes(view))
 	if fireflies:
 		glow_layer.add_child(AmbientParticles.fireflies(view))
+	if bird_interval > 0.0 or swimmers > 0 or dragonflies > 0:
+		var life := AmbientLife.new()
+		life.name = "Life"
+		view.world_root.add_child(life)
+		life.setup(view, map)
+		if bird_interval > 0.0:
+			life.enable_birds(bird_interval, bird_tint)
+		life.add_swimmers(swimmers, swimmer_texture)
+		life.add_darters(dragonflies)
 	if fog_banks > 0:
 		var fog := FogDrift.new()
 		fog.name = "Fog"

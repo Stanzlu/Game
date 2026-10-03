@@ -64,6 +64,7 @@ func build_from_text(text: String, source: String = "") -> bool:
 	if data.meta.has("ground"):
 		_apply_baked_ground()
 	_spawn_props()
+	_spawn_scatter()
 	Log.info(
 		Log.Category.CONTENT,
 		"map built",
@@ -202,6 +203,37 @@ func _apply_baked_ground() -> void:
 	add_child(ground_art)
 	move_child(ground_art, 0)
 	ground.visible = false
+
+
+## Small decorations (grass tufts, pebbles, leaves) from [meta] "scatter" rules: plain
+## sprites without collision, sorted with the other props, swaying when the catalog says so.
+func _spawn_scatter() -> void:
+	var rules: Array = data.meta.get("scatter", [])
+	var count := 0
+	for i in rules.size():
+		var rule: Dictionary = rules[i]
+		var entry := PropCatalog.entry(str(rule.get("sprite", "")))
+		if entry.is_empty():
+			continue
+		var anchor: Array = entry.get("anchor", [0, 0])
+		var sway := float(entry.get("sway", 0.0))
+		var flat: bool = entry.get("flat", false)
+		for pt in Scatter.points(data, rule, hash(data.source) + i * 7919):
+			var sprite := Sprite2D.new()
+			sprite.centered = false
+			sprite.texture = PropCatalog.texture_for(entry, pt * 3.17)
+			sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
+			sprite.flip_h = posmod(int(pt.x * 13.0 + pt.y * 7.0), 2) == 0
+			sprite.position = pt
+			sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+			if sway > 0.0:
+				sprite.material = Decor.sway_material(sway)
+			if flat:
+				sprite.z_index = -5
+			entities.add_child(sprite)
+			count += 1
+	if count > 0:
+		Log.debug(Log.Category.CONTENT, "scatter placed", {"path": data.source, "sprites": count})
 
 
 func _spawn_props() -> void:

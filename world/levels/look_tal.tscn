@@ -20,3 +20,4 @@ tint = Color(0.92, 0.97, 1.05, 1)
 shadow_tint = Color(0.02, 0.03, 0.06, 1)
 vignette = 0.35
 bloom = 0.9
+swimmers = 4

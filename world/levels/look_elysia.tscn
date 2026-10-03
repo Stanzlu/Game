@@ -22,3 +22,7 @@ tint = Color(1.02, 1.0, 0.95, 1)
 shadow_tint = Color(0.03, 0.02, 0.07, 1)
 vignette = 0.18
 bloom = 0.35
+bird_interval = 9.0
+swimmers = 6
+swimmer_texture = "koi.png"
+dragonflies = 3

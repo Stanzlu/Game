@@ -1,3 +1,4 @@
+class_name Decor
 extends StaticBody2D
 ## Generic decoration from the prop catalog (ADR-017): sprite variant, optional collision,
 ## wind sway, ground-level placement, footstep surface with rustle, lights, chimney smoke

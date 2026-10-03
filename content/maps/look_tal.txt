@@ -5,6 +5,7 @@
 style = "tal"
 ground = "res://assets/generated/maps/look_tal_ground.png"
 water = "res://assets/generated/maps/look_tal_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TP", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TP", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
 [legend]
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
