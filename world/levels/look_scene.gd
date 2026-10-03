@@ -125,8 +125,15 @@ func _add_sky() -> void:
 		[CLOUD_DIR + "cloud_2.png", 300.0, bottom - 40.0, 10.0, 0.75],
 		[CLOUD_DIR + "cloud_1.png", 520.0, bottom - 30.0, 12.0, 0.85],
 	]
-	for c: Array in clouds:
+	# a rainbow far behind, floating islets in between (Elysia's sky, refs: floating islands)
+	sky.add_cloud(load(CLOUD_DIR + "rainbow.png"), 140.0, bottom - 120.0, 0.0, 0.1, 0.0, 0.8)
+	for c: Array in clouds.slice(0, 2):
 		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
+	sky.add_cloud(load(CLOUD_DIR + "islet_1.png"), 420.0, bottom - 62.0, 1.5, 0.22, 2.0)
+	sky.add_cloud(load(CLOUD_DIR + "islet_0.png"), 110.0, bottom - 56.0, 2.0, 0.35, 3.0)
+	for c: Array in clouds.slice(2):
+		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
+	sky.add_cloud(load(CLOUD_DIR + "islet_2.png"), 600.0, bottom - 50.0, 2.5, 0.55, 3.0)
 
 
 func _grade_material() -> ShaderMaterial:

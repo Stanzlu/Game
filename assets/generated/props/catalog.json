@@ -156,6 +156,17 @@
    "res://assets/generated/props/elysia/glow_flower_2.png"
   ]
  },
+ "elysia/islet": {
+  "anchor": [
+   0,
+   0
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/islet_0.png",
+   "res://assets/generated/props/elysia/islet_1.png",
+   "res://assets/generated/props/elysia/islet_2.png"
+  ]
+ },
  "elysia/lantern": {
   "anchor": [
    6,
@@ -215,6 +226,15 @@
   },
   "textures": [
    "res://assets/generated/props/elysia/pillar.png"
+  ]
+ },
+ "elysia/rainbow": {
+  "anchor": [
+   0,
+   0
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/rainbow.png"
   ]
  },
  "elysia/reeds": {

@@ -869,6 +869,54 @@ def light_beam(w=96, h=220):
     return rgba
 
 
+def floating_islet(seed, w=56, h=52):
+    """Small floating island for the sky: grass cap, tapering mauve rock, hanging roots."""
+    rng = np.random.default_rng(seed)
+    st = pa.STYLES["elysia"]
+    c = Canvas(w, h)
+    cx, top = w / 2, 12
+    noise = pa.value_noise(h, w, 4, rng)
+    rock = np.zeros((h, w), bool)
+    for y in range(top, h - 2):
+        t = (y - top) / (h - 2 - top)
+        half = (w * 0.46) * (1 - t) ** 1.4 + 1.5
+        rock[y] = np.abs(np.arange(w) + 0.5 - cx - (noise[y] - 0.5) * 6 * t) <= half
+    f1, f2, cid = pa.worley(h, w, (5, 9), rng, 0.8)
+    v = 0.75 - 0.5 * np.clip((c.yy - top) / (h - top), 0, 1) + 0.4 * (pa.bump_light(np.clip((f2 - f1) / 2, 0, 1) * 2) - 0.5)
+    v = np.where(f2 - f1 < 0.7, v - 0.25, v)
+    c.paint(rock, st["cliff"], v, contrast=2.6, dither=False)
+    cap = c.ellipse(cx, top + 1, w * 0.48, 6) & (c.yy <= top + 3 + (noise > 0.5))
+    c.paint(cap, st["grass"], 0.35 + 0.6 * c.sphere(cx - 8, top - 3, w * 0.5, 8), dither=False)
+    blobs = [(top - 4, cx + rng.uniform(-8, 8), rng.uniform(5, 8)) for _ in range(3)]
+    alpha, value = pa.render_foliage((h, w), blobs, rng, small=(2.5, 3.5))
+    c.paint(alpha, st["foliage"], value, contrast=3.0, dither=False)
+    for _ in range(5):
+        x = int(rng.uniform(cx - w * 0.3, cx + w * 0.3))
+        y0 = top + 4
+        length = int(rng.uniform(5, 14))
+        for k in range(length):
+            if y0 + k < h:
+                c.fill(c.rect(x, y0 + k, x + 1, y0 + k + 1), st["foliage"][2 if k % 3 else 3])
+    c.outline(st["outline"])
+    return c
+
+
+def rainbow(w=260, h=110):
+    """Soft pixel rainbow arc for Elysia's sky (drawn translucent)."""
+    out = np.zeros((h, w, 4), np.float32)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    d = np.hypot(xx + 0.5 - w / 2, (yy + 0.5 - h) * 1.0)
+    bands = ["#ff6b6b", "#ffb15e", "#ffe66e", "#7ee08a", "#6ec0ff", "#9a86ff"]
+    r0, bw = h - 34, 4
+    for i, col in enumerate(bands):
+        m = (d >= r0 + i * bw) & (d < r0 + (i + 1) * bw)
+        out[m, :3] = pa.hex_rgb(col)
+        out[m, 3] = 120
+    fade = np.clip((h - yy) / (h * 0.55), 0, 1)
+    out[..., 3] *= np.floor(fade * 4) / 4
+    return out
+
+
 def particles():
     out = os.path.join(OUT, "fx")
     os.makedirs(out, exist_ok=True)
@@ -943,6 +991,10 @@ def build():
     save("elysia", "fountain", fountain(), (30, 42), shape={"circle": 23, "offset": [0, -5]},
          shadow=[28, 6], sparkle=True, loop_sound="res://assets/generated/audio/water_loop.wav")
     save("elysia", "cloud", [cloud(70, 120, 46), cloud(71, 176, 60), cloud(72, 96, 38)], (0, 0))
+    save("elysia", "islet", [floating_islet(75, 44, 40), floating_islet(76, 32, 30), floating_islet(77, 52, 44)],
+         (0, 0))
+    pa.save_rgba(os.path.join(OUT, "elysia", "rainbow.png"), rainbow())
+    CATALOG["elysia/rainbow"] = {"textures": [RES + "/elysia/rainbow.png"], "anchor": [0, 0]}
     # tal
     save("tal", "house", house(), (58, 105), shape={"rect": [96, 40], "offset": [0, -12]},
          shadow=[52, 6], lights=[

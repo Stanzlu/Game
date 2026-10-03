@@ -31,15 +31,27 @@ func setup(game_view: GameView, top: Color, bottom: Color) -> void:
 	add_child(_rect)
 
 
-## Adds a cloud at world height `y`; `parallax` < 1 moves slower than the ground (far away).
-func add_cloud(texture: Texture2D, x: float, y: float, speed: float, parallax: float) -> void:
+## Adds a sky object (cloud, floating islet, rainbow) at world height `y`; `parallax` < 1
+## moves slower than the ground (far away). `bob` makes it float up and down in pixels.
+func add_cloud(
+	texture: Texture2D,
+	x: float,
+	y: float,
+	speed: float,
+	parallax: float,
+	bob: float = 0.0,
+	alpha: float = 1.0
+) -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = texture
 	sprite.centered = false
 	sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	sprite.modulate = Color(1, 1, 1).lerp(Color(0.86, 0.9, 1.0), 1.0 - parallax)
+	sprite.modulate.a = alpha
 	add_child(sprite)
-	_clouds.append({"sprite": sprite, "x": x, "y": y, "speed": speed, "parallax": parallax})
+	_clouds.append(
+		{"sprite": sprite, "x": x, "y": y, "speed": speed, "parallax": parallax, "bob": bob}
+	)
 
 
 func _process(delta: float) -> void:
@@ -57,4 +69,5 @@ func _process(delta: float) -> void:
 			float(cloud["x"]) + float(cloud["speed"]) * _time - cam.x * float(cloud["parallax"])
 		)
 		sx = wrapf(sx, -w, span + w)
-		sprite.position = Vector2(roundf(origin.x + sx), float(cloud["y"]))
+		var bob := float(cloud["bob"]) * sin(_time * 0.6 + float(cloud["x"]) * 0.01)
+		sprite.position = Vector2(roundf(origin.x + sx), roundf(float(cloud["y"]) + bob))
