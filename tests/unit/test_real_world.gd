@@ -49,3 +49,21 @@ func test_only_the_real_world_reflects_the_protagonist() -> void:
 	add_child_autofree(elysia)
 	await wait_physics_frames(2)
 	assert_null(elysia.player.get_node_or_null("Reflection"), "Elysia reflects everything but him")
+
+
+func test_standing_still_ends_in_a_glance_around() -> void:
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(2)
+	var player := scene.player
+	player._next_glance = 0.2
+	await wait_seconds(0.4)
+	assert_true(str(player.sprite.animation).begins_with("look"), "blinks and glances around")
+	await wait_seconds(1.3)
+	assert_true(str(player.sprite.animation).begins_with("idle"), "then stands again")
+	assert_gt(player._next_glance, 3.9, "the next glance waits a while")
+	var mira: NpcWalker = null
+	for node in scene.map.entities.get_children():
+		if node is NpcWalker:
+			mira = node
+	assert_true(mira != null and mira.glances, "Mira glances around too")

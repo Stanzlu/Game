@@ -5,6 +5,8 @@ extends CharacterBody2D
 ## relative to the spawn cell. Basis for Elysia's identically moving NPCs later.
 ## With params "cue" (and optional "dialogue") the NPC can be talked to; it stays put and
 ## faces the player until the conversation ends.
+## With "glance": true it blinks and looks around now and then while standing (people of
+## the real world, Game Bible §36). Elysians never do: their attention is perfect.
 
 const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
@@ -23,7 +25,12 @@ var attending := false
 var talking := false
 var dialogue_path := DEFAULT_DIALOGUE
 var cue := ""
+var glances := false
 var _index := 0
+var _idle_time := 0.0
+var _next_glance := 3.0
+var _glancing := false
+var _rng := RandomNumberGenerator.new()
 var _stuck_time := 0.0
 var _origin := Vector2.ZERO
 
@@ -36,6 +43,9 @@ func _ready() -> void:
 	motion_mode = MOTION_MODE_FLOATING
 	_apply_sheet()
 	_origin = position
+	sprite.animation_finished.connect(_on_animation_finished)
+	_rng.seed = hash(name)
+	_next_glance = _rng.randf_range(2.5, 6.0)
 	_play("idle")
 
 
@@ -54,6 +64,7 @@ func apply_params(params: Dictionary) -> void:
 		var p: Array = point
 		route.append(Vector2(float(p[0]), float(p[1])) * tile_size)
 	speed = float(params.get("speed", speed))
+	glances = bool(params.get("glance", false))
 	if params.has("cue"):
 		cue = str(params["cue"])
 		dialogue_path = str(params.get("dialogue", DEFAULT_DIALOGUE))
@@ -156,6 +167,26 @@ func _nearest_player() -> Node2D:
 
 
 func _play(state_name: String) -> void:
+	if state_name == "idle" and glances:
+		_idle_time += get_physics_process_delta_time()
+		if (
+			not _glancing
+			and _idle_time >= _next_glance
+			and CharacterSheet.has_look(sprite.sprite_frames)
+		):
+			_glancing = true
+		if _glancing:
+			state_name = "look"
+	else:
+		_idle_time = 0.0
+		_glancing = false
 	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
 		sprite.play(anim)
+
+
+func _on_animation_finished() -> void:
+	if _glancing:
+		_glancing = false
+		_idle_time = 0.0
+		_next_glance = _rng.randf_range(2.5, 6.0)

@@ -25,7 +25,9 @@ from pixelart import ramp  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 FW, FH = 24, 32
 FEET = 30
-STATES = [("idle", 2), ("walk", 4), ("run", 4), ("sit", 1)]
+# "look" is the long idle (Game Bible §36 "viele Idle-Animationen"): blink, glance to one
+# side, to the other, blink. Its rows come last, so older sheets without them still work.
+STATES = [("idle", 2), ("walk", 4), ("run", 4), ("sit", 1), ("look", 4)]
 FACINGS = ["E", "SE", "S", "SW", "W", "NW", "N", "NE"]
 
 DESIGNS = {
@@ -82,10 +84,15 @@ DESIGNS = {
 
 def pose(state, frame):
     """Per-frame offsets. legs: (forward, lift) per leg; arms: swing per arm; bob: upper body."""
-    p = {"bob": 0, "legs": ((0, 0), (0, 0)), "arms": (0, 0), "sit": False, "lean": 0, "hair": 0}
+    p = {"bob": 0, "legs": ((0, 0), (0, 0)), "arms": (0, 0), "sit": False, "lean": 0, "hair": 0,
+         "gaze": 0, "blink": False}
     if state == "idle":
         p["bob"] = frame
         p["hair"] = frame
+    elif state == "look":
+        p["blink"] = frame in (0, 3)
+        p["gaze"] = {1: -1, 2: 1}.get(frame, 0)
+        p["hair"] = 1 if frame == 2 else 0
     elif state in ("walk", "run"):
         big = 2 if state == "run" else 1
         if frame in (0, 2):
@@ -329,7 +336,13 @@ class Figure:
                 eyes = [int(round(hx - 1)), int(round(hx + 3))]
             else:
                 eyes = [int(round(hx - 3)), int(round(hx + 2))]
+            eyes = [ex + p["gaze"] for ex in eyes]
             for ex in eyes:
+                if p["blink"]:
+                    # closed lids: a short dark line, skin where the eye was
+                    c.fill(c.rect(ex, ey, ex + 1, ey + 1), d["skin"][2])
+                    c.fill(c.rect(ex, ey + 1, ex + 1, ey + 2), d["eye"])
+                    continue
                 c.fill(c.rect(ex, ey, ex + 1, ey + 2), d["eye"])
                 c.fill(c.rect(ex, ey, ex + 1, ey + 1), np.array([250, 248, 255], np.float32) * 0.6 + d["eye"] * 0.4)
             if not side:

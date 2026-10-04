@@ -28,7 +28,16 @@ func test_character_sheet_builds_all_animations() -> void:
 	if sheet == null:
 		return
 	var frames := sheet.build_frames()
-	assert_eq(frames.get_animation_names().size(), CharacterSheet.STATES.size() * Facing.COUNT)
+	# the grey-box sheet ends after "sit"; only the look sheets have the long idle
+	assert_eq(frames.get_animation_names().size(), 4 * Facing.COUNT)
+	assert_false(CharacterSheet.has_look(frames))
 	assert_eq(frames.get_frame_count(CharacterSheet.animation_name("walk", Facing.Dir.N)), 4)
 	assert_eq(frames.get_frame_count(CharacterSheet.animation_name("sit", Facing.Dir.S)), 1)
 	assert_same(sheet.build_frames(), frames, "frames are cached per texture")
+	var look := load("res://entities/character/sheet_player_look.tres") as CharacterSheet
+	var look_frames := look.build_frames()
+	assert_eq(look_frames.get_animation_names().size(), CharacterSheet.STATES.size() * Facing.COUNT)
+	assert_true(CharacterSheet.has_look(look_frames), "blink and glance around")
+	var glance := CharacterSheet.animation_name("look", Facing.Dir.S)
+	assert_eq(look_frames.get_frame_count(glance), 4)
+	assert_false(look_frames.get_animation_loop(glance), "a glance plays once")
