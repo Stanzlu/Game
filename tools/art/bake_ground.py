@@ -125,6 +125,8 @@ class Baker:
     def __init__(self, meta, symbols, rows, seed):
         self.style_name = meta.get("style", "elysia")
         self.style = pa.STYLES[self.style_name]
+        # mirror axis (cell column) of a symmetric map: the right half is the left half flipped
+        self.axis = meta.get("symmetry")
         self.rng = np.random.default_rng(seed)
         self.ch, self.cw = len(rows), len(rows[0])
         self.h, self.w = self.ch * T, self.cw * T
@@ -234,6 +236,8 @@ class Baker:
         self._grass_clumps(is_["grass"])
         self._hedge(lab)
         self._cliff(lab)
+        if self.axis is not None:
+            deep = self._mirror(deep)
         self._prop_shadows()
 
         table = np.zeros((len(self.ramps), 6, 3), np.float32)
@@ -248,7 +252,7 @@ class Baker:
         alpha = np.where(self.lab == M["void"], 0.0, 255.0)
         # waterfalls dropping into the sky fade out over the last cells of the map (dithered)
         fall = self.lab == M["fall"]
-        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        b = self._bayer()
         fade = np.clip((self.h - np.arange(self.h)[:, None]) / (3.0 * T), 0, 1)
         alpha = np.where(fall & (fade < b), 0.0, alpha)
         ground = np.concatenate([rgb, alpha[..., None]], -1)
@@ -269,7 +273,7 @@ class Baker:
         # natural variation: drier patches and lusher, darker hollows with dithered borders
         b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
         patch = self.noise(48, 3)
-        amount = {"elysia": 0.35, "tal": 0.6, "wald": 0.5}.get(self.style_name, 0.5)
+        amount = {"elysia": 0.0, "tal": 0.6, "wald": 0.5}.get(self.style_name, 0.5)
         dry = g & ((patch - 0.6) * 10 * amount > b)
         lush = g & ((0.38 - patch) * 10 * amount > b)
         self.rid[dry] = self.ramp_ids["grass_dry"]
@@ -291,19 +295,58 @@ class Baker:
                     if 0 <= yy < self.h and 0 <= xx < self.w and g[yy, xx] and self.rid[yy, xx] in grass_ids:
                         self.idx[yy, xx] = min(max(self.idx[yy, xx] + d, 0), 4)
         if self.style_name == "elysia":
-            m = self.h * self.w // 700
-            ys = self.rng.integers(1, self.h - 2, m)
-            xs = self.rng.integers(1, self.w - 1, m)
-            for y, x in zip(ys, xs):
-                if g[y, x] and g[y + 1, x]:
-                    k = self.rng.integers(len(self.style["flowers"]))
-                    self.rid[y, x], self.idx[y, x] = self.ramp_ids["flower%d" % k], 2
+            self._lawn(g)
+
+    def _lawn(self, g):
+        """Elysia's lawn is kept: faint mowing stripes and flower dots in an exact lattice,
+        one color per row, so the ground itself already reads as too perfect (Bible §9)."""
+        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        # stripes run outwards from the mirror axis, two cells wide, dithered at the seams
+        c = (self.axis + 0.5) * T if self.axis is not None else self.w / 2.0
+        band = np.abs(np.arange(self.w)[None, :] + 0.5 - c) / (2.0 * T)
+        light = (np.floor(band) % 2 == 0) & (np.abs(band - np.round(band)) * 2.0 * T > 2.0 * b)
+        stripe = g & np.broadcast_to(light, g.shape) & (self.rid == self.ramp_ids["grass"])
+        self.idx[stripe] = np.minimum(self.idx[stripe] + 1, 3)
+        nfl = len(self.style["flowers"])
+        step = 12
+        for row, y in enumerate(range(6, self.h - 2, step)):
+            fid = self.ramp_ids["flower%d" % (row % nfl)]
+            x0 = c + (step / 2.0 if row % 2 else 0.0)
+            k0 = -int(x0 // step)
+            for k in range(k0, int((self.w - x0) // step) + 1):
+                x = int(np.floor(x0 + k * step))
+                if 1 <= x < self.w - 1 and g[y, x] and g[y + 1, x] and g[y - 1, x]:
+                    self.rid[y, x], self.idx[y, x] = fid, 2
                     self.idx[y + 1, x] = max(self.idx[y + 1, x] - 1, 0)
+
+    def _bayer(self):
+        """Ordered dither matrix over the map; mirrored on symmetric maps so dithered edges
+        drawn after _mirror (shadows, waterfall fade) stay pixel-identical on both sides."""
+        cols = np.arange(self.w)
+        if self.axis is not None:
+            c2 = int((2 * self.axis + 1) * T)
+            cols = np.where(cols >= (c2 + 1) // 2, c2 - 1 - cols, cols)
+        return pa.BAYER4[np.arange(self.h)[:, None] % 4, cols[None, :] % 4]
+
+    def _mirror(self, *extra):
+        """Copies the left half onto the right half around the axis column (pixel exact)."""
+        c2 = int((2 * self.axis + 1) * T)  # 2 * axis center in pixels
+        x = np.arange((c2 + 1) // 2, self.w)
+        src = c2 - 1 - x
+        keep = src >= 0
+        x, src = x[keep], src[keep]
+        out = []
+        for a in (self.rid, self.idx, self.lab) + extra:
+            a[:, x] = a[:, src]
+            out.append(a)
+        return out[3] if len(extra) == 1 else out[3:]
 
     def _path(self, p):
         soft = pa.box_blur(p.astype(np.float32), 5)
         v = 0.5 + 0.1 * centered(self.noise(14)) + 0.2 * (soft - 0.5)
         self.put(p, "path", v, contrast=3.0)
+        if self.style_name == "elysia":
+            return  # swept paths: no loose pebbles in paradise
         f1, _, cid = pa.worley(self.h, self.w, 6, self.rng, 0.9)
         pick = (cid % 100) < 30
         size = 1.0 + (cid % 7) / 6.0
@@ -672,12 +715,14 @@ class Baker:
 
     def _prop_shadows(self):
         """Soft palette shadows under trees, rocks and furniture (light from the top left)."""
-        b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
+        b = self._bayer()
         yy, xx = np.mgrid[0:self.h, 0:self.w].astype(np.float32)
+        # Elysia's light falls straight from above so shadows stay symmetric
+        lean = 0 if self.axis is not None else 2
         for cy, cx, (rx, ry) in self.shadows:
             y0, y1 = max(int(cy - ry - 2), 0), min(int(cy + ry + 3), self.h)
             x0, x1 = max(int(cx - rx - 2), 0), min(int(cx + rx + 4), self.w)
-            e = ((yy[y0:y1, x0:x1] + 0.5 - cy) / ry) ** 2 + ((xx[y0:y1, x0:x1] + 0.5 - cx - 2) / rx) ** 2
+            e = ((yy[y0:y1, x0:x1] + 0.5 - cy) / ry) ** 2 + ((xx[y0:y1, x0:x1] + 0.5 - cx - lean) / rx) ** 2
             core = e < 0.55
             rim = (e < 1.0) & ~core & (b[y0:y1, x0:x1] < 0.6)
             sub = self.idx[y0:y1, x0:x1]

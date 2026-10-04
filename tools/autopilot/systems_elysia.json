@@ -5,7 +5,7 @@
   {"t": 1.2, "tap": ["interact"], "log": "praise"},
   {"t": 2.6, "tap": ["interact"]},
   {"t": 3.8, "tap": ["interact"]},
-  {"t": 6.0, "teleport": [30, 24], "log": "chest"},
+  {"t": 6.0, "teleport": [32, 24], "log": "chest"},
   {"t": 6.2, "press": ["move_up"]},
   {"t": 6.25, "release": ["move_up"]},
   {"t": 6.6, "tap": ["interact"], "log": "open chest"},

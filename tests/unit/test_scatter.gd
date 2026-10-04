@@ -42,3 +42,25 @@ func test_near_limits_points_to_the_neighbourhood() -> void:
 		var cell := Vector2i((pt / 16.0).floor())
 		assert_lte(absi(cell.x - 2), 1)
 		assert_lte(absi(cell.y - 1), 1)
+
+
+func test_lattices_are_exact_and_mirror_around_the_axis() -> void:
+	var text := ".......\n.......\n.......\n.......\n.......\n.......\n......."
+	var data := MapData.parse(text, LEGEND)
+	data.meta["symmetry"] = 3
+	var grid := Scatter.points(data, {"on": ".", "spacing": 8, "pattern": "grid"}, 1)
+	assert_eq(grid, Scatter.points(data, {"on": ".", "spacing": 8, "pattern": "grid"}, 99))
+	var axis_px := 3.5 * 16.0
+	for pt in grid:
+		assert_has(grid, Vector2(2.0 * axis_px - pt.x, pt.y), "mirror twin of %s" % pt)
+	var checker := Scatter.points(data, {"on": ".", "spacing": 8, "pattern": "checker"}, 1)
+	assert_lt(checker.size(), grid.size())
+	for pt in checker:
+		assert_has(checker, Vector2(2.0 * axis_px - pt.x, pt.y))
+
+
+func test_zero_jitter_keeps_random_rules_on_the_lattice() -> void:
+	var data := MapData.parse(MAP, LEGEND)
+	var pts := Scatter.points(data, {"on": ".", "density": 1.0, "spacing": 8, "jitter": 0}, 3)
+	for pt in pts:
+		assert_eq(fposmod(pt.x - 4.0, 8.0), 0.0, "x on the lattice")

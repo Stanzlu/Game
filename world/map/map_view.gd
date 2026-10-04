@@ -281,25 +281,52 @@ func _spawn_scatter() -> void:
 		var anchor: Array = entry.get("anchor", [0, 0])
 		var sway := float(entry.get("sway", 0.0))
 		var flat: bool = entry.get("flat", false)
+		var axis_px := (symmetry_axis() + 0.5) * float(data.tile_size)
+		var sway_axis := axis_px if symmetry_axis() >= 0 else Decor.NO_AXIS
 		for pt in Scatter.points(data, rule, hash(data.source) + i * 7919):
+			# right of a symmetry axis: the twin's variant and flip, mirrored
+			var right := symmetry_axis() >= 0 and pt.x > axis_px
+			var base := Vector2(2.0 * axis_px - pt.x, pt.y) if right else pt
 			var sprite := Sprite2D.new()
 			sprite.centered = false
-			sprite.texture = PropCatalog.texture_for(entry, pt * 3.17)
+			sprite.texture = PropCatalog.texture_for(entry, base * 3.17)
 			sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
-			sprite.flip_h = posmod(int(pt.x * 13.0 + pt.y * 7.0), 2) == 0
+			var flip := posmod(int(base.x * 13.0 + base.y * 7.0), 2) == 0
+			if flip != right:
+				Decor._mirror_sprite(sprite)
 			sprite.position = pt
 			sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 			# Tiny scatter is not lit by lamps: every lit sprite costs a draw call per light,
 			# and the ground under it carries the light pool anyway (docs/PERFORMANCE.md).
 			sprite.light_mask = SCATTER_LIGHT_MASK
 			if sway > 0.0:
-				sprite.material = Decor.sway_material(sway)
+				sprite.material = Decor.sway_material(sway, false, sway_axis)
 			if flat:
 				sprite.z_index = -5
 			entities.add_child(sprite)
 			count += 1
 	if count > 0:
 		Log.debug(Log.Category.CONTENT, "scatter placed", {"path": data.source, "sprites": count})
+
+
+## Column of the symmetry axis from [meta] "symmetry", or -1.
+func symmetry_axis() -> int:
+	return int(data.meta.get("symmetry", -1)) if data != null else -1
+
+
+## In a symmetric map, a prop right of the axis is the mirror image of its twin: same
+## texture variant (seeded by the twin's position), flipped. All props learn the axis, so
+## their plants sway mirrored around it.
+func _mirror_params(params: Dictionary, cell: Vector2i) -> Dictionary:
+	var axis := symmetry_axis()
+	if axis < 0:
+		return params
+	var mirrored := params.duplicate()
+	mirrored["sway_axis"] = (axis + 0.5) * float(data.tile_size)
+	if cell.x > axis:
+		mirrored["mirror"] = true
+		mirrored["seed_position"] = cell_to_world(Vector2i(2 * axis - cell.x, cell.y))
+	return mirrored
 
 
 func _spawn_props() -> void:
@@ -322,4 +349,4 @@ func _spawn_props() -> void:
 			prop.position = cell_to_world(cell) - global_position
 			entities.add_child(prop)
 		if prop.has_method("apply_params"):
-			prop.call("apply_params", placement["params"])
+			prop.call("apply_params", _mirror_params(placement["params"], cell))

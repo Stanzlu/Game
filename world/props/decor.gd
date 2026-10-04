@@ -5,11 +5,16 @@ extends StaticBody2D
 ## and sparkles. Placed by text maps with params {"sprite": "<style>/<name>"}.
 ## Glowing parts (emissive layer, halos, light beams) are drawn unshaded in place: correct
 ## depth sorting, and a night tint (CanvasModulate) or lights do not dim them.
+## In symmetric maps (Elysia) MapView passes "mirror" and "seed_position": the prop then
+## shows its twin's variant, flipped, with lights and shapes mirrored too; "sway_axis" makes
+## plants sway in mirrored unison instead of gusts.
 
 const SWAY_SHADER := preload("res://world/shaders/wind_sway.gdshader")
 const SWAY_EMISSIVE_SHADER := preload("res://world/shaders/wind_sway_emissive.gdshader")
 const EMISSIVE_SHADER := preload("res://world/shaders/emissive.gdshader")
 const FX_DIR := "res://assets/generated/props/fx/"
+## sway_axis value for "no symmetry axis" (natural, gusty wind).
+const NO_AXIS := -1.0e9
 
 static var _sway_materials: Dictionary = {}
 static var _light_texture: GradientTexture2D
@@ -18,6 +23,8 @@ static var _additive: CanvasItemMaterial
 
 var sprite_id := ""
 var sprite: Sprite2D
+## Mirror image of a twin on the other side of a symmetric map.
+var mirrored := false
 var lights: Array[PointLight2D] = []
 ## Scales all lamp lights of this prop (DayLight dims lamps by day).
 var light_scale := 1.0
@@ -39,12 +46,16 @@ func apply_params(params: Dictionary) -> void:
 	var entry := PropCatalog.entry(sprite_id)
 	if entry.is_empty():
 		return
+	mirrored = bool(params.get("mirror", false))
+	var seed_position: Vector2 = params.get("seed_position", global_position)
 	sprite = Sprite2D.new()
 	sprite.name = "Sprite"
 	sprite.centered = false
-	sprite.texture = PropCatalog.texture_for(entry, global_position)
+	sprite.texture = PropCatalog.texture_for(entry, seed_position)
 	var anchor: Array = entry.get("anchor", [0, 0])
 	sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
+	if mirrored:
+		_mirror_sprite(sprite)
 	sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	add_child(sprite)
 	if entry.get("flat", false):
@@ -53,8 +64,9 @@ func apply_params(params: Dictionary) -> void:
 		var emit := Sprite2D.new()
 		emit.name = "Emissive"
 		emit.centered = false
-		emit.texture = PropCatalog.texture_for(entry, global_position, "emissive")
+		emit.texture = PropCatalog.texture_for(entry, seed_position, "emissive")
 		emit.offset = sprite.offset
+		emit.flip_h = sprite.flip_h
 		emit.material = emissive_material()
 		emit.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 		add_child(emit)
@@ -64,16 +76,17 @@ func apply_params(params: Dictionary) -> void:
 		_add_shape(entry["shape"])
 	var sway := float(entry.get("sway", 0.0))
 	if sway > 0.0:
-		sprite.material = sway_material(sway)
+		var axis_x := float(params.get("sway_axis", NO_AXIS))
+		sprite.material = sway_material(sway, false, axis_x)
 		var emit_node := get_node_or_null("Emissive") as Sprite2D
 		if emit_node != null:
-			emit_node.material = sway_material(sway, true)
+			emit_node.material = sway_material(sway, true, axis_x)
 	if entry.has("surface"):
 		_add_surface(StringName(entry["surface"]), entry.get("rustle", false))
 	for light: Dictionary in entry.get("lights", []):
 		_add_light(light)
 	if entry.has("smoke"):
-		_add_smoke(_vec(entry["smoke"]))
+		_add_smoke(_pos(entry["smoke"]))
 	if entry.get("sparkle", false):
 		_add_sparkles()
 	if entry.has("loop_sound"):
@@ -109,12 +122,18 @@ func _process(delta: float) -> void:
 		lights[i].energy = _light_energy[i] * f * light_scale
 
 
-static func sway_material(amount: float, unshaded: bool = false) -> ShaderMaterial:
-	var key := "%s_%s" % [amount, unshaded]
+## Shared sway material. `axis_x` (world x of a symmetry axis) switches to the mirrored,
+## gust-free sway of perfect Elysia; NO_AXIS keeps the natural wind.
+static func sway_material(
+	amount: float, unshaded: bool = false, axis_x: float = NO_AXIS
+) -> ShaderMaterial:
+	var key := "%s_%s_%s" % [amount, unshaded, axis_x]
 	if not _sway_materials.has(key):
 		var mat := ShaderMaterial.new()
 		mat.shader = SWAY_EMISSIVE_SHADER if unshaded else SWAY_SHADER
 		mat.set_shader_parameter("amount", amount)
+		if axis_x != NO_AXIS:
+			mat.set_shader_parameter("mirror_x", axis_x)
 		_sway_materials[key] = mat
 	return _sway_materials[key]
 
@@ -164,7 +183,7 @@ func _add_shape(spec: Dictionary) -> void:
 	else:
 		Log.error(Log.Category.CONTENT, "prop shape needs circle or rect", {"sprite": sprite_id})
 		return
-	shape.position = _vec(spec.get("offset", [0, 0]))
+	shape.position = _pos(spec.get("offset", [0, 0]))
 	add_child(shape)
 
 
@@ -199,7 +218,7 @@ func _on_rustle(body: Node2D) -> void:
 func _add_light(spec: Dictionary) -> void:
 	var light := PointLight2D.new()
 	light.texture = light_texture()
-	light.position = _vec(spec.get("offset", [0, 0]))
+	light.position = _pos(spec.get("offset", [0, 0]))
 	light.color = Color(str(spec.get("color", "#ffffff")))
 	light.energy = float(spec.get("energy", 1.0))
 	light.texture_scale = float(spec.get("range", 64)) / 32.0
@@ -274,7 +293,7 @@ func _add_glow(spec: Dictionary) -> void:
 	_glow.texture = light_texture()
 	var radius := float(spec.get("radius", 16))
 	_glow.scale = Vector2.ONE * radius / 32.0
-	_glow.position = _vec(spec.get("offset", [0, 0]))
+	_glow.position = _pos(spec.get("offset", [0, 0]))
 	_glow.self_modulate = Color(str(spec.get("color", "#ffffff")))
 	_glow.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	_glow.material = additive_unshaded()
@@ -287,6 +306,7 @@ func _add_beam() -> void:
 	_beam.centered = false
 	_beam.texture = sprite.texture
 	_beam.offset = sprite.offset
+	_beam.flip_h = sprite.flip_h
 	_beam.material = additive_unshaded()
 	add_child(_beam)
 	sprite.visible = false
@@ -316,7 +336,7 @@ func _add_beam() -> void:
 func _add_petal_rain(spec: Dictionary) -> void:
 	var petals := CPUParticles2D.new()
 	petals.name = "PetalRain"
-	petals.position = _vec(spec.get("offset", [0, 0]))
+	petals.position = _pos(spec.get("offset", [0, 0]))
 	petals.texture = load(FX_DIR + "petal.png")
 	petals.amount = int(spec.get("amount", 12))
 	petals.lifetime = 6.0
@@ -350,7 +370,7 @@ func _add_splash(spec: Dictionary) -> void:
 	drops.lifetime = 0.7
 	drops.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
 	drops.emission_rect_extents = _vec(spec.get("extents", [10, 3]))
-	drops.position = _vec(spec.get("offset", [0, 0]))
+	drops.position = _pos(spec.get("offset", [0, 0]))
 	drops.direction = Vector2(0, -1)
 	drops.spread = 55.0
 	drops.gravity = Vector2(0, 140)
@@ -381,6 +401,19 @@ func _add_splash(spec: Dictionary) -> void:
 	mist.color_ramp = mist_fade
 	mist.z_index = 2
 	add_child(mist)
+
+
+## Flips a sprite around its anchor (the anchor pixel stays where it was).
+static func _mirror_sprite(target: Sprite2D) -> void:
+	target.flip_h = true
+	if target.texture != null:
+		target.offset.x = -float(target.texture.get_width()) - target.offset.x
+
+
+## A position offset from the catalog, mirrored for a mirrored prop.
+func _pos(a: Variant) -> Vector2:
+	var v := _vec(a)
+	return Vector2(-v.x, v.y) if mirrored else v
 
 
 static func _vec(a: Variant) -> Vector2:

@@ -8,7 +8,7 @@
   {"t": 6.4, "tap": ["interact"], "log": "praise"},
   {"t": 7.8, "tap": ["interact"]},
   {"t": 9.0, "tap": ["interact"]},
-  {"t": 11.2, "teleport": [30, 24], "log": "chest"},
+  {"t": 11.2, "teleport": [32, 24], "log": "chest"},
   {"t": 11.4, "press": ["move_up"]},
   {"t": 11.45, "release": ["move_up"]},
   {"t": 11.8, "tap": ["interact"], "log": "open chest"},

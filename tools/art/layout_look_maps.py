@@ -72,101 +72,126 @@ class Grid:
 
 
 def elysia():
-    """Sacred tree in a symmetric marble pool, a terrace with stairs and a waterfall into the
-    pool, a stream that falls off the island edge into the clouds."""
-    w, h = 64, 40
+    """Elysia's garden, perfectly mirrored around the sacred tree (Game Bible §9: "Perfekte
+    Symmetrie. Makellose Architektur."): marble pool in the middle, twin terrace streams with
+    twin waterfalls and bridges, twin stairs, mirrored trees and flower beds, Elysians walking
+    mirrored routes. Only the unremarkable stone and the rift exist once: the first flaws.
+
+    The left half is drawn, the right half is its mirror (column x <-> 64 - x, axis = column 32,
+    65 columns so that every column has its twin).
+    """
+    w, h = 65, 40
+    axis = 32
     g = Grid(w, h)
-    # island edge in the south: wavy cliff, then sky
-    edge = []
+
+    def mx(x):
+        return 2 * axis - x
+
+    # island edge in the south: wavy but symmetric cliff, then sky
     for x in range(w):
-        e = 32 + round(0.8 * math.sin(x / 4.0) + 0.6 * math.sin(x / 2.3 + 1))
-        if 27 <= x <= 37:
+        d = abs(x - axis)
+        e = 32 + round(0.8 * math.sin(d / 4.0) + 0.6 * math.sin(d / 2.3 + 1))
+        if d <= 5:
             e = 34
-        edge.append(e)
-    for x in range(w):
-        for y in range(edge[x], h):
-            g.set(x, y, "^" if y < edge[x] + 3 else "%")
+        for y in range(e, h):
+            g.set(x, y, "^" if y < e + 3 else "%")
     # hedge border north and sides
     for x in range(w):
-        bottom = 2 + round(0.6 * math.sin(x / 3.1) + 0.4 * math.sin(x / 1.7 + 2))
+        d = abs(x - axis)
+        bottom = 2 + round(0.6 * math.sin(d / 3.1) + 0.4 * math.sin(d / 1.7 + 2))
         for y in range(0, bottom):
             g.set(x, y, "h")
     for y in range(h):
         for x in (0, 1, w - 2, w - 1):
             if g.get(x, y) == ".":
                 g.set(x, y, "h")
-    # terrace: cliff face below it, stairs on the west side
+    # terrace: cliff face below it, twin stairs
     for x in range(2, w - 2):
-        top = 9 - (1 if math.sin(x / 3.3) + 0.5 * math.sin(x / 1.6) > 0.6 else 0)
+        d = abs(x - axis)
+        top = 9 - (1 if math.sin(d / 3.3) + 0.5 * math.sin(d / 1.6) > 0.6 else 0)
         for y in range(top, 11):
             g.set(x, y, "^", only=".")
     for x in (11, 12, 13):
         for y in (8, 9, 10):
-            if g.get(x, y) == "^" or y == 10:
-                g.set(x, y, "s")
-    # meadows
-    g.ellipse(7, 5, 4, 2, "f", only=".", wobble=0.4, seed=1)
-    g.ellipse(55, 5, 4, 2, "f", only=".", wobble=0.4, seed=2)
-    g.ellipse(9, 28, 4, 2.5, "f", only=".", wobble=0.4, seed=3)
-    g.ellipse(56, 27, 3.5, 2.5, "f", only=".", wobble=0.4, seed=4)
-    g.ellipse(20, 14, 2.5, 1.5, "f", only=".", wobble=0.4, seed=5)
-    g.ellipse(45, 13, 2.5, 1.5, "f", only=".", wobble=0.4, seed=6)
+            for xx in (x, mx(x)):
+                if g.get(xx, y) == "^" or y == 10:
+                    g.set(xx, y, "s")
+    # flower meadows (beds), mirrored
+    for cx, cy, rx, ry in ((7, 5, 4, 2), (9, 28, 4, 2.5), (20, 14, 2.5, 1.5)):
+        g.ellipse(cx, cy, rx, ry, "f", only=".")
+        g.ellipse(mx(cx), cy, rx, ry, "f", only=".")
     # marble ring and front platform, then the pool inside
-    g.ellipse(32, 16.5, 8.4, 5.9, "M", only=".f")
+    g.ellipse(axis, 16.5, 8.4, 5.9, "M", only=".f")
     for y in (21, 22, 23):
         for x in range(27, 38):
             g.set(x, y, "M", only=".f")
-    g.ellipse(32, 16.5, 6.3, 4.2, "~", only="M")
-    # terrace stream and waterfall into the pool
-    g.path([(45, 1), (45.5, 4), (44, 6.5), (43, 8.6)], 2.1, "~", only=".f")
-    for y in (8, 9, 10):
-        for x in (42, 43):
-            if g.get(x, y) == "^":
-                g.set(x, y, "v")
-
-    # paths
-    g.path([(3, 26), (10, 26), (18, 25), (26, 23.5)], 2.6, ",", only=".f")
-    g.path([(38, 23.5), (46, 24), (54, 25), (61, 25)], 2.6, ",", only=".f")
-    g.path([(32, 24), (32, 28), (32, 32)], 2.4, ",", only=".f")
-    g.path([(12, 9), (12, 7), (14, 5), (22, 4)], 2.2, ",", only=".f")
-    # stream from the pool to the island edge, falling into the sky
-    # the waterfall's stream runs past the pool (which stays a closed, symmetric ring)
-    g.path([(42.5, 10.5), (44, 14), (45, 19), (45.5, 25), (47, 29), (47.5, 33)], 2.2, "~", only=".f,")
-    for y in range(25, h):
-        if g.get(47, y) in ("^", "%"):
-            g.set(47, y, "v")
-            g.set(48, y, "v")
-    for y in (23, 24, 25):
-        for x in range(43, 48):
-            if g.get(x, y) == "~":
-                g.set(x, y, "=")
-    # props: the sacred tree in the middle, symmetric pillars, crystal in front
-    props = {
-        "W": [(32, 17)],
-        "I": [(24, 16), (40, 16), (27, 21), (37, 21)],
-        "C": [(32, 22)],
-        "T": [(4, 5), (47, 4), (8, 15), (57, 19), (19, 30)],
-        "U": [(18, 4), (60, 7), (53, 14), (5, 21)],
-        "P": [(27, 4), (14, 20), (59, 29), (42, 29)],
-        "K": [(9, 3), (57, 4), (50, 20), (13, 28)],
-        "o": [(16, 7), (31, 6), (48, 6), (22, 11), (46, 12), (23, 23), (41, 23), (29, 27), (35, 27),
-              (6, 12), (58, 11), (26, 30), (38, 30), (52, 31), (17, 25)],
-        "g": [(21, 15), (42, 15), (21, 19), (42, 19), (29, 25), (35, 25), (6, 6), (54, 6), (24, 3),
-              (40, 4), (10, 30), (55, 28)],
-        "Y": [(20, 6), (51, 8), (24, 27), (52, 26)],
-        "O": [(30, 26), (34, 26), (30, 29), (34, 29)],
-        "R": [(23, 30), (41, 31), (8, 30), (55, 30)],
-        "w": [(27, 15), (36, 18), (29, 19), (35, 14)],
-        "b": [(31, 33)],
-        "F": [(x, 33) for x in range(26, 38) if x not in (31, 32)],
-        "x": [(42, 11)],
-        "E": [(13, 26), (47, 25), (24, 4)],
-        "Z": [(30, 23)],
+    g.ellipse(axis, 16.5, 6.3, 4.2, "~", only="M")
+    # paths: main path across the island, central path to the edge, terrace paths
+    g.path([(3, 25), (10, 25.5), (18, 25), (26, 23.5)], 2.6, ",", only=".f")
+    g.path([(mx(26), 23.5), (mx(18), 25), (mx(10), 25.5), (mx(3), 25)], 2.6, ",", only=".f")
+    g.path([(axis, 24), (axis, 28), (axis, 32)], 2.4, ",", only=".f")
+    terrace_paths = [
+        [(12, 9), (12, 7), (14, 5), (22, 4)],
+        [(mx(12), 9), (mx(12), 7), (mx(14), 5), (mx(22), 4)],
+    ]
+    # twin streams: from the terrace, falling into the garden, past the pool, off the edge
+    for side in (1, -1):
+        def sx(x):
+            return x if side == 1 else mx(x)
+        g.path([(sx(45), 1), (sx(45.5), 4), (sx(44), 6.5), (sx(43), 8.6)], 2.1, "~", only=".f")
+        for y in (8, 9, 10):
+            for x in (42, 43):
+                if g.get(sx(x), y) == "^":
+                    g.set(sx(x), y, "v")
+        g.path([(sx(42.5), 10.5), (sx(44), 14), (sx(45), 19), (sx(45.5), 25), (sx(47), 29), (sx(47.5), 33)],
+               2.2, "~", only=".f,")
+        for y in range(25, h):
+            for x in (47, 48):
+                if g.get(sx(x), y) in ("^", "%"):
+                    g.set(sx(x), y, "v")
+        for y in (23, 24, 25):
+            for x in range(43, 48):
+                if g.get(sx(x), y) == "~":
+                    g.set(sx(x), y, "=")
+    # terrace paths after the streams; where they cross: small plank bridges
+    for pts in terrace_paths:
+        g.path(pts, 2.2, ",", only=".f")
+        g.path(pts, 2.2, "=", only="~")
+    # mirrored props: (symbol, x, y) on the left half; the right half gets the mirror
+    pairs = {
+        "I": [(24, 16), (27, 21)],
+        "T": [(4, 5), (8, 15), (19, 30)],
+        "U": [(15, 3), (5, 21)],
+        "P": [(27, 4), (14, 20)],
+        "K": [(9, 3), (13, 28)],
+        "o": [(16, 7), (22, 11), (23, 23), (29, 27), (6, 12), (26, 30), (17, 26)],
+        "g": [(21, 15), (21, 19), (29, 25), (6, 6), (24, 3), (10, 30)],
+        "Y": [(20, 6), (24, 27)],
+        "O": [(30, 26), (30, 29)],
+        "R": [(23, 30), (8, 30)],
+        "w": [(27, 15), (29, 19)],
+        "x": [(22, 11)],
+        "F": [(x, 33) for x in range(26, 31)],
+        "E": [(13, 25), (24, 4)],
+        "b": [(28, 32)],
+    }
+    for c, pts in pairs.items():
+        for x, y in pts:
+            g.set(x, y, c)
+            # the mirrored Elysians walk the mirrored route ("e" in the legend)
+            # a 2-tile bench mirrors to the cell left of its twin's first cell
+            g.set(mx(x) - (1 if c == "b" else 0), y, "e" if c == "E" else c)
+    # on the axis: the sacred tree, the crystal, the chest before it, the bench at the edge
+    single = {
+        "W": [(axis, 17)],
+        "C": [(axis, 22)],
+        "Z": [(axis, 23)],
+        # the only things that exist once, off the axis
         "j": [(41, 17)],
         "X": [(60, 30)],
-        "@": [(10, 26)],
+        "@": [(9, 25)],
     }
-    for c, pts in props.items():
+    for c, pts in single.items():
         for x, y in pts:
             g.set(x, y, c)
     g.add_rails()
