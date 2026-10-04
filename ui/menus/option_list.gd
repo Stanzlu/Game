@@ -22,6 +22,13 @@ func _ready() -> void:
 	cursor = MenuCursor.new()
 	cursor.name = "Cursor"
 	add_child(cursor)
+	Settings.changed.connect(_on_setting_changed)
+
+
+## Large text (Game Bible §50) changes the font: rows measure themselves again.
+func _on_setting_changed(key: String) -> void:
+	if key == "text.large":
+		refresh.call_deferred()
 
 
 func clear_rows() -> void:
@@ -186,12 +193,23 @@ func _refresh_row(row: Dictionary) -> void:
 	if not node is Button:
 		return
 	var text: String = row["label"] if not str(row.get("label", "")).is_empty() else tr(row["key"])
+	var button := node as Button
+	button.text = text
 	if row.has("values"):
 		var values: Array = row["values"]
 		var index := clampi(int((row["get"] as Callable).call()), 0, values.size() - 1)
 		var value: Variant = values[index]
-		(row["value_label"] as Label).text = ARROWS % (tr(value) if value is String else str(value))
-	(node as Button).text = text
+		var value_label := row["value_label"] as Label
+		value_label.text = ARROWS % (tr(value) if value is String else str(value))
+		# the value sits on top of the button: reserve room so label and value never overlap
+		var font := button.get_theme_font(&"font")
+		var size := button.get_theme_font_size(&"font_size")
+		var need := (
+			font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			+ font.get_string_size(value_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			+ 34.0
+		)
+		button.custom_minimum_size.x = ceilf(need)
 
 
 ## Up/down wraps around and skips disabled rows and labels.

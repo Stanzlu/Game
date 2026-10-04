@@ -185,6 +185,8 @@ func apply_args(args: PackedStringArray) -> void:
 				override("debug.overlay", true)
 			"text":
 				override("text.speed", 3 if value == "instant" else 1)
+			"large-text":
+				override("text.large", true)
 
 
 # --- Side effects ----------------------------------------------------------------------
@@ -203,6 +205,8 @@ func _apply(key: String) -> void:
 			var step := get_int(key)
 			AudioServer.set_bus_mute(bus, step == 0)
 			AudioServer.set_bus_volume_db(bus, linear_to_db(step / 10.0) if step > 0 else -80.0)
+	elif key == "text.large":
+		TextSize.apply(get_bool(key))
 	elif key == "display.fullscreen" and DisplayServer.get_name() != "headless":
 		DisplayServer.window_set_mode(
 			(
