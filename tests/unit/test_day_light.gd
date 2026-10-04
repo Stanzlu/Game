@@ -13,17 +13,17 @@ func after_each() -> void:
 	WorldState.new_game()
 
 
-func test_tal_starts_at_night_and_cycles_presets() -> void:
+## The slice arrives in rain and wind and reaches the evening later (Game Bible §56).
+func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	var scene: LookScene = TAL.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
 	var day := scene.day_light
 	assert_not_null(day)
-	assert_eq(day.preset, "nacht")
-	assert_eq(day.next_preset(0.0), "regentag")
-	await wait_physics_frames(2)
+	assert_eq(day.preset, "regentag")
 	assert_almost_eq(day.world_tint.color.r, 1.0, 0.01, "overcast day is not darkened")
 	assert_true(day.rain.is_raining())
+	assert_eq(AudioDirector.ambience_stream.resource_path.get_file(), "rain_wind_loop.wav")
 	assert_eq(day.next_preset(0.0), "abend")
 	await wait_physics_frames(2)
 	assert_false(day.rain.is_raining(), "the rain stops in the evening")
@@ -32,6 +32,9 @@ func test_tal_starts_at_night_and_cycles_presets() -> void:
 	assert_almost_eq(float(lamp.get("light_scale")), 0.7, 0.01)
 	var grade := scene.view.display.material as ShaderMaterial
 	assert_almost_eq(float(grade.get_shader_parameter("saturation")), 1.1, 0.01)
+	assert_eq(day.next_preset(0.0), "nacht")
+	await wait_physics_frames(2)
+	assert_lt(day.world_tint.color.b, 0.9, "night darkens the valley")
 
 
 func test_unknown_preset_is_refused() -> void:
@@ -61,7 +64,7 @@ func test_resting_on_the_bench_lets_time_pass() -> void:
 	(bench.get_node("Interactable") as Interactable).interact(scene.player)
 	assert_eq(scene.player.state, Player.State.SIT)
 	await wait_seconds(2.8)
-	assert_eq(scene.day_light.preset, "regentag", "night turns into the next day")
+	assert_eq(scene.day_light.preset, "abend", "the rainy day turns into evening")
 
 
 func test_sitting_down_twice_passes_time_only_once() -> void:
@@ -78,7 +81,7 @@ func test_sitting_down_twice_passes_time_only_once() -> void:
 	scene.player.stand_up()
 	seat.interact(scene.player)
 	await wait_seconds(3.2)
-	assert_eq(scene.day_light.preset, "regentag", "one rest, one step")
+	assert_eq(scene.day_light.preset, "abend", "one rest, one step")
 
 
 func test_time_of_day_is_kept_in_the_game_state() -> void:

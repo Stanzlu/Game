@@ -22,6 +22,11 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var petals := false
 @export var motes := false
 @export var fireflies := false
+## Leaves blown through the view in gusts (the real world's wind, Game Bible §12).
+@export var wind_leaves := false
+## The protagonist shows up in water and puddles. Off in Elysia, whose water reflects
+## everything except him (Game Bible §9).
+@export var reflect_player := false
 ## Number of drifting fog banks and their tint (alpha = density).
 @export var fog_banks := 0
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
@@ -90,6 +95,8 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.motes(view))
 	if fireflies:
 		glow_layer.add_child(AmbientParticles.fireflies(view))
+	if wind_leaves:
+		view.world_root.add_child(AmbientParticles.leaves(view))
 	if bird_interval > 0.0 or swimmers > 0 or dragonflies > 0:
 		var life := AmbientLife.new()
 		life.name = "Life"
@@ -116,6 +123,8 @@ func _build_world() -> void:
 		butterfly.setup(
 			map.cell_to_world(Vector2i(butterfly_cells[i])), i, perfect_loops, i % 2 == 1
 		)
+	if reflect_player and player != null:
+		map.add_reflection(player, true)
 	view.set_post_material(_grade_material())
 	if day_preset != "keine":
 		_setup_day_light()

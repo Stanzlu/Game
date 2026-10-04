@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Procedural ambience loops for the look prototype (ADR-017): rain, garden, water, night forest.
+"""Procedural ambience loops for the look prototype (ADR-017): rain, garden, water, night forest,
+gusty wind, rain with wind and a dry valley evening.
 
 Noise beds are synthesized in the frequency domain, so every loop is periodic and repeats
 without a seam. Events (drops, bird chirps) wrap around the loop end for the same reason.
@@ -153,6 +154,59 @@ def forest_night(seconds=16, seed=4):
     return out
 
 
+def gusts(n, rng, strength=1.0):
+    """Irregular gust envelope in 0..1: very slow noise (periodic over the loop), squared so
+    calm stretches alternate with sudden pushes (the real world's wind, Game Bible §12)."""
+    slow = shaped_noise(n, rng, 0.04, 0.4, tilt=-1.2)
+    env = np.clip(0.5 + 0.5 * slow * 1.6, 0, 1) ** 2
+    return 0.25 + 0.75 * env * strength
+
+
+def creak(rng):
+    """A wooden creak (loose fence board, old branch): a slow, rough low tone."""
+    length = int(RATE * rng.uniform(0.35, 0.7))
+    t = np.arange(length) / RATE
+    f = rng.uniform(110, 190) * (1 + 0.25 * np.sin(2 * np.pi * rng.uniform(1.5, 3) * t))
+    phase = 2 * np.pi * np.cumsum(f) / RATE
+    rough = (np.sin(2 * np.pi * rng.uniform(25, 40) * t) > 0).astype(np.float64)
+    tone = (np.sin(phase) + 0.5 * np.sin(2 * phase) + 0.3 * np.sin(3 * phase)) * (0.55 + 0.45 * rough)
+    env = np.clip(np.sin(np.pi * t / t[-1]), 0, 1) ** 1.5
+    return tone * env
+
+
+def wind(seconds=24, seed=5, strength=1.0):
+    """Gusty wind: a dark bed, a whistle that rises with the gusts, leaves rattling in the
+    strong pushes and now and then a creaking board."""
+    rng = np.random.default_rng(seed)
+    n = RATE * seconds
+    g = gusts(n, rng, strength)
+    bed = shaped_noise(n, rng, 60, 900, tilt=-1.1) * 0.28 * g
+    whistle = shaped_noise(n, rng, 520, 880, tilt=0.0) * 0.06 * g ** 3
+    leaves = shaped_noise(n, rng, 2500, 8000, tilt=-0.3) * 0.07 * np.clip(g - 0.55, 0, 1) * 2.2
+    out = bed + whistle + leaves
+    for _ in range(max(1, seconds // 6)):
+        add_wrapped(out, rng.integers(0, n), creak(rng) * rng.uniform(0.03, 0.06))
+    return out
+
+
+def rain_wind(seconds=24):
+    """The valley in bad weather: rain with gusts of wind on top."""
+    r = rain(seconds, seed=1)
+    w = wind(seconds, seed=6)
+    return r / (np.max(np.abs(r)) + 1e-9) + 0.7 * w / (np.max(np.abs(w)) + 1e-9)
+
+
+def evening(seconds=24, seed=7):
+    """A dry evening in the valley: soft wind, the stream far off, a few late birds."""
+    rng = np.random.default_rng(seed)
+    n = RATE * seconds
+    out = wind(seconds, seed + 1, strength=0.55) * 0.8
+    out += shaped_noise(n, rng, 600, 5000, tilt=-0.4) * 0.04
+    for _ in range(5):
+        add_wrapped(out, rng.integers(0, n), chirp(rng) * rng.uniform(0.03, 0.07))
+    return out
+
+
 def write(name, signal):
     os.makedirs(OUT, exist_ok=True)
     signal = signal / (np.max(np.abs(signal)) + 1e-9) * 0.8
@@ -175,3 +229,6 @@ if __name__ == "__main__":
     write("garden_loop", garden())
     write("water_loop", water())
     write("forest_night_loop", forest_night())
+    write("wind_loop", wind())
+    write("rain_wind_loop", rain_wind())
+    write("evening_loop", evening())
