@@ -83,3 +83,18 @@ Menü, der vollständige Bericht liegt in `benchmark.txt` im Spielordner
 (`%APPDATA%\REAL\` bzw. `~/Library/Application Support/REAL/`). Ziel: Urteil „flüssig“ in allen drei
 Szenen, also 95 % der Frames unter 18 ms bei 60 Hz.
 
+## Feinschliff Phase 3 (2026-10-04)
+
+Requisiten-Atlas je Stil und unbeleuchtete Streu-Sprites (ADR-028). Gleiche Messumgebung
+(Software-Rendering, llvmpipe, 4 vCPU), Leistungstest mit 12 s pro Szene:
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls vorher → jetzt |
+|-------|-------|------|---------|---------|--------------------------|
+| Elysia | 33 | 30,3 | 36,4 | 38,4 | 574 → 79 |
+| Tal | 35 | 28,7 | 34,4 | 36,4 | 928 → 110 |
+| Wald | 30 | 32,8 | 39,0 | 42,1 | 818 → 195 |
+
+Draw Calls je Quelle (Elysia, vorher): Streu-Sprites und Requisiten ~550, Lichter 0, Partikel 4,
+HUD 9. Im Wald kosten die 12 Lichtquellen weiterhin ~180 Draw Calls; das ist der nächste Hebel,
+falls die Zielhardware knapp wird. Der Titelbildschirm liegt unter 30 Draw Calls.
+

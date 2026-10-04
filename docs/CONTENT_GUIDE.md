@@ -57,7 +57,7 @@ stages = Array[ExtResource("2_stage")]([SubResource("Resource_find"), SubResourc
 
 - Die erste Stufe ist der Start. `next` nennt die erlaubten Folgestufen, mehrere sind möglich (unterschiedliche Ausgänge). Eine Stufe ohne `next` beendet die Quest und braucht ein `outcome` (`done`, `missed`, …). Andere Ausgänge sind kein Scheitern.
 - Texte: `QUEST_<ID>_TITLE`, `QUEST_<ID>_<STUFE>` (Journaleintrag, wenn die Stufe erreicht ist) und `QUEST_<ID>_OBJ_<ZIEL>` in `journal.csv`, alles in Großbuchstaben. Das Journal zeigt alle erreichten Einträge in Reihenfolge, darunter die Ziele der aktuellen Stufe mit `[ ]` bzw. `[x]`.
-- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze, `rarity` die Elysia-Seltenheit (`NONE` bis `LEGENDARY`; der Stein hat `NONE` und zeigt „Seltenheit: —“). Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`.
+- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze, `rarity` die Elysia-Seltenheit (`NONE` bis `LEGENDARY`; der Stein hat `NONE` und zeigt „Seltenheit: —“). Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`. Icon 16×16 unter `assets/generated/items/<id>.png` (erzeugt von `tools/art/make_ui.py`); die Seltenheit bestimmt die Beute-Fanfare.
 - `draft = true` markiert Platzhalter-Inhalt. Vor dem Playtest-Build darf keine Quest und kein Item mehr `draft` sein (`ContentValidator.drafts()`).
 - Dateiname = ID. Keine Marker im Slice außer bewusst in Elysia.
 
@@ -141,6 +141,7 @@ else
 - Während eines Dialogs wird nicht gespeichert; Quest-Schritte im Dialog lösen das Autosave direkt nach dem Ende aus.
 - Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede gesprochene Zeile markiert ist, solange es keine finalen Texte gibt.
 - Neue Dialogdateien in `internationalization/locale/translations_pot_files` eintragen. Ein Test prüft das.
+- Stimmen: `content/dialogue/voices.json` ordnet jedem Sprecher (Name wie in der Dialogdatei) eine Stimme zu (`elysia`, `warm`, `low`, `neutral`); unbekannte Sprecher bekommen `_default`. Zeilen ohne Sprecher (Schilder) bleiben stumm.
 
 ## Schreibregeln
 

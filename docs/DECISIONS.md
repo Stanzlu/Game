@@ -174,3 +174,29 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - `DayLight` für Szenen der Wirklichkeit: Presets Regentag, Abend, Nacht blenden Weltfarbe, Farbstimmung, Lampen, Regen und Ton. Im Tal lässt Ausruhen auf der Bank die Zeit weiterlaufen. Elysia hat bewusst kein Tageslicht.
 - **Konsequenzen:** Der Ablauf ist getestet und als Video belegt. Echte Story-Platzierung (Kind, versteckter Riss, Hilfe nach Zeit) folgt mit Phase 4.
 
+## ADR-026 · Schrift und Bewegung der Oberfläche
+- **Status:** angenommen · 2026-10-04 · ersetzt die Schriftwahl aus Phase 0
+- **Kontext:** Tiny5 ist nur 5 Pixel hoch. Dialoge und Menüs waren bei 640×360 kaum lesbar, das Startmenü eine Entwicklerliste auf Schwarz.
+- **Entscheidung:**
+  - Hauptschrift **Jersey 10** in ihrer Pixelgröße 19 (Versalhöhe 10 px), Titel **Jersey 15** in 27, beide aus google/fonts (OFL 1.1). Tiny5 bleibt für kleine Beschriftungen (Hinweise, Tasten-Kappe, Entwickler-Panels).
+  - Menüs: gleitender Cursor je Skin (Elysia Goldjuwel, Real Strich), das Spiel dahinter weichgezeichnet und getönt (`menu_backdrop.gdshader`), Panels gleiten 6 px ein. Animiert wird die CanvasLayer-Verschiebung, nie ein verankerter Container.
+  - Dialogbox mit Namensschild, Weiter-Pfeil, Cursor auf Antworten und Stimme je Sprecher (`content/dialogue/voices.json`).
+  - Startmenü mit eigener Titelgrafik (`tools/art/make_title.py`), Prototypen in einem Untermenü.
+- **Konsequenzen:** Längere Listen (Einstellungen) scrollen. Wer UI baut, nutzt die Theme-Typen (`SmallLabel`, `HintLabel`, `PromptText` …) statt Schriftgrößen im Code.
+
+## ADR-027 · Soundeffekte: eigene, prozedural erzeugte Klänge
+- **Status:** angenommen · 2026-10-04 · Platzhalter bis zum Sounddesign
+- **Entscheidung:** `tools/audio/make_sfx.py` (numpy, 0 €) erzeugt alle Effekte: Menüklänge in zwei Sets (Elysia Glas in Dur und nie variiert; Real Holz und Papier mit kleinen Abweichungen), Münzen, XP, Level-up, Truhe, Beute je Seltenheit, Aufheben im Tal, Dialogstimmen, Glitches und das Brummen des Risses. `AudioDirector.ui()`, `sfx()` und `voice()` spielen sie auf den Bussen UI, SFX und Voice; `SoundBank` sucht erst in `assets/generated/sfx/`.
+- **Konsequenzen:** Die Klänge sind technisch geprüft (Pegel, Hüllkurven, Schleifen), aber nicht angehört. Ein Austausch ist reiner Dateitausch.
+
+## ADR-028 · Requisiten-Atlas je Stil
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Jede Look-Szene hat ~1.700 Streu-Sprites mit 20–37 verschiedenen Texturen. In Y-Reihenfolge wechselt die Textur ständig, jeder Wechsel ist ein Draw Call (574–928 pro Bild).
+- **Entscheidung:** `PropCatalog` packt beim ersten Gebrauch alle Grafiken eines Stils in eine Atlas-Textur und gibt `AtlasTexture`-Ausschnitte aus. Shader dürfen deshalb nicht mit `UV` als 0..1 der Figur rechnen (Wind nutzt `VERTEX`, Spiegelungen die Einzeltextur über `PropCatalog.source_texture`). Streu-Sprites werden nicht von Lampen beleuchtet (`light_mask = 0`).
+- **Konsequenzen:** Elysia 574 → 81, Tal 928 → 119, Wald 818 → 197 Draw Calls. Neue Requisiten landen automatisch im Atlas ihres Stils (Breite 1024 px).
+
+## ADR-029 · Spielstand Schema 2
+- **Status:** angenommen · 2026-10-04
+- **Entscheidung:** Die Tageszeit (`day_preset`) gehört zum Spielzustand. Migration 1 → 2 setzt `ui_mode` nach der Szene des Stands, weil Stände aus Phase 2 immer `ELYSIA` enthielten.
+- **Konsequenzen:** Ältere Stände laden weiter (Migration getestet). `docs/SAVE_FORMAT.md` ist aktualisiert.
+

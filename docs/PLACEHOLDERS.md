@@ -8,7 +8,9 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | Datei | Art | Quelle | Lizenz | Ersatz geplant |
 |-------|-----|--------|--------|----------------|
 | `icon.svg` | App-Icon | selbst erstellt (Riss im Feld) | projekt-eigen | finales Icon nach Art-Direction |
-| `assets/fonts/tiny5/Tiny5-Regular.ttf` | UI-Schrift | google/fonts `ofl/tiny5` (Stefan Schmidt) | OFL 1.1 (`OFL.txt` liegt bei) | evtl. final; Entscheidung mit Art-Direction |
+| `assets/fonts/tiny5/Tiny5-Regular.ttf` | kleine Beschriftungen | google/fonts `ofl/tiny5` (Stefan Schmidt) | OFL 1.1 (`OFL.txt` liegt bei) | evtl. final; Entscheidung mit Art-Direction |
+| `assets/fonts/jersey10/Jersey10-Regular.ttf` | Hauptschrift (ADR-026) | google/fonts `ofl/jersey10` (Soft Type) | OFL 1.1 (`OFL.txt` liegt bei) | evtl. final; Entscheidung mit Art-Direction |
+| `assets/fonts/jersey15/Jersey15-Regular.ttf` | Titel, Belohnungen (ADR-026) | google/fonts `ofl/jersey15` (Soft Type) | OFL 1.1 (`OFL.txt` liegt bei) | evtl. final; Entscheidung mit Art-Direction |
 | `core/boot/boot.tscn` | Startmenü des Prototyps | selbst erstellt | projekt-eigen | echter Titel-Flow (Phase 4) |
 | `assets/placeholder/tiles/greybox_tiles.png` | 16-px-Tiles (Gras, Erde, Stein, Mauer, Wasser, Holz) | projekt-eigen, programmatisch | projekt-eigen | CC0-Tileset (Phase 3), später finale Art |
 | `assets/placeholder/characters/{player,npc,antreiber}.png` | 16×24-Figuren, 8 Richtungen, Idle/Walk/Run/Sit | projekt-eigen, programmatisch | projekt-eigen | finales Figurendesign |
@@ -19,7 +21,10 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | `assets/generated/characters/{player,mira,elysian}.png` | Spielfigur, Mira, Elysianer; 24×32, 8 Richtungen | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | finales Figurendesign |
 | `assets/generated/audio/*_loop.wav` | Regen, Garten, Wasser, Nachtwald (Ambience-Loops) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Field Recordings bzw. Sounddesign |
 | `assets/generated/music/*_loop.wav` | Musik-Loops Elysia, Tal, Nachtwald, Antreiber mit gemeinsamem Motiv | projekt-eigen, synthetisch (`tools/audio/make_music.py`) | projekt-eigen | Komposition und Aufnahme (Phase 6 bzw. nach Budget) |
-| `assets/generated/ui/*.png` | Elysia-Rahmen mit Edelsteinen, Münze, Funkeln, Riss | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete UI im Elysia-Stil |
+| `assets/generated/ui/*.png` | Elysia-Rahmen mit Edelsteinen, Münze, Funkeln, Riss, Lichtstrahlen, Quest-Marker | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete UI im Elysia-Stil |
+| `assets/generated/items/*.png` | Item-Icons 16×16 (Kompliment, Stein, Samen) | projekt-eigen, Pixel für Pixel in `tools/art/make_ui.py` | projekt-eigen | handgezeichnete Icons |
+| `assets/generated/title/*.png` | Titelbild: schwebende Insel mit Weltenbaum, Wasserfall, Logo REAL | projekt-eigen, aus den Elysia-Sprites zusammengesetzt (`tools/art/make_title.py`) | projekt-eigen | Key-Art |
+| `assets/generated/sfx/*.wav` | Menü-, Belohnungs-, Dialog- und Riss-Klänge (ADR-027) | projekt-eigen, synthetisch (`tools/audio/make_sfx.py`) | projekt-eigen | Sounddesign |
 | `assets/generated/objects/*.png` | Elysia-Truhe (zu/offen), Stein | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete Objekte |
 | `content/maps/look_{elysia,tal,wald}.txt` | Look-Karten Elysia-Garten, Tal, Wald bei Nacht | projekt-eigen | projekt-eigen | Slice-Karten (Phase 3) |
 | `content/dialogue/**/*.dialogue` | Schildtexte und Antreiber-Sätze (alle `[#ph]`) | Entwurf Claude | projekt-eigen | Writing-Pass mit Voice-Sheets (Phase 4) |

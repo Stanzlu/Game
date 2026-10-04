@@ -6,21 +6,29 @@ Etwa 15 Minuten, bitte mit Ton.
 
 Wer keinen Build hat: Das Video `phase3_uebergang.mp4` (mit Ton) zeigt Teil 1 und 2.
 
+## Teil 0: Startmenü (ca. 1 Minute)
+
+Lass das Startmenü kurz laufen: Insel mit Weltenbaum, Wolken, Blüten, ab und zu Vögel, dazu Elysias
+Musik. Blättere durch die Einträge und hör auf die Menüklänge. Die Testszenen liegen jetzt unter
+**Prototypen**.
+
 ## Teil 1: Elysia (ca. 5 Minuten)
 
-Startmenü → **Look: Elysia-Garten**.
+Startmenü → **Neues Spiel** (oder Prototypen → Elysia-Garten).
 
 1. Hör kurz zu: Elysia hat jetzt Musik. Perfekt, hell, sich wiederholend.
-2. Sprich einen der identisch laufenden Elysianer an. Achte oben links auf Level, XP-Leiste und Gold,
-   oben rechts auf die Quest-Anzeige.
-3. Öffne die Truhe vor dem Weltenbaum. Wie wirken die Belohnungs-Popups?
+2. Sprich einen der identisch laufenden Elysianer an. Achte auf die Dialogbox (Namensschild,
+   Stimme beim Tippen) und oben links auf Level, XP-Leiste und Gold, oben rechts auf die Quest-Anzeige.
+3. Öffne die Truhe vor dem Weltenbaum. Wie wirken die Belohnungen (Münzen fliegen in den Zähler,
+   LEVEL UP mit Strahlen, Beute-Karte mit Icon und Fanfare)?
 4. Am rechten Rand des Beckens liegt ein Stein. Heb ihn auf.
 5. Öffne das Journal (J) und das Pause-Menü (Esc): goldener Stil.
 
 ## Teil 2: Der Riss (ca. 3 Minuten)
 
-Ganz unten rechts am Inselrand, bei einem lila Baum, leuchtet ein Riss in der Luft. Berühre ihn und
-lass die Sequenz durchlaufen, ohne etwas zu drücken.
+Ganz unten rechts am Inselrand, bei einem lila Baum, leuchtet ein Riss in der Luft. Hör hin, wenn du
+näher kommst: Die Luft flimmert und brummt. Berühre ihn und lass die Sequenz durchlaufen, ohne etwas
+zu drücken.
 
 - Was passiert mit der Anzeige, mit der Musik, mit dem Bild?
 - Wie fühlt sich die Stille an? Zu lang, zu kurz, genau richtig?
@@ -35,7 +43,7 @@ Regen auf, der Bach rauscht und leise Musik kommt zurück.
 
 ## Teil 4: Leistungstest (ca. 1 Minute)
 
-Startmenü → **Leistungstest**. Nichts drücken, bis das Ergebnis erscheint. Bitte schick mir die Datei
+Startmenü → **Prototypen** → **Leistungstest**. Nichts drücken, bis das Ergebnis erscheint. Bitte schick mir die Datei
 `benchmark.txt` (Pfad steht im Ergebnis) oder ein Foto der Ergebnistabelle.
 
 ## Fragen
@@ -45,6 +53,8 @@ Startmenü → **Leistungstest**. Nichts drücken, bis das Ergebnis erscheint. B
 - Ist die Musik als Platzhalter erträglich? Was stört am meisten?
 - Waren die Belohnungs-Popups witzig übertrieben oder nur nervig?
 - Gab es Ruckler oder Stellen, an denen das Spiel hängen blieb?
+- Ist die neue Schrift gut lesbar (Dialog, Menüs)? Zu groß, zu klein?
+- Welche Klänge stören (zu laut, zu schrill, zu oft)?
 
 ## Einstellungen, die hier wirken
 

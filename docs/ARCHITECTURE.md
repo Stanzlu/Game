@@ -32,7 +32,7 @@ docs/        Dokumentation                                         ✅
 | `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit, Eingabe-Overrides | ✅ |
 | `WorldState` | `core/world_state.gd` | typisierter Spielzustand (`GameState`), einzige Schreibstelle (ADR-019) | ✅ |
 | `SaveSystem` | `core/save_system.gd` | JSON-Saves, Slots, Autosave, Sperren, Laden (ADR-021) | ✅ |
-| `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking, Bandstopp, Ambience (ADR-023) | ✅ |
+| `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking, Bandstopp, Ambience (ADR-023); Menü-, Spiel- und Stimmklänge `ui()`, `sfx()`, `voice()` (ADR-027) | ✅ |
 | `ScreenFade` | `core/screen_fade.gd` | schwarze Abdeckung über Szenenwechsel (ADR-025) | ✅ |
 
 ## Spielszenen
@@ -105,9 +105,20 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
 der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
-`ui/theme/base_theme.tres` mit Typvariationen `TitleLabel` (32 px), `SubtitleLabel` (16 px),
-`MutedLabel`. Grundschrift Tiny5 in 8 px; Text-Skalierung später in ganzzahligen Vielfachen. Renderer: Compatibility
+`ui/theme/base_theme.tres` (ADR-026): Grundschrift Jersey 10 in 19 px, `TitleLabel`/`SubtitleLabel` in
+Jersey 15 (27 px), `SmallLabel`/`HintLabel`/`PromptText` in Tiny5 (8 px), dazu `MutedLabel`,
+`MenuEntry`, `MenuCursor`, `DialogueNamePlate`, `PromptPanel`/`PromptKey`, `TitleMenuPanel`.
+Die Skins Elysia und Real überschreiben nur Farben und Rahmen. `MenuLayer` legt einen weichgezeichneten
+Hintergrund (`menu_backdrop.gdshader`) unter das Panel; `OptionList` führt einen `MenuCursor` mit und
+spielt die Menüklänge. Entwickler-Panels nutzen `compact_theme.tres`. Renderer: Compatibility
 (OpenGL 3) auf allen Plattformen (ADR-022).
+
+**Startmenü:** `core/boot/boot.tscn` mit `TitleBackground` (`ui/title/`): Himmel, Weltenbaum-Insel,
+Wolken, Inseln, Blüten und Vögel; Prototyp-Szenen und Leistungstest im Untermenü `PrototypeMenu`.
+
+**HUD (`ui/hud/hud.gd`):** Elysia mit `XpBar`, hochzählendem Gold mit fliegenden Münzen, Level-up
+(Strahlen, Funken, Aufblitzen), Beute-Karte mit Icon (`ItemDef.icon()`) und `fancy_text.gdshader`;
+Real mit einer leisen Zeile. Für beide: Ortsname beim Betreten (`show_area`) und „Gespeichert“.
 
 **Look-Prototyp (ADR-017, `docs/ART_DIRECTION.md`):** `LookScene` (`world/levels/look_scene.gd`) erweitert
 `GameScene` um Atmosphäre. Ebenen in der Welt: Himmel `SkyLayer` (z −20) → gebackener Boden mit
@@ -119,6 +130,8 @@ dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` 
 Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und
 NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske; der Player
 bekommt keine). `AmbientLife` (`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen.
+`PropCatalog` gibt die Grafiken als Ausschnitte eines Atlas je Stil aus (ADR-028); Shader rechnen
+deshalb nicht mit `UV` als 0..1 der Figur.
 
 ## Eingabe
 
@@ -143,7 +156,10 @@ Eingabe-Overrides liegen in den Einstellungen; die Belegungsoberfläche folgt na
 Busse `Master`, `Music`, `Ambience`, `SFX`, `UI`, `Voice` (alle → Master) in `default_bus_layout.tres`.
 `AudioDirector` spielt die Musik-Loops (`assets/generated/music/`, `tools/audio/make_music.py`) auf `Music`
 und die Ambience-Loops auf `Ambience`, je mit zwei Spielern zum Überblenden. Musik: Elysia, Tal (Abend),
-Nachtwald, Antreiber, Stille. Während Dialogen −7 dB. Der Brunnen hat einen positionalen Wasser-Loop.
+Nachtwald, Antreiber, Stille. Während Dialogen −7 dB. Der Brunnen hat einen positionalen Wasser-Loop,
+der Riss ein Brummen. Effekte aus `assets/generated/sfx/` (`tools/audio/make_sfx.py`, ADR-027) laufen
+über je sechs Spieler pro Bus: `ui()` wählt das Klangset nach UI-Modus, `voice()` die Stimme aus
+`content/dialogue/voices.json`.
 
 ## Übergang und Licht (ADR-025)
 
