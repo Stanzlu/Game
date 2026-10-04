@@ -72,6 +72,8 @@ func _ready() -> void:
 	if arrival.has("position") and player != null:
 		player.teleport(arrival["position"])
 		view.follow(player)
+	if SceneRegistry.has(scene_key()) and scene_key() != "sandbox":
+		hud.show_area(SceneRegistry.title_key(scene_key()))
 	Log.info(Log.Category.BOOT, "scene ready", {"scene": str(name), "key": scene_key()})
 
 

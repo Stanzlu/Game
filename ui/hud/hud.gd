@@ -7,6 +7,8 @@ extends CanvasLayer
 ## is a little too much, on purpose. The Real world: nothing, except one quiet line with a
 ## small icon when something is picked up.
 ## The rift sequence removes the Elysia elements one by one (vanish_next()).
+## In both worlds: the name of a place when entering it (Elysia: a golden banner, Real: a
+## quiet line) and a small mark in the corner when the game saved.
 
 const COIN := preload("res://assets/generated/ui/coin.png")
 const SPARKLE := preload("res://assets/generated/ui/sparkle.png")
@@ -44,13 +46,19 @@ var _queue: Array[Callable] = []
 var _busy := false
 var _vanished: PackedStringArray = []
 var _time := 0.0
+var _area: Label
+var _area_tween: Tween
+var _saved: Label
+var _saved_tween: Tween
 
 
 func _ready() -> void:
 	layer = 12
 	_build_elysia()
 	_build_real()
+	_build_common()
 	WorldState.progression_changed.connect(_on_progression)
+	SaveSystem.saved.connect(func(_slot: String) -> void: _show_saved())
 	WorldState.item_received.connect(_on_item)
 	WorldState.quest_changed.connect(func(_q: String, _s: String) -> void: _refresh_quest())
 	WorldState.ui_mode_changed.connect(func(_m: GameState.UiMode) -> void: refresh())
@@ -205,6 +213,75 @@ func _build_real() -> void:
 	_quiet = Label.new()
 	_quiet.theme_type_variation = &"MutedLabel"
 	_quiet_row.add_child(_quiet)
+
+
+func _build_common() -> void:
+	var common := _full_rect("Common")
+	add_child(common)
+	_area = Label.new()
+	_area.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_area.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	_area.offset_left = -200
+	_area.offset_right = 200
+	_area.offset_top = 52
+	_area.modulate.a = 0.0
+	common.add_child(_area)
+	_saved = Label.new()
+	_saved.theme_type_variation = &"HintLabel"
+	_saved.text = tr("HUD_SAVED")
+	_saved.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_saved.offset_left = -90
+	_saved.offset_right = -8
+	_saved.offset_top = -16
+	_saved.offset_bottom = -6
+	_saved.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_saved.modulate.a = 0.0
+	common.add_child(_saved)
+
+
+## Name of the place, when a scene starts: Elysia announces it in gold with a little
+## sparkle; the Real world just says it, quietly, and lets it go.
+func show_area(name_key: String) -> void:
+	if _area_tween != null and _area_tween.is_valid():
+		_area_tween.kill()
+	_area.text = tr(name_key)
+	_area.material = null
+	for item: StringName in [&"font_color", &"font_outline_color"]:
+		_area.remove_theme_color_override(item)
+	_area.remove_theme_font_override(&"font")
+	_area.remove_theme_font_size_override(&"font_size")
+	_area_tween = _area.create_tween()
+	if is_elysia():
+		_area.theme_type_variation = &""
+		_make_fancy(_area, 27)
+		_area.offset_top = 40
+		_area_tween.tween_property(_area, ^"modulate:a", 1.0, 0.25).set_delay(0.6)
+		_area_tween.parallel().tween_property(_area, ^"offset_top", 52.0, 0.4).set_delay(0.6)
+		_area_tween.tween_callback(
+			func() -> void: _sparkle_burst(_area.get_global_rect().get_center(), 12)
+		)
+		_area_tween.tween_interval(2.2)
+		_area_tween.tween_property(_area, ^"modulate:a", 0.0, 0.5)
+	else:
+		_area.theme_type_variation = &"MutedLabel"
+		_area.add_theme_color_override(&"font_color", Color(0.86, 0.86, 0.84))
+		_area.add_theme_color_override(&"font_outline_color", Color(0, 0, 0, 0.6))
+		_area.add_theme_constant_override(&"outline_size", 2)
+		# lower third, like a quiet film caption
+		_area.offset_top = 292
+		_area_tween.tween_property(_area, ^"modulate:a", 0.9, 1.4).set_delay(1.6)
+		_area_tween.tween_interval(2.4)
+		_area_tween.tween_property(_area, ^"modulate:a", 0.0, 2.0)
+
+
+func _show_saved() -> void:
+	if _saved_tween != null and _saved_tween.is_valid():
+		_saved_tween.kill()
+	_saved.add_theme_color_override(&"font_color", GOLD if is_elysia() else Color(0.7, 0.72, 0.72))
+	_saved_tween = _saved.create_tween()
+	_saved_tween.tween_property(_saved, ^"modulate:a", 1.0, 0.25)
+	_saved_tween.tween_interval(1.2)
+	_saved_tween.tween_property(_saved, ^"modulate:a", 0.0, 0.6)
 
 
 func _full_rect(node_name: String) -> Control:
@@ -404,6 +481,11 @@ func _fancy_label(text: String, size: int) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_make_fancy(label, size)
+	return label
+
+
+func _make_fancy(label: Label, size: int) -> void:
 	label.add_theme_font_override(&"font", TITLE_FONT)
 	label.add_theme_font_size_override(&"font_size", size)
 	label.add_theme_color_override(&"font_color", Color(1, 0.9, 0.5))
@@ -414,7 +496,6 @@ func _fancy_label(text: String, size: int) -> Label:
 	material.set_shader_parameter(&"keep_color", OUTLINE)
 	material.set_shader_parameter(&"height", float(size))
 	label.material = material
-	return label
 
 
 func _show_popup(node: Control, seconds: float, scale_from: float) -> void:
