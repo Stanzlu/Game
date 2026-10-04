@@ -4,6 +4,7 @@ extends GutTest
 
 const TAL := preload("res://world/levels/look_tal.tscn")
 const ELYSIA := preload("res://world/levels/look_elysia.tscn")
+const WALD := preload("res://world/levels/look_wald.tscn")
 
 
 func before_each() -> void:
@@ -49,6 +50,12 @@ func test_only_the_real_world_reflects_the_protagonist() -> void:
 	add_child_autofree(elysia)
 	await wait_physics_frames(2)
 	assert_null(elysia.player.get_node_or_null("Reflection"), "Elysia reflects everything but him")
+	elysia.queue_free()
+	await wait_physics_frames(1)
+	var wald: LookScene = WALD.instantiate()
+	add_child_autofree(wald)
+	await wait_physics_frames(2)
+	assert_not_null(wald.player.get_node_or_null("Reflection"), "the night forest is real too")
 
 
 func test_standing_still_ends_in_a_glance_around() -> void:

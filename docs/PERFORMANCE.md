@@ -98,3 +98,19 @@ Draw Calls je Quelle (Elysia, vorher): Streu-Sprites und Requisiten ~550, Lichte
 HUD 9. Im Wald kosten die 12 Lichtquellen weiterhin ~180 Draw Calls; das ist der nächste Hebel,
 falls die Zielhardware knapp wird. Der Titelbildschirm liegt unter 30 Draw Calls.
 
+## Bible-Abgleich (2026-10-04)
+
+Elysia ist jetzt spiegelsymmetrisch mit Streu im Raster und Zwillings-Requisiten, das Tal hat Wind,
+Blätter und das Spiegelbild der Figur (ADR-031). Gleiche Messumgebung (Software-Rendering, llvmpipe,
+4 vCPU), Leistungstest mit 12 s pro Szene:
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls vorher → jetzt |
+|-------|-------|------|---------|---------|--------------------------|
+| Elysia | 27 | 36,8 | 42,3 | 57,1 | 79 → 113 |
+| Tal | 33 | 30,0 | 36,6 | 41,0 | 110 → 116 |
+| Wald | 29 | 34,0 | 43,5 | 48,4 | 195 → 196 |
+
+Elysia hat mehr Requisiten (jede Seite vollständig) und daher rund 30 Draw Calls mehr; das ist weit
+unter dem Stand vor dem Atlas (574). Die Software-Werte schwanken zwischen Läufen um einige fps und
+sagen nichts über echte Grafikkarten. Das Urteil „ruckelt“ gilt nur für die Container-Software.
+

@@ -33,7 +33,7 @@ Startmenü → **Neues Spiel** (oder Prototypen → Elysia-Garten).
 
 ## Teil 2: Der Riss (ca. 3 Minuten)
 
-Ganz unten rechts am Inselrand, bei einem lila Baum, leuchtet ein Riss in der Luft. Hör hin, wenn du
+Ganz unten rechts am Inselrand, rechts neben einem Blumenbeet, leuchtet ein Riss in der Luft. Hör hin, wenn du
 näher kommst: Die Luft flimmert und brummt. Berühre ihn und lass die Sequenz durchlaufen, ohne etwas
 zu drücken.
 

@@ -30,7 +30,7 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Klippen | Geschichtete Steinplatten (breite flache Zellen), Licht oben, dunkler zum Fuß. Gewölbte Graskappe mit heller Kante und Ranken, Schatten unter der Kappe und am Fuß. Wasserfälle mit Streifen, Gischt und Spritzpartikeln. |
 | Dichte | Kleinvegetation per Streu-Regeln im `[meta]`-Block (`scatter`): Grasbüschel, Wildblumen, Kiesel, Zweige, Laub und Pilze unter Bäumen, Schilf am Wasser, Sträucher am Waldrand, Gras, das in Wegränder wächst. Deterministisch, ohne Kollision, mit Wind. |
 | Natürlichkeit | Grasflächen mit trockenen und saftigen Flecken, kahle Stellen (Tal, Wald), feuchte Erde am Ufer, Kiesel im flachen Wasser, Waldränder aus einzelnen Kronen mit Stämmen, Bäume mit unregelmäßigen Kronen, schiefen Stämmen und drei Größen. |
-| Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser. In Elysia nie der Protagonist (Game Bible §9); im Tal spiegelt er sich in Wasser und Pfützen (ADR-031). |
+| Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser. In Elysia nie der Protagonist (Game Bible §9); in der Wirklichkeit (Tal, Wald) spiegelt er sich in Wasser und Pfützen (ADR-031). |
 | Tierleben | Vogelschwärme mit Schatten am Boden (Wald: Fledermäuse), Koi im heiligen Becken, Fischschatten in Bach und Teich, Libellen über dem Wasser. |
 | Leuchten | Leuchtende Teile (Pilze, Kristalle, Blätter, Lichthöfe, Lichtstrahl) sind eigene Emissive-Ebenen mit `render_mode unshaded`: richtig verdeckt, aber nicht von Nacht-Abdunklung oder Licht gedimmt. Echte `PointLight2D` nur für größere Lichtquellen. |
 | Tiefe | Props sortieren nach ihrer Fußlinie. Flaches (Seerosen) liegt auf Ebene −5, Boden auf −10, Himmel auf −20. |
@@ -81,10 +81,10 @@ Ergebnis mit `tools/capture.sh` ansehen.
 
 ## Fragen an den Projektinhaber
 
-1. Trifft die Richtung (Elysia hell und satt, Tal dunkel und warm beleuchtet) dein Bild?
-2. Was stört am meisten: Figur, Boden, Bäume, Haus, Licht, Farben oder Bewegung?
-3. Passt die Figurengröße im Verhältnis zu Bäumen und Haus?
-4. Soll die Grafik so weit sein, bevor wir mit Phase 2 (Systeme) weitermachen, oder reicht die Richtung?
+1. Wirkt Elysia unheimlich-perfekt (Symmetrie, Gleichtakt, kürzer werdende Musik) und trotzdem schön?
+2. Lädt das Tal trotz Regen und Wind ein, oder wirkt es trostlos?
+3. Verrät der Schein-Titel „Elysia“ zu wenig oder zu viel?
+4. Was stört an Figur, Bäumen, Haus oder Licht am meisten, bevor Schlüssel-Assets von Hand entstehen?
 
 ## Nächste Schritte (nicht Teil dieser Phase)
 

@@ -133,7 +133,7 @@ abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tön
 dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` streut zusätzlich
 Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und
 NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske). Den Player
-spiegelt nur eine Szene mit `reflect_player` (Tal, auch in Pfützen), Elysia nie. `AmbientLife`
+spiegelt nur eine Szene mit `reflect_player` (Tal und Wald, auch in Pfützen), Elysia nie. `AmbientLife`
 (`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen; mit `perfect_loops` (Elysia)
 ohne Zufall und gespiegelt an der Achse aus `[meta] symmetry`, die auch Boden, Streu, Requisiten und
 Wind (`wind_sway.gdshader`, `mirror_x`) spiegelt (ADR-031).

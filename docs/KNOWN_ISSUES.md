@@ -11,7 +11,7 @@
 | 7 | Der Dialogue Manager speichert eine Einstellung unter einem Schlüssel in Großbuchstaben (`UPDATE_TRANSLATION_TEMPLATES_AUTOMATICALLY`). | Nur Kosmetik. | So übernommen, ein Test prüft den Wert. | akzeptiert |
 | 8 | Im Kameramodus *Weich* wackelt die Figur um ±0,5 Spielpixel gegenüber dem Bildschirm, weil sie selbst pixelgenau bleibt. | Bei genauem Hinsehen sichtbar. | Gegenüberstellung mit *Pixelgenau* im Playtest (ADR-012). | offen |
 | 9 | Testoptionen aus dem Pause-Menü werden nicht gespeichert. | – | Gelöst in Phase 2: Einstellungsmenü mit `settings.json` (ADR-018). | erledigt |
-| 10 | Alle Geräusche sind synthetische Platzhalter. | Footsteps klingen generisch. | CC0-Sounds bzw. Sounddesign in Phase 3. | geplant |
+| 10 | Alle Geräusche sind synthetische Platzhalter. | Footsteps klingen generisch. | Phase 3: eigene prozedurale Effekte, Musik und Ambience (ADR-023, ADR-027); echtes Sounddesign später. | gemildert |
 | 11 | Controller-Hotplug und Tastenbeschriftung auf echtem Gamepad sind nicht auf Hardware getestet. | Beschriftung könnte bei exotischen Pads „A“ zeigen. | Beim Playtest prüfen. | offen |
 | 12 | Die Look-Szenen sind auf Zielhardware nicht gemessen (große Bodentexturen, Partikel, Lichter, Post-Process). Im Container gibt es nur Software-OpenGL. | Framerate auf schwachen Geräten unbekannt. | Beim Playtest Info-Anzeige (F3) prüfen; Messung in `PERFORMANCE.md` nachtragen. | offen |
 | 13 | Gebackene Böden müssen nach jeder Kartenänderung neu erzeugt werden. Der Test erkennt nur eine falsche Größe, nicht veralteten Inhalt. | Grafik und Kollision könnten auseinanderlaufen. | Backen gehört zum Kartenändern (`CONTENT_GUIDE.md`). | akzeptiert |
