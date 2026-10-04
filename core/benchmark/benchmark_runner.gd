@@ -143,15 +143,16 @@ func report() -> String:
 		)
 	)
 	var screen := DisplayServer.screen_get_size()
+	var hz := DisplayServer.screen_get_refresh_rate()
 	(
 		lines
 		. append(
 			(
-				"Bildschirm: %dx%d @ %d Hz · Fenster %dx%d · VSync %s"
+				"Bildschirm: %dx%d @ %s Hz · Fenster %dx%d · VSync %s"
 				% [
 					screen.x,
 					screen.y,
-					roundi(DisplayServer.screen_get_refresh_rate()),
+					str(roundi(hz)) if hz > 0.0 else "?",
 					get_window().size.x,
 					get_window().size.y,
 					(
