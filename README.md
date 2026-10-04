@@ -3,9 +3,10 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 3 (Art-/Audio-Prototyp) mit Feinschliff-Runde. Ziel ist ein 45–60-minütiger Vertical
-Slice, danach Playtest-Gate. Spielbar: Startmenü → Neues Spiel (Elysia, Truhe, Riss, Tal) und unter
-Prototypen alle Testszenen samt Leistungstest. Grafik, Ton und Texte sind selbst erzeugte Platzhalter.
+**Status:** Phase 3 (Art-/Audio-Prototyp) mit Feinschliff und Abgleich mit der Game Bible. Ziel ist ein
+45–60-minütiger Vertical Slice, danach Playtest-Gate. Spielbar: Startmenü → Neues Spiel (Elysia, Truhe,
+Riss, Tal) und unter Prototypen alle Testszenen samt Leistungstest. Vor dem ersten Übertritt nennt sich
+das Spiel im Startmenü „Elysia“ (ADR-030). Grafik, Ton und Texte sind selbst erzeugte Platzhalter.
 Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 
 ## Entwicklung
@@ -25,10 +26,12 @@ Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
+| `tools/godot.sh -- --title=real` | Startbild „REAL“ statt „Elysia“ erzwingen (`--title=elysia` umgekehrt) |
+| `tools/godot.sh -- --large-text` | große Schrift nur für diese Sitzung |
 | `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner); im Spiel: Startmenü → Prototypen → Leistungstest |
 | `.venv/bin/python tools/audio/make_music.py` | Musik-Loops neu erzeugen |
 | `.venv/bin/python tools/art/make_ui.py` | UI-Rahmen, Truhe, Stein, Riss, Item-Icons neu erzeugen |
-| `.venv/bin/python tools/art/make_title.py` | Titelbild (Insel, Wasserfall, Logo) neu erzeugen |
+| `.venv/bin/python tools/art/make_title.py` | Startbilder (Insel, Wasserfall, Logos, Abendtal) neu erzeugen |
 | `.venv/bin/python tools/audio/make_sfx.py` | Soundeffekte neu erzeugen |
 | `tools/godot.sh -- --profile=test1 --start=sandbox` | eigener Ordner für Spielstände und Einstellungen (Tests, Aufnahmen) |
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |

@@ -6,23 +6,30 @@ Etwa 15 Minuten, bitte mit Ton.
 
 Wer keinen Build hat: Das Video `phase3_uebergang.mp4` (mit Ton) zeigt Teil 1 und 2.
 
-## Teil 0: Startmenü (ca. 1 Minute)
+## Teil 0: Startmenü (ca. 2 Minuten)
 
-Lass das Startmenü kurz laufen: Insel mit Weltenbaum, Wolken, Blüten, ab und zu Vögel, dazu Elysias
-Musik. Blättere durch die Einträge und hör auf die Menüklänge. Die Testszenen liegen jetzt unter
-**Prototypen**.
+Solange du noch nicht durch den Riss gegangen bist, gibt sich das Spiel als klassisches Fantasy-RPG
+„Elysia“ aus: goldenes Logo, symmetrische Insel mit zwei Wasserfällen, immer derselbe Vogelschwarm im
+gleichen Takt. Erst wenn ein Spielstand im Tal liegt, zeigt das Startmenü „REAL“ über einem Abendtal.
+Unter **Prototypen** kannst du mit **Startbild wechseln** beide ansehen und mit **Schluss: Titelkarte**
+das geplante Ende des Slice („Schwarz. Titel.“).
 
 ## Teil 1: Elysia (ca. 5 Minuten)
 
 Startmenü → **Neues Spiel** (oder Prototypen → Elysia-Garten).
 
-1. Hör kurz zu: Elysia hat jetzt Musik. Perfekt, hell, sich wiederholend.
-2. Sprich einen der identisch laufenden Elysianer an. Achte auf die Dialogbox (Namensschild,
+1. Hör kurz zu: Elysia hat Musik. Perfekt, hell, sich wiederholend. Bleib ein paar Minuten: Der Loop
+   wird kürzer (nach der Truhe und nach dem Stein noch einmal). Fällt dir die Wiederholung auf?
+2. Lauf zur Mitte vor den Weltenbaum: Der Garten ist genau spiegelsymmetrisch, die Pflanzen wiegen
+   sich im Gleichtakt, Schmetterlinge und Libellen fliegen gespiegelt, die Koi kreisen gleichmäßig.
+   Nur zwei Dinge haben keinen Zwilling. Findest du sie?
+3. Sprich einen der gespiegelt laufenden Elysianer an. Achte auf die Dialogbox (Namensschild,
    Stimme beim Tippen) und oben links auf Level, XP-Leiste und Gold, oben rechts auf die Quest-Anzeige.
-3. Öffne die Truhe vor dem Weltenbaum. Wie wirken die Belohnungen (Münzen fliegen in den Zähler,
+4. Öffne die Truhe vor dem Weltenbaum. Wie wirken die Belohnungen (Münzen fliegen in den Zähler,
    LEVEL UP mit Strahlen, Beute-Karte mit Icon und Fanfare)?
-4. Am rechten Rand des Beckens liegt ein Stein. Heb ihn auf.
-5. Öffne das Journal (J) und das Pause-Menü (Esc): goldener Stil.
+5. Am rechten Rand des Beckens liegt ein Stein. Heb ihn auf.
+6. Öffne das Journal (J) und das Pause-Menü (Esc): goldener Stil. Bleib einmal still stehen: Deine
+   Figur spiegelt sich im Becken nicht.
 
 ## Teil 2: Der Riss (ca. 3 Minuten)
 
@@ -37,9 +44,13 @@ zu drücken.
 
 ## Teil 3: Tal und Tageszeiten (ca. 3 Minuten)
 
-Im Tal (nach dem Riss oder über **Look: Tal im Regen**) steht vor Miras Haus eine Bank. Setz dich und
-warte ein paar Sekunden. Die Zeit läuft weiter: Nacht → Regentag → Abend → Nacht. Am Abend hört der
-Regen auf, der Bach rauscht und leise Musik kommt zurück.
+Im Tal (nach dem Riss oder über **Look: Tal im Regen**) kommst du an einem Regentag an: Wind in Böen,
+Blätter fliegen, schiefe Bäume, kaputte Zaunstücke. Stell dich neben eine Pfütze: Hier spiegelt sich
+deine Figur. Bleib einige Sekunden stehen, dann schaut sie sich um (Mira auch).
+
+Vor Miras Haus steht eine Bank. Setz dich und warte ein paar Sekunden. Die Zeit läuft weiter:
+Regentag → Abend → Nacht → Regentag. Am Abend hört der Regen auf, der Wind wird leiser und leise
+Musik kommt zurück.
 
 ## Teil 4: Leistungstest (ca. 1 Minute)
 
@@ -56,7 +67,14 @@ Startmenü → **Prototypen** → **Leistungstest**. Nichts drücken, bis das Er
 - Ist die neue Schrift gut lesbar (Dialog, Menüs)? Zu groß, zu klein?
 - Welche Klänge stören (zu laut, zu schrill, zu oft)?
 
+- Wirkt Elysias Perfektion (Symmetrie, Gleichtakt, kürzer werdende Musik) unheimlich, schön oder
+  einfach künstlich?
+- Wirkt das Tal trotz Regen und Wind einladend?
+- Verrät dir das Startmenü „Elysia“ zu wenig oder zu viel?
+
 ## Einstellungen, die hier wirken
+
+- „Große Dialogschrift“ an: Menüs, Journal, HUD und Hinweise wachsen mit, nicht nur der Dialog.
 
 - „Bildschirmwackeln“ aus: Der Riss wackelt nicht.
 - „Blitzeffekte reduzieren“ an: Riss und Anzeige flackern nicht, sie blenden ruhig aus.

@@ -61,7 +61,8 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   Umbruch, Links/Rechts ändert Werte, Bestätigen mit Enter, Leertaste, E oder A, Zurück mit Esc oder B.
   Sie laufen auch bei pausiertem Baum.
 - Startmenü: Fortsetzen (neuester lesbarer Stand), Laden, Einstellungen, Prototyp-Szenen (jede startet
-  einen neuen Spielzustand). `--start=<schlüssel>` und `--continue` für Tests und Aufnahmen.
+  einen neuen Spielzustand). `--start=<schlüssel>` und `--continue` für Tests und Aufnahmen. Zwei Titel
+  (ADR-030): „Elysia“, bis `SaveSystem.reached_reality()` wahr ist, danach „REAL“; `--title=elysia|real`.
 
 - Sandbox: `world/levels/sandbox.tscn` lädt `content/maps/sandbox.txt`.
 - Antreiber: `encounters/antreiber/antreiber_encounter.gd` erbt von `GameScene` und baut endlose Segmente.
@@ -108,13 +109,16 @@ der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
 `ui/theme/base_theme.tres` (ADR-026): Grundschrift Jersey 10 in 19 px, `TitleLabel`/`SubtitleLabel` in
 Jersey 15 (27 px), `SmallLabel`/`HintLabel`/`PromptText` in Tiny5 (8 px), dazu `MutedLabel`,
 `MenuEntry`, `MenuCursor`, `DialogueNamePlate`, `PromptPanel`/`PromptKey`, `TitleMenuPanel`.
-Die Skins Elysia und Real überschreiben nur Farben und Rahmen. `MenuLayer` legt einen weichgezeichneten
+Die Skins Elysia und Real überschreiben nur Farben und Rahmen. `TextSize` (`ui/theme/text_size.gd`)
+schaltet für „Große Schrift“ die Schriftgrößen aller gemeinsamen Themes um (ADR-033). `MenuLayer` legt einen weichgezeichneten
 Hintergrund (`menu_backdrop.gdshader`) unter das Panel; `OptionList` führt einen `MenuCursor` mit und
 spielt die Menüklänge. Entwickler-Panels nutzen `compact_theme.tres`. Renderer: Compatibility
 (OpenGL 3) auf allen Plattformen (ADR-022).
 
-**Startmenü:** `core/boot/boot.tscn` mit `TitleBackground` (`ui/title/`): Himmel, Weltenbaum-Insel,
-Wolken, Inseln, Blüten und Vögel; Prototyp-Szenen und Leistungstest im Untermenü `PrototypeMenu`.
+**Startmenü:** `core/boot/boot.tscn` mit `TitleBackground` (`ui/title/`) in zwei Stimmungen: Elysia
+(symmetrische Insel, Zwillings-Wasserfälle, Vögel im exakten Takt) oder REAL (Abendtal mit Wind,
+Laterne, Sternen). Prototyp-Szenen, Leistungstest, Titelkarte (`TitleCard`) und Titelwechsel im
+Untermenü `PrototypeMenu`.
 
 **HUD (`ui/hud/hud.gd`):** Elysia mit `XpBar`, hochzählendem Gold mit fliegenden Münzen, Level-up
 (Strahlen, Funken, Aufblitzen), Beute-Karte mit Icon (`ItemDef.icon()`) und `fancy_text.gdshader`;
@@ -128,8 +132,11 @@ sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichte
 abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tönung, Vignette) sitzt auf
 dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` streut zusätzlich
 Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und
-NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske; der Player
-bekommt keine). `AmbientLife` (`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen.
+NPCs nahe am Wasser eine Spiegelung an (`reflection.gdshader`, maskiert mit der Wassermaske). Den Player
+spiegelt nur eine Szene mit `reflect_player` (Tal, auch in Pfützen), Elysia nie. `AmbientLife`
+(`world/fx/ambient_life.gd`) bewegt Vögel, Fische, Koi und Libellen; mit `perfect_loops` (Elysia)
+ohne Zufall und gespiegelt an der Achse aus `[meta] symmetry`, die auch Boden, Streu, Requisiten und
+Wind (`wind_sway.gdshader`, `mirror_x`) spiegelt (ADR-031).
 `PropCatalog` gibt die Grafiken als Ausschnitte eines Atlas je Stil aus (ADR-028); Shader rechnen
 deshalb nicht mit `UV` als 0..1 der Figur.
 
@@ -156,7 +163,8 @@ Eingabe-Overrides liegen in den Einstellungen; die Belegungsoberfläche folgt na
 Busse `Master`, `Music`, `Ambience`, `SFX`, `UI`, `Voice` (alle → Master) in `default_bus_layout.tres`.
 `AudioDirector` spielt die Musik-Loops (`assets/generated/music/`, `tools/audio/make_music.py`) auf `Music`
 und die Ambience-Loops auf `Ambience`, je mit zwei Spielern zum Überblenden. Musik: Elysia, Tal (Abend),
-Nachtwald, Antreiber, Stille. Während Dialogen −7 dB. Der Brunnen hat einen positionalen Wasser-Loop,
+Nachtwald, Antreiber, Stille. Elysias Loop schrumpft nach Spielzeit und Fortschritt (`ELYSIA_STAGES`,
+Wechsel am Loop-Ende, ADR-032). Während Dialogen −7 dB. Der Brunnen hat einen positionalen Wasser-Loop,
 der Riss ein Brummen. Effekte aus `assets/generated/sfx/` (`tools/audio/make_sfx.py`, ADR-027) laufen
 über je sechs Spieler pro Bus: `ui()` wählt das Klangset nach UI-Modus, `voice()` die Stimme aus
 `content/dialogue/voices.json`.

@@ -200,3 +200,39 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Entscheidung:** Die Tageszeit (`day_preset`) gehört zum Spielzustand. Migration 1 → 2 setzt `ui_mode` nach der Szene des Stands, weil Stände aus Phase 2 immer `ELYSIA` enthielten.
 - **Konsequenzen:** Ältere Stände laden weiter (Migration getestet). `docs/SAVE_FORMAT.md` ist aktualisiert.
 
+## ADR-030 · Zwei Startbilder: Elysias Schein-Titel, REAL erst nach dem Übertritt
+- **Status:** angenommen · 2026-10-04 · rückgängig machbar (ein Schalter in `core/boot/boot.gd`)
+- **Kontext:** Game Bible §10: „Elysia täuscht zunächst ein klassisches RPG vor.“ §56 setzt den Titel ans Ende des Slice („Schwarz. Titel.“). Das bisherige Startmenü zeigte von Anfang an „REAL“ mit dem Riss im A und nahm damit die Wendung vorweg.
+- **Entscheidung:**
+  - Solange kein Spielstand die Wirklichkeit erreicht hat (`SaveSystem.reached_reality()`), heißt das Spiel „Elysia“: goldenes Serifen-Logo mit Kristall und Filigran, Untertitel „Ein Abenteuer für die Ewigkeit“, spiegelsymmetrische Insel mit Zwillings-Wasserfällen, Menü mittig im Elysia-Skin, Elysias Musik.
+  - Danach zeigt das Startmenü „REAL“ in schlichten Buchstaben über einem Abendtal (krummer Baum im Wind, Bank, Laterne, kaputter Zaun, Haus mit Licht), Tal-Musik und Abend-Ambience, Menü links im Real-Skin.
+  - `TitleCard` (`ui/title/title_card.gd`) spielt den Schluss des Slice: schwarz, Musik aus, „REAL“ blendet ein und aus. Bis Phase 4 nur unter Prototypen abspielbar.
+  - Prototypen → „Startbild wechseln“ und `--title=elysia|real` zeigen beide Titel ohne Spielstand.
+- **Konsequenzen:** Wer Spielstände löscht, sieht wieder Elysia; das ist gewollt. Der Schein-Titel braucht später Key-Art auf Elysia-Niveau.
+
+## ADR-031 · Elysia perfekt, die Wirklichkeit ungepflegt
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §9 (perfekte Symmetrie, keine Alterung, Schmetterlinge auf denselben Routen, Wolken wiederholen sich, Wasser spiegelt alles außer dem Protagonisten), §12 (schiefe Bäume, kaputte Zäune, Wind), Risiko 10 (Wirklichkeit darf nicht gleich Leid sein).
+- **Entscheidung:**
+  - Elysia ist um Spalte 32 spiegelsymmetrisch (`[meta] symmetry`): Karte, gebackener Boden (pixelgenau, gespiegeltes Dithering), Streu im exakten Raster, Requisiten als Spiegelpaare. Nur der unscheinbare Stein und der Riss haben keinen Zwilling.
+  - Elysia-Boden ohne trockene Flecken und Kiesel, mit Mährichtungs-Streifen und Blumenpunkten im Raster.
+  - Bewegung ohne Zufall: Pflanzen wiegen sich ohne Böen gespiegelt im Gleichtakt, derselbe Vogelschwarm im exakten Takt, Koi kreisen gleichmäßig, Libellen und Schmetterlinge fliegen gespiegelte Routen, Wolkenschatten kehren sichtbar wieder, die Elysianer laufen gespiegelt im Gleichtakt und schauen sich nie um.
+  - Tal: krumme Bäume mit totem Ast, kaputte Zaunstücke, Wind (Ambience mit Böen und knarrendem Holz, Blätter in unregelmäßigen Böen). Ankunft bei Regen am Tag statt in der Nacht (Slice: „Regen. Wind.“ und später „Abend“); die Bank führt zu Abend und Nacht.
+  - Im Tal spiegelt sich die Hauptfigur in Wasser und Pfützen, in Elysia nie.
+  - Real-UI ruhig statt düster: wärmere Farben, sanfter abgedunkelter Hintergrund.
+- **Konsequenzen:** Änderungen an Elysias Karte müssen symmetrisch bleiben (`tools/art/layout_look_maps.py elysia` erzeugt sie gespiegelt, ein Test prüft die Paare). Der Tal-Start ist in `world/levels/look_tal.tscn` (`day_preset`) einstellbar.
+
+## ADR-032 · Elysias Loop schrumpft
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §35: „Loops werden zunehmend wahrnehmbar.“ (KNOWN_ISSUES #32)
+- **Entscheidung:** `make_music.py` schneidet Elysias Musik auf 4 und 2 Takte. `AudioDirector` wechselt nach Spielzeit (150 s, 300 s) oder Fortschritt (Truhe geöffnet, Stein genommen) zur nächsten Stufe, immer erst am Loop-Ende, damit der Wechsel auf dem Taktanfang landet.
+- **Konsequenzen:** Die Stufe hängt am Spielstand (Spielzeit, Flags) und ist damit nach dem Laden dieselbe. Feinabstimmung der Schwellen im Playtest.
+
+## ADR-033 · Idle-Animationen und große Schrift überall
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §36 („viele Idle-Animationen“) und §50 („skalierbare Textgröße“). Bisher vergrößerte die Einstellung nur die Dialogbox (KNOWN_ISSUES #23).
+- **Entscheidung:**
+  - Figurenblätter bekommen den Zustand „look“ (blinzeln, nach links, nach rechts, blinzeln) als letzte Zeilen. Die Hauptfigur schaut sich nach 4 bis 9 s Stillstand um, Mira ebenso (`"glance": true`), Elysianer nie.
+  - `TextSize` schaltet die gemeinsamen Themes um (Fließtext Jersey 15 in 27 px, kleine Schrift Tiny5 in 16 px, Entwickler-Panels mit). Auswahlzeilen reservieren Platz für ihren Wert, Menüs wachsen mit.
+- **Konsequenzen:** Neue UI nutzt Theme-Typen statt fester Schriftgrößen, sonst wächst sie nicht mit. Grey-Box-Blätter ohne „look“-Zeilen funktionieren weiter.
+
