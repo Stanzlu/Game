@@ -44,7 +44,8 @@ Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 ## Builds testen
 
 CI baut Windows- und macOS-Versionen auf `main`, per manuellem Start oder wenn eine Commit-Nachricht
-`[export]` enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts**. Die Builds sind
+`[export]` enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts** (2 Tage verfügbar; mehr als
+vier Build-Paare gleichzeitig sprengen den kostenlosen Speicher von 500 MB und blockieren CI). Die Builds sind
 nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 
 - **Windows:** `REAL-windows` entpacken, `REAL.exe` starten. Bei „Der Computer wurde durch Windows

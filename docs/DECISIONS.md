@@ -50,7 +50,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 ## ADR-009 · CI-Budget
 - **Status:** angenommen · 2026-10-02
 - **Kontext:** Privates Repository: 2.000 Actions-Minuten und 500 MB Artefakt-Speicher pro Monat kostenlos.
-- **Entscheidung:** Nur Ubuntu-Runner. Checks (Lint, Format, Import, Smoke-Run, Tests) bei jedem Push. Exporte nur auf `main`, per manuellem Start oder wenn die Commit-Nachricht `[export]` enthält. Artefakte werden 7 Tage aufbewahrt. Kein Git LFS.
+- **Entscheidung:** Nur Ubuntu-Runner. Checks (Lint, Format, Import, Smoke-Run, Tests) bei jedem Push. Exporte nur auf `main`, per manuellem Start oder wenn die Commit-Nachricht `[export]` enthält. Artefakte werden 2 Tage aufbewahrt (vorher 7; das Gratiskontingent von GitHub Free erlaubt nur 500 MB Artefakt-Speicher, ein Windows/macOS-Paar hat rund 100 MB, und darüber blockiert GitHub ohne Zahlungsmethode alle Actions-Jobs). Kein Git LFS.
 - **Konsequenzen:** Keine Kosten. Playtest-Builds für Phase 5 kommen als GitHub-Release, das nicht auf den Artefakt-Speicher zählt.
 
 ## ADR-010 · Git-Workflow: ein Branch und ein Pull Request pro Phase
