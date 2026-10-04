@@ -21,10 +21,21 @@ const TRACKS: PackedStringArray = ["elysia", "valley", "forest", "antreiber"]
 const TRACK_DB := {"elysia": -9.0, "valley": -6.0, "forest": -8.0, "antreiber": -10.0}
 const SILENT_DB := -60.0
 const DUCK_DB := -7.0
+## Elysia's loop shrinks the longer the player stays and the further they get (Game Bible
+## §35 "Loops werden zunehmend wahrnehmbar"): the same music cut to 8, 4 and 2 bars.
+## A stage starts after `after` seconds of play or once `flag` is set; the switch waits for
+## the end of the loop, so it lands on the downbeat.
+const ELYSIA_STAGES: Array[Dictionary] = [
+	{"file": "elysia_loop.wav", "after": 0.0, "flag": ""},
+	{"file": "elysia_half_loop.wav", "after": 150.0, "flag": "elysia.chest_tree_opened"},
+	{"file": "elysia_quarter_loop.wav", "after": 300.0, "flag": "elysia.stone_taken"},
+]
 const UI_SOUNDS: PackedStringArray = ["move", "confirm", "back", "open", "close", "tick"]
 const POOL_SIZE := 6
 
 var current := ""
+## Which ELYSIA_STAGES entry is playing (while the track is "elysia").
+var elysia_stage := 0
 var ambience_stream: AudioStream
 var _music: Array[AudioStreamPlayer] = []
 var _ambience: Array[AudioStreamPlayer] = []
@@ -35,6 +46,7 @@ var _tweens: Dictionary[Node, Tween] = {}
 var _tape_tween: Tween
 var _pools: Dictionary[StringName, Array] = {}
 var _next_in_pool: Dictionary[StringName, int] = {}
+var _last_position := 0.0
 
 
 func _ready() -> void:
@@ -65,6 +77,42 @@ static func track_path(track: String) -> String:
 	return MUSIC_DIR + track + "_loop.wav"
 
 
+## The Elysia stage the game has earned: by play time or by the flags of the stages.
+static func elysia_stage_for(playtime: float, has_flag: Callable) -> int:
+	var stage := 0
+	for i in ELYSIA_STAGES.size():
+		var entry := ELYSIA_STAGES[i]
+		var flag := str(entry["flag"])
+		if playtime >= float(entry["after"]) or (not flag.is_empty() and has_flag.call(flag)):
+			stage = i
+	return stage
+
+
+func wanted_elysia_stage() -> int:
+	return elysia_stage_for(WorldState.state.playtime_seconds, WorldState.has_flag)
+
+
+func _process(_delta: float) -> void:
+	if current == "elysia":
+		_update_elysia_stage(_music[_active_music].get_playback_position())
+
+
+## Swaps to the wanted Elysia stage when the loop has just wrapped around (`position`
+## jumped back), so the music never stumbles mid-bar.
+func _update_elysia_stage(position: float) -> void:
+	var wrapped := position < _last_position
+	_last_position = position
+	var want := wanted_elysia_stage()
+	if want == elysia_stage or not wrapped:
+		return
+	elysia_stage = want
+	var player := _music[_active_music]
+	player.stream = load(MUSIC_DIR + str(ELYSIA_STAGES[want]["file"]))
+	player.play()
+	_last_position = 0.0
+	Log.info(Log.Category.AUDIO, "elysia loop shrinks", {"stage": want})
+
+
 static func is_track(track: String) -> bool:
 	return track in TRACKS
 
@@ -84,7 +132,12 @@ func play_music(track: String, fade := 2.0) -> void:
 	if not track.is_empty():
 		_active_music = 1 - _active_music
 		var player := _music[_active_music]
-		player.stream = load(track_path(track))
+		var path := track_path(track)
+		if track == "elysia":
+			elysia_stage = wanted_elysia_stage()
+			path = MUSIC_DIR + str(ELYSIA_STAGES[elysia_stage]["file"])
+		_last_position = 0.0
+		player.stream = load(path)
 		player.pitch_scale = 1.0
 		player.volume_db = SILENT_DB
 		player.play()

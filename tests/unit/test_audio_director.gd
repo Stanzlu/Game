@@ -96,3 +96,25 @@ func test_ui_sounds_exist_in_both_skins() -> void:
 	audio.ui("move")
 	audio.ui("whistle")
 	assert_push_error("unknown ui sound")
+
+
+func test_elysia_loop_shrinks_on_the_downbeat() -> void:
+	var never := func(_flag: String) -> bool: return false
+	var stone := func(flag: String) -> bool: return flag == "elysia.stone_taken"
+	assert_eq(AudioDirectorService.elysia_stage_for(0.0, never), 0)
+	assert_eq(AudioDirectorService.elysia_stage_for(160.0, never), 1, "by play time")
+	assert_eq(AudioDirectorService.elysia_stage_for(10.0, stone), 2, "by progress")
+	for entry: Dictionary in AudioDirectorService.ELYSIA_STAGES:
+		var stream := load(AudioDirectorService.MUSIC_DIR + str(entry["file"])) as AudioStreamWAV
+		assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s loops" % entry["file"])
+	WorldState.new_game()
+	audio.play_music("elysia", 0.0)
+	assert_eq(audio.elysia_stage, 0)
+	WorldState.set_flag("elysia.chest_tree_opened")
+	audio._update_elysia_stage(5.0)
+	assert_eq(audio.elysia_stage, 0, "waits for the end of the loop")
+	audio._update_elysia_stage(0.01)
+	assert_eq(audio.elysia_stage, 1, "switches on the downbeat")
+	var playing := audio._music[audio._active_music].stream.resource_path
+	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
+	WorldState.new_game()

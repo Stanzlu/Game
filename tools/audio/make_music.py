@@ -221,21 +221,27 @@ def write(name, stereo):
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes(data.tobytes())
-    with open(path + ".import", "w") as f:
-        f.write(IMPORT)
+    # keep Godot's existing .import (it holds the uid); only new files get the template
+    if not os.path.exists(path + ".import"):
+        with open(path + ".import", "w") as f:
+            f.write(IMPORT)
     print(f"{path}: {stereo.shape[1] / RATE:.1f} s")
 
 
 # --- Tracks -----------------------------------------------------------------------------
 
 
-def elysia():
-    """Bright, perfect, strictly quantized. I-vi-IV-V in C, the motif on bells, 16th arps."""
+def elysia(bars=8, name="elysia_loop"):
+    """Bright, perfect, strictly quantized. I-vi-IV-V in C, the motif on bells, 16th arps.
+
+    Shorter versions are the same music cut down to its first `bars` bars: the longer the
+    player stays, the smaller Elysia's loop gets and the more its repetition shows
+    (Game Bible §35 "Loops werden zunehmend wahrnehmbar")."""
     rng = np.random.default_rng(11)
-    tr = Track(bpm=100, bars=8)
+    tr = Track(bpm=100, bars=bars)
     root = 60  # C4
     chords = [(1, [1, 3, 5, 7]), (6, [6, 8, 10, 12]), (4, [4, 6, 8, 10]), (5, [5, 7, 9, 13])]
-    for bar in range(8):
+    for bar in range(bars):
         chord_deg, tones = chords[(bar // 2) % 4]
         beat0 = bar * 4
         if bar % 2 == 0:
@@ -250,15 +256,24 @@ def elysia():
             tr.add(beat0 + i * 0.25, music_box(midi_hz(m), 1.2, 0.8), pan=-0.35 + 0.7 * (i % 2), gain=0.32)
     # motif on bells in bars 1-2 and 5-6, an answer an octave up in 7-8
     for start_bar, octave in [(0, 1), (4, 1), (6, 2)]:
+        if start_bar >= bars:
+            continue
         pos = start_bar * 4
         for deg, eighths in MOTIF:
             tr.add(pos, music_box(midi_hz(degree(root, MAJOR, deg, octave)), 2.6, 1.2), pan=0.15, gain=0.55)
             pos += eighths * 0.5
     # high sparkle on every downbeat (the loop "sparkles" exactly the same every time)
-    for bar in range(8):
+    for bar in range(bars):
         tr.add(bar * 4, music_box(midi_hz(degree(root, MAJOR, 5, 3)), 0.8, 0.5), pan=0.6, gain=0.18)
     tr.buf = np.stack([circular_filter(ch, lo=45, hi=7500) for ch in tr.buf])
-    finish(tr, "elysia_loop", reverb=0.32, rev_seconds=3.2)
+    finish(tr, name, reverb=0.32, rev_seconds=3.2)
+
+
+def elysia_stages():
+    """Elysia's loop and its two shrunken stages (AudioDirector switches at the loop end)."""
+    elysia()
+    elysia(4, "elysia_half_loop")
+    elysia(2, "elysia_quarter_loop")
 
 
 def valley():
@@ -332,7 +347,7 @@ def antreiber():
     finish(tr, "antreiber_loop", reverb=0.15, rev_seconds=1.2)
 
 
-TRACKS = {"elysia": elysia, "valley": valley, "forest": forest, "antreiber": antreiber}
+TRACKS = {"elysia": elysia_stages, "valley": valley, "forest": forest, "antreiber": antreiber}
 
 
 if __name__ == "__main__":
