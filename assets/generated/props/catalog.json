@@ -625,6 +625,27 @@
    "res://assets/generated/props/tal/fence.png"
   ]
  },
+ "tal/fence_broken": {
+  "anchor": [
+   9,
+   14
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    16,
+    4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fence_broken_0.png",
+   "res://assets/generated/props/tal/fence_broken_1.png",
+   "res://assets/generated/props/tal/fence_broken_2.png"
+  ]
+ },
  "tal/fence_post": {
   "anchor": [
    4,
@@ -934,6 +955,29 @@
    "res://assets/generated/props/tal/tree_0.png",
    "res://assets/generated/props/tal/tree_1.png",
    "res://assets/generated/props/tal/tree_2.png"
+  ]
+ },
+ "tal/tree_crooked": {
+  "anchor": [
+   50,
+   101
+  ],
+  "shadow": [
+   26,
+   8
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 1.4,
+  "textures": [
+   "res://assets/generated/props/tal/tree_crooked_0.png",
+   "res://assets/generated/props/tal/tree_crooked_1.png",
+   "res://assets/generated/props/tal/tree_crooked_2.png"
   ]
  },
  "tal/twig": {

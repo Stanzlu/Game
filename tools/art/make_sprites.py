@@ -199,9 +199,12 @@ def tree(style, seed, leaves="foliage"):
     return c
 
 
-def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
+def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None, crooked=0.0):
     """A less symmetric tree: leaning, tapering trunk with roots, branches forking into 3-5
-    sub-crowns with gaps, so it reads as a real tree rather than a ball on a stick."""
+    sub-crowns with gaps, so it reads as a real tree rather than a ball on a stick.
+
+    `crooked` (0..1, the real world, Game Bible §12): the trunk leans hard and bows, one side
+    of the crown is missing and a dead, bare branch sticks out on the other."""
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES[style], EXTRA[style]
     W, H, crown_r = {"small": (52, 66, 17), "medium": (68, 84, 23), "large": (88, 104, 29)}[size]
@@ -211,6 +214,11 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
     cx, base = W / 2, H - 3
     bark = ex["bark"]
     lean = rng.uniform(-3, 3)
+    bend, side = 0.0, 1.0
+    if crooked:
+        side = 1.0 if rng.random() < 0.5 else -1.0
+        lean = side * (8.0 + 8.0 * crooked)
+        bend = -side * (3.0 + 4.0 * crooked)
     fork_y = base - crown_r * 0.95
     crown_cy = fork_y - crown_r * 0.4
     # roots
@@ -222,7 +230,7 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
     trunk_m = np.zeros((H, W), bool)
     for y in range(int(fork_y), int(base)):
         t = (base - y) / max(base - fork_y, 1)
-        x = cx + lean * t
+        x = cx + lean * t + bend * np.sin(np.pi * t)
         half = tw / 2 * (1 - 0.3 * t)
         trunk_m[y, int(round(x - half)):int(round(x + half)) + 1] = True
     grain = pa.value_noise(H, W, (6, 1), rng)
@@ -239,6 +247,17 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
         br = limb_mask(c, cx + lean, fork_y + 2, sx, sy + 2, max(2, tw * 0.6))
         c.paint(br, bark, 0.25 + 0.4 * c.cylinder(sx - 3, sx + 3), contrast=3.0, dither=False)
     subs.append((crown_cy - crown_r * 0.15, cx + lean, crown_r * 0.62))
+    if crooked:
+        # the crown thins out away from the lean: drop the outermost sub-crown on that side
+        far = min(range(len(subs) - 1), key=lambda i: subs[i][1] * side)
+        subs.pop(far)
+        # a dead branch, bare and forked, reaching out against the lean
+        y0 = fork_y + (base - fork_y) * 0.5
+        x0 = cx + lean * 0.5 + bend
+        x1, y1 = x0 - side * crown_r * 1.15, y0 - crown_r * 0.4
+        dead = limb_mask(c, x0, y0, x1, y1, 3)
+        dead |= limb_mask(c, x1 + side * crown_r * 0.3, y1 + crown_r * 0.1, x1 - side * 3, y1 - crown_r * 0.35, 2)
+        c.paint(dead, bark, 0.3 + 0.35 * c.cylinder(min(x0, x1) - 2, max(x0, x1) + 2), contrast=3.0, dither=False)
     blobs = []
     for sy, sx, r in subs:
         for _ in range(4):
@@ -603,6 +622,49 @@ def fence(style, seed, vertical=False):
     if style == "elysia":
         c.paint(c.rect(9, 3, 12, 15), wood, np.where(c.xx < 10, 0.85, 0.5), contrast=3)
         c.paint(c.rect(10, 2, 11, 3), wood, 0.85)
+    c.outline(st["outline"])
+    return c
+
+
+def fence_broken(seed, kind):
+    """Tal fence that has seen weather (Game Bible §12): a rail hanging down from one nail,
+    a leaning post with a split rail, or a post stump with its rail lying in the grass."""
+    rng = np.random.default_rng(seed)
+    ex, st = EXTRA["tal"], pa.STYLES["tal"]
+    wood = ex["plank"]
+    c = Canvas(18, 18)
+
+    def rail(x0, y0, x1, y1, lit=0.6):
+        m = limb_mask(c, x0, y0, x1, y1, 2)
+        m |= limb_mask(c, x0, y0 + 1, x1, y1 + 1, 2)
+        c.paint(m, wood, np.where(c.yy <= np.minimum(y0, y1) + 1, lit + 0.15, lit - 0.2), contrast=3)
+
+    if kind == 0:
+        # upper rail intact, lower rail torn off the far post and hanging into the grass
+        c.paint(c.rect(1, 5, 18, 7), wood, np.where(c.yy == 5, 0.75, 0.45), contrast=3)
+        rail(4, 11, 15, 16)
+        c.paint(c.rect(1, 2, 5, 17), wood, np.where(c.xx < 3, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(2, 1, 4, 2), wood, 0.7)
+    elif kind == 1:
+        # the post leans over; the upper rail is split in the middle, the lower one sags
+        for y in range(1, 17):
+            dx = int(round((16 - y) * 0.22))
+            c.paint(c.rect(1 + dx, y, 5 + dx, y + 1), wood, np.where(c.xx < 3 + dx, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(5, 5, 9, 7), wood, np.where(c.yy == 5, 0.75, 0.45), contrast=3)
+        rail(11, 7, 18, 5)
+        rail(4, 10, 18, 12, 0.5)
+    else:
+        # only a stump of the post is left; its rail lies diagonally in the grass
+        c.paint(c.rect(1, 11, 5, 17), wood, np.where(c.xx < 3, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(1, 10, 2, 11), wood, 0.6)
+        c.paint(c.rect(3, 10, 5, 11), wood, 0.7)
+        rail(6, 14, 17, 16, 0.5)
+        c.paint(c.rect(9, 5, 18, 7), wood, np.where(c.yy == 5, 0.7, 0.4), contrast=3)
+    # a few dark knots and cracks
+    for _ in range(3):
+        y, x = int(rng.integers(2, 16)), int(rng.integers(2, 16))
+        if c.a[y, x]:
+            c.fill(c.rect(x, y, x + 1, y + 1), wood[0])
     c.outline(st["outline"])
     return c
 
@@ -1152,6 +1214,8 @@ def particles():
     px("splash", [".a.a.", "a...a", ".bbb."], {"a": ("#c9d6e2", 170), "b": ("#9fb2c4", 120)})
     px("ripple", [".aaa.", "a...a", ".aaa."], {"a": ("#9fb4c4", 140)})
     px("petal", ["ab", "bc"], {"a": ("#ffd0e4", 255), "b": ("#ff8fbf", 255), "c": ("#e04a8a", 255)})
+    # a torn leaf blown through the valley (wind, Game Bible §12)
+    px("leaf", ["ab.", "bbc", ".c."], {"a": ("#9a8a48", 255), "b": ("#6f6a30", 255), "c": ("#4a3c1e", 255)})
     px("sparkle", [".a.", "aba", ".a."], {"a": ("#fff3c4", 160), "b": ("#ffffff", 255)})
     # two frames stacked vertically (wings open / folded), used with vframes = 2
     px("butterfly", ["aa.aa", "abcba", ".bcb.", ".a.a.", ".....", ".bcb.", ".aca.", "....."],
@@ -1234,6 +1298,10 @@ def build():
                          natural_tree("tal", 102, "foliage_blue", "medium", (88, 104)),
                          natural_tree("tal", 103, "foliage", "medium", (88, 104))], (44, 101),
          shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
+    save("tal", "tree_crooked", [natural_tree("tal", 104, "foliage", "medium", (100, 104), crooked=0.8),
+                                 natural_tree("tal", 105, "foliage_blue", "medium", (100, 104), crooked=1.0),
+                                 natural_tree("tal", 106, "foliage", "small", (100, 104), crooked=0.6)],
+         (50, 101), shape={"circle": 6, "offset": [0, -2]}, sway=1.4, shadow=[26, 8])
     save("tal", "pine", [pine("tal", 110), pine("tal", 111)], (20, 68),
          shape={"circle": 5, "offset": [0, -2]}, sway=0.8, shadow=[16, 5])
     save("tal", "rock", [rock("tal", 120), rock("tal", 121, 22, 18)], (13, 16),
@@ -1247,6 +1315,8 @@ def build():
     save("tal", "woodpile", woodpile(141), (15, 18), shape={"rect": [26, 8], "offset": [0, -3]},
          shadow=[14, 3])
     save("tal", "fence", fence("tal", 150), (9, 14), shape={"rect": [16, 4], "offset": [0, -1]})
+    save("tal", "fence_broken", [fence_broken(152 + k, k) for k in range(3)], (9, 14),
+         shape={"rect": [16, 4], "offset": [0, -1]})
     save("tal", "fence_post", fence("tal", 151, vertical=True), (4, 22),
          shape={"rect": [4, 16], "offset": [0, -8]})
     save("tal", "bench", bench("tal"), (10, 18))

@@ -5,7 +5,7 @@
 style = "tal"
 ground = "res://assets/generated/maps/look_tal_ground.png"
 water = "res://assets/generated/maps/look_tal_water.png"
-scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TP", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TP", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TPC", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPCh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TPC", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
 [legend]
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
@@ -20,6 +20,8 @@ H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence"}}
 E = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_post"}}
 T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+B = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken"}}
 P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
 R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
 g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
@@ -42,7 +44,7 @@ hhhhhhhhhhhhhhh^^^^^^hhhhhhhhhhhhhhhhhhh^^^hhhhhhhhhhh^^
 h^^^^^.................^^^^^^...........~~~...^^^^^^.hhh
 hhh......P..T...........................~~~....P.....hhh
 hhh.............P........................~~~.........hhh
-hhh...T.............................P....~~~.........hhh
+hhh...C.............................P....~~~.........hhh
 hhh......................................~~~......T..hhh
 hhh................E.............E.......~~~.........hhh
 hhh.........ddddd..E.............E.......~~~...g.....hhh
@@ -50,7 +52,7 @@ hhh.....R...ddddd..E......H......E......~~~~.........hhh
 hhh.........ddddd..E.K........WK.E....R.~~~..........hhh
 hhh................E..b...,.N....E......~~~.........Phhh
 hhh.......g........E.....,,,.....E......~~~..........hhh
-hhh..T.............FFFFFF,,,FFFFFF.....~~~~...R......hhh
+hhh..C.............FFBFFF,,,FFFBFF.....~~~~...R......hhh
 hhh.....................l,,,............~~~..........hhh
 hhh.................mmm.p,,,.......g....~~~..........hhh
 hhh.....gg.........mmmmmm,@,............~~~..........hhh
@@ -62,9 +64,9 @@ hhh,,,,,,,,,........................m.....~~~...g...,hhh
 hhh............gg.............gg...^^^^^^^~~~~......^hhh
 hhh...............................^^^^^^^^^vvv^^^^^^^hhh
 hhh............................R..^^^^^^^^^vvv^^^^^^^hhh
-hhh.P..........T...........................x~~~......hhh
+hhh.P..........C...........................x~~~......hhh
 hhh.........................................~~~......hhh
-hhh.....T.............T...........T.........~~~.....Thhh
+hhh.....T.............T...........T.........~~~.....Chhh
 hhh..............R...........P..............~~~..P...hhh
 hhh.........................................~~~......hhh
 hhh.........................................~~~......hhh
