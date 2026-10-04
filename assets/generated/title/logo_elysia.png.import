@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6iv2g6xiavi0"
-path="res://.godot/imported/logo.png-1dc13cd8c5401ba8661b097d3fffc24f.ctex"
+uid="uid://cahjjrhsfh437"
+path="res://.godot/imported/logo_elysia.png-c636a433e35cb1ee1bb10ea1a649cfe8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/generated/title/logo.png"
-dest_files=["res://.godot/imported/logo.png-1dc13cd8c5401ba8661b097d3fffc24f.ctex"]
+source_file="res://assets/generated/title/logo_elysia.png"
+dest_files=["res://.godot/imported/logo_elysia.png-c636a433e35cb1ee1bb10ea1a649cfe8.ctex"]
 
 [params]
 

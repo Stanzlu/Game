@@ -15,6 +15,10 @@ const LABELS := {
 ## Called with the scene key to open.
 var on_scene: Callable
 var on_benchmark: Callable
+## Plays the slice's closing title card (Game Bible §56).
+var on_title_card: Callable
+## Switches the start screen between Elysia's fake title and REAL (for reviewing both).
+var on_switch_title: Callable
 
 
 func _ready() -> void:
@@ -30,4 +34,8 @@ func _build() -> void:
 	for key in SCENES:
 		list.add_action(LABELS[key], func() -> void: on_scene.call(key))
 	list.add_action("MENU_BENCHMARK", func() -> void: on_benchmark.call())
+	if on_title_card.is_valid():
+		list.add_action("MENU_TITLE_CARD", func() -> void: on_title_card.call())
+	if on_switch_title.is_valid():
+		list.add_action("MENU_SWITCH_TITLE", func() -> void: on_switch_title.call())
 	list.add_action("MENU_BACK", close)

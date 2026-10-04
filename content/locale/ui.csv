@@ -1,6 +1,7 @@
 keys,de
 BOOT_TITLE,REAL
 BOOT_SUBTITLE,Prototyp · Systeme
+TITLE_ELYSIA_TAGLINE,Ein Abenteuer für die Ewigkeit
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
@@ -135,6 +136,8 @@ DEBUG_NO_DAY_LIGHT,Diese Szene hat kein Tageslicht.
 DEBUG_MUSIC,Musik wechseln
 DEBUG_MUSIC_NOW,Musik: %s
 MENU_BENCHMARK,Leistungstest
+MENU_TITLE_CARD,Schluss: Titelkarte
+MENU_SWITCH_TITLE,Startbild wechseln (Elysia / REAL)
 OPTION_OK,OK
 BENCH_TITLE,Leistungstest
 BENCH_SCENE,Szene

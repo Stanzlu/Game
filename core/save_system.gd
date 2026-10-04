@@ -202,13 +202,14 @@ func _read_file(path: String) -> SaveCodec.LoadResult:
 
 
 ## Short description for slot lists: {"status": "empty"|"ok"|"broken", "saved_at",
-## "playtime", "map", "error", "backup"}.
+## "playtime", "map", "ui_mode", "error", "backup"}.
 func summary(slot: String) -> Dictionary:
 	var info := {
 		"status": "empty",
 		"saved_at": "",
 		"playtime": 0.0,
 		"map": "",
+		"ui_mode": GameState.UiMode.ELYSIA,
 		"error": "",
 		"backup": has_backup(slot),
 	}
@@ -223,7 +224,18 @@ func summary(slot: String) -> Dictionary:
 	info["saved_at"] = result.saved_at
 	info["playtime"] = result.state.playtime_seconds
 	info["map"] = result.state.player.map
+	info["ui_mode"] = result.state.ui_mode
 	return info
+
+
+## True once any readable save has crossed into the real world. The start menu then drops
+## Elysia's fake title and shows REAL (ADR-030).
+func reached_reality() -> bool:
+	for slot in SLOTS:
+		var info := summary(slot)
+		if info["status"] == "ok" and info["ui_mode"] == GameState.UiMode.REAL:
+			return true
+	return false
 
 
 ## The most recently written readable slot, or "".
