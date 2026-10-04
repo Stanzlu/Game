@@ -11,6 +11,7 @@ uniform float ripple_strength = 0.0;
 uniform sampler2D cloud_noise : repeat_enable, filter_linear;
 uniform float cloud_shadow = 0.0;
 uniform vec2 cloud_velocity = vec2(7.0, 2.5);
+uniform float cloud_tile = 720.0; // world pixels per repeat of the cloud pattern
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -63,7 +64,7 @@ void fragment() {
 		}
 	}
 	if (cloud_shadow > 0.0) {
-		float n = texture(cloud_noise, (px + TIME * cloud_velocity) / 720.0).r;
+		float n = texture(cloud_noise, (px + TIME * cloud_velocity) / cloud_tile).r;
 		float s = smoothstep(0.5, 0.68, n);
 		if (s > bayer4(px)) {
 			c.rgb *= 1.0 - cloud_shadow;

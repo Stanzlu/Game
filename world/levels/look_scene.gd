@@ -36,6 +36,11 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var dragonflies := 0
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
+## Elysia (Game Bible §9, §35): animals, plants and cloud shadows repeat exactly, mirrored
+## at the map's symmetry axis. Butterflies then come in twins (odd entries mirror the even).
+@export var perfect_loops := false
+## Koi circle for perfect loops, in cells: position = center, size = radii.
+@export var koi_orbit := Rect2()
 
 @export_group("Grading")
 @export var saturation := 1.0
@@ -90,6 +95,12 @@ func _build_world() -> void:
 		life.name = "Life"
 		view.world_root.add_child(life)
 		life.setup(view, map)
+		if perfect_loops:
+			var ts := float(map.data.tile_size)
+			var orbit := Rect2(map.cell_to_world(Vector2i(koi_orbit.position)), koi_orbit.size * ts)
+			life.enable_perfect_loops(
+				_mirror_x(), orbit if koi_orbit.size != Vector2.ZERO else Rect2()
+			)
 		if bird_interval > 0.0:
 			life.enable_birds(bird_interval, bird_tint)
 		life.add_swimmers(swimmers, swimmer_texture)
@@ -102,7 +113,9 @@ func _build_world() -> void:
 	for i in butterfly_cells.size():
 		var butterfly := Butterfly.new()
 		view.world_root.add_child(butterfly)
-		butterfly.setup(map.cell_to_world(Vector2i(butterfly_cells[i])), i)
+		butterfly.setup(
+			map.cell_to_world(Vector2i(butterfly_cells[i])), i, perfect_loops, i % 2 == 1
+		)
 	view.set_post_material(_grade_material())
 	if day_preset != "keine":
 		_setup_day_light()
@@ -134,16 +147,21 @@ func _setup_ground() -> void:
 	mat.set_shader_parameter("ripple_strength", water_ripples)
 	mat.set_shader_parameter("glint_strength", water_glints)
 	if cloud_shadows > 0.0:
+		# perfect loops: one small cloud pattern that visibly comes back ("Wolken wiederholen sich")
+		var size := 128 if perfect_loops else 256
 		var noise := FastNoiseLite.new()
-		noise.frequency = 0.012
+		noise.frequency = 0.03 if perfect_loops else 0.012
 		noise.fractal_octaves = 3
 		var texture := NoiseTexture2D.new()
-		texture.noise = noise
 		texture.seamless = true
-		texture.width = 256
-		texture.height = 256
+		texture.width = size
+		texture.height = size
+		texture.noise = noise
 		mat.set_shader_parameter("cloud_noise", texture)
 		mat.set_shader_parameter("cloud_shadow", cloud_shadows)
+		if perfect_loops:
+			mat.set_shader_parameter("cloud_tile", 320.0)
+			mat.set_shader_parameter("cloud_velocity", Vector2(16.0, 0.0))
 
 
 func _add_sky() -> void:
@@ -173,6 +191,14 @@ func _add_sky() -> void:
 	for c: Array in clouds.slice(2):
 		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
 	sky.add_cloud(load(CLOUD_DIR + "islet_2.png"), 600.0, bottom - 50.0, 2.5, 0.55, 3.0)
+
+
+## World x of the map's symmetry axis (cell center), or the map center without one.
+func _mirror_x() -> float:
+	var axis := map.symmetry_axis()
+	if axis < 0:
+		return map.world_rect().get_center().x
+	return map.cell_to_world(Vector2i(axis, 0)).x
 
 
 func _grade_material() -> ShaderMaterial:
