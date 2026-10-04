@@ -9,6 +9,7 @@ signal built(data: MapData)
 const DEFAULT_LEGEND := "res://content/maps/legend.json"
 const GROUND_SHADER := preload("res://world/shaders/ground.gdshader")
 const REFLECTION_SHADER := preload("res://world/shaders/reflection.gdshader")
+const SCATTER_LIGHT_MASK := 0
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
@@ -244,7 +245,8 @@ func _add_reflections() -> void:
 		else:
 			var src := sprite as Sprite2D
 			var copy_s := Sprite2D.new()
-			copy_s.texture = src.texture
+			# the reflection shader fades by UV, so it needs the plain texture, not an atlas
+			copy_s.texture = PropCatalog.source_texture(src.texture)
 			copy_s.centered = false
 			copy_s.flip_v = true
 			var h := float(src.texture.get_height()) if src.texture != null else 0.0
@@ -287,6 +289,9 @@ func _spawn_scatter() -> void:
 			sprite.flip_h = posmod(int(pt.x * 13.0 + pt.y * 7.0), 2) == 0
 			sprite.position = pt
 			sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+			# Tiny scatter is not lit by lamps: every lit sprite costs a draw call per light,
+			# and the ground under it carries the light pool anyway (docs/PERFORMANCE.md).
+			sprite.light_mask = SCATTER_LIGHT_MASK
 			if sway > 0.0:
 				sprite.material = Decor.sway_material(sway)
 			if flat:

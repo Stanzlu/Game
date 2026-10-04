@@ -11,5 +11,5 @@ void vertex() {
 	float t = TIME * speed - world.x * 0.035 + world.y * 0.01;
 	float gust = 0.55 + 0.45 * sin(TIME * 0.31 - world.x * 0.004);
 	float w = (sin(t) + 0.35 * sin(t * 2.3 + 1.7)) * gust;
-	VERTEX.x += round(w * amount * (1.0 - UV.y));
+	VERTEX.x += round(w * amount * step(VERTEX.y, -0.5));
 }
