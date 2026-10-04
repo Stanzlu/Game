@@ -130,10 +130,11 @@ func open() -> void:
 func _animate_open() -> void:
 	var elysia := follow_mode and WorldState.ui_mode() == GameState.UiMode.ELYSIA
 	var material := backdrop.material as ShaderMaterial
-	material.set_shader_parameter(&"desaturate", 0.15 if elysia else 0.6)
-	material.set_shader_parameter(&"darken", 0.3 if elysia else 0.5)
+	# the Real world is quiet, not gloomy (Game Bible risk 10): softer, warmer dimming
+	material.set_shader_parameter(&"desaturate", 0.15 if elysia else 0.35)
+	material.set_shader_parameter(&"darken", 0.3 if elysia else 0.32)
 	material.set_shader_parameter(
-		&"tint", Color(0.28, 0.12, 0.4, 0.22) if elysia else Color(0.03, 0.035, 0.04, 0.3)
+		&"tint", Color(0.28, 0.12, 0.4, 0.22) if elysia else Color(0.16, 0.12, 0.09, 0.22)
 	)
 	if _open_tween != null and _open_tween.is_valid():
 		_open_tween.kill()
