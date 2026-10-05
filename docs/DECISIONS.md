@@ -236,3 +236,15 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - `TextSize` schaltet die gemeinsamen Themes um (Fließtext Jersey 15 in 27 px, kleine Schrift Tiny5 in 16 px, Entwickler-Panels mit). Auswahlzeilen reservieren Platz für ihren Wert, Menüs wachsen mit.
 - **Konsequenzen:** Neue UI nutzt Theme-Typen statt fester Schriftgrößen, sonst wächst sie nicht mit. Grey-Box-Blätter ohne „look“-Zeilen funktionieren weiter.
 
+## ADR-034 · Naturklang der Wirklichkeit: Schichten und Zufall statt Schleife
+- **Status:** angenommen · 2026-10-05
+- **Kontext:** Playtest Phase 3: „Naturgeräusche in der realen Welt realistischer bauen als in Elysia.“ Game Bible §9 (Elysia wiederholt sich), §12 (die Wirklichkeit ist lebendig und unberechenbar). Bisher spielte jede Szene eine einzige 12–24-s-Mono-Schleife.
+- **Entscheidung:**
+  - Elysia behält eine Schleife (`garden_loop`) und klingt bewusst zu perfekt: gleichmäßige Brise, dieselbe Vogelphrase auf exaktem Takt.
+  - Die Wirklichkeit spielt eine `SoundscapeDef` (`content/audio/*.tres`) über `SoundscapePlayer` im `AudioDirector`:
+    - **Flächen** ohne Einzelereignisse (Regen, Wind, Laub, Bach, Grillen) laufen zweimal, links und rechts, eine halbe Schleife versetzt. Das klingt breit und nie phasengleich.
+    - **Einzelklänge** (Amsel, Rotkehlchen, Kohlmeise, Ringeltaube, Krähe, Waldkauz, ferner Hund, Tropfen, Zweig, Rascheln, Knarren) kommen zu zufälligen Zeiten aus zufälligen Richtungen, mit zufälliger Tonhöhe und Lautstärke.
+    - **Böen** aus langsamem Rauschen: Wind und Laub schwellen mit, Knarren und Rascheln werden häufiger, und die wehenden Blätter im Bild folgen demselben Signal (`AudioDirector.wind_gust()`).
+  - Klänge sind physikalisch modelliert (`tools/audio/make_nature.py`, 0 €): Tropfen mit log-normaler Lautstärke und Blasenresonanz, Wind durch wandernde Resonanzen, Vogelrufe nach Gesangsstruktur, Entfernung über Tiefpass und Außenhall.
+  - Richtung über vier Panorama-Busse (`NatureL2`, `NatureL1`, `NatureR1`, `NatureR2`), die zur Laufzeit angelegt werden und in `Ambience` münden; die Lautstärke-Einstellung gilt also weiter.
+- **Konsequenzen:** Tageszeiten und Orte wählen eine Definition statt einer Datei (`DayLight`, Szenen-Export `ambience`). Neue Orte brauchen nur eine neue `.tres`. Ob es nach Natur klingt, entscheidet das Ohr im Playtest (KNOWN_ISSUES #29).

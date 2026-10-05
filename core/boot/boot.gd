@@ -12,7 +12,7 @@ extends Control
 
 const BUILD_INFO_PATH := "res://core/build_info.cfg"
 const AMBIENCE := preload("res://assets/generated/audio/garden_loop.wav")
-const REAL_AMBIENCE := preload("res://assets/generated/audio/evening_loop.wav")
+const REAL_AMBIENCE := preload("res://content/audio/tal_abend.tres")
 const LOGO_ELYSIA := preload("res://assets/generated/title/logo_elysia.png")
 const LOGO_REAL := preload("res://assets/generated/title/logo_real.png")
 const FADE_SECONDS := 0.4

@@ -36,7 +36,9 @@ const POOL_SIZE := 6
 var current := ""
 ## Which ELYSIA_STAGES entry is playing (while the track is "elysia").
 var elysia_stage := 0
-var ambience_stream: AudioStream
+## What set_ambience() last got: an AudioStream bed or a SoundscapeDef (real world).
+var ambience_stream: Resource
+var _soundscape: SoundscapePlayer
 var _music: Array[AudioStreamPlayer] = []
 var _ambience: Array[AudioStreamPlayer] = []
 var _active_music := 0
@@ -54,6 +56,9 @@ func _ready() -> void:
 	for i in 2:
 		_music.append(_make_player("Music%d" % i, &"Music"))
 		_ambience.append(_make_player("Ambience%d" % i, &"Ambience"))
+	_soundscape = SoundscapePlayer.new()
+	_soundscape.name = "Soundscape"
+	add_child(_soundscape)
 	for bus: StringName in [&"UI", &"SFX", &"Voice"]:
 		var pool: Array[AudioStreamPlayer] = []
 		for i in POOL_SIZE:
@@ -168,23 +173,38 @@ func tape_stop(seconds := 2.5) -> Signal:
 	return tape_stopped
 
 
-## Crossfades the ambience bed (rain, birds, wind). null fades it out.
-func set_ambience(stream: AudioStream, volume_db := -6.0, fade := 2.0) -> void:
+## Crossfades the ambience: an AudioStream bed (Elysia's perfect loop) or a SoundscapeDef
+## (the real world: layered beds and random one-shots, ADR-034). null fades it out.
+func set_ambience(stream: Resource, volume_db := -6.0, fade := 2.0) -> void:
+	var soundscape := stream as SoundscapeDef
 	if stream == ambience_stream:
-		# Same bed: only the level changes. Silence twice stays silence (no revival).
-		if stream != null:
+		# Same ambience: only the level changes. Silence twice stays silence (no revival).
+		if soundscape != null:
+			_soundscape.play(soundscape, volume_db, fade)
+		elif stream != null:
 			_fade(_ambience[_active_ambience], volume_db, fade, false)
 		return
+	var bed := stream as AudioStream
+	if stream != null and soundscape == null and bed == null:
+		Log.error(Log.Category.AUDIO, "not an ambience", {"resource": stream.resource_path})
+		return
+	_soundscape.play(soundscape, volume_db, fade)
 	_fade(_ambience[_active_ambience], SILENT_DB, fade, true)
 	ambience_stream = stream
-	if stream == null:
+	if bed == null:
 		return
 	_active_ambience = 1 - _active_ambience
 	var player := _ambience[_active_ambience]
-	player.stream = stream
+	player.stream = bed
 	player.volume_db = SILENT_DB
 	player.play()
 	_fade(player, volume_db, fade, false)
+
+
+## Strength of the real world's wind right now (0..1), or -1 without a soundscape. The
+## blown leaves follow it, so what you see and hear gusts together.
+func wind_gust() -> float:
+	return _soundscape.gust if _soundscape.def != null else -1.0
 
 
 ## Lowers the music while a dialogue is open.

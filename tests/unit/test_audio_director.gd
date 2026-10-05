@@ -1,7 +1,7 @@
 extends GutTest
 ## AudioDirector: music states, crossfade players, ducking, tape stop, ambience.
 
-const RAIN := preload("res://assets/generated/audio/rain_loop.wav")
+const RAIN := preload("res://assets/generated/audio/garden_loop.wav")
 
 var audio: AudioDirectorService
 

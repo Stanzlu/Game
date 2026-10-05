@@ -132,3 +132,7 @@ func _process(delta: float) -> void:
 		_time += delta
 		var push := sin(_time * 0.37) + 0.6 * sin(_time * 0.91 + 1.3) + 0.3 * sin(_time * 2.3)
 		speed_scale = clampf(0.55 + 0.45 * push, 0.25, 1.8)
+		# the wind you hear: the leaves fly with the soundscape's gusts
+		var heard := AudioDirector.wind_gust()
+		if heard >= 0.0:
+			speed_scale = lerpf(0.3, 1.8, heard)

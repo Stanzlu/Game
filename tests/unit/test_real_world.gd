@@ -30,9 +30,16 @@ func test_valley_is_weathered_and_windy() -> void:
 	if leaves != null:
 		assert_true(leaves.gusty)
 		var speeds: Array[float] = []
-		for i in 6:
+		for i in 12:
+			AudioDirector._soundscape._process(1.7)
 			leaves._process(1.7)
 			speeds.append(leaves.speed_scale)
+			assert_almost_eq(
+				leaves.speed_scale,
+				lerpf(0.3, 1.8, AudioDirector.wind_gust()),
+				0.001,
+				"the leaves fly with the wind you hear"
+			)
 		assert_gt(speeds.max() - speeds.min(), 0.2, "the wind comes in gusts")
 
 

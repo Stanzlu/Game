@@ -8,7 +8,7 @@ signal changed(preset: String)
 
 const ORDER := GameState.DAY_PRESETS
 ## Per preset: world tint, grading (shader parameters), lamp scale, rain, water ripples,
-## ambience (path or "") and music track ("keep" leaves it).
+## ambience (path of a soundscape or bed, or "") and music track ("keep" leaves it).
 const PRESETS := {
 	"regentag":
 	{
@@ -23,7 +23,7 @@ const PRESETS := {
 		"lamps": 0.15,
 		"rain": true,
 		"ripples": 0.45,
-		"ambience": "res://assets/generated/audio/rain_wind_loop.wav",
+		"ambience": "res://content/audio/tal_regentag.tres",
 		"ambience_db": -4.0,
 		"music": "silence",
 	},
@@ -40,7 +40,7 @@ const PRESETS := {
 		"lamps": 0.7,
 		"rain": false,
 		"ripples": 0.0,
-		"ambience": "res://assets/generated/audio/evening_loop.wav",
+		"ambience": "res://content/audio/tal_abend.tres",
 		"ambience_db": -8.0,
 		"music": "valley",
 	},
@@ -57,7 +57,7 @@ const PRESETS := {
 		"lamps": 1.0,
 		"rain": true,
 		"ripples": 0.45,
-		"ambience": "res://assets/generated/audio/rain_wind_loop.wav",
+		"ambience": "res://content/audio/tal_nacht.tres",
 		"ambience_db": -4.0,
 		"music": "silence",
 	},
@@ -102,7 +102,7 @@ func set_preset(preset_name: String, seconds := 4.0) -> void:
 	if rain != null:
 		rain.set_raining(bool(p["rain"]))
 	var ambience_path: String = p["ambience"]
-	var ambience: AudioStream = load(ambience_path) if not ambience_path.is_empty() else null
+	var ambience: Resource = load(ambience_path) if not ambience_path.is_empty() else null
 	AudioDirector.set_ambience(ambience, float(p["ambience_db"]), maxf(t, 1.0))
 	if str(p["music"]) != "keep":
 		AudioDirector.play_music(str(p["music"]), maxf(t, 1.0))

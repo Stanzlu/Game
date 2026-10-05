@@ -23,7 +23,7 @@ func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	assert_eq(day.preset, "regentag")
 	assert_almost_eq(day.world_tint.color.r, 1.0, 0.01, "overcast day is not darkened")
 	assert_true(day.rain.is_raining())
-	assert_eq(AudioDirector.ambience_stream.resource_path.get_file(), "rain_wind_loop.wav")
+	assert_eq(AudioDirector.ambience_stream.resource_path.get_file(), "tal_regentag.tres")
 	assert_eq(day.next_preset(0.0), "abend")
 	await wait_physics_frames(2)
 	assert_false(day.rain.is_raining(), "the rain stops in the evening")

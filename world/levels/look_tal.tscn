@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://world/levels/look_scene.gd" id="1_scene"]
 [ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
-[ext_resource type="AudioStream" path="res://assets/generated/audio/rain_wind_loop.wav" id="3_amb"]
+[ext_resource type="Resource" path="res://content/audio/tal_regentag.tres" id="3_amb"]
 
 [node name="LookTal" type="Node"]
 script = ExtResource("1_scene")

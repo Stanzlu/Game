@@ -21,8 +21,9 @@ const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
 @export var saveable := true
 ## Music for this place (AudioDirector); "keep" leaves whatever is playing.
 @export_enum("keep", "silence", "elysia", "valley", "forest", "antreiber") var music := "keep"
-## Ambience bed (rain, birds); none fades the previous one out.
-@export var ambience: AudioStream
+## Ambience: an AudioStream bed or a SoundscapeDef (content/audio); none fades the
+## previous one out.
+@export var ambience: Resource
 @export var ambience_db := -6.0
 
 var view: GameView

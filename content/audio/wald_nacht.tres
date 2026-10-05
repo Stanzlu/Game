@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SoundscapeDef" format=3]
+
+[ext_resource type="Script" path="res://world/audio/soundscape_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+wind = 0.35
+beds = Array[Dictionary]([{"sound": "wind", "db": -13.0, "gust": 0.8}, {"sound": "leaves", "db": -20.0, "gust": 1.0}, {"sound": "crickets", "db": -16.0, "gust": 0.0}, {"sound": "stream", "db": -20.0, "gust": 0.0}])
+events = Array[Dictionary]([{"sound": "owl", "every": [15.0, 40.0], "db": -13.0, "pan": 1.0, "pitch": 1.04}, {"sound": "twig", "every": [10.0, 30.0], "db": -15.0, "pan": 0.9, "pitch": 1.04}, {"sound": "rustle", "every": [8.0, 25.0], "db": -17.0, "pan": 0.9, "pitch": 1.04}, {"sound": "creak", "every": [25.0, 60.0], "db": -19.0, "pan": 0.9, "pitch": 1.04, "gust": true}, {"sound": "drip", "every": [8.0, 20.0], "db": -20.0, "pan": 0.7, "pitch": 1.04}])
