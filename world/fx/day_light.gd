@@ -29,12 +29,12 @@ const PRESETS := {
 	},
 	"abend":
 	{
-		"world_tint": Color(0.98, 0.78, 0.68),
-		"saturation": 1.1,
-		"contrast": 1.05,
-		"brightness": 0.0,
-		"tint": Color(1.06, 0.96, 0.88),
-		"shadow_tint": Color(0.07, 0.02, 0.08),
+		"world_tint": Color(0.9, 0.79, 0.7),
+		"saturation": 1.0,
+		"contrast": 1.04,
+		"brightness": -0.02,
+		"tint": Color(1.04, 0.97, 0.9),
+		"shadow_tint": Color(0.03, 0.02, 0.07),
 		"vignette": 0.3,
 		"bloom": 0.7,
 		"lamps": 0.7,
@@ -46,11 +46,11 @@ const PRESETS := {
 	},
 	"nacht":
 	{
-		"world_tint": Color(0.52, 0.56, 0.78),
-		"saturation": 1.0,
+		"world_tint": Color(0.3, 0.35, 0.52),
+		"saturation": 0.72,
 		"contrast": 1.06,
 		"brightness": 0.0,
-		"tint": Color(0.92, 0.97, 1.05),
+		"tint": Color(0.9, 0.97, 1.08),
 		"shadow_tint": Color(0.02, 0.03, 0.06),
 		"vignette": 0.35,
 		"bloom": 0.9,

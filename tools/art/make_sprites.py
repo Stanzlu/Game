@@ -40,15 +40,15 @@ EXTRA = {
         "stem": ramp("#164a30", "#24703a", "#3f9a44", "#7cc653"),
     },
     "tal": {
-        "bark": ramp("#16100e", "#251915", "#38261d", "#4f3727", "#664a33"),
-        "plank": ramp("#1a1210", "#2b1d17", "#3f2b20", "#56402e", "#6e553d"),
-        "roof": ramp("#141518", "#1f2126", "#2c2f36", "#3c4049", "#50555f"),
-        "thatch": ramp("#1d1810", "#2f2618", "#453823", "#5d4c30", "#786440"),
-        "stone_wall": ramp("#1a1c21", "#282b32", "#383c45", "#4b505b", "#616773"),
-        "iron": ramp("#0d0e10", "#1a1c20", "#2a2d33", "#3d4148"),
+        "bark": ramp("#1c1612", "#2e241d", "#45362a", "#5e4a39", "#7a624c"),
+        "plank": ramp("#211915", "#352920", "#4c3b2d", "#66503d", "#82684f"),
+        "roof": ramp("#1f2124", "#2e3135", "#41454b", "#575c63", "#71767d"),
+        "thatch": ramp("#2a2316", "#403522", "#5a4b31", "#776441", "#968054"),
+        "stone_wall": ramp("#25272a", "#36393d", "#4b4f54", "#63686e", "#80858b"),
+        "iron": ramp("#141518", "#22252a", "#33373e", "#484d55"),
         "glass": ramp("#a8601c", "#f0a040", "#ffd27a", "#fff1c4"),
-        "stem": ramp("#101b14", "#1a2b1f", "#27402c", "#3a5739"),
-        "hoop": ramp("#121316", "#22252b", "#353942", "#4a4f59"),
+        "stem": ramp("#16241a", "#223523", "#304a2f", "#43623d"),
+        "hoop": ramp("#1a1b1e", "#2a2c31", "#3d4048", "#53575f"),
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
@@ -1050,7 +1050,7 @@ def wildflowers(style, seed, w=12, h=12):
 
 PEBBLE = {
     "elysia": ramp("#4e4a4e", "#7a746e", "#a8a094", "#d4ccbe"),
-    "tal": ramp("#16161c", "#262830", "#3a3c44", "#55585e"),
+    "tal": ramp("#2a2b2c", "#3f4042", "#58595c", "#76777a"),
     "wald": ramp("#111020", "#1d1b30", "#2c2a44", "#423f5c"),
 }
 
@@ -1089,7 +1089,7 @@ def small_mushrooms(style, seed, w=10, h=9):
     caps = [ramp("#5a2a1e", "#8e4128", "#c26a3c", "#e8a070"), ramp("#4a3a2a", "#7a6040", "#a88a5c", "#d4ba8a")]
     cap = caps[rng.integers(len(caps))]
     if style == "tal":
-        cap = cap * 0.7
+        cap = cap * 0.92
     c = Canvas(w, h)
     for x, y, r in ((4, 4, 2.6), (7, 6, 1.8)):
         c.paint(c.rect(x - 0.5, y, x + 0.5, h - 1), EXTRA["wald"]["stalk"], 0.7, dither=False)

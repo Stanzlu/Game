@@ -31,7 +31,11 @@ func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	var lamp := get_tree().get_first_node_in_group(&"lamp_props")
 	assert_almost_eq(float(lamp.get("light_scale")), 0.7, 0.01)
 	var grade := scene.view.display.material as ShaderMaterial
-	assert_almost_eq(float(grade.get_shader_parameter("saturation")), 1.1, 0.01)
+	assert_almost_eq(
+		float(grade.get_shader_parameter("saturation")),
+		float(DayLight.PRESETS["abend"]["saturation"]),
+		0.01
+	)
 	assert_eq(day.next_preset(0.0), "nacht")
 	await wait_physics_frames(2)
 	assert_lt(day.world_tint.color.b, 0.9, "night darkens the valley")

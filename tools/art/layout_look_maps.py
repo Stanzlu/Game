@@ -37,8 +37,10 @@ class Grid:
                 if ((x - cx) / (rx * r)) ** 2 + ((y - cy) / (ry * r)) ** 2 <= 1.0:
                     self.set(x, y, c, only)
 
-    def path(self, pts, width, c, only=None):
+    def path(self, pts, width, c, only=None, widths=None):
+        """Catmull-Rom path through `pts`; `widths` (one per point) varies the width along it."""
         samples = []
+        sample_w = []
         for i in range(len(pts) - 1):
             p0 = pts[max(i - 1, 0)]
             p1, p2 = pts[i], pts[i + 1]
@@ -49,11 +51,12 @@ class Grid:
                 samples.append(tuple(
                     0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2
                            + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3) for k in (0, 1)))
+                sample_w.append(widths[i] + (widths[i + 1] - widths[i]) * t if widths else width)
         samples.append(pts[-1])
+        sample_w.append(widths[-1] if widths else width)
         for y in range(self.h):
             for x in range(self.w):
-                d = min(math.hypot(x - sx, y - sy) for sx, sy in samples)
-                if d <= width / 2:
+                if any(math.hypot(x - sx, y - sy) <= sw / 2 for (sx, sy), sw in zip(samples, sample_w)):
                     self.set(x, y, c, only)
 
     def add_rails(self):
@@ -198,74 +201,114 @@ def elysia():
     return g
 
 
+def wobble(v, *waves):
+    """Smooth, irregular offset: a sum of sines with incommensurate periods."""
+    return sum(a * math.sin(v / period + phase) for a, period, phase in waves)
+
+
 def tal():
+    """The valley on a rainy day, laid out like real land (playtest 05.10.: "natürlicher"):
+    a ragged forest edge with bays, a rock face that comes and goes, a meandering stream
+    of changing width with a pool, a worn trail instead of a road, trees in groves with
+    a few old solitary ones in the meadow, rocks in clusters. The yard around the house is
+    the only straight thing: people built it."""
     w, h = 56, 36
     g = Grid(w, h)
-    # Forest canopy border with a rock face below the northern forest.
+    # forest all around, deeper in some places than others
     for x in range(w):
-        top = 3 + round(0.8 * math.sin(x / 3.4) + 0.5 * math.sin(x / 1.9 + 1))
-        for y in range(0, top):
+        north = 2 + round(1.0 + wobble(x, (1.0, 3.3, 0.0), (0.7, 1.9, 1.0), (0.6, 7.1, 2.0)))
+        south = 2 + round(0.6 + wobble(x, (0.8, 2.9, 0.5), (0.5, 5.3, 1.7)))
+        for y in range(0, max(north, 1)):
             g.set(x, y, "h")
-        for y in range(top, top + 2):
+        for y in range(h - max(south, 2), h):
+            g.set(x, y, "h")
+        # a rock face below the northern forest, missing where the forest comes down
+        rock = round(1.3 + wobble(x, (0.9, 2.3, 0.4), (0.6, 4.1, 1.3)))
+        for y in range(north, north + max(rock, 0)):
             g.set(x, y, "^")
     for y in range(h):
-        for x in (0, 1, 2, w - 3, w - 2, w - 1):
-            if g.get(x, y) in ".":
-                g.set(x, y, "h")
-    for x in range(w):
-        for y in (h - 2, h - 1):
+        west = 3 + round(0.4 + wobble(y, (1.1, 2.6, 0.3), (0.8, 4.7, 2.2), (0.4, 1.3, 0.9)))
+        east = 3 + round(0.3 + wobble(y, (1.0, 3.1, 1.1), (0.7, 5.9, 0.2)))
+        for x in range(0, max(west, 2)):
             g.set(x, y, "h")
-    # Stream from the rock face down to the south.
-    g.path([(41, 5), (42, 10), (40.5, 16), (42.5, 23), (45, 29), (45, 36)], 3.0, "~", only=".")
-    # Mud patches.
-    g.ellipse(22, 20, 5, 2, "m", only=".", wobble=0.5, seed=1)
-    g.ellipse(36, 22, 3, 1.5, "m", only=".", wobble=0.5, seed=3)
-    # Paths.
-    g.path([(3, 23), (10, 23), (17, 21.5), (26, 21), (34, 22), (39, 22), (47, 22), (53, 23)], 2.4, ",",
-           only=".m")
-    g.path([(26, 15), (26, 21)], 2.2, ",", only=".m")
+        for x in range(w - max(east, 2), w):
+            g.set(x, y, "h")
+    # the stream: out of the rock face, a bend with a pool, under the bridge, over the edge
+    stream = [(41, 2), (42.5, 6), (41.5, 9.5), (39.5, 13), (40.5, 17), (42.5, 20.5), (42.5, 23),
+              (43.5, 26), (44.5, 30), (45.5, 36)]
+    widths = [2.2, 2.4, 2.8, 3.4, 2.8, 3.2, 3.2, 2.6, 2.9, 3.3]
+    g.path(stream, 3.0, "~", only=".^h", widths=widths)
+    g.ellipse(38.6, 14.2, 2.6, 1.9, "~", only=".", wobble=0.6, seed=4)  # a quiet pool
+    # wet ground and mud where people walk and water collects
+    g.ellipse(22, 20.5, 4.2, 1.6, "m", only=".", wobble=0.7, seed=1)
+    g.ellipse(35.5, 23.2, 2.6, 1.2, "m", only=".", wobble=0.7, seed=3)
+    g.ellipse(9.5, 25.5, 2.2, 1.1, "m", only=".", wobble=0.8, seed=5)
+    # a worn trail, wider where people meet, narrow where few go
+    trail = [(1, 25), (7, 24.5), (13, 23), (18, 21.2), (24, 20.6), (29, 21.4), (35, 22.4), (40, 22),
+             (46, 22.3), (51, 21.4), (55, 20.5)]
+    g.path(trail, 2.0, ",", only=".m", widths=[1.5, 1.7, 1.9, 2.1, 2.5, 2.3, 1.9, 2.1, 1.9, 1.7, 1.5])
+    g.path([(26, 15.5), (25.6, 17.5), (26.2, 20)], 2.0, ",", only=".m")  # to the house
+    g.path([(14, 23.5), (12.5, 27), (10, 30.5)], 1.2, ",", only=".")  # a faint side track
+    # the plank bridge where the trail meets the stream
     for y in (21, 22, 23):
-        for x in range(41, 45):
-            g.set(x, y, "=")
-    # A lower terrace in the south-east: the stream drops over its edge as a waterfall.
-    for x in range(34, w - 3):
-        top = 26 - (1 if math.sin(x / 2.7) > 0.3 else 0)
-        for y in range(top, 28):
+        for x in range(39, 47):
+            if g.get(x, y) == "~":
+                g.set(x, y, "=")
+        row = [x for x in range(39, 47) if g.get(x, y) == "="]
+        if row:  # planks reach a little onto both banks
+            g.set(min(row) - 1, y, "=")
+            g.set(max(row) + 1, y, "=")
+    # a lower terrace in the south-east: the stream drops over its ragged edge
+    for x in range(33, w - 2):
+        top = 26 + round(wobble(x, (0.8, 2.1, 0.7), (0.5, 3.7, 0.1)))
+        for y in range(top, top + 2):
             cell = g.get(x, y)
             if cell == ".":
                 g.set(x, y, "^")
             elif cell == "~":
                 g.set(x, y, "v")
-    # vegetable beds in the yard, west of the house
-    for y in (11, 12, 13):
-        for x in range(12, 17):
+    # vegetable beds in the yard, west of the house, one row not finished
+    for y, x1 in ((11, 17), (12, 17), (13, 15)):
+        for x in range(12, x1):
             g.set(x, y, "d")
-    # Puddles on and next to the path.
-    for x, y in [(13, 22), (20, 21), (24, 18), (31, 22), (27, 20), (9, 23)]:
-        g.set(x, y, "p")
-    # Props.
+    # puddles on the trail and next to it
+    for x, y in [(13, 23), (20, 21), (24, 18), (27, 20), (31, 22), (8, 25), (36, 22)]:
+        if g.get(x, y) in ".,m":
+            g.set(x, y, "p")
     props = {
         "H": [(26, 12)],
         "F": [(x, 16) for x in range(19, 34) if x not in (21, 25, 26, 27, 31)],
         # the real world is not kept: weathered fence segments and crooked trees (Bible §12)
         "B": [(21, 16), (31, 16)],
-        "C": [(6, 8), (15, 28), (52, 30), (5, 16)],
         "E": [(19, y) for y in range(10, 16)] + [(33, y) for y in range(10, 16)],
-        "T": [(12, 6), (8, 30), (50, 9), (34, 30), (22, 30)],
-        "P": [(9, 6), (16, 7), (47, 6), (52, 14), (4, 28), (29, 31), (49, 31), (36, 8)],
-        "R": [(38, 13), (8, 12), (46, 16), (31, 27), (17, 31)],
-        "g": [(8, 19), (9, 19), (15, 25), (16, 25), (30, 25), (31, 25), (35, 18), (48, 24), (10, 15), (47, 11)],
+        # groves at the forest edge, mixed kinds, plus a few old solitary trees in the meadow
+        "T": [(9, 7), (13, 6), (49, 8), (8, 29), (22, 30), (35, 30), (6, 18), (16, 27)],
+        "P": [(7, 6), (11, 8), (47, 7), (51, 10), (5, 30), (10, 31), (24, 31), (33, 31),
+              (50, 31), (6, 21), (52, 16)],
+        "C": [(5, 9), (11, 19), (14, 26), (19, 31), (48, 29), (37, 9)],
+        # rocks lie in groups
+        "R": [(36, 13), (35, 14), (8, 12), (9, 13), (47, 17), (31, 27), (32, 28), (17, 30)],
+        "g": [(8, 19), (9, 19), (9, 20), (16, 25), (17, 25), (17, 26), (29, 25), (30, 25), (30, 26),
+              (35, 18), (48, 24), (49, 24), (10, 15), (46, 11), (47, 12)],
         "l": [(24, 17)],
         "K": [(31, 13), (21, 13)],
         "W": [(30, 13)],
         "b": [(22, 14)],
         "N": [(28, 14)],
-        "x": [(43, 28)],
         "@": [(26, 19)],
     }
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
+    # spray where the stream lands below the edge
+    for y in range(h):
+        for x in range(w):
+            if g.get(x, y) == "~" and g.get(x, y - 1) == "v" and g.get(x - 1, y) != "x":
+                g.set(x, y, "x")
+                break
+        else:
+            continue
+        break
     g.add_rails()
     return g
 
