@@ -31,10 +31,12 @@ STATES = [("idle", 2), ("walk", 4), ("run", 4), ("sit", 1), ("look", 4)]
 FACINGS = ["E", "SE", "S", "SW", "W", "NW", "N", "NE"]
 
 DESIGNS = {
-    # The protagonist: tidy, a little too perfect for Elysia. Teal jacket, satchel.
+    # The protagonist: tidy, a little too perfect for Elysia. Teal jacket, satchel. The only
+    # one with dark, side-swept hair and a cowlick that never lies flat: a small asymmetry
+    # in a symmetric world (Game Bible §9, "eigener werden").
     "player": {
         "skin": ramp("#8a4b45", "#c47b63", "#eaae8a", "#ffd8b8"),
-        "hair": ramp("#241520", "#4a2a2c", "#7a4634", "#b06e44", "#e0a466"),
+        "hair": ramp("#110f1c", "#1f1d33", "#33304e", "#4f4a6e", "#8a85ad"),
         "top": ramp("#14304a", "#1d5670", "#2b8a96", "#62c4bb"),
         "inner": ramp("#7d6f86", "#b7aec0", "#e6e0e6", "#ffffff"),
         "belt": ramp("#2a1a1e", "#4c3029", "#76503a", "#a37a52"),
@@ -43,11 +45,12 @@ DESIGNS = {
         "eye": pa.hex_rgb("#1a1226"),
         "blush": pa.hex_rgb("#e88b7e"),
         "outline": pa.hex_rgb("#1d1428"),
-        "hair_style": "tousled",
+        "hair_style": "swept",
         "outfit": "jacket",
         "bag": "satchel",
     },
-    # Elysians: flawless white and gold, all a little too alike (Game Bible §9).
+    # Elysians: flawless white and gold, all a little too alike (Game Bible §9): the same
+    # neat, perfectly symmetric bob with a center parting.
     "elysian": {
         "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
         "hair": ramp("#6a4210", "#a8701c", "#d8a832", "#f4d46a", "#fff2b8"),
@@ -59,7 +62,7 @@ DESIGNS = {
         "eye": pa.hex_rgb("#2a1f48"),
         "blush": pa.hex_rgb("#f0a090"),
         "outline": pa.hex_rgb("#3a2e58"),
-        "hair_style": "tousled",
+        "hair_style": "neat",
         "outfit": "cape",
         "bag": "none",
     },
@@ -135,6 +138,9 @@ class Figure:
         self.side = facing == "E"
         self.back = facing in ("N", "NE")
         self.three = facing in ("SE", "NE")
+        # three-quarter back view (walking diagonally up): head turned toward the facing,
+        # cheek and ear show at its edge, the near arm swings in front of the body
+        self.back3 = facing == "NE"
         self.drawn = np.zeros((FH, FW), bool)
 
     def part(self, mask, mat, value, line=False):
@@ -193,6 +199,9 @@ class Figure:
                 else:
                     hx = cx - 2 + 4 * li
                     fx = hx + (fwd * 0.5 if three else 0)
+                    if self.back3:
+                        # stepping up and to the side: the stride also shows sideways
+                        fx = hx + fwd * 0.8 + 0.5
                 leg = limb(c, hx, hip, fx, FEET - lift, 3)
                 boot = leg & (c.yy >= FEET - lift - 2)
                 if side:
@@ -250,7 +259,7 @@ class Figure:
                 strap = np.abs((c.xx + 0.5 - (tx1 - 1)) + (c.yy - ty0) * 0.9) <= 0.7
                 strap &= (c.yy >= ty0) & (c.yy < ty1 - 1) & torso
                 self.part(strap, "belt", 0.55)
-                if not back:
+                if not back or self.back3:
                     self.part(c.rect(tx0 - 2, ty1 - 4, tx0 + 1, ty1), "belt", 0.6, line=True)
             else:
                 self.part(c.rect(tx0 - 2, ty1 - 5, tx0 + 1, ty1 - 1), "belt", 0.55, line=True)
@@ -273,6 +282,13 @@ class Figure:
                 tone = 0.72 if k == 0 else 0.4
                 if three and k == 1:
                     tone = 0.3
+                if self.back3:
+                    # far arm half hidden behind the back, near arm light and in front
+                    tone = 0.25 if k == 0 else 0.7
+                    if k == 0:
+                        end = min(end, ty0 + 5)
+                        arm = limb(c, ax + 1, ty0 + 2, ax + 1, end, 2)
+                        hand = limb(c, ax + 1, end, ax + 1, end + 1, 2)
                 cuff = arm & (c.yy == end - 1)
                 self.part(arm, "top", tone, line=True)
                 self.part(cuff, "top", tone + 0.2)
@@ -285,7 +301,7 @@ class Figure:
     def head(self, cx, lean, b):
         d, c, p = self.d, self.c, self.p
         side, back, three = self.side, self.back, self.three
-        hx = cx + (0.5 if side else 0) + lean
+        hx = cx + (0.5 if side else 0) + lean + (0.5 if self.back3 else 0)
         hy = 10.0 + b
         hb = p["hair"]  # hair settles a frame later than the head (bounce)
         # neck
@@ -294,25 +310,55 @@ class Figure:
         self.part(head, "skin", 0.48 + 0.5 * c.sphere(hx - 1.5, hy - 1.5, 7, 7))
         hair_v = 0.1 + 0.72 * c.sphere(hx - 2.5, hy - 4, 9, 8)
         style = d["hair_style"]
+        nape = {"swept": 2.5, "neat": 3.5}.get(style, 4)
         if back:
             hair = head | c.ellipse(hx, hy - 0.6, 7.2, 6.6)
-            if facing_ne(self.facing):
-                hair &= ~c.rect(hx + 4, hy + 1, hx + 7, hy + 6)
-            hair |= c.rect(hx - 6, hy + 1, hx + 6, hy + 4 + hb) & c.ellipse(hx, hy + 1, 7.0, 6.0)
+            hair |= c.rect(hx - 6, hy + 1, hx + 6, hy + nape + hb) & c.ellipse(hx, hy + 1, 7.0, 6.0)
+            if style == "swept":
+                # short, tapered nape: the neck shows below it
+                hair &= ~(c.rect(0, hy + 4, FW, FH) & (np.abs(c.xx + 0.5 - hx) < 2.5))
+            if self.back3:
+                # the face turns away to the upper right: cheek, jaw and ear at the edge
+                hair &= ~(c.ellipse(hx + 5.2, hy + 2.2, 2.6, 3.6) & (c.yy >= hy - 0.5))
+                ear = c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5)
+                hair &= ~ear
         elif side:
             cap = c.ellipse(hx - 0.5, hy - 1.2, 7.3, 6.5) & ((c.yy < hy - 1.0) | (c.xx < hx - 0.5))
-            back_hair = c.rect(hx - 6.5, hy - 2, hx - 1.5, hy + 4 + hb) & c.ellipse(hx - 1, hy + 0.5, 7.2, 7.2)
-            fringe = c.rect(hx + 1, hy - 2, hx + 6.5, hy - 0.5) & ((c.xx.astype(int) % 2) == 0)
+            back_hair = c.rect(hx - 6.5, hy - 2, hx - 1.5, hy + nape + hb) & c.ellipse(hx - 1, hy + 0.5, 7.2, 7.2)
+            if style == "neat":
+                fringe = c.rect(hx + 1, hy - 2.5, hx + 6.3, hy - 0.8)
+            elif style == "swept":
+                # fringe swept forward over the brow, ending in a point
+                fringe = c.rect(hx + 1, hy - 3, hx + 6.5, hy - 1) | c.rect(hx + 5, hy - 1, hx + 7, hy + 0.5)
+            else:
+                fringe = c.rect(hx + 1, hy - 2, hx + 6.5, hy - 0.5) & ((c.xx.astype(int) % 2) == 0)
             hair = cap | back_hair | fringe
         else:
             cap = c.ellipse(hx - (0.5 if three else 0), hy - 1.3, 7.3, 6.5) & (c.yy < hy - 1.8)
-            # pointed bangs: a zigzag edge over the forehead
-            zig = ((c.xx.astype(int) + (1 if three else 0)) % 3)
-            bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy + 0.2 - (zig == 1) * 1.8 - (zig == 2) * 0.9)
-            locks = c.rect(hx - 7, hy - 2, hx - 4.6, hy + 4 + hb) | c.rect(hx + 4.6, hy - 2, hx + 7, hy + 4 + hb)
+            if style == "neat":
+                # straight, even bangs and locks down to the jaw on both sides
+                bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy - 0.8)
+                locks = c.rect(hx - 7, hy - 2, hx - 4.6, hy + 3.5) | c.rect(hx + 4.6, hy - 2, hx + 7, hy + 3.5)
+            elif style == "swept":
+                # one long fringe swept across the forehead, low over one brow, short sides
+                lean_x = (c.xx + 0.5 - (hx - 5)) / 10.0
+                edge = hy + 0.6 - np.clip(lean_x, 0, 1) * 3.2
+                bangs = c.rect(hx - 5.8, hy - 2.5, hx + 5.5, hy + 1) & (c.yy < edge)
+                bangs |= c.rect(hx - 6, hy - 1, hx - 4.5, hy + 1.5)  # tip over the brow
+                locks = c.rect(hx - 7, hy - 2, hx - 5, hy + 1.5 + hb * 0.5) | c.rect(hx + 5, hy - 2, hx + 7, hy + 1)
+            else:
+                # pointed bangs: a zigzag edge over the forehead
+                zig = ((c.xx.astype(int) + (1 if three else 0)) % 3)
+                bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy + 0.2 - (zig == 1) * 1.8 - (zig == 2) * 0.9)
+                locks = c.rect(hx - 7, hy - 2, hx - 4.6, hy + 4 + hb) | c.rect(hx + 4.6, hy - 2, hx + 7, hy + 4 + hb)
             if three:
-                locks = c.rect(hx - 7, hy - 2, hx - 4.2, hy + 4 + hb)
+                locks &= c.xx < hx
             hair = cap | (bangs & c.ellipse(hx, hy, 7.3, 7.3)) | (locks & c.ellipse(hx, hy + 0.5, 7.4, 7.4))
+        if style == "swept":
+            # the cowlick: one strand on the crown that never lies flat
+            tip = 1 if side else 0
+            hair |= c.rect(hx - 0.5 - tip, hy - 8, hx + 1 - tip, hy - 6)
+            hair |= c.rect(hx + 1 - tip, hy - 9 + hb * 0, hx + 2.5 - tip, hy - 8)
         if style == "tousled":
             # a strand sticking up and a few spikes on the crown
             hair |= c.rect(hx + (0 if not side else -1), hy - 8 + hb * 0, hx + 1 + (0 if not side else -1), hy - 6)
@@ -328,6 +374,17 @@ class Figure:
         ring = np.abs(np.hypot(c.xx + 0.5 - (hx + 1), c.yy + 0.5 - (hy + 3)) - 8.4) < 0.55
         shine = hair & ring & (c.xx >= hx - 4) & (c.xx < hx) & (c.yy < hy - 3)
         c.rgb[shine] = d["hair"][4]
+        if style == "swept" and not back:
+            # one lighter strand following the sweep of the fringe
+            strand = hair & (np.abs((c.xx + 0.5 - hx) * 0.32 + (c.yy + 0.5 - (hy - 2.2))) < 0.5)
+            strand &= (c.xx >= hx - 4) & (c.xx < hx + 4) & (c.yy >= hy - 4)
+            c.rgb[strand] = d["hair"][3]
+        if style == "neat" and not side:
+            # the perfect center parting
+            part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
+            c.rgb[part] = d["hair"][1]
+        if self.back3:
+            c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
         if not back:
             ey = int(round(hy + 1))
             if side:
@@ -352,10 +409,6 @@ class Figure:
                 c.fill(c.rect(mx, ey + 3, mx + 1, ey + 4), d["skin"][1])
             else:
                 c.fill(c.rect(int(round(hx + 6)), ey + 2, int(round(hx + 7)), ey + 3), d["skin"][2])
-
-
-def facing_ne(f):
-    return f == "NE"
 
 
 def sheet(design):
