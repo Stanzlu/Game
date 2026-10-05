@@ -9,6 +9,9 @@ const FRAME_30 := 1000.0 / 30.0
 var frames: PackedFloat32Array = []
 var draw_calls := 0.0
 var _draw_samples := 0
+var _cpu_ms := 0.0
+var _gpu_ms := 0.0
+var _timing_samples := 0
 
 
 func add(frame_ms: float, draw_call_count := -1) -> void:
@@ -16,6 +19,13 @@ func add(frame_ms: float, draw_call_count := -1) -> void:
 	if draw_call_count >= 0:
 		draw_calls += draw_call_count
 		_draw_samples += 1
+
+
+## CPU time of the frame (game logic plus render setup) and GPU time, in ms.
+func add_timing(cpu_ms: float, gpu_ms: float) -> void:
+	_cpu_ms += cpu_ms
+	_gpu_ms += gpu_ms
+	_timing_samples += 1
 
 
 func percentile(p: float) -> float:
@@ -50,14 +60,28 @@ func summary() -> Dictionary:
 		"slow_60": 100.0 * over_60 / count,
 		"slow_30": 100.0 * over_30 / count,
 		"draw_calls": draw_calls / maxi(_draw_samples, 1),
+		"cpu_ms": _cpu_ms / _timing_samples if _timing_samples > 0 else -1.0,
+		"gpu_ms": _gpu_ms / _timing_samples if _timing_samples > 0 else -1.0,
 	}
 
 
 ## "flüssig" (p95 within a 60 fps frame), "meist flüssig" (within 40 fps) or "ruckelt".
-static func verdict(stats: Dictionary) -> String:
+## With the uncapped measurement (`raw`): "auf 30 begrenzt" when the machine could do far
+## more but something (VSync in macOS Low Power Mode) holds it at a steady 30.
+static func verdict(stats: Dictionary, raw: Dictionary = {}) -> String:
+	if capped_at_30(stats, raw):
+		return "BENCH_CAPPED"
 	var p95: float = stats["p95_ms"]
 	if p95 <= FRAME_60 * 1.1:
 		return "BENCH_SMOOTH"
 	if p95 <= 25.0:
 		return "BENCH_MOSTLY"
 	return "BENCH_STUTTER"
+
+
+## A steady ~30 fps while the same scene runs well above 60 without VSync.
+static func capped_at_30(stats: Dictionary, raw: Dictionary) -> bool:
+	if raw.is_empty():
+		return false
+	var played: float = stats["avg_fps"]
+	return float(raw["avg_fps"]) >= 66.0 and played >= 27.0 and played <= 33.0

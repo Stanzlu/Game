@@ -74,7 +74,7 @@ Startmenü → **Prototypen** → **Leistungstest**. Nichts drücken, bis das Er
 
 ## Einstellungen, die hier wirken
 
-- „Große Dialogschrift“ an: Menüs, Journal, HUD und Hinweise wachsen mit, nicht nur der Dialog.
+- „Große Schrift“ an: Menüs, Journal, HUD und Hinweise wachsen mit, nicht nur der Dialog.
 
 - „Bildschirmwackeln“ aus: Der Riss wackelt nicht.
 - „Blitzeffekte reduzieren“ an: Riss und Anzeige flackern nicht, sie blenden ruhig aus.

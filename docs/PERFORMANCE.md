@@ -114,3 +114,14 @@ Elysia hat mehr Requisiten (jede Seite vollständig) und daher rund 30 Draw Call
 unter dem Stand vor dem Atlas (574). Die Software-Werte schwanken zwischen Läufen um einige fps und
 sagen nichts über echte Grafikkarten. Das Urteil „ruckelt“ gilt nur für die Container-Software.
 
+## Erster Test auf dem Zielrechner (Playtest 2026-10-05)
+
+Foto des Ergebnisbildschirms (macOS, Vollbild): Elysia, Tal und Wald jeweils **exakt 30 fps**, langsamste 5 % bei 34,2–34,4 ms, 100 % der Frames über 16,7 ms.
+
+- **Deutung:** Drei unterschiedlich schwere Szenen (113–196 Draw Calls) mit identisch 30 fps sind kein Grafiklimit, sondern eine Taktbremse. Headless kostet ein Frame im Container nur rund 7 ms CPU, die Szenen sind für eine Mac-GPU winzig (640×360).
+- **Wahrscheinliche Ursache:** macOS 26 hält Programme im **Stromsparmodus** im **Vollbild mit VSync** fest bei 30 fps. Apple nennt das gewollt ([Apple Developer Forums](https://developer.apple.com/forums/thread/795447)); Factorio meldet dasselbe.
+- **Umgesetzt:**
+  - Der Leistungstest misst jede Szene zusätzlich einige Sekunden ohne VSync („ohne VSync“) sowie CPU- und GPU-Zeit pro Frame (`viewport_set_measure_render_time`). Bei 30 fps trotz Reserve lautet das Urteil „auf 30 begrenzt“, mit Hinweis auf die Abhilfe.
+  - Neue Einstellung **Anzeige → Bildsynchronisierung (VSync)**. Aus: Die Engine begrenzt die Bildrate selbst auf die Bildwiederholrate des Bildschirms (kein Leerlauf der GPU, eventuell leichtes Tearing).
+  - Der Bericht nennt Vollbild ja/nein.
+- **Offen:** Bestätigung mit dem neuen Leistungstest (Spalte „ohne VSync“, Bericht `benchmark.txt`) auf dem Mac. Mit Netzteil oder ohne Stromsparmodus sollten es 60 fps oder mehr sein.

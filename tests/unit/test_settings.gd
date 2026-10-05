@@ -29,6 +29,7 @@ func test_defaults_without_file() -> void:
 	assert_eq(settings.get_int("text.speed"), 1)
 	assert_false(settings.get_bool("controls.sprint_toggle"))
 	assert_true(settings.get_bool("display.smooth_camera"))
+	assert_true(settings.get_bool("display.vsync"), "VSync on unless the player turns it off")
 	assert_false(FileAccess.file_exists(FILE), "nothing written until something changes")
 
 
