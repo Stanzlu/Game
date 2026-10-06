@@ -94,7 +94,7 @@ if WorldState.has_item("item_boot")
 elif WorldState.quest_stage("side_valley_goat") == "trade"
 	Mira: Die Ziege will was dafür? Dann gib ihr was. So funktioniert das mit Ziegen. [ID:tal_mira_eve_8]
 else
-	% Mira: Ohne Stiefel geh ich morgen nirgends hin. Die Ziege ist irgendwo hinterm Haus. [ID:tal_mira_eve_9]
+	% Mira: Ohne Stiefel geh ich morgen nirgends hin. Die Ziege treibt sich drüben beim Haus rum. [ID:tal_mira_eve_9]
 	% Mira: Einen Stiefel hab ich noch. Den anderen hat die Ziege. Das ist der Stand. [ID:tal_mira_eve_10]
 => END
 

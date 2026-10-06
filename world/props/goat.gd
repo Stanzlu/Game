@@ -11,6 +11,8 @@ var _frame := 0
 var _time := 0.0
 var _next_pause := 3.0
 var _rng := RandomNumberGenerator.new()
+## Seconds until the next bleat: it tells the player where the goat is.
+var _next_bleat := 2.0
 
 @onready var _sprite: Sprite2D = $Sprite
 
@@ -56,10 +58,15 @@ func _load_frames() -> void:
 func _on_flag_changed(id: String, value: bool) -> void:
 	if id == TRADED and value:
 		_load_frames()
+		SoundBank.play_at(self, "goat_munch", global_position, -4.0)
 
 
 ## Chewing: jaw up and down a few times, then a pause.
 func _process(delta: float) -> void:
+	_next_bleat -= delta
+	if _next_bleat <= 0.0:
+		_next_bleat = _rng.randf_range(7.0, 14.0)
+		SoundBank.play_at(self, "goat_bleat", global_position, -6.0)
 	if _frames.size() < 2:
 		return
 	_time += delta
