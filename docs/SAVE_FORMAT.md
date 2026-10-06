@@ -30,7 +30,7 @@ im selben Ordner.
 
 ```json
 {
-	"schema_version": 1,
+	"schema_version": 2,
 	"game_version": "0.0.1",
 	"saved_at": "2026-10-03T12:00:00Z",
 	"world_state": {
@@ -48,6 +48,7 @@ im selben Ordner.
 		"inventory": { "item_stone": 1, "item_seed": 1 },
 		"discovered": ["sandbox_garden"],
 		"ui_mode": "REAL",
+		"day_preset": "abend",
 		"elysia": { "xp": 12500, "gold": 4200 },
 		"player": { "name": "Alex", "preset": 1, "map": "sandbox", "x": 120.5, "y": 64 },
 		"playtime_seconds": 1234.5
@@ -57,7 +58,7 @@ im selben Ordner.
 
 | Feld | Bedeutung und Prüfung beim Laden |
 |------|----------------------------------|
-| `schema_version` | ganze Zahl ≥ 1. Neuer als das Spiel: Laden wird abgelehnt. Älter: Migration. |
+| `schema_version` | ganze Zahl ≥ 1, aktuell 2. Neuer als das Spiel: Laden wird abgelehnt. Älter: Migration. |
 | `saved_at` | UTC, ISO 8601. Bestimmt „Fortsetzen“ (neuester lesbarer Slot). |
 | `flags` | nur `true`-Werte; IDs mit Namensraum (`bereich.name`). Gelöschte Flags fehlen. |
 | `quests` | nur bekannte Quests (`content/quests`) und deren Stufen. `history` enthält besuchte Stufen, die aktuelle zuletzt. Fertig ist eine Quest, wenn ihre Stufe kein `next` hat. |
@@ -65,9 +66,13 @@ im selben Ordner.
 | `facets` | die acht Facetten-IDs aus `GameState.FACETS`, im Slice nur Flags. |
 | `inventory` | nur bekannte Items, Anzahl 1 bis Stapelgrenze. |
 | `ui_mode` | `ELYSIA` oder `REAL`. |
+| `day_preset` | Tageszeit der wirklichen Welt: `regentag`, `abend`, `nacht` oder leer (noch keine). Ausruhen auf der Bank schaltet weiter. Seit Schema 2, fehlt es, gilt leer. |
 | `elysia` | XP und Gold (kosmetisch). Das Level wird aus XP berechnet: `1 + floor(sqrt(xp / 15))`. |
 | `player` | Name (max. 24 Zeichen), Preset 0–7, Szenen-Schlüssel (`SceneRegistry`) und Position der Figur. Ein unbekannter Schlüssel macht den Stand unladbar (`unknown_map`). |
 | `playtime_seconds` | Spielzeit ohne Pausen und Menüs. |
+
+Migration 1 → 2: Stände aus Phase 2 enthielten immer `ELYSIA`, weil es den Übergang noch nicht gab.
+`ui_mode` richtet sich danach nach der Szene des Stands (`SceneRegistry.start_mode`).
 
 Unbekannte Felder werden ignoriert. Ungültige Einträge werden verworfen und als Warnung
 (`SAVE: save data repaired`) geloggt; der Rest lädt trotzdem.

@@ -29,6 +29,7 @@ func test_defaults_without_file() -> void:
 	assert_eq(settings.get_int("text.speed"), 1)
 	assert_false(settings.get_bool("controls.sprint_toggle"))
 	assert_true(settings.get_bool("display.smooth_camera"))
+	assert_true(settings.get_bool("display.vsync"), "VSync on unless the player turns it off")
 	assert_false(FileAccess.file_exists(FILE), "nothing written until something changes")
 
 
@@ -144,3 +145,32 @@ func test_event_codec_rejects_garbage() -> void:
 	assert_null(SettingsService.decode_event({"type": "mouse"}))
 	var axis := SettingsService.decode_event({"type": "joy_axis", "axis": 1, "value": -0.3})
 	assert_eq((axis as InputEventJoypadMotion).axis_value, -1.0)
+
+
+func test_large_text_scales_every_theme_together() -> void:
+	var theme := ThemeDB.get_project_theme()
+	TextSize.apply(true)
+	assert_eq(theme.default_font_size, 27)
+	assert_eq(theme.default_font, TextSize.LARGE_BODY)
+	assert_eq(theme.get_font_size(&"font_size", &"SmallLabel"), 16, "small text doubles")
+	# read through load(): a property of a constant would be folded at compile time
+	var compact := load("res://ui/theme/compact_theme.tres") as Theme
+	assert_eq(compact.default_font_size, 16, "developer panels too")
+	TextSize.apply(false)
+	assert_eq(theme.default_font_size, 19)
+	assert_eq(theme.get_font_size(&"font_size", &"PromptLabel"), 8)
+
+
+func test_choice_rows_make_room_for_their_value() -> void:
+	var list := OptionList.new()
+	add_child_autofree(list)
+	var row := list.add_choice(
+		"SETTINGS_TEXT_SPEED",
+		["TEXT_SPEED_NORMAL"],
+		func() -> int: return 0,
+		func(_i: int) -> void: pass
+	)
+	var font := row.get_theme_font(&"font")
+	var size := row.get_theme_font_size(&"font_size")
+	var label_w := font.get_string_size(row.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+	assert_gt(row.custom_minimum_size.x, label_w + 30.0, "label plus value plus gap")

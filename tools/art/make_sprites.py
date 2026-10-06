@@ -40,25 +40,30 @@ EXTRA = {
         "stem": ramp("#164a30", "#24703a", "#3f9a44", "#7cc653"),
     },
     "tal": {
-        "bark": ramp("#16100e", "#251915", "#38261d", "#4f3727", "#664a33"),
-        "plank": ramp("#1a1210", "#2b1d17", "#3f2b20", "#56402e", "#6e553d"),
-        "roof": ramp("#141518", "#1f2126", "#2c2f36", "#3c4049", "#50555f"),
-        "thatch": ramp("#1d1810", "#2f2618", "#453823", "#5d4c30", "#786440"),
-        "stone_wall": ramp("#1a1c21", "#282b32", "#383c45", "#4b505b", "#616773"),
-        "iron": ramp("#0d0e10", "#1a1c20", "#2a2d33", "#3d4148"),
+        "bark": ramp("#1c1612", "#2e241d", "#45362a", "#5e4a39", "#7a624c"),
+        "plank": ramp("#211915", "#352920", "#4c3b2d", "#66503d", "#82684f"),
+        "roof": ramp("#1f2124", "#2e3135", "#41454b", "#575c63", "#71767d"),
+        "thatch": ramp("#2a2316", "#403522", "#5a4b31", "#776441", "#968054"),
+        "stone_wall": ramp("#25272a", "#36393d", "#4b4f54", "#63686e", "#80858b"),
+        "iron": ramp("#141518", "#22252a", "#33373e", "#484d55"),
         "glass": ramp("#a8601c", "#f0a040", "#ffd27a", "#fff1c4"),
-        "stem": ramp("#101b14", "#1a2b1f", "#27402c", "#3a5739"),
-        "hoop": ramp("#121316", "#22252b", "#353942", "#4a4f59"),
+        "stem": ramp("#16241a", "#223523", "#304a2f", "#43623d"),
+        "hoop": ramp("#1a1b1e", "#2a2c31", "#3d4048", "#53575f"),
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
+        # birch bark in moonlight: almost white, with dark lenticel dashes
+        "birch": ramp("#2e3238", "#5a6068", "#9aa2aa", "#d0d6dc", "#f0f4f6"),
         "stem": ramp("#0b1a1a", "#12302c", "#1d4a3c", "#2e6650"),
-        "fern": ramp("#06140f", "#0c2419", "#143826", "#1f5034", "#2f6c46"),
-        "cap_cyan": ramp("#0e4656", "#18869c", "#38c4d6", "#8eeef4", "#e2ffff"),
-        "cap_violet": ramp("#2a1458", "#4e2a9a", "#8058d8", "#b896f6", "#ece0ff"),
-        "cap_pink": ramp("#4a1040", "#8a2478", "#cc4cb4", "#f490e0", "#ffd8f6"),
-        "moss": ramp("#0b1d18", "#123026", "#1c4636", "#2a5e48"),
-        "stalk": ramp("#3a3448", "#6a6278", "#a49cb0", "#dcd6e4"),
+        "fern": ramp("#07120d", "#0d2018", "#153222", "#1f462f", "#2d5e3e"),
+        # foxfire (bioluminescent fungi on rotten wood) glows a soft green
+        "cap_cyan": ramp("#0e3a22", "#1b6a3c", "#3aa860", "#8ee0a0", "#e0ffe8"),
+        # honey fungus clusters, honey-brown, no glow
+        "cap_violet": ramp("#2a1a0e", "#4e3218", "#7a5226", "#a87a40", "#d4b07a"),
+        # fly agaric: red cap with white spots, no glow
+        "cap_pink": ramp("#3a0c0c", "#701812", "#a8261a", "#d84a34", "#fff4ea"),
+        "moss": ramp("#0b1d14", "#12301e", "#1c462a", "#2a5e38"),
+        "stalk": ramp("#3a3836", "#6a6662", "#a4a09a", "#dcd8d0"),
     },
 }
 
@@ -199,9 +204,12 @@ def tree(style, seed, leaves="foliage"):
     return c
 
 
-def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
+def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None, crooked=0.0):
     """A less symmetric tree: leaning, tapering trunk with roots, branches forking into 3-5
-    sub-crowns with gaps, so it reads as a real tree rather than a ball on a stick."""
+    sub-crowns with gaps, so it reads as a real tree rather than a ball on a stick.
+
+    `crooked` (0..1, the real world, Game Bible §12): the trunk leans hard and bows, one side
+    of the crown is missing and a dead, bare branch sticks out on the other."""
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES[style], EXTRA[style]
     W, H, crown_r = {"small": (52, 66, 17), "medium": (68, 84, 23), "large": (88, 104, 29)}[size]
@@ -211,6 +219,11 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
     cx, base = W / 2, H - 3
     bark = ex["bark"]
     lean = rng.uniform(-3, 3)
+    bend, side = 0.0, 1.0
+    if crooked:
+        side = 1.0 if rng.random() < 0.5 else -1.0
+        lean = side * (8.0 + 8.0 * crooked)
+        bend = -side * (3.0 + 4.0 * crooked)
     fork_y = base - crown_r * 0.95
     crown_cy = fork_y - crown_r * 0.4
     # roots
@@ -222,7 +235,7 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
     trunk_m = np.zeros((H, W), bool)
     for y in range(int(fork_y), int(base)):
         t = (base - y) / max(base - fork_y, 1)
-        x = cx + lean * t
+        x = cx + lean * t + bend * np.sin(np.pi * t)
         half = tw / 2 * (1 - 0.3 * t)
         trunk_m[y, int(round(x - half)):int(round(x + half)) + 1] = True
     grain = pa.value_noise(H, W, (6, 1), rng)
@@ -239,6 +252,17 @@ def natural_tree(style, seed, leaves="foliage", size="medium", canvas=None):
         br = limb_mask(c, cx + lean, fork_y + 2, sx, sy + 2, max(2, tw * 0.6))
         c.paint(br, bark, 0.25 + 0.4 * c.cylinder(sx - 3, sx + 3), contrast=3.0, dither=False)
     subs.append((crown_cy - crown_r * 0.15, cx + lean, crown_r * 0.62))
+    if crooked:
+        # the crown thins out away from the lean: drop the outermost sub-crown on that side
+        far = min(range(len(subs) - 1), key=lambda i: subs[i][1] * side)
+        subs.pop(far)
+        # a dead branch, bare and forked, reaching out against the lean
+        y0 = fork_y + (base - fork_y) * 0.5
+        x0 = cx + lean * 0.5 + bend
+        x1, y1 = x0 - side * crown_r * 1.15, y0 - crown_r * 0.4
+        dead = limb_mask(c, x0, y0, x1, y1, 3)
+        dead |= limb_mask(c, x1 + side * crown_r * 0.3, y1 + crown_r * 0.1, x1 - side * 3, y1 - crown_r * 0.35, 2)
+        c.paint(dead, bark, 0.3 + 0.35 * c.cylinder(min(x0, x1) - 2, max(x0, x1) + 2), contrast=3.0, dither=False)
     blobs = []
     for sy, sx, r in subs:
         for _ in range(4):
@@ -607,6 +631,49 @@ def fence(style, seed, vertical=False):
     return c
 
 
+def fence_broken(seed, kind):
+    """Tal fence that has seen weather (Game Bible §12): a rail hanging down from one nail,
+    a leaning post with a split rail, or a post stump with its rail lying in the grass."""
+    rng = np.random.default_rng(seed)
+    ex, st = EXTRA["tal"], pa.STYLES["tal"]
+    wood = ex["plank"]
+    c = Canvas(18, 18)
+
+    def rail(x0, y0, x1, y1, lit=0.6):
+        m = limb_mask(c, x0, y0, x1, y1, 2)
+        m |= limb_mask(c, x0, y0 + 1, x1, y1 + 1, 2)
+        c.paint(m, wood, np.where(c.yy <= np.minimum(y0, y1) + 1, lit + 0.15, lit - 0.2), contrast=3)
+
+    if kind == 0:
+        # upper rail intact, lower rail torn off the far post and hanging into the grass
+        c.paint(c.rect(1, 5, 18, 7), wood, np.where(c.yy == 5, 0.75, 0.45), contrast=3)
+        rail(4, 11, 15, 16)
+        c.paint(c.rect(1, 2, 5, 17), wood, np.where(c.xx < 3, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(2, 1, 4, 2), wood, 0.7)
+    elif kind == 1:
+        # the post leans over; the upper rail is split in the middle, the lower one sags
+        for y in range(1, 17):
+            dx = int(round((16 - y) * 0.22))
+            c.paint(c.rect(1 + dx, y, 5 + dx, y + 1), wood, np.where(c.xx < 3 + dx, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(5, 5, 9, 7), wood, np.where(c.yy == 5, 0.75, 0.45), contrast=3)
+        rail(11, 7, 18, 5)
+        rail(4, 10, 18, 12, 0.5)
+    else:
+        # only a stump of the post is left; its rail lies diagonally in the grass
+        c.paint(c.rect(1, 11, 5, 17), wood, np.where(c.xx < 3, 0.8, 0.4), contrast=3)
+        c.paint(c.rect(1, 10, 2, 11), wood, 0.6)
+        c.paint(c.rect(3, 10, 5, 11), wood, 0.7)
+        rail(6, 14, 17, 16, 0.5)
+        c.paint(c.rect(9, 5, 18, 7), wood, np.where(c.yy == 5, 0.7, 0.4), contrast=3)
+    # a few dark knots and cracks
+    for _ in range(3):
+        y, x = int(rng.integers(2, 16)), int(rng.integers(2, 16))
+        if c.a[y, x]:
+            c.fill(c.rect(x, y, x + 1, y + 1), wood[0])
+    c.outline(st["outline"])
+    return c
+
+
 def bench(style):
     ex, st = EXTRA[style], pa.STYLES[style]
     wood = st["wood"]
@@ -806,8 +873,11 @@ def emissive_of(c, mask):
 
 
 def forest_tree(seed, glow=False):
-    """Old forest tree: thick dark trunk with roots, wide canopy. Glowing variant has
-    bioluminescent leaf clusters (ref: blue coral trees at night)."""
+    """Old forest tree: thick dark trunk with roots, wide canopy. The `glow` variant is a
+    birch: slim white trunk with dark dashes and a light, airy crown that catches the
+    moonlight (what really shines in a forest at night)."""
+    if glow:
+        return birch(seed)
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES["wald"], EXTRA["wald"]
     W, H = 88, 112
@@ -837,6 +907,50 @@ def forest_tree(seed, glow=False):
     if glow:
         emit = emissive_of(c, emit_mask)
     return c, emit
+
+
+def birch(seed):
+    """A birch at night: slim, slightly leaning white trunk with black lenticel dashes and
+    a light crown. The moonlit bark and leaf tips are emissive, softly (no fantasy glow)."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    W, H = 88, 112
+    c = Canvas(W, H)
+    cx, base = 44, 108
+    lean = rng.uniform(-0.12, 0.12)
+    xs = c.xx + 0.5 - (cx + lean * (base - c.yy))
+    trunk_m = (np.abs(xs) <= 3.6 - (base - c.yy) * 0.012) & (c.yy >= 30) & (c.yy < base)
+    trunk_m |= c.ellipse(cx, base - 2, 6, 2.5)
+    c.paint(trunk_m, ex["birch"], 0.25 + 0.75 * np.clip(0.5 - xs / 8.0, 0, 1), contrast=2.6, dither=False)
+    dashes = trunk_m & (pa.value_noise(H, W, (1, 4), rng) > 0.72) & ((c.yy % 5) < 2)
+    c.paint(dashes, st["bark"], 0.2, dither=False)
+    base_dark = trunk_m & (c.yy > base - 12) & (pa.value_noise(H, W, 2, rng) > 0.45)
+    c.paint(base_dark, st["bark"], 0.35, dither=False)
+    # thin branches into the crown
+    for side, y in ((-1, 44), (1, 52), (-1, 60), (1, 38)):
+        br = limb_mask(c, cx + lean * (base - y), y, cx + side * rng.uniform(12, 18), y - 10, 2)
+        c.paint(br, ex["birch"], 0.55, dither=False)
+    blobs = crown_blobs(rng, cx, 36, 30, 24, 14, 8, 12)
+    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(3.0, 4.5))
+    alpha &= pa.value_noise(H, W, 3, rng) > 0.22  # airy: the sky shows through
+    c.paint(alpha, st["foliage_blue"], value, contrast=3.0, dither=False)
+    c.outline(st["outline"])
+    moonlit = (trunk_m & (xs < 0.5) & ~dashes) | (alpha & (value > 0.93))
+    return c, emissive_of(c, moonlit)
+
+
+def mossy_rock(seed, w=30, h=22):
+    """A boulder under a thick cushion of moss, a few dew drops catching the moon."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    c = rock("wald", seed, w, h)
+    body = c.a > 0
+    top = body & (c.yy < h * 0.62) & (pa.value_noise(h, w, 4, rng) > 0.32)
+    c.paint(top, ex["moss"], 0.35 + 0.6 * c.sphere(w * 0.4, h * 0.3, w * 0.5, h * 0.4), dither=False)
+    dew = top & (pa.value_noise(h, w, 1.2, rng) > 0.86)
+    c.fill(dew, np.array([200, 220, 236], np.float32))
+    c.outline(st["outline"])
+    return c
 
 
 def limb_mask(c, x0, y0, x1, y1, width):
@@ -941,7 +1055,7 @@ def light_beam(w=96, h=220):
     a = np.clip(stripes[None, :] * 0.55 + 0.25, 0, 1) * np.clip(1 - x / np.maximum(half, 1), 0, 1) ** 0.6
     a *= np.clip(t * 4, 0, 1) * np.clip((1 - t) * 3, 0, 1)
     a = np.floor(a * 5) / 5  # banded alpha: reads as pixel art, not a smooth gradient
-    col = pa.hex_rgb("#bff6e6")
+    col = pa.hex_rgb("#d0def4")  # moonlight
     c.rgb[:] = col
     c.a = inside & (a > 0)
     rgba = c.rgba()
@@ -988,7 +1102,7 @@ def wildflowers(style, seed, w=12, h=12):
 
 PEBBLE = {
     "elysia": ramp("#4e4a4e", "#7a746e", "#a8a094", "#d4ccbe"),
-    "tal": ramp("#16161c", "#262830", "#3a3c44", "#55585e"),
+    "tal": ramp("#2a2b2c", "#3f4042", "#58595c", "#76777a"),
     "wald": ramp("#111020", "#1d1b30", "#2c2a44", "#423f5c"),
 }
 
@@ -1027,7 +1141,7 @@ def small_mushrooms(style, seed, w=10, h=9):
     caps = [ramp("#5a2a1e", "#8e4128", "#c26a3c", "#e8a070"), ramp("#4a3a2a", "#7a6040", "#a88a5c", "#d4ba8a")]
     cap = caps[rng.integers(len(caps))]
     if style == "tal":
-        cap = cap * 0.7
+        cap = cap * 0.92
     c = Canvas(w, h)
     for x, y, r in ((4, 4, 2.6), (7, 6, 1.8)):
         c.paint(c.rect(x - 0.5, y, x + 0.5, h - 1), EXTRA["wald"]["stalk"], 0.7, dither=False)
@@ -1152,6 +1266,8 @@ def particles():
     px("splash", [".a.a.", "a...a", ".bbb."], {"a": ("#c9d6e2", 170), "b": ("#9fb2c4", 120)})
     px("ripple", [".aaa.", "a...a", ".aaa."], {"a": ("#9fb4c4", 140)})
     px("petal", ["ab", "bc"], {"a": ("#ffd0e4", 255), "b": ("#ff8fbf", 255), "c": ("#e04a8a", 255)})
+    # a torn leaf blown through the valley (wind, Game Bible §12)
+    px("leaf", ["ab.", "bbc", ".c."], {"a": ("#9a8a48", 255), "b": ("#6f6a30", 255), "c": ("#4a3c1e", 255)})
     px("sparkle", [".a.", "aba", ".a."], {"a": ("#fff3c4", 160), "b": ("#ffffff", 255)})
     # two frames stacked vertically (wings open / folded), used with vframes = 2
     px("butterfly", ["aa.aa", "abcba", ".bcb.", ".a.a.", ".....", ".bcb.", ".aca.", "....."],
@@ -1234,6 +1350,10 @@ def build():
                          natural_tree("tal", 102, "foliage_blue", "medium", (88, 104)),
                          natural_tree("tal", 103, "foliage", "medium", (88, 104))], (44, 101),
          shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
+    save("tal", "tree_crooked", [natural_tree("tal", 104, "foliage", "medium", (100, 104), crooked=0.8),
+                                 natural_tree("tal", 105, "foliage_blue", "medium", (100, 104), crooked=1.0),
+                                 natural_tree("tal", 106, "foliage", "small", (100, 104), crooked=0.6)],
+         (50, 101), shape={"circle": 6, "offset": [0, -2]}, sway=1.4, shadow=[26, 8])
     save("tal", "pine", [pine("tal", 110), pine("tal", 111)], (20, 68),
          shape={"circle": 5, "offset": [0, -2]}, sway=0.8, shadow=[16, 5])
     save("tal", "rock", [rock("tal", 120), rock("tal", 121, 22, 18)], (13, 16),
@@ -1247,6 +1367,8 @@ def build():
     save("tal", "woodpile", woodpile(141), (15, 18), shape={"rect": [26, 8], "offset": [0, -3]},
          shadow=[14, 3])
     save("tal", "fence", fence("tal", 150), (9, 14), shape={"rect": [16, 4], "offset": [0, -1]})
+    save("tal", "fence_broken", [fence_broken(152 + k, k) for k in range(3)], (9, 14),
+         shape={"rect": [16, 4], "offset": [0, -1]})
     save("tal", "fence_post", fence("tal", 151, vertical=True), (4, 22),
          shape={"rect": [4, 16], "offset": [0, -8]})
     save("tal", "bench", bench("tal"), (10, 18))
@@ -1257,18 +1379,18 @@ def build():
     save("wald", "tree", [t[0] for t in trees if t[1] is None], (44, 106),
          shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9])
     glow_trees = [t for t in trees if t[1] is not None]
+    # birches: their moonlit bark is the brightest thing in the forest (no light of their own)
     save("wald", "glow_tree", [t[0] for t in glow_trees], (44, 106), emissive=[t[1] for t in glow_trees],
-         shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9],
-         lights=[{"offset": [0, -70], "color": "#5fb8ff", "energy": 0.55, "range": 90}])
-    for cap, color in (("cap_cyan", "#62e6f2"), ("cap_violet", "#a07cff"), ("cap_pink", "#f278d8")):
+         shape={"circle": 5, "offset": [0, -2]}, sway=0.6, shadow=[22, 7])
+    # foxfire glows faintly green; honey fungus and fly agaric do not glow at all
+    ms = [mushrooms(210 + k + 8, "cap_cyan") for k in range(2)]
+    save("wald", "mushrooms_cyan", [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
+         glow={"offset": [0, -7], "color": "#7ee0a0", "radius": 11})
+    for cap in ("cap_violet", "cap_pink"):
         ms = [mushrooms(210 + k + len(cap), cap) for k in range(2)]
-        save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
-             glow={"offset": [0, -9], "color": color, "radius": 22})
-    cc = [crystal_cluster(220 + k) for k in range(2)]
-    save("wald", "crystals", [x[0] for x in cc], (15, 27), emissive=[x[1] for x in cc],
-         shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4],
-         glow={"offset": [0, -12], "color": "#f070e0", "radius": 30},
-         lights=[{"offset": [0, -12], "color": "#e060d8", "energy": 0.8, "range": 64}])
+        save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18))
+    save("wald", "rock_mossy", [mossy_rock(220 + k) for k in range(2)], (15, 20),
+         shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4])
     save("wald", "fern", [fern(230 + k) for k in range(3)], (13, 17), sway=1.5,
          surface="tall_grass", rustle=True)
     save("wald", "log", fallen_log(240), (24, 15), shape={"rect": [40, 8], "offset": [0, -5]}, shadow=[22, 4])
@@ -1281,8 +1403,8 @@ def build():
     beam = light_beam()
     pa.save_rgba(os.path.join(OUT, "wald", "light_beam.png"), beam)
     CATALOG["wald/light_beam"] = {"textures": [RES + "/wald/light_beam.png"], "anchor": [48, 200],
-                                  "beam": True, "lights": [{"offset": [0, -10], "color": "#9ff2d8",
-                                                            "energy": 1.1, "range": 120}]}
+                                  "beam": True, "lights": [{"offset": [0, -10], "color": "#bcd2f0",
+                                                            "energy": 0.9, "range": 120}]}
     for style in ("elysia", "tal", "wald"):
         save(style, "grass_tuft", [grass_tuft(style, 500 + i) for i in range(5)], (7, 12), sway=1.0)
         save(style, "wildflowers", [wildflowers(style, 520 + i) for i in range(6)], (6, 11), sway=1.0)

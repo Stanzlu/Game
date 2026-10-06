@@ -85,7 +85,7 @@ func resolve(player: Player) -> void:
 	facing = Facing.from_vector(player.global_position - global_position)
 	_play("idle")
 	say(AntreiberModel.Mood.SILENT)
-	await get_tree().create_timer(2.0).timeout
+	await NodeTimer.after(self, 2.0)
 	facing = Facing.Dir.S
 	_play("sit")
 

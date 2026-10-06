@@ -19,6 +19,12 @@ const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
 @export var player_sheet: CharacterSheet
 ## False for places that cannot be resumed (encounters); autosaves wait for the next area.
 @export var saveable := true
+## Music for this place (AudioDirector); "keep" leaves whatever is playing.
+@export_enum("keep", "silence", "elysia", "valley", "forest", "antreiber") var music := "keep"
+## Ambience: an AudioStream bed or a SoundscapeDef (content/audio); none fades the
+## previous one out.
+@export var ambience: Resource
+@export var ambience_db := -6.0
 
 var view: GameView
 var map: MapView
@@ -27,6 +33,7 @@ var fx: FootstepFx
 var dialogue_box: DialogueBox
 var pause_menu: PauseMenu
 var journal: Journal
+var hud: Hud
 var overlay: InfoOverlay
 
 
@@ -38,6 +45,9 @@ func _ready() -> void:
 	fx = FootstepFx.new()
 	fx.name = "FootstepFx"
 	_build_world()
+	hud = Hud.new()
+	hud.name = "Hud"
+	add_child(hud)
 	dialogue_box = DIALOGUE_BOX_SCENE.instantiate()
 	add_child(dialogue_box)
 	journal = JOURNAL_SCENE.instantiate()
@@ -52,12 +62,19 @@ func _ready() -> void:
 		var debug_panel: CanvasLayer = DEBUG_PANEL_SCRIPT.new()
 		debug_panel.name = "DebugPanel"
 		add_child(debug_panel)
+	if music != "keep":
+		AudioDirector.play_music(music)
+	AudioDirector.set_ambience(ambience, ambience_db)
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
+	if ScreenFade.is_covered():
+		ScreenFade.fade_in(2.0)
 	var arrival := SaveSystem.scene_entered(scene_key())
 	if arrival.has("position") and player != null:
 		player.teleport(arrival["position"])
 		view.follow(player)
+	if SceneRegistry.has(scene_key()) and scene_key() != "sandbox":
+		hud.show_area(SceneRegistry.title_key(scene_key()))
 	Log.info(Log.Category.BOOT, "scene ready", {"scene": str(name), "key": scene_key()})
 
 

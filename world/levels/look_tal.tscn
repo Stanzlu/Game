@@ -2,22 +2,26 @@
 
 [ext_resource type="Script" path="res://world/levels/look_scene.gd" id="1_scene"]
 [ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
-[ext_resource type="AudioStream" path="res://assets/generated/audio/rain_loop.wav" id="3_amb"]
+[ext_resource type="Resource" path="res://content/audio/tal_regentag.tres" id="3_amb"]
 
 [node name="LookTal" type="Node"]
 script = ExtResource("1_scene")
 map_path = "res://content/maps/look_tal.txt"
 player_sheet = ExtResource("2_sheet")
 weather = 1
-world_tint = Color(0.52, 0.56, 0.78, 1)
+wind_leaves = true
+reflect_player = true
+day_preset = "regentag"
 water_ripples = 0.45
 water_glints = 0.3
 ambience = ExtResource("3_amb")
 ambience_db = -4.0
-saturation = 1.0
-contrast = 1.06
-tint = Color(0.92, 0.97, 1.05, 1)
-shadow_tint = Color(0.02, 0.03, 0.06, 1)
-vignette = 0.35
-bloom = 0.9
+music = "silence"
+saturation = 0.8
+contrast = 0.94
+brightness = 0.06
+tint = Color(0.97, 0.99, 1.02, 1)
+shadow_tint = Color(0.05, 0.06, 0.07, 1)
+vignette = 0.12
+bloom = 0.2
 swimmers = 4

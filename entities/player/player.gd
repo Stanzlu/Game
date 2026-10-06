@@ -13,6 +13,9 @@ const STAND_UP_THRESHOLD := 0.5
 const NUDGE_SPEED := 60.0
 const INTERACT_COOLDOWN := 0.2
 const STATE_NAMES := ["idle", "walk", "run", "sit", "idle"]
+## Seconds of standing still before the protagonist blinks and glances around (Game Bible
+## §36); random within the range, so it never feels like a timer.
+const GLANCE_AFTER := Vector2(4.0, 9.0)
 
 @export var tuning: MovementTuning
 @export var sheet: CharacterSheet
@@ -33,6 +36,10 @@ var _seat_return := Vector2.ZERO
 var _interact_cooldown := 0.0
 var _prev_physics_pos := Vector2.ZERO
 var _curr_physics_pos := Vector2.ZERO
+var _idle_time := 0.0
+var _next_glance := 5.0
+var _glancing := false
+var _rng := RandomNumberGenerator.new()
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var steps: FootstepPlayer = $Steps
@@ -52,6 +59,8 @@ func _ready() -> void:
 	sprite.offset = sheet.feet_offset
 	sheet.add_shadow_to(self)
 	sensor.target_changed.connect(prompt.show_for)
+	sprite.animation_finished.connect(_on_animation_finished)
+	_next_glance = _rng.randf_range(GLANCE_AFTER.x, GLANCE_AFTER.y)
 	_update_animation(0.0)
 
 
@@ -142,6 +151,7 @@ func _physics_step(delta: float) -> void:
 	else:
 		_set_state(State.RUN if sprinting and speed > tuning.walk_speed * 1.1 else State.WALK)
 	_advance_steps(moved, state == State.RUN)
+	_update_idle(delta)
 	_update_animation(speed)
 	sensor.update_target(self, Facing.to_vector(facing), not is_locked())
 	if not is_locked() and _interact_cooldown <= 0.0 and Input.is_action_just_pressed(&"interact"):
@@ -202,8 +212,31 @@ func _set_state(new_state: State) -> void:
 	state_changed.emit(state)
 
 
+## Long idle: after standing still for a while, blink and glance around once.
+func _update_idle(delta: float) -> void:
+	if state != State.IDLE:
+		_idle_time = 0.0
+		_glancing = false
+		return
+	_idle_time += delta
+	if (
+		not _glancing
+		and _idle_time >= _next_glance
+		and CharacterSheet.has_look(sprite.sprite_frames)
+	):
+		_glancing = true
+
+
+func _on_animation_finished() -> void:
+	if _glancing:
+		_glancing = false
+		_idle_time = 0.0
+		_next_glance = _rng.randf_range(GLANCE_AFTER.x, GLANCE_AFTER.y)
+
+
 func _update_animation(speed: float) -> void:
-	var anim := CharacterSheet.animation_name(STATE_NAMES[state], facing)
+	var state_name: String = "look" if _glancing else STATE_NAMES[state]
+	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
 		sprite.play(anim)
 	match state:

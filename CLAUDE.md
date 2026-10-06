@@ -20,12 +20,21 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
   `docs/SAVE_FORMAT.md`), Einstellungen über `Settings` (ADR-018). Quests/Items sind `.tres` in `content/`,
   `ContentValidator` prüft sie und alle Dialoge (statische IDs, keine Fake Choices).
 - Automatische Läufe mit `--profile=<name>` starten, damit nie echte Spielstände berührt werden.
+- Musik/Ambience über `AudioDirector` (Szenen-Exports `music`, `ambience`), UI-Stil über `UiSkin.attach`
+  (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
 - In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
+- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`.
 - Karten sind Textdateien (`content/maps`, ADR-013); Platzhalter-Assets erzeugt `tools/placeholders`.
 - Look-Grafik ist prozedural (ADR-017, `docs/ART_DIRECTION.md`): `tools/art/make_sprites.py`, dann
   `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`.
 - Autopilot für reproduzierbare Aufnahmen: `tools/autopilot/*.json` (nur Debug; `tap` für Menüs/Dialoge).
+- Elysia ist spiegelsymmetrisch (`[meta] symmetry`, ADR-031); das Startbild heißt „Elysia“, bis ein Stand
+  die Wirklichkeit erreicht, danach „Nach Elysia“ (ADR-030, ADR-035; REAL bleibt Projektname;
+  `--title=elysia|real` für Aufnahmen).
+- Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops), `make_nature.py` (Wirklichkeit:
+  Soundscapes in `content/audio`, ADR-034), `make_ambience.py` (Elysias Garten); Titel: `tools/art/make_title.py`.
+  UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).
 
 ## Konventionen
 - Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs.

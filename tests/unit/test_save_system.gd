@@ -148,3 +148,13 @@ func test_latest_slot_is_the_newest_readable_one() -> void:
 	_write_raw("slot_2", SaveCodec.encode(older, "2026-10-02T10:00:00Z"))
 	_write_raw("slot_3", "broken")
 	assert_eq(saves.latest_slot(), "slot_2")
+
+
+func test_reaching_reality_is_read_from_the_saves() -> void:
+	assert_false(saves.reached_reality(), "no saves: still Elysia's title")
+	assert_eq(saves.save_slot("slot_1"), OK)
+	assert_false(saves.reached_reality(), "an Elysia save keeps the fake title")
+	assert_eq(saves.summary("slot_1")["ui_mode"], GameState.UiMode.ELYSIA)
+	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	assert_eq(saves.save_slot("slot_2"), OK)
+	assert_true(saves.reached_reality(), "a save after the crossing shows REAL")

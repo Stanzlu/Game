@@ -57,7 +57,7 @@ stages = Array[ExtResource("2_stage")]([SubResource("Resource_find"), SubResourc
 
 - Die erste Stufe ist der Start. `next` nennt die erlaubten Folgestufen, mehrere sind möglich (unterschiedliche Ausgänge). Eine Stufe ohne `next` beendet die Quest und braucht ein `outcome` (`done`, `missed`, …). Andere Ausgänge sind kein Scheitern.
 - Texte: `QUEST_<ID>_TITLE`, `QUEST_<ID>_<STUFE>` (Journaleintrag, wenn die Stufe erreicht ist) und `QUEST_<ID>_OBJ_<ZIEL>` in `journal.csv`, alles in Großbuchstaben. Das Journal zeigt alle erreichten Einträge in Reihenfolge, darunter die Ziele der aktuellen Stufe mit `[ ]` bzw. `[x]`.
-- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze. Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`.
+- Items: `id` beginnt mit `item_` bzw. `curiosity_` (Art `CURIOSITY`), `max_stack` ist die Stapelgrenze, `rarity` die Elysia-Seltenheit (`NONE` bis `LEGENDARY`; der Stein hat `NONE` und zeigt „Seltenheit: —“). Texte `<ID>_NAME` und `<ID>_DESC` in `items.csv`. Icon 16×16 unter `assets/generated/items/<id>.png` (erzeugt von `tools/art/make_ui.py`); die Seltenheit bestimmt die Beute-Fanfare.
 - `draft = true` markiert Platzhalter-Inhalt. Vor dem Playtest-Build darf keine Quest und kein Item mehr `draft` sein (`ContentValidator.drafts()`).
 - Dateiname = ID. Keine Marker im Slice außer bewusst in Elysia.
 
@@ -82,7 +82,8 @@ G = {"ground": ",", "prop": "res://world/props/gate.tscn", "params": {"id": "gar
 - Schilder: `params.cue` (und optional `params.dialogue`). Hebel: `params.target`, Tore: `params.id`. NPC-Route: `params.route` in Tiles relativ zum Startfeld.
 - NPCs zum Ansprechen: `params.cue` und `params.dialogue`. Die Figur bleibt im Gespräch stehen und schaut den Spieler an.
 - Hebel mit Gedächtnis: `params.flag` (Zustand wird gespeichert) und `params.actions` (beim ersten Umlegen). Auslösezone `world/props/trigger_zone.tscn`: `params.flag` (feuert einmal), `params.actions`, optional `params.size` in Tiles.
-- Weltaktionen (`StateActions`, nichts anderes ist erlaubt): `{"flag": "bereich.name"}`, `{"quest": "<id>", "stage": "<stufe>", "start": true}`, `{"item": "<id>", "count": 1}`, `{"discover": "<ort>"}`. Ein Test prüft alle Aktionen in allen Karten.
+- Weltaktionen (`StateActions`, nichts anderes ist erlaubt): `{"flag": "bereich.name"}`, `{"quest": "<id>", "stage": "<stufe>", "start": true}`, `{"item": "<id>", "count": 1}`, `{"discover": "<ort>"}`, `{"xp": 250}`, `{"gold": 100}`. Ein Test prüft alle Aktionen in allen Karten.
+- Truhe `world/props/chest.tscn`: `params.flag` (öffnet einmal) und `params.actions` (Loot, Gold, XP, Quest-Schritt). Aufheben `world/props/pickup.tscn`: `params.item`, `params.flag`. Riss `world/props/rift.tscn`: `params.target` (Szenen-Schlüssel). Bank: `params.pass_time` lässt die Tageszeit weiterlaufen (nur Szenen mit `day_preset`).
 - Das Symbol ist immer das erste Zeichen der Zeile, deshalb kann auch `=` lokal definiert werden (`= = {...}`).
 
 ### Look-Karten (ADR-017)
@@ -100,9 +101,16 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - `[meta]`: `key = <JSON-Wert>`. `ground` ersetzt die Kachelgrafik durch eine gebackene Textur; Kollision und Oberflächen kommen weiter aus den Kacheln. `water` ist die Maske für den Wasser-Shader, `style` wählt die Paletten beim Backen.
 - `paint` legt fest, wie der Baker ein Tile malt: `grass`, `meadow` (Gras mit Blumenteppich), `path`, `mud`, `puddle`, `cobble`, `water`, `planks_v`, `planks_h`, `hedge` (Laubkronen, fest), `cliff` (Felswand unter der Kante), `void` (durchsichtig, Himmel dahinter), `marble` (weiße Steinplatten mit Kante), `stairs` (Stufen durch eine Felskante), `fall` (Wasserfall, fest; über `void` blendet er nach unten aus), `field` (Gemüsebeet). Ohne `paint` wird aus `surface` abgeleitet.
 - Deko: `world/props/decor.tscn` mit `params.sprite` = Katalog-ID (`<stil>/<name>`, siehe `assets/generated/props/catalog.json`). Bänke nehmen ebenfalls `params.sprite`. Katalog-Felder: `anchor`, `shape`, `sway`, `flat`, `bob`, `shadow`, `lights`, `flicker`, `surface`/`rustle`, `smoke`, `sparkle`, `loop_sound`, `glow` (Lichthof), `emissive` (leuchtende Pixel je Variante), `beam` (Lichtstrahl), `petal_rain`, `splash` (Gischt am Wasserfall).
-- Streuen (`[meta]`): `scatter = [{"sprite": "<id>", "on": "<Bodensymbole>", "density": 0.3, "spacing": 12, "near": "<Symbole>", "radius": 1}, ...]`. Setzt kleine Deko deterministisch auf passende Zellen (nie auf Zellen mit Platzierung). `near` verlangt ein Boden- oder Platzierungssymbol in `radius` Zellen Umkreis (z. B. Laub nur unter Bäumen, Schilf nur am Wasser).
-- Figuren: `entities/npc/npc_walker.tscn` nimmt `params.sheet` (CharacterSheet-Pfad), `params.route` und `params.speed`. Ohne Route steht die Figur und schaut den Spieler an, wenn er nahe kommt.
+- Streuen (`[meta]`): `scatter = [{"sprite": "<id>", "on": "<Bodensymbole>", "density": 0.3, "spacing": 12, "near": "<Symbole>", "radius": 1}, ...]`. Setzt kleine Deko deterministisch auf passende Zellen (nie auf Zellen mit Platzierung). `near` verlangt ein Boden- oder Platzierungssymbol in `radius` Zellen Umkreis (z. B. Laub nur unter Bäumen, Schilf nur am Wasser). `pattern` ist `random` (Standard), `grid` oder `checker`, `jitter` die Zufallsverschiebung (0 = exakt), `offset` verschiebt das Raster.
+- Symmetrie (`[meta]`): `symmetry = <Spalte>` macht eine Karte spiegelsymmetrisch um diese Spalte (Elysia, ADR-031): Boden, Streu und Requisiten rechts der Achse zeigen ihren Zwilling gespiegelt, Pflanzen wiegen sich im Gleichtakt. Die Karte selbst muss symmetrisch sein (`tools/art/layout_look_maps.py elysia` erzeugt sie so).
+- Figuren: `entities/npc/npc_walker.tscn` nimmt `params.sheet` (CharacterSheet-Pfad), `params.route` und `params.speed`. Ohne Route steht die Figur und schaut den Spieler an, wenn er nahe kommt. `params.glance = true` lässt sie im Stehen ab und zu blinzeln und sich umschauen (Menschen der Wirklichkeit; Elysianer nie).
 - Nach jeder Kartenänderung neu backen: `.venv/bin/python tools/art/bake_ground.py content/maps/<karte>.txt`. Ein Test meldet, wenn die Texturgröße nicht mehr zur Karte passt.
+
+## Szenen: Musik, Ambience, Licht
+
+- `GameScene`-Exports: `music` (`keep`, `silence`, `elysia`, `valley`, `forest`, `antreiber`), `ambience` (Loop) und `ambience_db`.
+- `LookScene.day_preset` (`keine`, `regentag`, `abend`, `nacht`) aktiviert das Tageslicht. Elysia bleibt ohne.
+- Startet man eine Szene im Prototyp-Menü, gilt ihr UI-Modus aus `SceneRegistry.START_MODES`.
 
 ## Dialogformat (Dialogue Manager 4)
 
@@ -134,6 +142,7 @@ else
 - Während eines Dialogs wird nicht gespeichert; Quest-Schritte im Dialog lösen das Autosave direkt nach dem Ende aus.
 - Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede gesprochene Zeile markiert ist, solange es keine finalen Texte gibt.
 - Neue Dialogdateien in `internationalization/locale/translations_pot_files` eintragen. Ein Test prüft das.
+- Stimmen: `content/dialogue/voices.json` ordnet jedem Sprecher (Name wie in der Dialogdatei) eine Stimme zu (`elysia`, `warm`, `low`, `neutral`); unbekannte Sprecher bekommen `_default`. Zeilen ohne Sprecher (Schilder) bleiben stumm.
 
 ## Schreibregeln
 

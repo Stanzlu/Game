@@ -1,0 +1,16 @@
+[
+  {"t": 1.0, "tap": ["menu"], "log": "pause (Real)"},
+  {"t": 1.6, "tap": ["ui_down"]},
+  {"t": 2.0, "tap": ["ui_down"]},
+  {"t": 2.4, "tap": ["ui_down"]},
+  {"t": 2.8, "tap": ["ui_down"]},
+  {"t": 3.2, "tap": ["ui_accept"], "log": "settings"},
+  {"t": 4.2, "tap": ["ui_down"]},
+  {"t": 4.5, "tap": ["ui_down"]},
+  {"t": 4.8, "tap": ["ui_right"]},
+  {"t": 5.2, "tap": ["ui_left"], "log": "value back"},
+  {"t": 5.6, "tap": ["cancel"]},
+  {"t": 6.2, "tap": ["cancel"]},
+  {"t": 7.0, "tap": ["journal"], "log": "journal (Real)"},
+  {"t": 8.2, "tap": ["journal"]}
+]

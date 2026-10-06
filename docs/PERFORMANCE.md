@@ -64,3 +64,64 @@ Gemessen im Cloud-Container.
 | Inhalte prüfen beim Start (Debug-Builds: 1 Quest, 3 Items, 3 Dialoge) | ca. 30 ms |
 | Exportierter Linux-Build: „Fortsetzen“ bis „scene ready“ (Wald) | Teil des 240-Frame-Smoke-Runs, ohne Fehler |
 
+## Phase 3 (2026-10-03)
+
+Renderer jetzt Compatibility (ADR-022). Messung im Container mit dem neuen Leistungstest unter Xvfb
+und **Software-Rendering** (Mesa llvmpipe, 4 vCPU Xeon). Nur ein Vergleichswert, keine Aussage über
+echte Grafikkarten.
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls |
+|-------|-------|------|---------|---------|-----------|
+| Elysia | 25 | 39,2 | 46,9 | 58,8 | 567 |
+| Tal | 27 | 37,4 | 43,6 | 50,2 | 837 |
+| Wald | 26 | 38,1 | 45,7 | 48,7 | 855 |
+
+Headless ohne Rendering (nur Skripte und Physik) laufen alle drei Szenen mit rund 7 ms pro Frame.
+
+**Für den Projektinhaber:** Startmenü → **Leistungstest** (ca. 45 Sekunden). Das Ergebnis erscheint im
+Menü, der vollständige Bericht liegt in `benchmark.txt` im Spielordner
+(`%APPDATA%\REAL\` bzw. `~/Library/Application Support/REAL/`). Ziel: Urteil „flüssig“ in allen drei
+Szenen, also 95 % der Frames unter 18 ms bei 60 Hz.
+
+## Feinschliff Phase 3 (2026-10-04)
+
+Requisiten-Atlas je Stil und unbeleuchtete Streu-Sprites (ADR-028). Gleiche Messumgebung
+(Software-Rendering, llvmpipe, 4 vCPU), Leistungstest mit 12 s pro Szene:
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls vorher → jetzt |
+|-------|-------|------|---------|---------|--------------------------|
+| Elysia | 33 | 30,3 | 36,4 | 38,4 | 574 → 79 |
+| Tal | 35 | 28,7 | 34,4 | 36,4 | 928 → 110 |
+| Wald | 30 | 32,8 | 39,0 | 42,1 | 818 → 195 |
+
+Draw Calls je Quelle (Elysia, vorher): Streu-Sprites und Requisiten ~550, Lichter 0, Partikel 4,
+HUD 9. Im Wald kosten die 12 Lichtquellen weiterhin ~180 Draw Calls; das ist der nächste Hebel,
+falls die Zielhardware knapp wird. Der Titelbildschirm liegt unter 30 Draw Calls.
+
+## Bible-Abgleich (2026-10-04)
+
+Elysia ist jetzt spiegelsymmetrisch mit Streu im Raster und Zwillings-Requisiten, das Tal hat Wind,
+Blätter und das Spiegelbild der Figur (ADR-031). Gleiche Messumgebung (Software-Rendering, llvmpipe,
+4 vCPU), Leistungstest mit 12 s pro Szene:
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | Drawcalls vorher → jetzt |
+|-------|-------|------|---------|---------|--------------------------|
+| Elysia | 27 | 36,8 | 42,3 | 57,1 | 79 → 113 |
+| Tal | 33 | 30,0 | 36,6 | 41,0 | 110 → 116 |
+| Wald | 29 | 34,0 | 43,5 | 48,4 | 195 → 196 |
+
+Elysia hat mehr Requisiten (jede Seite vollständig) und daher rund 30 Draw Calls mehr; das ist weit
+unter dem Stand vor dem Atlas (574). Die Software-Werte schwanken zwischen Läufen um einige fps und
+sagen nichts über echte Grafikkarten. Das Urteil „ruckelt“ gilt nur für die Container-Software.
+
+## Erster Test auf dem Zielrechner (Playtest 2026-10-05)
+
+Foto des Ergebnisbildschirms (macOS, Vollbild): Elysia, Tal und Wald jeweils **exakt 30 fps**, langsamste 5 % bei 34,2–34,4 ms, 100 % der Frames über 16,7 ms.
+
+- **Deutung:** Drei unterschiedlich schwere Szenen (113–196 Draw Calls) mit identisch 30 fps sind kein Grafiklimit, sondern eine Taktbremse. Headless kostet ein Frame im Container nur rund 7 ms CPU, die Szenen sind für eine Mac-GPU winzig (640×360).
+- **Wahrscheinliche Ursache:** macOS 26 hält Programme im **Stromsparmodus** im **Vollbild mit VSync** fest bei 30 fps. Apple nennt das gewollt ([Apple Developer Forums](https://developer.apple.com/forums/thread/795447)); Factorio meldet dasselbe.
+- **Umgesetzt:**
+  - Der Leistungstest misst jede Szene zusätzlich einige Sekunden ohne VSync („ohne VSync“) sowie CPU- und GPU-Zeit pro Frame (`viewport_set_measure_render_time`). Bei 30 fps trotz Reserve lautet das Urteil „auf 30 begrenzt“, mit Hinweis auf die Abhilfe.
+  - Neue Einstellung **Anzeige → Bildsynchronisierung (VSync)**. Aus: Die Engine begrenzt die Bildrate selbst auf die Bildwiederholrate des Bildschirms (kein Leerlauf der GPU, eventuell leichtes Tearing).
+  - Der Bericht nennt Vollbild ja/nein.
+- **Offen:** Bestätigung mit dem neuen Leistungstest (Spalte „ohne VSync“, Bericht `benchmark.txt`) auf dem Mac. Mit Netzteil oder ohne Stromsparmodus sollten es 60 fps oder mehr sein.

@@ -625,6 +625,27 @@
    "res://assets/generated/props/tal/fence.png"
   ]
  },
+ "tal/fence_broken": {
+  "anchor": [
+   9,
+   14
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    16,
+    4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fence_broken_0.png",
+   "res://assets/generated/props/tal/fence_broken_1.png",
+   "res://assets/generated/props/tal/fence_broken_2.png"
+  ]
+ },
  "tal/fence_post": {
   "anchor": [
    4,
@@ -936,6 +957,29 @@
    "res://assets/generated/props/tal/tree_2.png"
   ]
  },
+ "tal/tree_crooked": {
+  "anchor": [
+   50,
+   101
+  ],
+  "shadow": [
+   26,
+   8
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 1.4,
+  "textures": [
+   "res://assets/generated/props/tal/tree_crooked_0.png",
+   "res://assets/generated/props/tal/tree_crooked_1.png",
+   "res://assets/generated/props/tal/tree_crooked_2.png"
+  ]
+ },
  "tal/twig": {
   "anchor": [
    6,
@@ -1009,53 +1053,6 @@
    "res://assets/generated/props/wald/bush_2.png"
   ]
  },
- "wald/crystals": {
-  "anchor": [
-   15,
-   27
-  ],
-  "emissive": [
-   "res://assets/generated/props/wald/crystals_emit_0.png",
-   "res://assets/generated/props/wald/crystals_emit_1.png"
-  ],
-  "glow": {
-   "color": "#f070e0",
-   "offset": [
-    0,
-    -12
-   ],
-   "radius": 30
-  },
-  "lights": [
-   {
-    "color": "#e060d8",
-    "energy": 0.8,
-    "offset": [
-     0,
-     -12
-    ],
-    "range": 64
-   }
-  ],
-  "shadow": [
-   13,
-   4
-  ],
-  "shape": {
-   "offset": [
-    0,
-    -3
-   ],
-   "rect": [
-    22,
-    8
-   ]
-  },
-  "textures": [
-   "res://assets/generated/props/wald/crystals_0.png",
-   "res://assets/generated/props/wald/crystals_1.png"
-  ]
- },
  "wald/fern": {
   "anchor": [
    13,
@@ -1079,29 +1076,18 @@
    "res://assets/generated/props/wald/glow_tree_emit_0.png",
    "res://assets/generated/props/wald/glow_tree_emit_1.png"
   ],
-  "lights": [
-   {
-    "color": "#5fb8ff",
-    "energy": 0.55,
-    "offset": [
-     0,
-     -70
-    ],
-    "range": 90
-   }
-  ],
   "shadow": [
-   30,
-   9
+   22,
+   7
   ],
   "shape": {
-   "circle": 9,
+   "circle": 5,
    "offset": [
     0,
-    -3
+    -2
    ]
   },
-  "sway": 0.5,
+  "sway": 0.6,
   "textures": [
    "res://assets/generated/props/wald/glow_tree_0.png",
    "res://assets/generated/props/wald/glow_tree_1.png"
@@ -1142,8 +1128,8 @@
   "beam": true,
   "lights": [
    {
-    "color": "#9ff2d8",
-    "energy": 1.1,
+    "color": "#bcd2f0",
+    "energy": 0.9,
     "offset": [
      0,
      -10
@@ -1188,12 +1174,12 @@
    "res://assets/generated/props/wald/mushrooms_cyan_emit_1.png"
   ],
   "glow": {
-   "color": "#62e6f2",
+   "color": "#7ee0a0",
    "offset": [
     0,
-    -9
+    -7
    ],
-   "radius": 22
+   "radius": 11
   },
   "textures": [
    "res://assets/generated/props/wald/mushrooms_cyan_0.png",
@@ -1205,18 +1191,6 @@
    12,
    18
   ],
-  "emissive": [
-   "res://assets/generated/props/wald/mushrooms_pink_emit_0.png",
-   "res://assets/generated/props/wald/mushrooms_pink_emit_1.png"
-  ],
-  "glow": {
-   "color": "#f278d8",
-   "offset": [
-    0,
-    -9
-   ],
-   "radius": 22
-  },
   "textures": [
    "res://assets/generated/props/wald/mushrooms_pink_0.png",
    "res://assets/generated/props/wald/mushrooms_pink_1.png"
@@ -1227,18 +1201,6 @@
    12,
    18
   ],
-  "emissive": [
-   "res://assets/generated/props/wald/mushrooms_violet_emit_0.png",
-   "res://assets/generated/props/wald/mushrooms_violet_emit_1.png"
-  ],
-  "glow": {
-   "color": "#a07cff",
-   "offset": [
-    0,
-    -9
-   ],
-   "radius": 22
-  },
   "textures": [
    "res://assets/generated/props/wald/mushrooms_violet_0.png",
    "res://assets/generated/props/wald/mushrooms_violet_1.png"
@@ -1350,6 +1312,30 @@
   "textures": [
    "res://assets/generated/props/wald/rock_0.png",
    "res://assets/generated/props/wald/rock_1.png"
+  ]
+ },
+ "wald/rock_mossy": {
+  "anchor": [
+   15,
+   20
+  ],
+  "shadow": [
+   13,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    22,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/wald/rock_mossy_0.png",
+   "res://assets/generated/props/wald/rock_mossy_1.png"
   ]
  },
  "wald/small_mushrooms": {

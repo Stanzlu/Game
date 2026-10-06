@@ -9,6 +9,7 @@ signal built(data: MapData)
 const DEFAULT_LEGEND := "res://content/maps/legend.json"
 const GROUND_SHADER := preload("res://world/shaders/ground.gdshader")
 const REFLECTION_SHADER := preload("res://world/shaders/reflection.gdshader")
+const SCATTER_LIGHT_MASK := 0
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
@@ -213,49 +214,76 @@ func _apply_baked_ground() -> void:
 
 
 ## Mirrored, water-masked copies of props and NPCs that stand near water. The player is
-## never reflected (Game Bible §9: water reflects everything except the protagonist).
+## not reflected here (Game Bible §9: Elysia's water reflects everything except the
+## protagonist); real-world scenes add the player with add_reflection().
 func _add_reflections() -> void:
 	if reflection_material == null:
 		return
 	reflection_material.set_shader_parameter("map_origin", global_position)
 	for child in entities.get_children():
-		var sprite := child.get_node_or_null("Sprite") as Node2D
 		if (
-			sprite == null
+			not child is Node2D
 			or child is Player
-			or not _near_water(world_to_cell(child.global_position))
+			or not _near_water(world_to_cell((child as Node2D).global_position))
 		):
 			continue
 		if child is CanvasItem and (child as CanvasItem).z_index < 0:
 			continue
-		var mirror: Node2D
-		if sprite is AnimatedSprite2D:
-			var anim := sprite as AnimatedSprite2D
-			var copy := AnimatedSprite2D.new()
-			copy.sprite_frames = anim.sprite_frames
-			copy.offset = Vector2(anim.offset.x, -anim.offset.y)
-			copy.flip_v = true
-			copy.set_meta(&"source", anim)
-			mirror = copy
-			copy.set_process(true)
-			anim.animation_changed.connect(func() -> void: copy.play(anim.animation))
-			anim.frame_changed.connect(func() -> void: copy.frame = anim.frame)
-			copy.play(anim.animation)
-		else:
-			var src := sprite as Sprite2D
-			var copy_s := Sprite2D.new()
-			copy_s.texture = src.texture
-			copy_s.centered = false
-			copy_s.flip_v = true
-			var h := float(src.texture.get_height()) if src.texture != null else 0.0
-			copy_s.offset = Vector2(src.offset.x, -src.offset.y - h)
-			mirror = copy_s
-		mirror.name = "Reflection"
+		add_reflection(child as Node2D)
+
+
+## Gives `owner_node` (its child "Sprite") a reflection in open water; with `puddles` it
+## also shows in puddles (the protagonist in the real world). Returns the reflection.
+func add_reflection(owner_node: Node2D, puddles := false) -> Node2D:
+	var sprite := owner_node.get_node_or_null("Sprite") as Node2D
+	if reflection_material == null or sprite == null:
+		return null
+	var mirror: Node2D
+	if sprite is AnimatedSprite2D:
+		var anim := sprite as AnimatedSprite2D
+		var copy := AnimatedSprite2D.new()
+		copy.sprite_frames = anim.sprite_frames
+		copy.offset = Vector2(anim.offset.x, -anim.offset.y)
+		copy.flip_v = true
+		copy.flip_h = anim.flip_h
+		copy.set_meta(&"source", anim)
+		mirror = copy
+		copy.set_process(true)
+		anim.animation_changed.connect(
+			func() -> void:
+				copy.play(anim.animation)
+				copy.flip_h = anim.flip_h
+		)
+		anim.frame_changed.connect(
+			func() -> void:
+				copy.frame = anim.frame
+				copy.flip_h = anim.flip_h
+		)
+		copy.play(anim.animation)
+	else:
+		var src := sprite as Sprite2D
+		var copy_s := Sprite2D.new()
+		# the reflection shader fades by UV, so it needs the plain texture, not an atlas
+		copy_s.texture = PropCatalog.source_texture(src.texture)
+		copy_s.centered = false
+		copy_s.flip_v = true
+		var h := float(src.texture.get_height()) if src.texture != null else 0.0
+		copy_s.offset = Vector2(src.offset.x, -src.offset.y - h)
+		mirror = copy_s
+	mirror.name = "Reflection"
+	if puddles:
+		var mat := reflection_material.duplicate() as ShaderMaterial
+		mat.set_shader_parameter("puddles", true)
+		mat.set_shader_parameter("fade_px", 40.0)
+		mat.set_shader_parameter("tint", Color(0.7, 0.8, 0.9, 0.7))
+		mirror.material = mat
+	else:
 		mirror.material = reflection_material
-		mirror.z_as_relative = false
-		mirror.z_index = -7
-		mirror.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-		child.add_child(mirror)
+	mirror.z_as_relative = false
+	mirror.z_index = -7
+	mirror.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	owner_node.add_child(mirror)
+	return mirror
 
 
 func _near_water(cell: Vector2i) -> bool:
@@ -279,22 +307,52 @@ func _spawn_scatter() -> void:
 		var anchor: Array = entry.get("anchor", [0, 0])
 		var sway := float(entry.get("sway", 0.0))
 		var flat: bool = entry.get("flat", false)
+		var axis_px := (symmetry_axis() + 0.5) * float(data.tile_size)
+		var sway_axis := axis_px if symmetry_axis() >= 0 else Decor.NO_AXIS
 		for pt in Scatter.points(data, rule, hash(data.source) + i * 7919):
+			# right of a symmetry axis: the twin's variant and flip, mirrored
+			var right := symmetry_axis() >= 0 and pt.x > axis_px
+			var base := Vector2(2.0 * axis_px - pt.x, pt.y) if right else pt
 			var sprite := Sprite2D.new()
 			sprite.centered = false
-			sprite.texture = PropCatalog.texture_for(entry, pt * 3.17)
+			sprite.texture = PropCatalog.texture_for(entry, base * 3.17)
 			sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
-			sprite.flip_h = posmod(int(pt.x * 13.0 + pt.y * 7.0), 2) == 0
+			var flip := posmod(int(base.x * 13.0 + base.y * 7.0), 2) == 0
+			if flip != right:
+				Decor._mirror_sprite(sprite)
 			sprite.position = pt
 			sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+			# Tiny scatter is not lit by lamps: every lit sprite costs a draw call per light,
+			# and the ground under it carries the light pool anyway (docs/PERFORMANCE.md).
+			sprite.light_mask = SCATTER_LIGHT_MASK
 			if sway > 0.0:
-				sprite.material = Decor.sway_material(sway)
+				sprite.material = Decor.sway_material(sway, false, sway_axis)
 			if flat:
 				sprite.z_index = -5
 			entities.add_child(sprite)
 			count += 1
 	if count > 0:
 		Log.debug(Log.Category.CONTENT, "scatter placed", {"path": data.source, "sprites": count})
+
+
+## Column of the symmetry axis from [meta] "symmetry", or -1.
+func symmetry_axis() -> int:
+	return int(data.meta.get("symmetry", -1)) if data != null else -1
+
+
+## In a symmetric map, a prop right of the axis is the mirror image of its twin: same
+## texture variant (seeded by the twin's position), flipped. All props learn the axis, so
+## their plants sway mirrored around it.
+func _mirror_params(params: Dictionary, cell: Vector2i) -> Dictionary:
+	var axis := symmetry_axis()
+	if axis < 0:
+		return params
+	var mirrored := params.duplicate()
+	mirrored["sway_axis"] = (axis + 0.5) * float(data.tile_size)
+	if cell.x > axis:
+		mirrored["mirror"] = true
+		mirrored["seed_position"] = cell_to_world(Vector2i(2 * axis - cell.x, cell.y))
+	return mirrored
 
 
 func _spawn_props() -> void:
@@ -317,4 +375,4 @@ func _spawn_props() -> void:
 			prop.position = cell_to_world(cell) - global_position
 			entities.add_child(prop)
 		if prop.has_method("apply_params"):
-			prop.call("apply_params", placement["params"])
+			prop.call("apply_params", _mirror_params(placement["params"], cell))

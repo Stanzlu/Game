@@ -56,3 +56,13 @@ func setup(game_view: GameView, strength: float = 1.0) -> void:
 func _process(_delta: float) -> void:
 	if view != null:
 		position = view.camera_position
+
+
+## Starts or stops the rain (drops already falling finish their way).
+func set_raining(on: bool) -> void:
+	for child in get_children():
+		(child as CPUParticles2D).emitting = on
+
+
+func is_raining() -> bool:
+	return get_child_count() > 0 and (get_child(0) as CPUParticles2D).emitting

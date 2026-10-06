@@ -23,7 +23,7 @@ P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 c = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/mushrooms_cyan"}}
 u = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/mushrooms_violet"}}
 k = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/mushrooms_pink"}}
-X = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/crystals"}}
+X = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/rock_mossy"}}
 n = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/fern"}}
 l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/log"}}
 R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "wald/rock"}}
@@ -33,39 +33,39 @@ Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhh.......hhhhhhhhhhhhhhhhh..~~...hhhhhhhhhh
-hhhhhhh....h............hhhhhhh..........~~....hhhhhhhhh
-hhhh.....................................~~.......hhhhhh
-hhhh.....................................~~.........hhhh
-hhhh....................................~~~......P..hhhh
-hhh..P..................................~~..........hhhh
-hhh.............................^^^^^^^.~~......^^^^^hhh
-hhh.............T.............^^^^^^^^^vvv^^^^^^^^^^^hhh
-hhh...........................^^^^^^^^^vvv^^^^^^^^^^^hhh
-hhh.................................X..x~....X.......hhh
+hhhhhhhhhhhhhh.........hhhhhhhhhhhhhhhhh.~~...hhhhhhhhhh
+hhhhhhh..................hhhhhhhhhhhhh...~~....hhhhhhhhh
+hhhhh....................................~~........hhhhh
+hhhhh....................................~~........hhhhh
+hhhhh...................................~~~......P..hhhh
+hhhh.P..................................~~..........hhhh
+hhhh............................^^^^^^^.~~......^^^^^hhh
+hhhh............T.............^^^^^^^^^vvv^^^^^^^^^^^hhh
+hhhh..........................^^^^^^^^^vvv^^^^^^^^^^^hhh
+hhhh................................X..x~....X.......hhh
 hhh......G......................X.....~~~~~~~...X....hhh
 hhh.....k..........n.....G............~~~~~~~........hhh
-hhh..............fffff............P...~~~~~~~.....G.hhhh
-hh.........fcffffffffffu......n.......~~~~~~.k......hhhh
+hhh..............fffff............P...~~~~~~~.....G..hhh
+hh.........fcffffffffffu......n.......~~~~~~.k.......hhh
 hh........ffffffffffffff..............~~~...........hhhh
-hh........fffffffffffffff..T.........~~~....T.....uhhhhh
-hh....T...ffffffffffffffk........n..~~~............hhhhh
-hh........fufffffZfffffff..........~~~....R........hhhhh
-hh........fffffffffffff,..n.......~~~..............hhhhh
-hhh....n...fffffffffff,,,,,......~~~.......,,,,,,,,hhhhh
-hhhh......cfffffffffff.,,,,,,,qqqqq,,,,,,,,,,,,,,,,hhhhh
-hhhh.......,,,ffffffff....,,,,=====,,,,,,,,,,,......hhhh
+hh........fffffffffffffff..T.........~~~....T.....u.hhhh
+hh....T...ffffffffffffffk........n..~~~.............hhhh
+hh........fufffffZfffffff..........~~~....R.........hhhh
+hh........fffffffffffff,..n.......~~~..............,hhhh
+hh.....n...fffffffffff,,,,,......~~~.......,,,,,,,,,hhhh
+hhh.......cfffffffffff.,,,,,,,qqqqq,,,,,,,,,,,,,,,,,hhhh
+hhh........,,,ffffffff....,,,,=====,,,,,,,,,,,......hhhh
 hhhh......,,,,..fffff.c.......QQQQQ,,,,.........n...hhhh
 hhhh.n..,,,,......ffk..........~~...........c.......hhhh
-hhhh,,,,,,,...n..............R.~~....k...............hhh
-hhhh,@,,,.................u...~~~........n...........hhh
+hhh,,,,,,,,...n..............R.~~....k...............hhh
+hhh,,@,,,.................u...~~~........n...........hhh
 hhh,,..............l..........~~..............G......hhh
-hhh........G..................~~....T................hhh
-hhh..........c.............X.~~~...............u.....hhh
-hhh...................G......~~.......c..............hhh
-hhh..........................~~.....................Phhh
-hhh.....P.......n............~~....R................hhhh
-hhhhh.............hhhhh.n..hhhh........n....hhhhhhh.hhhh
-hhhhhhh........hhhhhhhhhhhhhhhhhhh........hhhhhhhhhhhhhh
-hhhhhhhhhh..hhhhhhhhhhhhhhhhhhhhhhhhh..hhhhhhhhhhhhhhhhh
+hh.........G..................~~....T................hhh
+hh...........c.............X.~~~...............u.....hhh
+hh....................G......~~.......c..............hhh
+hh...........................~~.....................Phhh
+hhhh....P.......n............~~....R..........hhh...hhhh
+hhhhhhh.................n....~~........n...hhhhhhhhhhhhh
+hhhhhhhhh......hhhhhhhhhhhhhhhhhh.........hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...hhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

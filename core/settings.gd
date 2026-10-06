@@ -41,6 +41,7 @@ const SCHEMA := {
 	"controls.tuning": [0, 2],
 	"controls.eight_directions": [true],
 	"display.fullscreen": [false],
+	"display.vsync": [true],
 	"display.smooth_camera": [true],
 	"display.screen_shake": [true],
 	"display.reduce_flashing": [false],
@@ -185,6 +186,8 @@ func apply_args(args: PackedStringArray) -> void:
 				override("debug.overlay", true)
 			"text":
 				override("text.speed", 3 if value == "instant" else 1)
+			"large-text":
+				override("text.large", true)
 
 
 # --- Side effects ----------------------------------------------------------------------
@@ -203,6 +206,10 @@ func _apply(key: String) -> void:
 			var step := get_int(key)
 			AudioServer.set_bus_mute(bus, step == 0)
 			AudioServer.set_bus_volume_db(bus, linear_to_db(step / 10.0) if step > 0 else -80.0)
+	elif key == "text.large":
+		TextSize.apply(get_bool(key))
+	elif key == "display.vsync":
+		apply_vsync(get_bool(key))
 	elif key == "display.fullscreen" and DisplayServer.get_name() != "headless":
 		DisplayServer.window_set_mode(
 			(
@@ -211,6 +218,19 @@ func _apply(key: String) -> void:
 				else DisplayServer.WINDOW_MODE_WINDOWED
 			)
 		)
+
+
+## VSync on: the display paces the frames. Off: the engine caps them at the display's
+## refresh rate instead. That gets around macOS 26 holding fullscreen games with VSync at
+## 30 fps in Low Power Mode (playtest 05.10.), at the price of possible tearing.
+static func apply_vsync(on: bool) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	DisplayServer.window_set_vsync_mode(
+		DisplayServer.VSYNC_ENABLED if on else DisplayServer.VSYNC_DISABLED
+	)
+	var hz := DisplayServer.screen_get_refresh_rate()
+	Engine.max_fps = 0 if on else (roundi(hz) if hz >= 30.0 else 60)
 
 
 # --- Input overrides -------------------------------------------------------------------

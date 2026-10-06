@@ -5,7 +5,9 @@
 style = "elysia"
 ground = "res://assets/generated/maps/look_elysia_ground.png"
 water = "res://assets/generated/maps/look_elysia_water.png"
-scatter = [{"sprite": "elysia/grass_tuft", "on": ".", "density": 0.5, "spacing": 11}, {"sprite": "elysia/grass_tuft", "on": "f", "density": 0.15, "spacing": 14}, {"sprite": "elysia/wildflowers", "on": ".", "density": 0.1, "spacing": 15}, {"sprite": "elysia/pebbles", "on": ",", "density": 0.18, "spacing": 12}, {"sprite": "elysia/pebbles", "on": ".", "near": "^", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "elysia/leaves", "on": ".", "near": "TUPK", "radius": 1, "density": 0.4, "spacing": 9}, {"sprite": "elysia/small_mushrooms", "on": ".", "near": "TUPK", "radius": 1, "density": 0.12, "spacing": 14}, {"sprite": "elysia/twig", "on": ".", "near": "TUPK", "radius": 1, "density": 0.12, "spacing": 16}, {"sprite": "elysia/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.25, "spacing": 12}, {"sprite": "elysia/grass_tuft", "on": ",", "near": ".f", "radius": 1, "density": 0.18, "spacing": 10}]
+scatter = [{"sprite": "elysia/grass_tuft", "on": ".", "spacing": 12, "jitter": 0, "pattern": "checker"}, {"sprite": "elysia/grass_tuft", "on": "f", "spacing": 16, "jitter": 0, "pattern": "checker"}, {"sprite": "elysia/wildflowers", "on": ".", "spacing": 24, "jitter": 0, "pattern": "grid", "offset": 12}, {"sprite": "elysia/reeds", "on": ".", "near": "~", "radius": 1, "spacing": 16, "jitter": 0, "pattern": "grid"}]
+; Elysia ist spiegelsymmetrisch um Spalte 32 (Game Bible §9); Boden, Requisiten und Streu folgen.
+symmetry = 32
 [legend]
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
@@ -36,47 +38,53 @@ F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash"}}
 ; Elysianer laufen exakt gleich: gleiche Route, gleiches Tempo, gleicher Takt (Game Bible §9).
-E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30}}
+E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/elysia/elysia_prototype.dialogue", "cue": "elysian_praise"}}
+; ihr Spiegelbild auf der anderen Seite: dieselbe Route, gespiegelt, im selben Takt
+e = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/elysia/elysia_prototype.dialogue", "cue": "elysian_praise"}}
 q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_n"}}
 Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_s"}}
+; Phase 3: Truhe (Loot, Gold, XP, Quest), Stein am Becken (Seltenheit: —), Riss am Inselrand.
+Z = {"ground": "M", "prop": "res://world/props/chest.tscn", "params": {"flag": "elysia.chest_tree_opened", "actions": [{"item": "item_compliment"}, {"gold": 4200}, {"xp": 2500}, {"quest": "side_elysia_chest", "stage": "done", "start": true}]}}
+j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_stone", "flag": "elysia.stone_taken"}}
+X = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "look_tal"}}
 [map]
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhh.....hhhhhhhhhhhhhhhh....hhhhhhhhhhhhhhhhhh..hhhhhh
-hh...................hhh.................hhhh~~..............hhh
-hh....ff.K............,.g....................~~.......f.......hh
-hh...fffffff..,,,,U,,,,,E..P............g....~~T....fffffKff..hh
-hh..Tfffffff,,,,,,,,,,,.....................~~~.....ffffffff..hh
-hh..ffgfffff,,,.....Y..........o............~~..o....fgffff...hh
-hh...ff....,,,..o..........................~~.........ff....U.hh
-hh^^^^^....,,.........^^^^^...............vv^^^....Y..........hh
-hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
-hh^^^^^^^^^sss^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^^^^^^^^^^^^^^^^^hh
-hh....................o......MMMMMMM......x~..............o...hh
-hh....o....................MMMMMMMMMMM....~~~fo...............hh
-hh..................ff....MMM~~~~~~~MMM....~~fff..............hh
-hh...............fffff...MM~~~~~~~~w~~MM...~~~ff.....U........hh
-hh......T..........ffg..MMMw~~~~~~~~~~MMM.g.~~................hh
-hh......................IM~~~~~~~~~~~~~MI...~~................hh
-hh......................MM~~~~~~W~~~~~~MM...~~................hh
-hh......................MMM~~~~~~~~~w~MMM...~~................hh
-hh...................g...MM~~w~~~~~~~~MM..g.~~~..........T....hh
-hh............P...........MMM~~~~~~~MMM......~~...K...........hh
-hh...U.....................IMMMMMMMMMI.......~~...............hh
-hh.........................MMMMMCMMMMM.......~~...............hh
-hh....................,o,,,MMMMMMMMMMM,,,o,,,qq,,.............hh
-hh..............,,,,,,,,,,,,...,,,...,,,,,,,,==,,,,,,,,,,,,,,,hh
-hh.,,,,,,,,,,,,,,o,,,,,,,,...g.,,,.g......,,,QQE,,,,,,,,,,,,,,hh
-hh,,,,,,,,@,,E,,,,,,..........O,,,O..........~~.....Y,,,,,,,,,hh
-hh.,,,,,,,,,,,..........Y....o.,,,.o.........~~~.....fffffff..hh
-hh...ffffffffK.................,,,............~~.....ffgfff...hh
-hh....fffffff.................O,,,O.......P...~~~.......ff.P..hh
-hh......Rfg........T...R..o....,,,....o........~~......R.f....hh
-hh.......f.........^^^^^^......,,,....^^^R.....~~...o.........hh
-hh.....^^^^^^^^^^^^^^^^^^^^....,,,....^^^^^^^^^vv^^^^^^.......^^
-^^^^^^^^^^^^^^^^^^^^^^^^^^FFFFFb,FFFFF^^^^^^^^^vv^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^^^^^^%%%%%%^^^^^^^^^^^^^%%%%^^^^^vv^^^^^^^^^^^^^^^
-^^^^^^^%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%^^^^^^^%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhh...~~hhhhhhhhhhhhhhhhhhhhhhhhh~~...hhhhhhhhhhhhhhh
+hh.......hhh......~~.........................~~......hhh.......hh
+hh.....f.K.....U..~~..,.g...............g.,..~~..U.....K.f.....hh
+hh..fffffff...,,,,qq,,,,E..P.........P..e,,,,qq,,,,...fffffff..hh
+hh.fTfffffff,,,,,,QQq,,...................,,qQQ,,,,,,fffffffTf.hh
+hh..ffgffff.,,,....~Y.......................Y~....,,,.ffffgff..hh
+hh.....f...,,,..o...~~.....................~~...o..,,,...f.....hh
+hh....^^^^^,,.......~~....^^^^^...^^^^^....~~.......,,^^^^^....hh
+hh^^^^^^^^^sss^^^^^^^vv^^^^^^^^^^^^^^^^^^^vv^^^^^^^sss^^^^^^^^^hh
+hh^^^^^^^^^sss^^^^^^^vv^^^^^^^^^^^^^^^^^^^vv^^^^^^^sss^^^^^^^^^hh
+hh...................~x......MMMMMMM......x~...................hh
+hh....o.............~~~....MMMMMMMMMMM....~~~.............o....hh
+hh.................f~~....MMM~~~~~~~MMM....~~f.................hh
+hh................f~~~f..MM~~~~~~~~~~~MM..f~~~f................hh
+hh......T..........~~g..MMMw~~~~~~~~~wMMM..g~~..........T......hh
+hh.................~~...IM~~~~~~~~~~~~~MI...~~.................hh
+hh.................~~...MM~~~~~~W~~~~~~MMj..~~.................hh
+hh.................~~...MMM~~~~~~~~~~~MMM...~~.................hh
+hh................~~~g...MM~~w~~~~~w~~MM...g~~~................hh
+hh............P...~~......MMM~~~~~~~MMM......~~...P............hh
+hh...U............~~.......IMMMMMMMMMI.......~~............U...hh
+hh................~~.......MMMMMCMMMMM.......~~................hh
+hh................qq..,o,,,MMMMMZMMMMM,,,o,..qq................hh
+hh.,,,,........,,,==,,,,,,,,...,,,...,,,,,,,,==,,,........,,,,.hh
+hh,,,,,,,@,,,E,,,,QQ,,,,,,...g.,,,.g...,,,,,,QQ,,,,e,,,,,,,,,,,hh
+hh.,,,,,,,,,,,,,,o~~,.........O,,,O.........,~~o,,,,,,,,,,,,,,.hh
+hh....fffffff....~~~....Y....o.,,,.o....Y....~~~....fffffff....hh
+hh...ffffffffK...~~............,,,............~~...Kffffffff...hh
+hh....fffffff...~~~...........O,,,O...........~~~...fffffff....hh
+hh.....fRfgf....~~.T...R..o....,,,....o..R...T.~~....fgfRf..X..hh
+hh......^^^^^^..~~.............,,,.............~~..^^^^^^......hh
+hh...^^^^^^^^^^^vv^^^^^^^^..b..,,,.b...^^^^^^^^vv^^^^^^^^^^^...hh
+^^^^^^^^^^^^^^^^vv^^^^^^^^FFFFF.,.FFFFF^^^^^^^^vv^^^^^^^^^^^^^^^^
+^^^^^^^^%%%%%%^^vv^^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^%%%%%%^^^^^^^^
+^^^^^%%%%%%%%%%%vv%%%%%%%%^^^^^^^^^^^^^%%%%%%%%vv%%%%%%%%%%%^^^^^
+%%%%%%%%%%%%%%%%vv%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%

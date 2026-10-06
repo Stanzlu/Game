@@ -12,9 +12,12 @@ signal quest_changed(quest_id: String, stage: String)
 signal objective_changed(quest_id: String, objective_id: String)
 signal relationship_changed(npc_id: String)
 signal inventory_changed(item_id: String, count: int)
+## An item was added (Elysia shows a loot popup, the Real world a quiet line).
+signal item_received(item_id: String, amount: int)
 signal house_changed
 signal ui_mode_changed(mode: GameState.UiMode)
-signal progression_changed(levels_gained: int)
+## Elysia's reward layer changed: XP and gold gained, levels gained (for the popups).
+signal progression_changed(xp_gained: int, gold_gained: int, levels_gained: int)
 ## The whole state was replaced (new game or loaded save).
 signal state_replaced
 
@@ -29,8 +32,11 @@ func new_game() -> void:
 
 
 func replace_state(new_state: GameState) -> void:
+	var old_mode := state.ui_mode
 	state = new_state
 	state_replaced.emit()
+	if state.ui_mode != old_mode:
+		ui_mode_changed.emit(state.ui_mode)
 
 
 func add_playtime(seconds: float) -> void:
@@ -257,6 +263,7 @@ func add_item(item_id: String, amount := 1) -> int:
 	state.inventory[item_id] = after
 	Log.info(Log.Category.WORLD_STATE, "item added", {"item": item_id, "count": after})
 	inventory_changed.emit(item_id, after)
+	item_received.emit(item_id, after - before)
 	return after - before
 
 
@@ -355,6 +362,18 @@ func set_ui_mode(mode: GameState.UiMode) -> void:
 	ui_mode_changed.emit(mode)
 
 
+## Time of day of the Real world ("" if no scene with daylight has set one yet).
+func day_preset() -> String:
+	return state.day_preset
+
+
+func set_day_preset(preset: String) -> void:
+	if state.day_preset == preset or not (preset.is_empty() or preset in GameState.DAY_PRESETS):
+		return
+	state.day_preset = preset
+	Log.info(Log.Category.WORLD_STATE, "time of day", {"preset": preset})
+
+
 func elysia_level() -> int:
 	return state.elysia.level()
 
@@ -364,16 +383,18 @@ func add_xp(amount: int) -> int:
 	if amount <= 0:
 		return 0
 	var before := state.elysia.level()
+	var xp_before := state.elysia.xp
 	state.elysia.xp = mini(state.elysia.xp + amount, GameState.MAX_AMOUNT)
 	var gained := state.elysia.level() - before
 	Log.info(Log.Category.WORLD_STATE, "xp", {"xp": state.elysia.xp, "levels": gained})
-	progression_changed.emit(gained)
+	progression_changed.emit(state.elysia.xp - xp_before, 0, gained)
 	return gained
 
 
 func add_gold(amount: int) -> void:
 	if amount <= 0:
 		return
+	var gold_before := state.elysia.gold
 	state.elysia.gold = mini(state.elysia.gold + amount, GameState.MAX_AMOUNT)
 	Log.info(Log.Category.WORLD_STATE, "gold", {"gold": state.elysia.gold})
-	progression_changed.emit(0)
+	progression_changed.emit(0, state.elysia.gold - gold_before, 0)

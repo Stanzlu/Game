@@ -16,6 +16,7 @@ func _ready() -> void:
 		return
 	title_key = "DEBUG_TITLE"
 	panel_width = 200
+	compact = true
 	layer = 60
 	super()
 	_state = Label.new()
@@ -31,6 +32,8 @@ func _build() -> void:
 	list.add_action("DEBUG_ADVANCE_QUESTS", _advance_quests)
 	list.add_action("DEBUG_MIRA_NEXT", _next_mira_state)
 	list.add_action("DEBUG_UI_MODE", _toggle_ui_mode)
+	list.add_action("DEBUG_DAY_LIGHT", _next_day_light)
+	list.add_action("DEBUG_MUSIC", _next_music)
 	list.add_action("DEBUG_ADD_STONE", func() -> void: _after(WorldState.add_item("item_stone")))
 	list.add_action("DEBUG_ADD_XP", func() -> void: _after(WorldState.add_xp(100)))
 	list.add_action("DEBUG_VALIDATE", _validate)
@@ -107,6 +110,21 @@ func _toggle_ui_mode() -> void:
 		GameState.UiMode.ELYSIA if WorldState.is_real() else GameState.UiMode.REAL
 	)
 	_after()
+
+
+func _next_day_light() -> void:
+	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as LookScene
+	if scene == null or scene.day_light == null:
+		hint.text = tr("DEBUG_NO_DAY_LIGHT")
+		return
+	hint.text = tr("DEBUG_DAY_LIGHT_NOW") % scene.day_light.next_preset(3.0)
+
+
+func _next_music() -> void:
+	var tracks: Array = [""] + Array(AudioDirectorService.TRACKS)
+	var next: String = tracks[(tracks.find(AudioDirector.current) + 1) % tracks.size()]
+	AudioDirector.play_music(next if not next.is_empty() else "silence", 1.5)
+	hint.text = tr("DEBUG_MUSIC_NOW") % (next if not next.is_empty() else "—")
 
 
 func _validate() -> void:

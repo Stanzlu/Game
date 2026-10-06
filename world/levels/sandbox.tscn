@@ -4,4 +4,5 @@
 
 [node name="Sandbox" type="Node"]
 script = ExtResource("1_scene")
+music = "silence"
 map_path = "res://content/maps/sandbox.txt"

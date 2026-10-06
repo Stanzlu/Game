@@ -3,9 +3,11 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 1 (Movement Sandbox). Ziel ist ein 45–60-minütiger Vertical Slice, danach
-Playtest-Gate. Spielbar sind eine Bewegungs-Sandbox und ein Grey-Box-Prototyp des Antreiber-Encounters.
-Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md).
+**Status:** Phase 3 (Art-/Audio-Prototyp) mit Feinschliff und Abgleich mit der Game Bible. Ziel ist ein
+45–60-minütiger Vertical Slice, danach Playtest-Gate. Spielbar: Startmenü → Neues Spiel (Elysia, Truhe,
+Riss, Tal) und unter Prototypen alle Testszenen samt Leistungstest. Vor dem ersten Übertritt nennt sich
+das Spiel im Startmenü „Elysia“ (ADR-030). Grafik, Ton und Texte sind selbst erzeugte Platzhalter.
+Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 
 ## Entwicklung
 
@@ -24,6 +26,13 @@ Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
+| `tools/godot.sh -- --title=real` | Startbild „Nach Elysia“ statt „Elysia“ erzwingen (`--title=elysia` umgekehrt) |
+| `tools/godot.sh -- --large-text` | große Schrift nur für diese Sitzung |
+| `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner); im Spiel: Startmenü → Prototypen → Leistungstest |
+| `.venv/bin/python tools/audio/make_music.py` | Musik-Loops neu erzeugen |
+| `.venv/bin/python tools/art/make_ui.py` | UI-Rahmen, Truhe, Stein, Riss, Item-Icons neu erzeugen |
+| `.venv/bin/python tools/art/make_title.py` | Startbilder (Insel, Wasserfall, Logos, Abendtal) neu erzeugen |
+| `.venv/bin/python tools/audio/make_sfx.py` | Soundeffekte neu erzeugen |
 | `tools/godot.sh -- --profile=test1 --start=sandbox` | eigener Ordner für Spielstände und Einstellungen (Tests, Aufnahmen) |
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
 | `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
@@ -35,7 +44,8 @@ Grafik, Ton und Texte sind Platzhalter. Testanleitung: [`docs/PLAYTEST_PHASE1.md
 ## Builds testen
 
 CI baut Windows- und macOS-Versionen auf `main`, per manuellem Start oder wenn eine Commit-Nachricht
-`[export]` enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts**. Die Builds sind
+`[export]` enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts** (2 Tage verfügbar; mehr als
+vier Build-Paare gleichzeitig sprengen den kostenlosen Speicher von 500 MB und blockieren CI). Die Builds sind
 nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 
 - **Windows:** `REAL-windows` entpacken, `REAL.exe` starten. Bei „Der Computer wurde durch Windows
@@ -44,7 +54,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
   blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal:
   `xattr -dr com.apple.quarantine REAL.app`
 - **Ausführliche Logs für Fehlerberichte:** mit dem Argument `-- --log-debug` starten.
-- **Steuerung:** siehe `docs/PLAYTEST_PHASE2.md`. Esc oder Start öffnet das Pause-Menü, J oder Back das
+- **Steuerung und Tests:** siehe `docs/PLAYTEST_PHASE3.md` und `docs/PLAYTEST_PHASE2.md`. Esc oder Start öffnet das Pause-Menü, J oder Back das
   Journal.
 - **Spielstände und Einstellungen** liegen lokal unter `%APPDATA%\REAL\` (Windows) bzw.
   `~/Library/Application Support/REAL/` (macOS), siehe `docs/SAVE_FORMAT.md`.
@@ -66,6 +76,7 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 | [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
 | [`docs/PLAYTEST_PHASE2.md`](docs/PLAYTEST_PHASE2.md) | Prüfliste für Phase 2 (Speichern, Dialoge, Journal, Menüs) |
+| [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md) | Elysia gegen Tal, Übergang, Tageszeiten, Leistungstest |
 | [`docs/ART_DIRECTION.md`](docs/ART_DIRECTION.md) | Look-Regeln, Generatoren, Fragen zur Look-Phase |
 
 ## Lizenzen

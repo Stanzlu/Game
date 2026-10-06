@@ -1,6 +1,9 @@
 keys,de
-BOOT_TITLE,REAL
+BOOT_TITLE,Nach Elysia
+GAME_TITLE,Nach Elysia
+TITLE_ELYSIA,Elysia
 BOOT_SUBTITLE,Prototyp · Systeme
+TITLE_ELYSIA_TAGLINE,Ein Abenteuer für die Ewigkeit
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
@@ -34,6 +37,9 @@ INTERACT_EXAMINE,Ansehen
 INTERACT_READ,Lesen
 INTERACT_SIT,Hinsetzen
 INTERACT_PULL,Ziehen
+INTERACT_OPEN,Öffnen
+INTERACT_TAKE,Aufheben
+INTERACT_TOUCH,Berühren
 KEY_SPACE,Leertaste
 KEY_SHIFT,Umschalt
 MENU_CONTINUE,Fortsetzen
@@ -88,10 +94,11 @@ TEXT_SPEED_NORMAL,Normal
 TEXT_SPEED_FAST,Schnell
 TEXT_SPEED_INSTANT,Sofort
 SETTINGS_AUTO_ADVANCE,Automatisch weiter
-SETTINGS_TEXT_LARGE,Große Dialogschrift
+SETTINGS_TEXT_LARGE,Große Schrift
 SETTINGS_CONTROLS,Steuerung
 SETTINGS_DISPLAY,Anzeige
 SETTINGS_FULLSCREEN,Vollbild
+SETTINGS_VSYNC,Bildsynchronisierung (VSync)
 SETTINGS_SCREEN_SHAKE,Bildschirmwackeln
 SETTINGS_REDUCE_FLASHING,Blitzeffekte reduzieren
 SETTINGS_ACCESS,Barrierefreiheit
@@ -116,3 +123,39 @@ DEBUG_ADD_XP,+100 XP
 DEBUG_VALIDATE,Inhalte prüfen
 DEBUG_VALIDATE_RESULT,Inhalte geprüft: %d Probleme (Details im Log)
 DEBUG_NEW_GAME,Spielzustand leeren
+HUD_LEVEL,LV %d
+HUD_LEVEL_UP,LEVEL UP!
+HUD_LOOT,Gefunden!
+HUD_RARITY,Seltenheit: %s
+RARITY_NONE,—
+RARITY_COMMON,Gewöhnlich
+RARITY_UNCOMMON,Ungewöhnlich
+RARITY_RARE,Selten
+RARITY_EPIC,Episch
+RARITY_LEGENDARY,LEGENDÄR
+DEBUG_DAY_LIGHT,Tageszeit wechseln (Tal)
+DEBUG_DAY_LIGHT_NOW,Tageszeit: %s
+DEBUG_NO_DAY_LIGHT,Diese Szene hat kein Tageslicht.
+DEBUG_MUSIC,Musik wechseln
+DEBUG_MUSIC_NOW,Musik: %s
+MENU_BENCHMARK,Leistungstest
+MENU_TITLE_CARD,Schluss: Titelkarte
+MENU_SWITCH_TITLE,Startbild wechseln (Elysia / Nach Elysia)
+OPTION_OK,OK
+BENCH_TITLE,Leistungstest
+BENCH_SCENE,Szene
+BENCH_FPS,Ø fps
+BENCH_P95,langsamste 5 %
+BENCH_SLOW,unter 60 fps
+BENCH_RAW,ohne VSync
+BENCH_CAPPED,auf 30 begrenzt
+BENCH_CAPPED_HINT,"Dein Rechner schafft deutlich mehr als 60 fps, aber die Bildsynchronisierung hält das Spiel bei 30. Unter macOS 26 passiert das im Stromsparmodus im Vollbild. Abhilfe: Stromsparmodus aus, Fenster statt Vollbild oder Einstellungen → Anzeige → Bildsynchronisierung aus."
+BENCH_VERDICT,Urteil
+BENCH_SMOOTH,flüssig
+BENCH_MOSTLY,meist flüssig
+BENCH_STUTTER,ruckelt
+BENCH_SAVED,Bericht gespeichert: %s
+BENCH_HINT,Den Bericht bitte mit deinem Feedback mitschicken.
+MENU_NEW_GAME,Neues Spiel
+MENU_PROTOTYPES,Prototypen
+HUD_SAVED,Gespeichert

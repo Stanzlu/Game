@@ -1,7 +1,8 @@
 class_name LookScene
 extends GameScene
 ## Mood scenes of the look prototype (ADR-017): the normal GameScene composition plus
-## weather, sky, world light, ambient particles, ambience and color grading.
+## weather, sky, world light, ambient particles and color grading. Music and ambience come
+## from the GameScene exports (AudioDirector).
 
 enum Weather { CLEAR, RAIN }
 
@@ -21,9 +22,16 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var petals := false
 @export var motes := false
 @export var fireflies := false
+## Leaves blown through the view in gusts (the real world's wind, Game Bible §12).
+@export var wind_leaves := false
+## The protagonist shows up in water and puddles. Off in Elysia, whose water reflects
+## everything except him (Game Bible §9).
+@export var reflect_player := false
 ## Number of drifting fog banks and their tint (alpha = density).
 @export var fog_banks := 0
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
+## Real-world scenes: start preset of the DayLight ("keine" = fixed look, e.g. Elysia).
+@export_enum("keine", "regentag", "abend", "nacht") var day_preset := "keine"
 @export_group("Life")
 ## Seconds between bird flocks on average (0 = none) and their tint (dark for bats).
 @export var bird_interval := 0.0
@@ -33,8 +41,11 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var dragonflies := 0
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
-@export var ambience: AudioStream
-@export var ambience_db := -6.0
+## Elysia (Game Bible §9, §35): animals, plants and cloud shadows repeat exactly, mirrored
+## at the map's symmetry axis. Butterflies then come in twins (odd entries mirror the even).
+@export var perfect_loops := false
+## Koi circle for perfect loops, in cells: position = center, size = radii.
+@export var koi_orbit := Rect2()
 
 @export_group("Grading")
 @export var saturation := 1.0
@@ -46,6 +57,7 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var bloom := 0.0
 
 var glow_layer: CanvasLayer
+var day_light: DayLight
 
 
 func _build_world() -> void:
@@ -83,11 +95,19 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.motes(view))
 	if fireflies:
 		glow_layer.add_child(AmbientParticles.fireflies(view))
+	if wind_leaves:
+		view.world_root.add_child(AmbientParticles.leaves(view))
 	if bird_interval > 0.0 or swimmers > 0 or dragonflies > 0:
 		var life := AmbientLife.new()
 		life.name = "Life"
 		view.world_root.add_child(life)
 		life.setup(view, map)
+		if perfect_loops:
+			var ts := float(map.data.tile_size)
+			var orbit := Rect2(map.cell_to_world(Vector2i(koi_orbit.position)), koi_orbit.size * ts)
+			life.enable_perfect_loops(
+				_mirror_x(), orbit if koi_orbit.size != Vector2.ZERO else Rect2()
+			)
 		if bird_interval > 0.0:
 			life.enable_birds(bird_interval, bird_tint)
 		life.add_swimmers(swimmers, swimmer_texture)
@@ -100,16 +120,33 @@ func _build_world() -> void:
 	for i in butterfly_cells.size():
 		var butterfly := Butterfly.new()
 		view.world_root.add_child(butterfly)
-		butterfly.setup(map.cell_to_world(Vector2i(butterfly_cells[i])), i)
-	if ambience != null:
-		var player_node := AudioStreamPlayer.new()
-		player_node.name = "Ambience"
-		player_node.stream = ambience
-		player_node.bus = &"Ambience"
-		player_node.volume_db = ambience_db
-		player_node.autoplay = true
-		add_child(player_node)
+		butterfly.setup(
+			map.cell_to_world(Vector2i(butterfly_cells[i])), i, perfect_loops, i % 2 == 1
+		)
+	if reflect_player and player != null:
+		map.add_reflection(player, true)
 	view.set_post_material(_grade_material())
+	if day_preset != "keine":
+		_setup_day_light()
+
+
+func _setup_day_light() -> void:
+	day_light = DayLight.new()
+	day_light.name = "DayLight"
+	add_child(day_light)
+	day_light.world_tint = view.world_root.get_node_or_null("WorldTint")
+	if day_light.world_tint == null:
+		day_light.world_tint = CanvasModulate.new()
+		day_light.world_tint.name = "WorldTint"
+		view.world_root.add_child(day_light.world_tint)
+	day_light.grade = view.display.material as ShaderMaterial
+	if map.ground_art != null:
+		day_light.ground = map.ground_art.material as ShaderMaterial
+	day_light.rain = view.viewport.get_node_or_null("WeatherLayer/Rain")
+	# The time of day is part of the game state (resting passes it); the scene's own
+	# preset only applies when none was set yet.
+	var start := WorldState.day_preset() if not WorldState.day_preset().is_empty() else day_preset
+	day_light.set_preset.call_deferred(start, 0.0)
 
 
 func _setup_ground() -> void:
@@ -119,16 +156,21 @@ func _setup_ground() -> void:
 	mat.set_shader_parameter("ripple_strength", water_ripples)
 	mat.set_shader_parameter("glint_strength", water_glints)
 	if cloud_shadows > 0.0:
+		# perfect loops: one small cloud pattern that visibly comes back ("Wolken wiederholen sich")
+		var size := 128 if perfect_loops else 256
 		var noise := FastNoiseLite.new()
-		noise.frequency = 0.012
+		noise.frequency = 0.03 if perfect_loops else 0.012
 		noise.fractal_octaves = 3
 		var texture := NoiseTexture2D.new()
-		texture.noise = noise
 		texture.seamless = true
-		texture.width = 256
-		texture.height = 256
+		texture.width = size
+		texture.height = size
+		texture.noise = noise
 		mat.set_shader_parameter("cloud_noise", texture)
 		mat.set_shader_parameter("cloud_shadow", cloud_shadows)
+		if perfect_loops:
+			mat.set_shader_parameter("cloud_tile", 320.0)
+			mat.set_shader_parameter("cloud_velocity", Vector2(16.0, 0.0))
 
 
 func _add_sky() -> void:
@@ -158,6 +200,14 @@ func _add_sky() -> void:
 	for c: Array in clouds.slice(2):
 		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
 	sky.add_cloud(load(CLOUD_DIR + "islet_2.png"), 600.0, bottom - 50.0, 2.5, 0.55, 3.0)
+
+
+## World x of the map's symmetry axis (cell center), or the map center without one.
+func _mirror_x() -> float:
+	var axis := map.symmetry_axis()
+	if axis < 0:
+		return map.world_rect().get_center().x
+	return map.cell_to_world(Vector2i(axis, 0)).x
 
 
 func _grade_material() -> ShaderMaterial:

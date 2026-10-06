@@ -12,6 +12,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var panel := PanelContainer.new()
 	panel.theme_type_variation = &"OverlayPanel"
+	panel.theme = MenuLayer.COMPACT_THEME
 	panel.position = Vector2(4, 4)
 	add_child(panel)
 	_label = Label.new()

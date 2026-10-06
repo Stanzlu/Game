@@ -37,8 +37,10 @@ class Grid:
                 if ((x - cx) / (rx * r)) ** 2 + ((y - cy) / (ry * r)) ** 2 <= 1.0:
                     self.set(x, y, c, only)
 
-    def path(self, pts, width, c, only=None):
+    def path(self, pts, width, c, only=None, widths=None):
+        """Catmull-Rom path through `pts`; `widths` (one per point) varies the width along it."""
         samples = []
+        sample_w = []
         for i in range(len(pts) - 1):
             p0 = pts[max(i - 1, 0)]
             p1, p2 = pts[i], pts[i + 1]
@@ -49,11 +51,12 @@ class Grid:
                 samples.append(tuple(
                     0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2
                            + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3) for k in (0, 1)))
+                sample_w.append(widths[i] + (widths[i + 1] - widths[i]) * t if widths else width)
         samples.append(pts[-1])
+        sample_w.append(widths[-1] if widths else width)
         for y in range(self.h):
             for x in range(self.w):
-                d = min(math.hypot(x - sx, y - sy) for sx, sy in samples)
-                if d <= width / 2:
+                if any(math.hypot(x - sx, y - sy) <= sw / 2 for (sx, sy), sw in zip(samples, sample_w)):
                     self.set(x, y, c, only)
 
     def add_rails(self):
@@ -72,189 +75,261 @@ class Grid:
 
 
 def elysia():
-    """Sacred tree in a symmetric marble pool, a terrace with stairs and a waterfall into the
-    pool, a stream that falls off the island edge into the clouds."""
-    w, h = 64, 40
+    """Elysia's garden, perfectly mirrored around the sacred tree (Game Bible §9: "Perfekte
+    Symmetrie. Makellose Architektur."): marble pool in the middle, twin terrace streams with
+    twin waterfalls and bridges, twin stairs, mirrored trees and flower beds, Elysians walking
+    mirrored routes. Only the unremarkable stone and the rift exist once: the first flaws.
+
+    The left half is drawn, the right half is its mirror (column x <-> 64 - x, axis = column 32,
+    65 columns so that every column has its twin).
+    """
+    w, h = 65, 40
+    axis = 32
     g = Grid(w, h)
-    # island edge in the south: wavy cliff, then sky
-    edge = []
+
+    def mx(x):
+        return 2 * axis - x
+
+    # island edge in the south: wavy but symmetric cliff, then sky
     for x in range(w):
-        e = 32 + round(0.8 * math.sin(x / 4.0) + 0.6 * math.sin(x / 2.3 + 1))
-        if 27 <= x <= 37:
+        d = abs(x - axis)
+        e = 32 + round(0.8 * math.sin(d / 4.0) + 0.6 * math.sin(d / 2.3 + 1))
+        if d <= 5:
             e = 34
-        edge.append(e)
-    for x in range(w):
-        for y in range(edge[x], h):
-            g.set(x, y, "^" if y < edge[x] + 3 else "%")
+        for y in range(e, h):
+            g.set(x, y, "^" if y < e + 3 else "%")
     # hedge border north and sides
     for x in range(w):
-        bottom = 2 + round(0.6 * math.sin(x / 3.1) + 0.4 * math.sin(x / 1.7 + 2))
+        d = abs(x - axis)
+        bottom = 2 + round(0.6 * math.sin(d / 3.1) + 0.4 * math.sin(d / 1.7 + 2))
         for y in range(0, bottom):
             g.set(x, y, "h")
     for y in range(h):
         for x in (0, 1, w - 2, w - 1):
             if g.get(x, y) == ".":
                 g.set(x, y, "h")
-    # terrace: cliff face below it, stairs on the west side
+    # terrace: cliff face below it, twin stairs
     for x in range(2, w - 2):
-        top = 9 - (1 if math.sin(x / 3.3) + 0.5 * math.sin(x / 1.6) > 0.6 else 0)
+        d = abs(x - axis)
+        top = 9 - (1 if math.sin(d / 3.3) + 0.5 * math.sin(d / 1.6) > 0.6 else 0)
         for y in range(top, 11):
             g.set(x, y, "^", only=".")
     for x in (11, 12, 13):
         for y in (8, 9, 10):
-            if g.get(x, y) == "^" or y == 10:
-                g.set(x, y, "s")
-    # meadows
-    g.ellipse(7, 5, 4, 2, "f", only=".", wobble=0.4, seed=1)
-    g.ellipse(55, 5, 4, 2, "f", only=".", wobble=0.4, seed=2)
-    g.ellipse(9, 28, 4, 2.5, "f", only=".", wobble=0.4, seed=3)
-    g.ellipse(56, 27, 3.5, 2.5, "f", only=".", wobble=0.4, seed=4)
-    g.ellipse(20, 14, 2.5, 1.5, "f", only=".", wobble=0.4, seed=5)
-    g.ellipse(45, 13, 2.5, 1.5, "f", only=".", wobble=0.4, seed=6)
+            for xx in (x, mx(x)):
+                if g.get(xx, y) == "^" or y == 10:
+                    g.set(xx, y, "s")
+    # flower meadows (beds), mirrored
+    for cx, cy, rx, ry in ((7, 5, 4, 2), (9, 28, 4, 2.5), (20, 14, 2.5, 1.5)):
+        g.ellipse(cx, cy, rx, ry, "f", only=".")
+        g.ellipse(mx(cx), cy, rx, ry, "f", only=".")
     # marble ring and front platform, then the pool inside
-    g.ellipse(32, 16.5, 8.4, 5.9, "M", only=".f")
+    g.ellipse(axis, 16.5, 8.4, 5.9, "M", only=".f")
     for y in (21, 22, 23):
         for x in range(27, 38):
             g.set(x, y, "M", only=".f")
-    g.ellipse(32, 16.5, 6.3, 4.2, "~", only="M")
-    # terrace stream and waterfall into the pool
-    g.path([(45, 1), (45.5, 4), (44, 6.5), (43, 8.6)], 2.1, "~", only=".f")
-    for y in (8, 9, 10):
-        for x in (42, 43):
-            if g.get(x, y) == "^":
-                g.set(x, y, "v")
-
-    # paths
-    g.path([(3, 26), (10, 26), (18, 25), (26, 23.5)], 2.6, ",", only=".f")
-    g.path([(38, 23.5), (46, 24), (54, 25), (61, 25)], 2.6, ",", only=".f")
-    g.path([(32, 24), (32, 28), (32, 32)], 2.4, ",", only=".f")
-    g.path([(12, 9), (12, 7), (14, 5), (22, 4)], 2.2, ",", only=".f")
-    # stream from the pool to the island edge, falling into the sky
-    # the waterfall's stream runs past the pool (which stays a closed, symmetric ring)
-    g.path([(42.5, 10.5), (44, 14), (45, 19), (45.5, 25), (47, 29), (47.5, 33)], 2.2, "~", only=".f,")
-    for y in range(25, h):
-        if g.get(47, y) in ("^", "%"):
-            g.set(47, y, "v")
-            g.set(48, y, "v")
-    for y in (23, 24, 25):
-        for x in range(43, 48):
-            if g.get(x, y) == "~":
-                g.set(x, y, "=")
-    # props: the sacred tree in the middle, symmetric pillars, crystal in front
-    props = {
-        "W": [(32, 17)],
-        "I": [(24, 16), (40, 16), (27, 21), (37, 21)],
-        "C": [(32, 22)],
-        "T": [(4, 5), (47, 4), (8, 15), (57, 19), (19, 30)],
-        "U": [(18, 4), (60, 7), (53, 14), (5, 21)],
-        "P": [(27, 4), (14, 20), (59, 29), (42, 29)],
-        "K": [(9, 3), (57, 4), (50, 20), (13, 28)],
-        "o": [(16, 7), (31, 6), (48, 6), (22, 11), (46, 12), (23, 23), (41, 23), (29, 27), (35, 27),
-              (6, 12), (58, 11), (26, 30), (38, 30), (52, 31), (17, 25)],
-        "g": [(21, 15), (42, 15), (21, 19), (42, 19), (29, 25), (35, 25), (6, 6), (54, 6), (24, 3),
-              (40, 4), (10, 30), (55, 28)],
-        "Y": [(20, 6), (51, 8), (24, 27), (52, 26)],
-        "O": [(30, 26), (34, 26), (30, 29), (34, 29)],
-        "R": [(23, 30), (41, 31), (8, 30), (55, 30)],
-        "w": [(27, 15), (36, 18), (29, 19), (35, 14)],
-        "b": [(31, 33)],
-        "F": [(x, 33) for x in range(26, 38) if x not in (31, 32)],
-        "x": [(42, 11)],
-        "E": [(13, 26), (47, 25), (24, 4)],
-        "@": [(10, 26)],
+    g.ellipse(axis, 16.5, 6.3, 4.2, "~", only="M")
+    # paths: main path across the island, central path to the edge, terrace paths
+    g.path([(3, 25), (10, 25.5), (18, 25), (26, 23.5)], 2.6, ",", only=".f")
+    g.path([(mx(26), 23.5), (mx(18), 25), (mx(10), 25.5), (mx(3), 25)], 2.6, ",", only=".f")
+    g.path([(axis, 24), (axis, 28), (axis, 32)], 2.4, ",", only=".f")
+    terrace_paths = [
+        [(12, 9), (12, 7), (14, 5), (22, 4)],
+        [(mx(12), 9), (mx(12), 7), (mx(14), 5), (mx(22), 4)],
+    ]
+    # twin streams: from the terrace, falling into the garden, past the pool, off the edge
+    for side in (1, -1):
+        def sx(x):
+            return x if side == 1 else mx(x)
+        g.path([(sx(45), 1), (sx(45.5), 4), (sx(44), 6.5), (sx(43), 8.6)], 2.1, "~", only=".f")
+        for y in (8, 9, 10):
+            for x in (42, 43):
+                if g.get(sx(x), y) == "^":
+                    g.set(sx(x), y, "v")
+        g.path([(sx(42.5), 10.5), (sx(44), 14), (sx(45), 19), (sx(45.5), 25), (sx(47), 29), (sx(47.5), 33)],
+               2.2, "~", only=".f,")
+        for y in range(25, h):
+            for x in (47, 48):
+                if g.get(sx(x), y) in ("^", "%"):
+                    g.set(sx(x), y, "v")
+        for y in (23, 24, 25):
+            for x in range(43, 48):
+                if g.get(sx(x), y) == "~":
+                    g.set(sx(x), y, "=")
+    # terrace paths after the streams; where they cross: small plank bridges
+    for pts in terrace_paths:
+        g.path(pts, 2.2, ",", only=".f")
+        g.path(pts, 2.2, "=", only="~")
+    # mirrored props: (symbol, x, y) on the left half; the right half gets the mirror
+    pairs = {
+        "I": [(24, 16), (27, 21)],
+        "T": [(4, 5), (8, 15), (19, 30)],
+        "U": [(15, 3), (5, 21)],
+        "P": [(27, 4), (14, 20)],
+        "K": [(9, 3), (13, 28)],
+        "o": [(16, 7), (22, 11), (23, 23), (29, 27), (6, 12), (26, 30), (17, 26)],
+        "g": [(21, 15), (21, 19), (29, 25), (6, 6), (24, 3), (10, 30)],
+        "Y": [(20, 6), (24, 27)],
+        "O": [(30, 26), (30, 29)],
+        "R": [(23, 30), (8, 30)],
+        "w": [(27, 15), (29, 19)],
+        "x": [(22, 11)],
+        "F": [(x, 33) for x in range(26, 31)],
+        "E": [(13, 25), (24, 4)],
+        "b": [(28, 32)],
     }
-    for c, pts in props.items():
+    for c, pts in pairs.items():
+        for x, y in pts:
+            g.set(x, y, c)
+            # the mirrored Elysians walk the mirrored route ("e" in the legend)
+            # a 2-tile bench mirrors to the cell left of its twin's first cell
+            g.set(mx(x) - (1 if c == "b" else 0), y, "e" if c == "E" else c)
+    # on the axis: the sacred tree, the crystal, the chest before it, the bench at the edge
+    single = {
+        "W": [(axis, 17)],
+        "C": [(axis, 22)],
+        "Z": [(axis, 23)],
+        # the only things that exist once, off the axis
+        "j": [(41, 17)],
+        "X": [(60, 30)],
+        "@": [(9, 25)],
+    }
+    for c, pts in single.items():
         for x, y in pts:
             g.set(x, y, c)
     g.add_rails()
     return g
 
 
+def wobble(v, *waves):
+    """Smooth, irregular offset: a sum of sines with incommensurate periods."""
+    return sum(a * math.sin(v / period + phase) for a, period, phase in waves)
+
+
 def tal():
+    """The valley on a rainy day, laid out like real land (playtest 05.10.: "natürlicher"):
+    a ragged forest edge with bays, a rock face that comes and goes, a meandering stream
+    of changing width with a pool, a worn trail instead of a road, trees in groves with
+    a few old solitary ones in the meadow, rocks in clusters. The yard around the house is
+    the only straight thing: people built it."""
     w, h = 56, 36
     g = Grid(w, h)
-    # Forest canopy border with a rock face below the northern forest.
+    # forest all around, deeper in some places than others
     for x in range(w):
-        top = 3 + round(0.8 * math.sin(x / 3.4) + 0.5 * math.sin(x / 1.9 + 1))
-        for y in range(0, top):
+        north = 2 + round(1.0 + wobble(x, (1.0, 3.3, 0.0), (0.7, 1.9, 1.0), (0.6, 7.1, 2.0)))
+        south = 2 + round(0.6 + wobble(x, (0.8, 2.9, 0.5), (0.5, 5.3, 1.7)))
+        for y in range(0, max(north, 1)):
             g.set(x, y, "h")
-        for y in range(top, top + 2):
+        for y in range(h - max(south, 2), h):
+            g.set(x, y, "h")
+        # a rock face below the northern forest, missing where the forest comes down
+        rock = round(1.3 + wobble(x, (0.9, 2.3, 0.4), (0.6, 4.1, 1.3)))
+        for y in range(north, north + max(rock, 0)):
             g.set(x, y, "^")
     for y in range(h):
-        for x in (0, 1, 2, w - 3, w - 2, w - 1):
-            if g.get(x, y) in ".":
-                g.set(x, y, "h")
-    for x in range(w):
-        for y in (h - 2, h - 1):
+        west = 3 + round(0.4 + wobble(y, (1.1, 2.6, 0.3), (0.8, 4.7, 2.2), (0.4, 1.3, 0.9)))
+        east = 3 + round(0.3 + wobble(y, (1.0, 3.1, 1.1), (0.7, 5.9, 0.2)))
+        for x in range(0, max(west, 2)):
             g.set(x, y, "h")
-    # Stream from the rock face down to the south.
-    g.path([(41, 5), (42, 10), (40.5, 16), (42.5, 23), (45, 29), (45, 36)], 3.0, "~", only=".")
-    # Mud patches.
-    g.ellipse(22, 20, 5, 2, "m", only=".", wobble=0.5, seed=1)
-    g.ellipse(36, 22, 3, 1.5, "m", only=".", wobble=0.5, seed=3)
-    # Paths.
-    g.path([(3, 23), (10, 23), (17, 21.5), (26, 21), (34, 22), (39, 22), (47, 22), (53, 23)], 2.4, ",",
-           only=".m")
-    g.path([(26, 15), (26, 21)], 2.2, ",", only=".m")
+        for x in range(w - max(east, 2), w):
+            g.set(x, y, "h")
+    # the stream: out of the rock face, a bend with a pool, under the bridge, over the edge
+    stream = [(41, 2), (42.5, 6), (41.5, 9.5), (39.5, 13), (40.5, 17), (42.5, 20.5), (42.5, 23),
+              (43.5, 26), (44.5, 30), (45.5, 36)]
+    widths = [2.2, 2.4, 2.8, 3.4, 2.8, 3.2, 3.2, 2.6, 2.9, 3.3]
+    g.path(stream, 3.0, "~", only=".^h", widths=widths)
+    g.ellipse(38.6, 14.2, 2.6, 1.9, "~", only=".", wobble=0.6, seed=4)  # a quiet pool
+    # wet ground and mud where people walk and water collects
+    g.ellipse(22, 20.5, 4.2, 1.6, "m", only=".", wobble=0.7, seed=1)
+    g.ellipse(35.5, 23.2, 2.6, 1.2, "m", only=".", wobble=0.7, seed=3)
+    g.ellipse(9.5, 25.5, 2.2, 1.1, "m", only=".", wobble=0.8, seed=5)
+    # a worn trail, wider where people meet, narrow where few go
+    trail = [(1, 25), (7, 24.5), (13, 23), (18, 21.2), (24, 20.6), (29, 21.4), (35, 22.4), (40, 22),
+             (46, 22.3), (51, 21.4), (55, 20.5)]
+    g.path(trail, 2.0, ",", only=".m", widths=[1.5, 1.7, 1.9, 2.1, 2.5, 2.3, 1.9, 2.1, 1.9, 1.7, 1.5])
+    g.path([(26, 15.5), (25.6, 17.5), (26.2, 20)], 2.0, ",", only=".m")  # to the house
+    g.path([(14, 23.5), (12.5, 27), (10, 30.5)], 1.2, ",", only=".")  # a faint side track
+    # the plank bridge where the trail meets the stream
     for y in (21, 22, 23):
-        for x in range(41, 45):
-            g.set(x, y, "=")
-    # A lower terrace in the south-east: the stream drops over its edge as a waterfall.
-    for x in range(34, w - 3):
-        top = 26 - (1 if math.sin(x / 2.7) > 0.3 else 0)
-        for y in range(top, 28):
+        for x in range(39, 47):
+            if g.get(x, y) == "~":
+                g.set(x, y, "=")
+        row = [x for x in range(39, 47) if g.get(x, y) == "="]
+        if row:  # planks reach a little onto both banks
+            g.set(min(row) - 1, y, "=")
+            g.set(max(row) + 1, y, "=")
+    # a lower terrace in the south-east: the stream drops over its ragged edge
+    for x in range(33, w - 2):
+        top = 26 + round(wobble(x, (0.8, 2.1, 0.7), (0.5, 3.7, 0.1)))
+        for y in range(top, top + 2):
             cell = g.get(x, y)
             if cell == ".":
                 g.set(x, y, "^")
             elif cell == "~":
                 g.set(x, y, "v")
-    # vegetable beds in the yard, west of the house
-    for y in (11, 12, 13):
-        for x in range(12, 17):
+    # vegetable beds in the yard, west of the house, one row not finished
+    for y, x1 in ((11, 17), (12, 17), (13, 15)):
+        for x in range(12, x1):
             g.set(x, y, "d")
-    # Puddles on and next to the path.
-    for x, y in [(13, 22), (20, 21), (24, 18), (31, 22), (27, 20), (9, 23)]:
-        g.set(x, y, "p")
-    # Props.
+    # puddles on the trail and next to it
+    for x, y in [(13, 23), (20, 21), (24, 18), (27, 20), (31, 22), (8, 25), (36, 22)]:
+        if g.get(x, y) in ".,m":
+            g.set(x, y, "p")
     props = {
         "H": [(26, 12)],
-        "F": [(x, 16) for x in range(19, 34) if x not in (25, 26, 27)],
+        "F": [(x, 16) for x in range(19, 34) if x not in (21, 25, 26, 27, 31)],
+        # the real world is not kept: weathered fence segments and crooked trees (Bible §12)
+        "B": [(21, 16), (31, 16)],
         "E": [(19, y) for y in range(10, 16)] + [(33, y) for y in range(10, 16)],
-        "T": [(6, 8), (12, 6), (15, 28), (8, 30), (50, 9), (52, 30), (34, 30), (22, 30), (5, 16)],
-        "P": [(9, 6), (16, 7), (47, 6), (52, 14), (4, 28), (29, 31), (49, 31), (36, 8)],
-        "R": [(38, 13), (8, 12), (46, 16), (31, 27), (17, 31)],
-        "g": [(8, 19), (9, 19), (15, 25), (16, 25), (30, 25), (31, 25), (35, 18), (48, 24), (10, 15), (47, 11)],
+        # groves at the forest edge, mixed kinds, plus a few old solitary trees in the meadow
+        "T": [(9, 7), (13, 6), (49, 8), (8, 29), (22, 30), (35, 30), (6, 18), (16, 27)],
+        "P": [(7, 6), (11, 8), (47, 7), (51, 10), (5, 30), (10, 31), (24, 31), (33, 31),
+              (50, 31), (6, 21), (52, 16)],
+        "C": [(5, 9), (11, 19), (14, 26), (19, 31), (48, 29), (37, 9)],
+        # rocks lie in groups
+        "R": [(36, 13), (35, 14), (8, 12), (9, 13), (47, 17), (31, 27), (32, 28), (17, 30)],
+        "g": [(8, 19), (9, 19), (9, 20), (16, 25), (17, 25), (17, 26), (29, 25), (30, 25), (30, 26),
+              (35, 18), (48, 24), (49, 24), (10, 15), (46, 11), (47, 12)],
         "l": [(24, 17)],
         "K": [(31, 13), (21, 13)],
         "W": [(30, 13)],
         "b": [(22, 14)],
         "N": [(28, 14)],
-        "x": [(43, 28)],
         "@": [(26, 19)],
     }
     for c, pts in props.items():
         for x, y in pts:
             g.set(x, y, c)
+    # spray where the stream lands below the edge
+    for y in range(h):
+        for x in range(w):
+            if g.get(x, y) == "~" and g.get(x, y - 1) == "v" and g.get(x - 1, y) != "x":
+                g.set(x, y, "x")
+                break
+        else:
+            continue
+        break
     g.add_rails()
     return g
 
 
 def wald():
-    """Forest at night: a clearing with a light beam, a rock ledge with a waterfall and
-    crystals, a stream with a log bridge, glowing trees and mushrooms."""
+    """A real forest at night: a moonlit clearing, a rock ledge with a waterfall and mossy
+    boulders, a stream with a log bridge, birches that shine pale in the moonlight, foxfire,
+    honey fungus and fly agarics. The forest edge is ragged, deeper in some places."""
     w, h = 56, 38
     g = Grid(w, h)
-    # thick forest border with a wavy inner edge
+    # thick forest border with a ragged inner edge
     for x in range(w):
-        top = 3 + round(1.2 * math.sin(x / 3.7) + 0.7 * math.sin(x / 1.9 + 1))
-        bottom = h - 3 - round(1.0 * math.sin(x / 4.1 + 2) + 0.6 * math.sin(x / 2.2))
+        top = 3 + round(wobble(x, (1.2, 3.7, 0.0), (0.7, 1.9, 1.0), (0.8, 6.3, 2.0)))
+        bottom = h - 3 - round(wobble(x, (1.0, 4.1, 2.0), (0.6, 2.2, 0.0), (0.7, 7.7, 1.1)))
         for y in range(0, max(top, 2)):
             g.set(x, y, "h")
         for y in range(bottom, h):
             g.set(x, y, "h")
     for y in range(h):
-        left = 3 + round(1.0 * math.sin(y / 3.3) + 0.5 * math.sin(y / 1.7))
-        right = w - 4 - round(1.0 * math.sin(y / 2.9 + 1))
+        left = 3 + round(wobble(y, (1.0, 3.3, 0.0), (0.5, 1.7, 0.0), (0.8, 5.9, 0.4)))
+        right = w - 4 - round(wobble(y, (1.0, 2.9, 1.0), (0.6, 6.7, 2.1)))
         for x in range(0, left):
             g.set(x, y, "h")
         for x in range(right, w):

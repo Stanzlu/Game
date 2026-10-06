@@ -3,12 +3,32 @@ extends VBoxContainer
 ## Menu rows for keyboard and gamepad: actions, choices (left/right or confirm cycles the
 ## value), headers and plain info lines. Up/down moves through the enabled rows and wraps.
 ## All labels are translation keys; values are shown as "< value >".
+## A MenuCursor marks the focused row; moving, confirming and changing values make the
+## menu sounds of the current world (AudioDirector.ui).
 
 signal value_changed(key: String)
 
 const ARROWS := "<  %s  >"
 
+## Which menu sounds to play (the start menu always uses the Real set).
+var sound_skin := AudioDirectorService.SoundSet.FOLLOW
+var cursor: MenuCursor
 var _rows: Array[Dictionary] = []
+## Focus set by code (opening, rebuilding) makes no sound.
+var _quiet := false
+
+
+func _ready() -> void:
+	cursor = MenuCursor.new()
+	cursor.name = "Cursor"
+	add_child(cursor)
+	Settings.changed.connect(_on_setting_changed)
+
+
+## Large text (Game Bible §50) changes the font: rows measure themselves again.
+func _on_setting_changed(key: String) -> void:
+	if key == "text.large":
+		refresh.call_deferred()
 
 
 func clear_rows() -> void:
@@ -28,6 +48,13 @@ func add_header(key: String) -> Label:
 	return label
 
 
+## Any other control (e.g. a table); removed with the rows.
+func add_custom(control: Control) -> Control:
+	add_child(control)
+	_rows.append({"node": control})
+	return control
+
+
 ## A line of text that cannot be focused (status, hints). `text` is shown as given.
 func add_info(text: String) -> Label:
 	var label := Label.new()
@@ -42,6 +69,7 @@ func add_info(text: String) -> Label:
 ## `label` overrides the translated key (e.g. slot descriptions).
 func add_action(key: String, callback: Callable, enabled := true, label := "") -> Button:
 	var button := _make_button()
+	button.pressed.connect(func() -> void: AudioDirector.ui("confirm", sound_skin))
 	button.pressed.connect(callback)
 	button.disabled = not enabled
 	_rows.append({"node": button, "key": key, "label": label})
@@ -95,11 +123,18 @@ func add_setting(key: String, label_key: String, values: Array = []) -> Button:
 
 
 func focus_first() -> void:
-	for row in _rows:
-		var node: Control = row["node"]
-		if node is Button and not (node as Button).disabled:
-			node.grab_focus()
-			return
+	focus_index(0)
+
+
+## Focuses the n-th enabled row without a sound (clamped), and puts the cursor there.
+func focus_index(index: int) -> void:
+	var list := buttons()
+	if list.is_empty():
+		return
+	_quiet = true
+	list[clampi(index, 0, list.size() - 1)].grab_focus()
+	_quiet = false
+	cursor.snap()
 
 
 func refresh() -> void:
@@ -122,6 +157,7 @@ func _make_button() -> Button:
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	button.focus_mode = Control.FOCUS_ALL
+	button.focus_entered.connect(_on_focus.bind(button))
 	# The interact key (E) confirms like ui_accept; keys bound to both fire only once.
 	button.gui_input.connect(
 		func(event: InputEvent) -> void:
@@ -137,7 +173,14 @@ func _make_button() -> Button:
 	return button
 
 
+func _on_focus(button: Button) -> void:
+	cursor.target = button
+	if not _quiet:
+		AudioDirector.ui("move", sound_skin)
+
+
 func _cycle(row: Dictionary, step: int) -> void:
+	AudioDirector.ui("tick", sound_skin)
 	var values: Array = row["values"]
 	var index := wrapi(int((row["get"] as Callable).call()) + step, 0, values.size())
 	(row["set"] as Callable).call(index)
@@ -150,12 +193,23 @@ func _refresh_row(row: Dictionary) -> void:
 	if not node is Button:
 		return
 	var text: String = row["label"] if not str(row.get("label", "")).is_empty() else tr(row["key"])
+	var button := node as Button
+	button.text = text
 	if row.has("values"):
 		var values: Array = row["values"]
 		var index := clampi(int((row["get"] as Callable).call()), 0, values.size() - 1)
 		var value: Variant = values[index]
-		(row["value_label"] as Label).text = ARROWS % (tr(value) if value is String else str(value))
-	(node as Button).text = text
+		var value_label := row["value_label"] as Label
+		value_label.text = ARROWS % (tr(value) if value is String else str(value))
+		# the value sits on top of the button: reserve room so label and value never overlap
+		var font := button.get_theme_font(&"font")
+		var size := button.get_theme_font_size(&"font_size")
+		var need := (
+			font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			+ font.get_string_size(value_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			+ 34.0
+		)
+		button.custom_minimum_size.x = ceilf(need)
 
 
 ## Up/down wraps around and skips disabled rows and labels.

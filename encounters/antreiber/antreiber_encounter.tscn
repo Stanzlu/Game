@@ -4,3 +4,4 @@
 
 [node name="AntreiberEncounter" type="Node"]
 script = ExtResource("1_s")
+music = "antreiber"

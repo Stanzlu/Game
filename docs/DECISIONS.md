@@ -38,7 +38,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Konsequenzen:** Reproduzierbare Builds ohne Netz. Updates sind bewusste Schritte. Die automatische POT-Pflege des Dialogue Managers ist abgeschaltet, damit Testdateien nicht in Übersetzungsvorlagen landen. C#-Varianten des Addons werden vom Export ausgeschlossen.
 
 ## ADR-007 · Darstellung: 640×360, Integer-Scaling, Nearest
-- **Status:** vorläufig · 2026-10-02 · Stretch-Modus und Snapping ersetzt durch ADR-012; Renderer-Entscheidung in Phase 3
+- **Status:** vorläufig · 2026-10-02 · Stretch-Modus und Snapping ersetzt durch ADR-012; Renderer ersetzt durch ADR-022
 - **Entscheidung:** Viewport 640×360, Fenster 1280×720, Stretch-Modus `viewport`, Skalierung `integer`, Texturfilter Nearest, Pixel-Snapping für 2D-Transforms. Arbeitsraster 16-px-Tiles. Renderer Forward+ mit OpenGL3-Fallback.
 - **Konsequenzen:** Scharfe Pixel bei 720p, 1080p, 1440p und 4K. Ruhiges Kamerascrolling braucht in Phase 1 einen Subpixel-Ansatz. ETC2/ASTC-Import ist aktiv, weil universelle macOS-Exporte es verlangen; Pixel-Art nutzt verlustfreie Texturen.
 
@@ -50,7 +50,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 ## ADR-009 · CI-Budget
 - **Status:** angenommen · 2026-10-02
 - **Kontext:** Privates Repository: 2.000 Actions-Minuten und 500 MB Artefakt-Speicher pro Monat kostenlos.
-- **Entscheidung:** Nur Ubuntu-Runner. Checks (Lint, Format, Import, Smoke-Run, Tests) bei jedem Push. Exporte nur auf `main`, per manuellem Start oder wenn die Commit-Nachricht `[export]` enthält. Artefakte werden 7 Tage aufbewahrt. Kein Git LFS.
+- **Entscheidung:** Nur Ubuntu-Runner. Checks (Lint, Format, Import, Smoke-Run, Tests) bei jedem Push. Exporte nur auf `main`, per manuellem Start oder wenn die Commit-Nachricht `[export]` enthält. Artefakte werden 2 Tage aufbewahrt (vorher 7; das Gratiskontingent von GitHub Free erlaubt nur 500 MB Artefakt-Speicher, ein Windows/macOS-Paar hat rund 100 MB, und darüber blockiert GitHub ohne Zahlungsmethode alle Actions-Jobs). Kein Git LFS.
 - **Konsequenzen:** Keine Kosten. Playtest-Builds für Phase 5 kommen als GitHub-Release, das nicht auf den Artefakt-Speicher zählt.
 
 ## ADR-010 · Git-Workflow: ein Branch und ein Pull Request pro Phase
@@ -141,3 +141,121 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - Spielzeit zählt nur, solange eine Spielszene läuft und nichts pausiert ist.
 - **Konsequenzen:** Keine halben Gespräche in Spielständen. Startet man im Prototyp-Menü eine Szene neu, überschreibt deren erstes Autosave den alten Autosave (die Sicherung bleibt). Das ändert sich mit dem echten Titelablauf.
 
+## ADR-022 · Renderer: Compatibility (OpenGL 3) auf allen Plattformen
+- **Status:** angenommen · 2026-10-03 · ersetzt die Renderer-Angabe in ADR-007
+- **Kontext:** Geplant war Forward+ (Vulkan, Metal, D3D12) mit Compatibility als Rückfall. REAL ist reines 2D: Licht über `PointLight2D` und `CanvasModulate`, Bloom, Vignette und Farbstimmung macht ein eigener Shader (`grade.gdshader`), nicht `WorldEnvironment`. Alle Aufnahmen und Sichtprüfungen seit Phase 1 laufen im Container ohnehin über OpenGL 3. Zielhardware sind auch ältere Laptops mit integrierter Grafik.
+- **Entscheidung:** `gl_compatibility` für Desktop und Mobile.
+- **Konsequenzen:** Builds rendern wie die geprüften Aufnahmen. Breitere Hardware-Unterstützung und schnellerer Start. Funktionen, die nur Forward+ hat (z. B. 2D-Glow über `WorldEnvironment`, SDF-Effekte), sind bewusst nicht im Einsatz. Ein Wechsel bleibt eine Projekteinstellung, falls später ein Effekt Forward+ braucht.
+
+## ADR-023 · Musik: eigene prozedurale Loops und ein AudioDirector
+- **Status:** angenommen · 2026-10-03 · Platzhalter bis zur echten Komposition
+- **Kontext:** Phase 3 verlangt Musikzustände und einen Elysia-Loop. Asset-Seiten sind blockiert, die Vorgabe ist 0 € und eigene Inhalte (wie bei der Grafik, ADR-017).
+- **Entscheidung:**
+  - `tools/audio/make_music.py` (numpy) erzeugt nahtlose Loops: Elysia (C-Dur, 100 BPM, streng quantisiert, Glockenspiel und Pads), Tal (D-Dorisch, gezupft, menschliches Timing), Nachtwald (Drone, Glasglocken), Antreiber (treibend, das Motiv steigt und kommt nie an). Alle tragen dasselbe Motiv, das spätere Hauptthema (Game Bible §35).
+  - Nahtlosigkeit: Noten laufen über das Loop-Ende in den Anfang, Filter und Hall sind zirkulär (Frequenzraum).
+  - Autoload `AudioDirector`: Musik-Tracks mit Überblendung, gleicher Track läuft über Szenenwechsel weiter, leiser während Dialogen, „Bandstopp“ (Tonhöhe und Lautstärke sinken) für den Übergang, Ambience-Betten. Musik und Ambience laufen in Menüs weiter.
+  - Szenen wählen Musik und Ambience über `GameScene`-Exports.
+- **Konsequenzen:** Rund 7,6 MB WAV im Repo (22,05 kHz Stereo), im Build komprimiert. Die Klangqualität ist Platzhalter-Niveau; Komposition und Aufnahme brauchen später Budget oder Musiker. Neue Tracks: Funktion in `make_music.py` und Eintrag in `AudioDirector.TRACKS`.
+
+## ADR-024 · UI-Bogen: Elysia-Skin mit HUD, Real-Skin fast leer
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - Zwei Themes (`ui/theme/elysia_skin.tres`, `real_skin.tres`) überschreiben nur, was sich unterscheidet. `UiSkin.attach(control)` hält Dialogbox, Menüs, Journal, Prompt und HUD im Stil des aktuellen UI-Modus, auch nach dem Laden.
+  - Elysia: Goldrahmen mit Edelsteinen (`tools/art/make_ui.py`), HUD mit Level, XP-Leiste, Gold und Quest-Anzeige samt Marker, laute Popups für XP, Gold, Level-Up und Loot. Seltenheit erscheint immer auch als Wort, nie nur als Farbe.
+  - Real: keine Rahmen, gedämpfte Farben, kein HUD; nur eine leise Zeile, wenn man etwas aufhebt.
+  - Items haben eine Seltenheit; der Stein hat keine („Seltenheit: —“).
+- **Konsequenzen:** Weitere UI-Elemente bekommen `UiSkin.attach`. Der spätere persönliche Stil („Handschrift, Kritzeleien“) wird ein dritter Skin.
+
+## ADR-025 · Übergangssequenz und Tageslicht
+- **Status:** angenommen · 2026-10-03
+- **Entscheidung:**
+  - `RiftSequence`: Spieler wird festgehalten, Speichern gesperrt, die Welt ruckelt (nur mit Bildschirmwackeln an), die HUD-Elemente verschwinden einzeln (ohne Flackern bei „Blitzeffekte reduzieren“), die Musik läuft als Bandstopp aus, Stille, Abblende. Danach UI-Modus REAL, Inventar Stein und Samen, Szenenwechsel ins Tal mit Regen, Autosave dort.
+  - Autoload `ScreenFade`: schwarze Abdeckung über Szenenwechsel hinweg; neue Szenen blenden selbst auf.
+  - `DayLight` für Szenen der Wirklichkeit: Presets Regentag, Abend, Nacht blenden Weltfarbe, Farbstimmung, Lampen, Regen und Ton. Im Tal lässt Ausruhen auf der Bank die Zeit weiterlaufen. Elysia hat bewusst kein Tageslicht.
+- **Konsequenzen:** Der Ablauf ist getestet und als Video belegt. Echte Story-Platzierung (Kind, versteckter Riss, Hilfe nach Zeit) folgt mit Phase 4.
+
+## ADR-026 · Schrift und Bewegung der Oberfläche
+- **Status:** angenommen · 2026-10-04 · ersetzt die Schriftwahl aus Phase 0
+- **Kontext:** Tiny5 ist nur 5 Pixel hoch. Dialoge und Menüs waren bei 640×360 kaum lesbar, das Startmenü eine Entwicklerliste auf Schwarz.
+- **Entscheidung:**
+  - Hauptschrift **Jersey 10** in ihrer Pixelgröße 19 (Versalhöhe 10 px), Titel **Jersey 15** in 27, beide aus google/fonts (OFL 1.1). Tiny5 bleibt für kleine Beschriftungen (Hinweise, Tasten-Kappe, Entwickler-Panels).
+  - Menüs: gleitender Cursor je Skin (Elysia Goldjuwel, Real Strich), das Spiel dahinter weichgezeichnet und getönt (`menu_backdrop.gdshader`), Panels gleiten 6 px ein. Animiert wird die CanvasLayer-Verschiebung, nie ein verankerter Container.
+  - Dialogbox mit Namensschild, Weiter-Pfeil, Cursor auf Antworten und Stimme je Sprecher (`content/dialogue/voices.json`).
+  - Startmenü mit eigener Titelgrafik (`tools/art/make_title.py`), Prototypen in einem Untermenü.
+- **Konsequenzen:** Längere Listen (Einstellungen) scrollen. Wer UI baut, nutzt die Theme-Typen (`SmallLabel`, `HintLabel`, `PromptText` …) statt Schriftgrößen im Code.
+
+## ADR-027 · Soundeffekte: eigene, prozedural erzeugte Klänge
+- **Status:** angenommen · 2026-10-04 · Platzhalter bis zum Sounddesign
+- **Entscheidung:** `tools/audio/make_sfx.py` (numpy, 0 €) erzeugt alle Effekte: Menüklänge in zwei Sets (Elysia Glas in Dur und nie variiert; Real Holz und Papier mit kleinen Abweichungen), Münzen, XP, Level-up, Truhe, Beute je Seltenheit, Aufheben im Tal, Dialogstimmen, Glitches und das Brummen des Risses. `AudioDirector.ui()`, `sfx()` und `voice()` spielen sie auf den Bussen UI, SFX und Voice; `SoundBank` sucht erst in `assets/generated/sfx/`.
+- **Konsequenzen:** Die Klänge sind technisch geprüft (Pegel, Hüllkurven, Schleifen), aber nicht angehört. Ein Austausch ist reiner Dateitausch.
+
+## ADR-028 · Requisiten-Atlas je Stil
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Jede Look-Szene hat ~1.700 Streu-Sprites mit 20–37 verschiedenen Texturen. In Y-Reihenfolge wechselt die Textur ständig, jeder Wechsel ist ein Draw Call (574–928 pro Bild).
+- **Entscheidung:** `PropCatalog` packt beim ersten Gebrauch alle Grafiken eines Stils in eine Atlas-Textur und gibt `AtlasTexture`-Ausschnitte aus. Shader dürfen deshalb nicht mit `UV` als 0..1 der Figur rechnen (Wind nutzt `VERTEX`, Spiegelungen die Einzeltextur über `PropCatalog.source_texture`). Streu-Sprites werden nicht von Lampen beleuchtet (`light_mask = 0`).
+- **Konsequenzen:** Elysia 574 → 81, Tal 928 → 119, Wald 818 → 197 Draw Calls. Neue Requisiten landen automatisch im Atlas ihres Stils (Breite 1024 px).
+
+## ADR-029 · Spielstand Schema 2
+- **Status:** angenommen · 2026-10-04
+- **Entscheidung:** Die Tageszeit (`day_preset`) gehört zum Spielzustand. Migration 1 → 2 setzt `ui_mode` nach der Szene des Stands, weil Stände aus Phase 2 immer `ELYSIA` enthielten.
+- **Konsequenzen:** Ältere Stände laden weiter (Migration getestet). `docs/SAVE_FORMAT.md` ist aktualisiert.
+
+## ADR-030 · Zwei Startbilder: Elysias Schein-Titel, REAL erst nach dem Übertritt
+- **Status:** angenommen · 2026-10-04 · rückgängig machbar (ein Schalter in `core/boot/boot.gd`)
+- **Kontext:** Game Bible §10: „Elysia täuscht zunächst ein klassisches RPG vor.“ §56 setzt den Titel ans Ende des Slice („Schwarz. Titel.“). Das bisherige Startmenü zeigte von Anfang an „REAL“ mit dem Riss im A und nahm damit die Wendung vorweg.
+- **Entscheidung:**
+  - Solange kein Spielstand die Wirklichkeit erreicht hat (`SaveSystem.reached_reality()`), heißt das Spiel „Elysia“: goldenes Serifen-Logo mit Kristall und Filigran, Untertitel „Ein Abenteuer für die Ewigkeit“, spiegelsymmetrische Insel mit Zwillings-Wasserfällen, Menü mittig im Elysia-Skin, Elysias Musik.
+  - Danach zeigt das Startmenü „REAL“ in schlichten Buchstaben über einem Abendtal (krummer Baum im Wind, Bank, Laterne, kaputter Zaun, Haus mit Licht), Tal-Musik und Abend-Ambience, Menü links im Real-Skin.
+  - `TitleCard` (`ui/title/title_card.gd`) spielt den Schluss des Slice: schwarz, Musik aus, „REAL“ blendet ein und aus. Bis Phase 4 nur unter Prototypen abspielbar.
+  - Prototypen → „Startbild wechseln“ und `--title=elysia|real` zeigen beide Titel ohne Spielstand.
+- **Konsequenzen:** Wer Spielstände löscht, sieht wieder Elysia; das ist gewollt. Der Schein-Titel braucht später Key-Art auf Elysia-Niveau.
+
+## ADR-031 · Elysia perfekt, die Wirklichkeit ungepflegt
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §9 (perfekte Symmetrie, keine Alterung, Schmetterlinge auf denselben Routen, Wolken wiederholen sich, Wasser spiegelt alles außer dem Protagonisten), §12 (schiefe Bäume, kaputte Zäune, Wind), Risiko 10 (Wirklichkeit darf nicht gleich Leid sein).
+- **Entscheidung:**
+  - Elysia ist um Spalte 32 spiegelsymmetrisch (`[meta] symmetry`): Karte, gebackener Boden (pixelgenau, gespiegeltes Dithering), Streu im exakten Raster, Requisiten als Spiegelpaare. Nur der unscheinbare Stein und der Riss haben keinen Zwilling.
+  - Elysia-Boden ohne trockene Flecken und Kiesel, mit Mährichtungs-Streifen und Blumenpunkten im Raster.
+  - Bewegung ohne Zufall: Pflanzen wiegen sich ohne Böen gespiegelt im Gleichtakt, derselbe Vogelschwarm im exakten Takt, Koi kreisen gleichmäßig, Libellen und Schmetterlinge fliegen gespiegelte Routen, Wolkenschatten kehren sichtbar wieder, die Elysianer laufen gespiegelt im Gleichtakt und schauen sich nie um.
+  - Tal: krumme Bäume mit totem Ast, kaputte Zaunstücke, Wind (Ambience mit Böen und knarrendem Holz, Blätter in unregelmäßigen Böen). Ankunft bei Regen am Tag statt in der Nacht (Slice: „Regen. Wind.“ und später „Abend“); die Bank führt zu Abend und Nacht.
+  - In der Wirklichkeit (Tal, Wald) spiegelt sich die Hauptfigur in Wasser und Pfützen, in Elysia nie.
+  - Real-UI ruhig statt düster: wärmere Farben, sanfter abgedunkelter Hintergrund.
+- **Konsequenzen:** Änderungen an Elysias Karte müssen symmetrisch bleiben (`tools/art/layout_look_maps.py elysia` erzeugt sie gespiegelt, ein Test prüft die Paare). Der Tal-Start ist in `world/levels/look_tal.tscn` (`day_preset`) einstellbar.
+
+## ADR-032 · Elysias Loop schrumpft
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §35: „Loops werden zunehmend wahrnehmbar.“ (KNOWN_ISSUES #32)
+- **Entscheidung:** `make_music.py` schneidet Elysias Musik auf 4 und 2 Takte. `AudioDirector` wechselt nach Spielzeit (150 s, 300 s) oder Fortschritt (Truhe geöffnet, Stein genommen) zur nächsten Stufe, immer erst am Loop-Ende, damit der Wechsel auf dem Taktanfang landet.
+- **Konsequenzen:** Die Stufe hängt am Spielstand (Spielzeit, Flags) und ist damit nach dem Laden dieselbe. Feinabstimmung der Schwellen im Playtest.
+
+## ADR-033 · Idle-Animationen und große Schrift überall
+- **Status:** angenommen · 2026-10-04
+- **Kontext:** Game Bible §36 („viele Idle-Animationen“) und §50 („skalierbare Textgröße“). Bisher vergrößerte die Einstellung nur die Dialogbox (KNOWN_ISSUES #23).
+- **Entscheidung:**
+  - Figurenblätter bekommen den Zustand „look“ (blinzeln, nach links, nach rechts, blinzeln) als letzte Zeilen. Die Hauptfigur schaut sich nach 4 bis 9 s Stillstand um, Mira ebenso (`"glance": true`), Elysianer nie.
+  - `TextSize` schaltet die gemeinsamen Themes um (Fließtext Jersey 15 in 27 px, kleine Schrift Tiny5 in 16 px, Entwickler-Panels mit). Auswahlzeilen reservieren Platz für ihren Wert, Menüs wachsen mit.
+- **Konsequenzen:** Neue UI nutzt Theme-Typen statt fester Schriftgrößen, sonst wächst sie nicht mit. Grey-Box-Blätter ohne „look“-Zeilen funktionieren weiter.
+
+## ADR-034 · Naturklang der Wirklichkeit: Schichten und Zufall statt Schleife
+- **Status:** angenommen · 2026-10-05
+- **Kontext:** Playtest Phase 3: „Naturgeräusche in der realen Welt realistischer bauen als in Elysia.“ Game Bible §9 (Elysia wiederholt sich), §12 (die Wirklichkeit ist lebendig und unberechenbar). Bisher spielte jede Szene eine einzige 12–24-s-Mono-Schleife.
+- **Entscheidung:**
+  - Elysia behält eine Schleife (`garden_loop`) und klingt bewusst zu perfekt: gleichmäßige Brise, dieselbe Vogelphrase auf exaktem Takt.
+  - Die Wirklichkeit spielt eine `SoundscapeDef` (`content/audio/*.tres`) über `SoundscapePlayer` im `AudioDirector`:
+    - **Flächen** ohne Einzelereignisse (Regen, Wind, Laub, Bach, Grillen) laufen zweimal, links und rechts, eine halbe Schleife versetzt. Das klingt breit und nie phasengleich.
+    - **Einzelklänge** (Amsel, Rotkehlchen, Kohlmeise, Ringeltaube, Krähe, Waldkauz, ferner Hund, Tropfen, Zweig, Rascheln, Knarren) kommen zu zufälligen Zeiten aus zufälligen Richtungen, mit zufälliger Tonhöhe und Lautstärke.
+    - **Böen** aus langsamem Rauschen: Wind und Laub schwellen mit, Knarren und Rascheln werden häufiger, und die wehenden Blätter im Bild folgen demselben Signal (`AudioDirector.wind_gust()`).
+  - Klänge sind physikalisch modelliert (`tools/audio/make_nature.py`, 0 €): Tropfen mit log-normaler Lautstärke und Blasenresonanz, Wind durch wandernde Resonanzen, Vogelrufe nach Gesangsstruktur, Entfernung über Tiefpass und Außenhall.
+  - Richtung über vier Panorama-Busse (`NatureL2`, `NatureL1`, `NatureR1`, `NatureR2`), die zur Laufzeit angelegt werden und in `Ambience` münden; die Lautstärke-Einstellung gilt also weiter.
+- **Konsequenzen:** Tageszeiten und Orte wählen eine Definition statt einer Datei (`DayLight`, Szenen-Export `ambience`). Neue Orte brauchen nur eine neue `.tres`. Ob es nach Natur klingt, entscheidet das Ohr im Playtest (KNOWN_ISSUES #29).
+
+## ADR-035 · Der wahre Titel heißt „Nach Elysia“
+- **Status:** angenommen · 2026-10-06 (vorläufig, Bestätigung durch den Projektinhaber ausstehend)
+- **Kontext:** Playtest Phase 3: „Finde einen passenderen Namen als ‚Real‘, Elysia ist für die erste Welt super.“ Die Bible führt REAL ausdrücklich als Arbeitstitel. §2 will gerade nicht die Frage „fake oder real?“ stellen, sondern „Was bedeutet es, wirklich am Leben zu sein?“; §65: „Du musst keinen Teil von dir vernichten, um weiterzugehen.“
+- **Entscheidung:** Der Titel nach dem Übertritt (Startbild, Titelkarte am Ende des Slice, Fenstertitel) lautet **„Nach Elysia“** (englisch später „After Elysia“).
+  - Das Logo nimmt dieselben Serifen-Buchstaben wie Elysia, aber ungeschmückt (kein Gold, keine Filigran-Ranken), mit einem feinen Riss durch das Y. Wo Elysias Kristall schwebte, wächst ein Keimling (§29/30: der Samen ist das zentrale Symbol).
+  - Der Fenstertitel folgt dem Startbild: „Elysia“, bis ein Spielstand die Wirklichkeit erreicht hat.
+  - REAL bleibt interner Projektname: Ordner der Spielstände (`REAL`), Bundle-ID, Repository und Dokumente ändern sich nicht, damit keine Spielstände verloren gehen.
+- **Begründung:** Der Spieler kennt das Wort Elysia, und im Moment der Enthüllung bekommt es eine neue Bedeutung: Es geht um das Leben danach, nicht um Echtheit gegen Fälschung. Der Titel stellt Elysia nicht als Feind hin, er spricht vom Weitergehen.
+- **Verworfene Vorschläge:** „Wildwuchs“ (stark als Gegenbild zum gemähten Elysia, aber schwer international), „Lebendig“ (trifft die Kernfrage, aber kaum auffindbar), „Unscripted“ (klug, aber wieder fake gegen echt), REAL behalten (vom Projektinhaber als unpassend empfunden).
+- **Konsequenzen:** Ein anderer Titel braucht nur `logo_real()` in `tools/art/make_title.py` und die Schlüssel `GAME_TITLE` und `BOOT_TITLE` in `content/locale/ui.csv`.

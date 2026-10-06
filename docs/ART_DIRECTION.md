@@ -26,18 +26,29 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Paletten | Pro Material eine Rampe mit 4 bis 6 Stufen, farbverschoben: Schatten kühler, Lichter wärmer (`tools/art/pixelart.py`, `STYLES`). Keine Farben außerhalb der Rampen im Boden. |
 | Dithering | Nur in schmalen Übergangsbändern (Kontrastparameter in `quantize`), nicht als Flächenrauschen. |
 | Umrisse | Dunkler, farbiger Umriss pro Stil (Elysia violett-dunkel, Tal fast schwarz), nie reines Schwarz. Innere Kanten eine Rampenstufe dunkler. |
-| Figuren | 24×32-Rahmen, Füße auf y = 30, Chibi-Proportionen (Kopf etwa 40 Prozent). 8 Richtungen, West gespiegelt. Idle 2, Gehen 4, Laufen 4, Sitzen 1 Bild. Kontaktschatten unter den Füßen. Flache 4-Ton-Schattierung, Haar mit Glanzbogen, Augen mit Lichtpunkt, innere Konturen zwischen Teilen. Designs in `make_character.py` (Spieler, Mira, Elysianer). |
+| Figuren | 24×32-Rahmen, Füße auf y = 30, Chibi-Proportionen (Kopf etwa 40 Prozent). 8 Richtungen, West gespiegelt. Idle 2, Gehen 4, Laufen 4, Sitzen 1, Umschauen 4 Bilder (blinzeln, links, rechts, blinzeln; ADR-033). Kontaktschatten unter den Füßen. Flache 4-Ton-Schattierung, Haar mit Glanzbogen, Augen mit Lichtpunkt, innere Konturen zwischen Teilen. Designs in `make_character.py` (Spieler, Mira, Elysianer). |
 | Klippen | Geschichtete Steinplatten (breite flache Zellen), Licht oben, dunkler zum Fuß. Gewölbte Graskappe mit heller Kante und Ranken, Schatten unter der Kappe und am Fuß. Wasserfälle mit Streifen, Gischt und Spritzpartikeln. |
 | Dichte | Kleinvegetation per Streu-Regeln im `[meta]`-Block (`scatter`): Grasbüschel, Wildblumen, Kiesel, Zweige, Laub und Pilze unter Bäumen, Schilf am Wasser, Sträucher am Waldrand, Gras, das in Wegränder wächst. Deterministisch, ohne Kollision, mit Wind. |
 | Natürlichkeit | Grasflächen mit trockenen und saftigen Flecken, kahle Stellen (Tal, Wald), feuchte Erde am Ufer, Kiesel im flachen Wasser, Waldränder aus einzelnen Kronen mit Stämmen, Bäume mit unregelmäßigen Kronen, schiefen Stämmen und drei Größen. |
-| Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser; der Protagonist nie (Game Bible §9). |
+| Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser. In Elysia nie der Protagonist (Game Bible §9); in der Wirklichkeit (Tal, Wald) spiegelt er sich in Wasser und Pfützen (ADR-031). |
 | Tierleben | Vogelschwärme mit Schatten am Boden (Wald: Fledermäuse), Koi im heiligen Becken, Fischschatten in Bach und Teich, Libellen über dem Wasser. |
 | Leuchten | Leuchtende Teile (Pilze, Kristalle, Blätter, Lichthöfe, Lichtstrahl) sind eigene Emissive-Ebenen mit `render_mode unshaded`: richtig verdeckt, aber nicht von Nacht-Abdunklung oder Licht gedimmt. Echte `PointLight2D` nur für größere Lichtquellen. |
 | Tiefe | Props sortieren nach ihrer Fußlinie. Flaches (Seerosen) liegt auf Ebene −5, Boden auf −10, Himmel auf −20. |
 | Laub | Kronen und Hecken aus einzelnen Blattbüscheln (`render_foliage`): flache Tonstufen, Licht oben links, dunkle Kante unten rechts je Büschel. Kein Rauschen. |
-| Elysia | Game Bible §9: perfekte Symmetrie, makellose Architektur, leuchtende Pflanzen. Grün mit Türkisstich, violette Schatten, warme Lichter. Bunte Bäume (grün, blau, lila, rosa), weißer Marmor, türkises Wasser, leuchtende Kristalle und Blumen. Mittelpunkt: Weltenbaum mit Hängeblüten im symmetrischen Marmorbecken. Terrassen mit Felskanten, Wasserfall von der Insel in die Wolken. Bewusst „zu perfekt“. |
-| Tal | Nacht nach dem Regen: tiefes Blau und Violett, Grün mit Türkisstich, rötliche Erde. `CanvasModulate` dunkelt die Welt, warmes Licht nur aus Fenstern und Laterne, Regen und Ringe auf Wasser und Pfützen, starke Vignette. Das Haus ist der einzige warme Ort; Mira steht an der Tür, daneben ein Gemüsebeet, im Süden fällt der Bach über eine Geländestufe. |
-| Wald | Nacht im Wald (Akt III): fast schwarzes Türkis, violetter Fels, Licht kommt nur von leuchtenden Dingen. Lichtung mit Lichtstrahl und aufsteigenden Funken, biolumineszente blaue Bäume, Leuchtpilze in Cyan, Violett und Rosa, magentafarbene Kristalle, Glühwürmchen, Felsstufe mit Wasserfall, Baumstammbrücke. |
+| Elysia | Game Bible §9: perfekte Symmetrie (Karte, Boden und Streu spiegeln sich pixelgenau um Spalte 32; nur Stein und Riss haben keinen Zwilling), makellose Architektur, leuchtende Pflanzen, gemähte Rasenstreifen, kein Schmutz. Bewegung ohne Zufall: Pflanzen im Gleichtakt, immer derselbe Vogelschwarm, gespiegelte Schmetterlinge und Libellen, kreisende Koi, wiederkehrende Wolkenschatten. Grün mit Türkisstich, violette Schatten, warme Lichter. Bunte Bäume (grün, blau, lila, rosa), weißer Marmor, türkises Wasser, leuchtende Kristalle und Blumen. Mittelpunkt: Weltenbaum mit Hängeblüten im symmetrischen Marmorbecken. Terrassen mit Felskanten, Wasserfall von der Insel in die Wolken. Bewusst „zu perfekt“. |
+| Tal | Wie echtes Land (Playtest 05.10.: „natürlicher, wie in der echten Welt“): ausgefranster Waldrand mit Buchten, eine Felsstufe, die kommt und geht, ein mäandernder Bach wechselnder Breite mit Kolk, ein Trampelpfad statt einer Straße, Bäume in gemischten Gruppen, ein paar alte Einzelbäume auf der Wiese, Felsen in Gruppen. Nur der Hof ist gerade, den haben Menschen gebaut. Farben eines bewölkten Regentags (gedämpftes Saft- und Olivgrün, nasse braune Erde, graues Gestein, graugrüner Bach); Abend golden mit kühlen Schatten, Nacht dunkelblau und entsättigt, warmes Licht nur aus Fenstern und Laterne. Krumme Bäume mit totem Ast, kaputte Zaunstücke: ungepflegt, aber nicht trostlos (Risiko 10). Wind in Böen, Regen und Ringe auf Wasser und Pfützen; Mira steht an der Tür, daneben ein Gemüsebeet, im Süden fällt der Bach über eine Geländestufe. |
+| Wald | Ein echter Wald bei Nacht (Akt III; Playtest 05.10.: „natürlicher, wie in der echten Welt“). Mondlicht statt Fantasy-Leuchten: tiefe Blaugrün-Töne, Schiefer-Fels, dunkles Wasser. Was leuchtet, leuchtet auch in Wirklichkeit: die weiße Rinde der Birken im Mondlicht, grünes Foxfire an morschem Holz, Glühwürmchen. Dazu Hallimasch und Fliegenpilze, bemooste Felsen mit Tau, eine Lichtung mit Mondstrahl, Felsstufe mit Wasserfall, Baumstammbrücke, ausgefranster Waldrand. |
+
+## Phase 3: UI-Bogen, Licht, Ton
+
+| Thema | Regel |
+|-------|-------|
+| UI Elysia | Goldrahmen mit Edelsteinecken, warme Creme-Schrift, violett-dunkler Grund. HUD oben links (Level, XP, Gold), Quest oben rechts mit hüpfendem Marker, Popups laut und übertrieben. Seltenheit immer als Wort. |
+| UI Real | Keine Rahmen, warmes Grau (ruhig, nicht düster), kein HUD. Aufgehobenes erscheint als eine leise Zeile unten links. |
+| Startbild | Vor dem Übertritt der Schein-Titel „Elysia“ (Gold, Kristall, symmetrisch), danach der wahre Titel „Nach Elysia“ über einem Abendtal: dieselben Buchstaben, ungeschmückt, mit Riss, und statt des Kristalls ein Keimling (ADR-030, ADR-035). |
+| Übergang | HUD zerfällt einzeln (Gold, XP, Level), Musik läuft als Bandstopp aus, Stille, schwarz, Regen. Ohne Flackern und Wackeln, wenn der Spieler es abgeschaltet hat. |
+| Tageslicht Tal | Regentag (hell, entsättigt, flach), Abend (warmes Orange, kein Regen, Bach und leise Musik), Nacht (kühles Blau, Lampen warm). Elysia hat kein Tageslicht. |
+| Musik | Ein Motiv (Stufen 3-5-6-5-3-2) in allen Welten: Elysia perfekt, Tal menschlich, Wald versteckt, Antreiber hetzend. Elysias Loop schrumpft von 8 auf 4 und 2 Takte (ADR-032). |
 
 ## Referenzen
 
@@ -59,7 +70,10 @@ Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, frem
 | `tools/art/make_sprites.py [--sheet x.png]` | Props, Wolken, Partikel und `assets/generated/props/catalog.json` (entfernt nicht mehr katalogisierte Sprites) |
 | `tools/art/make_character.py [--preview x.png]` | `assets/generated/characters/{player,mira,elysian}.png` |
 | `tools/art/bake_ground.py <karte> [--preview-dir d]` | gebackener Boden und Wassermaske laut `[meta]` (nach `make_sprites.py`, wegen der Prop-Schatten) |
-| `tools/audio/make_ambience.py` | Regen-, Garten-, Wasser- und Nachtwald-Loops (nahtlos) |
+| `tools/audio/make_ambience.py` | Regen-, Garten-, Wasser-, Nachtwald-, Wind-, Regen-mit-Wind- und Abend-Loops (nahtlos) |
+| `tools/audio/make_music.py [--only elysia]` | Musik-Loops Elysia (drei Längen), Tal, Wald, Antreiber (nahtlos, gemeinsames Motiv) |
+| `tools/art/make_title.py [--preview x.png]` | Startbilder: symmetrische Insel, Wasserfall, Logos „Elysia“ und „Nach Elysia“, Abendtal |
+| `tools/art/make_ui.py [--preview x.png]` | Elysia-Rahmen, Münze, Funkeln, Riss, Truhe, Stein |
 
 Installation: `.venv/bin/pip install -r requirements-art.txt`. Alle Generatoren sind
 deterministisch (feste Seeds). Nach Änderungen an Karten oder Generatoren: erzeugen, `tools/check.sh`,
@@ -67,14 +81,14 @@ Ergebnis mit `tools/capture.sh` ansehen.
 
 ## Fragen an den Projektinhaber
 
-1. Trifft die Richtung (Elysia hell und satt, Tal dunkel und warm beleuchtet) dein Bild?
-2. Was stört am meisten: Figur, Boden, Bäume, Haus, Licht, Farben oder Bewegung?
-3. Passt die Figurengröße im Verhältnis zu Bäumen und Haus?
-4. Soll die Grafik so weit sein, bevor wir mit Phase 2 (Systeme) weitermachen, oder reicht die Richtung?
+1. Wirkt Elysia unheimlich-perfekt (Symmetrie, Gleichtakt, kürzer werdende Musik) und trotzdem schön?
+2. Lädt das Tal trotz Regen und Wind ein, oder wirkt es trostlos?
+3. Verrät der Schein-Titel „Elysia“ zu wenig oder zu viel?
+4. Was stört an Figur, Bäumen, Haus oder Licht am meisten, bevor Schlüssel-Assets von Hand entstehen?
 
 ## Nächste Schritte (nicht Teil dieser Phase)
 
 - Handgepixelte Schlüssel-Assets: Spielfigur mit Animationen, Mira, Haus, Baumarten.
 - Terrain-Übergänge als Tileset statt gebacken, sobald Karten wachsen (Speicher, Iteration).
-- Reflexionen (Game Bible: Wasser spiegelt alles außer dem Protagonisten), Tag-Nacht-Licht, Innenräume.
+- Innenräume; handgemalte Tagespalette fürs Tal (KNOWN_ISSUES #30).
 - Performance der Look-Szenen auf Zielhardware messen (KNOWN_ISSUES #12).

@@ -16,6 +16,8 @@ const MAX_NAME_LENGTH := 24
 const MAX_PRESET := 7
 const MAX_ENTRIES := 4096
 const MAX_AMOUNT := 1_000_000_000
+## Times of day of the Real world, in the order resting passes them (DayLight).
+const DAY_PRESETS: PackedStringArray = ["regentag", "abend", "nacht"]
 
 static var _flag_regex := RegEx.create_from_string("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$")
 static var _id_regex := RegEx.create_from_string("^[a-z][a-z0-9_]*$")
@@ -28,6 +30,8 @@ var house := House.new()
 var inventory: Dictionary[String, int] = {}
 var discovered: PackedStringArray = []
 var ui_mode := UiMode.ELYSIA
+## Time of day in the Real world ("" until a scene with daylight set it).
+var day_preset := ""
 var elysia := ElysiaProgression.new()
 var player := PlayerInfo.new()
 var playtime_seconds := 0.0
@@ -119,6 +123,7 @@ func to_dict() -> Dictionary:
 		"inventory": inventory.duplicate(),
 		"discovered": Array(discovered),
 		"ui_mode": str(UiMode.keys()[ui_mode]),
+		"day_preset": day_preset,
 		"elysia": {"xp": elysia.xp, "gold": elysia.gold},
 		"player":
 		{
@@ -176,6 +181,10 @@ static func from_dict(data: Dictionary, report: PackedStringArray) -> GameState:
 	if mode < 0:
 		r.drop("ui_mode", data.get("ui_mode"))
 	s.ui_mode = UiMode.ELYSIA if mode < 0 else mode as UiMode
+	s.day_preset = r.string(data, "day_preset", "")
+	if not s.day_preset.is_empty() and not s.day_preset in DAY_PRESETS:
+		r.drop("day_preset", s.day_preset)
+		s.day_preset = ""
 	var ely := r.dict(data, "elysia")
 	s.elysia.xp = r.integer(ely, "xp", 0, 0, MAX_AMOUNT)
 	s.elysia.gold = r.integer(ely, "gold", 0, 0, MAX_AMOUNT)

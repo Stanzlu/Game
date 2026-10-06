@@ -1,0 +1,7 @@
+{
+	"_comment": "Dialogue voice per speaker (the name as written in .dialogue files). Kinds: elysia, warm, low, neutral (tools/audio/make_sfx.py).",
+	"_default": "neutral",
+	"Elysianer": "elysia",
+	"Mira": "warm",
+	"Antreiber": "low"
+}

@@ -42,6 +42,7 @@ func _build() -> void:
 	)
 	list.add_header("SETTINGS_DISPLAY")
 	list.add_setting("display.fullscreen", "SETTINGS_FULLSCREEN")
+	list.add_setting("display.vsync", "SETTINGS_VSYNC")
 	list.add_setting("display.smooth_camera", "PAUSE_CAMERA", ["CAMERA_PIXEL", "CAMERA_SMOOTH"])
 	list.add_setting("display.screen_shake", "SETTINGS_SCREEN_SHAKE")
 	list.add_setting("display.reduce_flashing", "SETTINGS_REDUCE_FLASHING")

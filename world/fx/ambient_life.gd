@@ -3,6 +3,10 @@ extends Node2D
 ## Small animals that make a scene feel alive (look prototype): bird flocks with ground
 ## shadows crossing the view, fish (or koi) swimming in water cells, dragonflies darting
 ## over water. Pure decoration: no collision, deterministic enough for captures.
+##
+## Perfect loops (Elysia, Game Bible §9 and §35): the same flock in the same formation
+## crosses on an exact beat, koi circle the pool evenly spaced, dragonflies fly mirrored
+## figure eights. Nothing is random, so attentive players start to notice the repetition.
 
 const FX_DIR := "res://assets/generated/props/fx/"
 
@@ -17,6 +21,9 @@ var _swimmers: Array[Dictionary] = []
 var _darters: Array[Dictionary] = []
 var _water_cells: Array[Vector2i] = []
 var _time := 0.0
+var _perfect := false
+var _mirror_x := 0.0
+var _orbit := Rect2()
 
 
 func _init() -> void:
@@ -42,6 +49,14 @@ func enable_birds(interval: float, tint: Color = Color.WHITE) -> void:
 	_flock_tint = tint
 
 
+## Switches to perfect loops. `mirror_x` is the world x of the symmetry axis; `orbit`
+## (center and radii in pixels) is the koi circle; an empty orbit keeps koi wandering.
+func enable_perfect_loops(mirror_x: float, orbit: Rect2 = Rect2()) -> void:
+	_perfect = true
+	_mirror_x = mirror_x
+	_orbit = orbit
+
+
 func add_swimmers(count: int, texture_name: String) -> void:
 	if _water_cells.is_empty():
 		return
@@ -55,40 +70,89 @@ func add_swimmers(count: int, texture_name: String) -> void:
 		add_child(sprite)
 		var at := _random_water_point()
 		sprite.position = at
-		_swimmers.append({"sprite": sprite, "pos": at, "goal": _random_water_point(), "rest": 0.0})
+		(
+			_swimmers
+			. append(
+				{
+					"sprite": sprite,
+					"pos": at,
+					"goal": _random_water_point(),
+					"rest": 0.0,
+					"angle": TAU * float(i) / float(count),
+				}
+			)
+		)
 
 
+## Dragonflies over open water. With perfect loops they come in mirrored pairs.
 func add_darters(count: int) -> void:
 	if _water_cells.is_empty():
 		return
 	var texture := load(FX_DIR + "dragonfly.png") as Texture2D
+	var homes: Array[Vector2] = []
+	var twins: Array[bool] = []
 	for i in count:
+		var home := _random_water_point() + Vector2(0, -10)
+		if _perfect:
+			if i % 2 == 1:
+				home = Vector2(2.0 * _mirror_x - homes[i - 1].x, homes[i - 1].y)
+			else:
+				home = _water_point_left_of(_mirror_x - 24.0) + Vector2(0, -10)
+		homes.append(home)
+		twins.append(_perfect and i % 2 == 1)
+	if _perfect and count % 2 == 1:
+		homes.append(Vector2(2.0 * _mirror_x - homes[-1].x, homes[-1].y))
+		twins.append(true)
+	for i in homes.size():
 		var sprite := Sprite2D.new()
 		sprite.texture = texture
 		sprite.vframes = 2
 		sprite.z_index = 30
+		sprite.flip_h = twins[i]
 		sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 		add_child(sprite)
-		var home := _random_water_point() + Vector2(0, -10)
+		var home := homes[i]
 		sprite.position = home
-		_darters.append({"sprite": sprite, "home": home, "pos": home, "goal": home, "rest": 0.0})
+		(
+			_darters
+			. append(
+				{
+					"sprite": sprite,
+					"home": home,
+					"pos": home,
+					"goal": home,
+					"rest": 0.0,
+					"twin": twins[i],
+				}
+			)
+		)
 
 
 func _process(delta: float) -> void:
 	_time += delta
 	_update_flocks(delta)
 	for f: Dictionary in _swimmers:
-		_swim(f, delta)
+		if _perfect and _orbit.size != Vector2.ZERO:
+			_circle(f)
+		else:
+			_swim(f, delta)
 	for d: Dictionary in _darters:
-		_dart(d, delta)
+		if _perfect:
+			_figure_eight(d)
+		else:
+			_dart(d, delta)
 
 
 func _update_flocks(delta: float) -> void:
 	if _flock_interval > 0.0:
 		_flock_timer -= delta
 		if _flock_timer <= 0.0:
-			_flock_timer = _flock_interval * _rng.randf_range(0.6, 1.4)
-			_spawn_flock()
+			if _perfect:
+				_flock_timer += _flock_interval
+				_spawn_perfect_flock()
+			else:
+				_flock_timer = _flock_interval * _rng.randf_range(0.6, 1.4)
+				_spawn_flock()
 	var cam := view.camera_position
 	for i in range(_birds.size() - 1, -1, -1):
 		var b: Dictionary = _birds[i]
@@ -113,32 +177,34 @@ func _spawn_flock() -> void:
 	var dir := Vector2(1.0 if from_left else -1.0, _rng.randf_range(-0.25, 0.25)).normalized()
 	var speed := _rng.randf_range(55.0, 80.0)
 	for i in _rng.randi_range(3, 6):
-		var bird := Sprite2D.new()
-		bird.texture = load(FX_DIR + "bird_fly.png")
-		bird.vframes = 2
-		bird.z_index = 45
-		bird.modulate = _flock_tint
-		bird.flip_h = not from_left
-		bird.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-		add_child(bird)
-		var shadow := Sprite2D.new()
-		shadow.texture = load(FX_DIR + "bird_shadow.png")
-		shadow.z_index = -4
-		shadow.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-		add_child(shadow)
 		var offset := Vector2(-dir.x * i * 9.0, (i % 2) * 7.0 - 3.0 + i * 2.0)
-		(
-			_birds
-			. append(
-				{
-					"sprite": bird,
-					"shadow": shadow,
-					"pos": start + offset,
-					"vel": dir * speed,
-					"phase": _rng.randf() * TAU,
-				}
-			)
-		)
+		_add_bird(start + offset, dir * speed, not from_left, _rng.randf() * TAU)
+
+
+## Always the same five birds in a clean V, left to right, wings beating together.
+func _spawn_perfect_flock() -> void:
+	var start := view.camera_position + Vector2(-380.0, -110.0)
+	for i in 5:
+		var rank := floorf((i + 1) * 0.5)
+		var side := -1.0 if i % 2 == 1 else 1.0
+		_add_bird(start + Vector2(-rank * 12.0, rank * 8.0 * side), Vector2(64.0, 0.0), false, 0.0)
+
+
+func _add_bird(at: Vector2, velocity: Vector2, flip: bool, phase: float) -> void:
+	var bird := Sprite2D.new()
+	bird.texture = load(FX_DIR + "bird_fly.png")
+	bird.vframes = 2
+	bird.z_index = 45
+	bird.modulate = _flock_tint
+	bird.flip_h = flip
+	bird.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	add_child(bird)
+	var shadow := Sprite2D.new()
+	shadow.texture = load(FX_DIR + "bird_shadow.png")
+	shadow.z_index = -4
+	shadow.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	add_child(shadow)
+	_birds.append({"sprite": bird, "shadow": shadow, "pos": at, "vel": velocity, "phase": phase})
 
 
 func _swim(f: Dictionary, delta: float) -> void:
@@ -178,6 +244,34 @@ func _dart(d: Dictionary, delta: float) -> void:
 	pos += to_goal.normalized() * minf(90.0 * delta, to_goal.length())
 	d["pos"] = pos
 	sprite.position = pos.round()
+
+
+## Koi evenly spaced on one ellipse, all at the same pace, tails in step.
+func _circle(f: Dictionary) -> void:
+	var sprite: Sprite2D = f["sprite"]
+	var a := float(f["angle"]) + _time * 0.2
+	var radii := _orbit.size
+	sprite.position = (_orbit.position + Vector2(cos(a) * radii.x, sin(a) * radii.y)).round()
+	sprite.flip_h = sin(a) > 0.0
+	sprite.frame = 0 if fmod(_time * 4.0, 1.0) < 0.5 else 1
+
+
+## One figure eight per 4.8 s around the home point; twins fly it mirrored.
+func _figure_eight(d: Dictionary) -> void:
+	var sprite: Sprite2D = d["sprite"]
+	var t := _time * 1.3
+	var side := -1.0 if bool(d["twin"]) else 1.0
+	var home: Vector2 = d["home"]
+	sprite.position = (home + Vector2(sin(t) * 28.0 * side, sin(t * 2.0) * 9.0)).round()
+	sprite.frame = 0 if fmod(_time * 18.0, 1.0) < 0.5 else 1
+
+
+func _water_point_left_of(max_x: float) -> Vector2:
+	for attempt in 32:
+		var at := _random_water_point()
+		if at.x < max_x:
+			return at
+	return _random_water_point()
 
 
 func _random_water_point() -> Vector2:

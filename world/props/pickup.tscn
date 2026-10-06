@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/props/pickup.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/generated/objects/stone.png" id="2_t"]
+[ext_resource type="Script" path="res://entities/interaction/interactable.gd" id="9_inter"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_use"]
+size = Vector2(16, 14)
+
+[node name="Pickup" type="Node2D"]
+script = ExtResource("1_s")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_t")
+offset = Vector2(0, -2)
+
+[node name="Interactable" type="Area2D" parent="."]
+script = ExtResource("9_inter")
+prompt_key = "INTERACT_TAKE"
+prompt_offset = Vector2(0, -14)
+
+[node name="Shape" type="CollisionShape2D" parent="Interactable"]
+shape = SubResource("RectangleShape2D_use")

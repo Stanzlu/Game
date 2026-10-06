@@ -29,6 +29,8 @@ InputDevice="*res://core/input_device.gd"
 Settings="*res://core/settings.gd"
 WorldState="*res://core/world_state.gd"
 SaveSystem="*res://core/save_system.gd"
+AudioDirector="*res://core/audio_director.gd"
+ScreenFade="*res://core/screen_fade.gd"
 
 [debug]
 
@@ -144,7 +146,7 @@ debug_panel={
 [internationalization]
 
 locale/translations=PackedStringArray("res://content/locale/ui.de.translation", "res://content/locale/journal.de.translation", "res://content/locale/items.de.translation")
-locale/translations_pot_files=PackedStringArray("res://content/dialogue/antreiber/antreiber.dialogue", "res://content/dialogue/sandbox/sandbox.dialogue", "res://content/dialogue/valley/mira_prototype.dialogue")
+locale/translations_pot_files=PackedStringArray("res://content/dialogue/antreiber/antreiber.dialogue", "res://content/dialogue/sandbox/sandbox.dialogue", "res://content/dialogue/valley/mira_prototype.dialogue", "res://content/dialogue/elysia/elysia_prototype.dialogue")
 locale/fallback="de"
 
 [layer_names]
@@ -161,6 +163,9 @@ locale/fallback="de"
 common/physics_interpolation=true
 
 [rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 
 textures/canvas_textures/default_texture_filter=0
 textures/vram_compression/import_etc2_astc=true
