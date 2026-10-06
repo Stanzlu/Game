@@ -9,12 +9,12 @@ const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
 ## XP for the first, second and third butterfly (Game Bible §10: rewards escalate).
 const BUTTERFLY_XP: Array[int] = [100, 500, 2000]
 const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
-## Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its own, and the
-## rift opens a while after the chest even if the child was never followed.
+## Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its own (with it
+## the child appears), and the rift opens a while later even if the child was never followed.
 const LOOPS_AFTER := 720.0
-const RIFT_AFTER_CHEST := 240.0
+const RIFT_AFTER_LOOPS := 240.0
 
-var _chest_time := -1.0
+var _loops_time := -1.0
 
 
 func _ready() -> void:
@@ -23,8 +23,8 @@ func _ready() -> void:
 	WorldState.objective_changed.connect(_on_objective_changed)
 	if not WorldState.has_flag("elysia.woke"):
 		_wake.call_deferred()
-	elif WorldState.has_flag("elysia.chest_tree_opened"):
-		_chest_time = WorldState.state.playtime_seconds
+	elif WorldState.has_flag("elysia.loops"):
+		_loops_time = WorldState.state.playtime_seconds
 
 
 func _wake() -> void:
@@ -43,9 +43,9 @@ func _process(_delta: float) -> void:
 	if not WorldState.has_flag("elysia.loops") and t > LOOPS_AFTER:
 		WorldState.set_flag("elysia.loops")
 	if (
-		_chest_time >= 0.0
+		_loops_time >= 0.0
 		and not WorldState.has_flag("elysia.rift_open")
-		and t - _chest_time > RIFT_AFTER_CHEST
+		and t - _loops_time > RIFT_AFTER_LOOPS
 	):
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag("elysia.rift_open")
@@ -69,9 +69,10 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		return
 	match id:
 		"elysia.chest_tree_opened":
-			_chest_time = WorldState.state.playtime_seconds
 			Beat.mark("irritation")
 			WorldState.set_flag("elysia.loops")
+		"elysia.loops":
+			_loops_time = WorldState.state.playtime_seconds
 		"elysia.mirror_seen":
 			Beat.mark("mirror")
 		"elysia.stone_taken":

@@ -135,6 +135,19 @@ func test_elysia_wakes_and_butterflies_escalate() -> void:
 	assert_eq(WorldState.quest_stage("side_elysia_butterflies"), "return")
 
 
+func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
+	var scene: GameScene = ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	WorldState.state.playtime_seconds = ElysiaScene.LOOPS_AFTER + 1.0
+	await wait_process_frames(3)
+	assert_true(WorldState.has_flag("elysia.loops"))
+	assert_eq(get_tree().get_nodes_in_group(&"child_guide").size(), 1, "the child appears")
+	WorldState.state.playtime_seconds += ElysiaScene.RIFT_AFTER_LOOPS + 1.0
+	await wait_process_frames(3)
+	assert_true(WorldState.has_flag("elysia.rift_open"), "nobody gets stuck in Elysia")
+
+
 func test_chest_starts_the_loops_and_the_child_opens_the_rift() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
