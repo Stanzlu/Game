@@ -431,8 +431,9 @@ def wood_bundle(ms):
 
 
 # --------------------------------------------------------------------------- the house
-LOGS = ramp("#160f0b", "#241913", "#35261c", "#4a3627", "#634a35", "#7d5f44")
-BEAM = ramp("#0e0a08", "#1a1310", "#2a2019", "#3b2d22")
+# honey-coloured logs and beams (ADR-041): a cabin that wants to be warm
+LOGS = ramp("#22150e", "#352217", "#4d3221", "#68462e", "#86603e", "#a67c52")
+BEAM = ramp("#140d09", "#24180f", "#382519", "#4d3524")
 NIGHT_GLASS = ramp("#0c1018", "#141c28", "#22303f", "#3a4c5c", "#5e7484")
 
 
@@ -481,6 +482,22 @@ def shell(ms):
                                                      | (np.abs(np.hypot(c.xx - 14, c.yy - wall_top) - 7) < 0.5)
                                                      | (np.abs(np.hypot(c.xx - 14, c.yy - wall_top) - 12) < 0.5)))
     c.fill(web & (c.xx >= 14), np.array([120, 118, 112], np.float32))
+    # bundles of herbs drying under the beam, tied with string, someone meant to come back
+    herbs = [ramp("#1e3a1c", "#2f5a2a", "#4c7c3a", "#74a052"), ramp("#3a2a44", "#5a3e66", "#7e5a8a", "#a682b0"),
+             ramp("#4a4214", "#7a6c20", "#a89434", "#d2bc56")]
+    for k, hx in enumerate((44, 58, 72, 210, 224)):
+        hang = 6 + (k * 3) % 5
+        c.fill(c.rect(hx, wall_top - 2, hx + 1, wall_top + hang - 4), np.array([150, 130, 96], np.float32))
+        bunch = c.ellipse(hx + 0.5, wall_top + hang, 3.2, 5.5) & (c.yy >= wall_top + hang - 4)
+        c.paint(bunch, herbs[k % 3], 0.3 + 0.5 * c.sphere(hx - 1, wall_top + hang - 2, 3.5, 6), dither=False)
+        c.fill(c.rect(hx - 1, wall_top + hang - 5, hx + 2, wall_top + hang - 4), np.array([196, 170, 120], np.float32))
+    # a pot of something green on the window sill
+    pot = c.rect(wx1 - 6, wy1 - 1, wx1 + 1, wy1 + 4)
+    c.paint(pot, ramp("#5a2a1a", "#8a4428", "#b4643a", "#d48a58"), 0.3 + 0.55 * c.cylinder(wx1 - 6, wx1 + 1),
+            dither=False)
+    leaves = (c.ellipse(wx1 - 2.5, wy1 - 4, 4.5, 3.5) | c.ellipse(wx1 - 5, wy1 - 6, 2.2, 2.8)) & (c.yy < wy1)
+    c.paint(leaves, ramp("#1c3a1e", "#2c5a2a", "#468038", "#6ea64c"), 0.3 + 0.55 * c.sphere(wx1 - 4, wy1 - 6, 5, 4),
+            dither=False)
     # side walls: thick timber seen from above, darkness beyond
     for x0, x1, edge in ((0, 12, 10), (244, 256, 244)):
         c.paint(c.rect(x0, wall_top, x1, 192), BEAM, 0.05, dither=False)
@@ -522,6 +539,13 @@ def fireplace(ms, lit, frame=0):
     # hearth slab
     hearth = c.rect(2, 54, 50, 64)
     c.paint(hearth, stone, np.where(c.yy < 56, 0.75, 0.42) + 0.1 * (tone - 0.5), contrast=2.0)
+    # a copper kettle on the hearth, dented, the handle up
+    copper = ramp("#3a1a10", "#6a3218", "#9a5226", "#c87a3c", "#eeb070")
+    kettle = c.ellipse(43, 55, 4.6, 3.6) & (c.yy <= 58)
+    c.paint(kettle, copper, 0.2 + 0.75 * c.sphere(41.5, 53.5, 4.5, 3.5), dither=False)
+    c.paint(c.rect(38, 53, 40, 55), copper, 0.45, dither=False)  # spout
+    handle = (np.abs(np.hypot(c.xx + 0.5 - 43, (c.yy + 0.5 - 52) * 1.4) - 3.4) < 0.7) & (c.yy < 52)
+    c.paint(handle, ex["iron"], 0.55, dither=False)
     if lit:
         flame = ramp("#6a1a08", "#c0400e", "#f08020", "#ffc040", "#fff0a0")
         shift = [0.0, 1.3, -1.1][frame % 3]
@@ -541,6 +565,12 @@ def fireplace(ms, lit, frame=0):
         embers = c.rect(16, 50, 36, 54) & (fn > 0.45)
         c.paint(embers, flame, 0.55, dither=False)
         e.paint(embers, flame, 0.55, dither=False)
+        # the kettle sings a little: a thread of steam from the spout
+        for k in range(4):
+            sy = 51 - k * 3 - frame
+            sx = 38 - k + [0, 1, 0][(k + frame) % 3]
+            c.fill(c.rect(sx, sy, sx + 1, sy + 2), np.array([228, 222, 210], np.float32))
+            e.fill(c.rect(sx, sy, sx + 1, sy + 2), np.array([120, 116, 108], np.float32))
         # warm light on the hearth and the lower stones
         warm = (hearth | (body & (c.yy > 40))) & c.ellipse(26, 54, 26, 14)
         c.rgb[warm] = np.clip(c.rgb[warm] * np.array([1.35, 1.12, 0.85], np.float32), 0, 255)
@@ -581,7 +611,9 @@ def bed(ms):
     """A narrow bed against the wall, a grey wool blanket, a flat pillow."""
     rng = np.random.default_rng(57)
     st = pa.STYLES["tal"]
-    wool = ramp("#1e2228", "#2e343c", "#444c56", "#5e6874", "#7a8490")
+    wool = ramp("#2a1e22", "#43303a", "#5e4652", "#7c5e6a", "#9a7a84")
+    patches = [ramp("#5a1e1a", "#8a3224", "#b44e34", "#d8784e"), ramp("#4a3a12", "#7a6020", "#a88834", "#d0b056"),
+               ramp("#1e2a4a", "#2e4270", "#4a6294", "#7088b6"), ramp("#2a3a22", "#405a30", "#5e7c44", "#86a25e")]
     c = ms.Canvas(30, 44)
     c.paint(c.rect(1, 2, 29, 42), LOGS, np.where((c.xx < 3) | (c.xx > 26), 0.55, 0.3), dither=False)
     c.paint(c.rect(4, 4, 26, 12), ramp("#6a645a", "#8e877a", "#b0a898"), 0.55 + 0.3 * c.sphere(12, 6, 12, 6),
@@ -589,6 +621,12 @@ def bed(ms):
     blanket = c.rect(3, 12, 27, 40)
     folds = pa.value_noise(44, 30, (4, 2), rng)
     c.paint(blanket, wool, 0.35 + 0.35 * (folds - 0.5) + 0.2 * (1 - (c.yy - 12) / 28), contrast=2.0)
+    # a patchwork quilt: squares sewn by somebody, none quite square
+    for py in range(14, 40, 6):
+        for px in range(3, 27, 6):
+            k = (px // 6 * 3 + py // 6 * 5) % 4
+            sq = c.rect(px, py, min(px + 6, 27), min(py + 6, 40))
+            c.paint(sq, patches[k], 0.3 + 0.3 * (folds - 0.5) + 0.25 * (1 - (c.yy - 12) / 28), contrast=1.6)
     c.paint(c.rect(3, 12, 27, 14), wool, 0.75, dither=False)
     c.outline(st["outline"])
     return c
@@ -626,8 +664,8 @@ def rug(ms):
     rng = np.random.default_rng(63)
     c = ms.Canvas(44, 22)
     m = c.ellipse(22, 11, 21, 10)
-    stripes = [ramp("#3a1e1c", "#5a2e28", "#7a4438"), ramp("#2a3036", "#3e4852", "#566270"),
-               ramp("#3a3424", "#5a5034", "#7a6e48")]
+    stripes = [ramp("#5a1e1a", "#8a3226", "#b04c36"), ramp("#2a3a5e", "#3e5684", "#5a76a6"),
+               ramp("#6a5214", "#9a7a24", "#c4a03c")]
     ring = (np.hypot((c.xx - 22) / 21, (c.yy - 11) / 10) * 6).astype(int)
     for k in range(7):
         sel = m & (ring == k)

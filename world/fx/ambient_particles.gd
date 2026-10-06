@@ -62,6 +62,30 @@ static func motes(game_view: GameView) -> AmbientParticles:
 	return p
 
 
+## Dust drifting in a quiet room (the house, ADR-041): few, dim, slow; it only shows where
+## the light falls on it.
+static func dust(game_view: GameView) -> AmbientParticles:
+	var p := AmbientParticles.new()
+	p.name = "Dust"
+	p.view = game_view
+	p.texture = load(FX_DIR + "mote.png")
+	p.amount = 12
+	p.lifetime = 9.0
+	p.preprocess = 9.0
+	p.emission_rect_extents = Vector2(130, 90)
+	p.direction = Vector2(0.3, -1)
+	p.spread = 120.0
+	p.gravity = Vector2(0, -0.6)
+	p.initial_velocity_min = 0.5
+	p.initial_velocity_max = 2.0
+	var fade := Gradient.new()
+	fade.set_color(0, Color(1, 0.95, 0.85, 0))
+	fade.add_point(0.5, Color(1, 0.95, 0.85, 0.35))
+	fade.set_color(1, Color(1, 0.95, 0.85, 0))
+	p.color_ramp = fade
+	return p
+
+
 static func fireflies(game_view: GameView) -> AmbientParticles:
 	var p := AmbientParticles.new()
 	p.name = "Fireflies"

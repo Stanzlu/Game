@@ -41,15 +41,16 @@ EXTRA = {
         "stem": ramp("#164a30", "#24703a", "#3f9a44", "#7cc653"),
     },
     "tal": {
-        "bark": ramp("#1c1612", "#2e241d", "#45362a", "#5e4a39", "#7a624c"),
-        "plank": ramp("#211915", "#352920", "#4c3b2d", "#66503d", "#82684f"),
-        "roof": ramp("#1f2124", "#2e3135", "#41454b", "#575c63", "#71767d"),
-        "thatch": ramp("#2a2316", "#403522", "#5a4b31", "#776441", "#968054"),
-        "stone_wall": ramp("#25272a", "#36393d", "#4b4f54", "#63686e", "#80858b"),
-        "iron": ramp("#141518", "#22252a", "#33373e", "#484d55"),
-        "glass": ramp("#a8601c", "#f0a040", "#ffd27a", "#fff1c4"),
-        "stem": ramp("#16241a", "#223523", "#304a2f", "#43623d"),
-        "hoop": ramp("#1a1b1e", "#2a2c31", "#3d4048", "#53575f"),
+        # warm, weathered and lived-in (ADR-041): honey wood, a mossy blue-slate roof, sunny glass
+        "bark": ramp("#2a1d16", "#422e22", "#5f4330", "#7d5a40", "#9d7754"),
+        "plank": ramp("#33231a", "#4f3726", "#6f4f36", "#906a48", "#b08a60"),
+        "roof": ramp("#1f2a30", "#2e3d44", "#41555a", "#587070", "#7a9088"),
+        "thatch": ramp("#3a2c18", "#574424", "#7a6234", "#9c8146", "#c0a35e"),
+        "stone_wall": ramp("#35322f", "#4d4945", "#68635c", "#878075", "#a9a092"),
+        "iron": ramp("#1a1a1e", "#2a2b30", "#3e4047", "#565a62"),
+        "glass": ramp("#b0681e", "#f2a844", "#ffd982", "#fff4cc"),
+        "stem": ramp("#173020", "#22452a", "#315f34", "#467c3e"),
+        "hoop": ramp("#22211f", "#34322f", "#4a4742", "#625e57"),
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
@@ -1301,6 +1302,11 @@ def particles():
        {"a": ("#0a1018", 120)})
     px("dragonfly", [".a.a.", "abcba", ".a.a.", ".....", "a...a", ".bcb.", "a...a"],
        {"a": ("#cfeaff", 170), "b": ("#2a6fd0", 255), "c": ("#123a80", 255)})
+    # a frog on the bank (the real world, ADR-041): sitting / mid-hop, stacked for vframes = 2
+    px("frog", ["..d...d..", ".abbabba.", "abbbbbbba", "abcbbbcba", ".abbebba.", "aa.aaa.aa", ".........",
+                "..d...d..", ".abbabba.", "abcbbbcba", ".abbbbba.", "..abbba..", ".a.....a.", "a.......a"],
+       {"a": ("#1a3216", 255), "b": ("#6aa83c", 255), "c": ("#b4dc64", 255), "d": ("#0e120c", 255),
+        "e": ("#e2dca0", 255)})
     px("shadow_small", [".aaaaaaaa.", "aabbbbbbaa", "abbbbbbbba", "aabbbbbbaa", ".aaaaaaaa."],
        {"a": ("#1c1630", 50), "b": ("#1c1630", 95)})
 

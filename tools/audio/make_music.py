@@ -104,6 +104,35 @@ def music_box(freq, seconds=2.2, bright=1.0):
     return sig * attack * 0.5
 
 
+def piano(freq, seconds=3.0, velocity=0.7, rng=None):
+    """Soft upright piano for the real world (ADR-041): slightly stretched partials that die
+    away faster the higher they are, two strings a hair apart, a felt hammer. Warm, a little
+    uneven, nothing like Elysia's music box."""
+    rng = rng or np.random.default_rng(0)
+    n = int(RATE * seconds)
+    t = np.arange(n) / RATE
+    sig = np.zeros(n)
+    for k in range(1, 9):
+        fk = freq * k * np.sqrt(1 + 0.0004 * k * k)
+        amp = (velocity ** (0.6 + 0.25 * k)) / k ** 1.3
+        decay = 0.9 + 0.55 * k + freq / 900.0
+        for detune in (0.9997, 1.0003):
+            sig += 0.5 * amp * np.sin(2 * np.pi * fk * detune * t + rng.uniform(0, 6.28)) * np.exp(-t * decay)
+    hammer = lowpass_np(rng.uniform(-1, 1, n) * np.exp(-t * 180.0), 0.08) * 0.15 * velocity
+    attack = np.minimum(1, t / 0.004)
+    return (sig + hammer) * attack * 0.42
+
+
+def lowpass_np(x, alpha):
+    """One-pole lowpass (alpha 0..1, smaller is darker)."""
+    out = np.empty_like(x)
+    acc = 0.0
+    for i, v in enumerate(x):
+        acc += alpha * (v - acc)
+        out[i] = acc
+    return out
+
+
 def bell(freq, seconds=3.5, inharmonic=True):
     """FM-ish glass bell (inharmonic partials) for the forest."""
     n = int(RATE * seconds)
@@ -292,14 +321,24 @@ def valley():
             tr.add(beat0 + i + 0.0 + jitter, pluck(midi_hz(notes[step] + (12 if step else 0)), 2.4, rng, 0.35), pan=-0.25 + 0.15 * step, gain=0.42 * vel)
         if bar % 2 == 0:
             tr.add(beat0, soft_bass(midi_hz(notes[0] - 12), tr.beat * 6), gain=0.5)
-    # the motif once, in the middle, slow and slightly late, like someone humming it
+    # the motif on a soft piano, slow and slightly late, like someone playing it for
+    # themselves (ADR-041); four bars later an answer that comes home (2-3-5-3-2-1)
+    answer = [(2, 1), (3, 1), (5, 2), (3, 1), (2, 1), (1, 3)]
+    for start, phrase, vel in ((8.0, MOTIF, 0.62), (24.0, answer, 0.55)):
+        pos = start
+        for deg, eighths in phrase:
+            jitter = rng.normal(0.04, 0.03) / tr.beat
+            v = vel * rng.uniform(0.85, 1.05)
+            tr.add(pos + jitter, piano(midi_hz(degree(root, DORIAN, deg, 0)), 3.4, v, rng), pan=0.15, gain=0.7)
+            pos += eighths * 0.75
+    # the guitar still hums it once in the middle, quieter, under the piano's silence
     pos = 16.0
     for deg, eighths in MOTIF:
         jitter = rng.normal(0.04, 0.03) / tr.beat
-        tr.add(pos + jitter, pluck(midi_hz(degree(root, DORIAN, deg, 0)), 3.0, rng, 0.55), pan=0.2, gain=0.55)
+        tr.add(pos + jitter, pluck(midi_hz(degree(root, DORIAN, deg, 0)), 3.0, rng, 0.55), pan=0.2, gain=0.35)
         pos += eighths * 0.75
     # a quiet hum underneath
-    tr.add(0, pad([midi_hz(root - 12), midi_hz(root - 5)], tr.beat * 32, rng, attack=4.0, release=4.0, detune=0.002), gain=0.18)
+    tr.add(0, pad([midi_hz(root - 12), midi_hz(root - 5)], tr.beat * 32, rng, attack=4.0, release=4.0, detune=0.002), gain=0.2)
     tr.buf = np.stack([circular_filter(ch, lo=50, hi=5200, tilt=-0.1) for ch in tr.buf])
     finish(tr, "valley_loop", reverb=0.26, rev_seconds=2.4)
 

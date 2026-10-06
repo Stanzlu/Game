@@ -115,3 +115,22 @@ func test_after_the_trade_the_goat_trots_off_and_turns_up_on_the_woodpile() -> v
 	assert_false(is_instance_valid(goat), "gone")
 	assert_true(perched.visible, "on the woodpile")
 	assert_lt((perched.get_node("Sprite") as Node2D).position.y, -10.0, "standing on top")
+
+
+func test_frogs_sit_on_the_banks_and_hop_off() -> void:
+	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	WorldState.set_flag("valley.mira_met")
+	var scene: GameScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var life := scene.view.world_root.find_children("*", "AmbientLife", true, false)
+	assert_eq(life.size(), 1)
+	var frogs: Array = life[0].get(&"_frogs")
+	assert_eq(frogs.size(), 6, "frogs in the valley")
+	var frog: Dictionary = frogs[0]
+	var cell := scene.map.world_to_cell(frog["pos"])
+	assert_ne(scene.map.data.surface_at_cell(cell), &"water", "on land")
+	await wait_seconds(0.3)
+	scene.player.teleport(frog["pos"] + Vector2(12, 0))
+	await wait_seconds(0.1)
+	assert_gte(float(frog["hop"]), 0.0, "it hops off when someone comes close")

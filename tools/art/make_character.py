@@ -139,6 +139,28 @@ DESIGNS = {
     },
 }
 
+# People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
+# a little less contrast, outlines a warm brown instead of near black. The Elysians and the
+# host keep their crisp, bright perfection on purpose.
+SOFT = ("player", "mira", "child", "antreiber")
+WARM_DARK = pa.hex_rgb("#4a3028")
+
+
+def soften(colors, lift=0.16):
+    """Lifts dark tones towards a warm brown, more the darker they are; lights stay."""
+    c = np.asarray(colors, np.float32)
+    lum = (c @ np.array([0.299, 0.587, 0.114], np.float32))[..., None] / 255.0
+    pull = lift * (1.0 - lum) ** 1.5
+    return np.clip(c + (WARM_DARK + 60.0 - c) * pull, 0, 255)
+
+
+for _name in SOFT:
+    _d = DESIGNS[_name]
+    for _key, _value in list(_d.items()):
+        if isinstance(_value, np.ndarray) and _value.ndim == 2 and _value.shape[1] == 3:
+            _d[_key] = soften(_value)
+    _d["outline"] = np.clip(_d["outline"] * 0.55 + WARM_DARK * 0.45, 0, 255)
+
 
 def pose(state, frame):
     """Per-frame offsets. legs: (forward, lift) per leg; arms: swing per arm; bob: upper body."""
