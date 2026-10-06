@@ -19,6 +19,9 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 ## Sky behind void map cells; transparent top color = no sky layer.
 @export var sky_top := Color(0, 0, 0, 0)
 @export var sky_bottom := Color(1, 1, 1, 1)
+## 1 = sky objects move with depth; 0 = a painted backdrop fixed to the screen (Elysia in the
+## slice: a picture, ADR-043).
+@export var sky_parallax := 1.0
 @export var petals := false
 @export var motes := false
 ## Dim dust drifting in a quiet room (the house).
@@ -34,6 +37,14 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
 ## Real-world scenes: start preset of the DayLight ("keine" = fixed look, e.g. Elysia).
 @export_enum("keine", "regentag", "abend", "nacht") var day_preset := "keine"
+@export_group("Depth")
+## The depth arc (ADR-043): Elysia is a flat picture (all off); the real world gets aerial
+## haze towards the top of the view, a backdrop beyond the northern treeline (pixels it
+## reaches above the map; 0 = none) and dark crowns in front along the southern forest.
+@export var depth_haze := 0.0
+@export var haze_color := Color(0.78, 0.84, 0.86)
+@export var backdrop_reach := 0.0
+@export var foreground_foliage := false
 @export_group("Life")
 ## Seconds between bird flocks on average (0 = none) and their tint (dark for bats).
 @export var bird_interval := 0.0
@@ -62,6 +73,8 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 
 var glow_layer: CanvasLayer
 var day_light: DayLight
+var backdrop: Backdrop
+var foreground: ForegroundFoliage
 
 
 func _build_world() -> void:
@@ -132,9 +145,30 @@ func _build_world() -> void:
 		)
 	if reflect_player and player != null:
 		map.add_reflection(player, true)
+	_add_depth()
 	view.set_post_material(_grade_material())
 	if day_preset != "keine":
 		_setup_day_light()
+
+
+## Backdrop and foreground of the depth arc (ADR-043). The camera may look up to `reach`
+## pixels above the map, where the backdrop lies.
+func _add_depth() -> void:
+	var moving := Settings.get_bool("display.parallax")
+	if backdrop_reach > 0.0:
+		backdrop = Backdrop.new()
+		backdrop.name = "Backdrop"
+		view.world_root.add_child(backdrop)
+		view.world_root.move_child(backdrop, 0)
+		backdrop.setup(view, map.world_rect(), backdrop_reach)
+		backdrop.parallax = moving
+		view.bounds = view.bounds.grow_side(SIDE_TOP, backdrop_reach)
+	if foreground_foliage:
+		foreground = ForegroundFoliage.new()
+		foreground.name = "Foreground"
+		view.world_root.add_child(foreground)
+		foreground.setup(view, map)
+		foreground.parallax = moving
 
 
 func _setup_day_light() -> void:
@@ -150,6 +184,7 @@ func _setup_day_light() -> void:
 	if map.ground_art != null:
 		day_light.ground = map.ground_art.material as ShaderMaterial
 	day_light.rain = view.viewport.get_node_or_null("WeatherLayer/Rain")
+	day_light.backdrop = backdrop
 	# evening sun through the breaking clouds: screen space, above the world, below the UI
 	var light_layer := CanvasLayer.new()
 	light_layer.name = "LightLayer"
@@ -207,14 +242,15 @@ func _add_sky() -> void:
 		[CLOUD_DIR + "cloud_1.png", 520.0, bottom - 30.0, 12.0, 0.85],
 	]
 	# a rainbow far behind, floating islets in between (Elysia's sky, refs: floating islands)
-	sky.add_cloud(load(CLOUD_DIR + "rainbow.png"), 140.0, bottom - 120.0, 0.0, 0.1, 0.0, 0.8)
+	var k := sky_parallax
+	sky.add_cloud(load(CLOUD_DIR + "rainbow.png"), 140.0, bottom - 120.0, 0.0, 0.1 * k, 0.0, 0.8)
 	for c: Array in clouds.slice(0, 2):
-		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
-	sky.add_cloud(load(CLOUD_DIR + "islet_1.png"), 420.0, bottom - 62.0, 1.5, 0.22, 2.0)
-	sky.add_cloud(load(CLOUD_DIR + "islet_0.png"), 110.0, bottom - 56.0, 2.0, 0.35, 3.0)
+		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4] * k)
+	sky.add_cloud(load(CLOUD_DIR + "islet_1.png"), 420.0, bottom - 62.0, 1.5, 0.22 * k, 2.0)
+	sky.add_cloud(load(CLOUD_DIR + "islet_0.png"), 110.0, bottom - 56.0, 2.0, 0.35 * k, 3.0)
 	for c: Array in clouds.slice(2):
-		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4])
-	sky.add_cloud(load(CLOUD_DIR + "islet_2.png"), 600.0, bottom - 50.0, 2.5, 0.55, 3.0)
+		sky.add_cloud(load(c[0]), c[1], c[2], c[3], c[4] * k)
+	sky.add_cloud(load(CLOUD_DIR + "islet_2.png"), 600.0, bottom - 50.0, 2.5, 0.55 * k, 3.0)
 
 
 ## World x of the map's symmetry axis (cell center), or the map center without one.
@@ -235,12 +271,15 @@ func _grade_material() -> ShaderMaterial:
 			"shadow_tint": shadow_tint,
 			"vignette": vignette,
 			"bloom": bloom,
+			"depth_haze": depth_haze,
+			"haze_color": haze_color,
 		}
 	)
 
 
 ## The color grading post effect, also for scenes that are not LookScenes (encounters).
-## Keys: saturation, contrast, brightness, tint, shadow_tint, vignette, bloom.
+## Keys: saturation, contrast, brightness, tint, shadow_tint, vignette, bloom, depth_haze,
+## haze_color.
 static func grade_material(values: Dictionary) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	mat.shader = GRADE_SHADER
@@ -253,4 +292,7 @@ static func grade_material(values: Dictionary) -> ShaderMaterial:
 	mat.set_shader_parameter("shadow_tint", Vector3(shadow.r, shadow.g, shadow.b))
 	mat.set_shader_parameter("vignette", float(values.get("vignette", 0.0)))
 	mat.set_shader_parameter("bloom", float(values.get("bloom", 0.0)))
+	var haze: Color = values.get("haze_color", Color(0.78, 0.84, 0.86))
+	mat.set_shader_parameter("depth_haze", float(values.get("depth_haze", 0.0)))
+	mat.set_shader_parameter("haze_color", Vector3(haze.r, haze.g, haze.b))
 	return mat

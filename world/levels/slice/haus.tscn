@@ -6,6 +6,7 @@
 [node name="Haus" type="Node"]
 script = ExtResource("1_scene")
 map_path = "res://content/maps/haus.txt"
+view_zoom = 1.5
 player_sheet = ExtResource("2_sheet")
 ambience_db = -5.0
 saturation = 1.0

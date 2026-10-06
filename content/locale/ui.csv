@@ -104,6 +104,7 @@ SETTINGS_FULLSCREEN,Vollbild
 SETTINGS_VSYNC,Bildsynchronisierung (VSync)
 SETTINGS_SCREEN_SHAKE,Bildschirmwackeln
 SETTINGS_REDUCE_FLASHING,Blitzeffekte reduzieren
+SETTINGS_PARALLAX,Tiefenebenen bewegen sich mit
 SETTINGS_ACCESS,Barrierefreiheit
 SETTINGS_TIMING,Zeitfenster
 TIMING_NORMAL,Normal

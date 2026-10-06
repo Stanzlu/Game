@@ -21,7 +21,7 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 
 | Thema | Regel |
 |-------|-------|
-| Raster | 16-px-Kacheln, 640×360, alles auf ganze Spielpixel. Pixel-Art wird nie gedreht oder frei skaliert. Wind schert in ganzen Pixeln, Wasser animiert in Stufen (8 fps). |
+| Raster | 16-px-Kacheln, 640×360, alles auf ganze Spielpixel. Pixel-Art wird nie gedreht oder frei skaliert; nur das ganze Weltbild darf um den Zoom der Szene wachsen und wird dann scharf abgetastet (ADR-043). Wind schert in ganzen Pixeln, Wasser animiert in Stufen (8 fps). |
 | Licht | Hauptlicht von oben links. Schatten fallen nach rechts unten und liegen als dunklere Palettenstufe am Boden, nicht als schwarzes Alpha. |
 | Paletten | Pro Material eine Rampe mit 4 bis 6 Stufen, farbverschoben: Schatten kühler, Lichter wärmer (`tools/art/pixelart.py`, `STYLES`). Keine Farben außerhalb der Rampen im Boden. |
 | Dithering | Nur in schmalen Übergangsbändern (Kontrastparameter in `quantize`), nicht als Flächenrauschen. |
@@ -33,7 +33,7 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Spiegelungen | Props und Figuren nahe am Wasser spiegeln sich gewellt und blass im Wasser. In Elysia nie der Protagonist (Game Bible §9); in der Wirklichkeit (Tal, Wald) spiegelt er sich in Wasser und Pfützen (ADR-031). |
 | Tierleben | Vogelschwärme mit Schatten am Boden (Wald: Fledermäuse), Koi im heiligen Becken, Fischschatten in Bach und Teich, Libellen über dem Wasser. |
 | Leuchten | Leuchtende Teile (Pilze, Kristalle, Blätter, Lichthöfe, Lichtstrahl) sind eigene Emissive-Ebenen mit `render_mode unshaded`: richtig verdeckt, aber nicht von Nacht-Abdunklung oder Licht gedimmt. Echte `PointLight2D` nur für größere Lichtquellen. |
-| Tiefe | Props sortieren nach ihrer Fußlinie. Flaches (Seerosen) liegt auf Ebene −5, Boden auf −10, Himmel auf −20. |
+| Tiefe | Props sortieren nach ihrer Fußlinie. Flaches (Seerosen) liegt auf Ebene −5, Boden auf −10, Himmel und Berge auf −20, Kronen im Vordergrund auf 40. |
 | Laub | Kronen und Hecken aus einzelnen Blattbüscheln (`render_foliage`): flache Tonstufen, Licht oben links, dunkle Kante unten rechts je Büschel. Kein Rauschen. |
 | Elysia | Game Bible §9: perfekte Symmetrie (Karte, Boden und Streu spiegeln sich pixelgenau um Spalte 32; nur Stein und Riss haben keinen Zwilling), makellose Architektur, leuchtende Pflanzen, gemähte Rasenstreifen, kein Schmutz. Bewegung ohne Zufall: Pflanzen im Gleichtakt, immer derselbe Vogelschwarm, gespiegelte Schmetterlinge und Libellen, kreisende Koi, wiederkehrende Wolkenschatten. Grün mit Türkisstich, violette Schatten, warme Lichter. Bunte Bäume (grün, blau, lila, rosa), weißer Marmor, türkises Wasser, leuchtende Kristalle und Blumen. Mittelpunkt: Weltenbaum mit Hängeblüten im symmetrischen Marmorbecken. Terrassen mit Felskanten, Wasserfall von der Insel in die Wolken. Bewusst „zu perfekt“. |
 | Tal | Wie echtes Land (Playtest 05.10.: „natürlicher, wie in der echten Welt“), gemalt mit Wärme (ADR-041): ausgefranster Waldrand mit Buchten, eine Felsstufe, die kommt und geht, ein mäandernder Bach wechselnder Breite mit Kolk, ein Trampelpfad statt einer Straße, Bäume in gemischten Gruppen, Felsen in Gruppen. Nur der Hof ist gerade, den haben Menschen gebaut. Farben: leuchtendes Saft- und Wiesengrün mit gelbgrünen Lichtern und kühlen blaugrünen Schatten, Ocker-Erde, ein klarer türkiser Bach, honigfarbenes Holz, ein moosgrünes Schieferdach. Der Regen bleibt (Ankunft), aber schön: kühles Licht, nasses Glänzen, keine Grauschicht. Abend golden mit violetten Schatten, ziehenden Wolkenschatten und schrägen Lichtstrahlen von links oben; Nacht dunkelblau. Wind läuft in breiten Wellen als heller Schimmer durch Gras und Pflanzen. Frösche am Ufer, die weghüpfen. Krumme Bäume, kaputte Zaunstücke: ungepflegt, aber nie trostlos (Risiko 10). |
@@ -51,6 +51,19 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 | Übergang | HUD zerfällt einzeln (Gold, XP, Level), Musik läuft als Bandstopp aus, Stille, schwarz, Regen. Ohne Flackern und Wackeln, wenn der Spieler es abgeschaltet hat. |
 | Tageslicht Tal | Regentag (kühl, nass glänzend, Grün bleibt satt), Abend (golden, violette Schatten, Wolkenschatten, Lichtstrahlen, kein Regen, Bach und Klavier), Nacht (kühles Blau, Lampen warm). Elysia hat kein Tageslicht. |
 | Musik | Ein Motiv (Stufen 3-5-6-5-3-2) in allen Welten: Elysia perfekt, Tal menschlich (weiches Klavier mit einer Antwort, die heimkommt: 2-3-5-3-2-1; Gitarre, Fläche), Wald versteckt, Antreiber hetzend. Das Kind in Elysia summt es. Elysias Loop schrumpft von 8 auf 4 und 2 Takte (ADR-032). |
+
+## Tiefen-Bogen (ADR-043)
+
+Elysia ist ein Bild, die Wirklichkeit ein Raum. Je näher das Spiel der Wirklichkeit kommt, desto
+mehr Tiefe hat es; das Mittel ist nie Perspektive, sondern Ebenen, Dunst und Kamera.
+
+| Thema | Regel |
+|-------|-------|
+| Zoom | Elysia 1× (weit, flach, alles auf einmal). Tal, Haus, Weg 1,5×: die Figur näher, die Welt größer, als ginge sie über den Rand hinaus. |
+| Dunst | Nur in der Wirklichkeit: nach oben im Bild leicht heller und in der Farbe der Luft (Regen kühl, Abend warm, Nacht blau). Nie so stark, dass Wege verschwimmen. |
+| Hintergrund | Über der nördlichen Baumgrenze Himmel und drei Bergketten, die fernste mit Schnee. Flanken zur Sonne (links) warm, die anderen kühl wie der Himmel, flache Facetten statt Rauschen. Jede Kette verschwimmt am Fuß im Dunst. Im Regen fast ganz im Nebel, am Abend im Alpenglühen. Ferne Ketten bewegen sich kaum mit (Parallaxe 0,16 bis 0,48). |
+| Vordergrund | Nur am südlichen Waldrand, dem Teil der Welt, der der Kamera am nächsten ist: große, fast schwarze Blätter in Kronen, größer als jedes Blatt am Boden. Sie gleiten 1,22-mal so schnell wie der Boden und verlassen das Bild zuerst. Nie über Wegen, die die Karte verlassen. |
+| Schwenk | Einmal im Slice: Wenn Mira am Ende zu den Bergen schaut, schaut die Kamera mit (5 Sekunden, weich). Die Sonnenstrahlen treten dabei zurück, sie gehören zur Wiese. |
 
 ## Referenzen
 

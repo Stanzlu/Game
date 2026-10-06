@@ -21,6 +21,8 @@ const GRADE := {
 	"shadow_tint": Color(0.03, 0.07, 0.08),
 	"vignette": 0.2,
 	"bloom": 0.25,
+	"depth_haze": 0.18,
+	"haze_color": Color(0.7, 0.78, 0.8),
 }
 
 var _wood: Node2D

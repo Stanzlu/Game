@@ -25,6 +25,9 @@ const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
 ## previous one out.
 @export var ambience: Resource
 @export var ambience_db := -6.0
+## How close the camera is (ADR-043): 1 = Elysia's wide, flat picture; the real world is
+## seen from closer (1.5), so its places feel bigger and its people nearer.
+@export_range(1.0, 3.0, 0.25) var view_zoom := 1.0
 
 var view: GameView
 var map: MapView
@@ -41,6 +44,7 @@ func _ready() -> void:
 	add_to_group(SaveService.CONTEXT_GROUP)
 	view = GameView.new()
 	view.name = "GameView"
+	view.set_zoom(view_zoom)
 	add_child(view)
 	fx = FootstepFx.new()
 	fx.name = "FootstepFx"

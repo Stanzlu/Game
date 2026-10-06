@@ -5,5 +5,6 @@
 
 [node name="SliceAntreiber" type="Node"]
 script = ExtResource("1_s")
+view_zoom = 1.5
 player_sheet = ExtResource("2_sheet")
 music = "antreiber"

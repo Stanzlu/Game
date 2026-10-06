@@ -39,7 +39,7 @@ docs/        Dokumentation                                         ✅
 
 ```
 GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_context"
-├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012)
+├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012), Zoom (ADR-043)
 │  ├─ WorldViewport/World                MapView (Karte, Props), Player, FX, NPCs
 │  └─ WorldDisplay                       Sprite, um Bruchteile verschoben
 ├─ Hud (CanvasLayer 12)                  Elysia: Level, XP, Gold, Quest, Popups · Real: leise Zeile
@@ -148,7 +148,10 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 ## Darstellung
 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
-der `GameView`, die UI in Fensterauflösung (ADR-012). Theme in
+der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen setzen `view_zoom` (ADR-043): Der
+Welt-Viewport schrumpft auf `view_size` = 640×360 / Zoom, das Anzeige-Sprite wächst um den Zoom, und
+bei nicht ganzzahligem Zoom tastet `sharp_display.gdshader` bzw. `grade.gdshader` scharf ab
+(`sharp_sample.gdshaderinc`). Welt nach UI rechnet `GameView.world_to_ui` um. Theme in
 `ui/theme/base_theme.tres` (ADR-026): Grundschrift Jersey 10 in 19 px, `TitleLabel`/`SubtitleLabel` in
 Jersey 15 (27 px), `SmallLabel`/`HintLabel`/`PromptText` in Tiny5 (8 px), dazu `MutedLabel`,
 `MenuEntry`, `MenuCursor`, `DialogueNamePlate`, `PromptPanel`/`PromptKey`, `TitleMenuPanel`.
@@ -171,7 +174,11 @@ Real mit einer leisen Zeile. Für beide: Ortsname beim Betreten (`show_area`) un
 `GameScene` um Atmosphäre. Ebenen in der Welt: Himmel `SkyLayer` (z −20) → gebackener Boden mit
 `ground.gdshader` (z −10, Wasser, Regenringe, Wolkenschatten) → flache Deko (z −5) → nach Fußlinie
 sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichter, Rauch) → Partikel
-(z 30). Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht
+(z 30). Tiefen-Bogen (ADR-043, Gruppe „Depth“ der `LookScene`): `Backdrop` (`world/fx/backdrop.gd`,
+z −20) malt Himmel und Bergketten über der Karte und erweitert die Kamera-Grenzen nach oben;
+`ForegroundFoliage` (z 40) legt Kronen an den Südrand; `depth_haze`/`haze_color` im Grade-Shader
+folgen dem `DayLight`, das auch `Backdrop.clear` (Nebel) blendet; `display.parallax` schaltet die
+Parallaxe ab. Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht
 abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tönung, Vignette) sitzt auf
 dem Anzeige-Sprite der `GameView` und wirkt auf das fertige Weltbild. `MapView` streut zusätzlich
 Kleinvegetation nach `[meta]`-Regeln (`world/map/scatter.gd`, rein und getestet) und hängt Props und

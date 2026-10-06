@@ -7,6 +7,9 @@
 [node name="Tal" type="Node"]
 script = ExtResource("1_scene")
 map_path = "res://content/maps/tal.txt"
+view_zoom = 1.5
+backdrop_reach = 128.0
+foreground_foliage = true
 player_sheet = ExtResource("2_sheet")
 weather = 1
 wind_leaves = true

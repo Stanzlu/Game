@@ -110,7 +110,9 @@ func _physics_process(delta: float) -> void:
 		_check_goal()
 		return
 	player.speed_scale = model.speed_scale()
-	var ahead := clampf(model.goal_distance, FLAG_MIN_AHEAD, FLAG_MAX_AHEAD)
+	# the goal stays on screen however close the camera is (ADR-043: zoomed views)
+	var scale := float(view.view_size.x) / float(GameView.BASE_SIZE.x)
+	var ahead := clampf(model.goal_distance, FLAG_MIN_AHEAD * scale, FLAG_MAX_AHEAD * scale)
 	var flag_target := player.global_position.x + ahead
 	flag.global_position.x = lerpf(flag.global_position.x, flag_target, 1.0 - exp(-6.0 * delta))
 	antreiber.update_actor(player, model, delta)

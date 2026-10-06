@@ -45,6 +45,7 @@ const SCHEMA := {
 	"display.smooth_camera": [true],
 	"display.screen_shake": [true],
 	"display.reduce_flashing": [false],
+	"display.parallax": [true],
 	"access.timing": [0, 2],
 	"access.encounter_speed": [0, 2],
 	"debug.overlay": [false],
