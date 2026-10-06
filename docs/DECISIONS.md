@@ -301,3 +301,17 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Nicht gemacht:** ein Händler in Elysia (§10) braucht neue Figuren- und Standgrafik mit Spiegelzwilling; er steht als Vorschlag in `PHASE4_PLAN.md`.
 - **Konsequenzen:** Alles hängt an Flags und Karten (ADR-037), Speichern und Laden stellen es her. Geschätzt kommen beim ersten Spielen einige Minuten dazu, vor allem durch Entdecken; gemessen wird im Playtest.
 
+## ADR-041 · Die Wirklichkeit warm gemalt (Ghibli-Gefühl), Elysia bleibt Hochglanz
+- **Status:** angenommen · 2026-10-06 (Wunsch und Auswahl des Projektinhabers: nur die Wirklichkeit, Figuren nur weichere Farben)
+- **Kontext:** Der Projektinhaber wünscht sich „mehr das Aussehen und den Vibe von Studio Ghibli, ohne die DNA zu ändern“. Die Bible will „Elysia ist perfekter. Die Wirklichkeit wird schöner.“ (§12, §3.4), moderne Pixel-Art (§36) und nichts Kopiertes (§60). Das Tal war bisher als gedämpfter Regentag gemalt (graues Oliv, flaches Licht).
+- **Entscheidung:**
+  - Nur die Wirklichkeit (Tal, Haus, Weg, Titel-Abendtal) bekommt die warme, gemalte Natur; Elysia bleibt symmetrischer Hochglanz. So wird der Kontrast stärker: Elysia schön wie ein Prospekt, die Wirklichkeit schön wie ein echter Tag.
+  - Palette `tal` (`tools/art/pixelart.py`, `make_sprites.py` EXTRA): leuchtende Grüntöne mit gelbgrünen Lichtern und blaugrünen Schatten, Ocker-Erde, klarer Bach, honigfarbenes Holz, moosiges Schieferdach.
+  - Licht (`DayLight`): Regen kühl und satt statt grau; Abend golden mit violetten Schatten, Wolkenschatten über den Wiesen und schrägen Lichtstrahlen (`SunRays`, Bildschirmebene, additiv); Nacht unverändert im Charakter.
+  - Wind (`wind_sway.gdshader`): breite Wellen laufen durch Gras und Pflanzen, lassen sie stärker neigen und hell schimmern; in Elysia (Spiegelachse) nie.
+  - Haus: warme Balken, Patchwork-Decke, Flickenteppich, Kräuterbündel, Pflanze, Kupferkessel mit Dampf, Staub im Licht (`AmbientParticles.dust`).
+  - Kleines Leben: Frösche am Ufer, die weghüpfen (`AmbientLife.add_frogs`).
+  - Figuren der Wirklichkeit (Spielfigur, Mira, Kind, Antreiber) mit angehobenen, angewärmten Dunkeltönen und warmbraunem Umriss; Proportionen und Designs bleiben.
+  - Musik: Die Tal-Musik bekommt ein weiches, synthetisches Klavier mit dem Motiv und einer Antwort (2-3-5-3-2-1). Eigene Melodie, keine Anleihen.
+- **Konsequenzen:** Alles bleibt prozedural und kostenlos. Die Referenz dient nur der Stimmung (keine Figuren, Kreaturen, Motive oder Kompositionen, keine Werbung mit dem Namen). Handgepixelte Schlüssel-Assets (ART_DIRECTION, „Nächste Schritte“) sollen diese Richtung später aufnehmen.
+
