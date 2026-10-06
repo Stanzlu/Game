@@ -3,5 +3,9 @@
 	"_default": "neutral",
 	"Elysianer": "elysia",
 	"Mira": "warm",
-	"Antreiber": "low"
+	"Antreiber": "low",
+	"Gärtnerin": "elysia",
+	"Gastwirt": "warm",
+	"Kind": "neutral",
+	"Ziege": "low"
 }

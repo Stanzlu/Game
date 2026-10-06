@@ -66,6 +66,42 @@ DESIGNS = {
         "outfit": "cape",
         "bag": "none",
     },
+    # The host of Elysia's garden (the numbing protector's cameo, Game Bible §14): warm, round,
+    # an apron over a burgundy vest; generous and charming, never sinister.
+    "host": {
+        "skin": ramp("#8a4b40", "#c47e60", "#ebb08a", "#ffd9b6"),
+        "hair": ramp("#2a1a14", "#4a3020", "#6e4a30", "#94683e", "#c09060"),
+        "top": ramp("#3a1420", "#64222e", "#8e3840", "#b85a58"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#5a3a10", "#8a6018", "#c49030", "#ecc860"),
+        "pants": ramp("#2a2230", "#403448", "#5a4a62", "#78667e"),
+        "boots": ramp("#1e1418", "#3d2822", "#664232", "#90674a"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#f08878"),
+        "outline": pa.hex_rgb("#2a1620"),
+        "hair_style": "neat",
+        "outfit": "jacket",
+        "apron": True,
+        "bag": "none",
+    },
+    # The child in Elysia (Game Bible §15): plain, a little too big jumper, no gold at all.
+    # Smaller body, same head. It is the only one there who casts a reflection.
+    "child": {
+        "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
+        "hair": ramp("#1e1612", "#3a2a20", "#5a4230", "#7e5e42", "#a88462"),
+        "top": ramp("#26303e", "#3c4a5c", "#58687c", "#7e8ea0"),
+        "inner": ramp("#3c4a5c", "#58687c", "#7e8ea0", "#a4b2c2"),
+        "belt": ramp("#26303e", "#3c4a5c", "#58687c", "#7e8ea0"),
+        "pants": ramp("#2a2018", "#40322a", "#5a4838", "#76604a"),
+        "boots": ramp("#1a1412", "#2e2420", "#46382e", "#5e4c3e"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#e0907e"),
+        "outline": pa.hex_rgb("#161214"),
+        "hair_style": "tousled",
+        "outfit": "jacket",
+        "child": True,
+        "bag": "none",
+    },
     # Mira: practical traveler in the valley. Mustard rain cape, auburn ponytail, backpack.
     "mira": {
         "skin": ramp("#7a4438", "#b56f55", "#dea27e", "#f6cfae"),
@@ -167,8 +203,9 @@ class Figure:
         b = p["bob"]
         lean = p["lean"] if (side or three) else 0
         cx = 12.5 if (side or three) else 12.0
-        hip = 23 + b
-        ty0, ty1 = 15 + b, 23 + b
+        kid = 5 if d.get("child") else 0  # a child: same head, shorter body
+        hip = 23 + b + (2 if kid else 0)
+        ty0, ty1 = 15 + b + kid, 23 + b + (2 if kid else 0)
 
         # backpack behind the body (front views) / ponytail behind the head
         if d["bag"] == "backpack" and not back:
@@ -246,6 +283,14 @@ class Figure:
             if not side:
                 self.part(c.rect(cx - 0.5 + (1 if three else 0), ty1 - 3, cx + 1.5 + (1 if three else 0), ty1 - 2),
                           "inner", 0.95)
+        if d.get("apron") and not back:
+            ax0 = tx0 + (1 if not side else 2)
+            apron = c.rect(ax0, ty0 + 3, tx1 - (1 if not side else 0), ty1 + 1)
+            if side:
+                apron = c.rect(tx1 - 3, ty0 + 3, tx1 + 0.5, ty1 + 1)
+            self.part(apron, "inner", self.cyl(tx0, tx1, 0.45, 0.5), line=True)
+            if not side:
+                self.part(c.rect(ax0 - 1, ty0 + 3, tx1 - 0, ty0 + 4), "belt", 0.6)
         if d["outfit"] == "cape" and not back:
             # cape clasp and a dark inner lining at the opening
             mid = cx + (1 if three else 0)
@@ -276,7 +321,7 @@ class Figure:
         else:
             for k, ax in enumerate((tx0 - 1, tx1 + 1)):
                 sw = p["arms"][k]
-                end = ty0 + 6 + max(sw, -1)
+                end = ty0 + (4 if d.get("child") else 6) + max(sw, -1)
                 arm = limb(c, ax, ty0 + 1, ax, end, 2)
                 hand = limb(c, ax, end, ax, end + 1, 2)
                 tone = 0.72 if k == 0 else 0.4
@@ -302,7 +347,7 @@ class Figure:
         d, c, p = self.d, self.c, self.p
         side, back, three = self.side, self.back, self.three
         hx = cx + (0.5 if side else 0) + lean + (0.5 if self.back3 else 0)
-        hy = 10.0 + b
+        hy = 10.0 + b + (5 if d.get("child") else 0)
         hb = p["hair"]  # hair settles a frame later than the head (bounce)
         # neck
         self.part(c.rect(hx - 1.5, hy + 4, hx + 1.5, hy + 6), "skin", 0.3)

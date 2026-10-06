@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+
+[sub_resource type="Resource" id="Resource_greet"]
+script = ExtResource("2_stage")
+id = "greet"
+next = PackedStringArray("butterflies", "celebrated")
+
+[sub_resource type="Resource" id="Resource_butterflies"]
+script = ExtResource("2_stage")
+id = "butterflies"
+next = PackedStringArray("reward", "celebrated")
+
+[sub_resource type="Resource" id="Resource_reward"]
+script = ExtResource("2_stage")
+id = "reward"
+next = PackedStringArray("celebrated")
+
+[sub_resource type="Resource" id="Resource_celebrated"]
+script = ExtResource("2_stage")
+id = "celebrated"
+outcome = "done"
+
+[resource]
+script = ExtResource("1_quest")
+id = "main_elysia_hero"
+kind = 0
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_greet"), SubResource("Resource_butterflies"), SubResource("Resource_reward"), SubResource("Resource_celebrated")])
+draft = false

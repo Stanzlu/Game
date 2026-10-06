@@ -4,7 +4,8 @@
 
 [resource]
 script = ExtResource("1_item")
-id = "curiosity_tiny_spoon"
-kind = 1
+id = "item_boot"
+kind = 0
+rarity = 0
 max_stack = 1
 draft = false

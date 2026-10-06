@@ -71,6 +71,29 @@
    "res://assets/generated/props/elysia/crystal.png"
   ]
  },
+ "elysia/feast_table": {
+  "anchor": [
+   22,
+   26
+  ],
+  "shadow": [
+   22,
+   5
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    38,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/feast_table.png"
+  ]
+ },
  "elysia/fence": {
   "anchor": [
    9,

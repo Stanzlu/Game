@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+
+[sub_resource type="Resource" id="Resource_cross"]
+script = ExtResource("2_stage")
+id = "cross"
+next = PackedStringArray("house")
+
+[sub_resource type="Resource" id="Resource_house"]
+script = ExtResource("2_stage")
+id = "house"
+next = PackedStringArray("wood")
+
+[sub_resource type="Resource" id="Resource_wood"]
+script = ExtResource("2_stage")
+id = "wood"
+next = PackedStringArray("fire")
+
+[sub_resource type="Resource" id="Resource_fire"]
+script = ExtResource("2_stage")
+id = "fire"
+next = PackedStringArray("done")
+
+[sub_resource type="Resource" id="Resource_done"]
+script = ExtResource("2_stage")
+id = "done"
+outcome = "done"
+
+[resource]
+script = ExtResource("1_quest")
+id = "main_valley_shelter"
+kind = 0
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_cross"), SubResource("Resource_house"), SubResource("Resource_wood"), SubResource("Resource_fire"), SubResource("Resource_done")])
+draft = false

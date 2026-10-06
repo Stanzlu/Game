@@ -1,0 +1,125 @@
+# Elysia, beats 1 and 2 of the vertical slice (docs/PHASE4_PLAN.md).
+# Elysians are likeable first (Master-Prompt §57): the unease comes only from repetition.
+
+~ wake
+Elysianer: Da bist du ja! {{WorldState.player_name()}}! [ID:el_wake_1]
+Elysianer: Alle freuen sich so, dass du da bist. Wir freuen uns eigentlich immer. Aber heute ganz besonders. [ID:el_wake_2]
+- Wo bin ich? [ID:el_wake_r1]
+	Elysianer: In Elysia natürlich! Dem schönsten Ort der Welt. [ID:el_wake_3]
+	Elysianer: Und dem einzigen. Das macht es leichter mit dem Schönsten. [ID:el_wake_4]
+- Hallo. [ID:el_wake_r2]
+	Elysianer: Hallo! Was für ein Hallo. So warm. So entschlossen. [ID:el_wake_5]
+- … [ID:el_wake_r3]
+	Elysianer: Ganz der Held. Wortkarg und geheimnisvoll. Wir lieben das. [ID:el_wake_6]
+Elysianer: Die Gärtnerin sucht dich, drüben bei den Blumen. Sie hat ein Problem, und du bist die Lösung. Du bist immer die Lösung. [ID:el_wake_7]
+do WorldState.start_quest("main_elysia_hero")
+do WorldState.set_flag("elysia.woke")
+=> END
+
+~ elysian
+if WorldState.has_flag("elysia.loops")
+	Elysianer: {{WorldState.player_name()}}! Schön, dich zu sehen. Wirklich schön. [ID:el_loop_1]
+else
+	% Elysianer: {{WorldState.player_name()}}! Schön, dich zu sehen. Wirklich schön. [ID:el_praise_1]
+	% Elysianer: Hast du schon gehört? Du bist toll. Das sagen alle. Ich auch. [ID:el_praise_2]
+	% Elysianer: Wie du da stehst. Wie ein Denkmal. Eins, das man gern besucht. [ID:el_praise_3]
+	% Elysianer: Ich hab vorhin gesehen, wie du um die Ecke gegangen bist. Sehr elegant. [ID:el_praise_4]
+	% Elysianer: Ein Held! Hier! Bei uns! Und ich steh einfach so daneben. [ID:el_praise_5]
+	do WorldState.add_xp(150)
+=> END
+
+~ gardener
+if WorldState.is_quest_done("side_elysia_butterflies")
+	Gärtnerin: {{WorldState.player_name()}}! Meine drei goldenen Schmetterlinge sind ent… [ID:el_gard_done_1]
+	Gärtnerin: Ach nein. Du hast sie ja gefangen. Natürlich hast du das. Du fängst immer alles. [ID:el_gard_done_2]
+elif WorldState.quest_stage("side_elysia_butterflies") == "return"
+	Gärtnerin: Alle drei! In Rekordzeit! In überhaupt einer Zeit! [ID:el_gard_ret_1]
+	Gärtnerin: Hörst du, wie zufrieden sie flattern? Sie fliegen wieder ihre Runden. Genau dieselben wie vorher. [ID:el_gard_ret_2]
+	Gärtnerin: Hier. Das ist für dich. Ein Kompliment. Ein echtes. Legendär sogar. [ID:el_gard_ret_3]
+	do WorldState.add_item("item_compliment")
+	do WorldState.add_xp(2000)
+	do WorldState.add_gold(500)
+	do WorldState.advance_quest("side_elysia_butterflies", "done")
+	if WorldState.has_flag("elysia.chest_tree_opened")
+		Gärtnerin: Die Truhe am Weltenbaum hast du ja schon geöffnet. Natürlich hast du das. Sie war für dich. [ID:el_gard_ret_5]
+	else
+		do WorldState.advance_quest("main_elysia_hero", "reward")
+		Gärtnerin: Und am Weltenbaum wartet eine Truhe. Nur auf dich. Sie wartet schon ganz lange. [ID:el_gard_ret_4]
+elif WorldState.is_quest_active("side_elysia_butterflies")
+	% Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_wait_1]
+	% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Wie Schmetterlinge eben. [ID:el_gard_wait_2]
+else
+	Gärtnerin: {{WorldState.player_name()}}! Dem Himmel sei Dank. Oder dir. Eher dir. [ID:el_gard_1]
+	Gärtnerin: Meine drei goldenen Schmetterlinge sind entwischt. Sie fliegen immer dieselben Runden, weißt du. Aber jetzt fliegen sie sie woanders. [ID:el_gard_2]
+	- Ich fang sie dir ein. [ID:el_gard_r1]
+		Gärtnerin: Ich wusste es! Ich wusste es, bevor du es gesagt hast. [ID:el_gard_3]
+	- Wie sehen sie aus? [ID:el_gard_r2]
+		Gärtnerin: Golden. Und schmetterlingig. Du wirst sie erkennen. Du erkennst alles. [ID:el_gard_4]
+	- … [ID:el_gard_r3]
+		Gärtnerin: Du nickst! Ich hab genau gesehen, wie du innerlich genickt hast. [ID:el_gard_5]
+	do WorldState.start_quest("side_elysia_butterflies")
+	if WorldState.quest_stage("main_elysia_hero") == "greet"
+		do WorldState.advance_quest("main_elysia_hero", "butterflies")
+	do WorldState.set_flag("elysia.butterflies_asked")
+=> END
+
+~ host
+if WorldState.has_flag("elysia.soup_served") and WorldState.has_flag("elysia.loops")
+	Gastwirt: Da ist er ja! Komm, komm. Setz dich. Hier ist Suppe. [ID:el_host_loop_1]
+	Gastwirt: Die beste Suppe von Elysia. Ich mach sie jeden Tag. Jeden Tag dieselbe. Perfektion ändert man nicht. [ID:el_host_loop_2]
+	Gastwirt: Du musst heute nirgends mehr hin. [ID:el_host_loop_3]
+elif WorldState.has_flag("elysia.soup_served")
+	% Gastwirt: Noch eine Suppe? Es ist dieselbe. Das ist ja das Schöne daran. [ID:el_host_again_1]
+	% Gastwirt: Setz dich doch. Bleib ein bisschen. Bleib länger. [ID:el_host_again_2]
+	% Gastwirt: Hier spielt gleich Musik. Hier spielt immer gleich Musik. [ID:el_host_again_3]
+else
+	Gastwirt: Da ist er ja! Komm, komm. Setz dich. Hier ist Suppe. [ID:el_host_1]
+	Gastwirt: Die beste Suppe von Elysia. Ich mach sie jeden Tag. Jeden Tag dieselbe. Perfektion ändert man nicht. [ID:el_host_2]
+	- Danke, gern. [ID:el_host_r1]
+		Gastwirt: Na? Na? Wie schmeckt sie? [ID:el_host_3]
+		- Fantastisch. [ID:el_host_r1a]
+			Gastwirt: Sag ich doch! Hier, nimm noch eine mit. Für unterwegs. Nicht, dass du unterwegs sein musst. [ID:el_host_4]
+		- Nach … nichts? [ID:el_host_r1b]
+			Gastwirt: Nach nichts! Ha! Der war gut. Nach nichts. [ID:el_host_5]
+			Gastwirt: Nimm noch eine mit. Die zweite schmeckt nach mehr. [ID:el_host_6]
+			do WorldState.set_flag("elysia.soup_tasteless")
+		- … [ID:el_host_r1c]
+			Gastwirt: Sprachlos. Das sind alle. Hier, die nächste ist für unterwegs. [ID:el_host_7]
+	- Ich hab keinen Hunger. [ID:el_host_r2]
+		Gastwirt: Hunger? Wer redet denn von Hunger. Hier geht es ums Genießen. [ID:el_host_8]
+		Gastwirt: Ich geb dir eine mit. Für später. Später ist hier immer. [ID:el_host_9]
+	- Ich muss weiter. [ID:el_host_r3]
+		Gastwirt: Musst du? Wirklich? [ID:el_host_10]
+		Gastwirt: Du musst heute nirgends mehr hin. Glaub mir. Hier ist alles, was du brauchst. Und eine Suppe. [ID:el_host_11]
+		do WorldState.set_flag("elysia.host_warned")
+	do WorldState.add_item("item_soup")
+	do WorldState.set_flag("elysia.soup_served")
+=> END
+
+~ basin
+if WorldState.has_flag("elysia.mirror_seen")
+	Das Wasser ist still wie Glas. Es zeigt alles. [ID:el_basin_again]
+else
+	Das Wasser im Becken ist klar und vollkommen still. [ID:el_basin_1]
+	Es zeigt den Himmel. Die Säulen. Den Baum. Eine Wolke, die vorhin schon einmal vorbeigezogen ist. [ID:el_basin_2]
+	Du beugst dich weiter vor. [ID:el_basin_3]
+	Der Himmel. Die Säulen. Der Baum. [ID:el_basin_4]
+	do WorldState.set_flag("elysia.mirror_seen")
+=> END
+
+~ flower
+% Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts. [ID:el_flower_1]
+% Die Blüte leuchtet von innen. Du riechst daran. Nichts. Ein sehr schönes Nichts. [ID:el_flower_2]
+% Du riechst noch einmal daran. Wieder nichts. Aber Elysia ist stolz auf dich. [ID:el_flower_3]
+do WorldState.add_xp(1000)
+=> END
+
+~ child
+if WorldState.has_flag("elysia.child_met")
+	Kind: Hörst du das? [ID:el_child_3]
+	do WorldState.set_flag("elysia.child_vanished")
+else
+	Das Kind schaut ins Wasser. Aus dem Wasser schaut ein Kind zurück. [ID:el_child_1]
+	Kind: … [ID:el_child_2]
+	do WorldState.set_flag("elysia.child_met")
+=> END

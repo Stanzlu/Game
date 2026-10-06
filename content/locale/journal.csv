@@ -6,3 +6,29 @@ QUEST_SIDE_SANDBOX_GATE_DONE,"Durchs Tor gegangen. Der Garten ist genau so groß
 QUEST_SIDE_ELYSIA_CHEST_TITLE,Die goldene Truhe
 QUEST_SIDE_ELYSIA_CHEST_OPEN_CHEST,"Am Weltenbaum wartet eine Truhe. Nur auf dich!"
 QUEST_SIDE_ELYSIA_CHEST_DONE,"Truhe geöffnet. Unglaublich gut gemacht. Wirklich."
+QUEST_MAIN_ELYSIA_HERO_TITLE,Der Held von Elysia
+QUEST_MAIN_ELYSIA_HERO_GREET,"Elysia ist erwacht, und mit ihm sein größter Held! Die Gärtnerin braucht dich. Natürlich braucht sie dich."
+QUEST_MAIN_ELYSIA_HERO_BUTTERFLIES,"Die Gärtnerin hat dir eine Aufgabe anvertraut, die nur du lösen kannst."
+QUEST_MAIN_ELYSIA_HERO_REWARD,"Ganz Elysia spricht von deiner Tat! Am Weltenbaum wartet deine Belohnung."
+QUEST_MAIN_ELYSIA_HERO_CELEBRATED,"Du bist der gefeiertste Held, den Elysia je hatte. Du bist der einzige, aber trotzdem."
+QUEST_SIDE_ELYSIA_BUTTERFLIES_TITLE,Die goldenen Schmetterlinge
+QUEST_SIDE_ELYSIA_BUTTERFLIES_CATCH,"Drei goldene Schmetterlinge sind der Gärtnerin entwischt. Sie fliegen ihre Runden über dem Garten."
+QUEST_SIDE_ELYSIA_BUTTERFLIES_OBJ_FIRST,Der erste Schmetterling
+QUEST_SIDE_ELYSIA_BUTTERFLIES_OBJ_SECOND,Der zweite Schmetterling
+QUEST_SIDE_ELYSIA_BUTTERFLIES_OBJ_THIRD,Der dritte Schmetterling
+QUEST_SIDE_ELYSIA_BUTTERFLIES_RETURN,"Alle drei gefangen! Mühelos! Die Gärtnerin wartet schon auf dich."
+QUEST_SIDE_ELYSIA_BUTTERFLIES_DONE,"Die Schmetterlinge sind zurück und fliegen wieder ihre Runden. Dieselben Runden."
+QUEST_MAIN_VALLEY_SHELTER_TITLE,Ein Dach
+QUEST_MAIN_VALLEY_SHELTER_CROSS,"Regen. Die Frau am Bach heißt Mira und hat Nein gesagt. Drüben überm Bach soll ein leeres Haus stehen. Die Brücke ist kaputt."
+QUEST_MAIN_VALLEY_SHELTER_HOUSE,"Ich bin drüben. Irgendwo hier muss das Haus sein."
+QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräuchte ich trockenes Holz. Mira meint, im alten Schuppen am Ende des Weges nach Westen liegt welches."
+QUEST_MAIN_VALLEY_SHELTER_FIRE,"Ich hab trockenes Holz. Jetzt zurück zum Haus, zum Kamin."
+QUEST_MAIN_VALLEY_SHELTER_DONE,"Das Feuer brennt. Es ist nicht viel. Aber es ist warm."
+QUEST_SIDE_VALLEY_GOAT_TITLE,Der Stiefel
+QUEST_SIDE_VALLEY_GOAT_FIND,"Eine Ziege hat Miras Stiefel. Mira will morgen weiter, mit zwei Stiefeln."
+QUEST_SIDE_VALLEY_GOAT_OBJ_GOAT,Die Ziege finden
+QUEST_SIDE_VALLEY_GOAT_OBJ_POTATO,Etwas finden, das eine Ziege mehr will als einen Stiefel
+QUEST_SIDE_VALLEY_GOAT_TRADE,"Die Ziege will etwas für den Stiefel. Was sie will, weiß nur sie."
+QUEST_SIDE_VALLEY_GOAT_RETURN,"Ich hab den Stiefel. Leicht angeknabbert. Mira wartet an ihrem Feuer."
+QUEST_SIDE_VALLEY_GOAT_DONE,"Mira hat ihren Stiefel wieder. Die Ziege hat eine Kartoffel. Alle sind zufrieden, die Ziege am meisten."
+

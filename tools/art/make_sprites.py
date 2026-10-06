@@ -18,6 +18,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pixelart as pa  # noqa: E402
+import slice_props  # noqa: E402
 from pixelart import ramp  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -1272,6 +1273,11 @@ def particles():
     # two frames stacked vertically (wings open / folded), used with vframes = 2
     px("butterfly", ["aa.aa", "abcba", ".bcb.", ".a.a.", ".....", ".bcb.", ".aca.", "....."],
        {"a": ("#ff9a3c", 255), "b": ("#ffd36e", 255), "c": ("#3a2a1c", 255)})
+    # the gardener's golden butterflies (slice miniquest): bigger, so they read as the goal
+    px("golden_butterfly", ["aa.....aa", "abba.abba", "abccdccba", ".abcdcba.", "..abdba..", ".aba.aba.",
+                            "..a...a..", "...a.a...", "..abdba..", "..bcdcb..", "..acdca..", "...bdb...",
+                            "...a.a...", "........."],
+       {"a": ("#9a6410", 255), "b": ("#e8b030", 255), "c": ("#fff0a0", 255), "d": ("#4a2c10", 255)})
     px("puff", [".aaa.", "abbba", "abcba", "abbba", ".aaa."],
        {"a": ("#c8ccd4", 110), "b": ("#d8dce2", 170), "c": ("#e8ebef", 220)})
     px("mote", ["a"], {"a": ("#ffffff", 200)})
@@ -1423,6 +1429,7 @@ def build():
         save(style, "rail_s", rail, (9, 4), shape={"rect": [16, 3], "offset": [0, 7]})
     pa.save_rgba(os.path.join(OUT, "fx", "fog.png"), fog_bank(300))
     particles()
+    slice_props.build(sys.modules[__name__])
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
     for style in ("elysia", "tal", "wald"):
