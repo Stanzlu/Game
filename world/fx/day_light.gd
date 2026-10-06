@@ -21,6 +21,10 @@ const PRESETS := {
 		"shadow_tint": Color(0.03, 0.07, 0.08),
 		"vignette": 0.1,
 		"bloom": 0.3,
+		# rain mist in the distance, the mountains behind it (ADR-043)
+		"depth_haze": 0.2,
+		"haze_color": Color(0.7, 0.78, 0.8),
+		"mountains": 0.12,
 		"lamps": 0.15,
 		"rain": true,
 		"ripples": 0.45,
@@ -41,6 +45,10 @@ const PRESETS := {
 		"shadow_tint": Color(0.07, 0.03, 0.1),
 		"vignette": 0.24,
 		"bloom": 0.85,
+		# the air clears: warm haze far off, the mountains Mira looks at are there
+		"depth_haze": 0.14,
+		"haze_color": Color(0.98, 0.82, 0.64),
+		"mountains": 1.0,
 		"lamps": 0.7,
 		"rain": false,
 		"ripples": 0.0,
@@ -61,6 +69,9 @@ const PRESETS := {
 		"shadow_tint": Color(0.02, 0.03, 0.06),
 		"vignette": 0.35,
 		"bloom": 0.9,
+		"depth_haze": 0.1,
+		"haze_color": Color(0.2, 0.24, 0.36),
+		"mountains": 0.5,
 		"lamps": 1.0,
 		"rain": true,
 		"ripples": 0.45,
@@ -72,7 +83,15 @@ const PRESETS := {
 	},
 }
 const GRADE_KEYS: PackedStringArray = [
-	"saturation", "contrast", "brightness", "tint", "shadow_tint", "vignette", "bloom"
+	"saturation",
+	"contrast",
+	"brightness",
+	"tint",
+	"shadow_tint",
+	"vignette",
+	"bloom",
+	"depth_haze",
+	"haze_color",
 ]
 
 var preset := ""
@@ -81,6 +100,7 @@ var grade: ShaderMaterial
 var ground: ShaderMaterial
 var rain: RainFx
 var rays: SunRays
+var backdrop: Backdrop
 var _tween: Tween
 
 
@@ -110,6 +130,8 @@ func set_preset(preset_name: String, seconds := 4.0) -> void:
 		_blend_param(ground, "cloud_shadow", float(p["clouds"]), t)
 	if rays != null:
 		_blend(rays, ^"strength", float(p["rays"]), t)
+	if backdrop != null:
+		_blend(backdrop, ^"clear", float(p["mountains"]), t)
 	for node in get_tree().get_nodes_in_group(&"lamp_props"):
 		_blend(node, ^"light_scale", float(p["lamps"]), t)
 	if rain != null:

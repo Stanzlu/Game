@@ -21,6 +21,8 @@ const ANTREIBER_SEAT := Vector2i(6, 23)
 ## He follows this long, or until the player is this far into the valley (column).
 const FOLLOW_SECONDS := 7.0
 const FOLLOW_UNTIL_COLUMN := 13
+## How long the camera takes to look up to the mountains at the end.
+const MOUNTAIN_PAN_SECONDS := 5.0
 
 var _follower: AntreiberActor
 var _follow_time := 0.0
@@ -104,6 +106,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			_goat_objective("potato")
 		"valley.ending":
 			_play_ending()
+		"valley.mountains_seen":
+			_look_to_the_mountains()
 
 
 func _goat_objective(objective: String) -> void:
@@ -114,6 +118,23 @@ func _goat_objective(objective: String) -> void:
 		if not WorldState.is_objective_done("side_valley_goat", needed):
 			return
 	WorldState.advance_quest("side_valley_goat", "trade")
+
+
+## The camera follows Mira's look north, over the treeline to the mountains (ADR-043).
+func _look_to_the_mountains() -> void:
+	var look := Node2D.new()
+	look.name = "MountainsLook"
+	view.world_root.add_child(look)
+	# placed so the camera does not move until the look rises
+	look.global_position = view.camera_position - GameView.FOLLOW_OFFSET
+	view.follow(look, false)
+	var top := view.bounds.position.y + view.view_size.y * 0.5 - GameView.FOLLOW_OFFSET.y
+	var tween := create_tween()
+	tween.tween_property(look, ^"global_position:y", top, MOUNTAIN_PAN_SECONDS)
+	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# the sun's beams belong to the meadow; over the open sky they would only stripe it
+	if day_light != null and day_light.rays != null:
+		create_tween().tween_property(day_light.rays, ^"strength", 0.1, MOUNTAIN_PAN_SECONDS)
 
 
 ## Beat 7: Mira makes room at her fire. "Morgen gehe ich weiter." Black. The title.

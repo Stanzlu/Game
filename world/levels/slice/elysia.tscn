@@ -11,6 +11,7 @@ player_sheet = ExtResource("2_sheet")
 cloud_shadows = 0.14
 sky_top = Color(0.4, 0.64, 0.9, 1)
 sky_bottom = Color(0.7, 0.85, 0.97, 1)
+sky_parallax = 0.0
 petals = true
 motes = true
 butterfly_cells = PackedVector2Array(7, 5, 57, 5, 9, 28, 55, 28, 20, 14, 44, 14)

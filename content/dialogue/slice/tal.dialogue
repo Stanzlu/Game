@@ -117,15 +117,18 @@ if WorldState.has_flag("valley.shell_seen")
 Mira: Morgen gehe ich weiter. [ID:tal_end_2]
 - Wohin? [ID:tal_end_r1]
 	do WorldState.add_memory("mira", "asked_where_to")
+	do WorldState.set_flag("valley.mountains_seen")
 	Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
 	Mira: Zum Meer. [ID:tal_end_5]
 - Zum Meer? [if WorldState.has_memory("mira", "asked_shell") /] [ID:tal_end_r3]
+	do WorldState.set_flag("valley.mountains_seen")
 	Mira schaut dich an. Dann zu den Bergen. [ID:tal_end_7]
 	Mira: … Ja. Zum Meer. [ID:tal_end_8]
 	do WorldState.add_memory("mira", "guessed_sea")
 - … [ID:tal_end_r2]
 	Mira: Du willst wissen, wohin. Das seh ich dir an. [ID:tal_end_3]
 	do WorldState.add_memory("mira", "end_silence")
+	do WorldState.set_flag("valley.mountains_seen")
 	Mira schaut zu den Bergen. Lange. [ID:tal_end_9]
 	Mira: Zum Meer. [ID:tal_end_10]
 if WorldState.has_flag("valley.shell_seen")
