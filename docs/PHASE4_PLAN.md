@@ -71,6 +71,20 @@ Testanleitung: `PLAYTEST_PHASE4.md`.
 - Keine Therapiesprache, keine Erklärung der Metapher. Menschen reden auch über Wetter und Essen.
 - Jede Wahl hat eine wahrnehmbare Folge (ContentValidator, keine Fake Choices).
 
+## Vertiefen, falls zu kurz (Vorschlag, erst nach dem Playtest)
+
+Geschätzt dauert der Slice beim ersten Spielen 20–30 statt 45–60 Minuten (KNOWN_ISSUES #43). Ohne
+neue Systeme, nur mit vorhandenen Bausteinen, ließe er sich dort vertiefen, wo die Bible (§56) mehr Zeit
+vorsieht. Welche davon, entscheidet der Playtest:
+- Elysia (0–18): eine zweite mühelose Aufgabe mit noch größerer Belohnung, mehr Elysianer mit eigenen
+  wortgleichen Schleifen, ein Elysianer, der dich bei allem bewundert; mehr zu entdecken, das sich wiederholt.
+- Tal (25–35): mehr Stellen zum Ansehen (Zaun, Wegweiser, Miras Lager), ein zweites kurzes Gespräch mit
+  Mira über Wetter und Essen, der Bach mit einer zweiten Stelle zum Ausprobieren.
+- Antreiber (35–45): mehr Zurufe, Wegstücke mit wechselnden Dingen am Rand, ein spürbarer Verlauf bis zur
+  Lösung; die Bible gibt dem Beat zehn Minuten.
+- Haus (45–52): mehr zum Ansehen, ein ruhiger Moment am Feuer (sich setzen, Musik, Zeit vergeht).
+- Abend (52–60): die Ziege läuft ein paarmal davon, mehr Zeilen an Miras Feuer vor dem Ende.
+
 ## Kürzen, falls nötig (Cut-First, Master-Prompt §49)
 
 Zuerst: Varianten bei der Namenswahl, Katze füttern, zweite Puzzle-Lösung, Gastwirt, Länge der
