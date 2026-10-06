@@ -135,3 +135,21 @@ langsamsten Frames bei 8–10 ms.
 - **Weg zum Schuppen:** Jedes neu gebaute Wegstück kostete einen Ruckler von 25–35 ms (Karte parsen,
   rund 370 Streu-Sprites setzen). Wegstücke, die das Fenster verlassen, werden jetzt geparkt und vorne
   wiederverwendet; zwei Reservestücke je Sorte entstehen schon beim Laden. Danach max. 9 ms.
+
+## Playtest-Gate (Phase 5, v0.5.0)
+
+Mit Zoom 1,5× und Tiefen-Bogen (ADR-043). Container, Software-Rendering (Mesa llvmpipe, 4 vCPU),
+Leistungstest im Fenster 1280×720, zweiter Lauf (Shader im Cache):
+
+| Szene | Ø fps | Ø ms | 95 % ms | 99 % ms | max ms | Draw Calls |
+|-------|-------|------|---------|---------|--------|------------|
+| Elysia | 41 | 24,4 | 29,9 | 33,8 | 38,9 | 113 |
+| Tal | 38 | 26,3 | 31,9 | 34,8 | 37,2 | 78 |
+| Haus | 46 | 21,8 | 26,3 | 29,1 | 44,4 | 11 |
+| Weg | 39 | 25,8 | 32,9 | 36,8 | 42,4 | 61 |
+| Wald | 48 | 20,9 | 24,8 | 28,0 | 32,5 | 186 |
+
+Beim ersten Lauf hatte das Tal einen einmaligen Hänger von 255 ms (Shader-Kompilierung, KNOWN_ISSUES #53).
+Build-Größen aus CI (Zip): Windows rund 50 MB, macOS rund 71 MB. Offen bleibt die Messung auf dem
+Zielrechner mit v0.5.0 (Startmenü → Prototypen → Leistungstest, Spalte „ohne VSync“).
+

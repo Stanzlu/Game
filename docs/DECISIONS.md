@@ -345,3 +345,12 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - 2× Zoom: zu wenig Überblick für Bach und Trittsteine.
   - Zoom auch in Elysia: Elysia soll weit und flach wirken, das ist der Kontrast.
 - **Konsequenzen:** Der Zoom gilt pro Szene; neue Szenen erben 1×. Was Weltkoordinaten in UI umrechnet, nutzt `GameView.world_to_ui`. Die Berge und Kronen sind prozedural gemalt, ohne Asset-Dateien. Die Kamera zeigt am Nordrand jetzt Himmel statt Kartenende. Mehrkosten: ein Polygonzug pro Kette und einige Texturen am Südrand, nur bei Kamerabewegung neu gezeichnet. KNOWN_ISSUES #44 ist behoben.
+
+## ADR-044 · Playtest-Gate: Release-Entwurf auf Versions-Tag, Beat-Zeilen in jedem Build
+- **Status:** angenommen · 2026-10-06 (Phase 5, Auftrag des Projektinhabers: „Weiter“ nach dem Merge von Phase 4)
+- **Kontext:** Phase 5 verlangt Build, Testanleitung, bekannte Probleme, Playtest-Fragen, Risiken, Leistung, Platzhalter und nächste Schritte (Master-Prompt §47). ADR-009 sah Playtest-Builds als GitHub-Release vor. Das Repository ist inzwischen öffentlich; ein veröffentlichtes Release kann jeder herunterladen. Beim Vorbereiten fiel auf, dass Release-Builds nur Warnungen und Fehler loggen: Die Beat-Zeilen mit den Spielminuten, mit denen der Playtest die Spielzeit misst, fehlten ohne `--log-debug`.
+- **Entscheidung:**
+  - Version **0.5.0** (Phase 5). Ein Tag `v<Version>` auf `main` baut Windows, macOS und Linux und legt mit `tools/release.sh` einen **Release-Entwurf** an (Pre-Release, je System ein Zip mit `LIESMICH.txt`). Der Tag muss zur Version in `project.godot` passen. Den Entwurf veröffentlicht der Projektinhaber.
+  - `Log.record` schreibt in jedem Build. Genutzt nur für die Minute jedes Beats und die Build-Zeile beim Start, damit jedes Tester-Log Spielzeiten und Version enthält, ohne persönliche Daten.
+  - Eine Testanleitung für alle Tester (`PLAYTEST.md`, Fragen nach Master-Prompt §48) und ein Gate-Bericht mit Gate-Matrix M/Ä, Risiken, Leistung, Platzhaltern und nächsten Schritten (`GATE_REPORT.md`).
+- **Konsequenzen:** Releases zählen nicht zum Artefakt-Speicher. Ohne Veröffentlichung bleibt der Build privat. Die Schwellen der Gates sind Vorschläge, die der Projektinhaber vor der Auswertung festlegt. Nach Phase 5: STOP, bis Ergebnisse vorliegen.
