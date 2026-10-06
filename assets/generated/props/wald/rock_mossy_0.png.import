@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjw38kunpsmpw"
-path="res://.godot/imported/crystals_1.png-905258999df739d5c8a6f69ce8a6290d.ctex"
+uid="uid://bh7tpmj8c8yav"
+path="res://.godot/imported/rock_mossy_0.png-09cee37332c6c8c2c619e4adcf18ad91.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/generated/props/wald/crystals_1.png"
-dest_files=["res://.godot/imported/crystals_1.png-905258999df739d5c8a6f69ce8a6290d.ctex"]
+source_file="res://assets/generated/props/wald/rock_mossy_0.png"
+dest_files=["res://.godot/imported/rock_mossy_0.png-09cee37332c6c8c2c619e4adcf18ad91.ctex"]
 
 [params]
 

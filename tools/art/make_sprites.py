@@ -52,13 +52,18 @@ EXTRA = {
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
+        # birch bark in moonlight: almost white, with dark lenticel dashes
+        "birch": ramp("#2e3238", "#5a6068", "#9aa2aa", "#d0d6dc", "#f0f4f6"),
         "stem": ramp("#0b1a1a", "#12302c", "#1d4a3c", "#2e6650"),
-        "fern": ramp("#06140f", "#0c2419", "#143826", "#1f5034", "#2f6c46"),
-        "cap_cyan": ramp("#0e4656", "#18869c", "#38c4d6", "#8eeef4", "#e2ffff"),
-        "cap_violet": ramp("#2a1458", "#4e2a9a", "#8058d8", "#b896f6", "#ece0ff"),
-        "cap_pink": ramp("#4a1040", "#8a2478", "#cc4cb4", "#f490e0", "#ffd8f6"),
-        "moss": ramp("#0b1d18", "#123026", "#1c4636", "#2a5e48"),
-        "stalk": ramp("#3a3448", "#6a6278", "#a49cb0", "#dcd6e4"),
+        "fern": ramp("#07120d", "#0d2018", "#153222", "#1f462f", "#2d5e3e"),
+        # foxfire (bioluminescent fungi on rotten wood) glows a soft green
+        "cap_cyan": ramp("#0e3a22", "#1b6a3c", "#3aa860", "#8ee0a0", "#e0ffe8"),
+        # honey fungus clusters, honey-brown, no glow
+        "cap_violet": ramp("#2a1a0e", "#4e3218", "#7a5226", "#a87a40", "#d4b07a"),
+        # fly agaric: red cap with white spots, no glow
+        "cap_pink": ramp("#3a0c0c", "#701812", "#a8261a", "#d84a34", "#fff4ea"),
+        "moss": ramp("#0b1d14", "#12301e", "#1c462a", "#2a5e38"),
+        "stalk": ramp("#3a3836", "#6a6662", "#a4a09a", "#dcd8d0"),
     },
 }
 
@@ -868,8 +873,11 @@ def emissive_of(c, mask):
 
 
 def forest_tree(seed, glow=False):
-    """Old forest tree: thick dark trunk with roots, wide canopy. Glowing variant has
-    bioluminescent leaf clusters (ref: blue coral trees at night)."""
+    """Old forest tree: thick dark trunk with roots, wide canopy. The `glow` variant is a
+    birch: slim white trunk with dark dashes and a light, airy crown that catches the
+    moonlight (what really shines in a forest at night)."""
+    if glow:
+        return birch(seed)
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES["wald"], EXTRA["wald"]
     W, H = 88, 112
@@ -899,6 +907,50 @@ def forest_tree(seed, glow=False):
     if glow:
         emit = emissive_of(c, emit_mask)
     return c, emit
+
+
+def birch(seed):
+    """A birch at night: slim, slightly leaning white trunk with black lenticel dashes and
+    a light crown. The moonlit bark and leaf tips are emissive, softly (no fantasy glow)."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    W, H = 88, 112
+    c = Canvas(W, H)
+    cx, base = 44, 108
+    lean = rng.uniform(-0.12, 0.12)
+    xs = c.xx + 0.5 - (cx + lean * (base - c.yy))
+    trunk_m = (np.abs(xs) <= 3.6 - (base - c.yy) * 0.012) & (c.yy >= 30) & (c.yy < base)
+    trunk_m |= c.ellipse(cx, base - 2, 6, 2.5)
+    c.paint(trunk_m, ex["birch"], 0.25 + 0.75 * np.clip(0.5 - xs / 8.0, 0, 1), contrast=2.6, dither=False)
+    dashes = trunk_m & (pa.value_noise(H, W, (1, 4), rng) > 0.72) & ((c.yy % 5) < 2)
+    c.paint(dashes, st["bark"], 0.2, dither=False)
+    base_dark = trunk_m & (c.yy > base - 12) & (pa.value_noise(H, W, 2, rng) > 0.45)
+    c.paint(base_dark, st["bark"], 0.35, dither=False)
+    # thin branches into the crown
+    for side, y in ((-1, 44), (1, 52), (-1, 60), (1, 38)):
+        br = limb_mask(c, cx + lean * (base - y), y, cx + side * rng.uniform(12, 18), y - 10, 2)
+        c.paint(br, ex["birch"], 0.55, dither=False)
+    blobs = crown_blobs(rng, cx, 36, 30, 24, 14, 8, 12)
+    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(3.0, 4.5))
+    alpha &= pa.value_noise(H, W, 3, rng) > 0.22  # airy: the sky shows through
+    c.paint(alpha, st["foliage_blue"], value, contrast=3.0, dither=False)
+    c.outline(st["outline"])
+    moonlit = (trunk_m & (xs < 0.5) & ~dashes) | (alpha & (value > 0.93))
+    return c, emissive_of(c, moonlit)
+
+
+def mossy_rock(seed, w=30, h=22):
+    """A boulder under a thick cushion of moss, a few dew drops catching the moon."""
+    rng = np.random.default_rng(seed)
+    st, ex = pa.STYLES["wald"], EXTRA["wald"]
+    c = rock("wald", seed, w, h)
+    body = c.a > 0
+    top = body & (c.yy < h * 0.62) & (pa.value_noise(h, w, 4, rng) > 0.32)
+    c.paint(top, ex["moss"], 0.35 + 0.6 * c.sphere(w * 0.4, h * 0.3, w * 0.5, h * 0.4), dither=False)
+    dew = top & (pa.value_noise(h, w, 1.2, rng) > 0.86)
+    c.fill(dew, np.array([200, 220, 236], np.float32))
+    c.outline(st["outline"])
+    return c
 
 
 def limb_mask(c, x0, y0, x1, y1, width):
@@ -1003,7 +1055,7 @@ def light_beam(w=96, h=220):
     a = np.clip(stripes[None, :] * 0.55 + 0.25, 0, 1) * np.clip(1 - x / np.maximum(half, 1), 0, 1) ** 0.6
     a *= np.clip(t * 4, 0, 1) * np.clip((1 - t) * 3, 0, 1)
     a = np.floor(a * 5) / 5  # banded alpha: reads as pixel art, not a smooth gradient
-    col = pa.hex_rgb("#bff6e6")
+    col = pa.hex_rgb("#d0def4")  # moonlight
     c.rgb[:] = col
     c.a = inside & (a > 0)
     rgba = c.rgba()
@@ -1327,18 +1379,18 @@ def build():
     save("wald", "tree", [t[0] for t in trees if t[1] is None], (44, 106),
          shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9])
     glow_trees = [t for t in trees if t[1] is not None]
+    # birches: their moonlit bark is the brightest thing in the forest (no light of their own)
     save("wald", "glow_tree", [t[0] for t in glow_trees], (44, 106), emissive=[t[1] for t in glow_trees],
-         shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9],
-         lights=[{"offset": [0, -70], "color": "#5fb8ff", "energy": 0.55, "range": 90}])
-    for cap, color in (("cap_cyan", "#62e6f2"), ("cap_violet", "#a07cff"), ("cap_pink", "#f278d8")):
+         shape={"circle": 5, "offset": [0, -2]}, sway=0.6, shadow=[22, 7])
+    # foxfire glows faintly green; honey fungus and fly agaric do not glow at all
+    ms = [mushrooms(210 + k + 8, "cap_cyan") for k in range(2)]
+    save("wald", "mushrooms_cyan", [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
+         glow={"offset": [0, -7], "color": "#7ee0a0", "radius": 11})
+    for cap in ("cap_violet", "cap_pink"):
         ms = [mushrooms(210 + k + len(cap), cap) for k in range(2)]
-        save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],
-             glow={"offset": [0, -9], "color": color, "radius": 22})
-    cc = [crystal_cluster(220 + k) for k in range(2)]
-    save("wald", "crystals", [x[0] for x in cc], (15, 27), emissive=[x[1] for x in cc],
-         shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4],
-         glow={"offset": [0, -12], "color": "#f070e0", "radius": 30},
-         lights=[{"offset": [0, -12], "color": "#e060d8", "energy": 0.8, "range": 64}])
+        save("wald", "mushrooms_" + cap[4:], [m[0] for m in ms], (12, 18))
+    save("wald", "rock_mossy", [mossy_rock(220 + k) for k in range(2)], (15, 20),
+         shape={"rect": [22, 8], "offset": [0, -3]}, shadow=[13, 4])
     save("wald", "fern", [fern(230 + k) for k in range(3)], (13, 17), sway=1.5,
          surface="tall_grass", rustle=True)
     save("wald", "log", fallen_log(240), (24, 15), shape={"rect": [40, 8], "offset": [0, -5]}, shadow=[22, 4])
@@ -1351,8 +1403,8 @@ def build():
     beam = light_beam()
     pa.save_rgba(os.path.join(OUT, "wald", "light_beam.png"), beam)
     CATALOG["wald/light_beam"] = {"textures": [RES + "/wald/light_beam.png"], "anchor": [48, 200],
-                                  "beam": True, "lights": [{"offset": [0, -10], "color": "#9ff2d8",
-                                                            "energy": 1.1, "range": 120}]}
+                                  "beam": True, "lights": [{"offset": [0, -10], "color": "#bcd2f0",
+                                                            "energy": 0.9, "range": 120}]}
     for style in ("elysia", "tal", "wald"):
         save(style, "grass_tuft", [grass_tuft(style, 500 + i) for i in range(5)], (7, 12), sway=1.0)
         save(style, "wildflowers", [wildflowers(style, 520 + i) for i in range(6)], (6, 11), sway=1.0)

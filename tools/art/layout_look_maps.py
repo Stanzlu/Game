@@ -314,21 +314,22 @@ def tal():
 
 
 def wald():
-    """Forest at night: a clearing with a light beam, a rock ledge with a waterfall and
-    crystals, a stream with a log bridge, glowing trees and mushrooms."""
+    """A real forest at night: a moonlit clearing, a rock ledge with a waterfall and mossy
+    boulders, a stream with a log bridge, birches that shine pale in the moonlight, foxfire,
+    honey fungus and fly agarics. The forest edge is ragged, deeper in some places."""
     w, h = 56, 38
     g = Grid(w, h)
-    # thick forest border with a wavy inner edge
+    # thick forest border with a ragged inner edge
     for x in range(w):
-        top = 3 + round(1.2 * math.sin(x / 3.7) + 0.7 * math.sin(x / 1.9 + 1))
-        bottom = h - 3 - round(1.0 * math.sin(x / 4.1 + 2) + 0.6 * math.sin(x / 2.2))
+        top = 3 + round(wobble(x, (1.2, 3.7, 0.0), (0.7, 1.9, 1.0), (0.8, 6.3, 2.0)))
+        bottom = h - 3 - round(wobble(x, (1.0, 4.1, 2.0), (0.6, 2.2, 0.0), (0.7, 7.7, 1.1)))
         for y in range(0, max(top, 2)):
             g.set(x, y, "h")
         for y in range(bottom, h):
             g.set(x, y, "h")
     for y in range(h):
-        left = 3 + round(1.0 * math.sin(y / 3.3) + 0.5 * math.sin(y / 1.7))
-        right = w - 4 - round(1.0 * math.sin(y / 2.9 + 1))
+        left = 3 + round(wobble(y, (1.0, 3.3, 0.0), (0.5, 1.7, 0.0), (0.8, 5.9, 0.4)))
+        right = w - 4 - round(wobble(y, (1.0, 2.9, 1.0), (0.6, 6.7, 2.1)))
         for x in range(0, left):
             g.set(x, y, "h")
         for x in range(right, w):
