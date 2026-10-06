@@ -47,7 +47,7 @@ echo "import ok"
 
 # Each start target runs a few hundred frames headless and must log its ready line.
 # --profile=smoke keeps saves and settings of these runs away from real ones.
-for target in "" sandbox antreiber look_elysia look_tal look_wald; do
+for target in "" sandbox antreiber look_elysia look_tal look_wald elysia tal haus weg; do
   step "smoke: ${target:-main menu}"
   smoke_log="$(mktemp)"
   args=(--headless --quit-after 240 -- --profile=smoke)

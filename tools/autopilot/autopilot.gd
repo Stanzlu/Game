@@ -23,7 +23,8 @@ var _dialogue_until := -1.0
 
 
 static func start_if_requested(tree: SceneTree) -> void:
-	if not OS.is_debug_build():
+	# once per run: the start menu comes back after the end of the slice
+	if not OS.is_debug_build() or tree.root.has_node(^"Autopilot"):
 		return
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--autopilot="):
