@@ -93,6 +93,15 @@ func test_west_path_waits_until_wood_is_needed() -> void:
 	assert_true(names.any(func(n: String) -> bool: return n.begins_with("Door_0_")))
 
 
+func test_west_path_closes_again_once_the_wood_is_taken() -> void:
+	WorldState.set_flag("valley.wood_needed")
+	WorldState.set_flag("valley.wood_taken")
+	var scene := await _scene()
+	var names := scene.map.entities.get_children().map(func(n: Node) -> String: return str(n.name))
+	assert_false(names.any(func(n: String) -> bool: return n.begins_with("Door_0_")), "no exit")
+	assert_true(names.any(func(n: String) -> bool: return n.begins_with("Blocker_2_")), "explained")
+
+
 func test_goat_wants_the_potato() -> void:
 	await _scene()
 	WorldState.start_quest("side_valley_goat")

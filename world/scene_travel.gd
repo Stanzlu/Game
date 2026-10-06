@@ -11,6 +11,9 @@ static var pending_spawn := ""
 ## Seconds the next scene takes to fade in (< 0 = its default). The rift arrives slowly.
 static var arrival_fade := -1.0
 static var _travelling := false
+## Tests: travel only records where it would go and stays in the scene.
+static var stay := false
+static var last_target := ""
 
 
 static func is_travelling() -> bool:
@@ -23,6 +26,10 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 		return
 	if not SceneRegistry.has(target):
 		Log.error(Log.Category.CONTENT, "travel target unknown", {"target": target})
+		return
+	last_target = target
+	if stay:
+		Log.info(Log.Category.WORLD_STATE, "travel (stay)", {"target": target, "spawn": spawn})
 		return
 	_travelling = true
 	var scene := from.get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene

@@ -68,6 +68,11 @@ func _add_atmosphere() -> void:
 ## The shed came to the player: the bird lands on its roof, the wood lies on the path.
 func _after_resolved() -> void:
 	super()
+	if WorldState.has_flag(WOOD_FLAG):
+		# the wood was taken on an earlier walk: nothing to pick up, just the way back
+		await NodeTimer.after(self, 2.0)
+		SceneTravel.go(self, "tal", "west", "")
+		return
 	_wood = PICKUP.instantiate()
 	_actors.add_child(_wood)
 	_wood.global_position = Vector2(player.global_position.x + 20, PATH_Y + 6)

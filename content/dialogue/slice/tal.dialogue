@@ -135,6 +135,10 @@ Der Pfad verschwindet zwischen den Bäumen nach Westen. [ID:tal_west_1]
 Erst mal ein Dach über dem Kopf. [ID:tal_west_2]
 => END
 
+~ west_path_done
+Der Weg zum Schuppen. Das Holz hast du schon. Den Weg muss man nicht zweimal gehen. [ID:tal_west_3]
+=> END
+
 ~ fell_in
 if WorldState.has_flag("valley.fell_twice")
 	% Wieder der Bach. Er ist nicht wärmer geworden. [ID:tal_fell_3]

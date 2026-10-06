@@ -58,9 +58,10 @@ i = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "b
 S = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": false}}
 s = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": true}}
 Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fallen_tree"}}
-; der Pfad nach Westen zum Schuppen (Antreiber): erst offen, wenn Holz gebraucht wird
-X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "weg", "auto": true, "size": [1, 5], "if": "valley.wood_needed"}}
+; der Pfad nach Westen zum Schuppen (Antreiber): offen, solange Holz gebraucht wird
+X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "weg", "auto": true, "size": [1, 5], "if": "valley.wood_needed", "unless": "valley.wood_taken"}}
 Z = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.wood_needed"}}
+V = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path_done", "dialogue": "res://content/dialogue/slice/tal.dialogue", "if": "valley.wood_taken"}}
 ; Ziege und Kartoffel (Beat 7)
 G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose"}}
 o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
@@ -90,7 +91,7 @@ hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......C...hhhh
 hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,p,m@mm.........hhhh
 ..........,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
 .,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh
-XZ,3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
+XZV3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
 .......mmmm..,C..g............g...^^^^.....~~..^^.....g....^^^^^^hhh
 ...........m,,..T..............R.^^^^^^^^^^vvv^^^^^^.....^^^^^^^^^hh
 hhh.........,...................R^....^^^^^vvv^..^^^^^^^^^^......^hh
