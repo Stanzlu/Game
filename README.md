@@ -3,11 +3,12 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 4 (Vertical Slice) fertig, als Nächstes das Playtest-Gate (Phase 5). Spielbar am
+**Status:** Phase 5, das Playtest-Gate (Build v0.5.0). Bis Ergebnisse vorliegen, entsteht kein Inhalt
+über den Slice hinaus ([`docs/GATE_REPORT.md`](docs/GATE_REPORT.md)). Spielbar am
 Stück: Startmenü → Neues Spiel → Name → Elysia → Riss → das Tal mit Mira → das Haus → der Weg zum
 Schuppen → Feuer → Ziege → Abend an Miras Feuer → Titel „Nach Elysia“. Unter Prototypen liegen die
 Testszenen der früheren Phasen und der Leistungstest. Grafik, Ton und Texte sind selbst erzeugte
-Platzhalter bzw. Entwürfe. Testanleitung: [`docs/PLAYTEST_PHASE4.md`](docs/PLAYTEST_PHASE4.md).
+Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs/PLAYTEST.md).
 
 ## Entwicklung
 
@@ -23,6 +24,7 @@ Platzhalter bzw. Entwürfe. Testanleitung: [`docs/PLAYTEST_PHASE4.md`](docs/PLAY
 | `tools/check.sh` | Lint, Format, Import, Smoke-Run, Unit-Tests |
 | `tools/export.sh windows\|macos\|linux` | Build nach `build/` |
 | `tools/smoke_export.sh` | exportierten Linux-Build starten und prüfen |
+| `RELEASE_DRY_RUN=1 tools/release.sh v0.5.0` | Builds für Tester packen, ohne den Release-Entwurf anzulegen |
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
@@ -47,10 +49,13 @@ Platzhalter bzw. Entwürfe. Testanleitung: [`docs/PLAYTEST_PHASE4.md`](docs/PLAY
 
 ## Builds testen
 
-CI baut Windows- und macOS-Versionen auf `main`, per manuellem Start oder wenn eine Commit-Nachricht
-`[export]` enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts** (2 Tage verfügbar; mehr als
-vier Build-Paare gleichzeitig sprengen den kostenlosen Speicher von 500 MB und blockieren CI). Die Builds sind
-nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
+**Playtest-Builds** entstehen aus einem Versions-Tag: `git tag v0.5.0 && git push origin v0.5.0` (der Tag
+muss zu `config/version` in `project.godot` passen). CI baut dann Windows, macOS und Linux und legt unter
+**Releases** einen Entwurf an (`tools/release.sh`, ADR-044), den du prüfst und veröffentlichst.
+
+Zwischenstände baut CI auf `main`, per manuellem Start oder wenn eine Commit-Nachricht `[export]`
+enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts** (2 Tage verfügbar). Die Builds
+sind nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 
 - **Windows:** `REAL-windows` entpacken, `REAL.exe` starten. Bei „Der Computer wurde durch Windows
   geschützt“ auf **Weitere Informationen** und dann **Trotzdem ausführen** klicken.
@@ -78,6 +83,8 @@ nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Abhängigkeiten, Versionen, Lizenzen |
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
+| [`docs/PLAYTEST.md`](docs/PLAYTEST.md) | Testanleitung für alle Tester (Playtest-Gate) |
+| [`docs/GATE_REPORT.md`](docs/GATE_REPORT.md) | Phase 5: Gates, Risiken, Leistung, Platzhalter, nächste Schritte |
 | [`docs/PLAYTEST_PHASE1.md`](docs/PLAYTEST_PHASE1.md) | Testanleitung und Fragen für Phase 1 |
 | [`docs/PLAYTEST_PHASE2.md`](docs/PLAYTEST_PHASE2.md) | Prüfliste für Phase 2 (Speichern, Dialoge, Journal, Menüs) |
 | [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md) | Elysia gegen Tal, Übergang, Tageszeiten, Leistungstest |

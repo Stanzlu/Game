@@ -1,7 +1,8 @@
 # REAL – continuous integration.
 # Budget rule (ADR-009): Ubuntu runners only. Exports run on main, on manual
-# dispatch, or when the head commit message contains "[export]" – not on every
-# push, to stay within the private-repo artifact quota.
+# dispatch, on version tags, or when the head commit message contains "[export]" –
+# not on every push. A version tag (v*) also creates a draft playtest release
+# (ADR-044), which does not count towards the artifact storage.
 name: CI
 
 # Push runs also report their status on pull requests, so no separate PR trigger.
@@ -50,9 +51,13 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[export]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    # only the release step on version tags writes (a draft release)
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
 
@@ -82,7 +87,14 @@ jobs:
       - name: Export macOS build
         run: tools/export.sh macos
 
+      - name: Create draft playtest release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/release.sh "${GITHUB_REF_NAME}"
+
       - name: Upload Windows build
+        if: "!startsWith(github.ref, 'refs/tags/v')"
         uses: actions/upload-artifact@v7
         with:
           name: REAL-windows
@@ -91,6 +103,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload macOS build
+        if: "!startsWith(github.ref, 'refs/tags/v')"
         uses: actions/upload-artifact@v7
         with:
           name: REAL-macos
