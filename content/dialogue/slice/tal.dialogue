@@ -13,7 +13,7 @@ elif WorldState.has_flag("valley.mira_met")
 => mira_first
 
 ~ mira_first
-Mira kniet vor einem Netz und knotet eine Masche. Sie schaut nicht auf. [ID:tal_mira_1]
+Die Frau hat ein Stück Netz in den Händen und knotet eine Masche. Sie schaut nicht auf. [ID:tal_mira_1]
 - Hallo. [ID:tal_mira_r1]
 	Mira: Hallo. [ID:tal_mira_2]
 	Mira: Du stehst im Regen. Nur falls dir das keiner gesagt hat. [ID:tal_mira_3]
@@ -21,6 +21,10 @@ Mira kniet vor einem Netz und knotet eine Masche. Sie schaut nicht auf. [ID:tal_
 - Wo bin ich hier? [ID:tal_mira_r2]
 	Mira: Am Bach. Im Tal. Im Regen. Such dir was aus. [ID:tal_mira_4]
 	do WorldState.add_memory("mira", "asked_where")
+- Ich bin der Held von Elysia. [ID:tal_mira_r10]
+	Mira: Aha. [ID:tal_mira_22]
+	Mira: Ich bin die, die hier ein Netz flickt. Jetzt kennen wir uns. [ID:tal_mira_23]
+	do WorldState.add_memory("mira", "said_hero")
 - … [ID:tal_mira_r3]
 	Mira: … [ID:tal_mira_5]
 	Mira: Gut. Dann sind wir uns einig. [ID:tal_mira_6]
@@ -38,6 +42,10 @@ Mira: Brauchst du was? [ID:tal_mira_21]
 	Mira: Mir auch. Deswegen hab ich ein Feuer. [ID:tal_mira_11]
 	Mira: Meins. Nein, du kannst dich nicht dazusetzen. [ID:tal_mira_12]
 	do WorldState.add_memory("mira", "said_cold")
+if WorldState.has_flag("elysia.asked_for_no")
+	Das Wort bleibt im Regen hängen. Drüben hat es niemand über die Lippen gebracht, nicht einmal, als du darum gebeten hast. [ID:tal_mira_no_1]
+elif WorldState.has_flag("elysia.offered_bed")
+	Drüben hätte man dir ein Bett angeboten. Und den Boden davor gleich mit. [ID:tal_mira_no_2]
 Mira zieht den Knoten fest und nickt über den Bach. [ID:tal_mira_13]
 Mira: Da drüben steht ein Haus. Leer, seit dem Frühjahr. Die Leute sind weg. [ID:tal_mira_14]
 Mira: Die Brücke ist auch weg, jedenfalls die Mitte. Über die Steine kommst du rüber. Oder oben über den Baum, der liegt seit dem Sturm. [ID:tal_mira_15]
@@ -87,6 +95,7 @@ if WorldState.has_item("item_boot")
 	- … [ID:tal_mira_eve_r3]
 		Mira: Ja. Genau so ein Tag war das. [ID:tal_mira_eve_6]
 		do WorldState.add_memory("mira", "boot_silence")
+	Mira: Die Ziege steht übrigens auf dem Holzstapel vom Haus. Ich frag nicht, wie. [ID:tal_mira_eve_9b]
 	do WorldState.remove_item("item_boot")
 	do WorldState.advance_quest("side_valley_goat", "done")
 	Mira zieht den Stiefel an und setzt sich ans Feuer. Nach einer Weile rückt sie ein Stück zur Seite. [ID:tal_mira_eve_7]
@@ -108,10 +117,70 @@ Mira: Morgen gehe ich weiter. [ID:tal_end_2]
 	do WorldState.add_memory("mira", "end_silence")
 Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
 Mira: Zum Meer. [ID:tal_end_5]
+if WorldState.has_flag("valley.shell_seen")
+	An der Plane dreht sich die Muschel ein Stück im Wind. [ID:tal_end_6]
 => END
 
 ~ mira_end_again
 Mira schaut ins Feuer. Sie hat dir einen Platz gelassen. [ID:tal_mira_end_1]
+=> END
+
+~ net
+if WorldState.has_flag("house.mira_visited")
+	Das Netz hängt wieder auf dem Gestell. Das eine Loch ist zu. Ein neues ist schon da. [ID:tal_net_2]
+else
+	Miras Netz hängt zum Trocknen über dem Gestell. Ein Loch ist frisch geflickt, ein anderes wartet noch. [ID:tal_net_1]
+=> END
+
+~ shell
+An der Plane hängt eine Muschel an einer Schnur. Weiß, mit einem feinen Riss. [ID:tal_shell_1]
+Hier, mitten im Tal, weit weg von jedem Meer. [ID:tal_shell_2]
+do WorldState.set_flag("valley.shell_seen")
+=> END
+
+~ boot_print
+if WorldState.is_quest_done("side_valley_goat")
+	Der Stein ist leer. Der Stiefel ist wieder da, wo er hingehört. [ID:tal_boot_3]
+elif WorldState.has_flag("house.mira_visited")
+	Hier hat der Stiefel zum Trocknen gestanden. Bis die Ziege andere Pläne hatte. [ID:tal_boot_2]
+else
+	Ein flacher Stein am Feuer, noch warm. Darauf der nasse Abdruck einer Stiefelsohle. Der Stiefel dazu ist nirgends. [ID:tal_boot_1]
+=> END
+
+~ wildflower
+if WorldState.has_flag("valley.flower_smelled")
+	% Du riechst noch einmal. Es ist immer noch da. [ID:tal_flower_3]
+	% Regen, Erde, Honig. In dieser Reihenfolge. [ID:tal_flower_4]
+else
+	Wilde Blumen am Wegrand, vom Regen niedergedrückt. Eine ist abgeknickt und blüht trotzdem. [ID:tal_flower_1]
+	Du riechst daran. Regen. Erde. Ganz schwach Honig. [ID:tal_flower_2]
+	if WorldState.has_flag("elysia.flower_smelled")
+		Du riechst noch einmal, um sicherzugehen. Es riecht immer noch. [ID:tal_flower_5]
+	do WorldState.set_flag("valley.flower_smelled")
+=> END
+
+~ berries
+if WorldState.has_flag("valley.berries_eaten")
+	% Du nimmst noch eine. Sauer. Du nimmst trotzdem noch eine. [ID:tal_berry_4]
+	% Die guten hängen zu weit drin, zwischen den Dornen. Natürlich. [ID:tal_berry_5]
+else
+	Ein Brombeerstrauch, nass vom Regen. [ID:tal_berry_1]
+	Die erste Beere ist sauer. Die zweite ist süß. Die dritte ist wieder sauer, aber anders. [ID:tal_berry_2]
+	if WorldState.has_flag("elysia.soup_tasteless")
+		Du merkst, dass du langsam kaust. Damit es länger dauert. [ID:tal_berry_6]
+	Ein Dorn hat dich am Handrücken erwischt. Ein kleiner roter Strich. [ID:tal_berry_3]
+	do WorldState.set_flag("valley.berries_eaten")
+=> END
+
+~ crooked_tree
+Ein Baum, der schief gewachsen ist. Irgendwann hat er sich nach dem Licht gestreckt und ist dabei geblieben. [ID:tal_tree_1]
+=> END
+
+~ fence_gap
+if WorldState.has_flag("valley.goat_loose")
+	Die Lücke im Zaun. Gerade breit genug für etwas Entschlossenes mit Hörnern. [ID:tal_fence_2]
+else
+	Ein Zaun mit einer Lücke. Wer hier durchwollte, wollte es sehr. [ID:tal_fence_1]
 => END
 
 ~ woodpile
@@ -155,8 +224,8 @@ else
 
 ~ goat
 if WorldState.has_flag("valley.goat_traded")
-	% Die Ziege kaut die Kartoffel. Sie wirkt zufrieden. Mit sich, mit der Kartoffel, mit allem. [ID:tal_goat_7]
-	% Die Ziege schaut dich an. Sie hat keine Fragen. [ID:tal_goat_8]
+	% Die Ziege steht oben auf dem Holzstapel und kaut die Kartoffel. Wie sie da hochgekommen ist, verrät sie nicht. [ID:tal_goat_7]
+	% Die Ziege schaut von oben auf dich herab. Sie hat keine Fragen. [ID:tal_goat_8]
 elif WorldState.has_item("item_potato")
 	Du hältst der Ziege die Kartoffel hin. [ID:tal_goat_4]
 	Die Ziege betrachtet die Kartoffel. Dann den Stiefel. Dann wieder die Kartoffel. [ID:tal_goat_5]

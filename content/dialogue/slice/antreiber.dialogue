@@ -6,6 +6,7 @@
 ~ start
 % Antreiber: Holz! Gute Idee. Ich hab den Weg schon geplant. [ID:sl_antr_start_1]
 % Antreiber: Schuppen, Holz, zurück, Feuer. Wenn wir zügig sind, schaffen wir das vor dem Dunkelwerden. [ID:sl_antr_start_2]
+% Antreiber: Ich hab eine Liste gemacht. Punkt eins, gehen. Punkt zwei, schneller gehen. [ID:sl_antr_start_3]
 => END
 
 ~ urging
@@ -14,18 +15,23 @@
 % Antreiber: Da vorne. Siehst du? Gleich. [ID:sl_antr_urge_3]
 % Antreiber: Du machst das gut. Noch ein bisschen besser, dann reicht es. [ID:sl_antr_urge_4]
 % Antreiber: Ich hab mitgezählt. Wir liegen gut. [ID:sl_antr_urge_5]
+% Antreiber: Nicht nach links schauen, da ist nichts. Nach vorne. [ID:sl_antr_urge_6]
+% Antreiber: Pausen machen wir, wenn wir da sind. Dann gleich eine lange. [ID:sl_antr_urge_7]
 => END
 
 ~ cheering
 % Antreiber: Ja! So kommen wir voran! [ID:sl_antr_cheer_1]
 % Antreiber: Schneller ist besser. Das weiß jeder. [ID:sl_antr_cheer_2]
 % Antreiber: Perfekt. Fast perfekt. [ID:sl_antr_cheer_3]
+% Antreiber: So geht das! Wer rennt, friert nicht. [ID:sl_antr_cheer_4]
 => END
 
 ~ tired
 % Antreiber: Nicht anhalten. Wer anhält, verliert. [ID:sl_antr_tired_1]
 % Antreiber: Wir sind fast da. Wir sind immer fast da. [ID:sl_antr_tired_2]
 % Antreiber: Müde ist nur ein Gefühl. Das geht weg, wenn wir ankommen. [ID:sl_antr_tired_3]
+% Antreiber: Ich bin nicht außer Atem. Ich atme nur schneller, um Zeit zu sparen. [ID:sl_antr_tired_4]
+% Antreiber: Der Schuppen ist bestimmt gleich da. Er muss gleich da sein. [ID:sl_antr_tired_5]
 => END
 
 ~ worried
@@ -50,4 +56,14 @@ Ein Wegweiser. »Schuppen 200 m«. [ID:sl_antr_sign_1]
 ~ wood
 Das Holz liegt da. Trocken, gespalten, zusammengebunden. Es lag die ganze Zeit hier. [ID:sl_antr_wood_1]
 Der Antreiber sitzt auf dem Boden und weiß nicht genau, wohin mit seinen Händen. [ID:sl_antr_wood_2]
+Antreiber: Ich wollte nur, dass wir ankommen, bevor es dunkel wird. [ID:sl_antr_why_1]
+Antreiber: Wer schnell genug ist, den holt nichts ein. Nicht die Kälte, nicht das Dunkel. Das hat immer funktioniert. [ID:sl_antr_why_2]
+- Wir sind angekommen. [ID:sl_antr_why_r1]
+	Antreiber: … Ja. Sind wir. [ID:sl_antr_why_3]
+	Antreiber: Hab ich gar nicht gemerkt. [ID:sl_antr_why_4]
+- Du hast geholfen. Auf deine Art. [ID:sl_antr_why_r2]
+	Antreiber: Hab ich? [ID:sl_antr_why_5]
+	Er nickt, sehr schnell, und dann noch einmal, langsamer. [ID:sl_antr_why_6]
+- … [ID:sl_antr_why_r3]
+	Der Antreiber sagt auch nichts. Es ist das erste Mal, dass er nichts sagt, ohne dass es ihn Mühe kostet. [ID:sl_antr_why_7]
 => END

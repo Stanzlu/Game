@@ -7,6 +7,9 @@ extends CharacterBody2D
 ## faces the player until the conversation ends.
 ## With "glance": true it blinks and looks around now and then while standing (people of
 ## the real world, Game Bible §36). Elysians never do: their attention is perfect.
+## "pause": [min, max] seconds makes it linger at every waypoint for a different while (people
+## with something to do); Elysians walk on without pause, always the same. "face": "n", "e",
+## "s" or "w" is where it looks while standing at its spawn.
 
 const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
@@ -33,6 +36,8 @@ var _glancing := false
 var _rng := RandomNumberGenerator.new()
 var _stuck_time := 0.0
 var _origin := Vector2.ZERO
+var _pause := Vector2.ZERO
+var _wait := 0.0
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 
@@ -65,6 +70,15 @@ func apply_params(params: Dictionary) -> void:
 		route.append(Vector2(float(p[0]), float(p[1])) * tile_size)
 	speed = float(params.get("speed", speed))
 	glances = bool(params.get("glance", false))
+	var pause: Variant = params.get("pause", 0.0)
+	_pause = (
+		Vector2(float(pause[0]), float(pause[1]))
+		if pause is Array
+		else Vector2(float(pause), float(pause))
+	)
+	var faces := {"n": Facing.Dir.N, "e": Facing.Dir.E, "s": Facing.Dir.S, "w": Facing.Dir.W}
+	if faces.has(str(params.get("face", ""))):
+		facing = faces[str(params["face"])]
 	if params.has("cue"):
 		cue = str(params["cue"])
 		dialogue_path = str(params.get("dialogue", DEFAULT_DIALOGUE))
@@ -126,7 +140,9 @@ func _physics_process(delta: float) -> void:
 		facing = Facing.from_vector(player.global_position - global_position)
 		_play("idle")
 		return
-	if route.is_empty():
+	if route.is_empty() or _wait > 0.0:
+		_wait = maxf(_wait - delta, 0.0)
+		velocity = Vector2.ZERO
 		_play("idle")
 		return
 	var goal := _origin + route[_index]
@@ -134,6 +150,7 @@ func _physics_process(delta: float) -> void:
 	if to_goal.length() <= ARRIVE_DISTANCE:
 		_index = (_index + 1) % route.size()
 		_stuck_time = 0.0
+		_wait = _rng.randf_range(_pause.x, _pause.y)
 		return
 	velocity = to_goal.normalized() * speed
 	var before := position

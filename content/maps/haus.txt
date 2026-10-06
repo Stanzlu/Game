@@ -15,7 +15,7 @@ K = {"ground": "_", "prop": "res://world/props/fireplace.tscn"}
 T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/table", "cue": "table", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 18}}
 b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bed", "cue": "bed", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
 R = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/shelf", "sprite_when": {"house.shelf_filled": "haus/shelf_spoon"}, "cue": "shelf", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
-r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/rug"}}
+r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/rug", "sit": {"face": "n"}}}
 u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bucket", "cue": "bucket", "dialogue": "res://content/dialogue/slice/haus.dialogue"}}
 ; das Fenster (vor dem Feuer leer), die Katze draußen auf dem Sims und später drinnen am Feuer
 w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
