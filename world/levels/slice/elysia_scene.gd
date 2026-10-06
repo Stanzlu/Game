@@ -42,10 +42,12 @@ func _process(_delta: float) -> void:
 	var t := WorldState.state.playtime_seconds
 	if not WorldState.has_flag("elysia.loops") and t > LOOPS_AFTER:
 		WorldState.set_flag("elysia.loops")
+	# the loop start is not saved: after a load the wait starts again, but never past the
+	# latest possible start of the loops
 	if (
 		_loops_time >= 0.0
 		and not WorldState.has_flag("elysia.rift_open")
-		and t - _loops_time > RIFT_AFTER_LOOPS
+		and (t - _loops_time > RIFT_AFTER_LOOPS or t > LOOPS_AFTER + RIFT_AFTER_LOOPS)
 	):
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag("elysia.rift_open")
@@ -85,9 +87,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			Beat.mark("rift_found")
 
 
+## The child fades out by itself (its map placement ends with elysia.child_vanished).
 func _child_vanishes() -> void:
-	for node in get_tree().get_nodes_in_group(&"child_guide"):
-		if node.has_method(&"vanish"):
-			node.call(&"vanish")
 	await NodeTimer.after(self, 1.2)
 	WorldState.set_flag("elysia.rift_open")

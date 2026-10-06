@@ -69,12 +69,81 @@ func test_conditional_props_follow_flags() -> void:
 	assert_eq(alive.size(), 0, "removed by unless")
 
 
+func _story_map(legend_lines: String, rows: String) -> MapView:
+	var text := (
+		'[meta]\n[legend]\n. = {"atlas": [0, 0], "surface": "grass"}\n'
+		+ '@ = {"ground": ".", "marker": "player_spawn"}\n'
+		+ legend_lines
+		+ "\n[map]\n"
+		+ rows
+	)
+	var map := MapView.new()
+	add_child_autofree(map)
+	assert_true(map.build_from_text(text, "test"))
+	return map
+
+
+func _alive(map: MapView, prefix: String) -> Array[Node]:
+	return map.entities.get_children().filter(
+		func(node: Node) -> bool:
+			return str(node.name).begins_with(prefix) and not node.is_queued_for_deletion()
+	)
+
+
+func test_a_prop_that_removed_itself_stays_gone_and_the_others_still_follow() -> void:
+	var map := _story_map(
+		(
+			'p = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item":'
+			+ ' "item_stone", "flag": "test.taken", "if": "test.shown"}}\n'
+			+ 'r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":'
+			+ ' "tal/house_dark", "sprite_when": {"test.lit": "tal/house"}, "if": "test.shown"}}'
+		),
+		".@...\n.p.r.\n.....\n"
+	)
+	WorldState.set_flag("test.shown")
+	assert_eq(_alive(map, "Pickup").size(), 1)
+	var pickup: Node = _alive(map, "Pickup")[0]
+	pickup.call(&"_on_interacted", null)
+	await wait_physics_frames(2)
+	WorldState.set_flag("test.other")
+	assert_eq(_alive(map, "Pickup").size(), 0, "taken stays taken")
+	WorldState.set_flag("test.lit")
+	var decor := _alive(map, "Decor")
+	assert_eq(decor.size(), 1, "rebuilt, not doubled")
+	assert_eq((decor[0] as Decor).sprite_id, "tal/house", "the new look after the old pickup")
+
+
+func test_a_leaving_prop_finishes_its_own_exit() -> void:
+	var map := _story_map(
+		(
+			'b = {"ground": ".", "prop": "res://world/props/golden_butterfly.tscn", "params":'
+			+ ' {"flag": "test.caught", "unless": "test.caught"}}'
+		),
+		".@...\n..b..\n.....\n"
+	)
+	var butterfly: Node = _alive(map, "GoldenButterfly")[0]
+	butterfly.call(&"_on_caught", null)
+	await wait_physics_frames(1)
+	assert_true(
+		is_instance_valid(butterfly) and not butterfly.is_queued_for_deletion(), "still flashing"
+	)
+	await wait_seconds(0.7)
+	assert_false(is_instance_valid(butterfly), "gone after the flash")
+
+
 func test_spawn_marker_is_taken_once() -> void:
 	var map := _map()
 	SceneTravel.pending_spawn = "door"
 	assert_eq(SceneTravel.take_spawn(map), map.cell_to_world(Vector2i(3, 1)))
 	assert_eq(SceneTravel.pending_spawn, "", "cleared after use")
 	assert_null(SceneTravel.take_spawn(map), "no pending spawn: map spawn")
+
+
+func test_a_new_scene_ends_any_travel() -> void:
+	# a travel cut short (its scene left during the fade) must not keep every door shut
+	SceneTravel._travelling = true
+	SceneTravel.take_fade()
+	assert_false(SceneTravel.is_travelling())
 
 
 func test_beats_are_marked_once_with_their_minute() -> void:
@@ -163,6 +232,24 @@ func test_chest_starts_the_loops_and_the_child_opens_the_rift() -> void:
 	WorldState.set_flag("elysia.child_met")
 	assert_eq(child.step, ChildGuide.Step.LEAD)
 	WorldState.set_flag("elysia.child_vanished")
+	await wait_physics_frames(2)
+	assert_true(is_instance_valid(child), "the child fades out instead of popping away")
+	assert_eq(child.step, ChildGuide.Step.GONE)
 	await wait_seconds(1.4)
 	assert_true(WorldState.has_flag("elysia.rift_open"))
 	assert_true(Beat.reached("rift_found"))
+	await wait_seconds(0.4)
+	assert_false(is_instance_valid(child), "gone after the fade")
+
+
+func test_the_rift_opens_in_time_even_after_loading() -> void:
+	# the wait after the loops starts again on every load, but never past the latest start
+	WorldState.set_flag("elysia.woke")
+	WorldState.set_flag("elysia.loops")
+	WorldState.state.playtime_seconds = (
+		ElysiaScene.LOOPS_AFTER + ElysiaScene.RIFT_AFTER_LOOPS + 1.0
+	)
+	var scene: GameScene = ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_process_frames(3)
+	assert_true(WorldState.has_flag("elysia.rift_open"))

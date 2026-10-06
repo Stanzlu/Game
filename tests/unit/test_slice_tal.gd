@@ -75,6 +75,14 @@ func test_the_house_is_dark_until_the_fire_burns() -> void:
 	assert_eq(_house(lit).sprite_id, "tal/house")
 
 
+func test_after_miras_visit_it_is_evening() -> void:
+	WorldState.set_day_preset("regentag")  # stored on the first visit
+	WorldState.set_flag("house.mira_visited")
+	var scene := await _scene()
+	assert_eq(WorldState.day_preset(), "abend")
+	assert_eq(scene.day_light.preset, "abend")
+
+
 func _house(scene: GameScene) -> Decor:
 	for node in scene.map.entities.get_children():
 		if node is Decor and (node as Decor).sprite_id.begins_with("tal/house"):

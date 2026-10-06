@@ -43,6 +43,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 func _begin_lead() -> void:
 	step = Step.LEAD
 	_target = 0
+	# it slips past the player instead of pushing against them on the way
+	collision_mask = PhysicsLayers.WORLD
 
 
 ## The walk to the rift: ahead of the player, never out of sight.
@@ -72,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			_play("idle")
 
 
-func _lead(_delta: float, player: Node2D) -> void:
+func _lead(delta: float, player: Node2D) -> void:
 	if _target >= guide.size():
 		step = Step.WAIT_AT_END
 		return
@@ -88,13 +90,30 @@ func _lead(_delta: float, player: Node2D) -> void:
 		_target += 1
 		return
 	velocity = to_goal.normalized() * speed
+	var before := position
 	move_and_slide()
+	# blocked (a prop on the way): head for the next waypoint instead of walking on the spot
+	if position.distance_to(before) < speed * delta * 0.25:
+		_stuck_time += delta
+		if _stuck_time > STUCK_SECONDS:
+			_target += 1
+			_stuck_time = 0.0
+	else:
+		_stuck_time = 0.0
 	facing = Facing.from_vector_stable(facing, velocity)
 	_play("walk")
 
 
-## Fades out where it stands (after its last line); the scene opens the rift.
+## Its condition turned false (elysia.child_vanished, after its last line): it fades out
+## where it stands; the scene opens the rift.
+func leave() -> void:
+	vanish()
+
+
+## Fades out where it stands.
 func vanish() -> void:
+	if step == Step.GONE:
+		return
 	step = Step.GONE
 	var interactable := get_node_or_null("Interactable") as Interactable
 	if interactable != null:

@@ -15,8 +15,10 @@ const GOAT_OBJECTIVES: PackedStringArray = ["goat", "potato"]
 
 
 func _ready() -> void:
-	if WorldState.has_flag("house.mira_visited"):
-		day_preset = "abend"
+	# after Mira's visit it is evening; the stored time of day (the rainy day of the first
+	# visit) would otherwise win over the scene's preset
+	if WorldState.has_flag("house.mira_visited") and WorldState.day_preset() in ["", "regentag"]:
+		WorldState.set_day_preset("abend")
 	super()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	if not WorldState.has_flag("valley.arrived"):

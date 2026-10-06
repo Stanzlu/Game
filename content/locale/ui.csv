@@ -167,6 +167,10 @@ NAME_TITLE,"Wie lautet dein Name, Held?"
 NAME_SUGGESTIONS,Oder einer dieser
 NAME_CONFIRM,Das Abenteuer beginnt
 NAME_HINT,Tippe einen Namen oder wähle einen aus.
+NAME_SUGGESTION_1,Aren
+NAME_SUGGESTION_2,Kai
+NAME_SUGGESTION_3,Mika
+NAME_SUGGESTION_4,Noel
 PLACE_ELYSIA,Elysia
 PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus

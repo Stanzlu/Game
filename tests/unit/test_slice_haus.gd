@@ -67,14 +67,26 @@ func test_fire_warms_the_room_and_mira_knocks() -> void:
 	assert_true(Beat.reached("mira_visit"))
 
 
+func _shelves(scene: GameScene) -> Array[Node]:
+	return scene.map.entities.get_children().filter(
+		func(node: Node) -> bool:
+			return (
+				node is Decor
+				and (node as Decor).sprite_id.begins_with("haus/shelf")
+				and not node.is_queued_for_deletion()
+			)
+	)
+
+
 func test_the_spoon_goes_on_the_shelf() -> void:
 	var scene := await _scene()
-	var shelf: Decor = null
-	for node in scene.map.entities.get_children():
-		if node is Decor and (node as Decor).sprite_id.begins_with("haus/shelf"):
-			shelf = node
-	assert_eq(shelf.sprite_id, "haus/shelf")
+	assert_eq((_shelves(scene)[0] as Decor).sprite_id, "haus/shelf")
 	WorldState.add_item("curiosity_tiny_spoon", 1, false)
 	assert_true(WorldState.place_curiosity("shelf_1", "curiosity_tiny_spoon"))
 	WorldState.set_flag("house.shelf_filled")
-	assert_eq(shelf.sprite_id, "haus/shelf_spoon", "the shelf shows the spoon at once")
+	var shelves := _shelves(scene)
+	assert_eq(shelves.size(), 1, "rebuilt with the new look, not doubled")
+	assert_eq(
+		(shelves[0] as Decor).sprite_id, "haus/shelf_spoon", "the shelf shows the spoon at once"
+	)
+	assert_not_null(shelves[0].get_node_or_null("Interactable"), "can still be looked at")

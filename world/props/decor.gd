@@ -35,8 +35,6 @@ var _bob := 0.0
 var _time := 0.0
 var _glow: Sprite2D
 var _beam: Sprite2D
-var _variants: Dictionary = {}
-var _base_sprite := ""
 
 
 func _ready() -> void:
@@ -46,13 +44,9 @@ func _ready() -> void:
 
 
 func apply_params(params: Dictionary) -> void:
-	sprite_id = str(params.get("sprite", ""))
-	# {"sprite_when": {"<flag>": "<sprite>"}}: the story changed how it looks (house lit)
-	_variants = params.get("sprite_when", {})
-	_base_sprite = sprite_id
-	sprite_id = _variant_sprite()
-	if not _variants.is_empty() and not WorldState.flag_changed.is_connected(_on_variant_flag):
-		WorldState.flag_changed.connect(_on_variant_flag)
+	# {"sprite_when": {"<flag>": "<sprite>"}}: the story changed how it looks (house lit);
+	# MapView rebuilds the prop when that changes while it is on screen
+	sprite_id = variant_sprite(params)
 	if params.has("cue"):
 		_add_inspect(params)
 		if sprite_id.is_empty():
@@ -229,29 +223,14 @@ func _on_rustle(body: Node2D) -> void:
 	SoundBank.play_at(self, "rustle", global_position, -14.0)
 
 
-func _variant_sprite() -> String:
-	for flag_id: String in _variants:
+## The sprite for these params: the first "sprite_when" flag that is set picks its look,
+## otherwise "sprite".
+static func variant_sprite(params: Dictionary) -> String:
+	var variants: Dictionary = params.get("sprite_when", {})
+	for flag_id: String in variants:
 		if WorldState.has_flag(flag_id):
-			return str(_variants[flag_id])
-	return _base_sprite
-
-
-## A sprite_when flag changed while the prop is on screen: swap to the matching art.
-func _on_variant_flag(id: String, _value: bool) -> void:
-	if not _variants.has(id) or sprite == null:
-		return
-	var wanted := _variant_sprite()
-	if wanted == sprite_id:
-		return
-	var entry := PropCatalog.entry(wanted)
-	if entry.is_empty():
-		return
-	sprite_id = wanted
-	sprite.texture = PropCatalog.texture_for(entry, global_position)
-	var anchor: Array = entry.get("anchor", [0, 0])
-	sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
-	if mirrored:
-		_mirror_sprite(sprite)
+			return str(variants[flag_id])
+	return str(params.get("sprite", ""))
 
 
 func _add_inspect(params: Dictionary) -> void:

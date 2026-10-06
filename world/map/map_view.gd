@@ -26,8 +26,15 @@ var reflection_material: ShaderMaterial
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
 var _external_props: Array[Node] = []
-## Placements with "if"/"unless" flag conditions: placement index -> spawned node or null.
-var _conditional: Dictionary[int, Node] = {}
+## Placements that follow the story ("if"/"unless" conditions, "sprite_when" looks):
+## placement index -> spawned node or null. Untyped: a prop can free itself (a pickup that
+## was taken), and a freed instance must not be read into a typed variable.
+var _conditional: Dictionary = {}
+## Conditional props that removed themselves while wanted (taken, caught): they stay gone
+## until their conditions turn false again.
+var _retired: Dictionary[int, bool] = {}
+## Look of each "sprite_when" placement as spawned: placement index -> sprite id.
+var _looks: Dictionary[int, String] = {}
 
 
 func _ready() -> void:
@@ -370,18 +377,22 @@ func _mirror_params(params: Dictionary, cell: Vector2i) -> Dictionary:
 
 func _spawn_props() -> void:
 	_conditional.clear()
+	_retired.clear()
+	_looks.clear()
 	for index in data.placements.size():
 		var placement: Dictionary = data.placements[index]
 		if (placement["prop"] as String).is_empty():
 			continue
 		var params: Dictionary = placement["params"]
-		if params.has("if") or params.has("unless"):
+		if params.has("if") or params.has("unless") or params.has("sprite_when"):
 			_conditional[index] = null
 			if not conditions_met(params):
 				continue
 		var prop := _spawn_prop(placement)
 		if _conditional.has(index):
 			_conditional[index] = prop
+			if params.has("sprite_when"):
+				_looks[index] = Decor.variant_sprite(params)
 
 
 func _spawn_prop(placement: Dictionary) -> Node2D:
@@ -433,18 +444,50 @@ func _on_flag_changed(_id: String, _value: bool) -> void:
 	refresh_conditions()
 
 
-## Spawns conditional props whose flags became true and removes those whose became false.
+## Spawns conditional props whose flags became true, lets those whose became false leave
+## and rebuilds props whose "sprite_when" look changed (all lights, shapes and layers of
+## the new look, mirrored twins included).
 func refresh_conditions() -> void:
 	for index: int in _conditional.keys():
 		var placement: Dictionary = data.placements[index]
-		var node: Node = _conditional[index]
-		var alive := node != null and is_instance_valid(node) and not node.is_queued_for_deletion()
-		var wanted := conditions_met(placement["params"])
-		if wanted and not alive:
-			var prop := _spawn_prop(placement)
-			_conditional[index] = prop
-			if prop != null and _near_water(placement["cell"]) and not prop is Player:
-				add_reflection(prop)
-		elif not wanted and alive:
-			node.queue_free()
+		var params: Dictionary = placement["params"]
+		var entry: Variant = _conditional[index]
+		var alive := is_instance_valid(entry) and not (entry as Node).is_queued_for_deletion()
+		if not alive and typeof(entry) == TYPE_OBJECT:
+			_retired[index] = true  # it removed itself (taken, caught)
 			_conditional[index] = null
+		if not conditions_met(params):
+			_retired.erase(index)
+			if alive:
+				_leave(entry as Node)
+				_conditional[index] = null
+			continue
+		if alive and params.has("sprite_when"):
+			if Decor.variant_sprite(params) == _looks.get(index, ""):
+				continue
+			_retire_name(entry as Node)
+			(entry as Node).queue_free()
+			alive = false
+		if alive or _retired.has(index):
+			continue
+		var prop := _spawn_prop(placement)
+		_conditional[index] = prop
+		if params.has("sprite_when"):
+			_looks[index] = Decor.variant_sprite(params)
+		if prop != null and _near_water(placement["cell"]) and not prop is Player:
+			add_reflection(prop)
+
+
+## Frees the prop's name for its successor (props are named after their cell).
+static func _retire_name(prop: Node) -> void:
+	prop.name = "%s_leaving" % prop.name
+
+
+## A prop whose conditions turned false goes its own way when it has one (the child fades,
+## a caught butterfly finishes its flash) and frees itself; others vanish at once.
+static func _leave(prop: Node) -> void:
+	_retire_name(prop)
+	if prop.has_method(&"leave"):
+		prop.call(&"leave")
+	else:
+		prop.queue_free()

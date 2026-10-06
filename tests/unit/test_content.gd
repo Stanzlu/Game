@@ -143,3 +143,43 @@ func test_world_actions_in_maps_are_valid() -> void:
 			if params.has("flag"):
 				assert_true(GameState.is_flag_id(str(params["flag"])), "%s: flag" % path)
 	assert_gt(checked, 0, "sandbox uses world actions")
+
+
+## Every flag a map ("if", "unless", "sprite_when") or a dialogue reads is set somewhere: by
+## a dialogue, a map param ("flag", "start_flag", a world action) or as a literal in code.
+## Catches typos that would hide a prop (the rift, an exit) or a line forever.
+func test_flags_read_by_content_are_set_somewhere() -> void:
+	var reads := {}
+	var writes := {}
+	var call_regex := RegEx.create_from_string(
+		'(has_flag|set_flag|clear_flag)\\(\\s*"([a-z0-9_]+\\.[a-z0-9_]+)"'
+	)
+	for path in _files("res://content", ["dialogue"]):
+		for found in call_regex.search_all(FileAccess.get_file_as_string(path)):
+			var target := reads if found.get_string(1) == "has_flag" else writes
+			target[found.get_string(2)] = path
+	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
+	for path in _files("res://content/maps", ["txt"]):
+		var data := MapData.parse(FileAccess.get_file_as_string(path), legend, path)
+		for p: Dictionary in data.placements:
+			var params: Dictionary = p["params"]
+			for key: String in ["if", "unless"]:
+				var value: Variant = params.get(key, [])
+				for flag_id: Variant in [value] if value is String else value:
+					reads[str(flag_id)] = path
+			for flag_id: Variant in params.get("sprite_when", {}):
+				reads[str(flag_id)] = path
+			for key: String in ["flag", "start_flag"]:
+				if params.has(key):
+					writes[str(params[key])] = path
+			for action: Variant in params.get("actions", []):
+				if action is Dictionary and (action as Dictionary).has("flag"):
+					writes[str(action["flag"])] = path
+	var literal_regex := RegEx.create_from_string('"([a-z0-9_]+\\.[a-z0-9_]+)"')
+	for dir_path in CODE_DIRS:
+		for path in _files(dir_path, ["gd"]):
+			for found in literal_regex.search_all(FileAccess.get_file_as_string(path)):
+				writes[found.get_string(1)] = path
+	assert_gt(reads.size(), 20, "the slice reads its flags")
+	for flag_id: String in reads:
+		assert_true(writes.has(flag_id), "%s reads %s, nothing sets it" % [reads[flag_id], flag_id])

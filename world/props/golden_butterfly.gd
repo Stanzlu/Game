@@ -84,9 +84,27 @@ func _on_caught(_actor: Node) -> void:
 	if _caught:
 		return
 	_caught = true
+	# the flash starts before the flag: MapView then lets it finish (leave)
+	_flash()
 	WorldState.set_flag(flag)
 	AudioDirector.sfx("praise", -4.0)
 	StateActions.run(actions, "butterfly:" + flag)
+
+
+## Its condition turned false (caught, or the quest is over): a last golden flash.
+func leave() -> void:
+	if not _caught:
+		_caught = true
+		_flash()
+
+
+func _flash() -> void:
+	if _butterfly == null:
+		queue_free()
+		return
+	var interactable := get_node_or_null("Interactable") as Interactable
+	if interactable != null:
+		interactable.enabled = false
 	var tween := create_tween()
 	tween.tween_property(_butterfly, ^"scale", Vector2(1.6, 1.6), 0.18)
 	tween.parallel().tween_property(_butterfly, ^"modulate:a", 0.0, 0.35)

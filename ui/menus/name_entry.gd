@@ -6,7 +6,10 @@ extends MenuLayer
 
 signal chosen(hero_name: String)
 
-const SUGGESTIONS: PackedStringArray = ["Aren", "Kai", "Mika", "Noel"]
+## Suggested names (locale keys, so they can be changed with the other texts).
+const SUGGESTIONS: PackedStringArray = [
+	"NAME_SUGGESTION_1", "NAME_SUGGESTION_2", "NAME_SUGGESTION_3", "NAME_SUGGESTION_4"
+]
 const ALLOWED := "abcdefghijklmnopqrstuvwxyzäöüßéèáàâêîôûçñ -'"
 
 var field: LineEdit
@@ -21,14 +24,15 @@ func _ready() -> void:
 func _build() -> void:
 	field = LineEdit.new()
 	field.max_length = GameState.MAX_NAME_LENGTH
-	field.placeholder_text = SUGGESTIONS[0]
+	field.placeholder_text = tr(SUGGESTIONS[0])
 	field.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	field.custom_minimum_size = Vector2(160, 0)
 	field.context_menu_enabled = false
 	field.text_submitted.connect(func(_text: String) -> void: _confirm())
 	list.add_custom(field)
 	list.add_header("NAME_SUGGESTIONS")
-	for suggestion in SUGGESTIONS:
+	for key in SUGGESTIONS:
+		var suggestion := tr(key)
 		list.add_action("", func() -> void: field.text = suggestion, true, suggestion)
 	list.add_action("NAME_CONFIRM", _confirm)
 	list.add_action("MENU_BACK", close)
@@ -56,6 +60,6 @@ static func clean(raw: String) -> String:
 func _confirm() -> void:
 	var hero_name := clean(field.text)
 	if hero_name.is_empty():
-		hero_name = SUGGESTIONS[0]
+		hero_name = tr(SUGGESTIONS[0])
 	close()
 	chosen.emit(hero_name)

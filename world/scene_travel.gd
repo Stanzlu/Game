@@ -32,9 +32,11 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 		Log.info(Log.Category.WORLD_STATE, "travel (stay)", {"target": target, "spawn": spawn})
 		return
 	_travelling = true
-	var scene := from.get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
-	if scene != null and scene.player != null:
-		scene.player.lock(&"travel")
+	# untyped: the pause menu asks is_travelling(), and GameScene preloads the pause menu
+	var scene := from.get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP)
+	var player: Node = scene.get(&"player") if scene != null else null
+	if player != null:
+		player.call(&"lock", &"travel")
 	if not sound.is_empty():
 		AudioDirector.sfx(sound)
 	Log.info(Log.Category.WORLD_STATE, "travel", {"target": target, "spawn": spawn})
@@ -46,8 +48,9 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 
 
 ## Fade-in time for a scene that just opened: a requested one, else short after a door and
-## long for a fresh start. Clears the request.
+## long for a fresh start. Clears the request; any travel is over once a scene opens.
 static func take_fade() -> float:
+	_travelling = false
 	var seconds := arrival_fade
 	arrival_fade = -1.0
 	if seconds >= 0.0:
