@@ -79,3 +79,34 @@ Startmenü → **Prototypen** → **Leistungstest**. Nichts drücken, bis das Er
 - „Bildschirmwackeln“ aus: Der Riss wackelt nicht.
 - „Blitzeffekte reduzieren“ an: Riss und Anzeige flackern nicht, sie blenden ruhig aus.
 - Lautstärken für Musik und Umgebung getrennt einstellbar.
+
+## Deine Rückmeldung vom 05.10. und was daraus wurde
+
+| Rückmeldung | Umsetzung |
+|-------------|-----------|
+| Menü richtig gut; Startbildschirm später anpassen | Bleibt so; neues Key-Art kommt mit mehr Inhalt (KNOWN_ISSUES #35). |
+| Hauptfigur: Frisur anders als bei den anderen | Dunkle, seitlich gekämmte Haare mit Wirbel, der nie anliegt. Die Elysianer tragen alle denselben braven Bob mit Mittelscheitel, Mira ihren Zopf. |
+| Warum ist Elysia gespiegelt? Passt das zur Bible? | Siehe unten. |
+| Musik passt zu Elysia | Bleibt. |
+| Naturgeräusche der Wirklichkeit realistischer als in Elysia | Neue Soundscapes (ADR-034): breite Flächen, Böen, Vögel, Tropfen und Knacken zu zufälligen Zeiten aus zufälligen Richtungen; Elysias Garten klingt bewusst gleichförmig. |
+| Landschaft natürlicher, wie in der echten Welt | Tal mit organischem Grundriss und Farben eines echten Regentags; Wald als echter Nachtwald (Birken im Mondlicht, Foxfire, Fliegenpilze statt Kristallen). |
+| Diagonal nach oben fehlt die Haltung | Eigene Dreiviertel-Rückansicht: Kopf gedreht, Wange und Ohr sichtbar, Arm vorne, Tasche seitlich. |
+| Passenderer Name als „Real“ | „Nach Elysia“ (ADR-035), austauschbar. |
+| Leistungstest: überall 30 fps | Wahrscheinlich die VSync-Bremse von macOS 26 im Stromsparmodus. Der Leistungstest erkennt sie jetzt, VSync ist abschaltbar (KNOWN_ISSUES #42). |
+
+### Warum Elysia gespiegelt ist
+
+- **Bible:** §9 beginnt mit „Perfekte Symmetrie.“ Dazu kommen „NPCs bewegen sich teilweise identisch, Schmetterlinge fliegen dieselben Routen, Wolken wiederholen sich“. Die Spiegelung macht diese Perfektion sichtbar, ohne dass jemand sie erklärt.
+- **Vorahnung (§46):** „perfekte Natur“ und „identische NPC-Bewegungen“ sollen früh auffallen. Spätestens wenn die Elysianer gespiegelt im Gleichtakt laufen, merkt man: Hier stimmt etwas nicht.
+- **Weltenbaum:** Er steht nicht in der Bible. Er stammt aus deinen Referenzbildern (Runde 2: Stadt mit heiligem Baum) und bildet die Mitte, um die sich alles spiegelt.
+
+**Wenn es dir zu viel ist, gibt es zwei Alternativen:**
+
+1. **Nur der Kern spiegelt sich:** Garten, Becken und Baum bleiben symmetrisch, die Ränder (Klippen, Wald) werden makellos, aber unregelmäßig.
+   - Vorteil: Am Anfang wirkt Elysia eher wie ein schöner Park, die Unruhe kommt langsamer.
+   - Nachteil: Der Kontrast zur Wirklichkeit wird schwächer.
+2. **Keine Spiegelung:** Elysias Perfektion entsteht nur über Sauberkeit und Wiederholung.
+   - Vorteil: Elysia wirkt am natürlichsten.
+   - Nachteil: Ein Bible-Merkmal (§9) fällt weg.
+
+Meine Empfehlung bleibt die volle Spiegelung, weil sie in der Bible steht. Option 1 ist ein guter Kompromiss, falls Elysia am Anfang zu unheimlich wirkt.
