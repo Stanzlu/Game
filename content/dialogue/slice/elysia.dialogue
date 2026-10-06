@@ -112,6 +112,24 @@ else
 % Die Blüte leuchtet von innen. Du riechst daran. Nichts. Ein sehr schönes Nichts. [ID:el_flower_2]
 % Du riechst noch einmal daran. Wieder nichts. Aber Elysia ist stolz auf dich. [ID:el_flower_3]
 do WorldState.add_xp(1000)
+do WorldState.set_flag("elysia.flower_smelled")
+=> END
+
+~ favor
+Elysianer: {{WorldState.player_name()}}! Kann ich irgendwas für dich tun? Irgendwas? [ID:el_favor_1]
+- Kann ich heute Nacht bei dir schlafen? [ID:el_favor_r1]
+	Elysianer: Natürlich! Mein Bett ist dein Bett. Ich schlafe davor, auf dem Boden. Sehr gern sogar. [ID:el_favor_2]
+	do WorldState.set_flag("elysia.offered_bed")
+- Schenk mir dein Haus. [ID:el_favor_r2]
+	Elysianer: Es gehört dir! Eigentlich gehört es dir schon immer. Ich wohne nur zur Probe darin. [ID:el_favor_3]
+	do WorldState.set_flag("elysia.offered_house")
+- Sag einmal Nein. [ID:el_favor_r3]
+	Elysianer: N… [ID:el_favor_4]
+	Elysianer: Ja! Ich meine, ja. Natürlich. Alles, was du willst. [ID:el_favor_5]
+	do WorldState.set_flag("elysia.asked_for_no")
+- Nichts, danke. [ID:el_favor_r4]
+	Elysianer: Nichts! So bescheiden. Wir bewundern das. Wir bewundern alles an dir. [ID:el_favor_6]
+	do WorldState.add_xp(150)
 => END
 
 ~ child
