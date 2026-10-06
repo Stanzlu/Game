@@ -59,7 +59,7 @@ S = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {
 s = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": true}}
 Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fallen_tree"}}
 ; der Pfad nach Westen zum Schuppen (Antreiber): erst offen, wenn Holz gebraucht wird
-X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "antreiber", "auto": true, "size": [1, 5], "if": "valley.wood_needed"}}
+X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "weg", "auto": true, "size": [1, 5], "if": "valley.wood_needed"}}
 Z = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.wood_needed"}}
 ; Ziege und Kartoffel (Beat 7)
 G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose"}}

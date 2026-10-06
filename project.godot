@@ -146,7 +146,7 @@ debug_panel={
 [internationalization]
 
 locale/translations=PackedStringArray("res://content/locale/ui.de.translation", "res://content/locale/journal.de.translation", "res://content/locale/items.de.translation")
-locale/translations_pot_files=PackedStringArray("res://content/dialogue/antreiber/antreiber.dialogue", "res://content/dialogue/sandbox/sandbox.dialogue", "res://content/dialogue/valley/mira_prototype.dialogue", "res://content/dialogue/elysia/elysia_prototype.dialogue", "res://content/dialogue/slice/elysia.dialogue", "res://content/dialogue/slice/tal.dialogue", "res://content/dialogue/slice/haus.dialogue")
+locale/translations_pot_files=PackedStringArray("res://content/dialogue/antreiber/antreiber.dialogue", "res://content/dialogue/sandbox/sandbox.dialogue", "res://content/dialogue/valley/mira_prototype.dialogue", "res://content/dialogue/elysia/elysia_prototype.dialogue", "res://content/dialogue/slice/elysia.dialogue", "res://content/dialogue/slice/tal.dialogue", "res://content/dialogue/slice/haus.dialogue", "res://content/dialogue/slice/antreiber.dialogue")
 locale/fallback="de"
 
 [layer_names]

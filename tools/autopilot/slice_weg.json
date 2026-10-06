@@ -1,0 +1,9 @@
+[
+  {"t": 1.0, "press": ["move_right"], "log": "walking to the shed"},
+  {"t": 5.0, "press": ["sprint"], "log": "hurrying"},
+  {"t": 9.0, "release": ["sprint"]},
+  {"t": 12.0, "release": ["move_right"], "log": "standing still"},
+  {"t": 18.5, "press": ["move_right"]}, {"t": 18.75, "release": ["move_right"]},
+  {"t": 19.2, "tap": ["interact"], "log": "take the wood"},
+  {"t": 20.0, "dialogue": 6.0}
+]

@@ -1,0 +1,53 @@
+# Der Weg zum Schuppen, Beat 5 des Vertical Slice (docs/PHASE4_PLAN.md).
+# Der Antreiber (Game Bible §14): „Wenn du genug leistest, bist du genug.“ Zuerst hilfreich,
+# effizient, schnell, organisiert. Später erschöpfend. Er erklärt nichts; er treibt an.
+# Die Cues gehören zu seinen Stimmungen (AntreiberModel.Mood) und erscheinen als Zurufe.
+
+~ start
+% Antreiber: Holz! Gute Idee. Ich hab den Weg schon geplant. [ID:sl_antr_start_1]
+% Antreiber: Schuppen, Holz, zurück, Feuer. Wenn wir zügig sind, schaffen wir das vor dem Dunkelwerden. [ID:sl_antr_start_2]
+=> END
+
+~ urging
+% Antreiber: Gut. Weiter so. [ID:sl_antr_urge_1]
+% Antreiber: Schritt, Schritt, Schritt. Sehr effizient. [ID:sl_antr_urge_2]
+% Antreiber: Da vorne. Siehst du? Gleich. [ID:sl_antr_urge_3]
+% Antreiber: Du machst das gut. Noch ein bisschen besser, dann reicht es. [ID:sl_antr_urge_4]
+% Antreiber: Ich hab mitgezählt. Wir liegen gut. [ID:sl_antr_urge_5]
+=> END
+
+~ cheering
+% Antreiber: Ja! So kommen wir voran! [ID:sl_antr_cheer_1]
+% Antreiber: Schneller ist besser. Das weiß jeder. [ID:sl_antr_cheer_2]
+% Antreiber: Perfekt. Fast perfekt. [ID:sl_antr_cheer_3]
+=> END
+
+~ tired
+% Antreiber: Nicht anhalten. Wer anhält, verliert. [ID:sl_antr_tired_1]
+% Antreiber: Wir sind fast da. Wir sind immer fast da. [ID:sl_antr_tired_2]
+% Antreiber: Müde ist nur ein Gefühl. Das geht weg, wenn wir ankommen. [ID:sl_antr_tired_3]
+=> END
+
+~ worried
+% Antreiber: Warum wirst du langsamer? [ID:sl_antr_worry_1]
+% Antreiber: Hey. Der Schuppen läuft uns nicht weg. Trotzdem. [ID:sl_antr_worry_2]
+=> END
+
+~ puzzled
+% Antreiber: Was machst du da? [ID:sl_antr_puzzle_1]
+% Antreiber: Das ist kein Plan. Das ist Stehen. [ID:sl_antr_puzzle_2]
+% Antreiber: Wir verlieren Zeit. Ich kann sie hören. [ID:sl_antr_puzzle_3]
+=> END
+
+~ silent
+Antreiber: … [ID:sl_antr_silent_1]
+=> END
+
+~ sign
+Ein Wegweiser. »Schuppen 200 m«. [ID:sl_antr_sign_1]
+=> END
+
+~ wood
+Das Holz liegt da. Trocken, gespalten, zusammengebunden. Es lag die ganze Zeit hier. [ID:sl_antr_wood_1]
+Der Antreiber sitzt auf dem Boden und weiß nicht genau, wohin mit seinen Händen. [ID:sl_antr_wood_2]
+=> END

@@ -7,6 +7,7 @@ const SCENES := {
 	"elysia": "res://world/levels/slice/elysia.tscn",
 	"tal": "res://world/levels/slice/tal.tscn",
 	"haus": "res://world/levels/slice/haus.tscn",
+	"weg": "res://encounters/antreiber/slice_antreiber.tscn",
 	"sandbox": "res://world/levels/sandbox.tscn",
 	"antreiber": "res://encounters/antreiber/antreiber_encounter.tscn",
 	"look_elysia": "res://world/levels/look_elysia.tscn",

@@ -356,6 +356,80 @@ def boot_icon_sprite(ms):
     return c
 
 
+# --------------------------------------------------------------------------- the Antreiber's path
+def signpost(ms):
+    """A weathered post with one arrow board pointing on along the path (to the shed)."""
+    rng = np.random.default_rng(33)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(26, 32)
+    c.paint(c.rect(7, 6, 10, 31), ex["plank"], np.where(c.xx < 8, 0.65, 0.3), dither=False)
+    board = c.rect(2, 6, 21, 13) | (c.rect(21, 6, 25, 13) & (np.abs(c.yy + 0.5 - 9.5) <= (25 - c.xx) * 0.9))
+    grain = pa.value_noise(32, 26, (1, 5), rng)
+    c.paint(board, ex["plank"], 0.55 + 0.2 * (1 - (c.yy - 6) / 7) + 0.15 * (grain - 0.5), contrast=2.0)
+    # letters worn to scratches
+    for x in range(5, 19, 2):
+        c.paint(c.rect(x, 9, x + 1, 11), ex["plank"], 0.12, dither=False)
+    lichen = board & (pa.value_noise(32, 26, 1.5, rng) > 0.82)
+    c.fill(lichen, np.array([130, 140, 100], np.float32))
+    c.outline(st["outline"])
+    return c
+
+
+def shed(ms):
+    """The old woodshed at the end of the path: a lean-to of grey boards with a tarred roof,
+    open at the front, split logs stacked dry inside."""
+    rng = np.random.default_rng(37)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(56, 50)
+    grey = ramp("#1e1c1a", "#34302c", "#4c4640", "#686058", "#867c72")
+    grain = pa.value_noise(50, 56, (1, 6), rng)
+    # back wall and sides
+    wall = c.rect(4, 14, 52, 46)
+    v = 0.35 + 0.15 * (grain - 0.5)
+    v = np.where(((c.xx - 4) % 6) == 5, 0.12, v)
+    c.paint(wall, grey, v, contrast=2.0)
+    # the open front: dark inside, logs stacked in rows (round ends facing us)
+    inside = c.rect(10, 20, 46, 46)
+    c.paint(inside, ramp("#0a0908", "#141210", "#201c18"), 0.4, dither=False)
+    logs = ramp("#3a2614", "#6a4626", "#9a6e40", "#c49a62")
+    for row in range(4):
+        y = 43 - row * 5
+        for k in range(7 - (row % 2)):
+            x = 13 + k * 5 + (row % 2) * 2.5
+            end = c.ellipse(x, y, 2.4, 2.3)
+            c.paint(end, logs, 0.35 + 0.5 * c.sphere(x - 0.8, y - 0.8, 2.6, 2.6), dither=False)
+            c.paint(end & c.ellipse(x, y, 0.8, 0.8), logs, 0.2, dither=False)
+    for px in (8, 46):  # front posts
+        c.paint(c.rect(px, 16, px + 3, 47), ex["bark"], np.where(c.xx == px, 0.6, 0.3), dither=False)
+    # roof: one slope, tar paper over boards, a drip edge
+    roof = c.rect(0, 6, 56, 18) & (c.yy >= 6 + (c.xx * 0.0))
+    rv = 0.3 + 0.35 * (1 - (c.yy - 6) / 12) + 0.08 * (pa.value_noise(50, 56, (2, 4), rng) - 0.5)
+    rv = np.where(((c.xx + (c.yy // 4) * 3) % 9) == 0, rv - 0.15, rv)
+    c.paint(roof, ex["roof"], rv, contrast=2.0)
+    c.paint(c.rect(0, 17, 56, 19), ex["roof"], 0.15, dither=False)
+    moss = roof & (pa.value_noise(50, 56, 2.5, rng) > 0.8)
+    c.paint(moss, st["grass"], 0.4, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def wood_bundle(ms):
+    """An armful of dry split logs tied with a cord, lying on the path."""
+    st = pa.STYLES["tal"]
+    logs = ramp("#3a2614", "#6a4626", "#9a6e40", "#c49a62", "#e0be88")
+    c = ms.Canvas(22, 14)
+    for k, y in enumerate((9.5, 7.0, 4.5)):
+        for j in range(3 - (k == 2)):
+            x0 = 2 + j * 0.5 + k * 1.5
+            m = c.rect(x0, y - 2, x0 + 16, y + 1.5)
+            c.paint(m, logs, 0.35 + 0.35 * (1 - (c.yy - (y - 2)) / 3.5) + 0.05 * j, dither=False)
+            end = c.ellipse(x0 + 16, y - 0.25, 1.6, 1.9)
+            c.paint(end, logs, 0.85, dither=False)
+    c.paint(c.rect(9, 2, 11, 12), ramp("#3a3326", "#6a6048", "#8a7e60"), 0.6, dither=False)  # cord
+    c.outline(st["outline"])
+    return c
+
+
 # --------------------------------------------------------------------------- the house
 LOGS = ramp("#160f0b", "#241913", "#35261c", "#4a3627", "#634a35", "#7d5f44")
 BEAM = ramp("#0e0a08", "#1a1310", "#2a2019", "#3b2d22")
@@ -622,6 +696,10 @@ def build(ms):
     ms.save("tal", "goat_boot", [goat(ms, f, "boot") for f in (0, 1)], (17, 24), shadow=[11, 3])
     ms.save("tal", "goat_potato", [goat(ms, f, "potato") for f in (0, 1)], (17, 24), shadow=[11, 3])
     ms.save("tal", "boot", boot_icon_sprite(ms), (7, 14))
+    # the Antreiber's path (slice beat 5)
+    ms.save("tal", "signpost", signpost(ms), (8, 30), shape={"circle": 3, "offset": [0, -1]}, shadow=[6, 2])
+    ms.save("tal", "shed", shed(ms), (28, 47), shape={"rect": [52, 10], "offset": [0, -6]}, shadow=[28, 5])
+    ms.save("tal", "wood_bundle", wood_bundle(ms), (11, 11))
     # the house inside (slice beat 6)
     ms.save("haus", "shell", shell(ms), (8, 8), flat=True,
             lights=[{"offset": [168, 32], "color": "#7f9cc4", "energy": 0.45, "range": 96}])

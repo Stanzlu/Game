@@ -6,8 +6,10 @@ the east for Mira's camp, with the story's obstacles built in: the bridge is bro
 middle, a field of stepping stones crosses the stream north of it (flat ones hold, round
 ones tip), and a fallen tree further up is the long, safe way round.
 
-Usage: python3 tools/art/layout_slice_maps.py tal [--write]
-Afterwards re-run tools/art/bake_ground.py content/maps/tal.txt.
+Also the two repeating pieces of the Antreiber's path (antreiber_tal, antreiber_tal_bench).
+
+Usage: python3 tools/art/layout_slice_maps.py tal|antreiber_tal|antreiber_tal_bench [--write]
+Afterwards re-run tools/art/bake_ground.py content/maps/<name>.txt.
 """
 import os
 import sys
@@ -191,8 +193,54 @@ def _fallen_tree(g):
     return cells
 
 
-def write(text):
-    path = os.path.join(ROOT, "content", "maps", "tal.txt")
+def antreiber(bench):
+    """One piece of the path that does not end (Antreiber, beat 5): forest on both sides, the
+    trail through the middle. Pieces repeat endlessly, so both edge columns are identical in
+    every piece and a tree stands on each seam. Every other piece has a bench and a sign."""
+    w, h = 20, 23
+    g = Grid(w, h)
+    for x in range(w):
+        inner = 0 < x < w - 1
+        north = 3 + (round(1.2 + wobble(x + (7 if bench else 0), (1.0, 2.1, 0.3), (0.6, 1.3, 1.1))) if inner else 1)
+        south = 3 + (round(1.2 + wobble(x + (3 if bench else 0), (0.9, 1.9, 0.9), (0.6, 1.1, 0.2))) if inner else 1)
+        for y in range(0, north):
+            g.set(x, y, "h")
+        for y in range(h - south, h):
+            g.set(x, y, "h")
+    widths = [2.6, 2.8, 3.2, 2.9, 2.6] if not bench else [2.6, 3.0, 3.4, 3.0, 2.6]
+    g.path([(-1, 11), (5, 11.2), (10, 10.8 if bench else 11.4), (15, 11.1), (20, 11)], 3.0, ",", only=".",
+           widths=widths)
+    for x in range(w):  # the seam: the same three path rows at both ends
+        for y in range(9, 14):
+            if x in (0, w - 1):
+                g.set(x, y, "," if 10 <= y <= 12 else ".")
+    g.ellipse(6 if bench else 13, 12.6, 1.8, 0.8, "m", only=",", wobble=0.6, seed=2 if bench else 5)
+    for x, y in ([(4, 10), (14, 12)] if bench else [(8, 12), (17, 10)]):
+        if g.get(x, y) == ",":
+            g.set(x, y, "p")
+    props = {"T": [(0, 5), (0, 17)], "P": [], "C": [], "R": [], "g": []}
+    if bench:
+        props["b"] = [(9, 9)]
+        props["S"] = [(5, 9)]
+        props["P"] += [(14, 5), (4, 17), (17, 17), (11, 6)]
+        props["T"] += [(3, 6)]
+        props["C"] += [(7, 4), (13, 17)]
+        props["R"] += [(16, 15)]
+        props["g"] += [(12, 8), (13, 8), (3, 14)]
+    else:
+        props["P"] += [(6, 5), (15, 17), (3, 17), (16, 4)]
+        props["T"] += [(12, 4), (9, 18)]
+        props["C"] += [(17, 6), (5, 16)]
+        props["R"] += [(4, 15), (5, 15)]
+        props["g"] += [(15, 8), (8, 14), (9, 14)]
+    for c, pts in props.items():
+        for x, y in pts:
+            g.set(x, y, c)
+    return g
+
+
+def write(text, name="tal"):
+    path = os.path.join(ROOT, "content", "maps", "%s.txt" % name)
     with open(path, encoding="utf-8") as f:
         head = f.read()
     head = head[:head.index("[map]\n") + len("[map]\n")]
@@ -202,10 +250,12 @@ def write(text):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2 or sys.argv[1] != "tal":
-        sys.exit("usage: layout_slice_maps.py tal [--write]")
-    grid = tal()
+    makers = {"tal": tal, "antreiber_tal": lambda: antreiber(False),
+              "antreiber_tal_bench": lambda: antreiber(True)}
+    if len(sys.argv) < 2 or sys.argv[1] not in makers:
+        sys.exit("usage: layout_slice_maps.py %s [--write]" % "|".join(makers))
+    grid = makers[sys.argv[1]]()
     if "--write" in sys.argv:
-        write(grid.text())
+        write(grid.text(), sys.argv[1])
     else:
         print(grid.text())

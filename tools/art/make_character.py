@@ -102,6 +102,25 @@ DESIGNS = {
         "child": True,
         "bag": "none",
     },
+    # The Antreiber (Game Bible §14): helpful, efficient, fast, organised; later exhausting.
+    # A faded red training jacket, a sweatband, a stopwatch on a lanyard, a short crew cut.
+    "antreiber": {
+        "skin": ramp("#84483c", "#be7a5e", "#e6ac88", "#fcd6b4"),
+        "hair": ramp("#1a1410", "#2e241c", "#46382c", "#64523e", "#8a7458"),
+        "top": ramp("#3e1214", "#6a1e1c", "#9a3426", "#c85a3a"),
+        "inner": ramp("#7a7c80", "#b4b6ba", "#e2e4e6", "#ffffff"),
+        "belt": ramp("#3e1214", "#6a1e1c", "#9a3426", "#c85a3a"),
+        "pants": ramp("#14161c", "#22262e", "#343a44", "#4c5460"),
+        "boots": ramp("#6a6a6e", "#a2a2a6", "#d6d6d8", "#f6f6f6"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#e07a6a"),
+        "outline": pa.hex_rgb("#1c1012"),
+        "hair_style": "crew",
+        "outfit": "jacket",
+        "headband": True,
+        "stopwatch": True,
+        "bag": "none",
+    },
     # Mira: practical traveler in the valley. Mustard rain cape, auburn ponytail, backpack.
     "mira": {
         "skin": ramp("#7a4438", "#b56f55", "#dea27e", "#f6cfae"),
@@ -283,6 +302,12 @@ class Figure:
             if not side:
                 self.part(c.rect(cx - 0.5 + (1 if three else 0), ty1 - 3, cx + 1.5 + (1 if three else 0), ty1 - 2),
                           "inner", 0.95)
+        if d.get("stopwatch") and not back:
+            # a stopwatch on a lanyard, on the chest
+            mid = cx + (1 if three else 0) + (1 if side else 0)
+            lanyard = (np.abs(np.abs(c.xx + 0.5 - mid) - (3 - (c.yy - ty0) * 0.6)) < 0.5) & (c.yy >= ty0) & (c.yy < ty0 + 4)
+            self.part(lanyard & torso, "boots", 0.3)
+            self.part(c.ellipse(mid, ty0 + 5, 1.6, 1.6), "boots", 0.85, line=True)
         if d.get("apron") and not back:
             ax0 = tx0 + (1 if not side else 2)
             apron = c.rect(ax0, ty0 + 3, tx1 - (1 if not side else 0), ty1 + 1)
@@ -355,7 +380,7 @@ class Figure:
         self.part(head, "skin", 0.48 + 0.5 * c.sphere(hx - 1.5, hy - 1.5, 7, 7))
         hair_v = 0.1 + 0.72 * c.sphere(hx - 2.5, hy - 4, 9, 8)
         style = d["hair_style"]
-        nape = {"swept": 2.5, "neat": 3.5}.get(style, 4)
+        nape = {"swept": 2.5, "neat": 3.5, "crew": 1.0}.get(style, 4)
         if back:
             hair = head | c.ellipse(hx, hy - 0.6, 7.2, 6.6)
             hair |= c.rect(hx - 6, hy + 1, hx + 6, hy + nape + hb) & c.ellipse(hx, hy + 1, 7.0, 6.0)
@@ -375,6 +400,8 @@ class Figure:
             elif style == "swept":
                 # fringe swept forward over the brow, ending in a point
                 fringe = c.rect(hx + 1, hy - 3, hx + 6.5, hy - 1) | c.rect(hx + 5, hy - 1, hx + 7, hy + 0.5)
+            elif style == "crew":
+                fringe = c.rect(hx + 1, hy - 2.8, hx + 6.3, hy - 2)
             else:
                 fringe = c.rect(hx + 1, hy - 2, hx + 6.5, hy - 0.5) & ((c.xx.astype(int) % 2) == 0)
             hair = cap | back_hair | fringe
@@ -391,6 +418,10 @@ class Figure:
                 bangs = c.rect(hx - 5.8, hy - 2.5, hx + 5.5, hy + 1) & (c.yy < edge)
                 bangs |= c.rect(hx - 6, hy - 1, hx - 4.5, hy + 1.5)  # tip over the brow
                 locks = c.rect(hx - 7, hy - 2, hx - 5, hy + 1.5 + hb * 0.5) | c.rect(hx + 5, hy - 2, hx + 7, hy + 1)
+            elif style == "crew":
+                # short crew cut: a thin straight hairline, the sides cropped close
+                bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy - 1.8)
+                locks = c.rect(hx - 6.8, hy - 2, hx - 5.6, hy) | c.rect(hx + 5.6, hy - 2, hx + 6.8, hy)
             else:
                 # pointed bangs: a zigzag edge over the forehead
                 zig = ((c.xx.astype(int) + (1 if three else 0)) % 3)
@@ -428,6 +459,11 @@ class Figure:
             # the perfect center parting
             part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
             c.rgb[part] = d["hair"][1]
+        if d.get("headband"):
+            # a sweatband across the brow, all the way round
+            band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & c.ellipse(hx, hy - 1, 7.4, 7.6) & (hair | head)
+            self.part(band, "inner", 0.85)
+            self.part(band & (c.yy >= hy - 2.8), "top", 0.75)
         if self.back3:
             c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
         if not back:

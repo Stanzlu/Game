@@ -211,13 +211,31 @@ func _mirror_x() -> float:
 
 
 func _grade_material() -> ShaderMaterial:
+	return grade_material(
+		{
+			"saturation": saturation,
+			"contrast": contrast,
+			"brightness": brightness,
+			"tint": tint,
+			"shadow_tint": shadow_tint,
+			"vignette": vignette,
+			"bloom": bloom,
+		}
+	)
+
+
+## The color grading post effect, also for scenes that are not LookScenes (encounters).
+## Keys: saturation, contrast, brightness, tint, shadow_tint, vignette, bloom.
+static func grade_material(values: Dictionary) -> ShaderMaterial:
 	var mat := ShaderMaterial.new()
 	mat.shader = GRADE_SHADER
-	mat.set_shader_parameter("saturation", saturation)
-	mat.set_shader_parameter("contrast", contrast)
-	mat.set_shader_parameter("brightness", brightness)
-	mat.set_shader_parameter("tint", Vector3(tint.r, tint.g, tint.b))
-	mat.set_shader_parameter("shadow_tint", Vector3(shadow_tint.r, shadow_tint.g, shadow_tint.b))
-	mat.set_shader_parameter("vignette", vignette)
-	mat.set_shader_parameter("bloom", bloom)
+	var tint_color: Color = values.get("tint", Color.WHITE)
+	var shadow: Color = values.get("shadow_tint", Color.BLACK)
+	mat.set_shader_parameter("saturation", float(values.get("saturation", 1.0)))
+	mat.set_shader_parameter("contrast", float(values.get("contrast", 1.0)))
+	mat.set_shader_parameter("brightness", float(values.get("brightness", 0.0)))
+	mat.set_shader_parameter("tint", Vector3(tint_color.r, tint_color.g, tint_color.b))
+	mat.set_shader_parameter("shadow_tint", Vector3(shadow.r, shadow.g, shadow.b))
+	mat.set_shader_parameter("vignette", float(values.get("vignette", 0.0)))
+	mat.set_shader_parameter("bloom", float(values.get("bloom", 0.0)))
 	return mat

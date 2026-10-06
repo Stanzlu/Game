@@ -170,4 +170,5 @@ NAME_HINT,Tippe einen Namen oder wähle einen aus.
 PLACE_ELYSIA,Elysia
 PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus
+PLACE_WEG,Der Weg zum Schuppen
 END_OF_SLICE,"Ende des Prototyps. Danke fürs Spielen."

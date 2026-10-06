@@ -1253,6 +1253,49 @@
    "res://assets/generated/props/tal/rock_1.png"
   ]
  },
+ "tal/shed": {
+  "anchor": [
+   28,
+   47
+  ],
+  "shadow": [
+   28,
+   5
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    52,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/shed.png"
+  ]
+ },
+ "tal/signpost": {
+  "anchor": [
+   8,
+   30
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/signpost.png"
+  ]
+ },
  "tal/small_mushrooms": {
   "anchor": [
    5,
@@ -1416,6 +1459,15 @@
    "res://assets/generated/props/tal/wildflowers_3.png",
    "res://assets/generated/props/tal/wildflowers_4.png",
    "res://assets/generated/props/tal/wildflowers_5.png"
+  ]
+ },
+ "tal/wood_bundle": {
+  "anchor": [
+   11,
+   11
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wood_bundle.png"
   ]
  },
  "tal/woodpile": {
