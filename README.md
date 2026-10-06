@@ -26,7 +26,7 @@ Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
-| `tools/godot.sh -- --title=real` | Startbild „REAL“ statt „Elysia“ erzwingen (`--title=elysia` umgekehrt) |
+| `tools/godot.sh -- --title=real` | Startbild „Nach Elysia“ statt „Elysia“ erzwingen (`--title=elysia` umgekehrt) |
 | `tools/godot.sh -- --large-text` | große Schrift nur für diese Sitzung |
 | `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner); im Spiel: Startmenü → Prototypen → Leistungstest |
 | `.venv/bin/python tools/audio/make_music.py` | Musik-Loops neu erzeugen |

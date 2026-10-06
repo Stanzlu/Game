@@ -136,9 +136,12 @@ func _sound_set() -> AudioDirectorService.SoundSet:
 	)
 
 
-## Logo, tagline, skin, music and ambience of the chosen title.
+## Logo, tagline, skin, music and ambience of the chosen title. The window title keeps the
+## disguise too: "Elysia" until a save reached the real world, then the true title.
 func _apply_title_mode() -> void:
 	theme = UiSkin.ELYSIA_SKIN if _is_elysia() else UiSkin.REAL_SKIN
+	if DisplayServer.get_name() != "headless":
+		get_window().title = tr("TITLE_ELYSIA" if _is_elysia() else "GAME_TITLE")
 	_logo.texture = LOGO_ELYSIA if _is_elysia() else LOGO_REAL
 	_logo.size = _logo.texture.get_size()
 	if _is_elysia():

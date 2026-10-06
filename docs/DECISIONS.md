@@ -248,3 +248,14 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - Klänge sind physikalisch modelliert (`tools/audio/make_nature.py`, 0 €): Tropfen mit log-normaler Lautstärke und Blasenresonanz, Wind durch wandernde Resonanzen, Vogelrufe nach Gesangsstruktur, Entfernung über Tiefpass und Außenhall.
   - Richtung über vier Panorama-Busse (`NatureL2`, `NatureL1`, `NatureR1`, `NatureR2`), die zur Laufzeit angelegt werden und in `Ambience` münden; die Lautstärke-Einstellung gilt also weiter.
 - **Konsequenzen:** Tageszeiten und Orte wählen eine Definition statt einer Datei (`DayLight`, Szenen-Export `ambience`). Neue Orte brauchen nur eine neue `.tres`. Ob es nach Natur klingt, entscheidet das Ohr im Playtest (KNOWN_ISSUES #29).
+
+## ADR-035 · Der wahre Titel heißt „Nach Elysia“
+- **Status:** angenommen · 2026-10-06 (vorläufig, Bestätigung durch den Projektinhaber ausstehend)
+- **Kontext:** Playtest Phase 3: „Finde einen passenderen Namen als ‚Real‘, Elysia ist für die erste Welt super.“ Die Bible führt REAL ausdrücklich als Arbeitstitel. §2 will gerade nicht die Frage „fake oder real?“ stellen, sondern „Was bedeutet es, wirklich am Leben zu sein?“; §65: „Du musst keinen Teil von dir vernichten, um weiterzugehen.“
+- **Entscheidung:** Der Titel nach dem Übertritt (Startbild, Titelkarte am Ende des Slice, Fenstertitel) lautet **„Nach Elysia“** (englisch später „After Elysia“).
+  - Das Logo nimmt dieselben Serifen-Buchstaben wie Elysia, aber ungeschmückt (kein Gold, keine Filigran-Ranken), mit einem feinen Riss durch das Y. Wo Elysias Kristall schwebte, wächst ein Keimling (§29/30: der Samen ist das zentrale Symbol).
+  - Der Fenstertitel folgt dem Startbild: „Elysia“, bis ein Spielstand die Wirklichkeit erreicht hat.
+  - REAL bleibt interner Projektname: Ordner der Spielstände (`REAL`), Bundle-ID, Repository und Dokumente ändern sich nicht, damit keine Spielstände verloren gehen.
+- **Begründung:** Der Spieler kennt das Wort Elysia, und im Moment der Enthüllung bekommt es eine neue Bedeutung: Es geht um das Leben danach, nicht um Echtheit gegen Fälschung. Der Titel stellt Elysia nicht als Feind hin, er spricht vom Weitergehen.
+- **Verworfene Vorschläge:** „Wildwuchs“ (stark als Gegenbild zum gemähten Elysia, aber schwer international), „Lebendig“ (trifft die Kernfrage, aber kaum auffindbar), „Unscripted“ (klug, aber wieder fake gegen echt), REAL behalten (vom Projektinhaber als unpassend empfunden).
+- **Konsequenzen:** Ein anderer Titel braucht nur `logo_real()` in `tools/art/make_title.py` und die Schlüssel `GAME_TITLE` und `BOOT_TITLE` in `content/locale/ui.csv`.

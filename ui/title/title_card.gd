@@ -1,8 +1,8 @@
 class_name TitleCard
 extends CanvasLayer
 ## The last beat of the vertical slice (Game Bible §56): "Schwarz. Titel." The screen goes
-## black, the music stops, REAL fades in, stays and fades out; then `finished`. Accept or
-## cancel skips once the title is visible.
+## black, the music stops, the true title (ADR-035) fades in, stays and fades out; then
+## `finished`. Accept or cancel skips once the title is visible.
 
 signal finished
 

@@ -24,7 +24,7 @@ Eintrag, Austausch ohne Logikänderung möglich (ADR-003).
 | `assets/generated/music/*_loop.wav` | Musik-Loops Elysia (8, 4 und 2 Takte), Tal, Nachtwald, Antreiber mit gemeinsamem Motiv | projekt-eigen, synthetisch (`tools/audio/make_music.py`) | projekt-eigen | Komposition und Aufnahme (Phase 6 bzw. nach Budget) |
 | `assets/generated/ui/*.png` | Elysia-Rahmen mit Edelsteinen, Münze, Funkeln, Riss, Lichtstrahlen, Quest-Marker | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete UI im Elysia-Stil |
 | `assets/generated/items/*.png` | Item-Icons 16×16 (Kompliment, Stein, Samen) | projekt-eigen, Pixel für Pixel in `tools/art/make_ui.py` | projekt-eigen | handgezeichnete Icons |
-| `assets/generated/title/*.png` | Startbilder: symmetrische Insel mit Weltenbaum, Wasserfall, Logos „Elysia“ und „REAL“, Abendtal | projekt-eigen, aus den Spiel-Sprites zusammengesetzt (`tools/art/make_title.py`) | projekt-eigen | Key-Art |
+| `assets/generated/title/*.png` | Startbilder: symmetrische Insel mit Weltenbaum, Wasserfall, Logos „Elysia“ und „Nach Elysia“, Abendtal | projekt-eigen, aus den Spiel-Sprites zusammengesetzt (`tools/art/make_title.py`) | projekt-eigen | Key-Art |
 | `assets/generated/sfx/*.wav` | Menü-, Belohnungs-, Dialog- und Riss-Klänge (ADR-027) | projekt-eigen, synthetisch (`tools/audio/make_sfx.py`) | projekt-eigen | Sounddesign |
 | `assets/generated/objects/*.png` | Elysia-Truhe (zu/offen), Stein | projekt-eigen, prozedural (`tools/art/make_ui.py`) | projekt-eigen | handgezeichnete Objekte |
 | `content/maps/look_{elysia,tal,wald}.txt` | Look-Karten Elysia-Garten, Tal, Wald bei Nacht | projekt-eigen | projekt-eigen | Slice-Karten (Phase 3) |

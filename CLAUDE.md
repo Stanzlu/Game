@@ -30,7 +30,8 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
   `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`.
 - Autopilot für reproduzierbare Aufnahmen: `tools/autopilot/*.json` (nur Debug; `tap` für Menüs/Dialoge).
 - Elysia ist spiegelsymmetrisch (`[meta] symmetry`, ADR-031); das Startbild heißt „Elysia“, bis ein Stand
-  die Wirklichkeit erreicht (ADR-030, `--title=elysia|real` für Aufnahmen).
+  die Wirklichkeit erreicht, danach „Nach Elysia“ (ADR-030, ADR-035; REAL bleibt Projektname;
+  `--title=elysia|real` für Aufnahmen).
 - Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops), `make_nature.py` (Wirklichkeit:
   Soundscapes in `content/audio`, ADR-034), `make_ambience.py` (Elysias Garten); Titel: `tools/art/make_title.py`.
   UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).

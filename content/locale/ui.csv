@@ -1,5 +1,7 @@
 keys,de
-BOOT_TITLE,REAL
+BOOT_TITLE,Nach Elysia
+GAME_TITLE,Nach Elysia
+TITLE_ELYSIA,Elysia
 BOOT_SUBTITLE,Prototyp · Systeme
 TITLE_ELYSIA_TAGLINE,Ein Abenteuer für die Ewigkeit
 BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
@@ -138,7 +140,7 @@ DEBUG_MUSIC,Musik wechseln
 DEBUG_MUSIC_NOW,Musik: %s
 MENU_BENCHMARK,Leistungstest
 MENU_TITLE_CARD,Schluss: Titelkarte
-MENU_SWITCH_TITLE,Startbild wechseln (Elysia / REAL)
+MENU_SWITCH_TITLE,Startbild wechseln (Elysia / Nach Elysia)
 OPTION_OK,OK
 BENCH_TITLE,Leistungstest
 BENCH_SCENE,Szene

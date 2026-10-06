@@ -19,7 +19,7 @@ import os
 import sys
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pixelart as pa  # noqa: E402
@@ -337,41 +337,31 @@ def logo_elysia():
 
 
 def logo_real():
-    """REAL in plain letters (cream, no gold) with a thin crack through the A (the rift)."""
-    W, H = 200, 64
-    stroke, letter_h = 9, 44
+    """The true title after the crossing (ADR-035): "NACH ELYSIA". The same serif capitals as
+    Elysia's logo, but unvarnished (no gold, no filigree), a thin crack through the Y (the
+    rift) and, where Elysia's crystal floated, a small seedling (Game Bible §29/30: the seed
+    is the central symbol). The word above is small and plain, like a note on paper."""
+    W, H = 264, 76
+    letter_h, stroke, gap = 40, 8, 7
+    word = "ELYSIA"
     img = Image.new("L", (W, H), 0)
     d = ImageDraw.Draw(img)
-    x0, y0 = 10, 8
-    gap = 8
-    # R
-    x = x0
-    d.rectangle([x, y0, x + stroke - 1, y0 + letter_h - 1], fill=255)
-    d.rounded_rectangle([x, y0, x + 34, y0 + 24], radius=11, fill=255)
-    d.rounded_rectangle([x + stroke, y0 + stroke, x + 34 - stroke, y0 + 24 - stroke], radius=4, fill=0)
-    d.polygon([(x + 14, y0 + 22), (x + 24, y0 + 22), (x + 38, y0 + letter_h - 1), (x + 28, y0 + letter_h - 1)], fill=255)
-    # E
-    x += 38 + gap
-    d.rectangle([x, y0, x + stroke - 1, y0 + letter_h - 1], fill=255)
-    d.rectangle([x, y0, x + 30, y0 + stroke - 1], fill=255)
-    d.rectangle([x, y0 + letter_h // 2 - stroke // 2, x + 24, y0 + letter_h // 2 + stroke // 2], fill=255)
-    d.rectangle([x, y0 + letter_h - stroke, x + 30, y0 + letter_h - 1], fill=255)
-    # A
-    x += 30 + gap
-    a_left = x
-    d.polygon([(x, y0 + letter_h - 1), (x + 17, y0), (x + 27, y0), (x + 44, y0 + letter_h - 1),
-               (x + 34, y0 + letter_h - 1), (x + 22, y0 + 12), (x + 10, y0 + letter_h - 1)], fill=255)
-    d.rectangle([x + 10, y0 + 27, x + 34, y0 + 27 + stroke - 2], fill=255)
-    # L
-    x += 44 + gap
-    d.rectangle([x, y0, x + stroke - 1, y0 + letter_h - 1], fill=255)
-    d.rectangle([x, y0 + letter_h - stroke, x + 30, y0 + letter_h - 1], fill=255)
+    probe = Image.new("L", (W * 2, H), 0)
+    total = sum(draw_letter(ImageDraw.Draw(probe), ch, 10, 0, letter_h, stroke) for ch in word)
+    total += gap * (len(word) - 1)
+    x = (W - total) // 2
+    y0 = 28
+    y_left = 0
+    for ch in word:
+        if ch == "Y":
+            y_left = x
+        x += draw_letter(d, ch, x, y0, letter_h, stroke) + gap
     mask = np.array(img) > 0
     yy, xx = np.mgrid[0:H, 0:W]
-    # crack through the A: a jagged line from top to bottom
+    # the crack: a jagged line down through the Y, from the fork to the foot
     rng = np.random.default_rng(4)
     crack = np.zeros_like(mask)
-    cxk = a_left + 21.0
+    cxk = y_left + 17.0
     for y in range(y0 - 2, y0 + letter_h + 2):
         cxk += rng.choice([-1, 0, 0, 1])
         crack[y, int(cxk)] = True
@@ -381,6 +371,32 @@ def logo_real():
     rgba[c_in, :3] = (58, 50, 52)
     glint = c_in & (yy > y0 + 14) & (yy < y0 + 30) & (np.roll(c_in, 1, 1))
     rgba[glint, :3] = (170, 200, 210)
+    # "NACH" small and plain above the left half of the word
+    font = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "jersey15", "Jersey15-Regular.ttf"), 20)
+    small = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(small).text(((W - total) // 2 + 1, 4), "NACH", font=font, fill=255)
+    smask = (np.array(small) > 127) & (rgba[..., 3] == 0)
+    rgba[smask, :3] = (214, 206, 192)
+    rgba[smask, 3] = 255
+    rgba[smask & ~np.roll(smask, 1, 0), :3] = (246, 242, 233)
+    # the seedling where the crystal was: a short stem and two leaves
+    cx = W // 2
+    stem_c, leaf_c, leaf_l = (96, 128, 70), (110, 150, 74), (160, 196, 106)
+    for y in range(13, 24):
+        rgba[y, cx, :3] = stem_c
+        rgba[y, cx, 3] = 255
+    for dx, dy in ((-1, 0), (-2, 0), (-3, -1), (-4, -1), (-2, -1), (-3, -2)):
+        rgba[15 + dy, cx + dx, :3] = leaf_c
+        rgba[15 + dy, cx + dx, 3] = 255
+    for dx, dy in ((1, 0), (2, -1), (3, -1), (4, -2), (2, -2), (3, -3), (5, -3)):
+        rgba[13 + dy, cx + dx, :3] = leaf_c
+        rgba[13 + dy, cx + dx, 3] = 255
+    rgba[14, cx - 3, :3] = leaf_l
+    rgba[11, cx + 3, :3] = leaf_l
+    # a little earth around the stem's foot
+    for dx in range(-3, 4):
+        rgba[24, cx + dx, :3] = (92, 74, 58)
+        rgba[24, cx + dx, 3] = 255
     return finish_logo(rgba, QUIET)
 
 

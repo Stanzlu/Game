@@ -45,7 +45,7 @@ Kurze Rundgänge für Aufnahmen: `tools/autopilot/look_elysia_walk.json` (zum We
 |-------|-------|
 | UI Elysia | Goldrahmen mit Edelsteinecken, warme Creme-Schrift, violett-dunkler Grund. HUD oben links (Level, XP, Gold), Quest oben rechts mit hüpfendem Marker, Popups laut und übertrieben. Seltenheit immer als Wort. |
 | UI Real | Keine Rahmen, warmes Grau (ruhig, nicht düster), kein HUD. Aufgehobenes erscheint als eine leise Zeile unten links. |
-| Startbild | Vor dem Übertritt der Schein-Titel „Elysia“ (Gold, Kristall, symmetrisch), danach „REAL“ über einem Abendtal (ADR-030). |
+| Startbild | Vor dem Übertritt der Schein-Titel „Elysia“ (Gold, Kristall, symmetrisch), danach der wahre Titel „Nach Elysia“ über einem Abendtal: dieselben Buchstaben, ungeschmückt, mit Riss, und statt des Kristalls ein Keimling (ADR-030, ADR-035). |
 | Übergang | HUD zerfällt einzeln (Gold, XP, Level), Musik läuft als Bandstopp aus, Stille, schwarz, Regen. Ohne Flackern und Wackeln, wenn der Spieler es abgeschaltet hat. |
 | Tageslicht Tal | Regentag (hell, entsättigt, flach), Abend (warmes Orange, kein Regen, Bach und leise Musik), Nacht (kühles Blau, Lampen warm). Elysia hat kein Tageslicht. |
 | Musik | Ein Motiv (Stufen 3-5-6-5-3-2) in allen Welten: Elysia perfekt, Tal menschlich, Wald versteckt, Antreiber hetzend. Elysias Loop schrumpft von 8 auf 4 und 2 Takte (ADR-032). |
@@ -72,7 +72,7 @@ Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, frem
 | `tools/art/bake_ground.py <karte> [--preview-dir d]` | gebackener Boden und Wassermaske laut `[meta]` (nach `make_sprites.py`, wegen der Prop-Schatten) |
 | `tools/audio/make_ambience.py` | Regen-, Garten-, Wasser-, Nachtwald-, Wind-, Regen-mit-Wind- und Abend-Loops (nahtlos) |
 | `tools/audio/make_music.py [--only elysia]` | Musik-Loops Elysia (drei Längen), Tal, Wald, Antreiber (nahtlos, gemeinsames Motiv) |
-| `tools/art/make_title.py [--preview x.png]` | Startbilder: symmetrische Insel, Wasserfall, Logos „Elysia“ und „REAL“, Abendtal |
+| `tools/art/make_title.py [--preview x.png]` | Startbilder: symmetrische Insel, Wasserfall, Logos „Elysia“ und „Nach Elysia“, Abendtal |
 | `tools/art/make_ui.py [--preview x.png]` | Elysia-Rahmen, Münze, Funkeln, Riss, Truhe, Stein |
 
 Installation: `.venv/bin/pip install -r requirements-art.txt`. Alle Generatoren sind

@@ -179,7 +179,15 @@ func _wait(seconds: float) -> Signal:
 func report() -> String:
 	var info := Engine.get_version_info()
 	var lines: PackedStringArray = []
-	lines.append("REAL – %s" % TranslationServer.translate("BENCH_TITLE"))
+	lines.append(
+		(
+			"%s – %s"
+			% [
+				TranslationServer.translate("GAME_TITLE"),
+				TranslationServer.translate("BENCH_TITLE")
+			]
+		)
+	)
 	lines.append(
 		(
 			"%s · Godot %s · %s"
