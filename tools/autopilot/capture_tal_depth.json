@@ -1,0 +1,15 @@
+[
+  {"t": 0.2, "flag": "valley.mira_met", "log": "story up to the evening"},
+  {"t": 0.2, "flag": "house.mira_visited"},
+  {"t": 0.2, "flag": "valley.goat_loose"},
+  {"t": 0.2, "flag": "valley.goat_traded"},
+  {"t": 0.2, "flag": "valley.bridge_fixed"},
+  {"t": 0.3, "teleport": [26, 14], "log": "into the house and out again: the valley in the evening"},
+  {"t": 0.4, "press": ["move_up"]},
+  {"t": 0.45, "release": ["move_up"]},
+  {"t": 0.6, "tap": ["interact"]},
+  {"t": 2.0, "press": ["move_down"]},
+  {"t": 3.2, "release": ["move_down"]},
+  {"t": 5.0, "teleport": [30, 16], "log": "the goat on the woodpile"},
+  {"t": 7.0, "teleport": [50, 21], "log": "Mira across her fire"}
+]
