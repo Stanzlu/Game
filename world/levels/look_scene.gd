@@ -21,6 +21,8 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var sky_bottom := Color(1, 1, 1, 1)
 @export var petals := false
 @export var motes := false
+## Dim dust drifting in a quiet room (the house).
+@export var dust := false
 @export var fireflies := false
 ## Leaves blown through the view in gusts (the real world's wind, Game Bible §12).
 @export var wind_leaves := false
@@ -39,6 +41,8 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export var swimmers := 0
 @export_enum("koi.png", "fish_shadow.png") var swimmer_texture := "fish_shadow.png"
 @export var dragonflies := 0
+## Frogs on the banks of streams and ponds (the real world).
+@export var frogs := 0
 ## Map cells where a butterfly flutters around.
 @export var butterfly_cells: PackedVector2Array = []
 ## Elysia (Game Bible §9, §35): animals, plants and cloud shadows repeat exactly, mirrored
@@ -93,11 +97,13 @@ func _build_world() -> void:
 		view.world_root.add_child(AmbientParticles.petals(view))
 	if motes:
 		view.world_root.add_child(AmbientParticles.motes(view))
+	if dust:
+		view.world_root.add_child(AmbientParticles.dust(view))
 	if fireflies:
 		glow_layer.add_child(AmbientParticles.fireflies(view))
 	if wind_leaves:
 		view.world_root.add_child(AmbientParticles.leaves(view))
-	if bird_interval > 0.0 or swimmers > 0 or dragonflies > 0:
+	if bird_interval > 0.0 or swimmers > 0 or dragonflies > 0 or frogs > 0:
 		var life := AmbientLife.new()
 		life.name = "Life"
 		view.world_root.add_child(life)
@@ -112,6 +118,7 @@ func _build_world() -> void:
 			life.enable_birds(bird_interval, bird_tint)
 		life.add_swimmers(swimmers, swimmer_texture)
 		life.add_darters(dragonflies)
+		life.add_frogs(frogs)
 	if fog_banks > 0:
 		var fog := FogDrift.new()
 		fog.name = "Fog"
@@ -143,6 +150,14 @@ func _setup_day_light() -> void:
 	if map.ground_art != null:
 		day_light.ground = map.ground_art.material as ShaderMaterial
 	day_light.rain = view.viewport.get_node_or_null("WeatherLayer/Rain")
+	# evening sun through the breaking clouds: screen space, above the world, below the UI
+	var light_layer := CanvasLayer.new()
+	light_layer.name = "LightLayer"
+	light_layer.layer = 2
+	view.viewport.add_child(light_layer)
+	day_light.rays = SunRays.new()
+	day_light.rays.name = "SunRays"
+	light_layer.add_child(day_light.rays)
 	# The time of day is part of the game state (resting passes it); the scene's own
 	# preset only applies when none was set yet.
 	var start := WorldState.day_preset() if not WorldState.day_preset().is_empty() else day_preset

@@ -11,16 +11,16 @@ const DECOR := preload("res://world/props/decor.tscn")
 const PICKUP := preload("res://world/props/pickup.tscn")
 const SOUNDSCAPE := preload("res://content/audio/tal_regentag.tres")
 const WOOD_FLAG := "valley.wood_taken"
-## Dusk under the trees, rain: the same light as the valley, a little darker.
-const WORLD_TINT := Color(0.68, 0.74, 0.86)
+## Under the trees in the rain: the valley's light, a little darker and cooler (ADR-041).
+const WORLD_TINT := Color(0.78, 0.84, 0.9)
 const GRADE := {
-	"saturation": 0.78,
-	"contrast": 0.95,
-	"brightness": 0.04,
-	"tint": Color(0.96, 0.99, 1.03),
-	"shadow_tint": Color(0.05, 0.06, 0.08),
+	"saturation": 0.95,
+	"contrast": 0.97,
+	"brightness": 0.03,
+	"tint": Color(0.96, 1.0, 1.03),
+	"shadow_tint": Color(0.03, 0.07, 0.08),
 	"vignette": 0.2,
-	"bloom": 0.15,
+	"bloom": 0.25,
 }
 
 var _wood: Node2D

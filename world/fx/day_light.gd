@@ -12,42 +12,49 @@ const ORDER := GameState.DAY_PRESETS
 const PRESETS := {
 	"regentag":
 	{
-		"world_tint": Color(1.0, 1.0, 1.0),
-		"saturation": 0.8,
-		"contrast": 0.94,
-		"brightness": 0.06,
-		"tint": Color(0.97, 0.99, 1.02),
-		"shadow_tint": Color(0.05, 0.06, 0.07),
-		"vignette": 0.12,
-		"bloom": 0.2,
+		# soft summer rain (ADR-041): the greens stay luminous, wet things glisten
+		"world_tint": Color(0.88, 0.94, 0.97),
+		"saturation": 0.97,
+		"contrast": 0.98,
+		"brightness": 0.02,
+		"tint": Color(0.97, 1.0, 1.02),
+		"shadow_tint": Color(0.03, 0.07, 0.08),
+		"vignette": 0.1,
+		"bloom": 0.3,
 		"lamps": 0.15,
 		"rain": true,
 		"ripples": 0.45,
+		"clouds": 0.0,
+		"rays": 0.0,
 		"ambience": "res://content/audio/tal_regentag.tres",
 		"ambience_db": -4.0,
 		"music": "silence",
 	},
 	"abend":
 	{
-		"world_tint": Color(0.9, 0.79, 0.7),
-		"saturation": 1.0,
-		"contrast": 1.04,
-		"brightness": -0.02,
-		"tint": Color(1.04, 0.97, 0.9),
-		"shadow_tint": Color(0.03, 0.02, 0.07),
-		"vignette": 0.3,
-		"bloom": 0.7,
+		# golden hour after the rain: warm light, violet shadows, everything glows a little
+		"world_tint": Color(1.0, 0.89, 0.76),
+		"saturation": 1.1,
+		"contrast": 1.05,
+		"brightness": 0.04,
+		"tint": Color(1.08, 0.98, 0.84),
+		"shadow_tint": Color(0.07, 0.03, 0.1),
+		"vignette": 0.24,
+		"bloom": 0.85,
 		"lamps": 0.7,
 		"rain": false,
 		"ripples": 0.0,
+		# the sky breaks up: cloud shadows drift over the meadows, the low sun comes through
+		"clouds": 0.16,
+		"rays": 1.0,
 		"ambience": "res://content/audio/tal_abend.tres",
 		"ambience_db": -8.0,
 		"music": "valley",
 	},
 	"nacht":
 	{
-		"world_tint": Color(0.3, 0.35, 0.52),
-		"saturation": 0.72,
+		"world_tint": Color(0.32, 0.38, 0.58),
+		"saturation": 0.82,
 		"contrast": 1.06,
 		"brightness": 0.0,
 		"tint": Color(0.9, 0.97, 1.08),
@@ -57,6 +64,8 @@ const PRESETS := {
 		"lamps": 1.0,
 		"rain": true,
 		"ripples": 0.45,
+		"clouds": 0.0,
+		"rays": 0.0,
 		"ambience": "res://content/audio/tal_nacht.tres",
 		"ambience_db": -4.0,
 		"music": "silence",
@@ -71,6 +80,7 @@ var world_tint: CanvasModulate
 var grade: ShaderMaterial
 var ground: ShaderMaterial
 var rain: RainFx
+var rays: SunRays
 var _tween: Tween
 
 
@@ -97,6 +107,9 @@ func set_preset(preset_name: String, seconds := 4.0) -> void:
 			_blend_param(grade, key, target, t)
 	if ground != null:
 		_blend_param(ground, "ripple_strength", float(p["ripples"]), t)
+		_blend_param(ground, "cloud_shadow", float(p["clouds"]), t)
+	if rays != null:
+		_blend(rays, ^"strength", float(p["rays"]), t)
 	for node in get_tree().get_nodes_in_group(&"lamp_props"):
 		_blend(node, ^"light_scale", float(p["lamps"]), t)
 	if rain != null:

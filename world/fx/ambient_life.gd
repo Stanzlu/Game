@@ -2,13 +2,17 @@ class_name AmbientLife
 extends Node2D
 ## Small animals that make a scene feel alive (look prototype): bird flocks with ground
 ## shadows crossing the view, fish (or koi) swimming in water cells, dragonflies darting
-## over water. Pure decoration: no collision, deterministic enough for captures.
+## over water, frogs on the banks that hop off when someone comes too close (the real
+## world, ADR-041). Pure decoration: no collision, deterministic enough for captures.
 ##
 ## Perfect loops (Elysia, Game Bible §9 and §35): the same flock in the same formation
 ## crosses on an exact beat, koi circle the pool evenly spaced, dragonflies fly mirrored
 ## figure eights. Nothing is random, so attentive players start to notice the repetition.
 
 const FX_DIR := "res://assets/generated/props/fx/"
+## Frogs hop off when someone comes this close; one hop takes this long.
+const FROG_SHY := 30.0
+const FROG_HOP_SECONDS := 0.42
 
 var view: GameView
 var map: MapView
@@ -20,6 +24,8 @@ var _birds: Array[Dictionary] = []
 var _swimmers: Array[Dictionary] = []
 var _darters: Array[Dictionary] = []
 var _water_cells: Array[Vector2i] = []
+var _bank_cells: Array[Vector2i] = []
+var _frogs: Array[Dictionary] = []
 var _time := 0.0
 var _perfect := false
 var _mirror_x := 0.0
@@ -41,6 +47,8 @@ func setup(game_view: GameView, map_view: MapView) -> void:
 				and _is_open_water(Vector2i(x, y))
 			):
 				_water_cells.append(Vector2i(x, y))
+			elif _is_bank(Vector2i(x, y)):
+				_bank_cells.append(Vector2i(x, y))
 
 
 ## Flocks every `interval` seconds on average; `tint` darkens birds for dusk or bats.
@@ -128,9 +136,46 @@ func add_darters(count: int) -> void:
 		)
 
 
+## Frogs sitting on the banks. They hop a little now and then, and away from anyone who
+## comes within reach.
+func add_frogs(count: int) -> void:
+	if _bank_cells.is_empty():
+		return
+	var texture := load(FX_DIR + "frog.png") as Texture2D
+	for i in count:
+		var sprite := Sprite2D.new()
+		sprite.texture = texture
+		sprite.vframes = 2
+		sprite.offset = Vector2(0, -3)
+		# above the grass tufts on the bank, so one actually sees them
+		sprite.z_index = 1
+		sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+		add_child(sprite)
+		var at := _random_bank_point()
+		sprite.position = at
+		sprite.flip_h = _rng.randf() < 0.5
+		(
+			_frogs
+			. append(
+				{
+					"sprite": sprite,
+					"pos": at,
+					"from": at,
+					"to": at,
+					"hop": -1.0,
+					"rest": _rng.randf_range(3.0, 9.0),
+				}
+			)
+		)
+
+
 func _process(delta: float) -> void:
 	_time += delta
 	_update_flocks(delta)
+	if not _frogs.is_empty():
+		var player := get_tree().get_first_node_in_group(&"player") as Node2D
+		for frog: Dictionary in _frogs:
+			_frog(frog, delta, player)
 	for f: Dictionary in _swimmers:
 		if _perfect and _orbit.size != Vector2.ZERO:
 			_circle(f)
@@ -281,6 +326,64 @@ func _random_water_point() -> Vector2:
 		map.cell_to_world(cell)
 		+ Vector2(_rng.randf_range(-0.3, 0.3), _rng.randf_range(-0.3, 0.3)) * ts
 	)
+
+
+func _frog(f: Dictionary, delta: float, player: Node2D) -> void:
+	var sprite: Sprite2D = f["sprite"]
+	var pos: Vector2 = f["pos"]
+	if float(f["hop"]) >= 0.0:
+		var t := minf(float(f["hop"]) + delta / FROG_HOP_SECONDS, 1.0)
+		f["hop"] = t
+		pos = (f["from"] as Vector2).lerp(f["to"], t)
+		f["pos"] = pos
+		sprite.position = pos + Vector2(0, -7.0 * sin(PI * t))
+		sprite.frame = 1
+		if t >= 1.0:
+			f["hop"] = -1.0
+			f["rest"] = _rng.randf_range(4.0, 12.0)
+			sprite.frame = 0
+		return
+	f["rest"] = float(f["rest"]) - delta
+	var away := Vector2.ZERO
+	if player != null and player.global_position.distance_to(pos) < FROG_SHY:
+		away = (pos - player.global_position).normalized()
+	elif float(f["rest"]) > 0.0:
+		return
+	# hop: away from the player, or a little way along the bank
+	var target := (
+		pos
+		+ (away * 40.0 if away != Vector2.ZERO else Vector2.from_angle(_rng.randf() * TAU) * 20.0)
+	)
+	f["from"] = pos
+	f["to"] = _nearest_bank_point(target)
+	f["hop"] = 0.0
+	sprite.flip_h = (f["to"] as Vector2).x < pos.x
+
+
+func _random_bank_point() -> Vector2:
+	var cell := _bank_cells[_rng.randi() % _bank_cells.size()]
+	return map.cell_to_world(cell) + Vector2(_rng.randf_range(-5, 5), _rng.randf_range(-4, 4))
+
+
+func _nearest_bank_point(near: Vector2) -> Vector2:
+	var best := _bank_cells[0]
+	var best_d := INF
+	for cell in _bank_cells:
+		var d := map.cell_to_world(cell).distance_squared_to(near)
+		if d < best_d:
+			best_d = d
+			best = cell
+	return map.cell_to_world(best) + Vector2(_rng.randf_range(-4, 4), _rng.randf_range(-3, 3))
+
+
+## Walkable land right next to water: where frogs sit.
+func _is_bank(cell: Vector2i) -> bool:
+	if map.data.surface_at_cell(cell) == &"water" or map.data.is_solid(cell):
+		return false
+	for d: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+		if map.data.surface_at_cell(cell + d) == &"water":
+			return true
+	return false
 
 
 ## Only cells whose four neighbours are water too, so swimmers stay off the banks.

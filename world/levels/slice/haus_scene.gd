@@ -6,8 +6,9 @@ extends LookScene
 ## Story state lives in WorldState (house fire, flags); this script stages it.
 
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
-const COLD_TINT := Color(0.44, 0.48, 0.62)
-const WARM_TINT := Color(0.84, 0.74, 0.64)
+const COLD_TINT := Color(0.5, 0.56, 0.68)
+## The fire's glow fills the room: honey and amber, not grey (ADR-041).
+const WARM_TINT := Color(1.0, 0.84, 0.66)
 const COLD_AMBIENCE := preload("res://content/audio/haus_kalt.tres")
 const WARM_AMBIENCE := preload("res://content/audio/haus_feuer.tres")
 ## Seconds the player sits by the burning fire before the quiet moment (Game Bible §45:

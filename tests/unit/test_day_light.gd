@@ -21,7 +21,9 @@ func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	var day := scene.day_light
 	assert_not_null(day)
 	assert_eq(day.preset, "regentag")
-	assert_almost_eq(day.world_tint.color.r, 1.0, 0.01, "overcast day is not darkened")
+	# soft summer rain (ADR-041): a touch cooler, but the valley stays bright and green
+	assert_gt(day.world_tint.color.get_luminance(), 0.9, "overcast day is not darkened")
+	assert_lt(day.world_tint.color.r, day.world_tint.color.b, "only cooler")
 	assert_true(day.rain.is_raining())
 	assert_eq(AudioDirector.ambience_stream.resource_path.get_file(), "tal_regentag.tres")
 	assert_eq(day.next_preset(0.0), "abend")
