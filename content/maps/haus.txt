@@ -1,0 +1,51 @@
+; Vertical Slice: das Haus von innen (Beat 6, docs/PHASE4_PLAN.md). Klein und von Hand gesetzt.
+; Wände und Fenster malt das Requisit haus/shell, den Dielenboden backt tools/art/bake_ground.py
+; content/maps/haus.txt. Kamin, Regal, Katze und Mira reagieren auf den Zustand des Hauses.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/haus_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_door"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/shell"}}
+K = {"ground": "_", "prop": "res://world/props/fireplace.tscn"}
+T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/table", "cue": "table", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 18}}
+b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bed", "cue": "bed", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
+R = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/shelf", "sprite_when": {"house.shelf_filled": "haus/shelf_spoon"}, "cue": "shelf", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
+r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/rug"}}
+u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bucket", "cue": "bucket", "dialogue": "res://content/dialogue/slice/haus.dialogue"}}
+; das Fenster (vor dem Feuer leer), die Katze draußen auf dem Sims und später drinnen am Feuer
+w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
+c = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_window", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20, "if": "house.fire_lit", "unless": "house.cat_fed"}}
+k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "if": "house.cat_fed"}}
+; Mira kommt, wenn das Feuer brennt, und geht wieder
+M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "mira", "glance": true, "if": "house.mira_knocked", "unless": "house.mira_left"}}
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "house", "auto": true, "sound": "door_close"}}
+[map]
+########################################
+########################################
+########################################
+########################################
+########################################
+############SWWWWWWWWWWWWWWW############
+############WWWWWWWWWWWWWWWW############
+############WWWWWWWWWWWWWWWW############
+############WWWWWWWRWWcwWWWW############
+############W___K__________W############
+############W__M__k________W############
+############W____r_______b_W############
+############W_______T______W############
+############W______@_______W############
+############W_u____1_______W############
+############W______________W############
+############WWWWWWWDWWWWWWWW############
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################
+########################################

@@ -1307,7 +1307,7 @@ def particles():
 
 # --------------------------------------------------------------------------- catalog
 def build():
-    for style in ("elysia", "tal", "wald"):
+    for style in ("elysia", "tal", "wald", "haus"):
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
     # elysia
     tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
@@ -1442,7 +1442,7 @@ def build():
     slice_props.build(sys.modules[__name__])
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
-    for style in ("elysia", "tal", "wald"):
+    for style in ("elysia", "tal", "wald", "haus"):
         for name in sorted(os.listdir(os.path.join(OUT, style))):
             if name.endswith(".png") and "%s/%s" % (style, name) not in used:
                 for stale in (name, name + ".import"):

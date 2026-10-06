@@ -111,6 +111,25 @@ func test_placeholder_tags_match_the_dialogue_kind() -> void:
 				assert_true(tagged, "%s:%d untagged line '%s'" % [path, int(key) + 1, line["text"]])
 
 
+func test_slice_speakers_are_known() -> void:
+	# "Name: text" makes a speaker; a colon in narration would turn half a sentence into a
+	# name plate. Every slice speaker must have a voice (content/dialogue/voices.json).
+	var voices: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string("res://content/dialogue/voices.json")
+	)
+	for path in _files(SLICE_DIALOGUES.trim_suffix("/"), ["dialogue"]):
+		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
+		for key: String in result.lines:
+			var line: Dictionary = result.lines[key]
+			if line.get("type") != "dialogue":
+				continue
+			var speaker := str(line.get("character", ""))
+			assert_true(
+				speaker.is_empty() or voices.has(speaker),
+				"%s:%d unknown speaker '%s'" % [path, int(key) + 1, speaker]
+			)
+
+
 func test_world_actions_in_maps_are_valid() -> void:
 	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
 	var checked := 0

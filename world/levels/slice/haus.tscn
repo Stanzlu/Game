@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/slice/haus_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+
+[node name="Haus" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/haus.txt"
+player_sheet = ExtResource("2_sheet")
+ambience_db = -5.0
+saturation = 0.92
+contrast = 1.03
+tint = Color(1.02, 0.99, 0.96, 1)
+shadow_tint = Color(0.04, 0.03, 0.06, 1)
+vignette = 0.34
+bloom = 0.3

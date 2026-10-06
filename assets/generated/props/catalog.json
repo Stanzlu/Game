@@ -577,6 +577,191 @@
    "res://assets/generated/props/elysia/wildflowers_5.png"
   ]
  },
+ "haus/bed": {
+  "anchor": [
+   15,
+   40
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -16
+   ],
+   "rect": [
+    28,
+    30
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/bed.png"
+  ]
+ },
+ "haus/bucket": {
+  "anchor": [
+   8,
+   14
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/bucket.png"
+  ]
+ },
+ "haus/cat_sleep": {
+  "anchor": [
+   10,
+   10
+  ],
+  "textures": [
+   "res://assets/generated/props/haus/cat_sleep.png"
+  ]
+ },
+ "haus/cat_window": {
+  "anchor": [
+   0,
+   22
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/cat_window.png"
+  ]
+ },
+ "haus/fireplace_cold": {
+  "anchor": [
+   26,
+   60
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    46,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/fireplace_cold.png"
+  ]
+ },
+ "haus/fireplace_lit": {
+  "anchor": [
+   26,
+   60
+  ],
+  "emissive": [
+   "res://assets/generated/props/haus/fireplace_lit_emit_0.png",
+   "res://assets/generated/props/haus/fireplace_lit_emit_1.png",
+   "res://assets/generated/props/haus/fireplace_lit_emit_2.png"
+  ],
+  "flicker": true,
+  "lights": [
+   {
+    "color": "#ff8a3a",
+    "energy": 1.6,
+    "offset": [
+     0,
+     -14
+    ],
+    "range": 190
+   }
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    46,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/fireplace_lit_0.png",
+   "res://assets/generated/props/haus/fireplace_lit_1.png",
+   "res://assets/generated/props/haus/fireplace_lit_2.png"
+  ]
+ },
+ "haus/rug": {
+  "anchor": [
+   22,
+   11
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/rug.png"
+  ]
+ },
+ "haus/shelf": {
+  "anchor": [
+   17,
+   29
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/shelf.png"
+  ]
+ },
+ "haus/shelf_spoon": {
+  "anchor": [
+   17,
+   29
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/shelf_spoon.png"
+  ]
+ },
+ "haus/shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "lights": [
+   {
+    "color": "#7f9cc4",
+    "energy": 0.45,
+    "offset": [
+     168,
+     32
+    ],
+    "range": 96
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/haus/shell.png"
+  ]
+ },
+ "haus/table": {
+  "anchor": [
+   22,
+   24
+  ],
+  "shadow": [
+   18,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    34,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/table.png"
+  ]
+ },
  "tal/barrel": {
   "anchor": [
    8,
@@ -974,6 +1159,16 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/planks_broken.png"
+  ]
+ },
+ "tal/planks_new": {
+  "anchor": [
+   43,
+   25
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/planks_new.png"
   ]
  },
  "tal/potato": {

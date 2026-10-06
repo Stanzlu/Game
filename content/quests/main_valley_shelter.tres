@@ -16,7 +16,7 @@ next = PackedStringArray("wood")
 [sub_resource type="Resource" id="Resource_wood"]
 script = ExtResource("2_stage")
 id = "wood"
-next = PackedStringArray("fire")
+next = PackedStringArray("fire", "done")
 
 [sub_resource type="Resource" id="Resource_fire"]
 script = ExtResource("2_stage")

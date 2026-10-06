@@ -1,0 +1,146 @@
+# Das Haus von innen, Beat 6 des Vertical Slice (docs/PHASE4_PLAN.md).
+# Leer seit dem Frühjahr. Erst kalt und still, mit dem Feuer warm. Mira kommt nicht als
+# Belohnung, sondern weil sie friert und Fisch hat. Menschen reden über Wetter und Essen.
+
+~ fireplace
+if WorldState.is_fire_lit()
+	% Das Feuer brennt. Manchmal knackt es, wenn das Harz aufplatzt. [ID:haus_fire_1]
+	% Wärme. Erst an den Händen, dann überall. [ID:haus_fire_2]
+	% Du legst nichts nach. Es brennt auch so. [ID:haus_fire_3]
+elif WorldState.has_item("item_dry_wood")
+	Du schichtest das Holz in den Kamin, die Rinde nach unten, wie man es irgendwann mal gelernt hat. [ID:haus_fire_4]
+	Ein Streichholz. Noch eins. Dann fängt die Rinde. [ID:haus_fire_5]
+	do WorldState.remove_item("item_dry_wood")
+	do WorldState.set_fire_lit(true)
+	do WorldState.advance_quest("main_valley_shelter", "done")
+elif WorldState.has_flag("valley.wood_needed")
+	Der Kamin ist kalt. Der Zettel steckt noch am Sims. »Nicht trödeln.« [ID:haus_fire_6]
+else
+	Der Kamin ist kalt. Asche von einem anderen Winter. [ID:haus_fire_7]
+	Im Korb daneben liegt nur Rinde. Das Holz draußen ist nass. [ID:haus_fire_8]
+	Am Sims steckt ein Zettel, krakelig beschrieben. »Trockenes Holz im Schuppen. Weg nach Westen. Nicht trödeln.« [ID:haus_fire_9]
+	do WorldState.set_flag("valley.wood_needed")
+	if WorldState.quest_stage("main_valley_shelter") == "house"
+		do WorldState.advance_quest("main_valley_shelter", "wood")
+=> END
+
+~ table
+if WorldState.has_flag("house.spoon_found")
+	% Der Tisch wackelt. Unter einem Bein klemmt ein gefaltetes Stück Papier, das nicht hilft. [ID:haus_table_3]
+	% Ein Becher, den niemand abgewaschen hat. Seit dem Frühjahr nicht. [ID:haus_table_4]
+else
+	Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel. [ID:haus_table_1]
+	Ein sehr kleiner Löffel. Du nimmst ihn mit, ohne genau zu wissen, warum. [ID:haus_table_2]
+	do WorldState.add_item("curiosity_tiny_spoon")
+	do WorldState.set_flag("house.spoon_found")
+=> END
+
+~ shelf
+if WorldState.curiosity_in("shelf_1") != ""
+	Der sehr kleine Löffel steht im Regal. Er sieht aus, als hätte er dort immer gestanden. [ID:haus_shelf_1]
+elif WorldState.has_item("curiosity_tiny_spoon")
+	Ein Regal. Ein paar leere Gläser, ein Buch ohne Umschlag. Ein Fach ist leer, gerade groß genug für etwas Kleines. [ID:haus_shelf_2]
+	- Den Löffel hineinstellen [ID:haus_shelf_r1]
+		do WorldState.place_curiosity("shelf_1", "curiosity_tiny_spoon")
+		do WorldState.set_flag("house.shelf_filled")
+		Du stellst den Löffel ins Fach. Er passt genau. [ID:haus_shelf_3]
+	- Ihn behalten [ID:haus_shelf_r2]
+		Du behältst ihn. Für sehr kleine Suppen. [ID:haus_shelf_4]
+else
+	Ein Regal. Ein paar leere Gläser, ein Buch ohne Umschlag. Ein Fach ist ganz leer. [ID:haus_shelf_5]
+=> END
+
+~ bed
+if WorldState.is_fire_lit()
+	Ein Bett. Die Decke ist warm geworden vom Feuer. Fast wie eine Einladung. [ID:haus_bed_2]
+else
+	Ein Bett. Die Decke riecht nach Staub und ein bisschen nach jemand anderem. [ID:haus_bed_1]
+=> END
+
+~ bucket
+Ein Eimer unter einer undichten Stelle im Dach. Halb voll. Jemand hat ihn hingestellt, bevor er gegangen ist. [ID:haus_bucket_1]
+=> END
+
+~ window
+if WorldState.is_fire_lit()
+	Im Fenster spiegelt sich das Feuer. Dahinter regnet es auf das Tal. [ID:haus_window_2]
+else
+	Draußen regnet es auf das Tal. Am anderen Ufer glimmt ein kleines Feuer. [ID:haus_window_1]
+=> END
+
+~ cat
+if WorldState.has_flag("house.cat_fed")
+	% Die Katze schläft am Feuer. Ein Ohr hört trotzdem zu. [ID:haus_cat_4]
+	% Die Katze schnurrt, ohne aufzuwachen. [ID:haus_cat_5]
+elif WorldState.has_item("item_fish")
+	Du öffnest das Fenster einen Spalt und hältst den Fisch hinaus. [ID:haus_cat_2]
+	Die Katze überlegt nicht lange. Dann kommt sie herein, als wäre es ihre Idee gewesen. [ID:haus_cat_3]
+	do WorldState.remove_item("item_fish")
+	do WorldState.set_flag("house.cat_fed")
+else
+	Draußen auf dem Fensterbrett sitzt eine Katze und schaut herein. Nicht zu dir. Zum Feuer. [ID:haus_cat_1]
+=> END
+
+~ knock
+Es klopft. [ID:haus_knock_1]
+=> END
+
+~ mira
+Mira wärmt sich die Hände am Feuer. Sie scheint gerade nicht reden zu wollen. [ID:haus_mira_idle_1]
+=> END
+
+~ mira_visit
+Mira steht in der Tür, nass bis auf die Haut. Sie trägt nur einen Stiefel. [ID:haus_mira_1]
+Mira: Ich hab den Rauch gesehen. [ID:haus_mira_2]
+Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
+- Komm rein. [ID:haus_mira_r1]
+	Mira: Bin ich schon. [ID:haus_mira_4]
+	do WorldState.add_memory("mira", "invited_in")
+- Wolltest du nicht lieber allein sein? [ID:haus_mira_r2]
+	Mira: Allein ja. Nass nein. [ID:haus_mira_5]
+	do WorldState.add_memory("mira", "teased_back")
+- … [ID:haus_mira_r3]
+	Mira: Ich nehm das als Ja. [ID:haus_mira_6]
+	do WorldState.add_memory("mira", "silent_yes")
+Mira setzt sich ans Feuer, legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
+if WorldState.has_flag("valley.fell_in")
+	if WorldState.has_memory("mira", "stones_warned")
+		Mira: Die runden. Ich hab's gesagt. [ID:haus_mira_8]
+	elif WorldState.has_memory("mira", "chose_tree")
+		Mira: Ich dachte, du nimmst den Baum. [ID:haus_mira_9]
+	else
+		Mira: Du bist in den Bach gefallen. Das hört man bis zu mir. [ID:haus_mira_10]
+else
+	Mira: Trocken rübergekommen. Hätte ich nicht gedacht. [ID:haus_mira_11]
+Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
+- Von woanders. [ID:haus_mira_r4]
+	Mira: Woanders ist groß. [ID:haus_mira_13]
+	do WorldState.add_memory("mira", "said_elsewhere")
+- Aus Elysia. [ID:haus_mira_r5]
+	Mira: Nie gehört. [ID:haus_mira_14]
+	Mira: Klingt nach einem Ort, an dem es nicht regnet. [ID:haus_mira_15]
+	do WorldState.add_memory("mira", "said_elysia")
+- Ich weiß es nicht mehr genau. [ID:haus_mira_r6]
+	Mira: Das kenn ich. [ID:haus_mira_16]
+	Mira schaut ins Feuer und sagt nichts mehr dazu. [ID:haus_mira_17]
+	do WorldState.add_memory("mira", "said_dont_know")
+Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
+Mira: Die Leute, die hier gewohnt haben, hatten eine Ziege. Die läuft noch rum. [ID:haus_mira_19]
+Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
+- Deinen Stiefel? [ID:haus_mira_r7]
+	Mira: Ich hab ihn zum Trocknen hingestellt. Sie hat ihn zum Essen mitgenommen. Wir hatten unterschiedliche Pläne. [ID:haus_mira_21]
+	do WorldState.add_memory("mira", "asked_boot")
+- Soll ich ihn dir holen? [ID:haus_mira_r8]
+	Mira: Wenn du sie siehst. Ich renn keiner Ziege hinterher. [ID:haus_mira_22]
+	do WorldState.add_memory("mira", "offered_boot")
+Mira: Sie ist bestechlich. Nur damit du's weißt. [ID:haus_mira_23]
+do WorldState.start_quest("side_valley_goat")
+do WorldState.set_flag("valley.goat_loose")
+Mira steht auf und streckt sich. [ID:haus_mira_24]
+Mira: Ich hab ein Brett über die Brücke gelegt. Damit ich zurückkomme. Und du auch, falls. [ID:haus_mira_25]
+Mira: Den Rest vom Fisch kannst du der Katze geben. Die sitzt schon die ganze Zeit am Fenster. [ID:haus_mira_26]
+do WorldState.add_item("item_fish")
+do WorldState.set_flag("valley.bridge_fixed")
+do WorldState.set_relationship("mira", "familiar")
+do WorldState.set_flag("house.mira_visited")
+=> END

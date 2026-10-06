@@ -8,7 +8,8 @@ extends Node
 ## player on the centre of a map cell (captures of distant spots without long walks).
 ## "repeat": n with "every": seconds repeats an event. "dialogue": seconds clicks through
 ## any open conversation for that long (taps interact while a dialogue box is visible,
-## picking the first answer), so a stray tap never starts a new one.
+## picking the first answer), so a stray tap never starts a new one. "give": "<item id>"
+## and "flag": "<flag id>" set up story state (captures of later beats without replaying).
 ## Time counts physics ticks, so runs are deterministic with --fixed-fps.
 
 const TAP_TICKS := 8
@@ -82,6 +83,10 @@ func _physics_process(_delta: float) -> void:
 		for action: String in event.get("tap", []):
 			_send(action, true)
 			_tapped[action] = _ticks + TAP_TICKS
+		if event.has("give"):
+			WorldState.add_item(str(event["give"]), 1, false)
+		if event.has("flag"):
+			WorldState.set_flag(str(event["flag"]))
 		if event.has("dialogue"):
 			_dialogue_until = t + float(event["dialogue"])
 		if event.has("log"):

@@ -83,7 +83,7 @@ def tal():
     gap = _bridge_gap(g)
     for y in (21, 22, 23):
         for x in gap:
-            g.set(x, y, "~")
+            g.set(x, y, "y")  # walkable once Mira lays boards over it; blocked until then
     # a lower terrace in the south-east: the stream drops over its ragged edge
     for x in range(33, w - 2):
         top = 27 + round(wobble(x, (0.8, 2.1, 0.7), (0.5, 3.7, 0.1)))
@@ -125,6 +125,8 @@ def tal():
         "N": [(49, 18)],
         "r": [(48, 17)],
         "k": [(gap[0], 22)],
+        "L": [(gap[1], 22)],
+        "n": [(gap[2], 22)],
         "i": [(max(x for x in range(37, 52) if g.get(x, 22) == "=") + 1, 22)],
         "Y": [(log_cells[0], LOG_ROW)],
         "G": [(12, 30)],

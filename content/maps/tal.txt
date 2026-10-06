@@ -51,7 +51,9 @@ c = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/net_rack"}}
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true}}
 ; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
-k = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken"}}
+k = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken", "unless": "valley.bridge_fixed"}}
+L = {"ground": "y", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 3], "unless": "valley.bridge_fixed"}}
+n = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_new", "if": "valley.bridge_fixed"}}
 i = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "bridge", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14}}
 S = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": false}}
 s = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": true}}
@@ -84,9 +86,9 @@ hhhh.....................,,............sSSSs....r....U,.........hhhh
 hhhh..T.................p,,........g..5SSsSs...,.N...,.........Phhhh
 hhhhh...gg.C........mmm..,,............ssSSS4..,,..c,,..........hhhh
 hhhh.....g.........,,,,,,,,p.............~~~~....,..,...........hhhh
-hhhh..P.........,,,,p,,,,,,,,,,,,.......q~~~qq...,,mm.......C...hhhh
-hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=k~~==i,,p,m@mm.........hhhh
-..........,,,p,,................,,,,,,,,Q~~~QQ,,.....m..........hhhh
+hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......C...hhhh
+hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,p,m@mm.........hhhh
+..........,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
 .,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh
 XZ,3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
 .......mmmm..,C..g............g...^^^^.....~~..^^.....g....^^^^^^hhh
