@@ -11,7 +11,8 @@ static func mark(id: String) -> void:
 		return
 	WorldState.set_flag(flag)
 	var seconds := WorldState.state.playtime_seconds
-	Log.info(
+	# record: the playtest log of a release build needs these lines without --log-debug
+	Log.record(
 		Log.Category.WORLD_STATE,
 		"beat",
 		{"beat": id, "minute": snappedf(seconds / 60.0, 0.1), "seconds": roundi(seconds)}

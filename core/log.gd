@@ -5,7 +5,8 @@ extends Node
 ## Debug builds log everything from DEBUG upwards; release builds only WARN and ERROR.
 ## ERROR goes through push_error() so it is never silent and fails tools/check.sh smoke runs.
 ## Release builds accept the user argument "--log-debug" (e.g. `REAL.exe -- --log-debug`)
-## so playtesters can send full logs.
+## so playtesters can send full logs. `record` is written in every build: what a playtest
+## log must contain without any arguments (the minute of every beat, `Beat.mark`).
 
 enum Level { DEBUG, INFO, WARN, ERROR }
 enum Category {
@@ -37,6 +38,18 @@ func error(category: Category, message: String, data: Dictionary = {}) -> void:
 	_write(Level.ERROR, category, message, data)
 
 
+## An INFO line that is written in release builds too. Use sparingly.
+func record(category: Category, message: String, data: Dictionary = {}) -> void:
+	_write(Level.INFO, category, message, data, true)
+
+
+## Whether a line of `level` in `category` is written (`always`: a `record` line).
+func passes(level: Level, category: Category, always := false) -> bool:
+	if category in muted_categories:
+		return false
+	return always or level >= min_level
+
+
 ## Formats a log line without printing it. Exposed for tests.
 func format_line(
 	level: Level, category: Category, message: String, data: Dictionary = {}
@@ -50,8 +63,10 @@ func format_line(
 	return line
 
 
-func _write(level: Level, category: Category, message: String, data: Dictionary) -> void:
-	if level < min_level or category in muted_categories:
+func _write(
+	level: Level, category: Category, message: String, data: Dictionary, always := false
+) -> void:
+	if not passes(level, category, always):
 		return
 	var line := format_line(level, category, message, data)
 	match level:

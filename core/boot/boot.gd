@@ -56,7 +56,8 @@ func _ready() -> void:
 	_build.text = format_build_line(info)
 	_play_intro()
 	list.focus_first()
-	Log.info(Log.Category.BOOT, "boot screen ready", info)
+	# record: a tester's log names the build it came from
+	Log.record(Log.Category.BOOT, "boot screen ready", info)
 	if not _start_arg_consumed:
 		Log.info(
 			Log.Category.CONTENT,
