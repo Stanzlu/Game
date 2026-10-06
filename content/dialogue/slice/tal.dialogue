@@ -1,0 +1,165 @@
+# Das Tal, Beats 3, 4 und 7 des Vertical Slice (docs/PHASE4_PLAN.md).
+# Mira: pragmatisch, trocken, warm ohne Sentimentalität, mit eigener Arbeit. Nie Mentorin,
+# nie Belohnung. Sie sagt Nein und meint es; sie hilft trotzdem, aber nur so weit, wie es sie
+# nichts kostet. Zeilen ohne Sprecher sind Erzählung.
+
+~ mira
+if WorldState.is_quest_done("side_valley_goat")
+	=> mira_end_again
+elif WorldState.has_flag("house.mira_visited")
+	=> mira_evening
+elif WorldState.has_flag("valley.mira_met")
+	=> mira_again
+=> mira_first
+
+~ mira_first
+Mira kniet vor einem Netz und knotet eine Masche. Sie schaut nicht auf. [ID:tal_mira_1]
+- Hallo. [ID:tal_mira_r1]
+	Mira: Hallo. [ID:tal_mira_2]
+	Mira: Du stehst im Regen. Nur falls dir das keiner gesagt hat. [ID:tal_mira_3]
+	do WorldState.add_memory("mira", "said_hello")
+- Wo bin ich hier? [ID:tal_mira_r2]
+	Mira: Am Bach. Im Tal. Im Regen. Such dir was aus. [ID:tal_mira_4]
+	do WorldState.add_memory("mira", "asked_where")
+- … [ID:tal_mira_r3]
+	Mira: … [ID:tal_mira_5]
+	Mira: Gut. Dann sind wir uns einig. [ID:tal_mira_6]
+	do WorldState.add_memory("mira", "first_silence")
+Mira: Brauchst du was? [ID:tal_mira_21]
+- Kann ich bei dir unterkommen? Nur bis der Regen aufhört. [ID:tal_mira_r4]
+	Mira: Nein. [ID:tal_mira_7]
+	Mira: Ich kenn dich nicht. Und unter die Plane passt genau eine. [ID:tal_mira_8]
+	do WorldState.add_memory("mira", "asked_shelter")
+- Weißt du, wo ich heute Nacht schlafen kann? [ID:tal_mira_r5]
+	Mira: Nicht hier. [ID:tal_mira_9]
+	Mira: Das ist kein Gasthaus. Das ist mein Lager. [ID:tal_mira_10]
+	do WorldState.add_memory("mira", "asked_sleep")
+- Mir ist kalt. [ID:tal_mira_r6]
+	Mira: Mir auch. Deswegen hab ich ein Feuer. [ID:tal_mira_11]
+	Mira: Meins. Nein, du kannst dich nicht dazusetzen. [ID:tal_mira_12]
+	do WorldState.add_memory("mira", "said_cold")
+Mira zieht den Knoten fest und nickt über den Bach. [ID:tal_mira_13]
+Mira: Da drüben steht ein Haus. Leer, seit dem Frühjahr. Die Leute sind weg. [ID:tal_mira_14]
+Mira: Die Brücke ist auch weg, jedenfalls die Mitte. Über die Steine kommst du rüber. Oder oben über den Baum, der liegt seit dem Sturm. [ID:tal_mira_15]
+- Ich nehm die Steine. [ID:tal_mira_r7]
+	Mira: Nicht die runden. Die sehen fest aus und sind es nicht. [ID:tal_mira_16]
+	do WorldState.add_memory("mira", "stones_warned")
+- Ich geh oben über den Baum. [ID:tal_mira_r8]
+	Mira: Dauert länger. Dafür kommst du trocken an. Halbwegs. [ID:tal_mira_17]
+	do WorldState.add_memory("mira", "chose_tree")
+- Ich warte lieber, bis der Regen aufhört. [ID:tal_mira_r9]
+	Mira: Dann wartest du bis Donnerstag. [ID:tal_mira_18]
+	Mira: Geh. Das Haus läuft nicht weg. Der Regen auch nicht. [ID:tal_mira_19]
+	do WorldState.add_memory("mira", "wanted_to_wait")
+Mira wendet sich wieder ihrem Netz zu. [ID:tal_mira_20]
+do WorldState.set_relationship("mira", "cautious")
+do WorldState.set_flag("valley.mira_met")
+do WorldState.start_quest("main_valley_shelter")
+=> END
+
+~ mira_again
+if WorldState.has_flag("valley.fell_in") and not WorldState.has_flag("valley.crossed")
+	if WorldState.has_memory("mira", "stones_warned")
+		Mira: Die runden, hab ich gesagt. [ID:tal_mira_again_1]
+	else
+		Mira: Ja. Die runden kippen. Hätte ich vielleicht sagen sollen. [ID:tal_mira_again_2]
+	Mira: Die flachen mit dem Moos drauf. Da ist schon mal jemand drübergegangen. [ID:tal_mira_again_3]
+elif WorldState.quest_stage("main_valley_shelter") == "wood"
+	Mira: Trockenes Holz? Im alten Schuppen. Am Ende vom Weg nach Westen. [ID:tal_mira_again_4]
+	Mira: Der Weg ist länger, als er aussieht. Sagt man. [ID:tal_mira_again_5]
+else
+	% Mira: Das Haus ist drüben. Ich bin hier. Das ist die ganze Geografie. [ID:tal_mira_again_6]
+	% Mira: Ich flick das Netz. Du kannst zusehen. Schneller wird es dadurch nicht. [ID:tal_mira_again_7]
+	% Mira: Die Steine oder der Baum. Ich sag's nicht noch mal. [ID:tal_mira_again_8]
+=> END
+
+~ mira_evening
+if WorldState.has_item("item_boot")
+	Mira: Mein Stiefel. [ID:tal_mira_eve_1]
+	Mira dreht ihn in der Hand. Ein Rand ist angeknabbert. [ID:tal_mira_eve_2]
+	- Die Ziege wollte eine Kartoffel dafür. [ID:tal_mira_eve_r1]
+		Mira: Natürlich wollte sie das. Sie ist eine Ziege, keine Heilige. [ID:tal_mira_eve_3]
+		do WorldState.add_memory("mira", "told_goat_story")
+	- Gern geschehen. [ID:tal_mira_eve_r2]
+		Mira: Ich hab noch gar nicht danke gesagt. [ID:tal_mira_eve_4]
+		Mira: … Danke. [ID:tal_mira_eve_5]
+		do WorldState.add_memory("mira", "said_welcome")
+	- … [ID:tal_mira_eve_r3]
+		Mira: Ja. Genau so ein Tag war das. [ID:tal_mira_eve_6]
+		do WorldState.add_memory("mira", "boot_silence")
+	do WorldState.remove_item("item_boot")
+	do WorldState.advance_quest("side_valley_goat", "done")
+	Mira zieht den Stiefel an und setzt sich ans Feuer. Nach einer Weile rückt sie ein Stück zur Seite. [ID:tal_mira_eve_7]
+	do WorldState.set_flag("valley.ending")
+elif WorldState.quest_stage("side_valley_goat") == "trade"
+	Mira: Die Ziege will was dafür? Dann gib ihr was. So funktioniert das mit Ziegen. [ID:tal_mira_eve_8]
+else
+	% Mira: Ohne Stiefel geh ich morgen nirgends hin. Die Ziege ist irgendwo hinterm Haus. [ID:tal_mira_eve_9]
+	% Mira: Einen Stiefel hab ich noch. Den anderen hat die Ziege. Das ist der Stand. [ID:tal_mira_eve_10]
+=> END
+
+~ ending
+Das Feuer knackt. Der Regen hat aufgehört. Irgendwo tropft es noch von den Bäumen. [ID:tal_end_1]
+Mira: Morgen gehe ich weiter. [ID:tal_end_2]
+- Wohin? [ID:tal_end_r1]
+	do WorldState.add_memory("mira", "asked_where_to")
+- … [ID:tal_end_r2]
+	Mira: Du willst wissen, wohin. Das seh ich dir an. [ID:tal_end_3]
+	do WorldState.add_memory("mira", "end_silence")
+Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
+Mira: Zum Meer. [ID:tal_end_5]
+=> END
+
+~ mira_end_again
+Mira schaut ins Feuer. Sie hat dir einen Platz gelassen. [ID:tal_mira_end_1]
+=> END
+
+~ woodpile
+if WorldState.has_item("item_dry_wood")
+	Das Holz hier ist immer noch nass. Deins nicht. [ID:tal_wood_3]
+else
+	Holz, unter dem Vordach gestapelt. Durchnässt bis in den Kern. [ID:tal_wood_1]
+	Damit brennt kein Feuer. Nur Rauch. [ID:tal_wood_2]
+=> END
+
+~ bridge
+if WorldState.has_flag("valley.bridge_fixed")
+	Über der Lücke liegt ein neues Brett, mit Draht festgebunden. Es hält. [ID:tal_bridge_3]
+else
+	Die Brücke ist in der Mitte gebrochen. Was fehlt, liegt irgendwo weiter unten im Bach. [ID:tal_bridge_1]
+	Zu weit zum Springen. Zu kalt zum Schwimmen. [ID:tal_bridge_2]
+=> END
+
+~ west_path
+Der Pfad verschwindet zwischen den Bäumen nach Westen. [ID:tal_west_1]
+Erst mal ein Dach über dem Kopf. [ID:tal_west_2]
+=> END
+
+~ fell_in
+if WorldState.has_flag("valley.fell_twice")
+	% Wieder der Bach. Er ist nicht wärmer geworden. [ID:tal_fell_3]
+	% Der Stein kippt, das Wasser ist da. Ihr kennt euch inzwischen. [ID:tal_fell_4]
+else
+	Der Stein kippt. Dann ist da nur noch Wasser, eiskalt, bis zur Hüfte. [ID:tal_fell_1]
+	Du ziehst dich ans Ufer. Nass warst du vorher schon. Jetzt bist du es richtig. [ID:tal_fell_2]
+=> END
+
+~ goat
+if WorldState.has_flag("valley.goat_traded")
+	% Die Ziege kaut die Kartoffel. Sie wirkt zufrieden. Mit sich, mit der Kartoffel, mit allem. [ID:tal_goat_7]
+	% Die Ziege schaut dich an. Sie hat keine Fragen. [ID:tal_goat_8]
+elif WorldState.has_item("item_potato")
+	Du hältst der Ziege die Kartoffel hin. [ID:tal_goat_4]
+	Die Ziege betrachtet die Kartoffel. Dann den Stiefel. Dann wieder die Kartoffel. [ID:tal_goat_5]
+	Sie lässt den Stiefel fallen. [ID:tal_goat_6]
+	do WorldState.remove_item("item_potato")
+	do WorldState.add_item("item_boot")
+	do WorldState.set_flag("valley.goat_traded")
+	do WorldState.advance_quest("side_valley_goat", "return")
+elif WorldState.has_flag("valley.goat_met")
+	Die Ziege kaut am Stiefel. Langsam, gründlich, ohne Eile. [ID:tal_goat_3]
+else
+	Eine Ziege. Sie hat einen Stiefel im Maul und kaut darauf, als hätte sie ihn sich verdient. [ID:tal_goat_1]
+	Du greifst nach dem Stiefel. Die Ziege dreht den Kopf weg. Sie will etwas anderes. [ID:tal_goat_2]
+	do WorldState.set_flag("valley.goat_met")
+=> END

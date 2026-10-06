@@ -606,6 +606,15 @@
    "res://assets/generated/props/tal/bench.png"
   ]
  },
+ "tal/boot": {
+  "anchor": [
+   7,
+   14
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/boot.png"
+  ]
+ },
  "tal/bush": {
   "anchor": [
    13,
@@ -627,6 +636,51 @@
    "res://assets/generated/props/tal/bush_0.png",
    "res://assets/generated/props/tal/bush_1.png",
    "res://assets/generated/props/tal/bush_2.png"
+  ]
+ },
+ "tal/campfire": {
+  "anchor": [
+   12,
+   14
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/campfire_emit.png"
+  ],
+  "flicker": true,
+  "lights": [
+   {
+    "color": "#ff7a30",
+    "energy": 1.1,
+    "offset": [
+     0,
+     -4
+    ],
+    "range": 72
+   }
+  ],
+  "shape": {
+   "circle": 7,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "smoke": [
+   0,
+   -6
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/campfire.png"
+  ]
+ },
+ "tal/fallen_tree": {
+  "anchor": [
+   22,
+   13
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/fallen_tree.png"
   ]
  },
  "tal/fence": {
@@ -686,6 +740,34 @@
   },
   "textures": [
    "res://assets/generated/props/tal/fence_post.png"
+  ]
+ },
+ "tal/goat_boot": {
+  "anchor": [
+   17,
+   24
+  ],
+  "shadow": [
+   11,
+   3
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/goat_boot_0.png",
+   "res://assets/generated/props/tal/goat_boot_1.png"
+  ]
+ },
+ "tal/goat_potato": {
+  "anchor": [
+   17,
+   24
+  ],
+  "shadow": [
+   11,
+   3
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/goat_potato_0.png",
+   "res://assets/generated/props/tal/goat_potato_1.png"
   ]
  },
  "tal/grass_tuft": {
@@ -758,6 +840,29 @@
    "res://assets/generated/props/tal/house.png"
   ]
  },
+ "tal/house_dark": {
+  "anchor": [
+   58,
+   105
+  ],
+  "shadow": [
+   52,
+   6
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -12
+   ],
+   "rect": [
+    96,
+    40
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/house_dark.png"
+  ]
+ },
  "tal/lantern": {
   "anchor": [
    6,
@@ -803,6 +908,29 @@
    "res://assets/generated/props/tal/leaves_3.png"
   ]
  },
+ "tal/net_rack": {
+  "anchor": [
+   15,
+   28
+  ],
+  "shadow": [
+   13,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    26,
+    4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/net_rack.png"
+  ]
+ },
  "tal/pebbles": {
   "anchor": [
    5,
@@ -836,6 +964,25 @@
   "textures": [
    "res://assets/generated/props/tal/pine_0.png",
    "res://assets/generated/props/tal/pine_1.png"
+  ]
+ },
+ "tal/planks_broken": {
+  "anchor": [
+   15,
+   14
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/planks_broken.png"
+  ]
+ },
+ "tal/potato": {
+  "anchor": [
+   9,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/potato.png"
   ]
  },
  "tal/rail_n": {
@@ -943,6 +1090,29 @@
    "res://assets/generated/props/tal/splash.png"
   ]
  },
+ "tal/stone_flat": {
+  "anchor": [
+   10,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/stone_flat_0.png",
+   "res://assets/generated/props/tal/stone_flat_1.png",
+   "res://assets/generated/props/tal/stone_flat_2.png"
+  ]
+ },
+ "tal/stone_round": {
+  "anchor": [
+   9,
+   9
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/stone_round_0.png",
+   "res://assets/generated/props/tal/stone_round_1.png"
+  ]
+ },
  "tal/tall_grass": {
   "anchor": [
    9,
@@ -955,6 +1125,29 @@
    "res://assets/generated/props/tal/tall_grass_0.png",
    "res://assets/generated/props/tal/tall_grass_1.png",
    "res://assets/generated/props/tal/tall_grass_2.png"
+  ]
+ },
+ "tal/tarp": {
+  "anchor": [
+   26,
+   31
+  ],
+  "shadow": [
+   24,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    44,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/tarp.png"
   ]
  },
  "tal/tree": {

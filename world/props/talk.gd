@@ -3,7 +3,7 @@ extends RefCounted
 ## Shared helpers for props that start a conversation or a description: an Interactable
 ## area on the prop, and presenting a dialogue cue through the scene's DialogueBox.
 
-const DEFAULT_DIALOGUE := "res://content/dialogue/slice/world.dialogue"
+const DEFAULT_DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
 
 
 ## Adds an Interactable with a round area to `owner` and returns it.

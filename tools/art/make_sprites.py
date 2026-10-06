@@ -718,9 +718,12 @@ def fountain():
 
 
 # --------------------------------------------------------------------------- tal: house and props
-def house():
+def house(lit=True):
+    """The house in the valley. Unlit (slice: empty since spring) the windows are cold glass
+    that only reflects the rainy sky, and the door lamp is out."""
     rng = np.random.default_rng(31)
     st, ex = pa.STYLES["tal"], EXTRA["tal"]
+    glass = ex["glass"] if lit else ramp("#141a22", "#26323e", "#3e4e5c", "#6a7c88")
     W, H = 116, 116
     c = Canvas(W, H)
     wall_top, wall_bottom = 70, 113
@@ -770,13 +773,17 @@ def house():
     door = c.rect(49, 84, 65, wall_bottom)
     c.paint(door, st["wood"], np.where(((c.xx - 49) % 4) == 3, 0.1, 0.45 + 0.2 * (grain - 0.5)))
     c.paint(c.rect(47, 81, 67, 84), ex["plank"], 0.7)
-    c.paint(c.rect(61, 97, 63, 99), ex["glass"], 0.9)
+    c.paint(c.rect(61, 97, 63, 99), ex["glass"] if lit else ex["iron"], 0.9 if lit else 0.6)
     # windows with warm light and cross frames
     for wx in (20, 80):
         frame = c.rect(wx - 1, 82, wx + 17, 99)
         c.paint(frame, ex["plank"], 0.75)
         pane = c.rect(wx + 1, 84, wx + 15, 97)
-        c.paint(pane, ex["glass"], 0.45 + 0.55 * c.sphere(wx + 6, 88, 10, 9), dither=True)
+        if lit:
+            c.paint(pane, glass, 0.45 + 0.55 * c.sphere(wx + 6, 88, 10, 9), dither=True)
+        else:  # a pale streak of sky across dark glass
+            streak = ((c.xx - wx) + (c.yy - 84)) % 11 < 2
+            c.paint(pane, glass, np.where(streak, 0.62, 0.18 + 0.2 * (c.yy - 84) / 13), dither=True)
         c.paint(c.rect(wx + 7, 84, wx + 9, 97), ex["plank"], 0.3)
         c.paint(c.rect(wx + 1, 90, wx + 15, 91), ex["plank"], 0.3)
         c.paint(c.rect(wx - 2, 99, wx + 18, 101), ex["plank"], 0.55)
@@ -798,7 +805,7 @@ def house():
     c.paint(c.rect(46, wall_bottom - 1, 68, wall_bottom + 2), ex["stone_wall"], np.where(c.yy < wall_bottom, 0.8, 0.45),
             dither=False)
     c.paint(c.rect(68, 86, 72, 88), ex["iron"], 0.4, dither=False)
-    c.paint(c.rect(69, 88, 72, 93), ex["glass"], 0.9, dither=False)
+    c.paint(c.rect(69, 88, 72, 93), glass, 0.9 if lit else 0.35, dither=False)
     c.paint(c.rect(68, 93, 73, 94), ex["iron"], 0.4, dither=False)
     # moss creeping up the foundation, weathered planks
     moss = c.rect(x0 - 1, wall_bottom - 7, x1 + 1, wall_bottom + 3) & (pa.value_noise(H, W, 2, rng) > 0.62) & c.a
@@ -1352,6 +1359,9 @@ def build():
              {"offset": [30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
              {"offset": [12, -14], "color": "#ffb066", "energy": 0.7, "range": 40},
          ], smoke=[26, -102])
+    # the same house empty and cold (slice: before the fire is lit)
+    save("tal", "house_dark", house(lit=False), (58, 105), shape={"rect": [96, 40], "offset": [0, -12]},
+         shadow=[52, 6])
     save("tal", "tree", [natural_tree("tal", 101, "foliage", "large", (88, 104)),
                          natural_tree("tal", 102, "foliage_blue", "medium", (88, 104)),
                          natural_tree("tal", 103, "foliage", "medium", (88, 104))], (44, 101),

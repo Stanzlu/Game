@@ -102,7 +102,7 @@ func test_placeholder_tags_match_the_dialogue_kind() -> void:
 			var line: Dictionary = result.lines[key]
 			if line.get("type") != "dialogue":
 				continue
-			var tagged := "ph" in line.get("tags", [])
+			var tagged: bool = "ph" in line.get("tags", [])
 			if slice:
 				assert_false(
 					tagged, "%s:%d placeholder in slice '%s'" % [path, int(key) + 1, line["text"]]

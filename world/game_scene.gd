@@ -67,8 +67,9 @@ func _ready() -> void:
 	AudioDirector.set_ambience(ambience, ambience_db)
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
+	var fade := SceneTravel.take_fade()
 	if ScreenFade.is_covered():
-		ScreenFade.fade_in(2.0 if SceneTravel.pending_spawn.is_empty() else 0.5)
+		ScreenFade.fade_in(fade)
 	var door_spawn: Variant = SceneTravel.take_spawn(map)
 	if door_spawn != null and player != null:
 		player.teleport(door_spawn)

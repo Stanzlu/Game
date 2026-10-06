@@ -45,6 +45,11 @@ func _ready() -> void:
 
 func apply_params(params: Dictionary) -> void:
 	sprite_id = str(params.get("sprite", ""))
+	# {"sprite_when": {"<flag>": "<sprite>"}}: the story changed how it looks (house lit)
+	var variants: Dictionary = params.get("sprite_when", {})
+	for flag_id: String in variants:
+		if WorldState.has_flag(flag_id):
+			sprite_id = str(variants[flag_id])
 	if params.has("cue"):
 		_add_inspect(params)
 		if sprite_id.is_empty():

@@ -8,6 +8,8 @@ const FADE_SECONDS := 0.45
 
 ## Marker name the next scene puts the player on ("" = the map's player_spawn).
 static var pending_spawn := ""
+## Seconds the next scene takes to fade in (< 0 = its default). The rift arrives slowly.
+static var arrival_fade := -1.0
 static var _travelling := false
 
 
@@ -34,6 +36,16 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 	pending_spawn = spawn
 	_travelling = false
 	from.get_tree().change_scene_to_file(SceneRegistry.path(target))
+
+
+## Fade-in time for a scene that just opened: a requested one, else short after a door and
+## long for a fresh start. Clears the request.
+static func take_fade() -> float:
+	var seconds := arrival_fade
+	arrival_fade = -1.0
+	if seconds >= 0.0:
+		return seconds
+	return 2.0 if pending_spawn.is_empty() else 0.5
 
 
 ## The marker cell for the pending spawn in `map`, or null. Clears the pending spawn.

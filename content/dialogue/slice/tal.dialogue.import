@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://df6rishw74a85"
+path="res://.godot/imported/tal.dialogue-51b68669382c3486efd0c5626419106f.tres"
+
+[deps]
+
+source_file="res://content/dialogue/slice/tal.dialogue"
+dest_files=["res://.godot/imported/tal.dialogue-51b68669382c3486efd0c5626419106f.tres"]
+
+[params]
+
+defaults=true

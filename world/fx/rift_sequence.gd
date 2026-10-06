@@ -9,6 +9,8 @@ signal finished
 
 const PAUSE_BETWEEN_ELEMENTS := 0.8
 const KEEP: PackedStringArray = ["item_stone", "item_seed"]
+## The Real world comes up slowly out of the dark, rain first.
+const ARRIVAL_FADE := 3.5
 
 var scene: GameScene
 var target := ""
@@ -59,6 +61,7 @@ func run() -> void:
 	SaveSystem.unblock(&"cutscene")
 	if travel:
 		SceneTravel.pending_spawn = spawn
+		SceneTravel.arrival_fade = ARRIVAL_FADE
 		get_tree().change_scene_to_file(SceneRegistry.path(target))
 	finished.emit()
 

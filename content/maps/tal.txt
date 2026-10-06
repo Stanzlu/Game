@@ -1,0 +1,103 @@
+; Vertical Slice: das Tal (Beats 3, 4 und 7, docs/PHASE4_PLAN.md). Layout: tools/art/layout_slice_maps.py
+; tal --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/tal.txt.
+; Die Brücke ist in der Mitte gebrochen. Über den Bach führen die Trittsteine (flache halten, runde
+; kippen) oder weiter oben der umgestürzte Baum. Miras Lager liegt am Ostufer, das Haus im Westen.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/tal_ground.png"
+water = "res://assets/generated/maps/tal_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TPC", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPCh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TPC", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+= = {"atlas": [6, 0], "surface": "wood", "paint": "planks_v"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
+d = {"atlas": [2, 0], "surface": "dirt", "paint": "field"}
+; begehbares Wasser: unter den Trittsteinen (w) und unter dem umgestürzten Baum (y)
+w = {"atlas": [3, 0], "surface": "stone", "paint": "water"}
+y = {"atlas": [6, 0], "surface": "wood", "paint": "water"}
+x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/splash"}}
+q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_n"}}
+Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rail_s"}}
+; Marker: Ankunft aus dem Riss, vor der Haustür, am Westpfad, an beiden Ufern der Trittsteine
+@ = {"ground": ",", "marker": "player_spawn"}
+1 = {"ground": ".", "marker": "spawn_rift"}
+2 = {"ground": ",", "marker": "spawn_house"}
+3 = {"ground": ",", "marker": "spawn_west"}
+4 = {"ground": ".", "marker": "spawn_stones_e"}
+5 = {"ground": ".", "marker": "spawn_stones_w"}
+; das Haus: leer und kalt, bis im Kamin Feuer brennt
+H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/house_dark", "sprite_when": {"house.fire_lit": "tal/house"}}}
+D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "haus", "spawn": "door"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence"}}
+E = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_post"}}
+B = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken"}}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel"}}
+W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile", "cue": "woodpile", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
+; Miras Lager: Plane, Feuer, das Netz, das sie flickt, und Mira selbst
+U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tarp"}}
+c = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/campfire"}}
+r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/net_rack"}}
+N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true}}
+; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
+k = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken"}}
+i = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "bridge", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14}}
+S = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": false}}
+s = {"ground": "w", "prop": "res://world/props/stepping_stone.tscn", "params": {"wobbly": true}}
+Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fallen_tree"}}
+; der Pfad nach Westen zum Schuppen (Antreiber): erst offen, wenn Holz gebraucht wird
+X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "antreiber", "auto": true, "size": [1, 5], "if": "valley.wood_needed"}}
+Z = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.wood_needed"}}
+; Ziege und Kartoffel (Beat 7)
+G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose"}}
+o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhhh~hhhhhhhhhhhhh^^^hhhhhhhhhh
+hhhhhhhhhhhhhh^^^^^^^^hhhhhhhhh^^^hhhhhh~~~hhhhhhhhhh^^..^^^hhhhhhhh
+hhhhhhh^^....^......^.^^hhhhh^^^^^^^^....~~^hhhhhhhh^.....^^^^^hhhhh
+hhhh^^^.................^^^^^^^...^......~~~^^hhhh^^........^^^hhhhh
+hhhh^^^....................^^.............~~^^^^^^^.............hhhh
+hhh^^..P.....T............................~~..^^^^..............hhhh
+hhh^.....T...............................Yyy...P................hhhh
+hhh........P.............................~~~.....T............P..hhh
+hh...C...............................C...~~~...........T..1......hhh
+hh.................E.............E......~~~........P.............hhh
+hh..........ddddd..E.............E.....~~~~...g..........,.......hhh
+hh......R...ddddd..E......H......E.....~~~.....g........,,.......hhh
+hh.......R..ddo....E.K....D...WK.E..R~~~~~..............,....T...hhh
+hh.................E..b...2......E.R~~~~~~.............,,........hhh
+hh.................E......,......E...~~~~~.............,.........hhh
+hhh................FFBFFF,,.FFFBFF.....~~~............,,..gg.....hhh
+hhhh.....................,,............sSSSs....r....U,.........hhhh
+hhhh..T.................p,,........g..5SSsSs...,.N...,.........Phhhh
+hhhhh...gg.C........mmm..,,............ssSSS4..,,..c,,..........hhhh
+hhhh.....g.........,,,,,,,,p.............~~~~....,..,...........hhhh
+hhhh..P.........,,,,p,,,,,,,,,,,,.......q~~~qq...,,mm.......C...hhhh
+hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=k~~==i,,p,m@mm.........hhhh
+..........,,,p,,................,,,,,,,,Q~~~QQ,,.....m..........hhhh
+.,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh
+XZ,3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
+.......mmmm..,C..g............g...^^^^.....~~..^^.....g....^^^^^^hhh
+...........m,,..T..............R.^^^^^^^^^^vvv^^^^^^.....^^^^^^^^^hh
+hhh.........,...................R^....^^^^^vvv^..^^^^^^^^^^......^hh
+hhh.....T..,...............................x~~...C..^^^^^.........hh
+hhh..P....,,G....R....T............T........~~............P.......hh
+hhh.......P........C....P........P..........~~~.....P.............hh
+hhhh........................................~~~...................hh
+hhhh........................................~~~...................hh
+hhhhh.................................hh....~~~..................hhh
+hhhhhhhh...........hhhhhhhhh.....hhhhhhhhhhh~~~.......hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~hhhhhhhhhhhhhhhhhhhh
