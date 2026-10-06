@@ -68,7 +68,11 @@ func _ready() -> void:
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
 	if ScreenFade.is_covered():
-		ScreenFade.fade_in(2.0)
+		ScreenFade.fade_in(2.0 if SceneTravel.pending_spawn.is_empty() else 0.5)
+	var door_spawn: Variant = SceneTravel.take_spawn(map)
+	if door_spawn != null and player != null:
+		player.teleport(door_spawn)
+		view.follow(player)
 	var arrival := SaveSystem.scene_entered(scene_key())
 	if arrival.has("position") and player != null:
 		player.teleport(arrival["position"])

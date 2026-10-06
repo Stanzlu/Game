@@ -52,6 +52,17 @@ func set_location(map: String, position: Vector2) -> void:
 # --- Story flags -----------------------------------------------------------------------
 
 
+## The protagonist's name (chosen at the start). Dialogue lines use {{WorldState.player_name()}}.
+func player_name() -> String:
+	return state.player.name if not state.player.name.is_empty() else tr("PLAYER_DEFAULT_NAME")
+
+
+func set_player_name(new_name: String) -> void:
+	var clean := new_name.strip_edges().left(GameState.MAX_NAME_LENGTH)
+	state.player.name = clean
+	Log.info(Log.Category.WORLD_STATE, "player name", {"name": clean})
+
+
 func has_flag(id: String) -> bool:
 	return state.flags.get(id, false)
 
@@ -251,7 +262,8 @@ func has_item(item_id: String, amount := 1) -> bool:
 
 
 ## Adds up to the item's stack limit. Returns how many were actually added.
-func add_item(item_id: String, amount := 1) -> int:
+## `announce` false adds silently (no loot card), e.g. what the hero already carried.
+func add_item(item_id: String, amount := 1, announce := true) -> int:
 	var def := ContentDB.item(item_id)
 	if def == null or amount <= 0:
 		Log.error(Log.Category.WORLD_STATE, "invalid item", {"item": item_id, "amount": amount})
@@ -263,7 +275,8 @@ func add_item(item_id: String, amount := 1) -> int:
 	state.inventory[item_id] = after
 	Log.info(Log.Category.WORLD_STATE, "item added", {"item": item_id, "count": after})
 	inventory_changed.emit(item_id, after)
-	item_received.emit(item_id, after - before)
+	if announce:
+		item_received.emit(item_id, after - before)
 	return after - before
 
 

@@ -33,6 +33,9 @@ var _quit_button: Button
 var _save_menu: SaveMenu
 var _settings_menu: SettingsMenu
 var _prototypes: PrototypeMenu
+var _name_entry: NameEntry
+## Hero name chosen for the next new game (applied after WorldState.new_game()).
+var _new_name := ""
 var _leaving := false
 
 @onready var _background: TitleBackground = $Background
@@ -94,7 +97,16 @@ func open_scene(key: String, fade := true) -> void:
 		await NodeTimer.after(self, FADE_SECONDS)
 	WorldState.new_game()
 	WorldState.set_ui_mode(SceneRegistry.start_mode(key))
+	if not _new_name.is_empty():
+		WorldState.set_player_name(_new_name)
+		_new_name = ""
 	get_tree().change_scene_to_file(SceneRegistry.path(key))
+
+
+## The vertical slice from the beginning: Elysia, with the name the player chose.
+func _start_new_game(hero_name: String) -> void:
+	_new_name = hero_name
+	open_scene("elysia")
 
 
 ## Elysia's fake title until any save has reached the real world (or `--title=`).
@@ -177,7 +189,13 @@ func _build_menus() -> void:
 	_prototypes.on_title_card = _play_title_card
 	_prototypes.on_switch_title = _switch_title
 	add_child(_prototypes)
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes]:
+	_name_entry = NameEntry.new()
+	_name_entry.name = "NameEntry"
+	_name_entry.follow_mode = false
+	_name_entry.sound_set = _sound_set()
+	_name_entry.chosen.connect(_start_new_game)
+	add_child(_name_entry)
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry]:
 		menu.frame.theme = theme
 	list = OptionList.new()
 	list.sound_skin = _sound_set()
@@ -185,7 +203,7 @@ func _build_menus() -> void:
 	list.custom_minimum_size = Vector2(132, 0)
 	_menu_panel.add_child(list)
 	_rebuild_list()
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes]:
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry]:
 		menu.opened.connect(func() -> void: _menu_panel.hide())
 		menu.closed.connect(_on_submenu_closed)
 	if BenchmarkRunner.result_pending and not BenchmarkRunner.last_rows.is_empty():
@@ -204,7 +222,7 @@ func _rebuild_list() -> void:
 	_continue = null
 	if not SaveSystem.latest_slot().is_empty():
 		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
-	list.add_action("MENU_NEW_GAME", func() -> void: open_scene("look_elysia"))
+	list.add_action("MENU_NEW_GAME", _name_entry.open)
 	list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
 	list.add_action("MENU_PROTOTYPES", _prototypes.open)
 	list.add_action("MENU_SETTINGS", _settings_menu.open)

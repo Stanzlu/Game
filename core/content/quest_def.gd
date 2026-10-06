@@ -31,6 +31,13 @@ func has_stage(stage_id: String) -> bool:
 	return stage(stage_id) != null
 
 
+func has_objective(objective_id: String) -> bool:
+	for s in stages:
+		if s != null and objective_id in s.objectives:
+			return true
+	return false
+
+
 func can_advance(from_stage: String, to_stage: String) -> bool:
 	var current := stage(from_stage)
 	return current != null and to_stage in current.next and has_stage(to_stage)

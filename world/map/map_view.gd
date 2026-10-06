@@ -26,9 +26,12 @@ var reflection_material: ShaderMaterial
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
 var _external_props: Array[Node] = []
+## Placements with "if"/"unless" flag conditions: placement index -> spawned node or null.
+var _conditional: Dictionary[int, Node] = {}
 
 
 func _ready() -> void:
+	WorldState.flag_changed.connect(_on_flag_changed)
 	if not map_path.is_empty():
 		load_map(map_path)
 
@@ -356,23 +359,82 @@ func _mirror_params(params: Dictionary, cell: Vector2i) -> Dictionary:
 
 
 func _spawn_props() -> void:
-	for placement: Dictionary in data.placements:
-		var scene_path: String = placement["prop"]
-		if scene_path.is_empty():
+	_conditional.clear()
+	for index in data.placements.size():
+		var placement: Dictionary = data.placements[index]
+		if (placement["prop"] as String).is_empty():
 			continue
-		var scene := load(scene_path) as PackedScene
-		if scene == null:
-			Log.error(Log.Category.CONTENT, "prop scene missing", {"scene": scene_path})
-			continue
-		var prop := scene.instantiate() as Node2D
-		var cell: Vector2i = placement["cell"]
-		prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
-		if props_parent != null:
-			props_parent.add_child(prop)
-			prop.global_position = cell_to_world(cell)
-			_external_props.append(prop)
-		else:
-			prop.position = cell_to_world(cell) - global_position
-			entities.add_child(prop)
-		if prop.has_method("apply_params"):
-			prop.call("apply_params", _mirror_params(placement["params"], cell))
+		var params: Dictionary = placement["params"]
+		if params.has("if") or params.has("unless"):
+			_conditional[index] = null
+			if not conditions_met(params):
+				continue
+		var prop := _spawn_prop(placement)
+		if _conditional.has(index):
+			_conditional[index] = prop
+
+
+func _spawn_prop(placement: Dictionary) -> Node2D:
+	var scene_path: String = placement["prop"]
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
+		Log.error(Log.Category.CONTENT, "prop scene missing", {"scene": scene_path})
+		return null
+	var prop := scene.instantiate() as Node2D
+	var cell: Vector2i = placement["cell"]
+	prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
+	if props_parent != null:
+		props_parent.add_child(prop)
+		prop.global_position = cell_to_world(cell)
+		_external_props.append(prop)
+	else:
+		prop.position = cell_to_world(cell) - global_position
+		entities.add_child(prop)
+	if prop.has_method("apply_params"):
+		prop.call("apply_params", _mirror_params(placement["params"], cell))
+	return prop
+
+
+## Story conditions of a placement: "if" (flag or list of flags, all set) and "unless"
+## (flag or list, none set). Such props appear and disappear as the flags change, so the
+## same map serves every beat (the child, the rift, Mira's camp, the goat).
+static func conditions_met(params: Dictionary) -> bool:
+	for flag_id in _flag_list(params.get("if", [])):
+		if not WorldState.has_flag(flag_id):
+			return false
+	for flag_id in _flag_list(params.get("unless", [])):
+		if WorldState.has_flag(flag_id):
+			return false
+	return true
+
+
+static func _flag_list(value: Variant) -> PackedStringArray:
+	if value is String:
+		return [value]
+	var out: PackedStringArray = []
+	for item: Variant in value if value is Array else []:
+		out.append(str(item))
+	return out
+
+
+func _on_flag_changed(_id: String, _value: bool) -> void:
+	if data == null or _conditional.is_empty():
+		return
+	refresh_conditions()
+
+
+## Spawns conditional props whose flags became true and removes those whose became false.
+func refresh_conditions() -> void:
+	for index: int in _conditional.keys():
+		var placement: Dictionary = data.placements[index]
+		var node: Node = _conditional[index]
+		var alive := node != null and is_instance_valid(node) and not node.is_queued_for_deletion()
+		var wanted := conditions_met(placement["params"])
+		if wanted and not alive:
+			var prop := _spawn_prop(placement)
+			_conditional[index] = prop
+			if prop != null and _near_water(placement["cell"]) and not prop is Player:
+				add_reflection(prop)
+		elif not wanted and alive:
+			node.queue_free()
+			_conditional[index] = null

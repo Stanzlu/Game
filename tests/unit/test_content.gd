@@ -1,12 +1,14 @@
 extends GutTest
 ## Content guards: every tr("KEY") literal exists, every dialogue under content/ compiles
-## and is registered for translation templates, placeholder lines are tagged.
+## and is registered for translation templates, placeholder lines are tagged (prototypes)
+## or gone (vertical slice).
 
 const CSV_FILES: PackedStringArray = [
 	"res://content/locale/ui.csv",
 	"res://content/locale/journal.csv",
 	"res://content/locale/items.csv"
 ]
+const SLICE_DIALOGUES := "res://content/dialogue/slice/"
 const CODE_DIRS: PackedStringArray = [
 	"res://core", "res://entities", "res://world", "res://ui", "res://encounters"
 ]
@@ -89,18 +91,24 @@ func test_every_cue_used_by_maps_exists() -> void:
 			)
 
 
-func test_draft_lines_are_tagged_as_placeholders() -> void:
-	# No final text yet: every spoken line must carry [#ph] so none slips into a build.
+func test_placeholder_tags_match_the_dialogue_kind() -> void:
+	# Prototype dialogues carry [#ph] on every spoken line so none slips into a build.
+	# Vertical-slice dialogues (content/dialogue/slice) are the playtest text: no [#ph] left
+	# (docs/CONTENT_GUIDE.md).
 	for path in _files("res://content/dialogue", ["dialogue"]):
+		var slice := path.begins_with(SLICE_DIALOGUES)
 		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
 		for key: String in result.lines:
 			var line: Dictionary = result.lines[key]
 			if line.get("type") != "dialogue":
 				continue
-			var tags: Array = line.get("tags", [])
-			assert_true(
-				"ph" in tags, "%s:%d untagged line '%s'" % [path, int(key) + 1, line["text"]]
-			)
+			var tagged := "ph" in line.get("tags", [])
+			if slice:
+				assert_false(
+					tagged, "%s:%d placeholder in slice '%s'" % [path, int(key) + 1, line["text"]]
+				)
+			else:
+				assert_true(tagged, "%s:%d untagged line '%s'" % [path, int(key) + 1, line["text"]])
 
 
 func test_world_actions_in_maps_are_valid() -> void:

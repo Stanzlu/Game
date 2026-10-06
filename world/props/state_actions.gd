@@ -4,6 +4,7 @@ extends RefCounted
 ## exist; nothing in map data is executed:
 ##   {"flag": "area.name"}  {"quest": "<id>", "stage": "<stage>", "start": true}
 ##   {"item": "<id>", "count": 1}  {"discover": "<location>"}  {"xp": 250}  {"gold": 100}
+##   {"quest": "<id>", "objective": "<objective>"}
 ## "start" starts the quest first if needed, then tries to move it to "stage".
 
 const KEYS: PackedStringArray = ["flag", "quest", "item", "discover", "xp", "gold"]
@@ -24,6 +25,8 @@ static func run(actions: Array, source: String) -> void:
 				WorldState.start_quest(quest_id)
 			if action.has("stage"):
 				WorldState.advance_quest(quest_id, str(action["stage"]))
+			if action.has("objective"):
+				WorldState.complete_objective(quest_id, str(action["objective"]))
 		elif action.has("item"):
 			WorldState.add_item(str(action["item"]), int(action.get("count", 1)))
 		elif action.has("discover"):
@@ -58,6 +61,10 @@ static func validate(actions: Variant) -> PackedStringArray:
 					problems.append("unknown quest '%s'" % data["quest"])
 				elif data.has("stage") and not q.has_stage(str(data["stage"])):
 					problems.append("quest '%s' has no stage '%s'" % [data["quest"], data["stage"]])
+				elif data.has("objective") and not q.has_objective(str(data["objective"])):
+					problems.append(
+						"quest '%s' has no objective '%s'" % [data["quest"], data["objective"]]
+					)
 			"item":
 				if not ContentDB.has_item(str(data["item"])):
 					problems.append("unknown item '%s'" % data["item"])
