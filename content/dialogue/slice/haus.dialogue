@@ -36,18 +36,26 @@ else
 => END
 
 ~ shelf
+if WorldState.curiosity_in("shelf_1") == "" and WorldState.curiosity_in("shelf_2") == ""
+	Ein Regal. Ein paar leere Gläser, ein Buch ohne Umschlag. Zwei Fächer sind ganz leer. [ID:haus_shelf_5]
 if WorldState.curiosity_in("shelf_1") != ""
 	Der sehr kleine Löffel steht im Regal. Er sieht aus, als hätte er dort immer gestanden. [ID:haus_shelf_1]
-elif WorldState.has_item("curiosity_tiny_spoon")
-	Ein Regal. Ein paar leere Gläser, ein Buch ohne Umschlag. Ein Fach ist leer, gerade groß genug für etwas Kleines. [ID:haus_shelf_2]
-	- Den Löffel hineinstellen [ID:haus_shelf_r1]
+if WorldState.curiosity_in("shelf_2") != ""
+	Daneben der Stein. Er glänzt nicht. Er liegt einfach gut da. [ID:haus_shelf_6]
+if WorldState.has_item("curiosity_tiny_spoon") or WorldState.has_item("item_stone")
+	Ein Fach ist noch frei, gerade groß genug für etwas Kleines. [ID:haus_shelf_2]
+	- Den Löffel hineinstellen [if WorldState.has_item("curiosity_tiny_spoon") /] [ID:haus_shelf_r1]
 		do WorldState.place_curiosity("shelf_1", "curiosity_tiny_spoon")
 		do WorldState.set_flag("house.shelf_filled")
 		Du stellst den Löffel ins Fach. Er passt genau. [ID:haus_shelf_3]
-	- Ihn behalten [ID:haus_shelf_r2]
-		Du behältst ihn. Für sehr kleine Suppen. [ID:haus_shelf_4]
-else
-	Ein Regal. Ein paar leere Gläser, ein Buch ohne Umschlag. Ein Fach ist ganz leer. [ID:haus_shelf_5]
+	- Den Stein hineinlegen [if WorldState.has_item("item_stone") /] [ID:haus_shelf_r3]
+		do WorldState.place_curiosity("shelf_2", "item_stone")
+		do WorldState.set_flag("house.shelf_stone")
+		Du legst den Stein ins Fach. Er wiegt fast nichts. Das Fach sieht trotzdem voller aus. [ID:haus_shelf_7]
+	- Behalten, was ich habe [ID:haus_shelf_r2]
+		Du behältst es. Für sehr kleine Suppen, vielleicht. [ID:haus_shelf_4]
+	if WorldState.curiosity_in("shelf_1") != "" and WorldState.curiosity_in("shelf_2") != ""
+		do WorldState.set_flag("house.shelf_both")
 => END
 
 ~ bed
@@ -55,6 +63,9 @@ if WorldState.is_fire_lit()
 	Ein Bett. Die Decke ist warm geworden vom Feuer. Fast wie eine Einladung. [ID:haus_bed_2]
 else
 	Ein Bett. Die Decke riecht nach Staub und ein bisschen nach jemand anderem. [ID:haus_bed_1]
+	if WorldState.has_flag("elysia.soup_served")
+		Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war. [ID:haus_bed_3]
+		Dann ist der Moment vorbei. Das Bett ist immer noch kalt. [ID:haus_bed_4]
 => END
 
 ~ bucket
@@ -70,8 +81,18 @@ else
 
 ~ cat
 if WorldState.has_flag("house.cat_fed")
-	% Die Katze schläft am Feuer. Ein Ohr hört trotzdem zu. [ID:haus_cat_4]
-	% Die Katze schnurrt, ohne aufzuwachen. [ID:haus_cat_5]
+	if WorldState.cat_name() != ""
+		% {{WorldState.cat_name()}} schläft am Feuer. Ein Ohr hört trotzdem zu. [ID:haus_cat_6]
+		% {{WorldState.cat_name()}} schnurrt, ohne aufzuwachen. [ID:haus_cat_7]
+	else
+		Die Katze schläft am Feuer. Ein Ohr hört trotzdem zu. [ID:haus_cat_4]
+		- Ihr einen Namen geben [ID:haus_cat_r1]
+			do WorldState.set_flag("house.cat_naming")
+		- Sie einfach Katze nennen [ID:haus_cat_r2]
+			do WorldState.set_cat_name("Katze")
+			Katze. Sie hat schon Schlimmeres gehört. [ID:haus_cat_8]
+		- Sie schlafen lassen [ID:haus_cat_r3]
+			Du lässt sie schlafen. Namen haben Zeit. [ID:haus_cat_9]
 elif WorldState.has_item("item_fish")
 	Du öffnest das Fenster einen Spalt und hältst den Fisch hinaus. [ID:haus_cat_2]
 	Die Katze überlegt nicht lange. Dann kommt sie herein, als wäre es ihre Idee gewesen. [ID:haus_cat_3]
@@ -81,9 +102,51 @@ else
 	Draußen auf dem Fensterbrett sitzt eine Katze und schaut herein. Nicht zu dir. Zum Feuer. [ID:haus_cat_1]
 => END
 
+~ cat_named
+{{WorldState.cat_name()}}. Die Katze öffnet ein Auge und schließt es wieder. Einverstanden, vermutlich. [ID:haus_cat_10]
+=> END
+
+# Later the cat sleeps on the Antreiber, and he does not dare get up (Game Bible §28).
+~ cat_antreiber
+if WorldState.cat_name() != ""
+	{{WorldState.cat_name()}} hat sich auf den Antreiber gelegt. [ID:haus_cat_antr_1]
+else
+	Die Katze hat sich auf den Antreiber gelegt. [ID:haus_cat_antr_2]
+Antreiber: Ich müsste eigentlich … [ID:haus_cat_antr_3]
+Antreiber: Das Dach. Das Holz für morgen. Der … [ID:haus_cat_antr_4]
+Er bleibt sitzen. Er wagt nicht, sich zu bewegen. [ID:haus_cat_antr_5]
+=> END
+
 ~ fire_rest
 Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
 Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
+if WorldState.has_item("item_stone")
+	Der Stein in deiner Tasche ist warm geworden. [ID:haus_rest_3]
+if WorldState.has_item("item_seed")
+	In der anderen Tasche der Samen. Du weißt nicht, seit wann er da ist. [ID:haus_rest_4]
+=> END
+
+~ antreiber_fire
+Antreiber: Wir könnten noch Holz für morgen holen. Nur vorsorglich. [ID:haus_antr_1]
+Antreiber: Oder das Dach. Das Dach tropft. Hast du den Eimer gesehen? [ID:haus_antr_2]
+=> END
+
+~ antreiber_sits
+Der Antreiber schaut dich an. Dann das Feuer. [ID:haus_antr_3]
+Er setzt sich. Er weiß nicht genau, wohin mit seinen Händen. Dann legt er sie in den Schoß. [ID:haus_antr_4]
+=> END
+
+~ antreiber_cheers
+Antreiber: Ja! Los! [ID:haus_antr_5]
+Antreiber: … Wohin eigentlich? [ID:haus_antr_6]
+Er geht zur Tür. Draußen findet er bestimmt etwas. [ID:haus_antr_7]
+=> END
+
+~ antreiber_rest
+if WorldState.has_flag("house.cat_fed")
+	=> cat_antreiber
+% Der Antreiber sitzt am Feuer und sieht aus, als würde er gleich aufspringen. Er springt nicht. [ID:haus_antr_8]
+% Antreiber: Ich sitz nur kurz. [ID:haus_antr_9]
 => END
 
 ~ knock
@@ -137,6 +200,8 @@ Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 	Mira schaut ins Feuer und sagt nichts mehr dazu. [ID:haus_mira_17]
 	do WorldState.add_memory("mira", "said_dont_know")
 Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
+if WorldState.has_flag("elysia.soup_served")
+	Er schmeckt nach Rauch und ein bisschen nach Bach. Du merkst dir den Geschmack, ohne es zu wollen. [ID:haus_mira_28]
 Mira: Die Leute, die hier gewohnt haben, hatten eine Ziege. Die läuft noch rum. [ID:haus_mira_19]
 Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 - Deinen Stiefel? [ID:haus_mira_r7]

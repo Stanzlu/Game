@@ -109,16 +109,107 @@ else
 
 ~ ending
 Das Feuer knackt. Der Regen hat aufgehört. Irgendwo tropft es noch von den Bäumen. [ID:tal_end_1]
+=>< evening_first
+=>< evening_day
+=>< evening_elysia
+if WorldState.has_flag("valley.shell_seen")
+	=>< evening_shell
 Mira: Morgen gehe ich weiter. [ID:tal_end_2]
 - Wohin? [ID:tal_end_r1]
 	do WorldState.add_memory("mira", "asked_where_to")
+	Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
+	Mira: Zum Meer. [ID:tal_end_5]
+- Zum Meer? [if WorldState.has_memory("mira", "asked_shell") /] [ID:tal_end_r3]
+	Mira schaut dich an. Dann zu den Bergen. [ID:tal_end_7]
+	Mira: … Ja. Zum Meer. [ID:tal_end_8]
+	do WorldState.add_memory("mira", "guessed_sea")
 - … [ID:tal_end_r2]
 	Mira: Du willst wissen, wohin. Das seh ich dir an. [ID:tal_end_3]
 	do WorldState.add_memory("mira", "end_silence")
-Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
-Mira: Zum Meer. [ID:tal_end_5]
+	Mira schaut zu den Bergen. Lange. [ID:tal_end_9]
+	Mira: Zum Meer. [ID:tal_end_10]
 if WorldState.has_flag("valley.shell_seen")
 	An der Plane dreht sich die Muschel ein Stück im Wind. [ID:tal_end_6]
+=> END
+
+# The evening at Mira's fire (ADR-042): she remembers how the day went, from what the
+# player said and did. Like the first no, it is never a reward: she talks because the fire
+# burns a while longer.
+~ evening_first
+if WorldState.has_memory("mira", "said_hero")
+	Mira: Der Held von Elysia an meinem Feuer. Ich hätt's mir größer vorgestellt. [ID:tal_eve_hero]
+elif WorldState.has_memory("mira", "first_silence")
+	Mira: Du redest immer noch nicht viel. Ist mir recht. Das Feuer redet genug. [ID:tal_eve_quiet]
+if WorldState.has_memory("mira", "asked_shelter")
+	Mira: Unter die Plane passt immer noch nur eine. [ID:tal_eve_tarp_1]
+	Mira: Ans Feuer passen zwei. [ID:tal_eve_tarp_2]
+elif WorldState.has_memory("mira", "asked_sleep")
+	Mira: Heute Mittag wusstest du nicht, wo du schlafen sollst. Jetzt hast du ein Haus. [ID:tal_eve_sleep_1]
+	Mira: Ich hab eine Plane. So kann's gehen. [ID:tal_eve_sleep_2]
+elif WorldState.has_memory("mira", "said_cold")
+	Mira: Mein Feuer, übrigens. [ID:tal_eve_cold_1]
+	Mira: Du darfst trotzdem sitzen bleiben. [ID:tal_eve_cold_2]
+=> END
+
+~ evening_day
+Mira: Erzähl was. Irgendwas. Das Feuer brennt noch eine Weile. [ID:tal_eve_day_1]
+- Die erste Brombeere war sauer. [if WorldState.has_flag("valley.berries_eaten") /] [ID:tal_eve_day_r1]
+	Mira: Die erste ist immer sauer. Deswegen isst man die zweite. [ID:tal_eve_day_2]
+	do WorldState.add_memory("mira", "told_berries")
+- Die Blumen am Weg riechen nach Honig. [if WorldState.has_flag("valley.flower_smelled") and not WorldState.has_flag("valley.berries_eaten") /] [ID:tal_eve_day_r2]
+	Mira: Bei Regen mehr. Keiner weiß, warum. [ID:tal_eve_day_3]
+	do WorldState.add_memory("mira", "told_flowers")
+- Der Weg zum Schuppen wollte nicht aufhören. [if WorldState.has_flag("valley.wood_taken") /] [ID:tal_eve_day_r3]
+	Mira: Manche Wege sind so. [ID:tal_eve_day_4]
+	Mira: Den lauf ich nicht mehr. [ID:tal_eve_day_5]
+	do WorldState.add_memory("mira", "told_path")
+- {{WorldState.cat_name()}} wohnt jetzt bei mir. [if WorldState.cat_name() != "" /] [ID:tal_eve_day_r4]
+	Mira: {{WorldState.cat_name()}}. Hm. [ID:tal_eve_day_6]
+	Mira: Die hat da schon gewohnt, bevor du kamst. Sie hat sich nur nicht vorgestellt. [ID:tal_eve_day_7]
+	do WorldState.add_memory("mira", "told_cat")
+- Eine Katze wohnt jetzt bei mir. [if WorldState.has_flag("house.cat_fed") and WorldState.cat_name() == "" /] [ID:tal_eve_day_r5]
+	Mira: Wie heißt sie? [ID:tal_eve_day_8]
+	Du weißt es nicht. Sie hat es dir nicht gesagt. [ID:tal_eve_day_9]
+	do WorldState.add_memory("mira", "told_cat")
+- … [ID:tal_eve_day_r6]
+	Mira schweigt eine Weile mit. Dann erzählt sie selbst. [ID:tal_eve_day_10]
+	Mira: Ich hab heute zwei Löcher im Netz geflickt. Und ein neues gefunden. [ID:tal_eve_day_11]
+	Mira: Das ist ungefähr jeder Tag. [ID:tal_eve_day_12]
+	do WorldState.add_memory("mira", "day_silence")
+=> END
+
+~ evening_elysia
+if WorldState.has_memory("mira", "said_elysia") or WorldState.has_memory("mira", "said_hero")
+	Mira: Dieses Elysia. Wie war's da? [ID:tal_eve_ely_1]
+else
+	Mira: Und wo warst du, bevor du hier im Regen standest? [ID:tal_eve_ely_2]
+- Schön. Alles war leicht. [ID:tal_eve_ely_r1]
+	Mira: Und trotzdem sitzt du jetzt hier. Im Nassen. [ID:tal_eve_ely_3]
+	Sie fragt nicht, warum. [ID:tal_eve_ely_4]
+	do WorldState.add_memory("mira", "told_elysia_easy")
+- Manchmal fehlt es mir. [ID:tal_eve_ely_r2]
+	Mira: Klar. [ID:tal_eve_ely_5]
+	Mira: Hier regnet's ja auch dauernd. [ID:tal_eve_ely_6]
+	do WorldState.add_memory("mira", "missed_elysia")
+- Darüber will ich nicht reden. [ID:tal_eve_ely_r3]
+	Mira: Gut. [ID:tal_eve_ely_7]
+	Sie fragt nicht noch mal. [ID:tal_eve_ely_8]
+	do WorldState.add_memory("mira", "kept_boundary")
+	do WorldState.set_facet("boundaries")
+- … [ID:tal_eve_ely_r4]
+	Mira: Auch eine Antwort. [ID:tal_eve_ely_9]
+	do WorldState.add_memory("mira", "elysia_silence")
+=> END
+
+~ evening_shell
+An der Plane bewegt sich die Muschel an ihrer Schnur. [ID:tal_eve_shell_1]
+- Woher hast du die Muschel? [ID:tal_eve_shell_r1]
+	Mira: Vom Meer. [ID:tal_eve_shell_2]
+	Mira: Ich war noch nie da. [ID:tal_eve_shell_3]
+	do WorldState.add_memory("mira", "asked_shell")
+- … [ID:tal_eve_shell_r2]
+	Du lässt die Muschel Muschel sein. Mira auch. [ID:tal_eve_shell_4]
+	do WorldState.add_memory("mira", "left_shell")
 => END
 
 ~ mira_end_again
@@ -240,4 +331,29 @@ else
 	Eine Ziege. Sie hat einen Stiefel im Maul und kaut darauf, als hätte sie ihn sich verdient. [ID:tal_goat_1]
 	Du greifst nach dem Stiefel. Die Ziege dreht den Kopf weg. Sie will etwas anderes. [ID:tal_goat_2]
 	do WorldState.set_flag("valley.goat_met")
+=> END
+
+# The first reflection (ADR-042): in Elysia the water showed everything except you. After
+# the rain the puddle by Mira's camp is smooth enough.
+~ puddle
+if WorldState.has_flag("valley.reflection_seen")
+	% Die Pfütze ist still. Du bist noch da. [ID:tal_puddle_4]
+	% Ein Blatt treibt über dein Spiegelbild und weiter. [ID:tal_puddle_5]
+else
+	Der Regen hat aufgehört. Die Pfütze am Weg ist glatt geworden. [ID:tal_puddle_1]
+	Darin der Himmel, ein Ast. Und jemand mit nassen Haaren. [ID:tal_puddle_2]
+	if WorldState.has_flag("valley.berries_eaten")
+		Auf dem Handrücken ein kleiner roter Strich. [ID:tal_puddle_6]
+	if WorldState.has_flag("elysia.mirror_seen")
+		Du hebst die Hand. Das Wasser hebt sie mit. [ID:tal_puddle_7]
+	Du schaust länger hin, als man in eine Pfütze schaut. [ID:tal_puddle_3]
+	do WorldState.set_flag("valley.reflection_seen")
+=> END
+
+# The Antreiber after the shed (ADR-042): he followed you back and sits by the path. He is
+# not beaten, only out of breath (Game Bible §3.3).
+~ antreiber_west
+% Antreiber: Ich sitz nur kurz. Sehr kurz. [ID:tal_antr_1]
+% Antreiber: Ich hab ausgerechnet, wie lange man sitzen darf. Ich hab's vergessen. [ID:tal_antr_2]
+% Der Antreiber sitzt am Weg und schaut dahin, wo ihr hergekommen seid. [ID:tal_antr_3]
 => END

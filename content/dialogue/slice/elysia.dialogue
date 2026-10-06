@@ -25,6 +25,7 @@ else
 	% Elysianer: Wie du da stehst. Wie ein Denkmal. Eins, das man gern besucht. [ID:el_praise_3]
 	% Elysianer: Ich hab vorhin gesehen, wie du um die Ecke gegangen bist. Sehr elegant. [ID:el_praise_4]
 	% Elysianer: Ein Held! Hier! Bei uns! Und ich steh einfach so daneben. [ID:el_praise_5]
+	% [if WorldState.is_quest_done("side_elysia_fountain") /] Elysianer: Der Brunnen! Du hast ihn gerichtet, ohne hinzugehen! Das kannst nur du. [ID:el_praise_6]
 	do WorldState.add_xp(150)
 => END
 
@@ -45,6 +46,8 @@ elif WorldState.quest_stage("side_elysia_butterflies") == "return"
 	else
 		do WorldState.advance_quest("main_elysia_hero", "reward")
 		Gärtnerin: Und am Weltenbaum wartet eine Truhe. Nur auf dich. Sie wartet schon ganz lange. [ID:el_gard_ret_4]
+	Gärtnerin: Ach, und der Brunnen am Becken. Er plätschert ein kleines bisschen zu leise. Schaust du nach? [ID:el_gard_ret_6]
+	do WorldState.start_quest("side_elysia_fountain")
 elif WorldState.is_quest_active("side_elysia_butterflies")
 	% Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_wait_1]
 	% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Wie Schmetterlinge eben. [ID:el_gard_wait_2]
@@ -97,7 +100,10 @@ else
 => END
 
 ~ basin
-if WorldState.has_flag("elysia.mirror_seen")
+if WorldState.is_quest_done("side_elysia_fountain") and not WorldState.has_flag("elysia.fountain_seen")
+	Das Becken plätschert. Genau richtig laut. Es hat, wenn man ehrlich ist, nie anders geplätschert. [ID:el_basin_5]
+	do WorldState.set_flag("elysia.fountain_seen")
+elif WorldState.has_flag("elysia.mirror_seen")
 	Das Wasser ist still wie Glas. Es zeigt alles. [ID:el_basin_again]
 else
 	Das Wasser im Becken ist klar und vollkommen still. [ID:el_basin_1]
