@@ -3,11 +3,11 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 3 (Art-/Audio-Prototyp) mit Feinschliff und Abgleich mit der Game Bible. Ziel ist ein
-45–60-minütiger Vertical Slice, danach Playtest-Gate. Spielbar: Startmenü → Neues Spiel (Elysia, Truhe,
-Riss, Tal) und unter Prototypen alle Testszenen samt Leistungstest. Vor dem ersten Übertritt nennt sich
-das Spiel im Startmenü „Elysia“ (ADR-030). Grafik, Ton und Texte sind selbst erzeugte Platzhalter.
-Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
+**Status:** Phase 4 (Vertical Slice) fertig, als Nächstes das Playtest-Gate (Phase 5). Spielbar am
+Stück: Startmenü → Neues Spiel → Name → Elysia → Riss → das Tal mit Mira → das Haus → der Weg zum
+Schuppen → Feuer → Ziege → Abend an Miras Feuer → Titel „Nach Elysia“. Unter Prototypen liegen die
+Testszenen der früheren Phasen und der Leistungstest. Grafik, Ton und Texte sind selbst erzeugte
+Platzhalter bzw. Entwürfe. Testanleitung: [`docs/PLAYTEST_PHASE4.md`](docs/PLAYTEST_PHASE4.md).
 
 ## Entwicklung
 
@@ -38,6 +38,10 @@ Testanleitung: [`docs/PLAYTEST_PHASE3.md`](docs/PLAYTEST_PHASE3.md).
 | `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
 | `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
 | `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen |
+| `python3 tools/art/layout_slice_maps.py tal --write` | Layout der Slice-Karten (`tal`, `antreiber_tal`, `antreiber_tal_bench`) |
+| `.venv/bin/python tools/audio/make_slice_sfx.py` | Klänge des Slice (Tür, Klopfen, Bach, Feuer, Katze, Ziege) |
+| `tools/godot.sh -- --start=elysia\|tal\|haus\|weg` | direkt an einen Ort des Slice |
+| `tools/godot.sh -- --profile=lauf --autopilot=res://tools/autopilot/slice_full.json` | den ganzen Slice ohne Hand durchspielen (Debug) |
 | `tools/godot.sh -- --start=look_elysia` | Look-Szene direkt starten (`look_elysia`, `look_tal`, `look_wald`) |
 | `tools/godot.sh …` | gepinntes Godot mit diesem Projekt starten |
 

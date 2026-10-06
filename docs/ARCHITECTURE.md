@@ -12,7 +12,7 @@ Legende: ✅ vorhanden · 🔜 geplant (Phase)
 core/        Querschnitt: Autoloads, Boot/Startmenü, Physik-Layer  ✅ · state/, save/, content/ (Phase 2) · util/, benchmark/ (Phase 3)
 entities/    Player, NPC, Interaktion, Figuren-Sheets             ✅ Phase 1
 world/       Karten, GameView, Props, FX, Shader, Szenen           ✅ Phase 1 · Look-Prototyp: Wetter, Licht, Himmel ✅
-encounters/  eigenständige Encounter-Szenen                       ✅ antreiber/ (Grey-Box)
+encounters/  eigenständige Encounter-Szenen                       ✅ antreiber/ (Grey-Box und Slice-Fassung)
 ui/          Theme, Skins Elysia/Real, HUD, Dialogbox, Prompt, Menüs, Journal, Debug-Panel ✅
 content/     Daten: locale/, dialogue/, maps/, quests/, items/     ✅
 assets/      Placeholder-Grafik, -Audio, Schriften                ✅ fonts/, placeholder/, generated/ (ADR-017)
@@ -60,12 +60,37 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 - Menüs erben von `MenuLayer` (`ui/menus/menu_layer.gd`) und nutzen `OptionList`: Hoch/Runter mit
   Umbruch, Links/Rechts ändert Werte, Bestätigen mit Enter, Leertaste, E oder A, Zurück mit Esc oder B.
   Sie laufen auch bei pausiertem Baum.
-- Startmenü: Fortsetzen (neuester lesbarer Stand), Laden, Einstellungen, Prototyp-Szenen (jede startet
-  einen neuen Spielzustand). `--start=<schlüssel>` und `--continue` für Tests und Aufnahmen. Zwei Titel
-  (ADR-030): „Elysia“, bis `SaveSystem.reached_reality()` wahr ist, danach „REAL“; `--title=elysia|real`.
+- Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia),
+  Laden, Prototypen (jede startet einen neuen Spielzustand), Einstellungen. `--start=<schlüssel>` und
+  `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
+  `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
+
+### Vertical Slice (Phase 4, ADR-037)
+
+```
+elysia  world/levels/slice/elysia.tscn   ElysiaScene: Erwachen, Schmetterlinge, Truhe, Wiederholung, Kind, Riss
+tal     world/levels/slice/tal.tscn      TalScene: Ankunft, Miras Nein, Trittsteine, Abend, Ziege, Schluss
+haus    world/levels/slice/haus.tscn     HausScene: kalter Kamin, Feuer, Miras Besuch, Katze
+weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum Schuppen (ADR-038)
+```
+
+- Szenen-Skripte reagieren nur auf `WorldState` (Flags, Quests, Haus) und inszenieren: `Cutscene`
+  (sperrt Spieler und Speichern, zeigt Cues nacheinander), Licht, Musik, Rückfälle gegen Festhängen.
+  `Beat.mark(id)` loggt die Spielminute jedes Beats.
+- Karten: Requisiten mit `"if"`/`"unless"` erscheinen live (MapView), `"sprite_when"` wechselt Bilder
+  (Decor). `door` (Tür oder Kartenrand mit `"auto"`), Spawn-Marker `spawn_<name>`, `SceneTravel.go()`
+  blendet über und setzt die Figur vor dem Autosave an den Marker. `blocker` sperrt Wege mit Erklärung.
+- Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`,
+  `fireplace`, `blocker`; `Talk` (Interaktionsfläche und Dialog über den Presenter); `ChildGuide`
+  (NpcWalker, der vorausgeht und wartet).
+- Der Riss gibt das Ziel samt Spawn weiter (`RiftSequence.spawn`), die Ankunft blendet langsam auf.
+- Durchlauf ohne Hand: `tools/autopilot/slice_full.json` (Hauptmenü bis Titelkarte); Teilstrecken
+  `slice_{elysia,tal,haus,weg,abend}.json`. Der Autopilot klickt Gespräche durch (`"dialogue"`) und
+  setzt bei Bedarf Zustand (`"give"`, `"flag"`).
 
 - Sandbox: `world/levels/sandbox.tscn` lädt `content/maps/sandbox.txt`.
-- Antreiber: `encounters/antreiber/antreiber_encounter.gd` erbt von `GameScene` und baut endlose Segmente.
+- Antreiber: `encounters/antreiber/antreiber_encounter.gd` erbt von `GameScene` und baut endlose Segmente;
+  Hooks (`segment_*`, `goal_scene`, `_configure_actor`, `_after_resolved`) für die Slice-Fassung.
 - Kopplung ohne Event-Bus: Schilder und NPCs rufen die Gruppe `dialogue_presenter`, Hebel die Gruppe
   `link_<id>`. Zustandsänderungen laufen über `WorldState` und dessen typisierte Signale.
 - Reine Logik ohne Knoten, voll getestet: `MovementModel`, `MapData`, `InteractionSelector`, `CameraMath`,

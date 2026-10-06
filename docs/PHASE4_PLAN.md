@@ -7,6 +7,14 @@ Freigabe: Der Projektinhaber hat am 06.10. die Arbeit an allem freigegeben („a
 weiterentwickeln“). Inhaltliche Entscheidungen, die hier getroffen werden, sind als Vorschlag markiert und
 lassen sich ändern; jede größere steht als ADR in `DECISIONS.md`.
 
+**Stand 06.10.: umgesetzt.** Alle sieben Beats sind spielbar und laufen per Autopilot am Stück
+(`tools/autopilot/slice_full.json`, Hauptmenü bis Titelkarte). Abweichungen vom Plan:
+- Der Antreiber-Ort heißt `weg` (die Grey-Box `antreiber` bleibt Prototyp, ADR-038).
+- Mira legt nach ihrem Besuch Bretter über die Brücke; danach führt der kurze Weg zu ihrem Lager.
+- Den Fisch für die Katze bringt Mira mit („Ich hab Fisch. Du hast Feuer.“).
+- Kind und Riss hängen am Beginn der Wiederholungen, nicht an der Truhe: niemand bleibt in Elysia hängen.
+Testanleitung: `PLAYTEST_PHASE4.md`.
+
 ## Ablauf und Orte
 
 | Beat | Minuten | Ort (Szene) | Inhalt |
