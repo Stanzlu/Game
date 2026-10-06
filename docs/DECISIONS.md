@@ -287,3 +287,17 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Kontext:** Der Boden-Baker malt Landschaft, keine Innenräume mit Wänden.
 - **Entscheidung:** Das Haus ist eine kleine Textkarte (Dielen, feste Wände) mitten in Schwarz; Blockwand, Fenster, Seitenwände und Türöffnung malt ein flaches Requisit `haus/shell`. Licht: kalt-blauer Raum mit Fensterschein, bis das Feuer brennt; dann wechselt der Raum über Sekunden ins Warme, und Regen auf dem Dach plus Kaminfeuer ersetzen die Stille.
 - **Konsequenzen:** Weitere Innenräume brauchen eine eigene Hülle (oder später ein Tileset). Der Raum ist klein auf dem Bildschirm (KNOWN_ISSUES #44).
+
+## ADR-040 · Der Slice nach dem Bible-Abgleich: mehr Leben, keine neuen Systeme
+- **Status:** angenommen · 2026-10-06 (Freigabe des Projektinhabers: „Gleiche es mit der Game-Bible ab und optimiere es, dass es immer besser und realistischer und natürlicher wirkt“)
+- **Kontext:** Der Slice deckte alle Beats von §56 ab, war aber kürzer als geplant (KNOWN_ISSUES #43) und an einigen Stellen dünner als die Bible: Elysianer sagen nie Nein, ohne dass man es ausprobieren kann (§1, §46); das spätere Hauptthema fehlte in Elysia (§35); die Wirklichkeit hatte wenig zu riechen und zu schmecken (§12); Mira stand nur da (§13: eigene Ziele); der Antreiber zeigte nicht, warum seine Strategie Sinn hatte (§59, Risiko 8); nach dem Feuer fehlte die Ruhe (§45); die Ziege tauchte nicht absurd auf (§33).
+- **Entscheidung:**
+  - Elysia: Die Zwillinge am Eingang fragen, was sie für dich tun können, und sagen zu allem Ja, auch zur Bitte, einmal Nein zu sagen. Miras erstes Nein greift das danach in einer Erzählzeile auf. Das Kind summt leise das Motiv der Tal-Musik; das Summen ist nur in der Nähe zu hören und führt zu ihm.
+  - Tal: Mira hat einen Tagesablauf (Netz, Feuer, Angel am Bach, jedes Mal unterschiedlich lang), abends sitzt sie auf der anderen Seite ihres Feuers. Neue Stellen zum Ansehen: die Muschel an ihrer Plane (am Ende dreht sie sich im Wind), der Stiefelabdruck am Feuer, Wildblumen, die nach etwas riechen, Brombeeren, die sauer und süß sind, ein krummer Baum, eine Zaunlücke. Wer sich Mira als „Held von Elysia“ vorstellt, bekommt ein „Aha.“, und im Haus erinnert sie sich daran.
+  - Weg: mehr Zurufe; nach dem Holz sagt der Antreiber, warum Rennen für ihn immer funktioniert hat, mit drei Antworten.
+  - Haus: Der Teppich am Kamin ist ein Sitzplatz. Wer sich ans brennende Feuer setzt, hat einen ruhigen Moment, danach klopft Mira; ohne Sitzen klopft sie spätestens nach 40 Sekunden.
+  - Abend: Nach dem Tausch trottet die Ziege davon und steht kurz darauf oben auf dem Holzstapel am Haus; Mira kommentiert es.
+  - Bausteine dafür: `NpcWalker` mit `"pause"` und `"face"`, `Decor` mit `"sit"`, Karten-Requisiten bekommen `"live": true`, wenn die Geschichte sie während der Szene bringt (Auftritt mit Verzögerung), Requisiten mit `leave()` gehen ihren eigenen Weg ab.
+- **Nicht gemacht:** ein Händler in Elysia (§10) braucht neue Figuren- und Standgrafik mit Spiegelzwilling; er steht als Vorschlag in `PHASE4_PLAN.md`.
+- **Konsequenzen:** Alles hängt an Flags und Karten (ADR-037), Speichern und Laden stellen es her. Geschätzt kommen beim ersten Spielen einige Minuten dazu, vor allem durch Entdecken; gemessen wird im Playtest.
+
