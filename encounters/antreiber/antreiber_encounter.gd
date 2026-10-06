@@ -15,6 +15,8 @@ const BIRD_SCENE := preload("res://world/props/bird.tscn")
 ## The flag stays in view: it hovers near the right edge and recedes there.
 const FLAG_MIN_AHEAD := 120.0
 const FLAG_MAX_AHEAD := 250.0
+const POOL_SIZE := 2
+const PARKED := Vector2(0, -100000)
 
 @export var stillness_seconds := 3.0
 @export var encounter_speed := 1.0
@@ -35,6 +37,9 @@ var goal_reached := false
 var _ground: Node2D
 var _actors: Node2D
 var _segments: Dictionary = {}
+## Path pieces that left the window, parked out of sight for reuse (path -> Array[MapView]):
+## building a piece costs a frame or two, moving one costs nothing.
+var _pool: Dictionary = {}
 var _segment_texts: Dictionary = {}
 var _last_player_pos := Vector2.ZERO
 
@@ -52,6 +57,7 @@ func _build_world() -> void:
 	for path: String in [segment_plain, segment_bench]:
 		_segment_texts[path] = FileAccess.get_file_as_string(path)
 	_ensure_segments(0.0)
+	_fill_pool()
 	_add_boundaries()
 	spawn_player(_actors, Vector2(2 * TILE + 8, PATH_Y))
 	player.surface_provider = surface_at
@@ -148,13 +154,42 @@ func _segment_index(x: float) -> int:
 
 func _ensure_segments(player_x: float) -> void:
 	var center := _segment_index(player_x)
-	for index in range(center - 1, center + 3):
-		if not _segments.has(index):
-			_segments[index] = _build_segment(index)
 	for index: int in _segments.keys():
 		if index < center - 2 or index > center + 4:
-			(_segments[index] as Node).queue_free()
+			_park(_segments[index])
 			_segments.erase(index)
+	for index in range(center - 1, center + 3):
+		if not _segments.has(index):
+			_segments[index] = _segment_at(index)
+
+
+func _segment_path(index: int) -> String:
+	return segment_bench if posmod(index, 2) == 1 else segment_plain
+
+
+func _segment_at(index: int) -> MapView:
+	var parked: Array = _pool.get(_segment_path(index), [])
+	if parked.is_empty():
+		return _build_segment(index)
+	var segment: MapView = parked.pop_back()
+	segment.shift_to(Vector2(index * SEGMENT_TILES.x * TILE, 0))
+	return segment
+
+
+## Builds the spare pieces while the scene loads, so walking never has to build one.
+func _fill_pool() -> void:
+	for parity in 2:
+		for k in POOL_SIZE:
+			_park(_build_segment(1000 + parity + 2 * k))
+
+
+func _park(segment: MapView) -> void:
+	var parked: Array = _pool.get_or_add(str(segment.get_meta(&"path")), [])
+	if parked.size() >= POOL_SIZE:
+		segment.queue_free()
+		return
+	segment.shift_to(PARKED)
+	parked.append(segment)
 
 
 func _build_segment(index: int) -> MapView:
@@ -163,7 +198,8 @@ func _build_segment(index: int) -> MapView:
 	segment.props_parent = _actors
 	segment.position = Vector2(index * SEGMENT_TILES.x * TILE, 0)
 	_ground.add_child(segment)
-	var path := segment_bench if posmod(index, 2) == 1 else segment_plain
+	var path := _segment_path(index)
+	segment.set_meta(&"path", path)
 	segment.build_from_text(_segment_texts[path], path)
 	return segment
 

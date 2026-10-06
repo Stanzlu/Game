@@ -43,6 +43,16 @@ func _exit_tree() -> void:
 	_external_props.clear()
 
 
+## Moves the map, and the props it placed under another parent, to `to` (local position).
+## Endless encounters recycle their path pieces this way instead of building new ones.
+func shift_to(to: Vector2) -> void:
+	var delta := to - position
+	position = to
+	for prop in _external_props:
+		if is_instance_valid(prop):
+			(prop as Node2D).global_position += delta
+
+
 ## Loads, validates and builds the map. Returns false (and logs errors) on invalid content.
 func load_map(path: String) -> bool:
 	map_path = path

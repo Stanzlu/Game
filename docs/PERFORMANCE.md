@@ -125,3 +125,13 @@ Foto des Ergebnisbildschirms (macOS, Vollbild): Elysia, Tal und Wald jeweils **e
   - Neue Einstellung **Anzeige → Bildsynchronisierung (VSync)**. Aus: Die Engine begrenzt die Bildrate selbst auf die Bildwiederholrate des Bildschirms (kein Leerlauf der GPU, eventuell leichtes Tearing).
   - Der Bericht nennt Vollbild ja/nein.
 - **Offen:** Bestätigung mit dem neuen Leistungstest (Spalte „ohne VSync“, Bericht `benchmark.txt`) auf dem Mac. Mit Netzteil oder ohne Stromsparmodus sollten es 60 fps oder mehr sein.
+
+## Vertical Slice (Phase 4)
+
+Der Leistungstest misst jetzt Elysia (Look-Karte), die drei Slice-Orte Tal, Haus und Weg zum Schuppen und
+den Nachtwald. Headless im Container (nur Skripte und Physik) liegen alle bei rund 7 ms pro Frame; die
+langsamsten Frames bei 8–10 ms.
+
+- **Weg zum Schuppen:** Jedes neu gebaute Wegstück kostete einen Ruckler von 25–35 ms (Karte parsen,
+  rund 370 Streu-Sprites setzen). Wegstücke, die das Fenster verlassen, werden jetzt geparkt und vorne
+  wiederverwendet; zwei Reservestücke je Sorte entstehen schon beim Laden. Danach max. 9 ms.
