@@ -77,9 +77,14 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
 - Szenen-Skripte reagieren nur auf `WorldState` (Flags, Quests, Haus) und inszenieren: `Cutscene`
   (sperrt Spieler und Speichern, zeigt Cues nacheinander), Licht, Musik, Rückfälle gegen Festhängen.
   `Beat.mark(id)` loggt die Spielminute jedes Beats.
-- Karten: Requisiten mit `"if"`/`"unless"` erscheinen live (MapView), `"sprite_when"` wechselt Bilder
-  (Decor). `door` (Tür oder Kartenrand mit `"auto"`), Spawn-Marker `spawn_<name>`, `SceneTravel.go()`
-  blendet über und setzt die Figur vor dem Autosave an den Marker. `blocker` sperrt Wege mit Erklärung.
+- Karten: Requisiten mit `"if"`/`"unless"` erscheinen live (MapView); wer einen eigenen Abgang hat
+  (`leave()`: das Kind verblasst, der Schmetterling blitzt auf), spielt ihn zu Ende. Was sich selbst
+  entfernt hat (eingesammelt, gefangen), bleibt weg. `"sprite_when"` baut das Requisit mit dem neuen
+  Bild neu auf (Licht, Form, Ebene, Spiegelzwilling). `door` (Tür oder Kartenrand mit `"auto"`),
+  Spawn-Marker `spawn_<name>`, `SceneTravel.go()` blendet über und setzt die Figur vor dem Autosave an
+  den Marker; während der Blende öffnet kein Pausenmenü. `blocker` sperrt Wege mit Erklärung, mit
+  `"offset"` auch über Zellen mit anderen Requisiten (der Bach bis zu Miras Nein, die Haustür bis zu
+  ihrem Besuch). `test_content` prüft, dass jedes gelesene Flag irgendwo gesetzt wird.
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`,
   `fireplace`, `blocker`; `Talk` (Interaktionsfläche und Dialog über den Presenter); `ChildGuide`
   (NpcWalker, der vorausgeht und wartet).

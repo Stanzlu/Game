@@ -24,6 +24,7 @@ k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; Mira kommt, wenn das Feuer brennt, und geht wieder
 M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "mira", "glance": true, "if": "house.mira_knocked", "unless": "house.mira_left"}}
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "house", "auto": true, "sound": "door_close"}}
+Q = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 1], "cue": "stay", "dialogue": "res://content/dialogue/slice/haus.dialogue", "if": "house.fire_lit", "unless": "house.mira_visited"}}
 [map]
 ########################################
 ########################################
@@ -40,7 +41,7 @@ D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": 
 ############W_______T______W############
 ############W______@_______W############
 ############W_u____1_______W############
-############W______________W############
+############W______Q_______W############
 ############WWWWWWWDWWWWWWWW############
 ########################################
 ########################################

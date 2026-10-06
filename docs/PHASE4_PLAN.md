@@ -13,6 +13,9 @@ lassen sich ändern; jede größere steht als ADR in `DECISIONS.md`.
 - Mira legt nach ihrem Besuch Bretter über die Brücke; danach führt der kurze Weg zu ihrem Lager.
 - Den Fisch für die Katze bringt Mira mit („Ich hab Fisch. Du hast Feuer.“).
 - Kind und Riss hängen am Beginn der Wiederholungen, nicht an der Truhe: niemand bleibt in Elysia hängen.
+- Über den Bach geht es erst nach Miras Nein (eine Erzählzeile am Ufer zeigt auf sie), und solange das
+  Feuer brennt, Mira aber noch nicht da war, bleibt die Haustür zu: Beide Kernmomente lassen sich nicht
+  verpassen.
 Testanleitung: `PLAYTEST_PHASE4.md`.
 
 ## Ablauf und Orte

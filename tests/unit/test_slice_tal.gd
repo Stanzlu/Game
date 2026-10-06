@@ -34,7 +34,28 @@ func test_arrival_marks_the_beat() -> void:
 	assert_true(Beat.reached("valley_arrival"))
 
 
+func _walk_west_from(scene: GameScene, cell: Vector2i) -> float:
+	scene.player.teleport(scene.map.cell_to_world(cell))
+	Input.action_press(&"move_left")
+	await wait_seconds(0.5)
+	Input.action_release(&"move_left")
+	return scene.player.global_position.x
+
+
+func test_the_stream_waits_until_mira_was_asked() -> void:
+	var scene := await _scene()
+	# the first stone of the field and the trunk, walking west from the east bank
+	for cell: Vector2i in [Vector2i(44, 18), Vector2i(44, 7)]:
+		var x: float = await _walk_west_from(scene, cell)
+		assert_gt(x, scene.map.cell_to_world(cell).x - 12.0, "held back at %s" % cell)
+	WorldState.set_flag("valley.mira_met")
+	await wait_physics_frames(2)
+	var x: float = await _walk_west_from(scene, Vector2i(44, 7))
+	assert_lt(x, scene.map.cell_to_world(Vector2i(43, 7)).x, "on the trunk once she was asked")
+
+
 func test_round_stone_tips_and_the_player_climbs_out_where_he_came_from() -> void:
+	WorldState.set_flag("valley.mira_met")
 	var scene := await _scene()
 	var east := _cell(scene, "spawn_stones_e")
 	# walking west from the east bank onto the round stone at (40, 19)
@@ -50,6 +71,7 @@ func test_round_stone_tips_and_the_player_climbs_out_where_he_came_from() -> voi
 
 
 func test_flat_stones_hold() -> void:
+	WorldState.set_flag("valley.mira_met")
 	var scene := await _scene()
 	for cell: Vector2i in [Vector2i(43, 19), Vector2i(42, 18), Vector2i(41, 17), Vector2i(39, 18)]:
 		scene.player.teleport(scene.map.cell_to_world(cell))
@@ -58,6 +80,7 @@ func test_flat_stones_hold() -> void:
 
 
 func test_crossing_the_stream_moves_the_quest_on() -> void:
+	WorldState.set_flag("valley.mira_met")
 	var scene := await _scene()
 	WorldState.start_quest("main_valley_shelter")
 	scene.player.teleport(_cell(scene, "spawn_stones_w") + Vector2(-24, 0))

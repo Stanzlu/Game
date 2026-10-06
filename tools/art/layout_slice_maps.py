@@ -140,6 +140,9 @@ def tal():
         "Z": [(1, 25)],
         "V": [(2, 25)],
         "@": [(52, 22)],
+        # until Mira was asked, the stream holds you back (her no is the valley's first beat)
+        "J": [(log_cells[-1], LOG_ROW)],
+        "j": [(STONE_X + len(STONE_FIELD[0]), STONE_ROWS[1])],
     }
     for c, pts in props.items():
         for x, y in pts:

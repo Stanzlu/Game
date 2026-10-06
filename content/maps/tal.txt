@@ -62,6 +62,10 @@ Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 X = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "weg", "auto": true, "size": [1, 5], "if": "valley.wood_needed", "unless": "valley.wood_taken"}}
 Z = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.wood_needed"}}
 V = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 5], "cue": "west_path_done", "dialogue": "res://content/dialogue/slice/tal.dialogue", "if": "valley.wood_taken"}}
+; Bis Mira gefragt wurde, hält einen der Bach zurück: J sperrt den Baumstamm (zwei Zellen
+; westlich), j das Steinfeld (fünf Zellen westlich, drei Reihen).
+J = {"ground": ".", "prop": "res://world/props/blocker.tscn", "params": {"size": [2, 1], "offset": [-1.5, 0], "cue": "stream_wait", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.mira_met"}}
+j = {"ground": ".", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 3], "offset": [-3, 0], "cue": "stream_wait", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.mira_met"}}
 ; Ziege und Kartoffel (Beat 7)
 G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose"}}
 o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
@@ -73,7 +77,7 @@ hhhhhhh^^....^......^.^^hhhhh^^^^^^^^....~~^hhhhhhhh^.....^^^^^hhhhh
 hhhh^^^.................^^^^^^^...^......~~~^^hhhh^^........^^^hhhhh
 hhhh^^^....................^^.............~~^^^^^^^.............hhhh
 hhh^^..P.....T............................~~..^^^^..............hhhh
-hhh^.....T...............................Yyy...P................hhhh
+hhh^.....T...............................YyyJ..P................hhhh
 hhh........P.............................~~~.....T............P..hhh
 hh...C...........G...................C...~~~...........T..1......hhh
 hh.................E.............E......~~~........P.............hhh
@@ -84,7 +88,7 @@ hh.................E..b...2......E.R~~~~~~.............,,........hhh
 hh.................E......,......E...~~~~~.............,.........hhh
 hhh................FFBFFF,,.FFFBFF.....~~~............,,..gg.....hhh
 hhhh.....................,,............sSSSs....r....U,.........hhhh
-hhhh..T.................p,,........g..5SSsSs...,.N...,.........Phhhh
+hhhh..T.................p,,........g..5SSsSsj..,.N...,.........Phhhh
 hhhhh...gg.C........mmm..,,............ssSSS4..,,..c,,..........hhhh
 hhhh.....g.........,,,,,,,,p.............~~~~....,..,...........hhhh
 hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......C...hhhh

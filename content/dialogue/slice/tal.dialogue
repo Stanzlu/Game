@@ -135,6 +135,11 @@ Der Pfad verschwindet zwischen den Bäumen nach Westen. [ID:tal_west_1]
 Erst mal ein Dach über dem Kopf. [ID:tal_west_2]
 => END
 
+~ stream_wait
+Der Bach ist schnell und kalt. Weiter unten am Ufer brennt ein kleines Feuer, davor kniet jemand. [ID:tal_stream_1]
+Vielleicht weiß sie, wo man hier rüberkommt. [ID:tal_stream_2]
+=> END
+
 ~ west_path_done
 Der Weg zum Schuppen. Das Holz hast du schon. Den Weg muss man nicht zweimal gehen. [ID:tal_west_3]
 => END

@@ -85,6 +85,10 @@ else
 Es klopft. [ID:haus_knock_1]
 => END
 
+~ stay
+Das Feuer brennt gerade erst richtig, und draußen regnet es. Du bleibst noch ein bisschen. [ID:haus_stay_1]
+=> END
+
 ~ mira
 Mira wärmt sich die Hände am Feuer. Sie scheint gerade nicht reden zu wollen. [ID:haus_mira_idle_1]
 => END

@@ -29,8 +29,8 @@ Wer einzelne Orte ansehen will (ohne den Rest): `--start=elysia`, `--start=tal`,
 
 - **Elysia:** Sprich das Kind am Becken an und folge ihm. Wer nichts tut, dem öffnet sich der Riss nach
   einiger Zeit von selbst (rechts unten am Inselrand).
-- **Bach:** Die flachen, bemoosten Steine halten, die runden, nassen kippen. Weiter oben liegt ein
-  umgestürzter Baum über dem Bach.
+- **Bach:** Erst mit der Frau am Feuer sprechen. Die flachen, bemoosten Steine halten, die runden,
+  nassen kippen. Weiter oben liegt ein umgestürzter Baum über dem Bach.
 - **Holz:** Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
 - **Der Weg:** Wer rennt, kommt nicht an. Was tut man, wenn ein Weg nicht endet?
 - **Die Ziege:** Sie ist bestechlich. Im Gemüsebeet am Haus.

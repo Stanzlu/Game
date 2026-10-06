@@ -90,3 +90,20 @@ func test_the_spoon_goes_on_the_shelf() -> void:
 		(shelves[0] as Decor).sprite_id, "haus/shelf_spoon", "the shelf shows the spoon at once"
 	)
 	assert_not_null(shelves[0].get_node_or_null("Interactable"), "can still be looked at")
+
+
+func _count(scene: GameScene, prefix: String) -> int:
+	var count := 0
+	for node in scene.map.entities.get_children():
+		if str(node.name).begins_with(prefix) and not node.is_queued_for_deletion():
+			count += 1
+	return count
+
+
+func test_the_door_waits_for_mira_after_the_fire() -> void:
+	var scene := await _scene()
+	assert_eq(_count(scene, "Blocker"), 0, "free to go before the fire")
+	WorldState.set_flag("house.fire_lit")
+	assert_eq(_count(scene, "Blocker"), 1, "nobody misses Mira's visit by walking out")
+	WorldState.set_flag("house.mira_visited")
+	assert_eq(_count(scene, "Blocker"), 0, "open again after her visit")
