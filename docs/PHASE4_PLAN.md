@@ -71,13 +71,16 @@ Testanleitung: `PLAYTEST_PHASE4.md`.
 - Keine Therapiesprache, keine Erklärung der Metapher. Menschen reden auch über Wetter und Essen.
 - Jede Wahl hat eine wahrnehmbare Folge (ContentValidator, keine Fake Choices).
 
-## Vertiefen, falls zu kurz (Vorschlag, erst nach dem Playtest)
+## Vertiefen, falls zu kurz
 
-Geschätzt dauert der Slice beim ersten Spielen 20–30 statt 45–60 Minuten (KNOWN_ISSUES #43). Ohne
-neue Systeme, nur mit vorhandenen Bausteinen, ließe er sich dort vertiefen, wo die Bible (§56) mehr Zeit
-vorsieht. Welche davon, entscheidet der Playtest:
-- Elysia (0–18): eine zweite mühelose Aufgabe mit noch größerer Belohnung, mehr Elysianer mit eigenen
-  wortgleichen Schleifen, ein Elysianer, der dich bei allem bewundert; mehr zu entdecken, das sich wiederholt.
+Geschätzt dauert der Slice beim ersten Spielen 20–30 statt 45–60 Minuten (KNOWN_ISSUES #43). Nach dem
+Bible-Abgleich vom 06.10. ist ein erster Teil umgesetzt (ADR-040): Elysianer sagen zu allem Ja, das Kind
+summt das spätere Hauptmotiv, Mira hat einen Tagesablauf und sitzt abends am Feuer, im Tal gibt es mehr
+zu riechen, schmecken und entdecken, der Antreiber zeigt sein Warum, am Feuer gibt es einen ruhigen
+Moment, die Ziege steht am Ende auf dem Holzstapel. Weitere Ideen, ohne neue Systeme, entscheidet der
+Playtest:
+- Elysia (0–18): ein Händler, der dir alles schenkt (mit Spiegelzwilling), eine zweite mühelose Aufgabe
+  mit noch größerer Belohnung, mehr Elysianer mit eigenen wortgleichen Schleifen.
 - Tal (25–35): mehr Stellen zum Ansehen (Zaun, Wegweiser, Miras Lager), ein zweites kurzes Gespräch mit
   Mira über Wetter und Essen, der Bach mit einer zweiten Stelle zum Ausprobieren.
 - Antreiber (35–45): mehr Zurufe, Wegstücke mit wechselnden Dingen am Rand, ein spürbarer Verlauf bis zur

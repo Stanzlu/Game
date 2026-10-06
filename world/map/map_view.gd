@@ -395,7 +395,9 @@ func _spawn_props() -> void:
 				_looks[index] = Decor.variant_sprite(params)
 
 
-func _spawn_prop(placement: Dictionary) -> Node2D:
+## `live`: the story brought it in while the scene runs (not on loading); the prop gets
+## params "live": true and may make an entrance.
+func _spawn_prop(placement: Dictionary, live := false) -> Node2D:
 	var scene_path: String = placement["prop"]
 	var scene := load(scene_path) as PackedScene
 	if scene == null:
@@ -412,7 +414,11 @@ func _spawn_prop(placement: Dictionary) -> Node2D:
 		prop.position = cell_to_world(cell) - global_position
 		entities.add_child(prop)
 	if prop.has_method("apply_params"):
-		prop.call("apply_params", _mirror_params(placement["params"], cell))
+		var params := _mirror_params(placement["params"], cell)
+		if live:
+			params = params.duplicate()
+			params["live"] = true
+		prop.call("apply_params", params)
 	return prop
 
 
@@ -470,7 +476,7 @@ func refresh_conditions() -> void:
 			alive = false
 		if alive or _retired.has(index):
 			continue
-		var prop := _spawn_prop(placement)
+		var prop := _spawn_prop(placement, true)
 		_conditional[index] = prop
 		if params.has("sprite_when"):
 			_looks[index] = Decor.variant_sprite(params)

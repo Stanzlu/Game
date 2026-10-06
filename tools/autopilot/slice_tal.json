@@ -1,7 +1,7 @@
 [
-  {"t": 1.0, "teleport": [50, 18], "log": "Mira at her net"},
-  {"t": 1.2, "press": ["move_left"]},
-  {"t": 1.25, "release": ["move_left"]},
+  {"t": 1.0, "meet": "mira", "log": "Mira at her net"},
+  {"t": 1.2, "press": ["move_up"]},
+  {"t": 1.25, "release": ["move_up"]},
   {"t": 1.6, "tap": ["interact"]},
   {"t": 2.2, "dialogue": 22.0, "log": "the first no"},
   {"t": 25.0, "teleport": [44, 19], "log": "stones: the wrong way"},

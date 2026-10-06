@@ -81,6 +81,11 @@ else
 	Draußen auf dem Fensterbrett sitzt eine Katze und schaut herein. Nicht zu dir. Zum Feuer. [ID:haus_cat_1]
 => END
 
+~ fire_rest
+Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
+Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
+=> END
+
 ~ knock
 Es klopft. [ID:haus_knock_1]
 => END
@@ -121,7 +126,10 @@ Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 	Mira: Woanders ist groß. [ID:haus_mira_13]
 	do WorldState.add_memory("mira", "said_elsewhere")
 - Aus Elysia. [ID:haus_mira_r5]
-	Mira: Nie gehört. [ID:haus_mira_14]
+	if WorldState.has_memory("mira", "said_hero")
+		Mira: Ach ja. Wo du der Held bist. [ID:haus_mira_27]
+	else
+		Mira: Nie gehört. [ID:haus_mira_14]
 	Mira: Klingt nach einem Ort, an dem es nicht regnet. [ID:haus_mira_15]
 	do WorldState.add_memory("mira", "said_elysia")
 - Ich weiß es nicht mehr genau. [ID:haus_mira_r6]

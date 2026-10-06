@@ -10,6 +10,8 @@ extends Node
 ## any open conversation for that long (taps interact while a dialogue box is visible,
 ## picking the first answer), so a stray tap never starts a new one. "give": "<item id>"
 ## and "flag": "<flag id>" set up story state (captures of later beats without replaying).
+## "meet": "<cue>" puts the player just south of the NPC with that dialogue cue, wherever its
+## own routine has taken it.
 ## Time counts physics ticks, so runs are deterministic with --fixed-fps.
 
 const TAP_TICKS := 8
@@ -81,6 +83,8 @@ func _physics_process(_delta: float) -> void:
 			Input.action_press(action)
 		if event.has("teleport"):
 			_teleport(event["teleport"])
+		if event.has("meet"):
+			_meet(str(event["meet"]))
 		for action: String in event.get("tap", []):
 			_send(action, true)
 			_tapped[action] = _ticks + TAP_TICKS
@@ -116,4 +120,18 @@ func _teleport(cell: Array) -> void:
 	if player == null or not player.has_method(&"teleport"):
 		Log.warn(Log.Category.INPUT, "autopilot teleport without player")
 		return
+	# a seated player gets up first (as any step would make them)
+	if player.has_method(&"stand_up"):
+		player.call(&"stand_up")
 	player.call(&"teleport", Vector2(float(cell[0]), float(cell[1])) * 16.0 + Vector2(8, 8))
+
+
+func _meet(cue: String) -> void:
+	var player := get_tree().get_first_node_in_group(&"player") as Node2D
+	for node in get_tree().current_scene.find_children("*", "CharacterBody2D", true, false):
+		if node is NpcWalker and (node as NpcWalker).cue == cue and player != null:
+			if player.has_method(&"stand_up"):
+				player.call(&"stand_up")
+			player.call(&"teleport", (node as Node2D).global_position + Vector2(0, 14))
+			return
+	Log.warn(Log.Category.INPUT, "autopilot meet: nobody there", {"cue": cue})

@@ -10,8 +10,14 @@ const COLD_TINT := Color(0.44, 0.48, 0.62)
 const WARM_TINT := Color(0.84, 0.74, 0.64)
 const COLD_AMBIENCE := preload("res://content/audio/haus_kalt.tres")
 const WARM_AMBIENCE := preload("res://content/audio/haus_feuer.tres")
-## Seconds of quiet by the fire before Mira knocks.
-@export var mira_after := 7.0
+## Seconds the player sits by the burning fire before the quiet moment (Game Bible §45:
+## after the fire comes rest); a little later Mira knocks.
+const REST_BEFORE_KNOCK := 2.5
+## Mira comes this many seconds after the fire at the latest, sitting or not.
+@export var mira_after := 40.0
+
+var _resting := 0.0
+var _mira_coming := false
 
 
 func _ready() -> void:
@@ -28,7 +34,24 @@ func _ready() -> void:
 		WorldState.advance_quest("main_valley_shelter", "house")
 	if warm and not WorldState.has_flag("house.mira_visited"):
 		# loaded a save between the fire and Mira's visit
+		_mira_coming = true
 		_mira_visits.call_deferred()
+
+
+func _process(delta: float) -> void:
+	if _mira_coming or player == null or not WorldState.is_fire_lit():
+		return
+	_resting = _resting + delta if player.state == Player.State.SIT else 0.0
+	if _resting >= REST_BEFORE_KNOCK:
+		_rest_by_the_fire()
+
+
+## Sitting by the fire: a moment of warmth and rain on the roof, then the knock.
+func _rest_by_the_fire() -> void:
+	_mira_coming = true
+	await Talk.present(self, DIALOGUE, "fire_rest", player)
+	await NodeTimer.after(self, 2.0)
+	_mira_visits()
 
 
 func _on_house_changed() -> void:
@@ -49,7 +72,9 @@ func _fire_catches() -> void:
 	while dialogue_box.visible:
 		await get_tree().process_frame
 	await NodeTimer.after(self, mira_after)
-	_mira_visits()
+	if not _mira_coming:
+		_mira_coming = true
+		_mira_visits()
 
 
 func _mira_visits() -> void:

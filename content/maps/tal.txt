@@ -48,8 +48,19 @@ b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite":
 ; Miras Lager: Plane, Feuer, das Netz, das sie flickt, und Mira selbst
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tarp"}}
 c = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/campfire"}}
-r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/net_rack"}}
-N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true}}
+r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/net_rack", "cue": "net", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
+; Dinge zum Ansehen, Riechen, Schmecken: die Muschel an Miras Plane, der Stein mit dem Stiefelabdruck,
+; Wildblumen, Brombeeren, ein krummer Baum, die Zaunlücke (gerade breit genug für eine Ziege).
+u = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "shell", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14}}
+z = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/stone_flat", "cue": "boot_print", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
+f = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wildflowers", "cue": "wildflower", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
+a = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bush", "cue": "berries", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
+A = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked", "cue": "crooked_tree", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
+I = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken", "cue": "fence_gap", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
+; Mira hat ihren eigenen Tag: Netz, Feuer, die Angel am Bach, jedes Mal verschieden lang. Abends
+; sitzt sie auf der anderen Seite ihres Feuers (M).
+N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "route": [[0, 0], [2, 2], [-3, 2]], "pause": [5, 11], "speed": 24, "unless": "house.mira_visited"}}
+M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "face": "w", "if": "house.mira_visited"}}
 ; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
 k = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken", "unless": "valley.bridge_fixed"}}
 L = {"ground": "y", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 3], "unless": "valley.bridge_fixed"}}
@@ -67,7 +78,9 @@ V = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size":
 J = {"ground": ".", "prop": "res://world/props/blocker.tscn", "params": {"size": [2, 1], "offset": [-1.5, 0], "cue": "stream_wait", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.mira_met"}}
 j = {"ground": ".", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 3], "offset": [-3, 0], "cue": "stream_wait", "dialogue": "res://content/dialogue/slice/tal.dialogue", "unless": "valley.mira_met"}}
 ; Ziege und Kartoffel (Beat 7)
-G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose"}}
+G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_loose", "unless": "valley.goat_traded"}}
+; Nach dem Tausch steht die Ziege oben auf dem Holzstapel am Haus. Niemand weiß, wie.
+O = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_traded", "perch": 22, "appear_after": 3.0}}
 o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -84,14 +97,14 @@ hh.................E.............E......~~~........P.............hhh
 hh..........ddddd..E.............E.....~~~~...g..........,.......hhh
 hh......R...ddddd..E......H......E.....~~~.....g........,,.......hhh
 hh.......R..ddo....E.K....D...WK.E..R~~~~~..............,....T...hhh
-hh.................E..b...2......E.R~~~~~~.............,,........hhh
+hh.................E..b...2...O..E.R~~~~~~.............,,.a......hhh
 hh.................E......,......E...~~~~~.............,.........hhh
-hhh................FFBFFF,,.FFFBFF.....~~~............,,..gg.....hhh
-hhhh.....................,,............sSSSs....r....U,.........hhhh
+hhh................FFIFFF,,.FFFBFF.....~~~............,,..gg.....hhh
+hhhh....................f,,............sSSSs....r...uU,.........hhhh
 hhhh..T.................p,,........g..5SSsSsj..,.N...,.........Phhhh
-hhhhh...gg.C........mmm..,,............ssSSS4..,,..c,,..........hhhh
-hhhh.....g.........,,,,,,,,p.............~~~~....,..,...........hhhh
-hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......C...hhhh
+hhhhh...gg.C........mmm..,,............ssSSS4..,,..cz,..........hhhh
+hhhh.....g.........,,,,,,,,p.............~~~~....,..M...........hhhh
+hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......A...hhhh
 hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,p,m@mm.........hhhh
 ..........,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
 .,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh

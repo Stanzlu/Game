@@ -85,9 +85,14 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   den Marker; während der Blende öffnet kein Pausenmenü. `blocker` sperrt Wege mit Erklärung, mit
   `"offset"` auch über Zellen mit anderen Requisiten (der Bach bis zu Miras Nein, die Haustür bis zu
   ihrem Besuch). `test_content` prüft, dass jedes gelesene Flag irgendwo gesetzt wird.
-- Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`,
-  `fireplace`, `blocker`; `Talk` (Interaktionsfläche und Dialog über den Presenter); `ChildGuide`
-  (NpcWalker, der vorausgeht und wartet).
+- Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
+  (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
+  Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).
+- `NpcWalker`: `"pause": [min, max]` lässt Menschen an Wegpunkten verschieden lange verweilen (Mira),
+  Elysianer laufen ohne Pause im Gleichtakt; `"face"` ist die Blickrichtung im Stand. `Decor` mit
+  `"sit"` ist ein Sitzplatz (der Teppich am Kamin). Bringt die Geschichte ein Requisit während der
+  Szene, bekommt es `"live": true` und darf auftreten (die Ziege erscheint mit Verzögerung).
+- Autopilot: `"meet": "<cue>"` stellt die Figur neben die NPC mit diesem Cue, wo immer sie gerade ist.
 - Der Riss gibt das Ziel samt Spawn weiter (`RiftSequence.spawn`), die Ankunft blendet langsam auf.
 - Durchlauf ohne Hand: `tools/autopilot/slice_full.json` (Hauptmenü bis Titelkarte); Teilstrecken
   `slice_{elysia,tal,haus,weg,abend}.json`. Der Autopilot klickt Gespräche durch (`"dialogue"`) und

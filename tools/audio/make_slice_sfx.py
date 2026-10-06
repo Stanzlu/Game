@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Procedural sound effects for the vertical slice (Phase 4, 0 €): the Real world's foley.
 A door that creaks, knocking, falling into the stream, a stepping stone that rocks, a match
-and a fire catching, a fire crackling in the fireplace (loop), a cat, a goat, dry wood.
+and a fire catching, a fire crackling in the fireplace (loop), a cat, a goat, dry wood; and
+the child in Elysia humming the motif of the later main theme.
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, peak-normalized per
 group, written with .import files to assets/generated/sfx/. The Real world is quiet and a
@@ -16,6 +17,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from make_music import DORIAN, MOTIF, degree, midi_hz  # noqa: E402
 from make_sfx import (RATE, at, bandpass, env, highpass, knock, lowpass, mix, noise, preview,  # noqa: E402
                       reverb, secs, sine, write)
 
@@ -232,8 +234,45 @@ def munch(rng):
     return outdoors(mix(*parts))
 
 
+# --- The child ----------------------------------------------------------------------------
+
+
+def child_hum(rng):
+    """The child in Elysia humming to itself, mouth closed: the motif that the valley loop and
+    Mira's fire play later (Game Bible §35, §46), in the same D dorian. Unlike everything in
+    Elysia it is not quite in time and not quite in tune."""
+    unit = 0.48
+    t0 = 0.2
+    times = [0.0]
+    pitches = []
+    for deg, eighths in MOTIF:
+        f = midi_hz(degree(62, DORIAN, deg)) * rng.uniform(0.99, 1.01)
+        length = eighths * unit * rng.uniform(0.9, 1.18)
+        times += [t0, t0 + length - 0.07]
+        pitches += [f, f]
+        t0 += length
+    total = t0 + 0.45
+    times.append(total)
+    pitches = [pitches[0] * 0.96] + pitches + [pitches[-1] * 0.93]
+
+    def f0(t):
+        return np.interp(t, times, pitches)
+
+    hum = [(320, 200), (950, 260), (2500, 450)]
+    t = secs(total)
+    # closed lips: mostly the fundamental (a soft sine), a little voice texture on top
+    pitch = f0(t) * (1 + 0.007 * np.sin(2 * np.pi * 5.0 * t))
+    body = np.sin(2 * np.pi * np.cumsum(pitch) / RATE)
+    texture = voiced(f0, total, rng, [(0.0, hum), (1.0, hum)], (5.0, 0.007), 0.05)
+    sig = body * 0.7 + texture / (np.max(np.abs(texture)) + 1e-9) * 0.3
+    # a little louder on the long notes, the breath fading at the end
+    swell = 0.8 + 0.2 * np.interp(t, times, [0.0] + [0.0, 1.0] * len(MOTIF) + [0.0])
+    shape = np.minimum(1.0, t / 0.15) * np.clip((total - t) / 0.5, 0, 1)
+    return outdoors(lowpass(sig * swell * shape, 1800), 0.14)
+
+
 GROUPS = {"door": -6.0, "knock": -4.0, "water": -3.0, "stone": -6.0, "fire": -6.0, "fire_loop": -10.0,
-          "animal": -6.0, "wood": -6.0}
+          "animal": -6.0, "wood": -6.0, "voice": -8.0}
 LOOPS = {"fire_loop"}
 
 
@@ -253,6 +292,10 @@ def build(only=None):
     for i in range(2):
         sounds["cat_meow_%d" % i] = (cat_meow(rng, i), "animal")
         sounds["goat_bleat_%d" % i] = (goat_bleat(rng, i), "animal")
+    # its own random stream, so the sounds above stay as they were
+    hum_rng = np.random.default_rng(31)
+    for i in range(2):
+        sounds["child_hum_%d" % i] = (child_hum(hum_rng), "voice")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

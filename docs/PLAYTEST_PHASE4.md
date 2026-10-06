@@ -33,6 +33,7 @@ Wer einzelne Orte ansehen will (ohne den Rest): `--start=elysia`, `--start=tal`,
   nassen kippen. Weiter oben liegt ein umgestürzter Baum über dem Bach.
 - **Holz:** Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
 - **Der Weg:** Wer rennt, kommt nicht an. Was tut man, wenn ein Weg nicht endet?
+- **Feuer:** Wenn es brennt, setz dich auf den Teppich davor.
 - **Die Ziege:** Sie ist bestechlich. Im Gemüsebeet am Haus.
 
 ## Fragen
@@ -51,7 +52,8 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Ist dir das Becken aufgefallen? Das Kind?
 
 **Mira**
-- Wirkt ihr „Nein“ ehrlich oder unfreundlich?
+- Wirkt ihr „Nein“ ehrlich oder unfreundlich? Hast du in Elysia jemanden gebeten, Nein zu sagen?
+- Fühlt sie sich lebendig an (sie geht zwischen Netz, Feuer und Bach hin und her)?
 - Ist sie eine eigene Person mit eigenen Zielen, oder eine Funktion der Geschichte?
 - Hat sie sich an deine Antworten erinnert (Bach, Steine)? Wie fühlte sich das an?
 
@@ -61,9 +63,13 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Antreiber: verständlich oder zufällig? Wann hast du begriffen, was zu tun ist?
 
 **Haus und Abend**
-- Hat das Feuer etwas verändert (Bild, Ton, Gefühl)?
+- Hat das Feuer etwas verändert (Bild, Ton, Gefühl)? Hast du dich davor gesetzt?
 - Die Ziege: Humor angekommen?
 - Das Ende („Zum Meer.“): zu abrupt, genau richtig, zu lang?
+
+**Die Wirklichkeit**
+- Hast du Dinge angesehen, gerochen, probiert (Blumen, Beeren, Muschel)? Wirkte das Tal dadurch echter?
+- Ist dir das Summen des Kindes aufgefallen, und hast du die Melodie später wiedererkannt?
 
 **Technik**
 - Ruckler, Hänger, Stellen, an denen du nicht weiterkamst?

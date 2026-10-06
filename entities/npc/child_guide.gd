@@ -3,18 +3,24 @@ extends NpcWalker
 ## The child in Elysia (Game Bible §15, slice 10–18 min). It looks into the water (and has
 ## a reflection, unlike the protagonist). Once spoken to, it walks ahead along "guide"
 ## waypoints (cells relative to its spawn), waits whenever the player falls behind and,
-## at the last one, asks its one question and fades away. Params like NpcWalker plus
+## at the last one, asks its one question and fades away. Now and then it hums to itself:
+## the motif of the later main theme (Game Bible §35, §46), quiet and positional, so the
+## player can follow the sound. Params like NpcWalker plus
 ## {"guide": [[dx, dy], ...], "start_flag": "<flag that sets it going>"}.
 
 enum Step { WATCH, LEAD, WAIT_AT_END, GONE }
 
 const KEEP_UP := 96.0
 const CALL_DISTANCE := 40.0
+## Seconds between two hums (random in this range); heard up to HUM_RANGE pixels away.
+const HUM_PAUSE := Vector2(7.0, 13.0)
+const HUM_RANGE := 360.0
 
 var guide: Array[Vector2] = []
 var start_flag := ""
 var step := Step.WATCH
 var _target := 0
+var _hum: AudioStreamPlayer2D
 
 
 func apply_params(params: Dictionary) -> void:
@@ -33,6 +39,24 @@ func _ready() -> void:
 	super()
 	add_to_group(&"child_guide")
 	WorldState.flag_changed.connect(_on_flag_changed)
+	_hum = AudioStreamPlayer2D.new()
+	_hum.name = "Hum"
+	# not quite in tune, but always the same tune: no pitch spread beyond a breath
+	_hum.stream = SoundBank.stream("child_hum", 1.01, 1.0)
+	_hum.bus = &"SFX"
+	_hum.volume_db = -4.0
+	_hum.max_distance = HUM_RANGE
+	_hum.attenuation = 1.6
+	add_child(_hum)
+	_hum_now_and_then()
+
+
+func _hum_now_and_then() -> void:
+	await NodeTimer.after(self, randf_range(1.5, 4.0))
+	while step != Step.GONE:
+		if not talking:
+			_hum.play()
+		await NodeTimer.after(self, randf_range(HUM_PAUSE.x, HUM_PAUSE.y))
 
 
 func _on_flag_changed(id: String, value: bool) -> void:
@@ -115,6 +139,8 @@ func vanish() -> void:
 	if step == Step.GONE:
 		return
 	step = Step.GONE
+	if _hum != null:
+		create_tween().tween_property(_hum, ^"volume_db", -40.0, 1.2)
 	var interactable := get_node_or_null("Interactable") as Interactable
 	if interactable != null:
 		interactable.enabled = false
