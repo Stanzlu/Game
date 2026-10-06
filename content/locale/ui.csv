@@ -53,6 +53,9 @@ PAUSE_SETTINGS,Einstellungen
 OPTION_YES,Ja
 OPTION_NO,Nein
 INTERACT_TALK,Ansprechen
+INTERACT_ENTER,Hineingehen
+INTERACT_CATCH,Fangen
+INTERACT_LEAVE,Hinausgehen
 SAVE_TITLE,Speichern
 LOAD_TITLE,Laden
 SAVE_NOT_HERE,Hier kann nicht gespeichert werden. Das Spiel speichert danach automatisch.
@@ -159,3 +162,17 @@ BENCH_HINT,Den Bericht bitte mit deinem Feedback mitschicken.
 MENU_NEW_GAME,Neues Spiel
 MENU_PROTOTYPES,Prototypen
 HUD_SAVED,Gespeichert
+PLAYER_DEFAULT_NAME,Held
+NAME_TITLE,"Wie lautet dein Name, Held?"
+NAME_SUGGESTIONS,Oder einer dieser
+NAME_CONFIRM,Das Abenteuer beginnt
+NAME_HINT,Tippe einen Namen oder wähle einen aus.
+NAME_SUGGESTION_1,Aren
+NAME_SUGGESTION_2,Kai
+NAME_SUGGESTION_3,Mika
+NAME_SUGGESTION_4,Noel
+PLACE_ELYSIA,Elysia
+PLACE_TAL,Das Tal
+PLACE_HAUS,Das Haus
+PLACE_WEG,Der Weg zum Schuppen
+END_OF_SLICE,"Ende des Prototyps. Danke fürs Spielen."

@@ -1,9 +1,11 @@
 extends Node2D
 ## The rift: a thin glowing crack in the air at the edge of Elysia. Params:
-## {"target": "<scene key>"}. Touching it starts the RiftSequence. It flickers unless the
-## player reduced flashing effects. The air around it bends and hums; motes drift into it.
+## {"target": "<scene key>", "spawn": "<marker name>"}. Touching it starts the RiftSequence.
+## It flickers unless the player reduced flashing effects. The air around it bends and hums;
+## motes drift into it.
 
 var target := "look_tal"
+var spawn := ""
 var _time := 0.0
 
 @onready var _sprite: Sprite2D = $Sprite
@@ -21,6 +23,7 @@ func _ready() -> void:
 
 func apply_params(params: Dictionary) -> void:
 	target = str(params.get("target", target))
+	spawn = str(params.get("spawn", ""))
 	if not SceneRegistry.has(target):
 		Log.error(Log.Category.CONTENT, "rift target unknown", {"target": target})
 
@@ -43,4 +46,4 @@ func _on_interacted(_actor: Node) -> void:
 	if scene == null:
 		Log.error(Log.Category.WORLD_STATE, "rift outside a game scene")
 		return
-	RiftSequence.play(scene, target)
+	RiftSequence.play(scene, target, true, spawn)

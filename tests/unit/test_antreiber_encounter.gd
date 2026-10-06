@@ -46,4 +46,9 @@ func test_segments_are_recycled_while_running() -> void:
 	Input.action_press(&"sprint")
 	await wait_seconds(5.0)
 	var segments := encounter.get_node("GameView/WorldViewport/World/Segments")
-	assert_between(segments.get_child_count(), 3, 7, "a bounded window of segments")
+	assert_between(encounter._segments.size(), 3, 7, "a bounded window of segments")
+	assert_lte(
+		segments.get_child_count(),
+		7 + 2 * AntreiberEncounter.POOL_SIZE,
+		"pieces that left the window are reused, not piled up"
+	)

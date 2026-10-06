@@ -10,14 +10,19 @@ const LOGO := preload("res://assets/generated/title/logo_real.png")
 const SCREEN := Vector2(640, 360)
 
 var logo: TextureRect
+var note: Label
+var note_key := ""
 var _tween: Tween
 var _done := false
 
 
 ## Adds a title card on top of everything below `parent` and starts it.
-static func play(parent: Node) -> TitleCard:
+## `note_key` (optional) is a line shown under the title once it has faded in (the end of
+## the vertical slice thanks the player).
+static func play(parent: Node, note_key := "") -> TitleCard:
 	var card := TitleCard.new()
 	card.name = "TitleCard"
+	card.note_key = note_key
 	parent.add_child(card)
 	return card
 
@@ -36,13 +41,28 @@ func _ready() -> void:
 	logo.position = ((SCREEN - LOGO.get_size()) * 0.5).round()
 	logo.modulate.a = 0.0
 	add_child(logo)
+	if not note_key.is_empty():
+		note = Label.new()
+		note.text = tr(note_key)
+		note.theme_type_variation = &"HintLabel"
+		note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		note.size = Vector2(SCREEN.x, 20)
+		note.position = Vector2(0, logo.position.y + LOGO.get_height() + 18)
+		note.modulate = Color(1, 1, 1, 0)
+		note.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(note)
 	AudioDirector.play_music("silence", 1.5)
 	AudioDirector.set_ambience(null, -80.0, 1.5)
 	_tween = create_tween()
 	_tween.tween_interval(1.5)
 	_tween.tween_property(logo, ^"modulate:a", 1.0, 2.5)
+	if note != null:
+		_tween.tween_property(note, ^"modulate:a", 0.8, 1.5)
+		_tween.tween_interval(2.5)
 	_tween.tween_interval(4.0)
 	_tween.tween_property(logo, ^"modulate:a", 0.0, 2.0)
+	if note != null:
+		_tween.parallel().tween_property(note, ^"modulate:a", 0.0, 2.0)
 	_tween.tween_interval(0.8)
 	_tween.finished.connect(_finish)
 	Log.info(Log.Category.BOOT, "title card")

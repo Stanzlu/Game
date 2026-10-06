@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://u7df81d6cbra"
+path="res://.godot/imported/elysia.dialogue-6b74bd734087249e9cdd19cb8d219cb0.tres"
+
+[deps]
+
+source_file="res://content/dialogue/slice/elysia.dialogue"
+dest_files=["res://.godot/imported/elysia.dialogue-6b74bd734087249e9cdd19cb8d219cb0.tres"]
+
+[params]
+
+defaults=true

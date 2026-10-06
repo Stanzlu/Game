@@ -8,3 +8,4 @@ id = "item_stone"
 kind = 0
 rarity = 0
 max_stack = 9
+draft = false

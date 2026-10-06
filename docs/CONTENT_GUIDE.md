@@ -140,7 +140,8 @@ else
   - Inventar und Haus: `has_item`, `add_item`, `remove_item`, `item_count`, `is_fire_lit`, `set_fire_lit`
   - Sonstiges: `set_facet`, `has_facet`, `discover`, `is_real`, `add_xp`, `add_gold`
 - Während eines Dialogs wird nicht gespeichert; Quest-Schritte im Dialog lösen das Autosave direkt nach dem Ende aus.
-- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Vor dem Playtest darf keine solche Zeile übrig sein. Ein Test prüft, dass jede gesprochene Zeile markiert ist, solange es keine finalen Texte gibt.
+- Platzhalterzeilen werden mit dem Tag `[#ph]` markiert. Prototyp-Dialoge (`sandbox`, `valley`, `elysia`) tragen ihn auf jeder Zeile. Die Texte des Vertical Slice liegen in `content/dialogue/slice/` und sind der Playtest-Text: dort darf keine Zeile `[#ph]` tragen. Ein Test prüft beides. Slice-Texte bleiben Entwürfe, die nach dem Playtest überarbeitet werden.
+- Zeilen ohne Sprecher sind Erzählung (Beschreibungen beim Untersuchen, Gesten wie „Sie schaut zu den Bergen.“). Sie bleiben stumm.
 - Neue Dialogdateien in `internationalization/locale/translations_pot_files` eintragen. Ein Test prüft das.
 - Stimmen: `content/dialogue/voices.json` ordnet jedem Sprecher (Name wie in der Dialogdatei) eine Stimme zu (`elysia`, `warm`, `low`, `neutral`); unbekannte Sprecher bekommen `_default`. Zeilen ohne Sprecher (Schilder) bleiben stumm.
 

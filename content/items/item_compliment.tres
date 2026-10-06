@@ -7,3 +7,4 @@ script = ExtResource("1_item")
 id = "item_compliment"
 max_stack = 99
 rarity = 5
+draft = false

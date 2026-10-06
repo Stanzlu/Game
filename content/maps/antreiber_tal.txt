@@ -1,0 +1,44 @@
+; Ein Stück des Weges, der nicht endet (Antreiber, Beat 5 des Vertical Slice). Die Stücke wiederholen
+; sich ohne Ende; beide Randspalten sind in jedem Stück gleich, auf jeder Naht steht ein Baum.
+; Layout: tools/art/layout_slice_maps.py antreiber_tal --write, danach tools/art/bake_ground.py.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/antreiber_tal_ground.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.04, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.2, "spacing": 20}, {"sprite": "tal/leaves", "on": ".,", "near": "TPC", "radius": 1, "density": 0.4, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPCh", "radius": 1, "density": 0.12, "spacing": 16}, {"sprite": "tal/twig", "on": ".,", "near": "TPC", "radius": 2, "density": 0.2, "spacing": 14}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
+S = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/signpost", "cue": "sign", "dialogue": "res://content/dialogue/slice/antreiber.dialogue", "radius": 14}}
+[map]
+hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhh..hhhhhhh
+.hhh........T..hPhh.
+T.....P.........hh..
+.................C..
+....................
+...............g....
+....................
+,,,,,,,,,,,,,,,,,p,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,p,,,,mm,,,,,
+..........,.........
+........gg..........
+....RR..............
+.....C..............
+ThhP...........P....
+.hhh.....T...hhhh...
+hhhhh...hhhhhhhhhh.h
+hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhh

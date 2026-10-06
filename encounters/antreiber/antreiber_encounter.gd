@@ -15,10 +15,21 @@ const BIRD_SCENE := preload("res://world/props/bird.tscn")
 ## The flag stays in view: it hovers near the right edge and recedes there.
 const FLAG_MIN_AHEAD := 120.0
 const FLAG_MAX_AHEAD := 250.0
+const POOL_SIZE := 2
+const PARKED := Vector2(0, -100000)
 
 @export var stillness_seconds := 3.0
 @export var encounter_speed := 1.0
 
+## What a subclass may change: the path pieces, the goal (a flag, or the woodshed) and where
+## it hovers, where the bird lands once the encounter is resolved.
+var segment_plain := SEGMENT_PLAIN
+var segment_bench := SEGMENT_BENCH
+var goal_scene: PackedScene = FLAG_SCENE
+var goal_params := {}
+var goal_offset_y := -10.0
+var goal_beside := 30.0
+var bird_offset := Vector2(4, -27)
 var model := AntreiberModel.new()
 var antreiber: AntreiberActor
 var flag: Node2D
@@ -26,6 +37,9 @@ var goal_reached := false
 var _ground: Node2D
 var _actors: Node2D
 var _segments: Dictionary = {}
+## Path pieces that left the window, parked out of sight for reuse (path -> Array[MapView]):
+## building a piece costs a frame or two, moving one costs nothing.
+var _pool: Dictionary = {}
 var _segment_texts: Dictionary = {}
 var _last_player_pos := Vector2.ZERO
 
@@ -40,19 +54,25 @@ func _build_world() -> void:
 	_actors.y_sort_enabled = true
 	view.world_root.add_child(_actors)
 	_actors.add_child(fx)
-	for path: String in [SEGMENT_PLAIN, SEGMENT_BENCH]:
+	for path: String in [segment_plain, segment_bench]:
 		_segment_texts[path] = FileAccess.get_file_as_string(path)
 	_ensure_segments(0.0)
+	_fill_pool()
 	_add_boundaries()
 	spawn_player(_actors, Vector2(2 * TILE + 8, PATH_Y))
 	player.surface_provider = surface_at
 	_last_player_pos = player.global_position
 	var height := float(SEGMENT_TILES.y * TILE)
 	view.bounds = Rect2(Vector2(-1.0e6, 0), Vector2(2.0e6, height))
-	flag = FLAG_SCENE.instantiate()
+	flag = goal_scene.instantiate()
 	_actors.add_child(flag)
-	flag.global_position = Vector2(player.global_position.x + model.goal_distance, PATH_Y - 10)
+	flag.global_position = Vector2(
+		player.global_position.x + model.goal_distance, PATH_Y + goal_offset_y
+	)
+	if not goal_params.is_empty() and flag.has_method(&"apply_params"):
+		flag.call(&"apply_params", goal_params)
 	antreiber = ACTOR_SCENE.instantiate()
+	_configure_actor(antreiber)
 	_actors.add_child(antreiber)
 	antreiber.global_position = player.global_position + AntreiberActor.LEAD
 	# Accessibility: longer timing windows and a calmer encounter (Game Bible §50).
@@ -64,6 +84,11 @@ func _build_world() -> void:
 		"antreiber start",
 		{"stillness_seconds": model.stillness_seconds, "speed": model.encounter_speed}
 	)
+
+
+## Hook: change the actor (art, lines) before it enters the tree.
+func _configure_actor(_actor: AntreiberActor) -> void:
+	pass
 
 
 func surface_at(world_pos: Vector2) -> StringName:
@@ -96,16 +121,21 @@ func _on_resolved() -> void:
 	WorldState.set_flag("encounter.antreiber_resolved")
 	player.speed_scale = 1.0
 	antreiber.resolve(player)
-	var beside := Vector2(player.global_position.x + 30, PATH_Y - 10)
+	var beside := Vector2(player.global_position.x + goal_beside, PATH_Y + goal_offset_y)
 	var tween := create_tween()
 	tween.tween_property(flag, ^"global_position", beside, 1.2).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(_land_bird)
+	tween.tween_callback(_after_resolved)
+
+
+## Hook after the goal came to the player: a bird lands on it (the flag; the shed's roof).
+func _after_resolved() -> void:
+	_land_bird()
 
 
 func _land_bird() -> void:
 	var bird: Node2D = BIRD_SCENE.instantiate()
 	_actors.add_child(bird)
-	bird.global_position = flag.global_position + Vector2(4, -27)
+	bird.global_position = flag.global_position + bird_offset
 	bird.z_index = 5
 	SoundBank.play_at(bird, "bird", bird.global_position, -8.0)
 
@@ -113,7 +143,7 @@ func _land_bird() -> void:
 func _check_goal() -> void:
 	if goal_reached or flag == null:
 		return
-	if player.global_position.distance_to(flag.global_position + Vector2(0, 10)) < 14.0:
+	if player.global_position.distance_to(flag.global_position - Vector2(0, goal_offset_y)) < 14.0:
 		goal_reached = true
 		Log.info(Log.Category.ENCOUNTER, "goal reached", model.stats())
 
@@ -124,13 +154,42 @@ func _segment_index(x: float) -> int:
 
 func _ensure_segments(player_x: float) -> void:
 	var center := _segment_index(player_x)
-	for index in range(center - 1, center + 3):
-		if not _segments.has(index):
-			_segments[index] = _build_segment(index)
 	for index: int in _segments.keys():
 		if index < center - 2 or index > center + 4:
-			(_segments[index] as Node).queue_free()
+			_park(_segments[index])
 			_segments.erase(index)
+	for index in range(center - 1, center + 3):
+		if not _segments.has(index):
+			_segments[index] = _segment_at(index)
+
+
+func _segment_path(index: int) -> String:
+	return segment_bench if posmod(index, 2) == 1 else segment_plain
+
+
+func _segment_at(index: int) -> MapView:
+	var parked: Array = _pool.get(_segment_path(index), [])
+	if parked.is_empty():
+		return _build_segment(index)
+	var segment: MapView = parked.pop_back()
+	segment.shift_to(Vector2(index * SEGMENT_TILES.x * TILE, 0))
+	return segment
+
+
+## Builds the spare pieces while the scene loads, so walking never has to build one.
+func _fill_pool() -> void:
+	for parity in 2:
+		for k in POOL_SIZE:
+			_park(_build_segment(1000 + parity + 2 * k))
+
+
+func _park(segment: MapView) -> void:
+	var parked: Array = _pool.get_or_add(str(segment.get_meta(&"path")), [])
+	if parked.size() >= POOL_SIZE:
+		segment.queue_free()
+		return
+	segment.shift_to(PARKED)
+	parked.append(segment)
 
 
 func _build_segment(index: int) -> MapView:
@@ -139,7 +198,8 @@ func _build_segment(index: int) -> MapView:
 	segment.props_parent = _actors
 	segment.position = Vector2(index * SEGMENT_TILES.x * TILE, 0)
 	_ground.add_child(segment)
-	var path := SEGMENT_BENCH if posmod(index, 2) == 1 else SEGMENT_PLAIN
+	var path := _segment_path(index)
+	segment.set_meta(&"path", path)
 	segment.build_from_text(_segment_texts[path], path)
 	return segment
 

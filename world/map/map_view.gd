@@ -26,9 +26,19 @@ var reflection_material: ShaderMaterial
 var entities: Node2D
 var _symbol_tiles: Dictionary = {}
 var _external_props: Array[Node] = []
+## Placements that follow the story ("if"/"unless" conditions, "sprite_when" looks):
+## placement index -> spawned node or null. Untyped: a prop can free itself (a pickup that
+## was taken), and a freed instance must not be read into a typed variable.
+var _conditional: Dictionary = {}
+## Conditional props that removed themselves while wanted (taken, caught): they stay gone
+## until their conditions turn false again.
+var _retired: Dictionary[int, bool] = {}
+## Look of each "sprite_when" placement as spawned: placement index -> sprite id.
+var _looks: Dictionary[int, String] = {}
 
 
 func _ready() -> void:
+	WorldState.flag_changed.connect(_on_flag_changed)
 	if not map_path.is_empty():
 		load_map(map_path)
 
@@ -38,6 +48,16 @@ func _exit_tree() -> void:
 		if is_instance_valid(prop):
 			prop.queue_free()
 	_external_props.clear()
+
+
+## Moves the map, and the props it placed under another parent, to `to` (local position).
+## Endless encounters recycle their path pieces this way instead of building new ones.
+func shift_to(to: Vector2) -> void:
+	var delta := to - position
+	position = to
+	for prop in _external_props:
+		if is_instance_valid(prop):
+			(prop as Node2D).global_position += delta
 
 
 ## Loads, validates and builds the map. Returns false (and logs errors) on invalid content.
@@ -356,23 +376,118 @@ func _mirror_params(params: Dictionary, cell: Vector2i) -> Dictionary:
 
 
 func _spawn_props() -> void:
-	for placement: Dictionary in data.placements:
-		var scene_path: String = placement["prop"]
-		if scene_path.is_empty():
+	_conditional.clear()
+	_retired.clear()
+	_looks.clear()
+	for index in data.placements.size():
+		var placement: Dictionary = data.placements[index]
+		if (placement["prop"] as String).is_empty():
 			continue
-		var scene := load(scene_path) as PackedScene
-		if scene == null:
-			Log.error(Log.Category.CONTENT, "prop scene missing", {"scene": scene_path})
+		var params: Dictionary = placement["params"]
+		if params.has("if") or params.has("unless") or params.has("sprite_when"):
+			_conditional[index] = null
+			if not conditions_met(params):
+				continue
+		var prop := _spawn_prop(placement)
+		if _conditional.has(index):
+			_conditional[index] = prop
+			if params.has("sprite_when"):
+				_looks[index] = Decor.variant_sprite(params)
+
+
+func _spawn_prop(placement: Dictionary) -> Node2D:
+	var scene_path: String = placement["prop"]
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
+		Log.error(Log.Category.CONTENT, "prop scene missing", {"scene": scene_path})
+		return null
+	var prop := scene.instantiate() as Node2D
+	var cell: Vector2i = placement["cell"]
+	prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
+	if props_parent != null:
+		props_parent.add_child(prop)
+		prop.global_position = cell_to_world(cell)
+		_external_props.append(prop)
+	else:
+		prop.position = cell_to_world(cell) - global_position
+		entities.add_child(prop)
+	if prop.has_method("apply_params"):
+		prop.call("apply_params", _mirror_params(placement["params"], cell))
+	return prop
+
+
+## Story conditions of a placement: "if" (flag or list of flags, all set) and "unless"
+## (flag or list, none set). Such props appear and disappear as the flags change, so the
+## same map serves every beat (the child, the rift, Mira's camp, the goat).
+static func conditions_met(params: Dictionary) -> bool:
+	for flag_id in _flag_list(params.get("if", [])):
+		if not WorldState.has_flag(flag_id):
+			return false
+	for flag_id in _flag_list(params.get("unless", [])):
+		if WorldState.has_flag(flag_id):
+			return false
+	return true
+
+
+static func _flag_list(value: Variant) -> PackedStringArray:
+	if value is String:
+		return [value]
+	var out: PackedStringArray = []
+	for item: Variant in value if value is Array else []:
+		out.append(str(item))
+	return out
+
+
+func _on_flag_changed(_id: String, _value: bool) -> void:
+	if data == null or _conditional.is_empty():
+		return
+	refresh_conditions()
+
+
+## Spawns conditional props whose flags became true, lets those whose became false leave
+## and rebuilds props whose "sprite_when" look changed (all lights, shapes and layers of
+## the new look, mirrored twins included).
+func refresh_conditions() -> void:
+	for index: int in _conditional.keys():
+		var placement: Dictionary = data.placements[index]
+		var params: Dictionary = placement["params"]
+		var entry: Variant = _conditional[index]
+		var alive := is_instance_valid(entry) and not (entry as Node).is_queued_for_deletion()
+		if not alive and typeof(entry) == TYPE_OBJECT:
+			_retired[index] = true  # it removed itself (taken, caught)
+			_conditional[index] = null
+		if not conditions_met(params):
+			_retired.erase(index)
+			if alive:
+				_leave(entry as Node)
+				_conditional[index] = null
 			continue
-		var prop := scene.instantiate() as Node2D
-		var cell: Vector2i = placement["cell"]
-		prop.name = "%s_%d_%d" % [prop.name, cell.x, cell.y]
-		if props_parent != null:
-			props_parent.add_child(prop)
-			prop.global_position = cell_to_world(cell)
-			_external_props.append(prop)
-		else:
-			prop.position = cell_to_world(cell) - global_position
-			entities.add_child(prop)
-		if prop.has_method("apply_params"):
-			prop.call("apply_params", _mirror_params(placement["params"], cell))
+		if alive and params.has("sprite_when"):
+			if Decor.variant_sprite(params) == _looks.get(index, ""):
+				continue
+			_retire_name(entry as Node)
+			(entry as Node).queue_free()
+			alive = false
+		if alive or _retired.has(index):
+			continue
+		var prop := _spawn_prop(placement)
+		_conditional[index] = prop
+		if params.has("sprite_when"):
+			_looks[index] = Decor.variant_sprite(params)
+		if prop != null and _near_water(placement["cell"]) and not prop is Player:
+			add_reflection(prop)
+
+
+## Frees the prop's name for its successor (props are named after their cell).
+static func _retire_name(prop: Node) -> void:
+	prop.name = "%s_leaving" % prop.name
+
+
+## A prop whose conditions turned false goes its own way when it has one (the child fades,
+## a caught butterfly finishes its flash) and frees itself; others vanish at once.
+static func _leave(prop: Node) -> void:
+	_retire_name(prop)
+	if prop.has_method(&"leave"):
+		prop.call(&"leave")
+	else:
+		prop.queue_free()

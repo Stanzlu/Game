@@ -264,6 +264,48 @@ def bed_stream(seconds=12, seed=14):
     return spectral(out, band(80, 6000, 1.0), periodic=True)
 
 
+def bed_roof(seconds=14, seed=16):
+    """Rain heard from inside a wooden house: the roof turns the hiss into a dull drumming,
+    single drops knock on the shingles above, a gutter trickles somewhere at the corner."""
+    rng = np.random.default_rng(seed)
+    n = secs(seconds)
+    out = periodic_noise(n, rng, lambda f: band(50, 700, 1.4)(f) * tilt(-5)(f)) * 0.14
+    out += periodic_noise(n, rng, band(900, 3000, 1.0)) * 0.006
+    taps = 260 * seconds
+    starts = rng.integers(0, n, taps)
+    loud = np.exp(rng.normal(-2.2, 0.7, taps))
+    for s, a in zip(starts, loud):
+        length = int(rng.integers(secs(0.004), secs(0.012)))
+        t = np.arange(length) / RATE
+        f0 = rng.uniform(260, 900)
+        knock = np.sin(2 * np.pi * f0 * t) * np.exp(-t * rng.uniform(250, 600))
+        add_wrapped(out, int(s), knock * a * 0.5)
+    trickle = periodic_noise(n, rng, band(400, 2400, 1.0)) * slow_mod(n, rng, 6, 0.8) * 0.015
+    out += trickle
+    return spectral(out, lambda f: band(40, 5000, 1.0)(f), periodic=True)
+
+
+def bed_fire(seconds=12, seed=17):
+    """A fire in the fireplace: a soft breathing roar, crackles and pops, a hiss of sap."""
+    rng = np.random.default_rng(seed)
+    n = secs(seconds)
+    out = periodic_noise(n, rng, lambda f: band(30, 300, 1.2)(f)) * 0.22 * (0.8 + 0.2 * slow_mod(n, rng, 5, 1.0))
+    out += periodic_noise(n, rng, band(2500, 7000, 1.0)) * 0.006 * slow_mod(n, rng, 7, 1.0)
+    pops = 30 * seconds
+    starts = rng.integers(0, n, pops)
+    loud = np.exp(rng.normal(-1.6, 0.9, pops))
+    grain = spectral(noise(secs(0.03), rng), band(1500, 9000, 1.0))
+    for s, a in zip(starts, loud):
+        length = int(rng.integers(secs(0.001), secs(0.009)))
+        shift = int(rng.integers(0, len(grain) - length))
+        pop = grain[shift:shift + length] * np.exp(-np.arange(length) / (length / 3.0))
+        add_wrapped(out, int(s), pop * a)
+        if rng.random() < 0.25:  # crackle clusters
+            for k in range(int(rng.integers(2, 6))):
+                add_wrapped(out, int(s) + int(rng.integers(secs(0.01), secs(0.08))) * (k + 1), pop * a * 0.4)
+    return out
+
+
 def bed_crickets(seconds=15, seed=15):
     """Field crickets near and far (chirps of 3-4 pulses) over a faint tree-cricket chorus."""
     rng = np.random.default_rng(seed)
@@ -481,6 +523,8 @@ BEDS = {
     "leaves": bed_leaves,
     "stream": bed_stream,
     "crickets": bed_crickets,
+    "roof": bed_roof,
+    "fire": bed_fire,
 }
 
 

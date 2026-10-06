@@ -5,6 +5,8 @@ extends StaticBody2D
 ## and sparkles. Placed by text maps with params {"sprite": "<style>/<name>"}.
 ## Glowing parts (emissive layer, halos, light beams) are drawn unshaded in place: correct
 ## depth sorting, and a night tint (CanvasModulate) or lights do not dim them.
+## With params "cue" (and optional "dialogue", "prompt", "radius") it can be looked at:
+## interacting shows that dialogue cue (descriptions, small discoveries).
 ## In symmetric maps (Elysia) MapView passes "mirror" and "seed_position": the prop then
 ## shows its twin's variant, flipped, with lights and shapes mirrored too; "sway_axis" makes
 ## plants sway in mirrored unison instead of gusts.
@@ -42,7 +44,13 @@ func _ready() -> void:
 
 
 func apply_params(params: Dictionary) -> void:
-	sprite_id = str(params.get("sprite", ""))
+	# {"sprite_when": {"<flag>": "<sprite>"}}: the story changed how it looks (house lit);
+	# MapView rebuilds the prop when that changes while it is on screen
+	sprite_id = variant_sprite(params)
+	if params.has("cue"):
+		_add_inspect(params)
+		if sprite_id.is_empty():
+			return  # an invisible spot to examine (the basin's water, a window)
 	var entry := PropCatalog.entry(sprite_id)
 	if entry.is_empty():
 		return
@@ -213,6 +221,28 @@ func _on_rustle(body: Node2D) -> void:
 		Tween.EASE_OUT
 	)
 	SoundBank.play_at(self, "rustle", global_position, -14.0)
+
+
+## The sprite for these params: the first "sprite_when" flag that is set picks its look,
+## otherwise "sprite".
+static func variant_sprite(params: Dictionary) -> String:
+	var variants: Dictionary = params.get("sprite_when", {})
+	for flag_id: String in variants:
+		if WorldState.has_flag(flag_id):
+			return str(variants[flag_id])
+	return str(params.get("sprite", ""))
+
+
+func _add_inspect(params: Dictionary) -> void:
+	var area := Talk.add_area(
+		self,
+		str(params.get("prompt", "INTERACT_EXAMINE")),
+		float(params.get("radius", 12.0)),
+		Vector2(0, -4)
+	)
+	var path := str(params.get("dialogue", Talk.DEFAULT_DIALOGUE))
+	var cue := str(params["cue"])
+	area.interacted.connect(func(actor: Node) -> void: Talk.present(self, path, cue, actor))
 
 
 func _add_light(spec: Dictionary) -> void:

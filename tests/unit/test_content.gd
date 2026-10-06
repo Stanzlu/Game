@@ -1,12 +1,14 @@
 extends GutTest
 ## Content guards: every tr("KEY") literal exists, every dialogue under content/ compiles
-## and is registered for translation templates, placeholder lines are tagged.
+## and is registered for translation templates, placeholder lines are tagged (prototypes)
+## or gone (vertical slice).
 
 const CSV_FILES: PackedStringArray = [
 	"res://content/locale/ui.csv",
 	"res://content/locale/journal.csv",
 	"res://content/locale/items.csv"
 ]
+const SLICE_DIALOGUES := "res://content/dialogue/slice/"
 const CODE_DIRS: PackedStringArray = [
 	"res://core", "res://entities", "res://world", "res://ui", "res://encounters"
 ]
@@ -89,17 +91,42 @@ func test_every_cue_used_by_maps_exists() -> void:
 			)
 
 
-func test_draft_lines_are_tagged_as_placeholders() -> void:
-	# No final text yet: every spoken line must carry [#ph] so none slips into a build.
+func test_placeholder_tags_match_the_dialogue_kind() -> void:
+	# Prototype dialogues carry [#ph] on every spoken line so none slips into a build.
+	# Vertical-slice dialogues (content/dialogue/slice) are the playtest text: no [#ph] left
+	# (docs/CONTENT_GUIDE.md).
 	for path in _files("res://content/dialogue", ["dialogue"]):
+		var slice := path.begins_with(SLICE_DIALOGUES)
 		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
 		for key: String in result.lines:
 			var line: Dictionary = result.lines[key]
 			if line.get("type") != "dialogue":
 				continue
-			var tags: Array = line.get("tags", [])
+			var tagged: bool = "ph" in line.get("tags", [])
+			if slice:
+				assert_false(
+					tagged, "%s:%d placeholder in slice '%s'" % [path, int(key) + 1, line["text"]]
+				)
+			else:
+				assert_true(tagged, "%s:%d untagged line '%s'" % [path, int(key) + 1, line["text"]])
+
+
+func test_slice_speakers_are_known() -> void:
+	# "Name: text" makes a speaker; a colon in narration would turn half a sentence into a
+	# name plate. Every slice speaker must have a voice (content/dialogue/voices.json).
+	var voices: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string("res://content/dialogue/voices.json")
+	)
+	for path in _files(SLICE_DIALOGUES.trim_suffix("/"), ["dialogue"]):
+		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
+		for key: String in result.lines:
+			var line: Dictionary = result.lines[key]
+			if line.get("type") != "dialogue":
+				continue
+			var speaker := str(line.get("character", ""))
 			assert_true(
-				"ph" in tags, "%s:%d untagged line '%s'" % [path, int(key) + 1, line["text"]]
+				speaker.is_empty() or voices.has(speaker),
+				"%s:%d unknown speaker '%s'" % [path, int(key) + 1, speaker]
 			)
 
 
@@ -116,3 +143,43 @@ func test_world_actions_in_maps_are_valid() -> void:
 			if params.has("flag"):
 				assert_true(GameState.is_flag_id(str(params["flag"])), "%s: flag" % path)
 	assert_gt(checked, 0, "sandbox uses world actions")
+
+
+## Every flag a map ("if", "unless", "sprite_when") or a dialogue reads is set somewhere: by
+## a dialogue, a map param ("flag", "start_flag", a world action) or as a literal in code.
+## Catches typos that would hide a prop (the rift, an exit) or a line forever.
+func test_flags_read_by_content_are_set_somewhere() -> void:
+	var reads := {}
+	var writes := {}
+	var call_regex := RegEx.create_from_string(
+		'(has_flag|set_flag|clear_flag)\\(\\s*"([a-z0-9_]+\\.[a-z0-9_]+)"'
+	)
+	for path in _files("res://content", ["dialogue"]):
+		for found in call_regex.search_all(FileAccess.get_file_as_string(path)):
+			var target := reads if found.get_string(1) == "has_flag" else writes
+			target[found.get_string(2)] = path
+	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
+	for path in _files("res://content/maps", ["txt"]):
+		var data := MapData.parse(FileAccess.get_file_as_string(path), legend, path)
+		for p: Dictionary in data.placements:
+			var params: Dictionary = p["params"]
+			for key: String in ["if", "unless"]:
+				var value: Variant = params.get(key, [])
+				for flag_id: Variant in [value] if value is String else value:
+					reads[str(flag_id)] = path
+			for flag_id: Variant in params.get("sprite_when", {}):
+				reads[str(flag_id)] = path
+			for key: String in ["flag", "start_flag"]:
+				if params.has(key):
+					writes[str(params[key])] = path
+			for action: Variant in params.get("actions", []):
+				if action is Dictionary and (action as Dictionary).has("flag"):
+					writes[str(action["flag"])] = path
+	var literal_regex := RegEx.create_from_string('"([a-z0-9_]+\\.[a-z0-9_]+)"')
+	for dir_path in CODE_DIRS:
+		for path in _files(dir_path, ["gd"]):
+			for found in literal_regex.search_all(FileAccess.get_file_as_string(path)):
+				writes[found.get_string(1)] = path
+	assert_gt(reads.size(), 20, "the slice reads its flags")
+	for flag_id: String in reads:
+		assert_true(writes.has(flag_id), "%s reads %s, nothing sets it" % [reads[flag_id], flag_id])

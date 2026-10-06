@@ -10,7 +10,8 @@ extends Node
 ## pause the measured scenes. `--quit-after-benchmark` ends the program after the report
 ## (tools/check.sh).
 
-const SCENES: PackedStringArray = ["look_elysia", "look_tal", "look_wald"]
+## Elysia and the night forest from the look prototype, the valley, house and path of the slice.
+const SCENES: PackedStringArray = ["look_elysia", "tal", "haus", "weg", "look_wald"]
 const REPORT_NAME := "benchmark.txt"
 ## Movement pattern (action, seconds), repeated: scrolls the camera across the scene.
 const PATTERN := [[&"move_right", 1.6], [&"move_down", 1.0], [&"move_left", 1.6], [&"move_up", 1.0]]

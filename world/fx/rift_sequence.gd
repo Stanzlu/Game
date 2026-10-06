@@ -9,20 +9,27 @@ signal finished
 
 const PAUSE_BETWEEN_ELEMENTS := 0.8
 const KEEP: PackedStringArray = ["item_stone", "item_seed"]
+## The Real world comes up slowly out of the dark, rain first.
+const ARRIVAL_FADE := 3.5
 
 var scene: GameScene
 var target := ""
+## Spawn marker in the target ("" = its player_spawn), see SceneTravel.
+var spawn := ""
 ## Tests shorten the pauses and stay in the scene.
 var time_scale := 1.0
 var travel := true
 var _running := false
 
 
-static func play(on_scene: GameScene, target_scene: String, autostart := true) -> RiftSequence:
+static func play(
+	on_scene: GameScene, target_scene: String, autostart := true, spawn_marker := ""
+) -> RiftSequence:
 	var sequence := RiftSequence.new()
 	sequence.name = "RiftSequence"
 	sequence.scene = on_scene
 	sequence.target = target_scene
+	sequence.spawn = spawn_marker
 	on_scene.add_child(sequence)
 	if autostart:
 		sequence.run.call_deferred()
@@ -53,6 +60,8 @@ func run() -> void:
 	_running = false
 	SaveSystem.unblock(&"cutscene")
 	if travel:
+		SceneTravel.pending_spawn = spawn
+		SceneTravel.arrival_fade = ARRIVAL_FADE
 		get_tree().change_scene_to_file(SceneRegistry.path(target))
 	finished.emit()
 
@@ -63,7 +72,7 @@ func _cross_over() -> void:
 	WorldState.reduce_inventory_to(KEEP)
 	for item in KEEP:
 		if not WorldState.has_item(item):
-			WorldState.add_item(item)
+			WorldState.add_item(item, 1, false)
 
 
 func _wait(seconds: float) -> Signal:

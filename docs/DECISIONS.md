@@ -259,3 +259,31 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Begründung:** Der Spieler kennt das Wort Elysia, und im Moment der Enthüllung bekommt es eine neue Bedeutung: Es geht um das Leben danach, nicht um Echtheit gegen Fälschung. Der Titel stellt Elysia nicht als Feind hin, er spricht vom Weitergehen.
 - **Verworfene Vorschläge:** „Wildwuchs“ (stark als Gegenbild zum gemähten Elysia, aber schwer international), „Lebendig“ (trifft die Kernfrage, aber kaum auffindbar), „Unscripted“ (klug, aber wieder fake gegen echt), REAL behalten (vom Projektinhaber als unpassend empfunden).
 - **Konsequenzen:** Ein anderer Titel braucht nur `logo_real()` in `tools/art/make_title.py` und die Schlüssel `GAME_TITLE` und `BOOT_TITLE` in `content/locale/ui.csv`.
+
+## ADR-036 · Slice-Texte sind Playtest-Text, Prototypen bleiben markiert
+- **Status:** angenommen · 2026-10-06
+- **Kontext:** Bisher musste jede gesprochene Zeile `[#ph]` tragen, „solange es keine finalen Texte gibt“. Gleichzeitig sagt die Content-Regel: vor dem Playtest darf keine `[#ph]`-Zeile übrig sein. Der Vertical Slice ist der Playtest.
+- **Entscheidung:** Dialoge unter `content/dialogue/slice/` sind der Playtest-Text und tragen kein `[#ph]`; die Prototyp-Dialoge (Sandbox, Look-Prototypen, Grey-Box-Antreiber) bleiben vollständig markiert. Ein Test prüft beide Richtungen und dazu, dass jeder Sprecher im Slice eine Stimme in `voices.json` hat (ein Doppelpunkt in einer Erzählzeile machte sonst einen halben Satz zum Namensschild).
+- **Konsequenzen:** Slice-Texte sind Entwürfe des Assistenten in der Stimme der Bible und werden nach dem Playtest überarbeitet. Zeilen ohne Sprecher sind Erzählung.
+
+## ADR-037 · Die Geschichte steht in Flags, Karten und Szenen reagieren darauf
+- **Status:** angenommen · 2026-10-06
+- **Kontext:** Der Slice erzählt sieben Beats an vier Orten. Dieselbe Karte muss je nach Fortschritt anders aussehen (das Kind erscheint, der Riss öffnet sich, Mira kommt ins Haus, die Brücke wird geflickt, das Haus leuchtet).
+- **Entscheidung:**
+  - Jeder Zustand ist ein `WorldState`-Flag, eine Quest-Stufe, eine Erinnerung oder das Haus-Modell. Dialoge ändern ihn (`do WorldState...`), nie Szenen-Skripte über Umwege.
+  - Requisiten in Karten tragen Bedingungen: `"if"`/`"unless"` (Flag oder Liste) lassen sie live erscheinen und verschwinden; `"sprite_when": {"<flag>": "<sprite>"}` wechselt ihr Bild. Türen und Kartenränder sind Requisiten (`door`, Spawn-Marker `spawn_<name>`), Sperren (`blocker`) erklären sich beim Untersuchen.
+  - Je Ort ein Szenen-Skript (`world/levels/slice/*_scene.gd`), das nur inszeniert: Cutscenes, Licht, Musik, Rückfälle gegen Festhängen (der Riss öffnet sich nach Zeit auch ohne das Kind).
+  - `Beat.mark(id)` setzt `beat.<id>` und loggt Spielminute und Sekunde, damit der Playtest-Log die Minuten jedes Beats belegt.
+- **Konsequenzen:** Laden eines Spielstands stellt jede Szene richtig her, weil sie nur aus dem Zustand gebaut wird. Neue Beats brauchen meist nur Dialog, Flags und Kartenzeilen.
+
+## ADR-038 · Der Antreiber im Slice: dieselben Regeln, neues Gewand
+- **Status:** angenommen · 2026-10-06
+- **Kontext:** Der Grey-Box-Encounter aus Phase 1 (Regeln in `AntreiberModel`) ist geprüft, sah aber nach Platzhalter aus.
+- **Entscheidung:** `SliceAntreiber` erbt vom Encounter und tauscht nur, was man sieht und hört: zwei sich wiederholende Wegstücke im Tal-Stil (gebackener Boden, Bäume auf jeder Naht), eigene Figur, eigene Zurufe, der Schuppen als zurückweichendes Ziel, Regen und Farbkorrektur wie im Tal. Wer stehen bleibt, hat den Schuppen neben sich und das Holz vor den Füßen. Ein Wegweiser zeigt immer „Schuppen 200 m“; wer ihn liest, bleibt dabei stehen.
+- **Konsequenzen:** Der Grey-Box-Encounter bleibt als Prototyp (`--start=antreiber`) und testet die Regeln weiter. Die Szene des Slice heißt `weg`.
+
+## ADR-039 · Das Haus von innen: kleine Karte, gemalte Raumhülle
+- **Status:** angenommen · 2026-10-06
+- **Kontext:** Der Boden-Baker malt Landschaft, keine Innenräume mit Wänden.
+- **Entscheidung:** Das Haus ist eine kleine Textkarte (Dielen, feste Wände) mitten in Schwarz; Blockwand, Fenster, Seitenwände und Türöffnung malt ein flaches Requisit `haus/shell`. Licht: kalt-blauer Raum mit Fensterschein, bis das Feuer brennt; dann wechselt der Raum über Sekunden ins Warme, und Regen auf dem Dach plus Kaminfeuer ersetzen die Stille.
+- **Konsequenzen:** Weitere Innenräume brauchen eine eigene Hülle (oder später ein Tileset). Der Raum ist klein auf dem Bildschirm (KNOWN_ISSUES #44).

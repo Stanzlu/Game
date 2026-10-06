@@ -18,6 +18,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pixelart as pa  # noqa: E402
+import slice_props  # noqa: E402
 from pixelart import ramp  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -717,9 +718,12 @@ def fountain():
 
 
 # --------------------------------------------------------------------------- tal: house and props
-def house():
+def house(lit=True):
+    """The house in the valley. Unlit (slice: empty since spring) the windows are cold glass
+    that only reflects the rainy sky, and the door lamp is out."""
     rng = np.random.default_rng(31)
     st, ex = pa.STYLES["tal"], EXTRA["tal"]
+    glass = ex["glass"] if lit else ramp("#141a22", "#26323e", "#3e4e5c", "#6a7c88")
     W, H = 116, 116
     c = Canvas(W, H)
     wall_top, wall_bottom = 70, 113
@@ -769,13 +773,17 @@ def house():
     door = c.rect(49, 84, 65, wall_bottom)
     c.paint(door, st["wood"], np.where(((c.xx - 49) % 4) == 3, 0.1, 0.45 + 0.2 * (grain - 0.5)))
     c.paint(c.rect(47, 81, 67, 84), ex["plank"], 0.7)
-    c.paint(c.rect(61, 97, 63, 99), ex["glass"], 0.9)
+    c.paint(c.rect(61, 97, 63, 99), ex["glass"] if lit else ex["iron"], 0.9 if lit else 0.6)
     # windows with warm light and cross frames
     for wx in (20, 80):
         frame = c.rect(wx - 1, 82, wx + 17, 99)
         c.paint(frame, ex["plank"], 0.75)
         pane = c.rect(wx + 1, 84, wx + 15, 97)
-        c.paint(pane, ex["glass"], 0.45 + 0.55 * c.sphere(wx + 6, 88, 10, 9), dither=True)
+        if lit:
+            c.paint(pane, glass, 0.45 + 0.55 * c.sphere(wx + 6, 88, 10, 9), dither=True)
+        else:  # a pale streak of sky across dark glass
+            streak = ((c.xx - wx) + (c.yy - 84)) % 11 < 2
+            c.paint(pane, glass, np.where(streak, 0.62, 0.18 + 0.2 * (c.yy - 84) / 13), dither=True)
         c.paint(c.rect(wx + 7, 84, wx + 9, 97), ex["plank"], 0.3)
         c.paint(c.rect(wx + 1, 90, wx + 15, 91), ex["plank"], 0.3)
         c.paint(c.rect(wx - 2, 99, wx + 18, 101), ex["plank"], 0.55)
@@ -797,7 +805,7 @@ def house():
     c.paint(c.rect(46, wall_bottom - 1, 68, wall_bottom + 2), ex["stone_wall"], np.where(c.yy < wall_bottom, 0.8, 0.45),
             dither=False)
     c.paint(c.rect(68, 86, 72, 88), ex["iron"], 0.4, dither=False)
-    c.paint(c.rect(69, 88, 72, 93), ex["glass"], 0.9, dither=False)
+    c.paint(c.rect(69, 88, 72, 93), glass, 0.9 if lit else 0.35, dither=False)
     c.paint(c.rect(68, 93, 73, 94), ex["iron"], 0.4, dither=False)
     # moss creeping up the foundation, weathered planks
     moss = c.rect(x0 - 1, wall_bottom - 7, x1 + 1, wall_bottom + 3) & (pa.value_noise(H, W, 2, rng) > 0.62) & c.a
@@ -1272,6 +1280,11 @@ def particles():
     # two frames stacked vertically (wings open / folded), used with vframes = 2
     px("butterfly", ["aa.aa", "abcba", ".bcb.", ".a.a.", ".....", ".bcb.", ".aca.", "....."],
        {"a": ("#ff9a3c", 255), "b": ("#ffd36e", 255), "c": ("#3a2a1c", 255)})
+    # the gardener's golden butterflies (slice miniquest): bigger, so they read as the goal
+    px("golden_butterfly", ["aa.....aa", "abba.abba", "abccdccba", ".abcdcba.", "..abdba..", ".aba.aba.",
+                            "..a...a..", "...a.a...", "..abdba..", "..bcdcb..", "..acdca..", "...bdb...",
+                            "...a.a...", "........."],
+       {"a": ("#9a6410", 255), "b": ("#e8b030", 255), "c": ("#fff0a0", 255), "d": ("#4a2c10", 255)})
     px("puff", [".aaa.", "abbba", "abcba", "abbba", ".aaa."],
        {"a": ("#c8ccd4", 110), "b": ("#d8dce2", 170), "c": ("#e8ebef", 220)})
     px("mote", ["a"], {"a": ("#ffffff", 200)})
@@ -1294,7 +1307,7 @@ def particles():
 
 # --------------------------------------------------------------------------- catalog
 def build():
-    for style in ("elysia", "tal", "wald"):
+    for style in ("elysia", "tal", "wald", "haus"):
         os.makedirs(os.path.join(OUT, style), exist_ok=True)
     # elysia
     tree_entry = dict(shape={"circle": 6, "offset": [0, -2]}, sway=1.0, shadow=[28, 9])
@@ -1346,6 +1359,9 @@ def build():
              {"offset": [30, -15], "color": "#ff8a45", "energy": 1.3, "range": 80},
              {"offset": [12, -14], "color": "#ffb066", "energy": 0.7, "range": 40},
          ], smoke=[26, -102])
+    # the same house empty and cold (slice: before the fire is lit)
+    save("tal", "house_dark", house(lit=False), (58, 105), shape={"rect": [96, 40], "offset": [0, -12]},
+         shadow=[52, 6])
     save("tal", "tree", [natural_tree("tal", 101, "foliage", "large", (88, 104)),
                          natural_tree("tal", 102, "foliage_blue", "medium", (88, 104)),
                          natural_tree("tal", 103, "foliage", "medium", (88, 104))], (44, 101),
@@ -1423,9 +1439,10 @@ def build():
         save(style, "rail_s", rail, (9, 4), shape={"rect": [16, 3], "offset": [0, 7]})
     pa.save_rgba(os.path.join(OUT, "fx", "fog.png"), fog_bank(300))
     particles()
+    slice_props.build(sys.modules[__name__])
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
-    for style in ("elysia", "tal", "wald"):
+    for style in ("elysia", "tal", "wald", "haus"):
         for name in sorted(os.listdir(os.path.join(OUT, style))):
             if name.endswith(".png") and "%s/%s" % (style, name) not in used:
                 for stale in (name, name + ".import"):

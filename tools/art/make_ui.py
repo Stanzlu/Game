@@ -273,6 +273,135 @@ QUEST_MARK = [
 ]
 
 
+# Slice items (Phase 4). Elysia's are shiny, the Real world's plain.
+ICON_FAME = [
+    "................",
+    ".......oo.......",
+    "......oYYo......",
+    "......oYHo......",
+    ".oooooYYYYooooo.",
+    ".oYYYYYHYYYYYdo.",
+    "..oYYYYYYYYYdo..",
+    "...odYYYYYYdo...",
+    "....oYYYYYYo....",
+    "...oYYYddYYYo...",
+    "...oYYdooddYo...",
+    "..oYdoo..ooddo..",
+    "..odo......odo..",
+    "..oo........oo..",
+    "................",
+    "................",
+]
+ICON_SOUP = [
+    "................",
+    "......w..w......",
+    ".....w..w..w....",
+    "......w..w..w...",
+    ".....w..w..w....",
+    "................",
+    "..oooooooooooo..",
+    ".oSSSSSSSSSSSSo.",
+    ".oHYYYYYYYYYYdo.",
+    "..oYYYYYYYYYdo..",
+    "..oYYYYYYYYYdo..",
+    "...odYYYYYYdo...",
+    "....oodddddo....",
+    "......oooo......",
+    "................",
+    "................",
+]
+ICON_WOOD = [
+    "................",
+    "................",
+    "................",
+    "...ooooooooooo..",
+    "..oLLLLLLLLLLRo.",
+    "..odddddddddoRo.",
+    ".ooooooooooo.oo.",
+    "oLLLLLLLLLLRo...",
+    "oddddcddddoRo...",
+    "ooooocooooooo...",
+    "..oLLLcLLLLLLRo.",
+    "..oddddddddddRo.",
+    "..ooooooooooooo.",
+    "................",
+    "................",
+    "................",
+]
+ICON_POTATO = [
+    "................",
+    "................",
+    "................",
+    "................",
+    ".....oooooo.....",
+    "...ooLLLLLLoo...",
+    "..oLHLLLLLLLdo..",
+    ".oLLLLeLLLLLLdo.",
+    ".oLLLLLLLLeLLdo.",
+    ".odLLLLLLLLLddo.",
+    "..odLLeLLLLddo..",
+    "...ooddddddoo...",
+    ".....oooooo.....",
+    "................",
+    "................",
+    "................",
+]
+ICON_BOOT = [
+    "................",
+    ".....o.o.o......",
+    "....oLoLoLo.....",
+    "....oLLLLLo.....",
+    "....oLLLHdo.....",
+    "....oLLLLdo.....",
+    "....oLLLLdo.....",
+    "....oLLLLdo.....",
+    "....oLLLLdoo....",
+    "....oLLLLLLLoo..",
+    "....oLLLLLLLLdo.",
+    "....odddddddddo.",
+    "....ossssssssso.",
+    ".....ooooooooo..",
+    "................",
+    "................",
+]
+ICON_FISH = [
+    "................",
+    "................",
+    "................",
+    "................",
+    "..........oo....",
+    "..oooooo.oLLo...",
+    ".oLLLLLLoLLo....",
+    "oLeLLLLLLLLo....",
+    "oLLLLLLLLLdo....",
+    ".odddddddoddo...",
+    "..oooooo..oddo..",
+    "...........oo...",
+    "................",
+    "................",
+    "................",
+    "................",
+]
+ICON_SPOON = [
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+    ".........ooo....",
+    "........oHLdo...",
+    "........oLLdo...",
+    ".........odo....",
+    "........odo.....",
+    ".......odo......",
+    "......odo.......",
+    ".....odo........",
+    ".....oo.........",
+    "................",
+    "................",
+]
+
+
 def item_icons():
     pink = {"o": (90, 20, 60, 255), "P": (255, 120, 180, 255), "H": (255, 230, 245, 255),
             "d": (200, 60, 130, 255), "*": (255, 250, 200, 255)}
@@ -280,7 +409,26 @@ def item_icons():
             "g": (136, 136, 148, 255), "s": (110, 110, 122, 255), "d": (96, 96, 108, 255)}
     seed = {"o": (54, 32, 20, 255), "B": (150, 96, 56, 255), "L": (204, 150, 96, 255),
             "d": (108, 66, 38, 255), "G": (120, 196, 90, 255)}
+    gold = {"o": (70, 44, 10, 255), "Y": (240, 196, 72, 255), "H": (255, 248, 200, 255),
+            "d": (176, 120, 30, 255), "S": (220, 210, 196, 255), "w": (226, 232, 240, 160)}
+    wood = {"o": (30, 20, 14, 255), "L": (176, 128, 80, 255), "d": (112, 76, 44, 255),
+            "R": (214, 176, 120, 255), "c": (120, 108, 80, 255)}
+    potato = {"o": (40, 28, 18, 255), "L": (176, 134, 84, 255), "H": (212, 176, 120, 255),
+              "d": (128, 92, 56, 255), "e": (96, 68, 40, 255)}
+    leather = {"o": (26, 16, 12, 255), "L": (120, 78, 46, 255), "H": (160, 112, 70, 255),
+               "d": (84, 52, 30, 255), "s": (40, 34, 30, 255)}
+    fish = {"o": (30, 30, 36, 255), "L": (186, 160, 120, 255), "d": (134, 110, 80, 255),
+            "e": (30, 30, 36, 255)}
+    metal = {"o": (40, 42, 48, 255), "L": (176, 182, 188, 255), "H": (240, 244, 246, 255),
+             "d": (110, 116, 124, 255)}
     return {
+        "item_fame.png": from_ascii(ICON_FAME, gold),
+        "item_soup.png": from_ascii(ICON_SOUP, gold),
+        "item_dry_wood.png": from_ascii(ICON_WOOD, wood),
+        "item_potato.png": from_ascii(ICON_POTATO, potato),
+        "item_boot.png": from_ascii(ICON_BOOT, leather),
+        "item_fish.png": from_ascii(ICON_FISH, fish),
+        "curiosity_tiny_spoon.png": from_ascii(ICON_SPOON, metal),
         "item_compliment.png": from_ascii(ICON_COMPLIMENT, pink),
         "item_stone.png": from_ascii(ICON_STONE, grey),
         "item_seed.png": from_ascii(ICON_SEED, seed),

@@ -4,6 +4,10 @@ extends RefCounted
 ## stored in a save file is never renamed (docs/CONTENT_GUIDE.md, IDs).
 
 const SCENES := {
+	"elysia": "res://world/levels/slice/elysia.tscn",
+	"tal": "res://world/levels/slice/tal.tscn",
+	"haus": "res://world/levels/slice/haus.tscn",
+	"weg": "res://encounters/antreiber/slice_antreiber.tscn",
 	"sandbox": "res://world/levels/sandbox.tscn",
 	"antreiber": "res://encounters/antreiber/antreiber_encounter.tscn",
 	"look_elysia": "res://world/levels/look_elysia.tscn",
@@ -12,7 +16,7 @@ const SCENES := {
 }
 
 ## UI mode a scene starts in when it is opened from the prototype menu (new game).
-const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA}
+const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA, "elysia": GameState.UiMode.ELYSIA}
 
 
 static func start_mode(key: String) -> GameState.UiMode:
