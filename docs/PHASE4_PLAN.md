@@ -88,6 +88,12 @@ Playtest:
 - Haus (45–52): mehr zum Ansehen, ein ruhiger Moment am Feuer (sich setzen, Musik, Zeit vergeht).
 - Abend (52–60): die Ziege läuft ein paarmal davon, mehr Zeilen an Miras Feuer vor dem Ende.
 
+Nach dem Abgleich mit vier Referenzspielen (06.10., ADR-042, `ANALYSE_REFERENZEN.md`) ist die
+Vertiefung in die Tiefe gegangen statt in die Breite: Abendgespräch aus den Erinnerungen des Tages,
+eigenes Nein, das erste Spiegelbild, der Stein im Regal, Frösche, die bei Stille kommen, der Antreiber
+hinter dir und am Kamin, die Katze mit Namen, das Journal als Tagebuch, und in Elysia eine Aufgabe,
+die sich selbst löst.
+
 ## Kürzen, falls nötig (Cut-First, Master-Prompt §49)
 
 Zuerst: Varianten bei der Namenswahl, Katze füttern, zweite Puzzle-Lösung, Gastwirt, Länge der

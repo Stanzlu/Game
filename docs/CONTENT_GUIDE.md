@@ -8,6 +8,9 @@ Regeln für alles, was Spielerinnen und Spieler lesen, hören oder anklicken. Ve
 - Stabile IDs in `snake_case`, nie Anzeigenamen in Logik: `mira`, `tess`, `antreiber`, `item_stone`, `curiosity_tiny_spoon`.
 - Story-Flags mit Namensraum: `elysia.mirror_noticed`, `valley.mira_first_no`, `house.fire_lit`. Bereiche bisher: `elysia`, `valley`, `forest`, `house`, `encounter`, `sandbox` (nur Prototyp).
 - Figuren mit Beziehung: `mira`, `tess`, `orin`, `lio`. Erinnerungen und Orte in `snake_case` (`door_silence`, `valley_bridge`).
+- Jede Erinnerung, die das Tagebuch zeigen soll, bekommt einen Satz in `content/locale/journal.csv`
+  unter `MEMORY_<FIGUR>_<ERINNERUNG>` (z. B. `MEMORY_MIRA_ASKED_SHELTER`): Ich-Form, trocken, was
+  geschah, nie was es bedeutet (ADR-042, Bible §3.2, §23). Erinnerungen ohne Satz bleiben unsichtbar.
 - Szenen-Schlüssel (`core/scene_registry.gd`) stehen in Spielständen und werden nie umbenannt.
 - Quests: `main_<ort>_<thema>` bzw. `side_<thema>`, z. B. `main_elysia_butterflies`, `side_goat_roof`.
 - UI-Schlüssel in `content/locale/ui.csv`: `UPPER_SNAKE_CASE` mit Bereichspräfix (`BOOT_`, `MENU_`, `JOURNAL_`, `HUD_`).

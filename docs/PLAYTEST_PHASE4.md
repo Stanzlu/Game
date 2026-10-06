@@ -66,10 +66,22 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Hat das Feuer etwas verändert (Bild, Ton, Gefühl)? Hast du dich davor gesetzt?
 - Die Ziege: Humor angekommen?
 - Das Ende („Zum Meer.“): zu abrupt, genau richtig, zu lang?
+- Das Gespräch an Miras Feuer: Fühlte es sich an, als würde sie sich an deinen Tag erinnern, oder
+  wie eine Abfrage? Hast du ihr gesagt, dass du nicht über Elysia reden willst, und wie war ihre
+  Antwort für dich?
+- Hast du am Abend die Pfütze am Lager angesehen?
+- Der Antreiber im Haus: Bist du sitzen geblieben oder aufgestanden? Wirkte er wie jemand, den nur
+  du siehst? Wo lag die Katze am Ende?
+- Hast du der Katze einen Namen gegeben? Welchen?
 
 **Die Wirklichkeit**
 - Hast du Dinge angesehen, gerochen, probiert (Blumen, Beeren, Muschel)? Wirkte das Tal dadurch echter?
 - Ist dir das Summen des Kindes aufgefallen, und hast du die Melodie später wiedererkannt?
+- Bist du irgendwo am Bach eine Weile still gestanden? Ist dir aufgefallen, was dann passiert?
+- Das Journal in der Wirklichkeit (Taste J): Wie liest sich der Teil „Menschen“?
+
+**Elysia (zweite Aufgabe)**
+- Der stille Brunnen erledigt sich, bevor du ankommst. Witzig, irritierend, oder hast du es kaum bemerkt?
 
 **Technik**
 - Ruckler, Hänger, Stellen, an denen du nicht weiterkamst?

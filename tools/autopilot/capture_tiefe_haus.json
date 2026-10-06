@@ -1,0 +1,14 @@
+[
+  {"t": 0.2, "flag": "valley.wood_taken", "log": "the house after Mira's knock: she and the Antreiber by the fire"},
+  {"t": 0.2, "flag": "house.antreiber_by_fire"},
+  {"t": 0.2, "flag": "house.cat_fed"},
+  {"t": 0.2, "flag": "house.mira_knocked"},
+  {"t": 0.2, "flag": "house.shelf_both"},
+  {"t": 0.3, "give": "item_dry_wood"},
+  {"t": 0.5, "teleport": [16, 10], "log": "light the fire"},
+  {"t": 0.7, "press": ["move_up"]},
+  {"t": 0.75, "release": ["move_up"]},
+  {"t": 1.1, "tap": ["interact"]},
+  {"t": 1.6, "dialogue": 4.0},
+  {"t": 6.5, "teleport": [20, 13], "log": "look at the room"}
+]
