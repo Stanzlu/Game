@@ -7,12 +7,20 @@ extends Node
 ## No Camera2D: the view sets the viewport's canvas transform itself (same frame as the
 ## fractional shift). World nodes live under `world_root` and poll the Input singleton;
 ## the viewport does not receive input events. UI belongs in CanvasLayers of this scene.
+##
+## Zoom (ADR-043): world pixels can be drawn larger than the UI's. The world viewport then
+## shrinks to `view_size` and the display sprite scales it up; with a zoom that is not a
+## whole number the texture is filtered linearly and the display shader samples it sharp
+## (sharp_sample.gdshaderinc), so pixels stay even at any window size.
 
 enum CameraMode { PIXEL, SMOOTH }
 
 const BASE_SIZE := Vector2i(640, 360)
 ## One extra game pixel on each side so a fractional shift never reveals an edge.
 const BORDER := 1
+const SHARP_SHADER := preload("res://world/shaders/sharp_display.gdshader")
+## The camera looks at the target's body, not its feet.
+const FOLLOW_OFFSET := Vector2(0, -8)
 
 @export var camera_mode := CameraMode.SMOOTH
 ## How quickly the camera catches up (1/s). Higher = tighter.
@@ -28,6 +36,10 @@ var display: Sprite2D
 var camera_position := Vector2.ZERO
 var target: Node2D
 var bounds := Rect2()
+## How many UI pixels one world pixel covers (1 = as before, Elysia; 1.5 = the real world).
+var zoom := 1.0
+## Size of the visible world in world pixels (BASE_SIZE / zoom, rounded up).
+var view_size := BASE_SIZE
 
 var _cam_pos := Vector2.ZERO
 var _lead := Vector2.ZERO
@@ -61,11 +73,40 @@ func _ready() -> void:
 	add_child(viewport)
 	add_child(display)
 	display.texture = viewport.get_texture()
+	if display.material == null:
+		display.material = _sharp_material()
+
+
+## Sets the zoom (1 to 3). Call before the world is built; changing it later is possible but
+## reallocates the world texture.
+func set_zoom(value: float) -> void:
+	zoom = clampf(value, 1.0, 3.0)
+	view_size = Vector2i((Vector2(BASE_SIZE) / zoom).ceil())
+	viewport.size = view_size + Vector2i.ONE * BORDER * 2
+	display.scale = Vector2.ONE * zoom
+	# whole-number zooms stay nearest (exact); others need the sharp linear sampling
+	var whole := is_equal_approx(zoom, roundf(zoom))
+	display.texture_filter = (
+		CanvasItem.TEXTURE_FILTER_NEAREST if whole else CanvasItem.TEXTURE_FILTER_LINEAR
+	)
+	_has_position = false
+
+
+## Converts a world position to a position in the 640x360 UI space (for overlays that
+## should keep the UI's pixel size while following something in the world).
+func world_to_ui(world_position: Vector2) -> Vector2:
+	return (world_position - camera_position + Vector2(view_size) * 0.5) * zoom
 
 
 ## Post-process for the whole world image (color grading, bloom, vignette; ADR-017).
 func set_post_material(material: Material) -> void:
-	display.material = material
+	display.material = material if material != null else _sharp_material()
+
+
+static func _sharp_material() -> ShaderMaterial:
+	var mat := ShaderMaterial.new()
+	mat.shader = SHARP_SHADER
+	return mat
 
 
 ## Follow this node (usually the player). Uses its interpolated_position() when available.
@@ -104,7 +145,7 @@ func _process(delta: float) -> void:
 	)
 	_lead = CameraMath.smooth_toward(_lead, lead_target, look_ahead_sharpness, delta)
 	# Following the rounded feet keeps the snapped player steady on screen.
-	var desired: Vector2 = feet.round() + _lead + Vector2(0, -8)
+	var desired: Vector2 = feet.round() + _lead + FOLLOW_OFFSET
 	if not _has_position:
 		_cam_pos = desired
 		_lead = Vector2.ZERO
@@ -112,7 +153,7 @@ func _process(delta: float) -> void:
 	else:
 		_cam_pos = CameraMath.smooth_toward(_cam_pos, desired, follow_sharpness, delta)
 	if bounds.has_area():
-		_cam_pos = CameraMath.clamp_to_bounds(_cam_pos, Vector2(BASE_SIZE) * 0.5, bounds)
+		_cam_pos = CameraMath.clamp_to_bounds(_cam_pos, Vector2(view_size) * 0.5, bounds)
 	var shaken := _cam_pos
 	if _shake_time > 0.0:
 		_shake_time = maxf(_shake_time - delta, 0.0)
@@ -124,4 +165,4 @@ func _process(delta: float) -> void:
 	camera_position = parts[0]
 	var half_view := Vector2(viewport.size) * 0.5
 	viewport.canvas_transform = Transform2D(0.0, half_view - camera_position)
-	display.position = -Vector2.ONE * BORDER - parts[1]
+	display.position = (-Vector2.ONE * BORDER - parts[1]) * zoom

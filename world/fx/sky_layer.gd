@@ -21,7 +21,7 @@ func setup(game_view: GameView, top: Color, bottom: Color) -> void:
 	view = game_view
 	_rect = ColorRect.new()
 	_rect.name = "Gradient"
-	_rect.size = Vector2(GameView.BASE_SIZE) + Vector2.ONE * MARGIN * 2.0
+	_rect.size = Vector2(view.view_size) + Vector2.ONE * MARGIN * 2.0
 	_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var mat := ShaderMaterial.new()
 	mat.shader = SKY_SHADER
@@ -59,9 +59,9 @@ func _process(delta: float) -> void:
 		return
 	_time += delta
 	var cam := view.camera_position
-	var origin := cam - Vector2(GameView.BASE_SIZE) * 0.5
+	var origin := cam - Vector2(view.view_size) * 0.5
 	_rect.position = origin - Vector2.ONE * MARGIN
-	var span := float(GameView.BASE_SIZE.x)
+	var span := float(view.view_size.x)
 	for cloud: Dictionary in _clouds:
 		var sprite: Sprite2D = cloud["sprite"]
 		var w := sprite.texture.get_width()
