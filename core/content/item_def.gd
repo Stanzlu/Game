@@ -22,8 +22,16 @@ const RARITY_COLORS: Array[Color] = [
 @export var kind := Kind.ITEM
 @export_range(1, 999) var max_stack := 99
 @export var rarity := Rarity.COMMON
+## An ordinary item that may still stand on a shelf like a curiosity (the stone from Elysia:
+## the first thing of one's own in the house).
+@export var placeable := false
 ## Draft content with placeholder text. Must be false before a playtest build.
 @export var draft := true
+
+
+## Curiosities and placeable items can be put into the house's curiosity slots.
+func can_be_placed() -> bool:
+	return kind == Kind.CURIOSITY or placeable
 
 
 func name_key() -> String:

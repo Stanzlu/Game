@@ -325,7 +325,7 @@ func curiosity_in(slot_id: String) -> String:
 ## Moves a curiosity from the inventory into a slot (an occupied slot gives its item back).
 func place_curiosity(slot_id: String, item_id: String) -> bool:
 	var def := ContentDB.item(item_id)
-	if not GameState.is_id(slot_id) or def == null or def.kind != ItemDef.Kind.CURIOSITY:
+	if not GameState.is_id(slot_id) or def == null or not def.can_be_placed():
 		Log.error(Log.Category.WORLD_STATE, "invalid curiosity", {"slot": slot_id, "item": item_id})
 		return false
 	if not remove_item(item_id):
@@ -337,6 +337,21 @@ func place_curiosity(slot_id: String, item_id: String) -> bool:
 	Log.info(Log.Category.WORLD_STATE, "curiosity placed", {"slot": slot_id, "item": item_id})
 	house_changed.emit()
 	return true
+
+
+func cat_name() -> String:
+	return state.house.cat_name
+
+
+## Names the cat (Game Bible §28). Empty names are refused; the name is trimmed and capped.
+func set_cat_name(new_name: String) -> void:
+	var clean := new_name.strip_edges().left(GameState.MAX_NAME_LENGTH)
+	if clean.is_empty():
+		Log.error(Log.Category.WORLD_STATE, "empty cat name refused")
+		return
+	state.house.cat_name = clean
+	Log.info(Log.Category.WORLD_STATE, "cat name", {"name": clean})
+	house_changed.emit()
 
 
 # --- Discovered locations --------------------------------------------------------------

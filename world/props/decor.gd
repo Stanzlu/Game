@@ -8,6 +8,8 @@ extends StaticBody2D
 ## With params "cue" (and optional "dialogue", "prompt", "radius") it can be looked at:
 ## interacting shows that dialogue cue (descriptions, small discoveries). With "sit":
 ## {"face": "n|e|s|w", "offset": [x, y]} one can sit down on it (the rug by the fire).
+## "lift": pixels draws the sprite higher than its cell while it still sorts by that cell
+## (the cat asleep on the Antreiber's lap, in front of him).
 ## In symmetric maps (Elysia) MapView passes "mirror" and "seed_position": the prop then
 ## shows its twin's variant, flipped, with lights and shapes mirrored too; "sway_axis" makes
 ## plants sway in mirrored unison instead of gusts.
@@ -65,6 +67,7 @@ func apply_params(params: Dictionary) -> void:
 	sprite.texture = PropCatalog.texture_for(entry, seed_position)
 	var anchor: Array = entry.get("anchor", [0, 0])
 	sprite.offset = -Vector2(float(anchor[0]), float(anchor[1]))
+	sprite.offset.y -= float(params.get("lift", 0.0))
 	if mirrored:
 		_mirror_sprite(sprite)
 	sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -257,6 +260,7 @@ func _add_inspect(params: Dictionary) -> void:
 	)
 	var path := str(params.get("dialogue", Talk.DEFAULT_DIALOGUE))
 	var cue := str(params["cue"])
+	set_meta(&"cue", cue)
 	area.interacted.connect(func(actor: Node) -> void: Talk.present(self, path, cue, actor))
 
 

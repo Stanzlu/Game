@@ -224,6 +224,27 @@ def goat_bleat(rng, variant):
     return outdoors(voiced(f0, length, rng, formants, (9.5, 0.03), 0.15) * tremolo * shape, 0.1)
 
 
+def frog_croak(rng, variant):
+    """Quaark: a frog on the bank, two or three rough pulses through a nasal throat. Frogs
+    come close when one stands still (ADR-042); this is how one notices them."""
+    base = rng.uniform(150, 190) * (1.0 if variant == 0 else 1.18)
+    parts = []
+    for k in range(2 + variant):
+        length = rng.uniform(0.11, 0.16)
+
+        def f0(t, b=base):
+            return np.interp(t, [0, length], [b * 1.05, b * 0.9])
+
+        formants = [(0.0, [(420, 160), (1100, 260), (2300, 400)]),
+                    (1.0, [(360, 160), (950, 240), (2100, 400)])]
+        t = secs(length)
+        rattle = 1 - 0.6 * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * rng.uniform(32, 40) * t)))
+        shape = np.minimum(1.0, t / 0.01) * np.clip((length - t) / 0.05, 0, 1)
+        pulse = voiced(f0, length, rng, formants, (0.0, 0.0), 0.25) * rattle * shape
+        parts.append(at(pulse, k * rng.uniform(0.17, 0.22)))
+    return outdoors(mix(*parts), 0.12)
+
+
 def munch(rng):
     """The goat chewing a potato: wet crunches."""
     parts = []
@@ -296,6 +317,10 @@ def build(only=None):
     hum_rng = np.random.default_rng(31)
     for i in range(2):
         sounds["child_hum_%d" % i] = (child_hum(hum_rng), "voice")
+    # frogs get their own random stream too (ADR-042)
+    frog_rng = np.random.default_rng(37)
+    for i in range(2):
+        sounds["frog_croak_%d" % i] = (frog_croak(frog_rng, i), "animal")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

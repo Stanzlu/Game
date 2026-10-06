@@ -9,7 +9,8 @@ extends CharacterBody2D
 ## the real world, Game Bible §36). Elysians never do: their attention is perfect.
 ## "pause": [min, max] seconds makes it linger at every waypoint for a different while (people
 ## with something to do); Elysians walk on without pause, always the same. "face": "n", "e",
-## "s" or "w" is where it looks while standing at its spawn.
+## "s" or "w" is where it looks while standing at its spawn. "sit": true seats it there (Mira
+## across her fire, the Antreiber by the path): it stays seated, also when talked to.
 
 const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
@@ -29,6 +30,7 @@ var talking := false
 var dialogue_path := DEFAULT_DIALOGUE
 var cue := ""
 var glances := false
+var seated := false
 var _index := 0
 var _idle_time := 0.0
 var _next_glance := 3.0
@@ -70,6 +72,9 @@ func apply_params(params: Dictionary) -> void:
 		route.append(Vector2(float(p[0]), float(p[1])) * tile_size)
 	speed = float(params.get("speed", speed))
 	glances = bool(params.get("glance", false))
+	seated = bool(params.get("sit", false))
+	if seated:
+		_play("idle")
 	var pause: Variant = params.get("pause", 0.0)
 	_pause = (
 		Vector2(float(pause[0]), float(pause[1]))
@@ -184,7 +189,9 @@ func _nearest_player() -> Node2D:
 
 
 func _play(state_name: String) -> void:
-	if state_name == "idle" and glances:
+	if seated and state_name == "idle":
+		state_name = "sit"
+	elif state_name == "idle" and glances:
 		_idle_time += get_physics_process_delta_time()
 		if (
 			not _glancing
