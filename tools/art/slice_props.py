@@ -632,9 +632,10 @@ def bed(ms):
     return c
 
 
-def shelf(ms, spoon):
+def shelf(ms, spoon, stone=False):
     """A shelf on the wall: two boards, a few empty jars, a book without a cover, and one
-    empty compartment. With the spoon: it stands there as if it always had."""
+    empty compartment. With the spoon: it stands there as if it always had. With the stone
+    from Elysia beside it (ADR-042): grey, plain, the first thing of one's own."""
     rng = np.random.default_rng(61)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(34, 30)
@@ -655,6 +656,9 @@ def shelf(ms, spoon):
         metal = ramp("#5a5e62", "#8c9296", "#c4cacc", "#eef2f2")
         c.paint(c.ellipse(24, 22.5, 1.6, 1.2), metal, 0.7, dither=False)
         c.paint(c.rect(24, 23, 25, 26), metal, 0.5, dither=False)
+    if stone:
+        pebble = c.ellipse(17.5, 24.4, 2.6, 1.7)
+        c.paint(pebble, st["stone"], 0.35 + 0.4 * np.clip((24.6 - c.yy) / 3.0, 0, 1), dither=False)
     c.outline(st["outline"])
     return c
 
@@ -751,6 +755,8 @@ def build(ms):
     ms.save("haus", "bed", bed(ms), (15, 40), shape={"rect": [28, 30], "offset": [0, -16]})
     ms.save("haus", "shelf", shelf(ms, False), (17, 29), flat=True)
     ms.save("haus", "shelf_spoon", shelf(ms, True), (17, 29), flat=True)
+    ms.save("haus", "shelf_stone", shelf(ms, False, True), (17, 29), flat=True)
+    ms.save("haus", "shelf_spoon_stone", shelf(ms, True, True), (17, 29), flat=True)
     ms.save("haus", "rug", rug(ms), (22, 11), flat=True)
     ms.save("haus", "bucket", bucket(ms), (8, 14), shape={"circle": 5, "offset": [0, -3]})
     ms.save("haus", "cat_window", cat(ms, "window"), (0, 22), flat=True)

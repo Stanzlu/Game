@@ -58,6 +58,8 @@ class House:
 	var fire_lit := false
 	## Slot ID -> curiosity item ID.
 	var curiosity_slots: Dictionary[String, String] = {}
+	## The cat's name once the player gave it one (Game Bible §28); "" = unnamed.
+	var cat_name := ""
 
 
 ## Elysia's cosmetic reward layer. The level is derived from XP.
@@ -119,7 +121,12 @@ func to_dict() -> Dictionary:
 		"quests": quest_data,
 		"relationships": rel_data,
 		"facets": facets.duplicate(),
-		"house": {"fire_lit": house.fire_lit, "curiosity_slots": house.curiosity_slots.duplicate()},
+		"house":
+		{
+			"fire_lit": house.fire_lit,
+			"curiosity_slots": house.curiosity_slots.duplicate(),
+			"cat_name": house.cat_name,
+		},
 		"inventory": inventory.duplicate(),
 		"discovered": Array(discovered),
 		"ui_mode": str(UiMode.keys()[ui_mode]),
@@ -164,6 +171,7 @@ static func from_dict(data: Dictionary, report: PackedStringArray) -> GameState:
 			s.house.curiosity_slots[slot] = item
 		else:
 			r.drop("curiosity slot", slot)
+	s.house.cat_name = r.string(house_data, "cat_name", "").strip_edges().left(MAX_NAME_LENGTH)
 	var inv := r.dict(data, "inventory")
 	for item: Variant in inv:
 		var def := ContentDB.item(str(item)) if item is String else null

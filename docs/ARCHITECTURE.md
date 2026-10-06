@@ -92,6 +92,14 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   Elysianer laufen ohne Pause im Gleichtakt; `"face"` ist die Blickrichtung im Stand. `Decor` mit
   `"sit"` ist ein Sitzplatz (der Teppich am Kamin). Bringt die Geschichte ein Requisit während der
   Szene, bekommt es `"live": true` und darf auftreten (die Ziege erscheint mit Verzögerung).
+- Tiefe nach ADR-042: `NpcWalker` mit `"sit": true` sitzt (Mira, der Antreiber); `Decor` mit
+  `"lift"` zeichnet höher, als es sortiert (die Katze auf dem Schoß); `ItemDef.placeable` lässt ein
+  normales Item ins Regal (der Stein). `AntreiberActor.trail`, `walk_to`, `sit_down` inszenieren ihn
+  nach dem Schuppen (`TalScene`, `HausScene`). `AmbientLife`: Frösche kommen, wenn die Spielfigur
+  still steht. `NameEntry` ist wiederverwendbar (`title_key`, `suggestions`) und benennt die Katze
+  (`WorldState.cat_name`). Das Journal zeigt in der Wirklichkeit keine Häkchen und unter „Menschen“
+  die Erinnerungen als Sätze (`MEMORY_<FIGUR>_<ID>`). Dialoge nutzen `=><` (Teilgespräch mit
+  Rückkehr) und Antworten mit `[if … /]`, die nur erscheinen, wenn man das Erzählte erlebt hat.
 - Autopilot: `"meet": "<cue>"` stellt die Figur neben die NPC mit diesem Cue, wo immer sie gerade ist.
 - Der Riss gibt das Ziel samt Spawn weiter (`RiftSequence.spawn`), die Ankunft blendet langsam auf.
 - Durchlauf ohne Hand: `tools/autopilot/slice_full.json` (Hauptmenü bis Titelkarte); Teilstrecken

@@ -1,0 +1,19 @@
+[
+  {"t": 0.2, "flag": "valley.mira_met", "log": "the valley in the evening (ADR-042)"},
+  {"t": 0.2, "flag": "house.mira_visited"},
+  {"t": 0.2, "flag": "valley.bridge_fixed"},
+  {"t": 0.2, "flag": "valley.wood_needed"},
+  {"t": 0.2, "flag": "valley.wood_taken"},
+  {"t": 0.2, "flag": "valley.antreiber_rests"},
+  {"t": 0.3, "teleport": [26, 14], "log": "into the house and out again: evening, no rain"},
+  {"t": 0.4, "press": ["move_up"]},
+  {"t": 0.45, "release": ["move_up"]},
+  {"t": 0.6, "tap": ["interact"]},
+  {"t": 2.0, "press": ["move_down"]},
+  {"t": 3.2, "release": ["move_down"]},
+  {"t": 5.0, "teleport": [50, 22], "log": "Mira sitting across her fire"},
+  {"t": 8.0, "teleport": [49, 22], "log": "standing in the puddle: it shows you"},
+  {"t": 8.1, "press": ["move_up"]},
+  {"t": 8.15, "release": ["move_up"]},
+  {"t": 14.0, "teleport": [9, 24], "log": "the Antreiber by the path"}
+]

@@ -718,6 +718,26 @@
    "res://assets/generated/props/haus/shelf_spoon.png"
   ]
  },
+ "haus/shelf_spoon_stone": {
+  "anchor": [
+   17,
+   29
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/shelf_spoon_stone.png"
+  ]
+ },
+ "haus/shelf_stone": {
+  "anchor": [
+   17,
+   29
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/shelf_stone.png"
+  ]
+ },
  "haus/shell": {
   "anchor": [
    8,

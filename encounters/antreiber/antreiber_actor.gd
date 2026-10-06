@@ -3,9 +3,14 @@ extends Node2D
 ## The Antreiber in the grey-box encounter: runs ahead of the player, cheers, urges,
 ## worries; falls silent and sits down once the player stops. Barks come from
 ## content/dialogue/antreiber/antreiber.dialogue (one cue per mood).
+## After the shed (ADR-042) he is not beaten, only slower: `trail` walks behind the player
+## without a word, `walk_to` and `sit_down` stage him in the valley and by the fire.
 
 const LEAD := Vector2(40, -14)
 const BARK_SECONDS := 2.2
+## Walking behind: this far back, never faster than this.
+const TRAIL_DISTANCE := 26.0
+const TRAIL_SPEED := 42.0
 const CUES := {
 	AntreiberModel.Mood.START: "start",
 	AntreiberModel.Mood.URGING: "urging",
@@ -87,6 +92,44 @@ func resolve(player: Player) -> void:
 	say(AntreiberModel.Mood.SILENT)
 	await NodeTimer.after(self, 2.0)
 	facing = Facing.Dir.S
+	_play("sit")
+
+
+## Walks behind the player, a little slower than they do; stands when they stand.
+func trail(player: Node2D, delta: float) -> void:
+	silent = true
+	var to_player := player.global_position - global_position
+	if to_player.length() <= TRAIL_DISTANCE:
+		facing = Facing.from_vector(to_player)
+		_play("idle")
+		return
+	var target := player.global_position - to_player.normalized() * TRAIL_DISTANCE
+	global_position = global_position.move_toward(target, TRAIL_SPEED * delta)
+	facing = Facing.from_vector(to_player)
+	_play("walk")
+
+
+## Walks to `target` (world position) at `speed` and stands there.
+func walk_to(target: Vector2, speed := 36.0) -> void:
+	silent = true
+	var distance := global_position.distance_to(target)
+	if distance > 0.5:
+		facing = Facing.from_vector(target - global_position)
+		_play("walk")
+		var tween := create_tween()
+		tween.tween_property(self, ^"global_position", target, distance / speed)
+		await tween.finished
+	_play("idle")
+
+
+func face(dir: Facing.Dir) -> void:
+	facing = dir
+	_play("idle")
+
+
+func sit_down(dir: Facing.Dir) -> void:
+	silent = true
+	facing = dir
 	_play("sit")
 
 

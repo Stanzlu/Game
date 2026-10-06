@@ -150,6 +150,10 @@ def tal():
         "Z": [(1, 25)],
         "V": [(2, 25)],
         "@": [(52, 22)],
+        # after the rain the puddle by the camp shows you (ADR-042); the Antreiber sits by the
+        # path once he followed you back from the shed
+        "e": [(49, 22)],
+        "t": [(6, 23)],
         # until Mira was asked, the stream holds you back (her no is the valley's first beat)
         "J": [(log_cells[-1], LOG_ROW)],
         "j": [(STONE_X + len(STONE_FIELD[0]), STONE_ROWS[1])],

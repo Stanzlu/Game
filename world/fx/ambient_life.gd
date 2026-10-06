@@ -3,7 +3,9 @@ extends Node2D
 ## Small animals that make a scene feel alive (look prototype): bird flocks with ground
 ## shadows crossing the view, fish (or koi) swimming in water cells, dragonflies darting
 ## over water, frogs on the banks that hop off when someone comes too close (the real
-## world, ADR-041). Pure decoration: no collision, deterministic enough for captures.
+## world, ADR-041), and come back closer than before when that someone stands still for a
+## while (ADR-042: in the Wirklichkeit things come to you when you stop). Pure decoration:
+## no collision, deterministic enough for captures.
 ##
 ## Perfect loops (Elysia, Game Bible §9 and §35): the same flock in the same formation
 ## crosses on an exact beat, koi circle the pool evenly spaced, dragonflies fly mirrored
@@ -13,6 +15,12 @@ const FX_DIR := "res://assets/generated/props/fx/"
 ## Frogs hop off when someone comes this close; one hop takes this long.
 const FROG_SHY := 30.0
 const FROG_HOP_SECONDS := 0.42
+## Standing still this long makes frogs nearby come closer; they stop at FROG_NEAR and croak
+## now and then. Only frogs within FROG_CALL of the player come, hopping along
+## the bank as far as it leads towards them.
+const FROG_STILL_SECONDS := 3.0
+const FROG_NEAR := 38.0
+const FROG_CALL := 160.0
 
 var view: GameView
 var map: MapView
@@ -27,6 +35,8 @@ var _water_cells: Array[Vector2i] = []
 var _bank_cells: Array[Vector2i] = []
 var _frogs: Array[Dictionary] = []
 var _time := 0.0
+## How long the player has not moved (frogs come closer after FROG_STILL_SECONDS).
+var _still := 0.0
 var _perfect := false
 var _mirror_x := 0.0
 var _orbit := Rect2()
@@ -174,6 +184,8 @@ func _process(delta: float) -> void:
 	_update_flocks(delta)
 	if not _frogs.is_empty():
 		var player := get_tree().get_first_node_in_group(&"player") as Node2D
+		var moving := player != null and (player.get(&"velocity") as Vector2).length() > 2.0
+		_still = 0.0 if player == null or moving else _still + delta
 		for frog: Dictionary in _frogs:
 			_frog(frog, delta, player)
 	for f: Dictionary in _swimmers:
@@ -340,13 +352,18 @@ func _frog(f: Dictionary, delta: float, player: Node2D) -> void:
 		sprite.frame = 1
 		if t >= 1.0:
 			f["hop"] = -1.0
-			f["rest"] = _rng.randf_range(4.0, 12.0)
+			var coming := _still >= FROG_STILL_SECONDS
+			f["rest"] = _rng.randf_range(0.6, 1.2) if coming else _rng.randf_range(4.0, 12.0)
 			sprite.frame = 0
 		return
 	f["rest"] = float(f["rest"]) - delta
 	var away := Vector2.ZERO
-	if player != null and player.global_position.distance_to(pos) < FROG_SHY:
+	var dist := player.global_position.distance_to(pos) if player != null else INF
+	if dist < FROG_SHY:
 		away = (pos - player.global_position).normalized()
+	elif _still >= FROG_STILL_SECONDS and dist < FROG_CALL:
+		_come_closer(f, player, dist)
+		return
 	elif float(f["rest"]) > 0.0:
 		return
 	# hop: away from the player, or a little way along the bank
@@ -358,6 +375,32 @@ func _frog(f: Dictionary, delta: float, player: Node2D) -> void:
 	f["to"] = _nearest_bank_point(target)
 	f["hop"] = 0.0
 	sprite.flip_h = (f["to"] as Vector2).x < pos.x
+
+
+## The player stands still: hop towards them along the bank, a hop every second or so, and
+## stay a little way off; once there, croak now and then.
+func _come_closer(f: Dictionary, player: Node2D, dist: float) -> void:
+	if float(f["rest"]) > 0.0:
+		return
+	var pos: Vector2 = f["pos"]
+	if dist <= FROG_NEAR + 6.0:
+		f["rest"] = _rng.randf_range(4.0, 8.0)
+		var sprite: Sprite2D = f["sprite"]
+		sprite.flip_h = player.global_position.x < pos.x
+		SoundBank.play_at(self, "frog_croak", pos, -14.0)
+		return
+	var goal := player.global_position + (pos - player.global_position).normalized() * FROG_NEAR
+	var target := _nearest_bank_point(pos.move_toward(goal, 22.0))
+	var target_dist := target.distance_to(player.global_position)
+	# no bank leads closer (the player stands away from the water), or it would be too close
+	if target_dist >= dist - 2.0 or target_dist < FROG_SHY + 2.0:
+		f["rest"] = _rng.randf_range(2.0, 4.0)
+		return
+	f["from"] = pos
+	f["to"] = target
+	f["hop"] = 0.0
+	f["rest"] = _rng.randf_range(0.6, 1.2)
+	(f["sprite"] as Sprite2D).flip_h = target.x < pos.x
 
 
 func _random_bank_point() -> Vector2:

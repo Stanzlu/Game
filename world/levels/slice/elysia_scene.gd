@@ -13,6 +13,11 @@ const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
 ## the child appears), and the rift opens a while later even if the child was never followed.
 const LOOPS_AFTER := 720.0
 const RIFT_AFTER_LOOPS := 240.0
+## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
+## shrinks to nothing (Game Bible §8, §10).
+const FOUNTAIN_SOLVES_AFTER := 6.0
+const FOUNTAIN_XP := 10000
+const FOUNTAIN_GOLD := 2500
 
 var _loops_time := -1.0
 
@@ -21,10 +26,14 @@ func _ready() -> void:
 	super()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.objective_changed.connect(_on_objective_changed)
+	WorldState.quest_changed.connect(_on_quest_changed)
 	if not WorldState.has_flag("elysia.woke"):
 		_wake.call_deferred()
 	elif WorldState.has_flag("elysia.loops"):
 		_loops_time = WorldState.state.playtime_seconds
+	if WorldState.is_quest_active("side_elysia_fountain"):
+		# loaded while the fountain was about to fix itself
+		_fountain_solves_itself()
 
 
 func _wake() -> void:
@@ -51,6 +60,25 @@ func _process(_delta: float) -> void:
 	):
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag("elysia.rift_open")
+
+
+func _on_quest_changed(quest_id: String, stage: String) -> void:
+	if quest_id == "side_elysia_fountain" and stage == "check":
+		_fountain_solves_itself()
+
+
+## Somebody else fixed it, for you, before you got there.
+func _fountain_solves_itself() -> void:
+	# the clock starts once the gardener has finished talking: the player sets off, and then
+	while dialogue_box != null and dialogue_box.visible:
+		await get_tree().process_frame
+	await NodeTimer.after(self, FOUNTAIN_SOLVES_AFTER)
+	if not WorldState.is_quest_active("side_elysia_fountain"):
+		return
+	WorldState.advance_quest("side_elysia_fountain", "done")
+	WorldState.add_xp(FOUNTAIN_XP)
+	WorldState.add_gold(FOUNTAIN_GOLD)
+	Beat.mark("fountain")
 
 
 func _on_objective_changed(quest_id: String, _objective_id: String) -> void:

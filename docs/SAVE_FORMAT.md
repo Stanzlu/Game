@@ -44,7 +44,7 @@ im selben Ordner.
 		},
 		"relationships": { "mira": { "state": "cautious", "memories": ["door_silence"] } },
 		"facets": { "courage": true },
-		"house": { "fire_lit": true, "curiosity_slots": { "shelf_1": "curiosity_tiny_spoon" } },
+		"house": { "fire_lit": true, "curiosity_slots": { "shelf_1": "curiosity_tiny_spoon" }, "cat_name": "Asche" },
 		"inventory": { "item_stone": 1, "item_seed": 1 },
 		"discovered": ["sandbox_garden"],
 		"ui_mode": "REAL",
@@ -64,6 +64,7 @@ im selben Ordner.
 | `quests` | nur bekannte Quests (`content/quests`) und deren Stufen. `history` enthält besuchte Stufen, die aktuelle zuletzt. Fertig ist eine Quest, wenn ihre Stufe kein `next` hat. |
 | `relationships` | nur `mira`, `tess`, `orin`, `lio`. Zustand `stranger`, `cautious`, `familiar`, `close`, `strained`. Erinnerungen als IDs. |
 | `facets` | die acht Facetten-IDs aus `GameState.FACETS`, im Slice nur Flags. |
+| `house` | Feuer an/aus; Kuriositäten-Fächer (nur bekannte Items, die ins Regal dürfen); `cat_name`: Name der Katze (max. 24 Zeichen), leer = unbenannt. Fehlt `cat_name` (Stände vor ADR-042), gilt leer; kein neues Schema. |
 | `inventory` | nur bekannte Items, Anzahl 1 bis Stapelgrenze. |
 | `ui_mode` | `ELYSIA` oder `REAL`. |
 | `day_preset` | Tageszeit der wirklichen Welt: `regentag`, `abend`, `nacht` oder leer (noch keine). Ausruhen auf der Bank schaltet weiter. Seit Schema 2, fehlt es, gilt leer. |

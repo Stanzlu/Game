@@ -60,7 +60,7 @@ I = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; Mira hat ihren eigenen Tag: Netz, Feuer, die Angel am Bach, jedes Mal verschieden lang. Abends
 ; sitzt sie auf der anderen Seite ihres Feuers (M).
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "route": [[0, 0], [2, 2], [-3, 2]], "pause": [5, 11], "speed": 24, "unless": "house.mira_visited"}}
-M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "face": "w", "if": "house.mira_visited"}}
+M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "face": "w", "sit": true, "if": "house.mira_visited"}}
 ; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
 k = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken", "unless": "valley.bridge_fixed"}}
 L = {"ground": "y", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 3], "unless": "valley.bridge_fixed"}}
@@ -82,6 +82,9 @@ G = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "val
 ; Nach dem Tausch steht die Ziege oben auf dem Holzstapel am Haus. Niemand weiß, wie.
 O = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "valley.goat_traded", "perch": 22, "appear_after": 3.0}}
 o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
+; nach dem Regen zeigt die Pfütze am Lager dich selbst; der Antreiber sitzt am Weg (ADR-042)
+e = {"ground": "p", "prop": "res://world/props/decor.tscn", "params": {"cue": "puddle", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 12, "if": "house.mira_visited"}}
+t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_west", "sit": true, "face": "w", "if": "valley.antreiber_rests", "unless": "house.antreiber_by_fire"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhhh~hhhhhhhhhhhhh^^^hhhhhhhhhh
@@ -105,8 +108,8 @@ hhhh..T.................p,,........g..5SSsSsj..,.N...,.........Phhhh
 hhhhh...gg.C........mmm..,,............ssSSS4..,,..cz,..........hhhh
 hhhh.....g.........,,,,,,,,p.............~~~~....,..M...........hhhh
 hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......A...hhhh
-hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,p,m@mm.........hhhh
-..........,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
+hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,e,m@mm.........hhhh
+......t...,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
 .,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh
 XZV3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
 .......mmmm..,C..g............g...^^^^.....~~..^^.....g....^^^^^^hhh
