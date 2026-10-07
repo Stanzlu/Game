@@ -2,7 +2,7 @@
 ; Stein, Kind und Riss haben keinen Zwilling. Boden wie im Look-Prototyp (gleiche Kacheln).
 [meta]
 style = "elysia"
-ground = "res://assets/generated/maps/look_elysia_ground.png"
+ground = "res://assets/generated/maps/elysia_ground.png"
 water = "res://assets/generated/maps/look_elysia_water.png"
 scatter = [{"sprite": "elysia/grass_tuft", "on": ".", "spacing": 12, "jitter": 0, "pattern": "checker"}, {"sprite": "elysia/grass_tuft", "on": "f", "spacing": 16, "jitter": 0, "pattern": "checker"}, {"sprite": "elysia/wildflowers", "on": ".", "spacing": 24, "jitter": 0, "pattern": "grid", "offset": 12}, {"sprite": "elysia/reeds", "on": ".", "near": "~", "radius": 1, "spacing": 16, "jitter": 0, "pattern": "grid"}]
 ; Elysia ist spiegelsymmetrisch um Spalte 32 (Game Bible §9); Boden, Requisiten und Streu folgen.
