@@ -1,14 +1,20 @@
 # REAL – continuous integration.
 # Budget rule (ADR-009): Ubuntu runners only. Exports run on main, on manual
 # dispatch, on version tags, or when the head commit message contains "[export]" –
-# not on every push. A version tag (v*) also creates a draft playtest release
-# (ADR-044), which does not count towards the artifact storage.
+# not on every push. A version tag (v*) or a manual run with "release" ticked also
+# creates a draft playtest release (ADR-044), which does not count towards the
+# artifact storage.
 name: CI
 
 # Push runs also report their status on pull requests, so no separate PR trigger.
 on:
   push:
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Playtest-Release als Entwurf anlegen (Tag v<Version> aus project.godot)"
+        type: boolean
+        default: false
 
 # Separate groups per trigger: a manual export run must not cancel the push checks.
 concurrency:
@@ -88,13 +94,18 @@ jobs:
         run: tools/export.sh macos
 
       - name: Create draft playtest release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: tools/release.sh "${GITHUB_REF_NAME}"
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tools/release.sh "${GITHUB_REF_NAME}"
+          else
+            tools/release.sh "v$(sed -n 's/^config\/version="\(.*\)"$/\1/p' project.godot)"
+          fi
 
       - name: Upload Windows build
-        if: "!startsWith(github.ref, 'refs/tags/v')"
+        if: "!startsWith(github.ref, 'refs/tags/v') && !inputs.release"
         uses: actions/upload-artifact@v7
         with:
           name: REAL-windows
@@ -103,7 +114,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload macOS build
-        if: "!startsWith(github.ref, 'refs/tags/v')"
+        if: "!startsWith(github.ref, 'refs/tags/v') && !inputs.release"
         uses: actions/upload-artifact@v7
         with:
           name: REAL-macos

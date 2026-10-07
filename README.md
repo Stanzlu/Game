@@ -49,9 +49,11 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 
 ## Builds testen
 
-**Playtest-Builds** entstehen aus einem Versions-Tag: `git tag v0.5.0 && git push origin v0.5.0` (der Tag
-muss zu `config/version` in `project.godot` passen). CI baut dann Windows, macOS und Linux und legt unter
-**Releases** einen Entwurf an (`tools/release.sh`, ADR-044), den du prüfst und veröffentlichst.
+**Playtest-Builds:** GitHub → **Actions** → **CI** → **Run workflow** auf `main`, Häkchen bei
+„Playtest-Release als Entwurf anlegen“. Alternativ ein Versions-Tag (`git push origin v0.5.0`; er muss zu
+`config/version` in `project.godot` passen). CI baut dann Windows, macOS und Linux und legt unter
+**Releases** einen Entwurf an (`tools/release.sh`, ADR-044). Du prüfst ihn und veröffentlichst ihn;
+erst dann entsteht der Tag.
 
 Zwischenstände baut CI auf `main`, per manuellem Start oder wenn eine Commit-Nachricht `[export]`
 enthält. Download: GitHub → **Actions** → Lauf auswählen → **Artifacts** (2 Tage verfügbar). Die Builds

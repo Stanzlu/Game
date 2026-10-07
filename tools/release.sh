@@ -2,6 +2,8 @@
 # Packs the exported builds for testers and creates a DRAFT GitHub release (Phase 5, ADR-044).
 # Usage: tools/release.sh <tag>   (after tools/export.sh windows|macos|linux)
 # A draft is only visible to the repository's collaborators; the project owner publishes it.
+# Without an existing tag the draft points at the current commit and GitHub creates the tag
+# when the draft is published (manual CI run with "release").
 # RELEASE_DRY_RUN=1 only packs into build/release/ and prints what it would create.
 set -euo pipefail
 # shellcheck source=tools/godot_env.sh
@@ -66,6 +68,11 @@ if [ "${RELEASE_DRY_RUN:-0}" = "1" ]; then
   echo "release: dry run, would create draft ${tag} with ${#assets[@]} files"
   exit 0
 fi
+if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
+  target=(--verify-tag)
+else
+  target=(--target "${GITHUB_SHA:-$(git rev-parse HEAD)}")
+fi
 gh release create "$tag" "${assets[@]}" --draft --prerelease \
-  --title "Playtest ${tag}" --notes-file "$out/notes.md" --verify-tag
+  --title "Playtest ${tag}" --notes-file "$out/notes.md" "${target[@]}"
 echo "release: draft ${tag} created; publish it on GitHub when it is ready for testers"

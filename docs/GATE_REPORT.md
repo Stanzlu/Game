@@ -19,8 +19,8 @@ das Gate braucht.
 
 ## Build und Ablauf
 
-1. **Build:** Ein Tag `v0.5.0` auf `main` lässt CI Windows, macOS und Linux bauen und einen
-   **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt`.
+1. **Build:** Ein manueller CI-Lauf auf `main` mit „Release“ (oder ein Tag `v0.5.0`) lässt CI
+   Windows, macOS und Linux bauen und einen **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt`.
    Ein Entwurf ist nur für dich sichtbar. Du prüfst ihn und veröffentlichst ihn mit einem Klick.
    Erst dann kann jeder mit dem Link herunterladen; das Repository ist öffentlich.
 2. **Tester:** du und **mindestens vier Menschen**, die das Projekt nicht kennen, am besten gemischt
