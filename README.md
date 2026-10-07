@@ -82,6 +82,7 @@ sind nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
 | [`docs/PLACEHOLDERS.md`](docs/PLACEHOLDERS.md) | alle Platzhalter-Assets mit Lizenz |
 | [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md) | Abhängigkeiten, Versionen, Lizenzen |
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | bekannte Probleme |
+| [`docs/OFFENE_PUNKTE.md`](docs/OFFENE_PUNKTE.md) | alle ungelösten Punkte, sortiert nach „jetzt“, „Playtest“, „Full Production“ |
 | [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) | Budget-Vorschlag und Messwerte |
 | [`docs/PLAYTEST.md`](docs/PLAYTEST.md) | Testanleitung für alle Tester (Playtest-Gate) |
 | [`docs/GATE_REPORT.md`](docs/GATE_REPORT.md) | Phase 5: Gates, Risiken, Leistung, Platzhalter, nächste Schritte |

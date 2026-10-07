@@ -149,6 +149,7 @@ Jede Datei mit Quelle und Lizenz steht in [`PLACEHOLDERS.md`](PLACEHOLDERS.md).
 ## Nächste mögliche Schritte
 
 Nichts davon beginnt vor den Ergebnissen. Welcher Weg, entscheidest du nach der Auswertung.
+Alle ungelösten Punkte, die ein Weg mitnehmen muss, stehen gesammelt in `OFFENE_PUNKTE.md`.
 
 | Ergebnis | Weg | Inhalt |
 |---|---|---|
