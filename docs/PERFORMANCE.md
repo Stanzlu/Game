@@ -153,3 +153,27 @@ Beim ersten Lauf hatte das Tal einen einmaligen Hänger von 255 ms (Shader-Kompi
 Build-Größen aus CI (Zip): Windows rund 50 MB, macOS rund 71 MB. Offen bleibt die Messung auf dem
 Zielrechner mit v0.5.0 (Startmenü → Prototypen → Leistungstest, Spalte „ohne VSync“).
 
+## Zoom 1,25× überall (ADR-045, 07.10.)
+
+Der Container war an diesem Tag deutlich langsamer als am 06.10. (das Haus mit 11 Draw Calls: 37 statt
+22 ms). Deshalb steht hier ein Vergleich beider Stände in derselben Umgebung: Software-Rendering,
+Leistungstest im Fenster 1280×720, jeweils zweiter Lauf.
+
+| Szene | `main` (Zoom vorher) | Ø ms | Draw Calls | 1,25× | Ø ms | Draw Calls |
+|-------|----------------------|------|------------|-------|------|------------|
+| Elysia | 1× | 35,5 | 113 | 1,25× | 48,2 | 92 |
+| Tal | 1,5× | 40,8 | 78 | 1,25× | 43,2 | 106 |
+| Haus | 1,5× | 36,8 | 11 | 1,25× | 38,8 | 11 |
+| Weg | 1,5× | 40,9 | 60 | 1,25× | 40,5 | 85 |
+| Wald | 1× | 34,7 | 186 | 1,25× | 42,4 | 133 |
+
+- **Unverändert:** Szenen, die schon vorher gezoomt waren (Tal, Haus, Weg), bleiben gleich.
+- **Langsamer:** Elysia und Wald werden im Software-Rendering langsamer, obwohl weniger Draw Calls
+  anfallen. Bei nicht ganzzahligem Zoom wird das Weltbild linear statt nach dem nächsten Pixel
+  abgetastet, mit neun Zugriffen pro Bildpunkt (scharfe Abtastung und Bloom). Das kostet llvmpipe Zeit,
+  einer Grafikkarte erfahrungsgemäß nicht.
+- **Ausreißer:** Im zweiten Lauf mit 1,25× hatten Elysia und Wald einzelne Frames bis 240 ms, `main`
+  nicht. Die Ursache ist offen, vermutlich Last im Container; im Playtest beobachten
+  (KNOWN_ISSUES #53).
+- **Offen:** Die Messung auf dem Mac.
+

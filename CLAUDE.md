@@ -35,8 +35,8 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops), `make_nature.py` (Wirklichkeit:
   Soundscapes in `content/audio`, ADR-034), `make_ambience.py` (Elysias Garten); Titel: `tools/art/make_title.py`.
   UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).
-- Zoom pro Szene (`view_zoom`): Elysia 1×, Wirklichkeit 1,5×, scharf abgetastet; Tiefen-Bogen (Dunst, `Backdrop`,
-  `ForegroundFoliage`) nur in der Wirklichkeit (ADR-043). Welt→UI über `GameView.world_to_ui`.
+- Zoom `view_zoom` überall 1,25×, scharf abgetastet (ADR-045); Tiefen-Bogen (Dunst, `Backdrop`) nur in der
+  Wirklichkeit (ADR-043). Welt→UI über `GameView.world_to_ui`. Waldränder der Wirklichkeit aus Kronen, nie Raster.
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne

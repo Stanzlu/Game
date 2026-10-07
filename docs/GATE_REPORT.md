@@ -1,6 +1,6 @@
 # Phase 5: Playtest-Gate
 
-Stand 06.10. · Build **v0.5.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044.
+Stand 06.10. · Build **v0.5.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045.
 
 Der Vertical Slice ist technisch fertig. Ab hier gilt: **STOP.** Kein Inhalt über den Slice hinaus,
 bis Playtest-Ergebnisse vorliegen (Bible §57, Master-Prompt §47). Dieses Dokument bündelt alles, was
@@ -23,8 +23,8 @@ das Gate braucht.
    **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt`.
    Ein Entwurf ist nur für dich sichtbar. Du prüfst ihn und veröffentlichst ihn mit einem Klick.
    Erst dann kann jeder mit dem Link herunterladen; das Repository ist öffentlich.
-2. **Tester:** Vorschlag: **du und drei bis fünf Menschen**, die das Projekt nicht kennen, am besten
-   gemischt (spielt viel / spielt selten). Sie bekommen den Release-Link und `PLAYTEST.md`, sonst nichts.
+2. **Tester:** du und **mindestens vier Menschen**, die das Projekt nicht kennen, am besten gemischt
+   (spielt viel / spielt selten). Sie bekommen den Release-Link und `PLAYTEST.md`, sonst nichts.
 3. **Zurück kommen:** Antworten auf die 15 Fragen und die Log-Datei. Das Log enthält die Minute jedes
    Abschnitts, jetzt auch in Release-Builds (`Log.record`, ADR-044). Vorher fehlten diese Zeilen ohne
    `--log-debug` (KNOWN_ISSUES #54).
@@ -34,26 +34,51 @@ das Gate braucht.
 
 Klasse **M** (Mechanik, Erzählung) ist mit Platzhaltern aussagekräftig. Klasse **Ä** (Ästhetik) hängt an
 Grafik und Ton und wird mit Platzhaltern nur geschätzt (Pre-Implementation Review, B1.1).
-Die Schwellen sind ein **Vorschlag**; du entscheidest sie vor der Auswertung.
+Die Schwellen sind **festgelegt** (vom Projektinhaber an Claude übertragen, 06.10., ADR-045) und
+gelten vor jeder Auswertung, damit das Ergebnis nicht nachträglich zurechtgelegt wird.
 
-| Gate (Bible §57) | Klasse | Fragen in `PLAYTEST.md` | Erfüllt, wenn (Vorschlag) | Was der Slice dafür tut |
+**Zählweise:** Für jeden Tester wird jedes Gate aus seinen Antworten mit **ja**, **teils** oder
+**nein** bewertet. Maßgeblich ist die Regel in der Spalte „Ja, wenn“. Gezählt werden die Tester, die das
+Projekt nicht kennen; die eigene Runde des Projektinhabers wird getrennt notiert (Autorenblick).
+
+| Gate (Bible §57) | Klasse | Fragen in `PLAYTEST.md` | Ja, wenn der Tester … | Was der Slice dafür tut |
 |---|---|---|---|---|
-| **Movement:** gern unterwegs | M | 8, Technik | Mehrheit beschreibt das Laufen positiv oder neutral, niemand nennt die Steuerung als Hindernis | Beschleunigung, Rennen, Ecken-Ausweichen, weiche Kamera, Schritte je Untergrund |
-| **Elysia:** zunächst attraktiv | Ä | 1, 10 | Mehrheit fand die ersten Minuten angenehm, bevor es kippte | Belohnungen, Level-ups, Lob, Gold, Musik, Symmetrie |
-| **Mystery:** etwas stimmt nicht, unerklärt | M | 2, 6, 12 | Mehrheit nennt einen konkreten Auslöser vor dem Riss, niemand empfindet es als erklärt | Wiederholungen, kein Spiegelbild, Stein ohne Zwilling, das Kind |
-| **Mira:** mehr über sie wissen | M | 4, 5, 14 | Mehrheit beschreibt sie als eigene Person und hat eine Vermutung, was sie will | eigenes Nein, eigene Ziele, Abendgespräch mit Erinnerungen |
-| **Transition:** substanzieller Wechsel | M/Ä | 3, 10 | Mehrheit beschreibt den Verlust der Anzeigen als spürbar (nicht nur bemerkt) | UI zerfällt einzeln, Stille, Regen, Zoom und Tiefe (ADR-043) |
-| **Encounter:** Optimierung ist nicht alles | M | 7 | Mehrheit nennt „stehen bleiben“ oder Ähnliches als verstanden, nicht als Zufall | Weg wächst beim Rennen, Hinweise (Bänke, Frösche, Stocken) |
-| **Emotion:** ein Moment bleibt | M/Ä | 10 | Mehrheit nennt spontan einen Moment | Feuer, Abend an Miras Feuer, Blick zu den Bergen, Katze |
-| **Humor:** ein wiederkehrendes Element trägt | M | 9 | Mindestens ein Element wird von mehreren genannt | Elysias Übertreibung, Ziege, Kartoffel, „Ein Kompliment, legendär“ |
-| **Desire:** „Ich möchte wissen, wie es weitergeht“ | M | 14, 15 | **Pflicht:** Mehrheit würde freiwillig weiterspielen und kann sagen, warum | der ganze Bogen, offenes Ende „Zum Meer.“ |
+| **Movement:** gern unterwegs | M | 8, Technik | das Laufen positiv oder neutral beschreibt und die Steuerung nicht als Hindernis nennt | Beschleunigung, Rennen, Ecken-Ausweichen, weiche Kamera, Schritte je Untergrund |
+| **Elysia:** zunächst attraktiv | Ä | 1, 10 | die ersten Minuten in Elysia als angenehm oder verlockend beschreibt, bevor es kippte | Belohnungen, Level-ups, Lob, Gold, Musik, Symmetrie |
+| **Mystery:** etwas stimmt nicht, unerklärt | M | 2, 6, 12 | einen konkreten Auslöser vor dem Riss nennt und es nicht als „erklärt“ empfand | Wiederholungen, kein Spiegelbild, Stein ohne Zwilling, das Kind |
+| **Mira:** mehr über sie wissen | M | 4, 5, 14 | sie als eigene Person beschreibt und eine Vermutung hat, was sie will | eigenes Nein, eigene Ziele, Abendgespräch mit Erinnerungen |
+| **Transition:** substanzieller Wechsel | M/Ä | 3, 10 | den Verlust der Anzeigen als Gefühl beschreibt (nicht nur „ist weg“) | UI zerfällt einzeln, Stille, Regen, Dunst und Berge (ADR-043) |
+| **Encounter:** Optimierung ist nicht alles | M | 7 | „stehen bleiben“ (oder Ähnliches) als Lösung nennt und sie verständlich fand | Weg wächst beim Rennen, Hinweise (Bänke, Frösche, Stocken) |
+| **Emotion:** ein Moment bleibt | M/Ä | 10 | spontan einen bestimmten Moment nennt | Feuer, Abend an Miras Feuer, Blick zu den Bergen, Katze |
+| **Humor:** ein wiederkehrendes Element trägt | M | 9 | etwas Lustiges nennt; das Gate ist erfüllt, wenn mindestens ein Element von zwei oder mehr Testern genannt wird | Elysias Übertreibung, Ziege, Kartoffel, „Ein Kompliment, legendär“ |
+| **Desire:** „Ich möchte wissen, wie es weitergeht“ | M | 14, 15 | freiwillig weiterspielen würde und einen Grund aus der Geschichte oder Welt nennt (nicht nur „sieht gut aus“) | der ganze Bogen, offenes Ende „Zum Meer.“ |
 
-Zusätzlich gemessen: **Spielzeit** aus dem Log (Ziel 45–60 Minuten, geschätzt 30–50; KNOWN_ISSUES #43)
-und **Hänger** (Frage 13): Wo brauchten Tester länger als drei Minuten oder die Hilfe?
+**Ein Gate ist**
+- **erfüllt**, wenn mindestens zwei Drittel der Tester **ja** sagen (bei 4 Testern: 3, bei 5: 4,
+  bei 6: 4)
+- **verfehlt**, wenn weniger als ein Drittel **ja** sagt
+- dazwischen **wackelt** es
 
-**Lesart nach Bible §57:** Fehlt Desire, wird nicht einfach Content produziert, sondern der Slice
-verbessert. Bestehen die M-Gates und wackeln nur die Ä-Gates, ist das eine Frage an Art und Ton, also
-an Budget und Zeit, nicht an die Struktur.
+**Gesamturteil:**
+
+| Urteil | Bedingung | Folge |
+|---|---|---|
+| **Bestanden** | Desire erfüllt; Movement, Mystery, Mira und Encounter erfüllt (höchstens eines wackelt); kein M-Gate verfehlt | Vorproduktion (nächste Schritte) |
+| **Verbessern** | Desire wackelt, oder ein M-Gate ist verfehlt | die betroffenen Gates gezielt verbessern, dann Kurz-Playtest mit neuen Testern |
+| **Nicht bestanden** | Desire verfehlt | kein neuer Inhalt; der Slice wird überarbeitet (Bible §57) |
+
+Die Ä-Gates (Elysia, Anteile von Transition und Emotion) dürfen mit Platzhaltern wackeln. Verfehlt
+eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
+
+**Zusätzlich gemessen:**
+- **Spielzeit** aus dem Log: Ziel 45–60 Minuten, geschätzt 30–50 (KNOWN_ISSUES #43). Liegt der Median
+  unter 35 Minuten, wird vertieft (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“), auch wenn alles
+  andere besteht.
+- **Hänger** (Frage 13): Jede Stelle, an der zwei oder mehr Tester länger als drei Minuten brauchten
+  oder die Hilfe öffneten, wird vor dem nächsten Test entschärft.
+- **Technik:** Jeder Absturz wird vor dem nächsten Test behoben.
+- **Tester:** mindestens vier Menschen, die das Projekt nicht kennen, gemischt (spielt viel / spielt
+  selten). Weniger als vier ergeben kein Urteil, nur Hinweise.
 
 ## Technische Risiken
 
@@ -83,8 +108,14 @@ an Budget und Zeit, nicht an die Struktur.
 | Speichern | unter 100 ms | 0,5–1,5 ms |
 | Build-Größe | unter 200 MB | Windows rund 50 MB (Zip), macOS rund 71 MB (Zip) |
 
-Mit dem Zoom (ADR-043) ist weniger Welt im Bild (Tal: 78 Draw Calls). Berge und Kronen zeichnen nur
-neu, wenn sie zu sehen sind.
+Die Tabelle ist mit Zoom 1,5× gemessen. Für 1,25× (ADR-045) gibt es am 07.10. einen Vergleich in
+derselben Umgebung (`PERFORMANCE.md`):
+- Tal, Haus und Weg bleiben gleich.
+- Elysia und Wald (vorher 1×) sind im Software-Rendering rund 25 % langsamer, weil die Welt jetzt
+  linear und scharf abgetastet wird.
+- Auf Grafikkarten ist das erfahrungsgemäß vernachlässigbar. Die Messung auf dem Mac steht aus.
+
+Die Berge zeichnen nur neu, wenn sie zu sehen sind.
 
 ## Platzhalter
 
@@ -112,7 +143,7 @@ Jede Datei mit Quelle und Lizenz steht in [`PLACEHOLDERS.md`](PLACEHOLDERS.md).
 | 43 | Spielzeit ungemessen | möglicherweise unter 45 Minuten |
 | 47 | Texte sind Entwürfe | einzelne Zeilen klingen falsch |
 | 46, 34, 29 | Klänge synthetisch | Katze, Ziege und Tür können künstlich wirken |
-| 51, 52 | Berge, Kronen, Zoom | zu hell, zu blass oder zu wenig Überblick |
+| 51 | Berge prozedural | am Abend zu hell oder zu glatt |
 | 53 | Shader-Kompilierung | ein kurzer Hänger beim ersten Betreten eines Ortes |
 
 ## Nächste mögliche Schritte
