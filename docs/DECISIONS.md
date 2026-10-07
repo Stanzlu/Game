@@ -381,4 +381,10 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - Die gebackenen Böden von Tal, Weg, Look-Tal und Wald sind neu erzeugt.
   - Die Kollision bleibt zellengenau; an Waldrändern kann die Figur einige Pixel vor den Kronen stehen bleiben, wie am Ufer (KNOWN_ISSUES #15).
   - Berechtigung: Der Projektinhaber erlaubt künftig Pull, Commit und Merge ohne Rückfrage.
+- **Nachtrag 07.10.** Der Projektinhaber markierte im Abendbild drei weitere unnatürliche Stellen:
+  - **Waldkante vor den Bergen:** Die Oberkante war ein Lineal. Jetzt gibt es eine eigene, mit dem Laub des Waldes gebackene Baumgrenze (`[meta] treeline`, `bake_ground.py`): Kronen verschiedener Größe, einzelne höhere Bäume, 32 Pixel über und unter dem Kartenrand, vor den ersten Kartenreihen. Die runden Kronen und die ferne Baumreihe des Hintergrunds entfallen.
+  - **Bachursprung:** Der Bach begann mitten im Wald, daneben standen Stämme im Wasser wie Pfosten. Jetzt kommt er vom Kartenrand unter den Bäumen hervor, und über Wasser werden keine Stämme mehr gemalt.
+  - **Felsstufen:** Sie endeten gerade im Wald. Jetzt hängen Kronen bis zu 7 Pixel über ihre Kante. Felsstücke unter drei Zellen Breite werden Wald oder Wiese (`layout_slice_maps.py`).
+
+  Elysia bleibt bitgenau gleich.
 
