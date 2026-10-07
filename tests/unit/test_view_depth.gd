@@ -183,3 +183,26 @@ func test_the_backdrop_is_only_drawn_while_in_view() -> void:
 	tal.view.follow(tal.player)
 	await wait_seconds(0.3)
 	assert_true(tal.backdrop.is_in_view(), "at the northern edge the sky shows")
+
+
+func test_the_forest_ends_in_a_baked_treeline() -> void:
+	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	var tal: TalScene = TAL.instantiate()
+	add_child_autofree(tal)
+	await wait_physics_frames(3)
+	assert_not_null(tal.treeline, "a silhouette of crowns, not the map's border")
+	var top := tal.map.world_rect().position.y
+	assert_eq(tal.treeline.position.y, top - LookScene.TREELINE_ABOVE)
+	assert_gt(tal.treeline.z_index, -10, "in front of the ground's first rows")
+	assert_eq(tal.treeline.texture.get_width(), int(tal.map.world_rect().size.x), "full width")
+
+
+func test_the_stream_comes_from_beyond_the_forest() -> void:
+	var path := "res://content/maps/tal.txt"
+	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
+	var data := MapData.parse(FileAccess.get_file_as_string(path), legend, path)
+	var water := 0
+	for x in data.width:
+		if data.surface_at_cell(Vector2i(x, 0)) == &"water":
+			water += 1
+	assert_gt(water, 0, "the stream reaches the map's northern edge")

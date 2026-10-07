@@ -8,6 +8,8 @@ enum Weather { CLEAR, RAIN }
 
 const GRADE_SHADER := preload("res://world/shaders/grade.gdshader")
 const CLOUD_DIR := "res://assets/generated/props/elysia/"
+## World pixels the baked treeline strip reaches above the map (tools/art/bake_ground.py).
+const TREELINE_ABOVE := 32
 
 @export_group("Atmosphere")
 @export var weather := Weather.CLEAR
@@ -73,6 +75,7 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 var glow_layer: CanvasLayer
 var day_light: DayLight
 var backdrop: Backdrop
+var treeline: Sprite2D
 
 
 func _build_world() -> void:
@@ -161,6 +164,27 @@ func _add_depth() -> void:
 		backdrop.setup(view, map.world_rect(), backdrop_reach)
 		backdrop.parallax = moving
 		view.bounds = view.bounds.grow_side(SIDE_TOP, backdrop_reach)
+	_add_treeline()
+
+
+## The forest's top edge as the backdrop's foreground (ADR-045): a strip baked with the
+## forest's own foliage (`[meta] treeline`), in front of the map's first rows, so the forest
+## ends in a silhouette against the sky and the stream flows out from under the trees.
+func _add_treeline() -> void:
+	var path := str(map.data.meta.get("treeline", ""))
+	if path.is_empty():
+		return
+	var texture := load(path) as Texture2D
+	if texture == null:
+		Log.error(Log.Category.CONTENT, "treeline missing", {"path": path})
+		return
+	treeline = Sprite2D.new()
+	treeline.name = "Treeline"
+	treeline.texture = texture
+	treeline.centered = false
+	treeline.z_index = -9
+	treeline.position = map.world_rect().position - Vector2(0, TREELINE_ABOVE)
+	view.world_root.add_child(treeline)
 
 
 func _setup_day_light() -> void:

@@ -20,7 +20,6 @@ const SKY_BOTTOM := Color("#efd9c0")
 const MIST := Color("#c3cdd0")
 const SNOW := Color("#f2efe8")
 const SNOW_SHADE := Color("#b6c3d4")
-const CANOPY := [Color("#132e20"), Color("#1d4028"), Color("#2c5c30")]
 const STEP := 3.0
 ## Wiggles of the crest smaller than this (px) do not make a face of their own.
 const FACE_MIN := 6.0
@@ -40,7 +39,6 @@ var parallax := true
 var _profiles: Array[PackedFloat32Array] = []
 ## Per range: the columns where the crest turns (valleys and peaks, alternating).
 var _turns: Array[PackedInt32Array] = []
-var _canopy: Array[Vector3] = []
 var _last_camera := Vector2.INF
 var _showing := true
 
@@ -77,12 +75,6 @@ func setup(game_view: GameView, map_rect: Rect2, reach_px := 128.0) -> void:
 			heights.append(float(ridge[1]) + float(ridge[2]) * (2.0 * n - 1.0))
 		_profiles.append(heights)
 		_turns.append(turns(heights, FACE_MIN))
-	# the treeline: crowns of the forest at the map's top edge, fixed to the ground
-	var x := -8.0
-	while x < width + 8.0:
-		var radius := rng.randf_range(6.0, 11.0)
-		_canopy.append(Vector3(x, top_y + rng.randf_range(1.0, 5.0), radius))
-		x += rng.randf_range(radius * 0.8, radius * 1.4)
 
 
 ## Smooth 1D value noise over `knots` (0..1) at position `t` (in knot spacings).
@@ -153,17 +145,10 @@ func _draw() -> void:
 	)
 	for r in RIDGES.size():
 		_draw_ridge(r, cam, left, right)
-	# mist in front of the mountains, behind the trees
+	# mist in front of the mountains; the treeline in front of it is part of the map
 	if clear < 1.0:
 		var mist := Color(MIST, (1.0 - clear) * 0.92)
 		draw_rect(Rect2(left, sky_top, right - left, reach + 8.0), mist)
-	for crown in _canopy:
-		var c := Vector2(crown.x, crown.y)
-		if c.x < left - crown.z or c.x > right + crown.z:
-			continue
-		draw_circle(c.round(), crown.z, CANOPY[0])
-		draw_circle((c + Vector2(-1, -2)).round(), crown.z * 0.7, CANOPY[1])
-		draw_circle((c + Vector2(-2, -4)).round(), crown.z * 0.35, CANOPY[2])
 
 
 ## One mountain range: far ranges barely move with the camera (they are far away).
