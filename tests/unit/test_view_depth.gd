@@ -1,8 +1,8 @@
 extends GutTest
-## Zoom and the depth arc (ADR-043): the real world is drawn larger than Elysia and stays
-## crisp at any window size; Elysia is a flat picture, the valley gets haze, mountains
-## beyond the treeline that the rain hides, leaves in front, and Mira's look to the
-## mountains at the end.
+## Zoom and the depth arc (ADR-043, ADR-045): every place is drawn a little closer (1.25)
+## and stays crisp at any window size; Elysia is a flat picture, the valley gets haze,
+## mountains beyond the treeline that the rain hides, and Mira's look to the mountains at
+## the end.
 
 const TAL := preload("res://world/levels/slice/tal.tscn")
 const HAUS := preload("res://world/levels/slice/haus.tscn")
@@ -78,23 +78,25 @@ func test_world_positions_map_to_the_ui() -> void:
 	)
 
 
-func test_the_real_world_is_closer_than_elysia() -> void:
-	var elysia: LookScene = ELYSIA.instantiate()
-	add_child_autofree(elysia)
-	await wait_physics_frames(2)
-	assert_eq(elysia.view.zoom, 1.0, "Elysia is wide and flat")
-	assert_null(elysia.backdrop, "a picture has no distance")
-	assert_null(elysia.foreground)
-	elysia.queue_free()
-	await wait_physics_frames(1)
-	WorldState.set_ui_mode(GameState.UiMode.REAL)
-	for packed: PackedScene in [TAL, HAUS]:
+func test_every_place_is_seen_a_little_closer() -> void:
+	for packed: PackedScene in [ELYSIA, TAL, HAUS]:
+		if packed != ELYSIA:
+			WorldState.set_ui_mode(GameState.UiMode.REAL)
 		var scene: GameScene = packed.instantiate()
 		add_child_autofree(scene)
 		await wait_physics_frames(2)
-		assert_eq(scene.view.zoom, 1.5, scene.name)
+		assert_eq(scene.view.zoom, 1.25, scene.name)
+		assert_eq(scene.view.view_size, Vector2i(512, 288), "640x360 / 1.25")
 		scene.queue_free()
 		await wait_physics_frames(1)
+
+
+func test_elysia_is_a_flat_picture() -> void:
+	var elysia: LookScene = ELYSIA.instantiate()
+	add_child_autofree(elysia)
+	await wait_physics_frames(2)
+	assert_null(elysia.backdrop, "a picture has no distance")
+	assert_eq(elysia.depth_haze, 0.0, "no haze")
 
 
 func test_the_camera_can_look_above_the_valley() -> void:
@@ -103,7 +105,6 @@ func test_the_camera_can_look_above_the_valley() -> void:
 	add_child_autofree(tal)
 	await wait_physics_frames(3)
 	assert_not_null(tal.backdrop)
-	assert_not_null(tal.foreground)
 	var map_top := tal.map.world_rect().position.y
 	assert_eq(tal.view.bounds.position.y, map_top - tal.backdrop_reach, "sky above the map")
 	assert_eq(tal.backdrop.get_index(), 0, "behind everything in the world")
@@ -143,22 +144,6 @@ func test_far_ranges_move_less_than_near_ones() -> void:
 		last = factor
 
 
-func test_leaves_in_front_move_faster_than_the_ground() -> void:
-	WorldState.set_ui_mode(GameState.UiMode.REAL)
-	var tal: TalScene = TAL.instantiate()
-	add_child_autofree(tal)
-	await wait_physics_frames(3)
-	var leaves := tal.foreground
-	var bottom := tal.map.world_rect().end.y
-	var rest := Vector2(200, bottom - ForegroundFoliage.RISE)
-	var down := Vector2(200, bottom - tal.view.view_size.y * 0.5)
-	assert_eq(leaves.position_for(rest, down), rest, "in place with the camera all the way down")
-	var up := leaves.position_for(rest, down - Vector2(0, 100))
-	assert_almost_eq(up.y - rest.y, 100.0 * (ForegroundFoliage.FACTOR - 1.0), 0.01, "leave first")
-	leaves.parallax = false
-	assert_eq(leaves.position_for(rest, down - Vector2(0, 100)), rest, "fixed without parallax")
-
-
 func test_parallax_can_be_turned_off() -> void:
 	assert_true(Settings.get_bool("display.parallax"), "on by default")
 	Settings.set_value("display.parallax", false, false)
@@ -167,7 +152,6 @@ func test_parallax_can_be_turned_off() -> void:
 	add_child_autofree(tal)
 	await wait_physics_frames(3)
 	assert_false(tal.backdrop.parallax)
-	assert_false(tal.foreground.parallax)
 
 
 func test_mira_looks_to_the_mountains_and_the_camera_follows() -> void:

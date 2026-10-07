@@ -25,9 +25,9 @@ const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
 ## previous one out.
 @export var ambience: Resource
 @export var ambience_db := -6.0
-## How close the camera is (ADR-043): 1 = Elysia's wide, flat picture; the real world is
-## seen from closer (1.5), so its places feel bigger and its people nearer.
-@export_range(1.0, 3.0, 0.25) var view_zoom := 1.0
+## How close the camera is (ADR-043, ADR-045): every place is seen a little closer than the
+## 640x360 picture (1.25), so places feel bigger and people nearer without losing the overview.
+@export_range(1.0, 3.0, 0.25) var view_zoom := 1.25
 
 var view: GameView
 var map: MapView
