@@ -62,7 +62,7 @@ mehr Tiefe hat es; das Mittel ist nie Perspektive, sondern Ebenen, Dunst und Kam
 | Zoom | Überall 1,25× (ADR-045): die Figur näher, die Welt größer, ohne den Überblick zu verlieren. |
 | Dunst | Nur in der Wirklichkeit: nach oben im Bild leicht heller und in der Farbe der Luft (Regen kühl, Abend warm, Nacht blau). Nie so stark, dass Wege verschwimmen. |
 | Hintergrund | Über der nördlichen Baumgrenze Himmel und drei Bergketten, die fernste mit Schnee. Flanken zur Sonne (links) warm, die anderen kühl wie der Himmel, flache Facetten statt Rauschen. Jede Kette verschwimmt am Fuß im Dunst. Im Regen fast ganz im Nebel, am Abend im Alpenglühen. Ferne Ketten bewegen sich kaum mit (Parallaxe 0,16 bis 0,48). |
-| Waldrand | In der Wirklichkeit wächst der Wald: Der Rand zur Wiese ist eine Reihe Kronen mit Buchten und Ausbuchtungen, darunter Wiese und ein weicher Schatten, der dem Umriss folgt; nie eine gerade Linie entlang der Kacheln (ADR-045). Elysias Hecken sind geschnitten. |
+| Waldrand | In der Wirklichkeit wächst der Wald: Der Rand zur Wiese ist eine Reihe Kronen mit Buchten und Ausbuchtungen, darunter Wiese und ein weicher Schatten, der dem Umriss folgt; nie eine gerade Linie entlang der Kacheln. Gegen den Himmel endet er in einer gebackenen Baumgrenze aus demselben Laub, Bäche kommen unter den Kronen hervor, Kronen hängen über Felsstufen, keine Stämme im Wasser (ADR-045). Elysias Hecken sind geschnitten. |
 | Schwenk | Einmal im Slice: Wenn Mira am Ende zu den Bergen schaut, schaut die Kamera mit (5 Sekunden, weich). Die Sonnenstrahlen treten dabei zurück, sie gehören zur Wiese. |
 
 ## Referenzen

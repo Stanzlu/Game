@@ -239,8 +239,13 @@ class Baker:
         self._edges(is_)
         self._meadow(is_["grass"])
         self._grass_clumps(is_["grass"])
-        self._hedge(lab)
-        self._cliff(lab)
+        if self.wild:
+            # rocks first, so the crowns of the trees on top can hang over their edges
+            self._cliff(lab)
+            self._hedge(lab)
+        else:
+            self._hedge(lab)
+            self._cliff(lab)
         if self.axis is not None:
             deep = self._mirror(deep)
         self._prop_shadows()
@@ -659,7 +664,11 @@ class Baker:
         if not hd.any():
             return
         reach = pa.box_blur(hd.astype(np.float32), 5) + centered(self.noise(5)) * 0.2
-        clip = (hd | (reach > 0.12)) & (lab != M["void"]) & (lab != M["cliff"]) & (lab != M["fall"])
+        rock = lab == M["cliff"]
+        if self.wild:
+            # trees standing at a rock step lean over its edge; the face below stays open
+            rock = rock & ~near(hd, 7)
+        clip = (hd | (reach > 0.12)) & (lab != M["void"]) & ~rock & (lab != M["fall"])
         trees = []
         for cy in range(-6, self.h + 6, 17):
             for cx in range(-6, self.w + 6, 17):
@@ -718,7 +727,11 @@ class Baker:
         for y, x, r, _ in trees:
             probe_y = int(y + r + 3)
             ix = int(np.clip(x, 0, self.w - 1))
-            if probe_y >= self.h or hd[probe_y, ix] or self.lab[probe_y, ix] in (M["void"], M["cliff"]):
+            below = self.lab[probe_y, ix] if probe_y < self.h else M["void"]
+            # no trunks standing in the stream or on rock (they read as posts)
+            if probe_y >= self.h or hd[probe_y, ix] or below in (M["void"], M["cliff"]):
+                continue
+            if self.wild and below in (M["water"], M["fall"], M["puddle"]):
                 continue
             tw = 4 if r < 13 else 5
             for yy in range(int(y + r * 0.4), min(int(y + r + 5), self.h)):
@@ -838,6 +851,46 @@ class Baker:
         self.idx[foot1] = np.maximum(self.idx[foot1] - 1, 0)
 
 
+# The treeline strip (ADR-045): world pixels above and below the map's top edge.
+TREELINE_ABOVE = 32
+TREELINE_BELOW = 32
+
+
+def bake_treeline(baker):
+    """The forest's top edge as a strip in front of the map's first rows: crowns of the same
+    foliage as the map's forest, of different sizes and some standing tall, so the edge against
+    the sky is a silhouette and not the map's border. Where the stream leaves the map it
+    flows out from under them."""
+    h, w = TREELINE_ABOVE + TREELINE_BELOW, baker.w
+    rng = np.random.default_rng(431)
+    value = np.zeros((h, w), np.float32)
+    alpha = np.zeros((h, w), bool)
+    x = -8.0
+    while x < w + 8:
+        r = rng.uniform(10.0, 15.0)
+        if rng.random() < 0.14:
+            r = rng.uniform(16.0, 19.0)
+        cy = TREELINE_ABOVE + 6 + rng.uniform(-2, 4) - (r - 12.0) * 0.5
+        tone = rng.uniform(-0.12, 0.1)
+        y0, y1 = int(max(cy - r - 6, 0)), int(min(cy + r + 6, h))
+        x0, x1 = int(max(x - r - 6, 0)), int(min(x + r + 6, w))
+        if x1 > x0:
+            blobs = [(cy - y0, x - x0, r * 0.62)]
+            for k in range(7):
+                a = k / 7 * 2 * np.pi + rng.uniform(-0.3, 0.3)
+                d = r * rng.uniform(0.35, 0.62)
+                blobs.append((cy - y0 + np.sin(a) * d * 0.85, x - x0 + np.cos(a) * d, r * rng.uniform(0.38, 0.5)))
+            a_loc, v_loc = pa.render_foliage((y1 - y0, x1 - x0), blobs, rng, small=(3.0, 4.6))
+            sub_v, sub_a = value[y0:y1, x0:x1], alpha[y0:y1, x0:x1]
+            sub_v[a_loc] = np.clip(v_loc[a_loc] + tone, 0, 1)
+            sub_a |= a_loc
+        x += rng.uniform(r * 0.75, r * 1.2)
+    ramp = np.array(baker.style["foliage"], np.float32)
+    idx = pa.quantize(value, len(ramp), 3.0, dither=False)
+    rgb = ramp[np.clip(idx, 0, len(ramp) - 1)]
+    return np.concatenate([rgb, (alpha * 255.0)[..., None]], -1)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("map")
@@ -852,6 +905,8 @@ def main():
     pa.save_rgba(res_path(meta["ground"]), ground)
     if "water" in meta:
         pa.save_rgba(res_path(meta["water"]), water)
+    if "treeline" in meta:
+        pa.save_rgba(res_path(meta["treeline"]), bake_treeline(baker))
     print("baked %s -> %s (%dx%d)" % (args.map, meta["ground"], baker.w, baker.h))
     if args.preview_dir:
         from PIL import Image

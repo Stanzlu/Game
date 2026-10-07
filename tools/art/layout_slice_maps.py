@@ -31,6 +31,7 @@ LOG_ROW = 7
 def tal():
     w, h = 68, 38
     g = Grid(w, h)
+    north_rock = set()
     for x in range(w):
         north = 2 + round(1.0 + wobble(x, (1.0, 3.3, 0.0), (0.7, 1.9, 1.0), (0.6, 7.1, 2.0)))
         south = 2 + round(0.6 + wobble(x, (0.8, 2.9, 0.5), (0.5, 5.3, 1.7)))
@@ -41,6 +42,7 @@ def tal():
         rock = round(1.3 + wobble(x, (0.9, 2.3, 0.4), (0.6, 4.1, 1.3)))
         for y in range(north, north + max(rock, 0)):
             g.set(x, y, "^")
+            north_rock.add((x, y))
     for y in range(h):
         west = 3 + round(0.4 + wobble(y, (1.1, 2.6, 0.3), (0.8, 4.7, 2.2), (0.4, 1.3, 0.9)))
         east = 3 + round(0.3 + wobble(y, (1.0, 3.1, 1.1), (0.7, 5.9, 0.2)))
@@ -53,11 +55,24 @@ def tal():
         for x in range(0, 6):
             if g.get(x, y) == "h" and abs(y - 24.8) < 2.3:
                 g.set(x, y, ".")
-    # the stream, as in the look prototype
-    stream = [(41, 2), (42.5, 6), (41.5, 9.5), (39.5, 13), (40.5, 17), (42.5, 20.5), (42.5, 23),
-              (43.5, 26), (44.5, 30), (45.5, 38)]
-    widths = [2.2, 2.4, 2.8, 3.4, 3.4, 3.2, 3.2, 2.6, 2.9, 3.3]
+    # the stream, as in the look prototype; it comes from beyond the northern forest (the
+    # mountains), so it starts at the map's edge, not somewhere in the trees
+    stream = [(41, 0), (41, 2), (42.5, 6), (41.5, 9.5), (39.5, 13), (40.5, 17), (42.5, 20.5),
+              (42.5, 23), (43.5, 26), (44.5, 30), (45.5, 38)]
+    widths = [2.0, 2.2, 2.4, 2.8, 3.4, 3.4, 3.2, 3.2, 2.6, 2.9, 3.3]
     g.path(stream, 3.0, "~", only=".^h", widths=widths)
+    # rock steps narrower than three cells read as posts: forest where they hang below the
+    # trees, meadow where they stand in the open
+    for y in range(h):
+        run = []
+        for x in range(w + 1):
+            if x < w and (x, y) in north_rock and g.get(x, y) == "^":
+                run.append(x)
+                continue
+            if 0 < len(run) < 3:
+                for rx in run:
+                    g.set(rx, y, "h" if y > 0 and g.get(rx, y - 1) == "h" else ".")
+            run = []
     g.ellipse(38.6, 14.2, 2.6, 1.9, "~", only=".", wobble=0.6, seed=4)
     # wet ground and mud
     g.ellipse(22, 20.5, 4.2, 1.6, "m", only=".", wobble=0.7, seed=1)

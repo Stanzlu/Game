@@ -6,6 +6,7 @@
 style = "tal"
 ground = "res://assets/generated/maps/tal_ground.png"
 water = "res://assets/generated/maps/tal_water.png"
+treeline = "res://assets/generated/maps/tal_treeline.png"
 scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.55, "spacing": 11}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TPC", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPCh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TPC", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
 [legend]
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
@@ -86,14 +87,14 @@ o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": 
 e = {"ground": "p", "prop": "res://world/props/decor.tscn", "params": {"cue": "puddle", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 12, "if": "house.mira_visited"}}
 t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_west", "sit": true, "face": "w", "if": "valley.antreiber_rests", "unless": "house.antreiber_by_fire"}}
 [map]
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhhh~hhhhhhhhhhhhh^^^hhhhhhhhhh
-hhhhhhhhhhhhhh^^^^^^^^hhhhhhhhh^^^hhhhhh~~~hhhhhhhhhh^^..^^^hhhhhhhh
-hhhhhhh^^....^......^.^^hhhhh^^^^^^^^....~~^hhhhhhhh^.....^^^^^hhhhh
-hhhh^^^.................^^^^^^^...^......~~~^^hhhh^^........^^^hhhhh
-hhhh^^^....................^^.............~~^^^^^^^.............hhhh
-hhh^^..P.....T............................~~..^^^^..............hhhh
-hhh^.....T...............................YyyJ..P................hhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhh^^^hhhhhhhhhh
+hhhhhhhhhhhhhh^^^^^^^^hhhhhhhhh^^^hhhhhh~~~hhhhhhhhhhhh..^^^hhhhhhhh
+hhhhhhhhh....h........hhhhhhh^^^^^^^^....~~hhhhhhhhhh.....^^^^^hhhhh
+hhhh^^^.................^^^^^^^..........~~~hhhhhhhh........^^^hhhhh
+hhhh^^^...................................~~^^^^^^^.............hhhh
+hhhh...P.....T............................~~..^^^^..............hhhh
+hhhh.....T...............................YyyJ..P................hhhh
 hhh........P.............................~~~.....T............P..hhh
 hh...C...........G...................C...~~~...........T..1......hhh
 hh.................E.............E......~~~........P.............hhh
