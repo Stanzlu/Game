@@ -39,12 +39,11 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 @export_enum("keine", "regentag", "abend", "nacht") var day_preset := "keine"
 @export_group("Depth")
 ## The depth arc (ADR-043): Elysia is a flat picture (all off); the real world gets aerial
-## haze towards the top of the view, a backdrop beyond the northern treeline (pixels it
-## reaches above the map; 0 = none) and dark crowns in front along the southern forest.
+## haze towards the top of the view and a backdrop beyond the northern treeline (pixels it
+## reaches above the map; 0 = none).
 @export var depth_haze := 0.0
 @export var haze_color := Color(0.78, 0.84, 0.86)
 @export var backdrop_reach := 0.0
-@export var foreground_foliage := false
 @export_group("Life")
 ## Seconds between bird flocks on average (0 = none) and their tint (dark for bats).
 @export var bird_interval := 0.0
@@ -74,7 +73,6 @@ const CLOUD_DIR := "res://assets/generated/props/elysia/"
 var glow_layer: CanvasLayer
 var day_light: DayLight
 var backdrop: Backdrop
-var foreground: ForegroundFoliage
 
 
 func _build_world() -> void:
@@ -151,8 +149,8 @@ func _build_world() -> void:
 		_setup_day_light()
 
 
-## Backdrop and foreground of the depth arc (ADR-043). The camera may look up to `reach`
-## pixels above the map, where the backdrop lies.
+## Backdrop of the depth arc (ADR-043). The camera may look up to `reach` pixels above the
+## map, where the backdrop lies.
 func _add_depth() -> void:
 	var moving := Settings.get_bool("display.parallax")
 	if backdrop_reach > 0.0:
@@ -163,12 +161,6 @@ func _add_depth() -> void:
 		backdrop.setup(view, map.world_rect(), backdrop_reach)
 		backdrop.parallax = moving
 		view.bounds = view.bounds.grow_side(SIDE_TOP, backdrop_reach)
-	if foreground_foliage:
-		foreground = ForegroundFoliage.new()
-		foreground.name = "Foreground"
-		view.world_root.add_child(foreground)
-		foreground.setup(view, map)
-		foreground.parallax = moving
 
 
 func _setup_day_light() -> void:
