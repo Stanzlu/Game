@@ -84,11 +84,10 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Der stille Brunnen erledigt sich, bevor du ankommst. Witzig, irritierend, oder hast du es kaum bemerkt?
 
 **Bild und Tiefe**
-- Die Wirklichkeit ist näher herangezoomt als Elysia. Fühlt sich das Tal dadurch größer an, oder
-  fehlt dir der Überblick (Bach, Weg zum Haus)?
+- Die Kamera ist überall etwas näher (1,25×). Passt das, oder fehlt dir irgendwo der Überblick?
 - Ist dir aufgefallen, dass Elysia flach und weit wirkt und das Tal räumlicher?
 - Am Ende schaut Mira zu den Bergen, und die Kamera schaut mit. Wie wirkt das? Und die Berge selbst?
-- Die dunklen Kronen am unteren Rand, wenn du nach Süden gehst: Tiefe oder störend?
+- Wirken die Waldränder jetzt natürlich (keine geraden Kanten, keine dunklen Blöcke)?
 
 **Technik**
 - Ruckler, Hänger, Stellen, an denen du nicht weiterkamst?
@@ -123,4 +122,4 @@ dann sehe ich, wie lange jeder Teil gedauert hat, ohne dass du mitschreiben muss
 - „Automatisch weiter“ und „Textgeschwindigkeit“: wenn dir das Lesen zu langsam oder zu schnell ist.
 - „Große Schrift“, „Bildschirmwackeln“, „Blitzeffekte reduzieren“ wie in Phase 3.
 - „Zeitfenster“ und „Begegnungstempo“ machen den Antreiber geduldiger.
-- „Tiefenebenen bewegen sich mit“: aus, wenn dir die Bewegung von Bergen und Kronen unangenehm ist.
+- „Tiefenebenen bewegen sich mit“: aus, wenn dir die Bewegung der Berge unangenehm ist.

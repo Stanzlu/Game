@@ -39,7 +39,7 @@ docs/        Dokumentation                                         ✅
 
 ```
 GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_context"
-├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012), Zoom (ADR-043)
+├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012), Zoom (ADR-045)
 │  ├─ WorldViewport/World                MapView (Karte, Props), Player, FX, NPCs
 │  └─ WorldDisplay                       Sprite, um Bruchteile verschoben
 ├─ Hud (CanvasLayer 12)                  Elysia: Level, XP, Gold, Quest, Popups · Real: leise Zeile
@@ -148,7 +148,7 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 ## Darstellung
 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
-der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen setzen `view_zoom` (ADR-043): Der
+der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen haben `view_zoom` (Vorgabe 1,25, ADR-045): Der
 Welt-Viewport schrumpft auf `view_size` = 640×360 / Zoom, das Anzeige-Sprite wächst um den Zoom, und
 bei nicht ganzzahligem Zoom tastet `sharp_display.gdshader` bzw. `grade.gdshader` scharf ab
 (`sharp_sample.gdshaderinc`). Welt nach UI rechnet `GameView.world_to_ui` um. Theme in
@@ -176,7 +176,7 @@ Real mit einer leisen Zeile. Für beide: Ortsname beim Betreten (`show_area`) un
 sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichter, Rauch) → Partikel
 (z 30). Tiefen-Bogen (ADR-043, Gruppe „Depth“ der `LookScene`): `Backdrop` (`world/fx/backdrop.gd`,
 z −20) malt Himmel und Bergketten über der Karte und erweitert die Kamera-Grenzen nach oben;
-`ForegroundFoliage` (z 40) legt Kronen an den Südrand; `depth_haze`/`haze_color` im Grade-Shader
+`depth_haze`/`haze_color` im Grade-Shader
 folgen dem `DayLight`, das auch `Backdrop.clear` (Nebel) blendet; `display.parallax` schaltet die
 Parallaxe ab. Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht
 abdunkelt. Die Farbstimmung (`grade.gdshader`: Bloom, Sättigung, Kontrast, Tönung, Vignette) sitzt auf

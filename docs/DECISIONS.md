@@ -330,7 +330,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Konsequenzen:** Keine neuen Systeme; alles hängt an Flags, Erinnerungen und Karten (ADR-037). Speicherstand: optionales Feld `house.cat_name` (fehlt es, gilt leer; kein neues Schema). Geschätzt 8–12 Minuten mehr beim ersten Spielen, durch Gespräch und Entdecken. Offen für den Playtest: ob der Antreiber im Haus für andere sichtbar wirken soll (Mira spricht ihn nie an) und ob die Frösche ohne Hinweis entdeckt werden.
 
 ## ADR-043 · Zoom und Tiefen-Bogen: Elysia flach, die Wirklichkeit näher und tiefer
-- **Status:** angenommen · 2026-10-06 (Wunsch des Projektinhabers: „ein etwas stärkerer Zoom auf den Charakter, damit die Map größer wirkt“, „etwas mehr 3D und dadurch auch mehr räumliche Tiefe … natürlich nur, wenn es dadurch tatsächlich besser aussieht“; die Tiefe soll mit der Verbindung zur echten Welt wachsen, anfangs eher 2D wie HeartGold, später räumlicher wie Schwarz/Schwarz 2; ausgewählt: „Zoom 1,5× + Tiefen-Bogen“)
+- **Status:** angenommen · 2026-10-06 · Zoom und Vordergrund ersetzt durch ADR-045 (Wunsch des Projektinhabers: „ein etwas stärkerer Zoom auf den Charakter, damit die Map größer wirkt“, „etwas mehr 3D und dadurch auch mehr räumliche Tiefe … natürlich nur, wenn es dadurch tatsächlich besser aussieht“; die Tiefe soll mit der Verbindung zur echten Welt wachsen, anfangs eher 2D wie HeartGold, später räumlicher wie Schwarz/Schwarz 2; ausgewählt: „Zoom 1,5× + Tiefen-Bogen“)
 - **Kontext:** Bei 640×360 Spielpixeln wirkten Figur und Räume klein; das Haus lag als Kasten in viel Schwarz (KNOWN_ISSUES #44). Echtes 3D oder eine perspektivische Verzerrung würde die Pixel ungleich machen und die Pixel-Art brechen (ART_DIRECTION, Raster). Tiefe muss also aus Ebenen, Dunst und Kamera kommen.
 - **Entscheidung:**
   - **Zoom pro Szene** (`GameScene.view_zoom`): Elysia bleibt bei 1× (weit, flach, ein Bild), Tal, Haus und der Weg zum Schuppen haben 1,5×. Die `GameView` verkleinert dafür den Welt-Viewport (`view_size` = 640×360 / Zoom) und vergrößert das Weltbild. Bei ganzzahligem Zoom bleibt Nearest; sonst tastet der Anzeige-Shader scharf ab (`sharp_sample.gdshaderinc`: innerhalb eines Pixels flach, an der Kante ein Bildschirmpixel Übergang). So bleiben die Pixel bei jeder Fenstergröße gleich groß. Die UI bleibt bei 640×360.
@@ -354,3 +354,31 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - `Log.record` schreibt in jedem Build. Genutzt nur für die Minute jedes Beats und die Build-Zeile beim Start, damit jedes Tester-Log Spielzeiten und Version enthält, ohne persönliche Daten.
   - Eine Testanleitung für alle Tester (`PLAYTEST.md`, Fragen nach Master-Prompt §48) und ein Gate-Bericht mit Gate-Matrix M/Ä, Risiken, Leistung, Platzhaltern und nächsten Schritten (`GATE_REPORT.md`).
 - **Konsequenzen:** Releases zählen nicht zum Artefakt-Speicher. Ohne Veröffentlichung bleibt der Build privat. Die Schwellen der Gates sind Vorschläge, die der Projektinhaber vor der Auswertung festlegt. Nach Phase 5: STOP, bis Ergebnisse vorliegen.
+
+## ADR-045 · Nach dem ersten Spielen: Zoom 1,25× überall, gewachsene Waldränder, Gate-Schwellen
+- **Status:** angenommen · 2026-10-06 (Rückmeldung des Projektinhabers zum Build von Phase 4e: „Ich finde den Rand an der Map nicht natürlich, das stört total und sieht nach Bug aus“, „Im Wald sind die Stämme der Bäume merkwürdig weiß“, „den Zoom würde ich gefühlt überall auf 1,25 setzen“; die Gate-Schwellen hat er an Claude übertragen)
+- **Kontext:** Aufnahmen aller Kartenränder zeigten zwei Fehlerbilder:
+  - Der Waldboden war zellengenau als dunkle Fläche gebacken, der Schatten darunter folgte den Zellen. Wo die Kronen eine Lücke ließen, entstanden gerade Linien und dunkle Rechtecke am Übergang zur Wiese.
+  - Die dunklen Vordergrund-Kronen am Südrand (ADR-043) wirkten im Spiel wie ein Darstellungsfehler.
+
+  Im Nachtwald lagen die Birkenstämme fast ganz auf der Leuchtebene und blieben dadurch weiß, während die Nacht alles andere abdunkelte.
+- **Entscheidung:**
+  - **Zoom:** 1,25× überall (`GameScene.view_zoom` als Vorgabe, keine Ausnahmen; Welt 512 × 288 Spielpixel). Der Kontrast Elysia/Wirklichkeit kommt allein aus Dunst und Bergen.
+  - **Waldränder der Wirklichkeit:** Der Rand entsteht aus Kronen statt aus dem Zellraster.
+    - Unter dem Waldrand liegt Wiese, nur das Waldinnere (über 10 Pixel vom Rand) ist dunkler Boden.
+    - Eine zusätzliche Reihe Kronen steht leicht zurückgesetzt entlang des Rands.
+    - Der Schatten folgt dem Umriss der Kronen.
+
+    Elysia behält seine geschnittenen Hecken; ihr Boden bleibt bitgenau gleich.
+  - **Vordergrund-Kronen** entfernt.
+  - **Birken:** Rinde blassgrau statt weiß; nur ein schmaler Mondlichtsaum und die Blattspitzen leuchten.
+  - **Gate-Schwellen** fest:
+    - Pro Tester und Gate gilt ja / teils / nein.
+    - Ein Gate ist erfüllt ab zwei Dritteln ja und verfehlt unter einem Drittel.
+    - Bestanden heißt: Desire erfüllt und die Kern-Gates der Mechanik erfüllt.
+    - Mindestens vier fremde Tester; Spielzeit-Median ab 35 Minuten (`GATE_REPORT.md`).
+- **Konsequenzen:**
+  - Die gebackenen Böden von Tal, Weg, Look-Tal und Wald sind neu erzeugt.
+  - Die Kollision bleibt zellengenau; an Waldrändern kann die Figur einige Pixel vor den Kronen stehen bleiben, wie am Ufer (KNOWN_ISSUES #15).
+  - Berechtigung: Der Projektinhaber erlaubt künftig Pull, Commit und Merge ohne Rückfrage.
+

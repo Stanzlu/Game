@@ -54,8 +54,9 @@ EXTRA = {
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
-        # birch bark in moonlight: almost white, with dark lenticel dashes
-        "birch": ramp("#2e3238", "#5a6068", "#9aa2aa", "#d0d6dc", "#f0f4f6"),
+        # birch bark in moonlight: pale grey, not white (playtest 06.10.: the white trunks
+        # looked odd), with dark lenticel dashes
+        "birch": ramp("#24282e", "#40464e", "#646c75", "#848c95", "#a3abb3"),
         "stem": ramp("#0b1a1a", "#12302c", "#1d4a3c", "#2e6650"),
         "fern": ramp("#07120d", "#0d2018", "#153222", "#1f462f", "#2d5e3e"),
         # foxfire (bioluminescent fungi on rotten wood) glows a soft green
@@ -920,7 +921,8 @@ def forest_tree(seed, glow=False):
 
 def birch(seed):
     """A birch at night: slim, slightly leaning white trunk with black lenticel dashes and
-    a light crown. The moonlit bark and leaf tips are emissive, softly (no fantasy glow)."""
+    a light crown. Only a thin moonlit rim of the bark and the leaf tips are emissive; the rest
+    darkens with the night like everything else."""
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES["wald"], EXTRA["wald"]
     W, H = 88, 112
@@ -944,7 +946,8 @@ def birch(seed):
     alpha &= pa.value_noise(H, W, 3, rng) > 0.22  # airy: the sky shows through
     c.paint(alpha, st["foliage_blue"], value, contrast=3.0, dither=False)
     c.outline(st["outline"])
-    moonlit = (trunk_m & (xs < 0.5) & ~dashes) | (alpha & (value > 0.93))
+    rim = trunk_m & (xs < -2.0) & (c.yy < base - 14) & ~dashes
+    moonlit = rim | (alpha & (value > 0.93))
     return c, emissive_of(c, moonlit)
 
 
