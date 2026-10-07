@@ -218,7 +218,12 @@ class Baker:
         lab = self.labels()
         self.lab = lab
         is_ = {name: lab == i for name, i in M.items()}
-        self._grass(is_["grass"] | is_["puddle"])
+        # the real world's forests grow: grass under their edges, so where the crowns leave a
+        # gap the ground is the meadow's, not a dark block cut along the cell grid. Elysia keeps
+        # its clipped hedges.
+        self.wild = self.style_name != "elysia"
+        under = is_["hedge"] if self.wild else np.zeros_like(is_["hedge"])
+        self._grass(is_["grass"] | is_["puddle"] | under)
         self._path(is_["path"])
         self._mud(is_["mud"] | is_["puddle"])
         self._cobble(is_["cobble"])
@@ -663,6 +668,23 @@ class Baker:
                 iy, ix = int(np.clip(y, 0, self.h - 1)), int(np.clip(x, 0, self.w - 1))
                 if hd[iy, ix]:
                     trees.append((y, x, self.rng.uniform(10.5, 15.5), self.rng.uniform(-0.12, 0.1)))
+        # a closer row of crowns along the edge, set back a little into the forest, so the edge
+        # is a line of trees with bays and bulges rather than the cell grid
+        dense = pa.box_blur(hd.astype(np.float32), 4)
+        gy, gx = np.gradient(dense)
+        edge = hd & near(~hd, 2) if self.wild else np.zeros_like(hd)
+        for ey in range(0, self.h, 9):
+            for ex in range(0, self.w, 9):
+                patch = edge[ey:ey + 9, ex:ex + 9]
+                if not patch.any():
+                    continue
+                py, px = np.argwhere(patch)[self.rng.integers(int(patch.sum()))]
+                y, x = ey + py, ex + px
+                g = np.array([gy[y, x], gx[y, x]])
+                inward = g / (np.linalg.norm(g) + 1e-6)
+                depth = self.rng.uniform(2.0, 6.0)
+                trees.append((y + inward[0] * depth, x + inward[1] * depth,
+                              self.rng.uniform(9.0, 13.0), self.rng.uniform(-0.12, 0.1)))
         trees.sort(key=lambda t: t[0])
         value = np.zeros((self.h, self.w), np.float32)
         alpha = np.zeros((self.h, self.w), bool)
@@ -682,8 +704,11 @@ class Baker:
             sub_v[a_loc] = np.clip(v_loc[a_loc] + tone, 0, 1)
             sub_a |= a_loc
         fid = self.ramp_ids["foliage"]
-        self.rid[hd] = fid
-        self.idx[hd] = 0
+        # deep inside the forest the floor is in shade; near its edge the meadow shows through
+        # (the edge is drawn by the crowns, never by the cell grid)
+        deep = hd & ~near(~hd, 10) if self.wild else hd
+        self.rid[deep] = fid
+        self.idx[deep] = 0
         idx = pa.quantize(value, self.n("foliage"), 3.0, dither=False)
         self.rid[alpha] = fid
         self.idx[alpha] = idx[alpha]
@@ -703,7 +728,8 @@ class Baker:
                         self.rid[yy, xx] = wid
                         rel = (xx - (x - tw / 2)) / tw
                         self.idx[yy, xx] = 2 if rel < 0.35 else (1 if rel < 0.75 else 0)
-        cover = alpha | hd | trunks
+        # shade follows the crowns' outline, not the cells
+        cover = alpha | deep | trunks
         below = within_below(cover, 6) & ~cover & (lab != M["void"])
         b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
         d1 = within_below(cover, 2) & below
