@@ -69,7 +69,9 @@ func add_info(text: String) -> Label:
 ## `label` overrides the translated key (e.g. slot descriptions).
 func add_action(key: String, callback: Callable, enabled := true, label := "") -> Button:
 	var button := _make_button()
-	button.pressed.connect(func() -> void: AudioDirector.ui("confirm", sound_skin))
+	# "Zurück" closes the menu, and closing has its own sound (no confirm on top of it)
+	if key != "MENU_BACK":
+		button.pressed.connect(func() -> void: AudioDirector.ui("confirm", sound_skin))
 	button.pressed.connect(callback)
 	button.disabled = not enabled
 	_rows.append({"node": button, "key": key, "label": label})
@@ -158,6 +160,12 @@ func _make_button() -> Button:
 	button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	button.focus_mode = Control.FOCUS_ALL
 	button.focus_entered.connect(_on_focus.bind(button))
+	# the mouse moves the focus, so hover and focus never mark two rows at once
+	button.mouse_entered.connect(
+		func() -> void:
+			if not button.disabled and not button.has_focus():
+				button.grab_focus()
+	)
 	# The interact key (E) confirms like ui_accept; keys bound to both fire only once.
 	button.gui_input.connect(
 		func(event: InputEvent) -> void:

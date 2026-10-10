@@ -8,6 +8,7 @@ extends CanvasLayer
 ## plate over the corner, a voice per speaker while the text types
 ## (content/dialogue/voices.json), a bobbing marker when the line waits, a cursor on answers.
 
+signal opened
 signal finished
 
 const VOICES_PATH := "res://content/dialogue/voices.json"
@@ -97,6 +98,7 @@ func present(dialogue: DialogueResource, start_cue: String, who: Node = null) ->
 	_plate.hide()
 	show()
 	_animate_open()
+	opened.emit()
 	Log.info(Log.Category.DIALOGUE, "dialogue start", {"cue": cue})
 	_show_line(await DialogueManager.get_next_dialogue_line(resource, cue))
 

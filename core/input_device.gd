@@ -15,6 +15,12 @@ var style := Style.XBOX
 
 func _input(event: InputEvent) -> void:
 	var new_kind := kind
+	if event is InputEventMouseMotion:
+		_show_mouse(true)
+		return
+	if event is InputEventKey or event is InputEventJoypadButton:
+		# playing with keys or a pad: the pointer gets out of the picture
+		_show_mouse(false)
 	if event is InputEventKey or event is InputEventMouseButton:
 		new_kind = Kind.KEYBOARD
 	elif event is InputEventJoypadButton:
@@ -25,6 +31,14 @@ func _input(event: InputEvent) -> void:
 	if new_kind == Kind.GAMEPAD:
 		style = style_from_name(Input.get_joy_name(event.device))
 	set_kind(new_kind)
+
+
+func _show_mouse(show: bool) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var mode := Input.MOUSE_MODE_VISIBLE if show else Input.MOUSE_MODE_HIDDEN
+	if Input.mouse_mode != mode:
+		Input.mouse_mode = mode
 
 
 func set_kind(new_kind: Kind) -> void:
@@ -65,7 +79,8 @@ static func key_label(physical: Key) -> String:
 static func button_label(button: JoyButton, pad_style: Style) -> String:
 	var face: Array = ["A", "B", "X", "Y"]
 	if pad_style == Style.PLAYSTATION:
-		face = ["✕", "○", "□", "△"]
+		# "×" instead of "✕": the key-cap font has it (no fallback glyph)
+		face = ["×", "○", "□", "△"]
 	elif pad_style == Style.NINTENDO:
 		face = ["B", "A", "Y", "X"]
 	match button:

@@ -48,7 +48,7 @@ Tastatur und Controller funktionieren gleichermaßen.
   - große Schrift
   - Bildschirmwackeln und Blitzeffekte reduzieren
   - „Tiefenebenen bewegen sich mit“ (aus, wenn dir Bewegung im Hintergrund unangenehm ist)
-  - „Zeitfenster“ und „Begegnungstempo“ für mehr Geduld
+  - „Mehr Zeit lassen“ und „Begegnungstempo“ für mehr Geduld
 - **Wenn du feststeckst:** Versuch es erst ein paar Minuten selbst. Hilft das nicht, steht unten unter
   „Hilfe“ ein Hinweis für jede Stelle.
 - **macOS, ruckelt es mit genau 30 Bildern pro Sekunde?** Das ist meistens der Stromsparmodus im

@@ -54,6 +54,7 @@ func _ready() -> void:
 	add_child(hud)
 	dialogue_box = DIALOGUE_BOX_SCENE.instantiate()
 	add_child(dialogue_box)
+	dialogue_box.opened.connect(hud.hide_area)
 	journal = JOURNAL_SCENE.instantiate()
 	add_child(journal)
 	overlay = InfoOverlay.new()

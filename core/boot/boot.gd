@@ -48,7 +48,8 @@ var _leaving := false
 
 
 func _ready() -> void:
-	_hint.text = tr("MENU_CONTROLS_HINT")
+	_hint.text = controls_hint()
+	InputDevice.device_changed.connect(func(_kind: int) -> void: _hint.text = controls_hint())
 	title_mode = choose_title_mode(OS.get_cmdline_user_args())
 	_background.build(title_mode)
 	_apply_title_mode()
@@ -235,8 +236,14 @@ func _rebuild_list() -> void:
 	if not SaveSystem.latest_slot().is_empty():
 		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
 	list.add_action("MENU_NEW_GAME", _new_game_requested)
-	list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
-	list.add_action("MENU_PROTOTYPES", _prototypes.open)
+	list.add_action(
+		"MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD), _any_save_to_load()
+	)
+	if OS.is_debug_build():
+		list.add_action("MENU_PROTOTYPES", _prototypes.open)
+	else:
+		# testers only get the benchmark: the prototype scenes would replace their autosave
+		list.add_action("MENU_BENCHMARK", func() -> void: BenchmarkRunner.start(get_tree()))
 	list.add_action("MENU_SETTINGS", _settings_menu.open)
 	_quit_button = list.add_action("MENU_QUIT", _quit)
 	list.refresh()
@@ -249,7 +256,8 @@ func _rebuild_list() -> void:
 
 func _on_submenu_closed() -> void:
 	_menu_panel.show()
-	var index := list.buttons().find(get_viewport().gui_get_focus_owner())
+	# the gem still marks the row that opened the submenu (focus returns only after this)
+	var index := list.buttons().find(list.cursor.target)
 	_rebuild_list()
 	list.focus_index(maxi(index, 0))
 
@@ -279,12 +287,34 @@ func _play_intro() -> void:
 		tween.tween_property(node, ^"modulate:a", 1.0, 0.5).set_delay(0.7)
 
 
+func _any_save_to_load() -> bool:
+	for slot in SaveService.SLOTS:
+		if SaveSystem.summary(slot)["status"] != "empty":
+			return true
+	return false
+
+
 ## A new game replaces the autosave: with a running game in it, ask first (slots stay).
 func _new_game_requested() -> void:
 	if SaveSystem.summary(SaveService.AUTOSAVE)["status"] == "ok":
 		_confirm.ask("CONFIRM_NEW_GAME", "CONFIRM_NEW_GAME_YES", "MENU_BACK")
 	else:
 		_name_entry.open()
+
+
+## The controls in one line, for the device in hand (keys or a pad's buttons).
+static func controls_hint() -> String:
+	var pad := InputDevice.kind == InputDevice.Kind.GAMEPAD
+	return (
+		TranslationServer.translate("MENU_CONTROLS_HINT")
+		% [
+			TranslationServer.translate("CONTROLS_MOVE_PAD" if pad else "CONTROLS_MOVE_KEYS"),
+			InputDevice.label_for(&"sprint"),
+			InputDevice.label_for(&"interact"),
+			InputDevice.label_for(&"journal"),
+			InputDevice.label_for(&"menu"),
+		]
+	)
 
 
 ## Loads the newest readable save ("Fortsetzen", `--continue`).

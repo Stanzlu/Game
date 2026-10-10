@@ -101,7 +101,7 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 
 | Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Stand v0.5.1 |
 |---|---|---|
-| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.5.1 neu messen (Startmenü → Prototypen → Leistungstest) |
+| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.5.1 neu messen (Startmenü → Leistungstest) |
 | Frame-Zeit CPU | 95 % unter 16,6 ms | headless rund 7 ms pro Frame, langsamste 8–10 ms |
 | Container (Software-Rendering, kein Maßstab) | – | 38–48 fps in allen Szenen, 11–186 Draw Calls |
 | Erster Start einer Szene | ohne spürbaren Hänger | einmalig bis 255 ms (Shader-Kompilierung, Software-Rendering), danach max. 37–44 ms |

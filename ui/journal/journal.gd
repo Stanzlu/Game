@@ -50,7 +50,9 @@ func _build() -> void:
 	_add_section("JOURNAL_FINISHED", finished)
 	if WorldState.is_real():
 		_add_people()
-	hint.text = tr("JOURNAL_HINT")
+	hint.text = (
+		tr("JOURNAL_HINT") % [InputDevice.label_for(&"journal"), InputDevice.label_for(&"cancel")]
+	)
 
 
 func _add_section(header: String, ids: Array[String]) -> void:
@@ -59,7 +61,7 @@ func _add_section(header: String, ids: Array[String]) -> void:
 	list.add_header(header)
 	for quest_id in ids:
 		var button := list.add_action(
-			"", func() -> void: pass, true, tr(ContentDB.quest(quest_id).title_key())
+			"", _page_detail, true, tr(ContentDB.quest(quest_id).title_key())
 		)
 		button.focus_entered.connect(func() -> void: _show_detail(entry_text(quest_id)))
 
@@ -74,9 +76,21 @@ func _add_people() -> void:
 	list.add_header("JOURNAL_PEOPLE")
 	for npc in people:
 		var button := list.add_action(
-			"", func() -> void: pass, true, tr("JOURNAL_PERSON_%s" % npc.to_upper())
+			"", _page_detail, true, tr("JOURNAL_PERSON_%s" % npc.to_upper())
 		)
 		button.focus_entered.connect(func() -> void: _show_detail(person_text(npc)))
+
+
+## Confirming a row turns the entry's page (from the end back to the start): controllers
+## without a second stick can read long entries too.
+func _page_detail() -> void:
+	var bar := _detail_scroll.get_v_scroll_bar()
+	if bar.max_value <= bar.page:
+		return
+	var at_end := _detail_scroll.scroll_vertical >= int(bar.max_value - bar.page) - 1
+	_detail_scroll.scroll_vertical = (
+		0 if at_end else _detail_scroll.scroll_vertical + int(bar.page * 0.8)
+	)
 
 
 ## Shows an entry; the newest lines are at the end, so the view starts there.

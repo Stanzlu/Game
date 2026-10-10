@@ -27,7 +27,7 @@ im weiteren Spiel nichts verloren geht.
 |---|---|---|---|
 | J | Release-Entwurf „Playtest v0.5.1“ veröffentlichen; den älteren Entwurf v0.5.0 löschen | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac mit v0.5.1 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Prototypen → Leistungstest, Bericht `benchmark.txt` schicken |
+| J | Leistung auf dem Mac mit v0.5.1 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
 
 ## 2. Klärt der Playtest
 

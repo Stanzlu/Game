@@ -44,6 +44,19 @@ static func can_open(tree: SceneTree) -> bool:
 	)
 
 
+## The pause menu may also open during a conversation (to turn on large text or slow the
+## text down); not during cutscenes, doors or fades.
+static func can_pause(tree: SceneTree) -> bool:
+	for node in tree.get_nodes_in_group(GROUP) + tree.get_nodes_in_group(&"cutscene"):
+		if node.has_method(&"is_open") and bool(node.call(&"is_open")):
+			return false
+	return (
+		not SceneTravel.is_travelling()
+		and not ScreenFade.is_covered()
+		and not ScreenFade.is_fading()
+	)
+
+
 static func any_open(tree: SceneTree) -> bool:
 	for group: StringName in [GROUP, &"dialogue_presenter", &"cutscene"]:
 		for node in tree.get_nodes_in_group(group):

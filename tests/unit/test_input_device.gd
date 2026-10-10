@@ -14,7 +14,7 @@ func test_labels_follow_the_last_device() -> void:
 
 
 func test_pad_styles_label_the_bottom_button() -> void:
-	assert_eq(InputDevice.button_label(JOY_BUTTON_A, InputDevice.Style.PLAYSTATION), "✕")
+	assert_eq(InputDevice.button_label(JOY_BUTTON_A, InputDevice.Style.PLAYSTATION), "×")
 	assert_eq(InputDevice.button_label(JOY_BUTTON_A, InputDevice.Style.NINTENDO), "B")
 	assert_eq(InputDevice.button_label(JOY_BUTTON_START, InputDevice.Style.XBOX), "Start")
 

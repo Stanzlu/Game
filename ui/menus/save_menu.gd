@@ -111,6 +111,8 @@ static func describe(slot: String, info: Dictionary) -> String:
 
 static func format_playtime(seconds: float) -> String:
 	var minutes := int(seconds / 60.0)
+	if minutes < 1:
+		return TranslationServer.translate("TIME_UNDER_MINUTE")
 	if minutes < 60:
 		return TranslationServer.translate("TIME_MINUTES") % minutes
 	return TranslationServer.translate("TIME_HOURS") % [minutes / 60, minutes % 60]

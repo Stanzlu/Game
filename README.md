@@ -30,7 +30,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
 | `tools/godot.sh -- --title=real` | Startbild „Nach Elysia“ statt „Elysia“ erzwingen (`--title=elysia` umgekehrt) |
 | `tools/godot.sh -- --large-text` | große Schrift nur für diese Sitzung |
-| `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner); im Spiel: Startmenü → Prototypen → Leistungstest |
+| `tools/godot.sh -- --benchmark` | Leistungstest (Bericht `benchmark.txt` im Nutzerordner); im Spiel: Startmenü → Leistungstest |
 | `.venv/bin/python tools/audio/make_music.py` | Musik-Loops neu erzeugen |
 | `.venv/bin/python tools/art/make_ui.py` | UI-Rahmen, Truhe, Stein, Riss, Item-Icons neu erzeugen |
 | `.venv/bin/python tools/art/make_title.py` | Startbilder (Insel, Wasserfall, Logos, Abendtal) neu erzeugen |

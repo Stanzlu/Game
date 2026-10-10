@@ -166,6 +166,8 @@ func _build_elysia() -> void:
 	quest_row.offset_left = -260
 	quest_row.offset_right = -8
 	quest_row.offset_top = 5
+	# large text grows to the left, never off the right edge
+	quest_row.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	elysia_root.add_child(quest_row)
 	var mark_holder := Control.new()
 	mark_holder.custom_minimum_size = Vector2(6, 14)
@@ -204,6 +206,7 @@ func _build_real() -> void:
 	_quiet_row.offset_left = 10
 	_quiet_row.offset_top = -26
 	_quiet_row.offset_bottom = -8
+	_quiet_row.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_quiet_row.modulate.a = 0.0
 	real_root.add_child(_quiet_row)
 	_quiet_icon = TextureRect.new()
@@ -212,6 +215,7 @@ func _build_real() -> void:
 	_quiet_row.add_child(_quiet_icon)
 	_quiet = Label.new()
 	_quiet.theme_type_variation = &"MutedLabel"
+	_readable_over_world(_quiet)
 	_quiet_row.add_child(_quiet)
 
 
@@ -228,12 +232,15 @@ func _build_common() -> void:
 	common.add_child(_area)
 	_saved = Label.new()
 	_saved.theme_type_variation = &"HintLabel"
+	_readable_over_world(_saved)
 	_saved.text = tr("HUD_SAVED")
 	_saved.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
 	_saved.offset_left = -90
 	_saved.offset_right = -8
 	_saved.offset_top = -16
 	_saved.offset_bottom = -6
+	_saved.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_saved.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_saved.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_saved.modulate.a = 0.0
 	common.add_child(_saved)
@@ -241,6 +248,24 @@ func _build_common() -> void:
 
 ## Name of the place, when a scene starts: Elysia announces it in gold with a little
 ## sparkle; the Real world just says it, quietly, and lets it go.
+## Small text drawn straight over the world (grass, path, water): light with a soft dark
+## outline, so it reads on any ground.
+static func _readable_over_world(label: Label) -> void:
+	label.add_theme_color_override(&"font_color", Color(0.9, 0.88, 0.84))
+	label.add_theme_color_override(&"font_outline_color", Color(0.05, 0.04, 0.03, 0.7))
+	label.add_theme_constant_override(&"outline_size", 2)
+
+
+## The place's name gives way when a conversation starts (it would show through the box).
+func hide_area() -> void:
+	if _area.modulate.a <= 0.0:
+		return
+	if _area_tween != null and _area_tween.is_valid():
+		_area_tween.kill()
+	_area_tween = _area.create_tween()
+	_area_tween.tween_property(_area, ^"modulate:a", 0.0, 0.2)
+
+
 func show_area(name_key: String) -> void:
 	if _area_tween != null and _area_tween.is_valid():
 		_area_tween.kill()

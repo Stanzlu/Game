@@ -124,6 +124,8 @@ func _name_the_cat() -> void:
 	entry.name = "CatName"
 	entry.title_key = "CAT_NAME_TITLE"
 	entry.suggestions = CAT_SUGGESTIONS
+	entry.confirm_key = "CAT_NAME_CONFIRM"
+	entry.back_key = "CAT_NAME_SKIP"
 	add_child(entry)
 	entry.chosen.connect(func(cat: String) -> void: WorldState.set_cat_name(cat))
 	get_tree().paused = true
