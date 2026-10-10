@@ -28,14 +28,17 @@ var save_dir := ""
 var loading := false
 var _blockers: Dictionary[StringName, bool] = {}
 var _pending_autosave := ""
+var _flush_queued := false
 var _arrival: Dictionary = {}
 
 
 func _ready() -> void:
 	if save_dir.is_empty():
 		save_dir = RuntimeEnv.user_dir() + "saves"
+	# a quest step is often one of several changes in a row (quest done, then XP, gold and
+	# the beat): the save waits for the end of the frame so it holds all of them
 	WorldState.quest_changed.connect(
-		func(quest_id: String, _stage: String) -> void: request_autosave("quest:" + quest_id)
+		func(quest_id: String, _stage: String) -> void: request_autosave_soon("quest:" + quest_id)
 	)
 	WorldState.state_replaced.connect(func() -> void: _pending_autosave = "")
 
@@ -132,6 +135,25 @@ func request_autosave(reason: String) -> void:
 		Log.debug(
 			Log.Category.SAVE, "autosave deferred", {"reason": reason, "blockers": blockers()}
 		)
+
+
+## Like request_autosave, but written at the end of the frame (once, however many requests).
+func request_autosave_soon(reason: String) -> void:
+	_pending_autosave = reason
+	if not _flush_queued:
+		_flush_queued = true
+		_flush_queued_pending.call_deferred()
+
+
+func _flush_queued_pending() -> void:
+	_flush_queued = false
+	if has_pending_autosave() and not can_save():
+		Log.debug(
+			Log.Category.SAVE,
+			"autosave deferred",
+			{"reason": _pending_autosave, "blockers": blockers()}
+		)
+	_flush_pending()
 
 
 func _flush_pending() -> void:

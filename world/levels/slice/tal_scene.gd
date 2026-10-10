@@ -45,6 +45,10 @@ func _ready() -> void:
 		and not WorldState.has_flag("valley.antreiber_rests")
 	):
 		_antreiber_follows.call_deferred()
+	# a save from the moment Mira made room at her fire (the game closed during the last
+	# scene): the ending plays again instead of leaving the slice unfinishable
+	if WorldState.has_flag("valley.ending") and not WorldState.has_flag("slice.finished"):
+		_play_ending.call_deferred()
 
 
 func _process(delta: float) -> void:

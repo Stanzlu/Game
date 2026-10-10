@@ -54,9 +54,13 @@ func _ready() -> void:
 		WorldState.start_quest("main_valley_shelter")
 		WorldState.advance_quest("main_valley_shelter", "house")
 	if warm and not WorldState.has_flag("house.mira_visited"):
-		# loaded a save between the fire and Mira's visit
-		_mira_coming = true
-		_mira_visits.call_deferred()
+		# loaded a save between the fire and Mira's visit: the rest by the fire (and the
+		# Antreiber, if he has not come yet) still comes first; Mira knocks in any case later
+		if _antreiber_pending():
+			_mira_later.call_deferred()
+		else:
+			_mira_coming = true
+			_mira_visits.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -71,11 +75,7 @@ func _process(delta: float) -> void:
 func _rest_by_the_fire() -> void:
 	_mira_coming = true
 	await Talk.present(self, DIALOGUE, "fire_rest", player)
-	if (
-		WorldState.has_flag("valley.wood_taken")
-		and not WorldState.has_flag("house.antreiber_by_fire")
-		and not WorldState.has_flag("house.antreiber_left")
-	):
+	if _antreiber_pending():
 		await _antreiber_comes()
 	await NodeTimer.after(self, 2.0)
 	_mira_visits()
@@ -153,12 +153,25 @@ func _fire_catches() -> void:
 		create_tween().tween_property(tint, ^"color", WARM_TINT, 5.0).set_trans(Tween.TRANS_SINE)
 	AudioDirector.set_ambience(WARM_AMBIENCE, ambience_db, 4.0)
 	AudioDirector.play_music("valley", 8.0)
+	_mira_later()
+
+
+## Mira comes `mira_after` seconds after the fire at the latest, sitting or not.
+func _mira_later() -> void:
 	while dialogue_box.is_open():
 		await get_tree().process_frame
 	await NodeTimer.after(self, mira_after)
 	if not _mira_coming:
 		_mira_coming = true
 		_mira_visits()
+
+
+func _antreiber_pending() -> bool:
+	return (
+		WorldState.has_flag("valley.wood_taken")
+		and not WorldState.has_flag("house.antreiber_by_fire")
+		and not WorldState.has_flag("house.antreiber_left")
+	)
 
 
 func _mira_visits() -> void:

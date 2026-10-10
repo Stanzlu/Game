@@ -158,3 +158,16 @@ func test_reaching_reality_is_read_from_the_saves() -> void:
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
 	assert_eq(saves.save_slot("slot_2"), OK)
 	assert_true(saves.reached_reality(), "a save after the crossing shows REAL")
+
+
+func test_a_quest_step_and_what_follows_are_saved_together() -> void:
+	var writes: Array[String] = []
+	saves.saved.connect(func(slot: String) -> void: writes.append(slot))
+	WorldState.start_quest("side_sandbox_gate")
+	WorldState.add_xp(100)
+	assert_false(FileAccess.file_exists(saves.path_for("autosave")), "not in the middle of it")
+	await wait_physics_frames(2)
+	var slot := saves.read_slot("autosave")
+	assert_true(slot.ok, "written at the end of the frame")
+	assert_eq(slot.state.elysia.xp, WorldState.state.elysia.xp, "with the XP that came after")
+	assert_eq(writes, ["autosave"] as Array[String], "once")

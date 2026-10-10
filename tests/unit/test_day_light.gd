@@ -98,3 +98,23 @@ func test_time_of_day_is_kept_in_the_game_state() -> void:
 	assert_eq(scene.day_light.preset, "abend", "a loaded evening stays evening")
 	scene.day_light.next_preset(0.0)
 	assert_eq(WorldState.day_preset(), "nacht")
+
+
+func test_entering_in_the_evening_switches_music_once() -> void:
+	AudioDirector.play_music("silence", 0.0)
+	WorldState.set_day_preset("abend")
+	var changes: Array[String] = []
+	var record := func(track: String) -> void: changes.append(track)
+	AudioDirector.music_changed.connect(record)
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	var first: Resource = AudioDirector.ambience_stream
+	assert_eq(
+		first.resource_path if first != null else "",
+		DayLight.PRESETS["abend"]["ambience"],
+		"the evening's ambience from the first frame, not the rainy day's first"
+	)
+	await wait_physics_frames(4)
+	AudioDirector.music_changed.disconnect(record)
+	assert_eq(changes, ["valley"] as Array[String], "the evening's music from the start")
+	assert_eq(scene.day_light.preset, "abend")

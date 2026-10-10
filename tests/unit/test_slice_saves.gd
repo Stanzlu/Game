@@ -200,10 +200,29 @@ func test_way_to_the_shed() -> void:
 func test_house_between_fire_and_mira() -> void:
 	_fire_before_mira()
 	_save_and_load()
-	var scene := await _build(HAUS)
+	var scene: HausScene = HAUS.instantiate()
+	scene.mira_after = 60.0
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
 	assert_true(WorldState.is_fire_lit(), "the fire still burns")
 	assert_eq(_sprite_alive(scene, "haus/shelf"), "haus/shelf_spoon", "the spoon on the shelf")
 	assert_eq(_alive(scene, "Blocker").size(), 1, "the door waits for Mira")
+	await wait_physics_frames(2)
+	assert_null(get_tree().get_first_node_in_group(&"cutscene"), "the rest by the fire comes first")
+	Settings.set_value("text.auto_advance", true, false)
+	scene.player.sit_on(scene.map.cell_to_world(Vector2i(17, 11)), Facing.Dir.N)
+	var arrived := func() -> bool:
+		return not scene.map.entities.find_children("*", "AntreiberActor", true, false).is_empty()
+	await wait_until(arrived, 30.0)
+	Settings.set_value("text.auto_advance", false, false)
+	assert_true(arrived.call(), "the Antreiber still comes to the fire (ADR-042)")
+
+
+func test_house_after_the_antreiber_left() -> void:
+	_fire_before_mira()
+	WorldState.set_flag("house.antreiber_left")
+	_save_and_load()
+	await _build(HAUS)
 	await wait_physics_frames(2)
 	assert_not_null(get_tree().get_first_node_in_group(&"cutscene"), "Mira knocks after loading")
 
@@ -218,6 +237,17 @@ func test_valley_in_the_evening() -> void:
 	assert_eq(_alive(scene, "Goat").size(), 1, "the goat with the boot")
 	assert_eq(_alive(scene, "Door_0_").size(), 0, "no second walk for wood")
 	assert_true(WorldState.has_item("item_fish"), "fish for the cat")
+
+
+func test_valley_during_the_ending() -> void:
+	_the_end()
+	WorldState.set_flag("slice.finished", false)
+	_save_and_load()
+	await _build(TAL)
+	await wait_physics_frames(2)
+	assert_not_null(
+		get_tree().get_first_node_in_group(&"cutscene"), "closed during the last scene: it plays"
+	)
 
 
 func test_valley_after_the_end() -> void:
