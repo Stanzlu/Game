@@ -300,8 +300,16 @@ def sacred_tree(seed=7):
     c = Canvas(W, H)
     cx, base = 104, 182
     bark = st["bark"]
+    # Trunk, roots and branches are tubes: each stamp of a strand stores where across the
+    # tube a pixel lies (-1..1 along the stamp's normal), so every strand is shaded as a
+    # rounded limb lit from the top left, whatever way it runs. Grooves where strands meet.
+    wood = np.zeros((H, W), bool)
+    across = np.zeros((H, W), np.float32)
+    normal = np.zeros((H, W, 2), np.float32)  # in-picture normal of the strand (y, x)
+    sid = np.full((H, W), -1, np.int32)
+    root = np.zeros((H, W), bool)
 
-    def strand(points, w0, w1, tone):
+    def strand(points, w0, w1, ident, is_root=False):
         pts = np.array(points, np.float32)
         n = 60
         for i in range(n + 1):
@@ -309,9 +317,18 @@ def sacred_tree(seed=7):
             k = min(int(t * (len(pts) - 1)), len(pts) - 2)
             f = t * (len(pts) - 1) - k
             y, x = pts[k] * (1 - f) + pts[k + 1] * f
+            dy, dx = pts[k + 1] - pts[k]
+            ln = max(float(np.hypot(dy, dx)), 1e-3)
+            ny, nx = dx / ln, -dy / ln  # normal of the strand's direction
+            if ny > 0 or (ny == 0 and nx > 0):
+                ny, nx = -ny, -nx  # always the side facing up (and left)
             r = (w0 + (w1 - w0) * t) / 2
             m = c.ellipse(x, y, r + 0.5, r * 0.8 + 0.5)
-            c.paint(m, bark, tone + 0.55 * c.cylinder(x - r - 1, x + r + 1), contrast=3.0, dither=False)
+            off = ((c.yy + 0.5 - y) * ny + (c.xx + 0.5 - x) * nx) / (r + 0.5)
+            wood[m], sid[m] = True, ident
+            across[m] = np.clip(off[m], -1, 1)
+            normal[m] = (ny, nx)
+            root[m] = is_root
 
     # roots spreading into the water, back ones first
     for side in (-1, 1):
@@ -319,7 +336,7 @@ def sacred_tree(seed=7):
             p0 = (base - 14, cx + side * 6)
             p1 = (base - 6 + dy * 0.3, cx + side * dx * 0.45)
             p2 = (base + dy * 0.5, cx + side * dx)
-            strand([p0, p1, p2], w + 4, 3, 0.1 + 0.06 * k)
+            strand([p0, p1, p2], w + 4, 3, 10 + k + 3 * (side > 0), is_root=True)
     # twisted trunk from three strands
     for i, phase in enumerate((0.0, 2.1, 4.2)):
         pts = []
@@ -327,10 +344,27 @@ def sacred_tree(seed=7):
             y = base - 10 - t * 98
             x = cx + np.sin(t * 5.5 + phase) * 9 * (1 - t * 0.35) + (i - 1) * 7 * (1 - t * 0.5)
             pts.append((y, x))
-        strand(pts, 17, 9, 0.12 + 0.08 * i)
+        strand(pts, 17, 9, i)
     # branches into the crown
-    for ex, ey in ((52, 58), (156, 58), (80, 44), (128, 44), (104, 36)):
-        strand([(base - 104, cx), ((base - 104 + ey) / 2, (cx + ex) / 2 + rng.uniform(-6, 6)), (ey, ex)], 7, 3, 0.1)
+    for k, (ex, ey) in enumerate(((52, 58), (156, 58), (80, 44), (128, 44), (104, 36))):
+        strand([(base - 104, cx), ((base - 104 + ey) / 2, (cx + ex) / 2 + rng.uniform(-6, 6)), (ey, ex)],
+               7, 3, 20 + k)
+    # light on a tube: the surface normal tilts from the strand's normal (up/left side, +1)
+    # through facing the viewer (0) to the far side (-1)
+    a = across
+    nz = np.sqrt(np.clip(1 - a * a, 0, 1))
+    lit = pa.sphere_light(a * normal[..., 1], a * normal[..., 0], nz)
+    grain = pa.value_noise(H, W, (9, 2), rng)
+    v = 0.1 + 1.05 * lit - 0.12 * (grain > 0.68) + 0.06 * (grain < 0.25)
+    # the crown shades the top of the trunk
+    v -= 0.22 * np.clip((128 - c.yy) / 26, 0, 1) * ~root
+    # grooves where one strand lies against another
+    groove = np.zeros_like(wood)
+    for oy, ox in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        other = np.roll(np.roll(sid, oy, 0), ox, 1)
+        groove |= wood & (other >= 0) & (other != sid) & (sid >= other)
+    v = np.where(groove, 0.04, v)
+    c.paint(wood, bark, np.clip(v, 0, 1), contrast=3.0, dither=False)
     # blossom crown
     blobs = []
     # a filled core on a jittered grid (no holes), then a bumpy rim
@@ -369,7 +403,21 @@ def sacred_tree(seed=7):
             width = 2 if t < 0.6 else 1
             m = c.rect(x + wobble, y0 + k, x + wobble + width, y0 + k + 2)
             c.paint(m, wis, tone, dither=False)
+    # the roots lie in the water: their lowest pixels are wet and dark-turquoise, and a broken
+    # rim of foam runs where they leave the water (below the outline), more at the tips
+    water = st["water"]
+    low = root & ~np.roll(root, -1, 0) & ~alpha
+    c.fill(low, water[1] * 0.5 + bark[1] * 0.5)
     c.outline(st["outline"])
+    inwater = (root | wood) & (c.yy >= base - 16)
+    grown = inwater.copy()
+    for _ in range(3):
+        grown = grown | np.roll(grown, 1, 0) | np.roll(grown, -1, 0) | np.roll(grown, 1, 1) | np.roll(grown, -1, 1)
+    above = np.roll(inwater, -1, 0) | np.roll(inwater, -2, 0) | np.roll(inwater, -3, 0)  # root below
+    ring = grown & ~c.a & ~above & (c.yy >= base - 14)
+    pattern = ((c.xx.astype(int) * 7 + c.yy.astype(int) * 3) % 5) < 3
+    c.fill(ring & pattern, water[4])
+    c.fill(ring & ~pattern & (((c.xx.astype(int) + c.yy.astype(int)) % 2) == 0), water[3])
     return c
 
 
