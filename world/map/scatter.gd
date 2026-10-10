@@ -6,6 +6,8 @@ extends RefCounted
 ## Rule: {"sprite": "<catalog id>", "on": "<ground symbols>", "density": 0..1, "spacing": px,
 ##        "near": "<ground or placement symbols>" (optional), "radius": cells (default 1),
 ##        "jitter": 0..0.5 of the spacing (default 0.4, random pattern only),
+##        "clump": px (random pattern only: patch size; density fades to nothing between
+##                 patches, so plants grow in clumps with bare ground between them),
 ##        "pattern": "random" (default) | "grid" | "checker", "offset": px (rows, lattices)}
 ## Cells with a placement are skipped. The same map and rule always give the same points.
 ## "grid" and "checker" are exact lattices without randomness (Elysia's planted order); in a
@@ -24,6 +26,7 @@ static func points(data: MapData, rule: Dictionary, seed_value: int) -> PackedVe
 	var near := str(rule.get("near", ""))
 	var radius := int(rule.get("radius", 1))
 	var jitter := clampf(float(rule.get("jitter", 0.4)), 0.0, 0.5) / 0.4
+	var clump := float(rule.get("clump", 0.0))
 	var ts := float(data.tile_size)
 	var occupied := _occupied(data)
 	var out := PackedVector2Array()
@@ -37,7 +40,10 @@ static func points(data: MapData, rule: Dictionary, seed_value: int) -> PackedVe
 			var roll := rng.randf()
 			var pt := Vector2(x + jx, y + jy).round()
 			var cell := Vector2i((pt / ts).floor())
-			if roll < density and _allowed(data, cell, on, near, radius, occupied):
+			var here := density
+			if clump > 0.0:
+				here *= smoothstep(0.35, 0.75, value_noise(pt / clump, seed_value))
+			if roll < here and _allowed(data, cell, on, near, radius, occupied):
 				out.append(pt)
 			x += spacing
 		y += spacing
@@ -83,6 +89,29 @@ static func _lattice(data: MapData, rule: Dictionary, checker: bool) -> PackedVe
 		y += spacing
 		row += 1
 	return out
+
+
+## Smooth value noise in 0..1 with one value per integer lattice point, from an integer hash:
+## the same point and seed give the same value on every machine (no engine noise state).
+static func value_noise(p: Vector2, seed_value: int) -> float:
+	var i := Vector2i(p.floor())
+	var f := p - Vector2(i)
+	var u := f * f * (Vector2(3.0, 3.0) - 2.0 * f)
+	var a := _lattice_value(i.x, i.y, seed_value)
+	var b := _lattice_value(i.x + 1, i.y, seed_value)
+	var c := _lattice_value(i.x, i.y + 1, seed_value)
+	var d := _lattice_value(i.x + 1, i.y + 1, seed_value)
+	return lerpf(lerpf(a, b, u.x), lerpf(c, d, u.x), u.y)
+
+
+## A pseudo-random value in 0..1 for one lattice point. Masked to 31 bits before every
+## multiplication, so no step overflows 64-bit integers.
+static func _lattice_value(x: int, y: int, seed_value: int) -> float:
+	var h := (x * 73856093) ^ (y * 19349663) ^ ((seed_value & 0xFFFFFF) * 83492791)
+	h &= 0x7FFFFFFF
+	h = ((h ^ (h >> 13)) * 1274126177) & 0x7FFFFFFF
+	h ^= h >> 16
+	return float(h & 0xFFFF) / 65535.0
 
 
 static func _occupied(data: MapData) -> Dictionary:

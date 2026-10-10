@@ -59,6 +59,51 @@ func test_lattices_are_exact_and_mirror_around_the_axis() -> void:
 		assert_has(checker, Vector2(2.0 * axis_px - pt.x, pt.y))
 
 
+func test_clump_leaves_bare_patches_deterministically() -> void:
+	var rows: PackedStringArray = []
+	for y in 30:
+		rows.append(".".repeat(40))
+	var data := MapData.parse("\n".join(rows), LEGEND)
+	var even := {"on": ".", "density": 1.0, "spacing": 6}
+	var clumped := {"on": ".", "density": 1.0, "spacing": 6, "clump": 56}
+	var pts := Scatter.points(data, clumped, 7)
+	assert_eq(pts, Scatter.points(data, clumped, 7), "same map, rule and seed: same clumps")
+	assert_ne(pts, Scatter.points(data, clumped, 8), "another seed: other clumps")
+	var all := Scatter.points(data, even, 7)
+	assert_lt(pts.size(), all.size())
+	assert_true(pts.size() > all.size() / 5, "clumps, not an empty map")
+	# count points per 24 px block: without clumps every block is full, with clumps some
+	# blocks stay bare and others keep (nearly) the full density
+	var per_block_all := _per_block(all, 24.0)
+	var per_block := _per_block(pts, 24.0)
+	var bare := 0
+	var dense := 0
+	for block: Vector2i in per_block_all:
+		var n: int = per_block.get(block, 0)
+		bare += 1 if n == 0 else 0
+		dense += 1 if n * 4 >= int(per_block_all[block]) * 3 else 0
+	assert_eq(per_block_all.size(), 27 * 20, "without clumps no block is empty")
+	assert_gt(bare, 20, "bare patches between the clumps")
+	assert_gt(dense, 20, "dense clumps")
+
+
+func _per_block(pts: PackedVector2Array, size: float) -> Dictionary:
+	var out := {}
+	for pt in pts:
+		var block := Vector2i((pt / size).floor())
+		out[block] = int(out.get(block, 0)) + 1
+	return out
+
+
+func test_value_noise_is_smooth_and_in_range() -> void:
+	for i in 200:
+		var p := Vector2(i * 0.37, i * 0.21)
+		var v := Scatter.value_noise(p, 11)
+		assert_between(v, 0.0, 1.0)
+		assert_eq(v, Scatter.value_noise(p, 11))
+		assert_almost_eq(v, Scatter.value_noise(p + Vector2(0.01, 0.0), 11), 0.05)
+
+
 func test_zero_jitter_keeps_random_rules_on_the_lattice() -> void:
 	var data := MapData.parse(MAP, LEGEND)
 	var pts := Scatter.points(data, {"on": ".", "density": 1.0, "spacing": 8, "jitter": 0}, 3)
