@@ -3,7 +3,7 @@
 Arbeitstitel. Ein atmosphärisches Pixel-Art-RPG über einen Menschen, der ein perfektes Fantasy-Paradies
 verlässt und entdeckt, dass ein unkontrollierbares, unperfektes Leben vielleicht viel lebendiger ist.
 
-**Status:** Phase 5, das Playtest-Gate (Build v0.5.0). Bis Ergebnisse vorliegen, entsteht kein Inhalt
+**Status:** Phase 5, das Playtest-Gate (Build v0.5.1). Bis Ergebnisse vorliegen, entsteht kein Inhalt
 über den Slice hinaus ([`docs/GATE_REPORT.md`](docs/GATE_REPORT.md)). Spielbar am
 Stück: Startmenü → Neues Spiel → Name → Elysia → Riss → das Tal mit Mira → das Haus → der Weg zum
 Schuppen → Feuer → Ziege → Abend an Miras Feuer → Titel „Nach Elysia“. Unter Prototypen liegen die
@@ -24,7 +24,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `tools/check.sh` | Lint, Format, Import, Smoke-Run, Unit-Tests |
 | `tools/export.sh windows\|macos\|linux` | Build nach `build/` |
 | `tools/smoke_export.sh` | exportierten Linux-Build starten und prüfen |
-| `RELEASE_DRY_RUN=1 tools/release.sh v0.5.0` | Builds für Tester packen, ohne den Release-Entwurf anzulegen |
+| `RELEASE_DRY_RUN=1 tools/release.sh v0.5.1` | Builds für Tester packen, ohne den Release-Entwurf anzulegen |
 | `tools/capture.sh "" captures/x 300 --start=sandbox` | Bildfolge via Xvfb nach `captures/` |
 | `tools/godot.sh -- --start=sandbox --camera=pixel` | direkt in eine Szene, Einstellungen nur für diese Sitzung überschreiben |
 | `tools/godot.sh -- --continue` | neuesten Spielstand laden |
@@ -50,7 +50,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 ## Builds testen
 
 **Playtest-Builds:** GitHub → **Actions** → **CI** → **Run workflow** auf `main`, Häkchen bei
-„Playtest-Release als Entwurf anlegen“. Alternativ ein Versions-Tag (`git push origin v0.5.0`; er muss zu
+„Playtest-Release als Entwurf anlegen“. Alternativ ein Versions-Tag (`git push origin v0.5.1`; er muss zu
 `config/version` in `project.godot` passen). CI baut dann Windows, macOS und Linux und legt unter
 **Releases** einen Entwurf an (`tools/release.sh`, ADR-044). Du prüfst ihn und veröffentlichst ihn;
 erst dann entsteht der Tag.

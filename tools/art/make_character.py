@@ -505,13 +505,11 @@ class Figure:
                     continue
                 c.fill(c.rect(ex, ey, ex + 1, ey + 2), d["eye"])
                 c.fill(c.rect(ex, ey, ex + 1, ey + 1), np.array([250, 248, 255], np.float32) * 0.6 + d["eye"] * 0.4)
+            # no nose: a lone pixel read as a speck in the face and, in profile, as a little
+            # outlined box (playtest 10.10.); eyes and blush carry the face
             if not side:
                 c.fill(c.rect(eyes[0] - 1, ey + 2, eyes[0], ey + 3), d["blush"])
                 c.fill(c.rect(eyes[-1] + 1, ey + 2, eyes[-1] + 2, ey + 3), d["blush"])
-                mx = int(round((eyes[0] + eyes[-1]) / 2 + 0.5))
-                c.fill(c.rect(mx, ey + 3, mx + 1, ey + 4), d["skin"][1])
-            else:
-                c.fill(c.rect(int(round(hx + 6)), ey + 2, int(round(hx + 7)), ey + 3), d["skin"][2])
 
 
 def sheet(design):

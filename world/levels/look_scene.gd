@@ -9,7 +9,7 @@ enum Weather { CLEAR, RAIN }
 const GRADE_SHADER := preload("res://world/shaders/grade.gdshader")
 const CLOUD_DIR := "res://assets/generated/props/elysia/"
 ## World pixels the baked treeline strip reaches above the map (tools/art/bake_ground.py).
-const TREELINE_ABOVE := 32
+const TREELINE_ABOVE := 64
 
 @export_group("Atmosphere")
 @export var weather := Weather.CLEAR

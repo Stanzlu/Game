@@ -852,17 +852,84 @@ class Baker:
 
 
 # The treeline strip (ADR-045): world pixels above and below the map's top edge.
-TREELINE_ABOVE = 32
+TREELINE_ABOVE = 64
 TREELINE_BELOW = 32
+# The forest beyond the treeline (playtest 10.10.: one row of crowns looked cut off before
+# the mountains), far to near: height of the crown centers above the map's top edge, crown
+# radius range, hill amplitude, haze and opacity. Farther rows are smaller, flatter in
+# contrast and hazier, and let a little of the sky's mist through, so the rain hides them too.
+TREELINE_ROWS = [
+    (40.0, (2.2, 3.0), 7.0, 0.6, 0.7),
+    (32.0, (3.0, 4.2), 5.5, 0.46, 0.82),
+    (23.0, (4.4, 6.0), 4.0, 0.3, 0.93),
+    (13.0, (6.5, 9.0), 2.5, 0.15, 1.0),
+]
+TREELINE_HAZE = np.array([150, 170, 168], np.float32)
+
+
+def _hills(rng, w, amplitude):
+    """Gentle rises and dips of a forested slope (two slow waves)."""
+    x = np.arange(w, dtype=np.float32)
+    waves = np.zeros(w, np.float32)
+    for length, weight in ((rng.uniform(220, 320), 0.65), (rng.uniform(90, 140), 0.35)):
+        waves += weight * np.sin(x / length * 2 * np.pi + rng.uniform(0, 2 * np.pi))
+    return waves * amplitude
+
+
+def _crown_row(rng, h, w, base, radii, amplitude):
+    """One row of crowns whose centers follow `base` (strip y) over gentle hills; the canopy
+    below the centers is filled in, so no sky shows between this row and the next nearer one.
+    Returns (alpha, value)."""
+    value = np.zeros((h, w), np.float32)
+    alpha = np.zeros((h, w), bool)
+    centre = base - _hills(rng, w, amplitude)
+    yy = np.arange(h, dtype=np.float32)[:, None]
+    # only above the map: below its top edge the map's own forest shows
+    under = (yy >= centre[None, :]) & (yy < TREELINE_ABOVE)
+    shade = pa.value_noise(h, w, 3, rng)
+    value[under] = (0.24 + 0.22 * shade)[under]
+    alpha |= under
+    lo, hi = radii
+    x = -hi
+    while x < w + hi:
+        r = rng.uniform(lo, hi)
+        cy = float(centre[int(np.clip(x, 0, w - 1))]) + rng.uniform(-0.35, 0.3) * r
+        pad = int(r) + 3
+        y0, y1 = int(max(cy - r - pad, 0)), int(min(cy + r + pad, h))
+        x0, x1 = int(max(x - r - pad, 0)), int(min(x + r + pad, w))
+        if x1 > x0 and y1 > y0:
+            blobs = [(cy - y0, x - x0, r * 0.7)]
+            for k in range(4):
+                a = k / 4 * 2 * np.pi + rng.uniform(-0.4, 0.4)
+                d = r * rng.uniform(0.3, 0.55)
+                blobs.append((cy - y0 + np.sin(a) * d * 0.8, x - x0 + np.cos(a) * d, r * rng.uniform(0.4, 0.55)))
+            small = (max(1.1, r * 0.3), max(1.6, r * 0.46))
+            a_loc, v_loc = pa.render_foliage((y1 - y0, x1 - x0), blobs, rng, small=small)
+            sub_v, sub_a = value[y0:y1, x0:x1], alpha[y0:y1, x0:x1]
+            sub_v[a_loc] = v_loc[a_loc]
+            sub_a |= a_loc
+        x += rng.uniform(r * 0.8, r * 1.3)
+    return alpha, value
 
 
 def bake_treeline(baker):
     """The forest's top edge as a strip in front of the map's first rows: crowns of the same
     foliage as the map's forest, of different sizes and some standing tall, so the edge against
-    the sky is a silhouette and not the map's border. Where the stream leaves the map it
-    flows out from under them."""
+    the sky is a silhouette and not the map's border. Behind it the forest goes on over gentle
+    hills in rows that grow smaller and hazier up to the foot of the mountains. Where the
+    stream leaves the map it flows out from under the nearest row."""
     h, w = TREELINE_ABOVE + TREELINE_BELOW, baker.w
     rng = np.random.default_rng(431)
+    far_rng = np.random.default_rng(432)
+    ramp = np.array(baker.style["foliage"], np.float32)
+    out = np.zeros((h, w, 4), np.float32)
+    for height, radii, amplitude, haze, opacity in TREELINE_ROWS:
+        alpha, value = _crown_row(far_rng, h, w, TREELINE_ABOVE - height, radii, amplitude)
+        flat = 0.5 + (value - 0.5) * (1.0 - haze * 0.6) + haze * 0.12
+        idx = pa.quantize(flat, len(ramp), 3.0, dither=False)
+        rgb = ramp[np.clip(idx, 0, len(ramp) - 1)] * (1.0 - haze) + TREELINE_HAZE * haze
+        out[alpha, :3] = rgb[alpha]
+        out[alpha, 3] = opacity * 255.0
     value = np.zeros((h, w), np.float32)
     alpha = np.zeros((h, w), bool)
     x = -8.0
@@ -885,10 +952,11 @@ def bake_treeline(baker):
             sub_v[a_loc] = np.clip(v_loc[a_loc] + tone, 0, 1)
             sub_a |= a_loc
         x += rng.uniform(r * 0.75, r * 1.2)
-    ramp = np.array(baker.style["foliage"], np.float32)
     idx = pa.quantize(value, len(ramp), 3.0, dither=False)
     rgb = ramp[np.clip(idx, 0, len(ramp) - 1)]
-    return np.concatenate([rgb, (alpha * 255.0)[..., None]], -1)
+    out[alpha, :3] = rgb[alpha]
+    out[alpha, 3] = 255.0
+    return out
 
 
 def main():

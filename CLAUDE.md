@@ -37,7 +37,7 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
   UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).
 - Zoom `view_zoom` überall 1,25×, scharf abgetastet (ADR-045); Tiefen-Bogen (Dunst, `Backdrop`) nur in der
   Wirklichkeit (ADR-043). Welt→UI über `GameView.world_to_ui`. Waldränder der Wirklichkeit aus Kronen, nie Raster;
-  Baumgrenze vor dem Himmel als `[meta] treeline` (gebacken).
+  Baumgrenze vor dem Himmel als `[meta] treeline` (gebacken, mit Waldreihen in die Tiefe).
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne

@@ -1,0 +1,16 @@
+[
+  {"t": 0.3, "teleport": [24, 3], "log": "the northern edge in the rain: the mist hides the mountains"},
+  {"t": 2.5, "flag": "valley.mira_met", "log": "story up to the evening: the mountains show"},
+  {"t": 2.5, "flag": "house.mira_visited"},
+  {"t": 2.5, "flag": "valley.goat_loose"},
+  {"t": 2.5, "flag": "valley.goat_traded"},
+  {"t": 2.5, "flag": "valley.bridge_fixed"},
+  {"t": 2.6, "teleport": [26, 14], "log": "into the house and out again: the valley in the evening"},
+  {"t": 2.7, "press": ["move_up"]},
+  {"t": 2.75, "release": ["move_up"]},
+  {"t": 2.9, "tap": ["interact"]},
+  {"t": 4.3, "press": ["move_down"]},
+  {"t": 5.5, "release": ["move_down"]},
+  {"t": 7.0, "teleport": [24, 3], "log": "the northern edge: forest rows before the mountains"},
+  {"t": 10.0, "teleport": [42, 3], "log": "where the stream comes from"}
+]

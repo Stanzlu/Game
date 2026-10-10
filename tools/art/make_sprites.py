@@ -54,9 +54,6 @@ EXTRA = {
     },
     "wald": {
         "bark": ramp("#0c0a12", "#17121d", "#241c2b", "#352a3d", "#4b3e53"),
-        # birch bark in moonlight: pale grey, not white (playtest 06.10.: the white trunks
-        # looked odd), with dark lenticel dashes
-        "birch": ramp("#24282e", "#40464e", "#646c75", "#848c95", "#a3abb3"),
         "stem": ramp("#0b1a1a", "#12302c", "#1d4a3c", "#2e6650"),
         "fern": ramp("#07120d", "#0d2018", "#153222", "#1f462f", "#2d5e3e"),
         # foxfire (bioluminescent fungi on rotten wood) glows a soft green
@@ -883,11 +880,10 @@ def emissive_of(c, mask):
 
 
 def forest_tree(seed, glow=False):
-    """Old forest tree: thick dark trunk with roots, wide canopy. The `glow` variant is a
-    birch: slim white trunk with dark dashes and a light, airy crown that catches the
-    moonlight (what really shines in a forest at night)."""
-    if glow:
-        return birch(seed)
+    """Old forest tree: thick dark trunk with roots, wide canopy. The `glow` variant has a
+    blue-green crown whose upper leaves catch the moonlight; its trunk stays dark (the
+    birches it replaced had pale trunks that looked odd in the dark, playtests 06. and
+    10.10.)."""
     rng = np.random.default_rng(seed)
     st, ex = pa.STYLES["wald"], EXTRA["wald"]
     W, H = 88, 112
@@ -909,46 +905,14 @@ def forest_tree(seed, glow=False):
     c.paint(alpha, leaves, value * (0.9 if glow else 1.0), contrast=3.0, dither=False)
     emit = None
     if glow:
-        lit = alpha & (value > 0.6)
-        tips = alpha & (pa.value_noise(H, W, 3, rng) > 0.78)
-        c.paint(tips, leaves, 0.95, dither=False)
-        emit_mask = lit | tips
+        # only the brightest leaves on top of the crown catch the moon, and only faintly:
+        # a whole lit crown read as a pale blob in the dark like the birch trunks before
+        emit_mask = alpha & (value > 0.9) & (c.yy < 34)
     c.outline(st["outline"])
     if glow:
         emit = emissive_of(c, emit_mask)
+        emit.rgb *= 0.6
     return c, emit
-
-
-def birch(seed):
-    """A birch at night: slim, slightly leaning white trunk with black lenticel dashes and
-    a light crown. Only a thin moonlit rim of the bark and the leaf tips are emissive; the rest
-    darkens with the night like everything else."""
-    rng = np.random.default_rng(seed)
-    st, ex = pa.STYLES["wald"], EXTRA["wald"]
-    W, H = 88, 112
-    c = Canvas(W, H)
-    cx, base = 44, 108
-    lean = rng.uniform(-0.12, 0.12)
-    xs = c.xx + 0.5 - (cx + lean * (base - c.yy))
-    trunk_m = (np.abs(xs) <= 3.6 - (base - c.yy) * 0.012) & (c.yy >= 30) & (c.yy < base)
-    trunk_m |= c.ellipse(cx, base - 2, 6, 2.5)
-    c.paint(trunk_m, ex["birch"], 0.25 + 0.75 * np.clip(0.5 - xs / 8.0, 0, 1), contrast=2.6, dither=False)
-    dashes = trunk_m & (pa.value_noise(H, W, (1, 4), rng) > 0.72) & ((c.yy % 5) < 2)
-    c.paint(dashes, st["bark"], 0.2, dither=False)
-    base_dark = trunk_m & (c.yy > base - 12) & (pa.value_noise(H, W, 2, rng) > 0.45)
-    c.paint(base_dark, st["bark"], 0.35, dither=False)
-    # thin branches into the crown
-    for side, y in ((-1, 44), (1, 52), (-1, 60), (1, 38)):
-        br = limb_mask(c, cx + lean * (base - y), y, cx + side * rng.uniform(12, 18), y - 10, 2)
-        c.paint(br, ex["birch"], 0.55, dither=False)
-    blobs = crown_blobs(rng, cx, 36, 30, 24, 14, 8, 12)
-    alpha, value = pa.render_foliage((H, W), blobs, rng, small=(3.0, 4.5))
-    alpha &= pa.value_noise(H, W, 3, rng) > 0.22  # airy: the sky shows through
-    c.paint(alpha, st["foliage_blue"], value, contrast=3.0, dither=False)
-    c.outline(st["outline"])
-    rim = trunk_m & (xs < -2.0) & (c.yy < base - 14) & ~dashes
-    moonlit = rim | (alpha & (value > 0.93))
-    return c, emissive_of(c, moonlit)
 
 
 def mossy_rock(seed, w=30, h=22):
@@ -1404,9 +1368,9 @@ def build():
     save("wald", "tree", [t[0] for t in trees if t[1] is None], (44, 106),
          shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9])
     glow_trees = [t for t in trees if t[1] is not None]
-    # birches: their moonlit bark is the brightest thing in the forest (no light of their own)
+    # moonlit crowns: the upper leaves catch the moon (no light of their own)
     save("wald", "glow_tree", [t[0] for t in glow_trees], (44, 106), emissive=[t[1] for t in glow_trees],
-         shape={"circle": 5, "offset": [0, -2]}, sway=0.6, shadow=[22, 7])
+         shape={"circle": 9, "offset": [0, -3]}, sway=0.5, shadow=[30, 9])
     # foxfire glows faintly green; honey fungus and fly agaric do not glow at all
     ms = [mushrooms(210 + k + 8, "cap_cyan") for k in range(2)]
     save("wald", "mushrooms_cyan", [m[0] for m in ms], (12, 18), emissive=[m[1] for m in ms],

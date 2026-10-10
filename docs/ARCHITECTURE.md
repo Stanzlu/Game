@@ -176,7 +176,8 @@ Real mit einer leisen Zeile. Für beide: Ortsname beim Betreten (`show_area`) un
 sortierte Figuren und Props (`decor.gd`, Wind über `wind_sway.gdshader`, Lichter, Rauch) → Partikel
 (z 30). Tiefen-Bogen (ADR-043, Gruppe „Depth“ der `LookScene`): `Backdrop` (`world/fx/backdrop.gd`,
 z −20) malt Himmel und Bergketten über der Karte und erweitert die Kamera-Grenzen nach oben; davor
-liegt die gebackene Baumgrenze (`[meta] treeline`, Sprite `Treeline`, z −9, ADR-045);
+liegt die gebackene Baumgrenze (`[meta] treeline`, Sprite `Treeline`, z −9, 64 px über den Kartenrand mit
+Waldreihen in die Tiefe, ADR-045);
 `depth_haze`/`haze_color` im Grade-Shader
 folgen dem `DayLight`, das auch `Backdrop.clear` (Nebel) blendet; `display.parallax` schaltet die
 Parallaxe ab. Regen liegt in einer eigenen `CanvasLayer` im SubViewport, damit `CanvasModulate` ihn nicht

@@ -315,7 +315,7 @@ def tal():
 
 def wald():
     """A real forest at night: a moonlit clearing, a rock ledge with a waterfall and mossy
-    boulders, a stream with a log bridge, birches that shine pale in the moonlight, foxfire,
+    boulders, a stream with a log bridge, old trees with moonlit crowns, foxfire,
     honey fungus and fly agarics. The forest edge is ragged, deeper in some places."""
     w, h = 56, 38
     g = Grid(w, h)

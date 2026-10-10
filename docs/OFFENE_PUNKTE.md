@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 07.10. · Build v0.5.0 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 10.10. · Build v0.5.1 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -25,10 +25,9 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.5.0“ veröffentlichen | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.5.1“ veröffentlichen; den älteren Entwurf v0.5.0 löschen | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac mit v0.5.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Prototypen → Leistungstest, Bericht `benchmark.txt` schicken |
-| J | Rand-Rückmeldung vom 06./07.10. nicht ganz abgeschlossen: Haus in Schwarz, grauer Himmel über dem Nordrand im Regen | #44, ADR-045 | Projektinhaber sagt, ob einer davon gemeint war |
+| J | Leistung auf dem Mac mit v0.5.1 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Prototypen → Leistungstest, Bericht `benchmark.txt` schicken |
 
 ## 2. Klärt der Playtest
 
@@ -55,6 +54,7 @@ im weiteren Spiel nichts verloren geht.
 | | Punkt | Quelle | Vorschlag |
 |---|---|---|---|
 | F | **Kartenpipeline skaliert nicht auf 7 Regionen:** Textkarten, ein gebackener Boden pro Karte, Layout-Skripte | ADR-004, ADR-017, #13 | Karten-Editor (Tiled/LDtk, ADR-004 hält den Weg offen); Böden in Kacheln oder Chunks backen |
+| F | **Größere Karten:** Der Projektinhaber stellt sich die Orte im ganzen Spiel größer vor (Playtest 10.10.); das Tal misst heute 68 × 38 Kacheln | ADR-045, Nachtrag 10.10. | Größe pro Region im Content-Budget (§48) festlegen; braucht die Pipeline oben (Chunks, Streaming der Streu) |
 | F | Veraltete gebackene Böden fallen nur bei falscher Größe auf | #13 | Prüfsumme der Karte in den gebackenen Dateien und ein Test, der sie vergleicht |
 | F | Elysia des Slice nutzte den Boden des Look-Prototyps (zwei Fackelschatten fehlten) | #57 (behoben) | Regel: jede Karte backt in eigene Dateien |
 | F | 1000–1600 Streu-Sprites pro Karte | #20 | MultiMesh oder gebackene Chunks |

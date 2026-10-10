@@ -1560,17 +1560,17 @@
    "res://assets/generated/props/wald/glow_tree_emit_1.png"
   ],
   "shadow": [
-   22,
-   7
+   30,
+   9
   ],
   "shape": {
-   "circle": 5,
+   "circle": 9,
    "offset": [
     0,
-    -2
+    -3
    ]
   },
-  "sway": 0.6,
+  "sway": 0.5,
   "textures": [
    "res://assets/generated/props/wald/glow_tree_0.png",
    "res://assets/generated/props/wald/glow_tree_1.png"
