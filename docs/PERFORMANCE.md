@@ -151,7 +151,7 @@ Leistungstest im Fenster 1280×720, zweiter Lauf (Shader im Cache):
 
 Beim ersten Lauf hatte das Tal einen einmaligen Hänger von 255 ms (Shader-Kompilierung, KNOWN_ISSUES #53).
 Build-Größen aus CI (Zip): Windows rund 50 MB, macOS rund 71 MB. Offen bleibt die Messung auf dem
-Zielrechner mit v0.5.0 (Startmenü → Prototypen → Leistungstest, Spalte „ohne VSync“).
+Zielrechner mit v0.5.1 (Startmenü → Prototypen → Leistungstest, Spalte „ohne VSync“).
 
 ## Zoom 1,25× überall (ADR-045, 07.10.)
 
