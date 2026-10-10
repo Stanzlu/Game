@@ -201,3 +201,14 @@ CAPTION_RIFT,Ein tiefes Summen in der Luft.
 CAPTION_WOBBLE,Der Stein kippelt.
 CAPTION_BIRD,Ein Vogel singt.
 CAPTION_FIRE,Das Feuer knistert.
+SETTINGS_CONTROLS,Steuerung anzeigen
+CONTROLS_TITLE,Steuerung
+CONTROLS_MOVE,Gehen
+CONTROLS_SPRINT,Rennen (halten)
+CONTROLS_INTERACT,"Ansehen, sprechen, bestätigen"
+CONTROLS_BACK,Zurück
+CONTROLS_MENU,Menü
+CONTROLS_JOURNAL,Journal
+CONTROLS_HINT,Tastatur · Controller
+KEY_STICK,Stick
+KEY_TRIGGER,Trigger

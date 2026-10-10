@@ -13,6 +13,7 @@ const VOLUMES := [
 const STEPS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 var _confirm: ConfirmMenu
+var _controls: ControlsMenu
 
 
 func _ready() -> void:
@@ -62,9 +63,21 @@ func _build() -> void:
 	if OS.is_debug_build():
 		list.add_header("SETTINGS_DEBUG")
 		list.add_setting("debug.overlay", "PAUSE_OVERLAY")
+	list.add_action("SETTINGS_CONTROLS", _show_controls)
 	list.add_action("SETTINGS_RESET", _reset)
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("SETTINGS_HINT")
+
+
+func _show_controls() -> void:
+	if _controls == null:
+		_controls = ControlsMenu.new()
+		_controls.name = "Controls"
+		_controls.follow_mode = follow_mode
+		_controls.sound_set = sound_set
+		add_child(_controls)
+		stack(_controls)
+	_controls.open()
 
 
 func _reset() -> void:

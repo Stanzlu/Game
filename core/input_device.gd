@@ -51,12 +51,24 @@ func set_kind(new_kind: Kind) -> void:
 
 ## Short label for the first binding of `action` on the current device.
 func label_for(action: StringName) -> String:
+	return label_for_kind(action, kind)
+
+
+## Short label for the first binding of `action` on keyboard or gamepad (sticks and
+## triggers as "Stick"/"Trigger" when the action has no button).
+func label_for_kind(action: StringName, device: Kind) -> String:
+	var axis_label := ""
 	for event: InputEvent in InputMap.action_get_events(action):
-		if kind == Kind.KEYBOARD and event is InputEventKey:
+		if device == Kind.KEYBOARD and event is InputEventKey:
 			return key_label((event as InputEventKey).physical_keycode)
-		if kind == Kind.GAMEPAD and event is InputEventJoypadButton:
+		if device == Kind.GAMEPAD and event is InputEventJoypadButton:
 			return button_label((event as InputEventJoypadButton).button_index, style)
-	return "?"
+		if device == Kind.GAMEPAD and event is InputEventJoypadMotion and axis_label.is_empty():
+			var axis := (event as InputEventJoypadMotion).axis
+			axis_label = TranslationServer.translate(
+				"KEY_TRIGGER" if axis >= JOY_AXIS_TRIGGER_LEFT else "KEY_STICK"
+			)
+	return axis_label if not axis_label.is_empty() else "?"
 
 
 static func key_label(physical: Key) -> String:
