@@ -610,12 +610,25 @@ def fence(style, seed, vertical=False):
     ex, st = EXTRA[style], pa.STYLES[style]
     wood = ex["white_wood"] if style == "elysia" else ex["plank"]
     if vertical:
-        # north-south run: rails seen edge-on as one line going up, a post per cell
+        # north-south run, a post per cell: two thin rails with a gap between them run up to
+        # the post of the cell above (one solid rail read as a single tall pole), the post is
+        # a short 4x10 block with a lit cap, one row of shadow at its foot (down-right)
         c = Canvas(8, 30)
-        c.paint(c.rect(3, 0, 5, 24), wood, np.where(c.xx < 4, 0.6, 0.3))
-        c.paint(c.rect(1, 14, 7, 29), wood, np.where(c.xx < 3, 0.8, np.where(c.xx > 5, 0.25, 0.5)))
-        c.paint(c.rect(2, 13, 6, 14), wood, 0.85)
-        c.outline(st["outline"])
+        top = 16
+        line = st["outline"]
+        post = c.rect(2, top, 6, top + 10)
+        c.paint(post, wood, np.where(c.xx < 3, 0.8, np.where(c.xx > 4, 0.3, 0.55)), contrast=3)
+        c.paint(c.rect(2, top, 6, top + 1), wood, np.where(c.xx < 4, 0.95, 0.75), contrast=3)  # cap
+        c.fill(c.rect(4, top + 5, 5, top + 6), wood[0])  # a knot
+        c.outline(line)
+        # one shadow row at the foot, falling down-right
+        c.fill(c.rect(3, top + 11, 8, top + 12) & ~c.a, line * 0.6 + st["grass"][1] * 0.4)
+        # the rails run up to the post of the cell above (16 px up) and stop below its shadow,
+        # so they never cut across it: two thin lines with grass between them and no outline,
+        # so the run narrows between the posts instead of reading as one tall pole
+        r0 = top + 12 - 16
+        for x, lit in ((2, 0.85), (5, 0.55)):
+            c.paint(c.rect(x, r0, x + 1, top - 1), wood, lit, contrast=3)
         return c
     c = Canvas(18, 18)
     tilt = rng.integers(-1, 2) if style == "tal" else 0
