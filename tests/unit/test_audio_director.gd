@@ -159,3 +159,32 @@ func test_master_is_limited_and_sfx_sits_lower() -> void:
 	assert_not_null(trim, "trim on SFX")
 	if trim != null:
 		assert_almost_eq(trim.volume_db, -2.0, 0.01)
+
+
+func test_valley_rests_between_rounds() -> void:
+	assert_false(AudioDirectorService.TRACK_REST.has("elysia"), "Elysia shrinks, never rests")
+	audio.rest_rules = {
+		"valley": {"loops": [2, 2], "rest": [5.0, 5.0], "fade_out": 1.0, "fade_in": 0.5},
+	}
+	audio.play_music("valley", 0.0)
+	var player := audio._music[audio._active_music]
+	var length := player.stream.get_length()
+	audio._update_rest(0.1, 1.0)
+	audio._update_rest(0.1, length - 0.5)
+	assert_false(audio.is_resting(), "the first round plays to its end")
+	audio._update_rest(0.1, 0.2)
+	audio._update_rest(0.1, length - 3.0)
+	assert_false(audio.is_resting(), "the second round")
+	audio._update_rest(0.1, length - 0.5)
+	assert_true(audio.is_resting(), "fades out into the end of the last round")
+	audio.duck(true)
+	audio._update_rest(5.0, 0.0)
+	assert_true(audio.is_resting(), "a dialogue does not wake it, the rest goes on")
+	audio._update_rest(0.6, 0.0)
+	assert_false(audio.is_resting(), "comes back")
+	assert_true(player.playing)
+	assert_eq(audio.current, "valley", "the track itself never changed")
+	audio.duck(false)
+	audio.play_music("forest", 0.0)
+	audio._process(0.1)
+	assert_false(audio.is_resting(), "other tracks have no rest")

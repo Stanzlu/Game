@@ -34,12 +34,21 @@ const ELYSIA_STAGES: Array[Dictionary] = [
 	{"file": "elysia_half_loop.wav", "after": 150.0, "flag": "elysia.chest_tree_opened"},
 	{"file": "elysia_quarter_loop.wav", "after": 300.0, "flag": "elysia.stone_taken"},
 ]
+## Tracks that rest between rounds, so a short loop does not repeat for an hour: after
+## `loops` (min, max) loops the music fades out over the last `fade_out` seconds of a loop,
+## stays away for `rest` (min, max) seconds under the ambience and comes back from the top
+## (`fade_in`). Elysia never rests: its loop shrinks instead (ELYSIA_STAGES).
+const TRACK_REST := {
+	"valley": {"loops": [2, 3], "rest": [40.0, 90.0], "fade_out": 4.0, "fade_in": 3.0},
+}
 const UI_SOUNDS: PackedStringArray = ["move", "confirm", "back", "open", "close", "tick"]
 const POOL_SIZE := 6
 
 var current := ""
 ## Which ELYSIA_STAGES entry is playing (while the track is "elysia").
 var elysia_stage := 0
+## TRACK_REST of this director (tests swap in short timings).
+var rest_rules: Dictionary = TRACK_REST.duplicate(true)
 ## What set_ambience() last got: an AudioStream bed or a SoundscapeDef (real world).
 var ambience_stream: Resource
 var _soundscape: SoundscapePlayer
@@ -53,10 +62,16 @@ var _tape_tween: Tween
 var _pools: Dictionary[StringName, Array] = {}
 var _next_in_pool: Dictionary[StringName, int] = {}
 var _last_position := 0.0
+## Loops the current track still plays before it rests (TRACK_REST).
+var _loops_left := 0
+## Seconds until a resting track comes back; negative while it plays.
+var _rest_left := -1.0
+var _rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_rng.randomize()
 	for i in 2:
 		_music.append(_make_player("Music%d" % i, &"Music"))
 		_ambience.append(_make_player("Ambience%d" % i, &"Ambience"))
@@ -101,9 +116,11 @@ func wanted_elysia_stage() -> int:
 	return elysia_stage_for(WorldState.state.playtime_seconds, WorldState.has_flag)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if current == "elysia":
 		_update_elysia_stage(_music[_active_music].get_playback_position())
+	elif rest_rules.has(current):
+		_update_rest(delta, _music[_active_music].get_playback_position())
 
 
 ## Swaps to the wanted Elysia stage when the loop has just wrapped around (`position`
@@ -122,6 +139,46 @@ func _update_elysia_stage(position: float) -> void:
 	Log.info(Log.Category.AUDIO, "elysia loop shrinks", {"stage": want})
 
 
+## Counts the loops of a track with a TRACK_REST rule. The last one fades out into its
+## end; after the rest the track comes back from the top with new rounds.
+func _update_rest(delta: float, position: float) -> void:
+	var rule: Dictionary = rest_rules[current]
+	var player := _music[_active_music]
+	if is_resting():
+		_rest_left -= delta
+		if _rest_left <= 0.0:
+			_start_rounds()
+			player.volume_db = SILENT_DB
+			player.play()
+			_fade(player, _music_db(), float(rule["fade_in"]), false)
+			Log.info(Log.Category.AUDIO, "music returns", {"track": current})
+		return
+	if position < _last_position:
+		_loops_left -= 1
+	_last_position = position
+	var left := player.stream.get_length() - position if player.stream != null else 0.0
+	if _loops_left > 1 or left > float(rule["fade_out"]):
+		return
+	var rest: Array = rule["rest"]
+	var seconds := _rng.randf_range(float(rest[0]), float(rest[1]))
+	_rest_left = left + seconds
+	_fade(player, SILENT_DB, left, true)
+	Log.info(Log.Category.AUDIO, "music rests", {"track": current, "seconds": roundf(seconds)})
+
+
+## Whether the current track is resting between its rounds (TRACK_REST).
+func is_resting() -> bool:
+	return _rest_left >= 0.0
+
+
+func _start_rounds() -> void:
+	_rest_left = -1.0
+	_last_position = 0.0
+	var rule: Dictionary = rest_rules.get(current, {})
+	var loops: Array = rule.get("loops", [0, 0])
+	_loops_left = _rng.randi_range(int(loops[0]), int(loops[1]))
+
+
 static func is_track(track: String) -> bool:
 	return track in TRACKS
 
@@ -138,6 +195,7 @@ func play_music(track: String, fade := 2.0) -> void:
 	var old := _music[_active_music]
 	_fade(old, SILENT_DB, fade, true)
 	current = track
+	_start_rounds()
 	if not track.is_empty():
 		_active_music = 1 - _active_music
 		var player := _music[_active_music]
@@ -145,7 +203,6 @@ func play_music(track: String, fade := 2.0) -> void:
 		if track == "elysia":
 			elysia_stage = wanted_elysia_stage()
 			path = MUSIC_DIR + str(ELYSIA_STAGES[elysia_stage]["file"])
-		_last_position = 0.0
 		player.stream = load(path)
 		player.pitch_scale = 1.0
 		player.volume_db = SILENT_DB
@@ -216,7 +273,8 @@ func duck(on: bool) -> void:
 	if on == _ducked:
 		return
 	_ducked = on
-	if not current.is_empty():
+	# a resting track comes back at the ducked or normal level by itself
+	if not current.is_empty() and not is_resting():
 		_fade(_music[_active_music], _music_db(), 0.4, false)
 
 
