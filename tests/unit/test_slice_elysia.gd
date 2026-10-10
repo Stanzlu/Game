@@ -217,10 +217,34 @@ func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
 	assert_true(WorldState.has_flag("elysia.rift_open"), "nobody gets stuck in Elysia")
 
 
+## Butterflies back, all three caught and returned.
+func _butterflies_done() -> void:
+	WorldState.start_quest("side_elysia_butterflies")
+	for objective: String in ElysiaScene.BUTTERFLY_OBJECTIVES:
+		WorldState.complete_objective("side_elysia_butterflies", objective)
+	WorldState.advance_quest("side_elysia_butterflies", "done")
+
+
+func test_the_chest_on_the_way_does_not_cut_the_butterflies_short() -> void:
+	var scene: GameScene = ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	WorldState.set_flag("elysia.chest_tree_opened")
+	await wait_physics_frames(2)
+	assert_false(WorldState.has_flag("elysia.loops"), "the miniquest comes first")
+	_butterflies_done()
+	await wait_physics_frames(2)
+	assert_true(WorldState.has_flag("elysia.loops"), "then Elysia starts repeating")
+	assert_true(Beat.reached("irritation"))
+
+
 func test_chest_starts_the_loops_and_the_child_opens_the_rift() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
+	_butterflies_done()
+	await wait_physics_frames(2)
+	assert_false(WorldState.has_flag("elysia.loops"), "the chest is still closed")
 	assert_eq(get_tree().get_nodes_in_group(&"child_guide").size(), 0, "child comes later")
 	WorldState.set_flag("elysia.chest_tree_opened")
 	await wait_physics_frames(2)

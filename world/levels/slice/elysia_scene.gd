@@ -9,13 +9,16 @@ const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
 ## XP for the first, second and third butterfly (Game Bible §10: rewards escalate).
 const BUTTERFLY_XP: Array[int] = [100, 500, 2000]
 const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
-## Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its own (with it
-## the child appears), and the rift opens a while later even if the child was never followed.
+## Repetition starts once the chest is open and the butterflies are back, whichever comes
+## last: the chest lies on the main path, and opening it on the way must not cut the
+## miniquest short. Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its
+## own (with it the child appears), and the rift opens a while later even if the child was
+## never followed.
 const LOOPS_AFTER := 720.0
 const RIFT_AFTER_LOOPS := 240.0
 ## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
 ## shrinks to nothing (Game Bible §8, §10).
-const FOUNTAIN_SOLVES_AFTER := 6.0
+const FOUNTAIN_SOLVES_AFTER := 3.0
 const FOUNTAIN_XP := 10000
 const FOUNTAIN_GOLD := 2500
 
@@ -65,6 +68,20 @@ func _process(_delta: float) -> void:
 func _on_quest_changed(quest_id: String, stage: String) -> void:
 	if quest_id == "side_elysia_fountain" and stage == "check":
 		_fountain_solves_itself()
+	elif quest_id == "side_elysia_butterflies" and stage == "done":
+		_start_loops_when_ready()
+
+
+## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.
+func _start_loops_when_ready() -> void:
+	if WorldState.has_flag("elysia.loops"):
+		return
+	if (
+		WorldState.has_flag("elysia.chest_tree_opened")
+		and WorldState.is_quest_done("side_elysia_butterflies")
+	):
+		Beat.mark("irritation")
+		WorldState.set_flag("elysia.loops")
 
 
 ## Somebody else fixed it, for you, before you got there.
@@ -99,8 +116,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		return
 	match id:
 		"elysia.chest_tree_opened":
-			Beat.mark("irritation")
-			WorldState.set_flag("elysia.loops")
+			_start_loops_when_ready()
 		"elysia.loops":
 			_loops_time = WorldState.state.playtime_seconds
 		"elysia.mirror_seen":

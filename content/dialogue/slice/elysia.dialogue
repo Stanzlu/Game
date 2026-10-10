@@ -6,7 +6,7 @@ Elysianer: Da bist du ja! {{WorldState.player_name()}}! [ID:el_wake_1]
 Elysianer: Alle freuen sich so, dass du da bist. Wir freuen uns eigentlich immer. Aber heute ganz besonders. [ID:el_wake_2]
 - Wo bin ich? [ID:el_wake_r1]
 	Elysianer: In Elysia natürlich! Dem schönsten Ort der Welt. [ID:el_wake_3]
-	Elysianer: Und dem einzigen. Das macht es leichter mit dem Schönsten. [ID:el_wake_4]
+	Elysianer: Und dem einzigen. Da ist das mit dem Schönsten nicht so schwer. [ID:el_wake_4]
 - Hallo. [ID:el_wake_r2]
 	Elysianer: Hallo! Was für ein Hallo. So warm. So entschlossen. [ID:el_wake_5]
 - … [ID:el_wake_r3]
@@ -34,7 +34,7 @@ if WorldState.is_quest_done("side_elysia_butterflies")
 	Gärtnerin: {{WorldState.player_name()}}! Meine drei goldenen Schmetterlinge sind ent… [ID:el_gard_done_1]
 	Gärtnerin: Ach nein. Du hast sie ja gefangen. Natürlich hast du das. Du fängst immer alles. [ID:el_gard_done_2]
 elif WorldState.quest_stage("side_elysia_butterflies") == "return"
-	Gärtnerin: Alle drei! In Rekordzeit! In überhaupt einer Zeit! [ID:el_gard_ret_1]
+	Gärtnerin: Alle drei! In Rekordzeit! Ganz egal, wie lange es gedauert hat! [ID:el_gard_ret_1]
 	Gärtnerin: Hörst du, wie zufrieden sie flattern? Sie fliegen wieder ihre Runden. Genau dieselben wie vorher. [ID:el_gard_ret_2]
 	Gärtnerin: Hier. Das ist für dich. Ein Kompliment. Ein echtes. Legendär sogar. [ID:el_gard_ret_3]
 	do WorldState.add_item("item_compliment")
@@ -50,10 +50,10 @@ elif WorldState.quest_stage("side_elysia_butterflies") == "return"
 	do WorldState.start_quest("side_elysia_fountain")
 elif WorldState.is_quest_active("side_elysia_butterflies")
 	% Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_wait_1]
-	% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Wie Schmetterlinge eben. [ID:el_gard_wait_2]
+	% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Immer im selben. [ID:el_gard_wait_2]
 else
 	Gärtnerin: {{WorldState.player_name()}}! Dem Himmel sei Dank. Oder dir. Eher dir. [ID:el_gard_1]
-	Gärtnerin: Meine drei goldenen Schmetterlinge sind entwischt. Sie fliegen immer dieselben Runden, weißt du. Aber jetzt fliegen sie sie woanders. [ID:el_gard_2]
+	Gärtnerin: Meine drei goldenen Schmetterlinge sind entwischt. Sie fliegen immer dieselben Runden, weißt du. Nur jetzt eben woanders. [ID:el_gard_2]
 	- Ich fang sie dir ein. [ID:el_gard_r1]
 		Gärtnerin: Ich wusste es! Ich wusste es, bevor du es gesagt hast. [ID:el_gard_3]
 	- Wie sehen sie aus? [ID:el_gard_r2]
@@ -89,7 +89,7 @@ else
 		- … [ID:el_host_r1c]
 			Gastwirt: Sprachlos. Das sind alle. Hier, die nächste ist für unterwegs. [ID:el_host_7]
 	- Ich hab keinen Hunger. [ID:el_host_r2]
-		Gastwirt: Hunger? Wer redet denn von Hunger. Hier geht es ums Genießen. [ID:el_host_8]
+		Gastwirt: Hunger? Wer redet denn von Hunger? Hier geht es ums Genießen. [ID:el_host_8]
 		Gastwirt: Ich geb dir eine mit. Für später. Später ist hier immer. [ID:el_host_9]
 	- Ich muss weiter. [ID:el_host_r3]
 		Gastwirt: Musst du? Wirklich? [ID:el_host_10]
@@ -100,25 +100,32 @@ else
 => END
 
 ~ basin
-if WorldState.is_quest_done("side_elysia_fountain") and not WorldState.has_flag("elysia.fountain_seen")
-	Das Becken plätschert. Genau richtig laut. Es hat, wenn man ehrlich ist, nie anders geplätschert. [ID:el_basin_5]
-	do WorldState.set_flag("elysia.fountain_seen")
-elif WorldState.has_flag("elysia.mirror_seen")
-	Das Wasser ist still wie Glas. Es zeigt alles. [ID:el_basin_again]
-else
+if not WorldState.has_flag("elysia.mirror_seen")
 	Das Wasser im Becken ist klar und vollkommen still. [ID:el_basin_1]
 	Es zeigt den Himmel. Die Säulen. Den Baum. Eine Wolke, die vorhin schon einmal vorbeigezogen ist. [ID:el_basin_2]
 	Du beugst dich weiter vor. [ID:el_basin_3]
 	Der Himmel. Die Säulen. Der Baum. [ID:el_basin_4]
 	do WorldState.set_flag("elysia.mirror_seen")
+elif WorldState.is_quest_done("side_elysia_fountain") and not WorldState.has_flag("elysia.fountain_seen")
+	Das Becken plätschert. Genau richtig laut. Es hat, wenn man ehrlich ist, nie anders geplätschert. [ID:el_basin_5]
+	do WorldState.set_flag("elysia.fountain_seen")
+else
+	Das Wasser ist still wie Glas. Es zeigt alles. [ID:el_basin_again]
 => END
 
 ~ flower
-% Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts. [ID:el_flower_1]
-% Die Blüte leuchtet von innen. Du riechst daran. Nichts. Ein sehr schönes Nichts. [ID:el_flower_2]
-% Du riechst noch einmal daran. Wieder nichts. Aber Elysia ist stolz auf dich. [ID:el_flower_3]
+if WorldState.has_flag("elysia.flower_smelled")
+	% Die Blüte leuchtet von innen. Du riechst daran. Nichts. Ein sehr schönes Nichts. [ID:el_flower_2]
+	% Du riechst noch einmal daran. Wieder nichts. Aber Elysia ist stolz auf dich. [ID:el_flower_3]
+else
+	Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts. [ID:el_flower_1]
 do WorldState.add_xp(1000)
 do WorldState.set_flag("elysia.flower_smelled")
+=> END
+
+# The feast tables (cue only, both twins): everything shines, nothing has been eaten.
+~ feast
+Eine Tafel voller Speisen. Alles glänzt. Nichts ist angebissen. [ID:el_feast_1]
 => END
 
 ~ favor
