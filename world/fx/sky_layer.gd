@@ -27,6 +27,8 @@ func setup(game_view: GameView, top: Color, bottom: Color) -> void:
 	mat.shader = SKY_SHADER
 	mat.set_shader_parameter("top", top)
 	mat.set_shader_parameter("bottom", bottom)
+	# dither on the world's pixel grid: one cell per pixel of the rect
+	mat.set_shader_parameter("size", _rect.size)
 	_rect.material = mat
 	add_child(_rect)
 

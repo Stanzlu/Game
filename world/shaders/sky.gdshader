@@ -1,6 +1,9 @@
 shader_type canvas_item;
 // Dithered sky gradient in a few hard bands (ADR-017), so the sky stays pixel art.
+// The dither follows the rect's own pixels (`size` = its size in game pixels), not the screen:
+// on the title, which is drawn at window resolution, FRAGCOORD would dither at screen scale.
 
+uniform vec2 size = vec2(640, 360);
 uniform vec4 top : source_color = vec4(0.53, 0.77, 0.93, 1.0);
 uniform vec4 bottom : source_color = vec4(0.86, 0.93, 0.98, 1.0);
 uniform float steps = 6.0;
@@ -15,6 +18,6 @@ float bayer4(vec2 p) {
 void fragment() {
 	float t = UV.y * steps;
 	float band = floor(t);
-	float s = (band + step(bayer4(floor(FRAGCOORD.xy)), t - band)) / steps;
+	float s = (band + step(bayer4(floor(UV * size)), t - band)) / steps;
 	COLOR = mix(top, bottom, clamp(s, 0.0, 1.0));
 }
