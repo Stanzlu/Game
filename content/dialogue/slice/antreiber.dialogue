@@ -5,8 +5,8 @@
 
 ~ start
 % Antreiber: Holz! Gute Idee. Ich hab den Weg schon geplant. [ID:sl_antr_start_1]
-% Antreiber: Schuppen, Holz, zurück, Feuer. Wenn wir zügig sind, schaffen wir das vor dem Dunkelwerden. [ID:sl_antr_start_2]
-% Antreiber: Ich hab eine Liste gemacht. Punkt eins, gehen. Punkt zwei, schneller gehen. [ID:sl_antr_start_3]
+% Antreiber: Schuppen, Holz, Feuer. Vor dem Dunkelwerden. [ID:sl_antr_start_2]
+% Antreiber: Meine Liste: Erstens gehen. Zweitens schneller gehen. [ID:sl_antr_start_3]
 => END
 
 ~ urging
@@ -15,7 +15,7 @@
 % Antreiber: Da vorne. Siehst du? Gleich. [ID:sl_antr_urge_3]
 % Antreiber: Du machst das gut. Noch ein bisschen besser, dann reicht es. [ID:sl_antr_urge_4]
 % Antreiber: Ich hab mitgezählt. Wir liegen gut. [ID:sl_antr_urge_5]
-% Antreiber: Nicht nach links schauen, da ist nichts. Nach vorne. [ID:sl_antr_urge_6]
+% Antreiber: Nicht zur Seite schauen, da ist nichts. Nach vorne. [ID:sl_antr_urge_6]
 % Antreiber: Pausen machen wir, wenn wir da sind. Dann gleich eine lange. [ID:sl_antr_urge_7]
 => END
 
@@ -45,12 +45,22 @@
 % Antreiber: Wir verlieren Zeit. Ich kann sie hören. [ID:sl_antr_puzzle_3]
 => END
 
+# Stopped before the race really began (AntreiberModel.is_engaged): it does not count yet.
+~ puzzled_early
+% Antreiber: Pause? Wir haben doch noch gar nicht angefangen. [ID:sl_antr_early_1]
+% Antreiber: Jetzt schon? Wir sind doch eben erst los. [ID:sl_antr_early_2]
+=> END
+
 ~ silent
 Antreiber: … [ID:sl_antr_silent_1]
 => END
 
 ~ sign
-Ein Wegweiser. »Schuppen 200 m«. [ID:sl_antr_sign_1]
+if WorldState.has_flag("valley.shed_sign_read")
+	Noch ein Wegweiser. »Schuppen 200 m«. Wie der letzte. [ID:sl_antr_sign_2]
+else
+	Ein Wegweiser. »Schuppen 200 m«. [ID:sl_antr_sign_1]
+	do WorldState.set_flag("valley.shed_sign_read")
 => END
 
 ~ wood

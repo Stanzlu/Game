@@ -7,7 +7,11 @@ extends Node2D
 ## without a word, `walk_to` and `sit_down` stage him in the valley and by the fire.
 
 const LEAD := Vector2(40, -14)
+## A bark stays long enough to read in the small font: this many characters per second,
+## never shorter than BARK_SECONDS; the next one waits a moment after it.
 const BARK_SECONDS := 2.2
+const BARK_CHARS_PER_SECOND := 14.0
+const BARK_GAP := 0.8
 ## Walking behind: this far back, never faster than this.
 const TRAIL_DISTANCE := 26.0
 const TRAIL_SPEED := 42.0
@@ -18,6 +22,7 @@ const CUES := {
 	AntreiberModel.Mood.TIRED: "tired",
 	AntreiberModel.Mood.WORRIED: "worried",
 	AntreiberModel.Mood.PUZZLED: "puzzled",
+	AntreiberModel.Mood.PUZZLED_EARLY: "puzzled_early",
 	AntreiberModel.Mood.SILENT: "silent",
 }
 
@@ -37,6 +42,7 @@ var _bark_time := 0.0
 func _ready() -> void:
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
+	sheet.add_shadow_to(self)
 	bark.hide()
 	_play("idle")
 
@@ -59,7 +65,9 @@ func update_actor(player: Player, model: AntreiberModel, delta: float) -> void:
 		_play("idle")
 	var mood := model.mood(speed, player.tuning.walk_speed)
 	_bark_cooldown -= delta
-	if (mood != _last_mood and _bark_cooldown < 1.6) or _bark_cooldown <= 0.0:
+	# a new mood may cut in early, but never into a line that is still being read
+	var changed := mood != _last_mood and _bark_cooldown < 1.6 and _bark_time == 0.0
+	if changed or _bark_cooldown <= 0.0:
 		_last_mood = mood
 		_bark_cooldown = randf_range(2.6, 4.0)
 		say(mood)
@@ -74,8 +82,14 @@ func say(mood: AntreiberModel.Mood) -> void:
 	bark.text = line.text
 	bark.show()
 	_center_bark.call_deferred()
-	_bark_time = BARK_SECONDS
+	_bark_time = bark_seconds(line.text)
+	_bark_cooldown = maxf(_bark_cooldown, _bark_time + BARK_GAP)
 	SoundBank.play_at(self, "bark", global_position, -10.0)
+
+
+## How long a bark stays on screen.
+static func bark_seconds(text: String) -> float:
+	return maxf(BARK_SECONDS, text.length() / BARK_CHARS_PER_SECOND)
 
 
 ## Label size is only final after the text change has been processed.

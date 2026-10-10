@@ -117,7 +117,8 @@ Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
 <details>
 <summary>Der Weg, der nicht endet</summary>
 
-Wer rennt, kommt nicht an. Was tut man, wenn ein Weg nicht endet?
+Erst ein gutes Stück mitgehen, ruhig auch rennen. Wer rennt, kommt trotzdem nicht an. Was tut man, wenn
+ein Weg nicht endet?
 </details>
 
 <details>
