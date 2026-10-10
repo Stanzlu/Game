@@ -192,3 +192,12 @@ PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus
 PLACE_WEG,Der Weg zum Schuppen
 END_OF_SLICE,"Ende des Prototyps. Danke fürs Spielen."
+SETTINGS_CAPTIONS,Geräusche als Text
+CAPTION_FROGS,Frösche quaken.
+CAPTION_GOAT,Eine Ziege meckert.
+CAPTION_GOAT_MUNCH,Die Ziege kaut.
+CAPTION_HUM,Jemand summt eine Melodie.
+CAPTION_RIFT,Ein tiefes Summen in der Luft.
+CAPTION_WOBBLE,Der Stein kippelt.
+CAPTION_BIRD,Ein Vogel singt.
+CAPTION_FIRE,Das Feuer knistert.

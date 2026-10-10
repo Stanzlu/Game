@@ -10,6 +10,8 @@ extends CanvasLayer
 ## In both worlds: the name of a place when entering it (Elysia: a golden banner, Real: a
 ## quiet line) and a small mark in the corner when the game saved.
 
+## Seconds before the same sound is written out again.
+const CAPTION_REPEAT := 4.0
 const COIN := preload("res://assets/generated/ui/coin.png")
 const SPARKLE := preload("res://assets/generated/ui/sparkle.png")
 const RAYS := preload("res://assets/generated/ui/rays.png")
@@ -47,6 +49,11 @@ var _busy := false
 var _vanished: PackedStringArray = []
 var _time := 0.0
 var _area: Label
+var _caption: Label
+var _caption_tween: Tween
+## Caption key -> seconds (ticks) it was last shown; each sound is written out at most every
+## CAPTION_REPEAT seconds (frogs croak a lot).
+var _caption_shown: Dictionary[String, float] = {}
 var _area_tween: Tween
 var _saved: Label
 var _saved_tween: Tween
@@ -230,6 +237,21 @@ func _build_common() -> void:
 	_area.offset_top = 52
 	_area.modulate.a = 0.0
 	common.add_child(_area)
+	_caption = Label.new()
+	_caption.name = "Caption"
+	_caption.theme_type_variation = &"MutedLabel"
+	_readable_over_world(_caption)
+	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_caption.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
+	_caption.offset_left = -200
+	_caption.offset_right = 200
+	# above the dialogue box
+	_caption.offset_top = -124
+	_caption.offset_bottom = -106
+	_caption.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_caption.modulate.a = 0.0
+	common.add_child(_caption)
+	AudioDirector.caption_requested.connect(_on_caption)
 	_saved = Label.new()
 	_saved.theme_type_variation = &"HintLabel"
 	_readable_over_world(_saved)
@@ -248,6 +270,41 @@ func _build_common() -> void:
 
 ## Name of the place, when a scene starts: Elysia announces it in gold with a little
 ## sparkle; the Real world just says it, quietly, and lets it go.
+## A sound written out (setting "Geräusche als Text"), with an arrow to the side it came
+## from when that side is clear.
+func _on_caption(key: String, at: Variant) -> void:
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _caption_shown.get(key, -INF) < CAPTION_REPEAT:
+		return
+	_caption_shown[key] = now
+	var text := tr(key)
+	var side := _side_of(at)
+	if side < 0:
+		text = "‹ " + text
+	elif side > 0:
+		text = text + " ›"
+	_caption.text = text
+	if _caption_tween != null and _caption_tween.is_valid():
+		_caption_tween.kill()
+	_caption_tween = _caption.create_tween()
+	_caption_tween.tween_property(_caption, ^"modulate:a", 1.0, 0.15)
+	_caption_tween.tween_interval(2.4)
+	_caption_tween.tween_property(_caption, ^"modulate:a", 0.0, 0.6)
+
+
+## -1 left, 1 right, 0 ahead or unknown.
+func _side_of(at: Variant) -> int:
+	var scene := get_parent() as GameScene
+	if not at is Vector2 or scene == null or scene.view == null:
+		return 0
+	var x := scene.view.world_to_ui(at).x
+	if x < GameView.BASE_SIZE.x / 3.0:
+		return -1
+	if x > GameView.BASE_SIZE.x * 2.0 / 3.0:
+		return 1
+	return 0
+
+
 ## Small text drawn straight over the world (grass, path, water): light with a soft dark
 ## outline, so it reads on any ground.
 static func _readable_over_world(label: Label) -> void:

@@ -9,6 +9,9 @@ extends Node
 ## (ui()), rewards and other game sounds (sfx()) and dialogue voices (voice()).
 
 signal music_changed(track: String)
+## A sound that carries the story was played (setting access.captions): the HUD writes it
+## out. `at` is its world position, or null for sounds without a place.
+signal caption_requested(key: String, at: Variant)
 ## Fires when a tape stop ends, or is cut short by new music (await tape_stop()).
 signal tape_stopped
 
@@ -31,6 +34,17 @@ const ELYSIA_STAGES: Array[Dictionary] = [
 	{"file": "elysia_quarter_loop.wav", "after": 300.0, "flag": "elysia.stone_taken"},
 ]
 const UI_SOUNDS: PackedStringArray = ["move", "confirm", "back", "open", "close", "tick"]
+## Sounds that tell something (Game Bible §50: hints must not depend on hearing alone).
+const CAPTIONS := {
+	"frog_croak": "CAPTION_FROGS",
+	"goat_bleat": "CAPTION_GOAT",
+	"goat_munch": "CAPTION_GOAT_MUNCH",
+	"child_hum": "CAPTION_HUM",
+	"rift_hum": "CAPTION_RIFT",
+	"stone_wobble": "CAPTION_WOBBLE",
+	"bird": "CAPTION_BIRD",
+	"fire_light": "CAPTION_FIRE",
+}
 const POOL_SIZE := 6
 
 var current := ""
@@ -237,7 +251,16 @@ func ui(sound: String, skin := SoundSet.FOLLOW) -> void:
 
 
 ## A non-positional game sound (rewards, the rift) on the SFX bus.
+
+
+## Asks the HUD to write out a sound, if captions are on and the sound has one.
+func caption(prefix: String, at: Variant = null) -> void:
+	if CAPTIONS.has(prefix) and Settings.get_bool("access.captions"):
+		caption_requested.emit(CAPTIONS[prefix], at)
+
+
 func sfx(prefix: String, volume_db := 0.0, pitch_spread := 1.0) -> void:
+	caption(prefix)
 	_play(&"SFX", SoundBank.stream(prefix, pitch_spread, 0.0), volume_db)
 
 

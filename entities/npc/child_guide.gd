@@ -56,6 +56,7 @@ func _hum_now_and_then() -> void:
 	while step != Step.GONE:
 		if not talking:
 			_hum.play()
+			AudioDirector.caption("child_hum", global_position)
 		await NodeTimer.after(self, randf_range(HUM_PAUSE.x, HUM_PAUSE.y))
 
 

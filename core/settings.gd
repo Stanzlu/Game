@@ -48,6 +48,7 @@ const SCHEMA := {
 	"display.parallax": [true],
 	"access.timing": [0, 2],
 	"access.encounter_speed": [0, 2],
+	"access.captions": [false],
 	"debug.overlay": [false],
 }
 const KEYS_PER_EVENT := {

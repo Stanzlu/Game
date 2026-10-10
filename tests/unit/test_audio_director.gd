@@ -118,3 +118,20 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	var playing := audio._music[audio._active_music].stream.resource_path
 	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
 	WorldState.new_game()
+
+
+func test_story_sounds_are_written_out_when_captions_are_on() -> void:
+	var heard: Array[String] = []
+	var record := func(key: String, _at: Variant) -> void: heard.append(key)
+	AudioDirector.caption_requested.connect(record)
+	Settings.set_value("access.captions", false, false)
+	AudioDirector.sfx("stone_wobble", -40.0)
+	assert_eq(heard, [] as Array[String], "off by default")
+	Settings.set_value("access.captions", true, false)
+	AudioDirector.sfx("stone_wobble", -40.0)
+	AudioDirector.sfx("coin", -40.0)
+	AudioDirector.caption_requested.disconnect(record)
+	Settings.set_value("access.captions", false, false)
+	assert_eq(heard, ["CAPTION_WOBBLE"] as Array[String], "story sounds only, not rewards")
+	for key: String in AudioDirectorService.CAPTIONS.values():
+		assert_true(ContentValidator.has_translation(key), key)

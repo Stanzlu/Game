@@ -50,6 +50,7 @@ func _build() -> void:
 	list.add_setting("display.reduce_flashing", "SETTINGS_REDUCE_FLASHING")
 	list.add_setting("display.parallax", "SETTINGS_PARALLAX")
 	list.add_header("SETTINGS_ACCESS")
+	list.add_setting("access.captions", "SETTINGS_CAPTIONS")
 	list.add_setting(
 		"access.timing", "SETTINGS_TIMING", ["TIMING_NORMAL", "TIMING_LONGER", "TIMING_MUCH_LONGER"]
 	)

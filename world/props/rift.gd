@@ -19,6 +19,7 @@ func _ready() -> void:
 	additive.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	additive.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
 	_sprite.material = additive
+	AudioDirector.caption.call_deferred("rift_hum", global_position)
 
 
 func apply_params(params: Dictionary) -> void:
