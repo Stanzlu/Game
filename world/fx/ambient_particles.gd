@@ -72,7 +72,8 @@ static func dust(game_view: GameView) -> AmbientParticles:
 	p.amount = 12
 	p.lifetime = 9.0
 	p.preprocess = 9.0
-	p.emission_rect_extents = Vector2(130, 90)
+	# the room's size: the camera stands still on it, so the dust stays inside the walls
+	p.emission_rect_extents = Vector2(118, 80)
 	p.direction = Vector2(0.3, -1)
 	p.spread = 120.0
 	p.gravity = Vector2(0, -0.6)

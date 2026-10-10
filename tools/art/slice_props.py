@@ -750,7 +750,7 @@ def build(ms):
     lit = [fireplace(ms, True, f) for f in range(3)]
     ms.save("haus", "fireplace_lit", [f[0] for f in lit], (26, 60), emissive=[f[1] for f in lit],
             shape={"rect": [46, 10], "offset": [0, -4]},
-            lights=[{"offset": [0, -14], "color": "#ff8a3a", "energy": 1.6, "range": 190}], flicker=True)
+            lights=[{"offset": [0, -14], "color": "#ff9a4a", "energy": 1.9, "range": 170}], flicker=True)
     ms.save("haus", "table", table(ms), (22, 24), shape={"rect": [34, 8], "offset": [0, -6]}, shadow=[18, 4])
     ms.save("haus", "bed", bed(ms), (15, 40), shape={"rect": [28, 30], "offset": [0, -16]})
     ms.save("haus", "shelf", shelf(ms, False), (17, 29), flat=True)

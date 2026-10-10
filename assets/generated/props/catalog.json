@@ -663,13 +663,13 @@
   "flicker": true,
   "lights": [
    {
-    "color": "#ff8a3a",
-    "energy": 1.6,
+    "color": "#ff9a4a",
+    "energy": 1.9,
     "offset": [
      0,
      -14
     ],
-    "range": 190
+    "range": 170
    }
   ],
   "shape": {

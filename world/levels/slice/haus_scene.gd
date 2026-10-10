@@ -10,8 +10,15 @@ extends LookScene
 
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
 const COLD_TINT := Color(0.5, 0.56, 0.68)
-## The fire's glow fills the room: honey and amber, not grey (ADR-041).
-const WARM_TINT := Color(1.0, 0.84, 0.66)
+## Once the fire burns, the room is lit by it: a dim warm base, and the fireplace's own
+## flickering light gives the falloff (a bright flat tint made the corners as light as the
+## hearth and everything one orange; ADR-041 still holds: honey and amber, not grey).
+const WARM_TINT := Color(0.54, 0.48, 0.48)
+## The room (cells): the camera stays centred on it instead of drifting over the black.
+const ROOM := Rect2i(12, 5, 16, 12)
+## Grey daylight from the rainy window: a cool counterpart to the fire on the floor below it.
+const WINDOW_CELL := Vector2(23.5, 9.0)
+const WINDOW_LIGHT := Color("#7d93c8")
 const COLD_AMBIENCE := preload("res://content/audio/haus_kalt.tres")
 const WARM_AMBIENCE := preload("res://content/audio/haus_feuer.tres")
 ## Seconds the player sits by the burning fire before the quiet moment (Game Bible §45:
@@ -43,6 +50,10 @@ func _ready() -> void:
 	ambience = WARM_AMBIENCE if warm else COLD_AMBIENCE
 	music = "valley" if warm else "silence"
 	super()
+	_add_window_light()
+	view.bounds = Rect2(
+		Vector2(ROOM.position * map.data.tile_size), Vector2(ROOM.size * map.data.tile_size)
+	)
 	WorldState.house_changed.connect(_on_house_changed)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	if WorldState.has_flag("house.cat_naming"):
@@ -156,6 +167,17 @@ func _fire_catches() -> void:
 	AudioDirector.set_ambience(WARM_AMBIENCE, ambience_db, 4.0)
 	AudioDirector.play_music("valley", 8.0)
 	_mira_later()
+
+
+func _add_window_light() -> void:
+	var light := PointLight2D.new()
+	light.name = "WindowLight"
+	light.texture = Decor.light_texture()
+	light.color = WINDOW_LIGHT
+	light.energy = 0.45
+	light.texture_scale = 88.0 / 32.0
+	light.position = WINDOW_CELL * float(map.data.tile_size)
+	map.entities.add_child(light)
 
 
 ## Mira comes `mira_after` seconds after the fire at the latest, sitting or not.
