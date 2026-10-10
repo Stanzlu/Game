@@ -60,6 +60,18 @@ func shift_to(to: Vector2) -> void:
 			(prop as Node2D).global_position += delta
 
 
+## Hides the map and stops processing it, with the props it placed under another parent
+## (a recycled piece of an endless path while it waits out of sight), or wakes it again.
+func set_active(active: bool) -> void:
+	var mode := Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
+	visible = active
+	process_mode = mode
+	for prop in _external_props:
+		if is_instance_valid(prop):
+			(prop as Node2D).visible = active
+			prop.process_mode = mode
+
+
 ## Loads, validates and builds the map. Returns false (and logs errors) on invalid content.
 func load_map(path: String) -> bool:
 	map_path = path

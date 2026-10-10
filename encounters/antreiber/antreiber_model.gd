@@ -5,12 +5,13 @@ extends RefCounted
 ## Moving makes the goal recede: the faster, the further. Sprinting builds fatigue that
 ## lowers the top speed (no HP, no failure). Standing still without movement input for
 ## `stillness_seconds`, or half as long while sitting, resolves the encounter, but only
-## after the player has actually tried the race (`engage_distance`).
+## after the player has actually tried the race (`is_engaged`): far enough, and either
+## hurried or kept at it a while. Stillness before that does not count (ADR-015).
 
 signal resolved
 
 enum Phase { RUNNING, RESOLVED }
-enum Mood { START, URGING, CHEERING, TIRED, WORRIED, PUZZLED, SILENT }
+enum Mood { START, URGING, CHEERING, TIRED, WORRIED, PUZZLED, PUZZLED_EARLY, SILENT }
 
 ## Goal recedes by this many pixels per pixel walked / sprinted.
 const WALK_RECEDE := 1.15
@@ -19,12 +20,18 @@ const MIN_GOAL_DISTANCE := 96.0
 const FATIGUE_PER_SECOND := 0.06
 const RECOVERY_PER_SECOND := 0.25
 const MAX_SLOWDOWN := 0.45
-## Distance the player has to cover before stopping can resolve it (1.5 segments).
-const ENGAGE_DISTANCE := 480.0
+## Distance the player has to cover before stopping can resolve it (three segments)...
+const ENGAGE_DISTANCE := 960.0
+## ...and they must have hurried (sprinted this long) or kept going this long (seconds).
+const ENGAGE_SPRINT_SECONDS := 2.0
+const ENGAGE_SECONDS := 40.0
 
 var phase := Phase.RUNNING
 var goal_distance := 200.0
+## Seconds without movement input (for his moods).
 var stillness := 0.0
+## The part of it that counts: stillness since the race was engaged.
+var counted_stillness := 0.0
 var fatigue := 0.0
 var stillness_seconds := 3.0
 ## Accessibility: < 1 slows the receding goal and fatigue (encounter speed).
@@ -51,14 +58,21 @@ func update(delta: float, moved: float, input_active: bool, sprinting: bool, sit
 	else:
 		fatigue = maxf(fatigue - RECOVERY_PER_SECOND * delta, 0.0)
 	max_fatigue = maxf(max_fatigue, fatigue)
+	var still := not input_active and is_engaged()
+	counted_stillness = counted_stillness + delta if still else 0.0
 	var needed := stillness_seconds * (0.5 if sitting else 1.0)
-	if stillness >= needed and is_engaged():
+	if counted_stillness >= needed:
 		phase = Phase.RESOLVED
 		resolved.emit()
 
 
+## The player has really tried the race: covered the distance, and hurried or kept at it.
+## Before that, stopping is only a pause (one would otherwise solve it by chance).
 func is_engaged() -> bool:
-	return distance_walked >= ENGAGE_DISTANCE
+	return (
+		distance_walked >= ENGAGE_DISTANCE
+		and (sprint_seconds >= ENGAGE_SPRINT_SECONDS or elapsed >= ENGAGE_SECONDS)
+	)
 
 
 ## Multiplier for the player's speed (fatigue makes running less effective).
@@ -78,7 +92,7 @@ func mood(speed: float, walk_speed: float) -> Mood:
 	elif elapsed < 1.5:
 		result = Mood.START
 	elif stillness > 1.2:
-		result = Mood.PUZZLED
+		result = Mood.PUZZLED if is_engaged() else Mood.PUZZLED_EARLY
 	elif speed < walk_speed * 0.5:
 		result = Mood.WORRIED
 	elif fatigue > 0.5:

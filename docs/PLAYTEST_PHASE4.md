@@ -105,7 +105,7 @@ dann sehe ich, wie lange jeder Teil gedauert hat, ohne dass du mitschreiben muss
 |-------------|-----------|
 | `elysia_start` | Erwachen |
 | `butterflies_caught` | alle drei Schmetterlinge |
-| `irritation` | Truhe geöffnet, Elysia wiederholt sich |
+| `irritation` | Truhe geöffnet und Schmetterlinge zurück (in beliebiger Reihenfolge), Elysia wiederholt sich |
 | `mirror`, `child` | Becken angesehen, Kind getroffen |
 | `rift_found` | der Riss öffnet sich |
 | `valley_arrival` | Ankunft im Tal |

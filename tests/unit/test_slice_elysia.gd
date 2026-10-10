@@ -217,10 +217,34 @@ func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
 	assert_true(WorldState.has_flag("elysia.rift_open"), "nobody gets stuck in Elysia")
 
 
+## Butterflies back, all three caught and returned.
+func _butterflies_done() -> void:
+	WorldState.start_quest("side_elysia_butterflies")
+	for objective: String in ElysiaScene.BUTTERFLY_OBJECTIVES:
+		WorldState.complete_objective("side_elysia_butterflies", objective)
+	WorldState.advance_quest("side_elysia_butterflies", "done")
+
+
+func test_the_chest_on_the_way_does_not_cut_the_butterflies_short() -> void:
+	var scene: GameScene = ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	WorldState.set_flag("elysia.chest_tree_opened")
+	await wait_physics_frames(2)
+	assert_false(WorldState.has_flag("elysia.loops"), "the miniquest comes first")
+	_butterflies_done()
+	await wait_physics_frames(2)
+	assert_true(WorldState.has_flag("elysia.loops"), "then Elysia starts repeating")
+	assert_true(Beat.reached("irritation"))
+
+
 func test_chest_starts_the_loops_and_the_child_opens_the_rift() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
+	_butterflies_done()
+	await wait_physics_frames(2)
+	assert_false(WorldState.has_flag("elysia.loops"), "the chest is still closed")
 	assert_eq(get_tree().get_nodes_in_group(&"child_guide").size(), 0, "child comes later")
 	WorldState.set_flag("elysia.chest_tree_opened")
 	await wait_physics_frames(2)
@@ -253,3 +277,37 @@ func test_the_rift_opens_in_time_even_after_loading() -> void:
 	add_child_autofree(scene)
 	await wait_process_frames(3)
 	assert_true(WorldState.has_flag("elysia.rift_open"))
+
+
+## First line of `cue` in the Elysia dialogue (its mutations run when it is left).
+func _first_line(cue: String) -> String:
+	var resource := load(ElysiaScene.DIALOGUE) as DialogueResource
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(resource, cue)
+	var text := line.text
+	while line != null:
+		line = await DialogueManager.get_next_dialogue_line(resource, line.next_id)
+	return text
+
+
+func test_the_missing_reflection_cannot_be_skipped() -> void:
+	WorldState.start_quest("side_elysia_fountain")
+	WorldState.advance_quest("side_elysia_fountain", "done")
+	assert_eq(
+		await _first_line("basin"),
+		"Das Wasser im Becken ist klar und vollkommen still.",
+		"the mirror first, even with the fountain fixed"
+	)
+	assert_true(WorldState.has_flag("elysia.mirror_seen"))
+	assert_true((await _first_line("basin")).begins_with("Das Becken plätschert."))
+	assert_eq(await _first_line("basin"), "Das Wasser ist still wie Glas. Es zeigt alles.")
+
+
+func test_the_first_sniff_is_the_first() -> void:
+	assert_eq(
+		await _first_line("flower"),
+		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
+	)
+	assert_ne(
+		await _first_line("flower"),
+		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
+	)

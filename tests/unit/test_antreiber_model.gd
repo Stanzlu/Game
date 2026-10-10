@@ -15,6 +15,13 @@ func _run(
 		model.update(dt, speed * dt * model.speed_scale(), input, sprinting, sitting)
 
 
+## Tries the race for real: a long walk and a short sprint.
+func _engage() -> void:
+	_run(10.0, 84.0, false)
+	_run(2.5, 140.0, true)
+	assert_true(model.is_engaged())
+
+
 func test_walking_makes_the_goal_recede() -> void:
 	var start := model.goal_distance
 	_run(3.0, 84.0, false)
@@ -47,7 +54,7 @@ func test_fatigue_recovers_when_not_sprinting() -> void:
 
 func test_standing_still_resolves_after_the_set_time() -> void:
 	watch_signals(model)
-	_run(6.0, 84.0, false)
+	_engage()
 	_run(2.9, 0.0, false, false)
 	assert_false(model.is_resolved())
 	_run(0.2, 0.0, false, false)
@@ -56,7 +63,7 @@ func test_standing_still_resolves_after_the_set_time() -> void:
 
 
 func test_any_input_resets_stillness() -> void:
-	_run(6.0, 84.0, false)
+	_engage()
 	_run(2.5, 0.0, false, false)
 	_run(0.1, 0.0, false, true)
 	_run(2.5, 0.0, false, false)
@@ -64,7 +71,7 @@ func test_any_input_resets_stillness() -> void:
 
 
 func test_sitting_resolves_twice_as_fast() -> void:
-	_run(6.0, 84.0, false)
+	_engage()
 	_run(1.6, 0.0, false, false, true)
 	assert_true(model.is_resolved())
 
@@ -81,6 +88,9 @@ func test_moods_follow_behaviour() -> void:
 	assert_eq(model.mood(84.0, 84.0), AntreiberModel.Mood.URGING)
 	assert_eq(model.mood(140.0, 84.0), AntreiberModel.Mood.CHEERING)
 	assert_eq(model.mood(10.0, 84.0), AntreiberModel.Mood.WORRIED)
+	_run(1.5, 0.0, false, false)
+	assert_eq(model.mood(0.0, 84.0), AntreiberModel.Mood.PUZZLED_EARLY, "not even started")
+	_engage()
 	_run(1.5, 0.0, false, false)
 	assert_eq(model.mood(0.0, 84.0), AntreiberModel.Mood.PUZZLED)
 
@@ -99,3 +109,33 @@ func test_standing_at_the_start_does_not_resolve() -> void:
 	_run(10.0, 0.0, false, false)
 	assert_false(model.is_resolved(), "the race has to be tried first")
 	assert_false(model.is_engaged())
+
+
+func test_a_short_walk_and_a_stop_is_only_a_pause() -> void:
+	# the old threshold (480 px, about six seconds of walking) solved it by accident
+	_run(6.0, 84.0, false)
+	_run(5.0, 0.0, false, false)
+	assert_false(model.is_resolved())
+	assert_eq(model.mood(0.0, 84.0), AntreiberModel.Mood.PUZZLED_EARLY)
+
+
+func test_far_without_hurrying_counts_only_after_a_while() -> void:
+	_run(12.0, 84.0, false)
+	assert_gt(model.distance_walked, AntreiberModel.ENGAGE_DISTANCE)
+	assert_false(model.is_engaged(), "walked far, but never hurried")
+	_run(AntreiberModel.ENGAGE_SECONDS - 12.5, 0.0, false, false)
+	assert_false(model.is_resolved(), "standing before that does not count")
+	_run(0.6, 0.0, false, false)
+	assert_true(model.is_engaged(), "kept at it long enough")
+	_run(model.stillness_seconds - 0.2, 0.0, false, false)
+	assert_false(model.is_resolved(), "stillness counts from then on")
+	_run(0.3, 0.0, false, false)
+	assert_true(model.is_resolved())
+
+
+func test_a_sprint_alone_is_not_far_enough() -> void:
+	_run(3.0, 140.0, true)
+	assert_gte(model.sprint_seconds, AntreiberModel.ENGAGE_SPRINT_SECONDS)
+	_run(5.0, 0.0, false, false)
+	assert_false(model.is_engaged())
+	assert_false(model.is_resolved())

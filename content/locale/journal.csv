@@ -24,7 +24,7 @@ QUEST_SIDE_ELYSIA_BUTTERFLIES_DONE,"Die Schmetterlinge sind zurück und fliegen 
 QUEST_MAIN_VALLEY_SHELTER_TITLE,Ein Dach
 QUEST_MAIN_VALLEY_SHELTER_CROSS,"Regen. Die Frau am Bach heißt Mira und hat Nein gesagt. Drüben überm Bach soll ein leeres Haus stehen. Die Brücke ist kaputt."
 QUEST_MAIN_VALLEY_SHELTER_HOUSE,"Ich bin drüben. Irgendwo hier muss das Haus sein."
-QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräuchte ich trockenes Holz. Mira meint, im alten Schuppen am Ende des Weges nach Westen liegt welches."
+QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräuchte ich trockenes Holz. Laut dem Zettel am Kamin liegt welches im Schuppen am Ende des Weges nach Westen."
 QUEST_MAIN_VALLEY_SHELTER_FIRE,"Ich hab trockenes Holz. Jetzt zurück zum Haus, zum Kamin."
 QUEST_MAIN_VALLEY_SHELTER_DONE,"Das Feuer brennt. Es ist nicht viel. Aber es ist warm."
 QUEST_SIDE_VALLEY_GOAT_TITLE,Der Stiefel
@@ -52,6 +52,9 @@ MEMORY_MIRA_SILENT_YES,"Sie kam mit Fisch. Ich habe nichts gesagt, sie hat es al
 MEMORY_MIRA_SAID_ELSEWHERE,"Sie wollte wissen, wo ich herkomme. Von woanders. Woanders ist groß."
 MEMORY_MIRA_SAID_ELYSIA,"Sie wollte wissen, wo ich herkomme. Aus Elysia. Klingt für sie nach einem Ort ohne Regen."
 MEMORY_MIRA_SAID_DONT_KNOW,"Sie wollte wissen, wo ich herkomme. Ich weiß es nicht genau. Sie kennt das."
+MEMORY_MIRA_PRAISED_FISH,"Ich habe gesagt, das sei der beste Fisch, den ich je gegessen habe. Sie hat widersprochen: zu lang im Feuer. Aber gut."
+MEMORY_MIRA_AGREED_FISH,"Sie meinte, der Fisch sei gut. Ich habe Ja gesagt. Sie hat Eben gesagt."
+MEMORY_MIRA_ATE_QUIETLY,"Wir haben Fisch gegessen und nichts gesagt. Der Regen hat aufs Dach getrommelt."
 MEMORY_MIRA_ASKED_BOOT,"Die Ziege hat ihren Stiefel. Sie hatten unterschiedliche Pläne."
 MEMORY_MIRA_OFFERED_BOOT,"Ich hole ihr den Stiefel, wenn ich die Ziege sehe. Sie rennt keiner Ziege hinterher."
 MEMORY_MIRA_TOLD_GOAT_STORY,"Ich habe ihr den Stiefel gebracht und erzählt, was die Ziege dafür wollte."

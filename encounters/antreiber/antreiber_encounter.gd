@@ -124,6 +124,8 @@ func _on_resolved() -> void:
 	player.speed_scale = 1.0
 	antreiber.resolve(player)
 	var beside := Vector2(player.global_position.x + goal_beside, PATH_Y + goal_offset_y)
+	# from here an idle-time tween moves it, not the physics step
+	flag.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var tween := create_tween()
 	tween.tween_property(flag, ^"global_position", beside, 1.2).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(_after_resolved)
@@ -175,6 +177,7 @@ func _segment_at(index: int) -> MapView:
 		return _build_segment(index)
 	var segment: MapView = parked.pop_back()
 	segment.shift_to(Vector2(index * SEGMENT_TILES.x * TILE, 0))
+	segment.set_active(true)
 	return segment
 
 
@@ -190,7 +193,9 @@ func _park(segment: MapView) -> void:
 	if parked.size() >= POOL_SIZE:
 		segment.queue_free()
 		return
+	# out of sight and out of the frame budget: no drawing, no sway, no particles
 	segment.shift_to(PARKED)
+	segment.set_active(false)
 	parked.append(segment)
 
 

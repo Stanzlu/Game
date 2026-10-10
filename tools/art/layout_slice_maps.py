@@ -169,6 +169,12 @@ def tal():
         # path once he followed you back from the shed
         "e": [(49, 22)],
         "t": [(6, 23)],
+        # more to look at: the stones from the east bank, where the rift was, a signpost with
+        # one word left at the end of the track south, the overgrown vegetable bed
+        "l": [(STONE_X + len(STONE_FIELD[0]) + 1, STONE_ROWS[1])],
+        "!": [(58, 8)],
+        "|": [(9, 30)],
+        "+": [(12, 11)],
         # until Mira was asked, the stream holds you back (her no is the valley's first beat)
         "J": [(log_cells[-1], LOG_ROW)],
         "j": [(STONE_X + len(STONE_FIELD[0]), STONE_ROWS[1])],

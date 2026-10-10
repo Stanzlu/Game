@@ -107,3 +107,77 @@ func test_the_door_waits_for_mira_after_the_fire() -> void:
 	assert_eq(_count(scene, "Blocker"), 1, "nobody misses Mira's visit by walking out")
 	WorldState.set_flag("house.mira_visited")
 	assert_eq(_count(scene, "Blocker"), 0, "open again after her visit")
+
+
+# --- Texts (text and puzzle pass, 10.10.) ----------------------------------------------
+
+
+## Plays `cue` to its end, picking the first allowed answer that contains `pick`.
+func _play(cue: String, pick := "") -> PackedStringArray:
+	var resource := load(HausScene.DIALOGUE) as DialogueResource
+	var seen: PackedStringArray = []
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(resource, cue)
+	while line != null:
+		seen.append(line.text)
+		var next_id := line.next_id
+		if not line.responses.is_empty():
+			var chosen: DialogueResponse = null
+			for r: DialogueResponse in line.responses:
+				if r.is_allowed and (chosen == null or (not pick.is_empty() and pick in r.text)):
+					chosen = r
+			seen.append(chosen.text)
+			next_id = chosen.next_id
+		line = await DialogueManager.get_next_dialogue_line(resource, next_id)
+	return seen
+
+
+func test_the_shelf_counts_its_free_spaces() -> void:
+	WorldState.add_item("item_stone", 1, false)
+	var seen := await _play("shelf", "Nichts")
+	assert_true("Zwei Fächer sind ganz leer" in seen[0])
+	assert_true("Beide gerade groß genug für etwas Kleines." in seen, "both are free")
+	assert_true("Du behältst den Stein. Das Fach kann warten." in seen, "no spoon joke")
+	seen = await _play("shelf", "Stein")
+	assert_eq(WorldState.curiosity_in("shelf_2"), "item_stone")
+	seen = await _play("shelf")
+	assert_eq(
+		seen[0], "Im Regal liegt der Stein. Er glänzt nicht. Er liegt einfach gut da.", "alone"
+	)
+	WorldState.add_item("curiosity_tiny_spoon", 1, false)
+	seen = await _play("shelf", "Nichts")
+	assert_true("Ein Fach ist noch frei, gerade groß genug für etwas Kleines." in seen)
+	assert_true("Du behältst den Löffel. Für sehr kleine Suppen, vielleicht." in seen)
+
+
+func test_mira_disagrees_about_her_fish() -> void:
+	var seen := await _play("mira_visit", "beste Fisch")
+	assert_true("Nein. Der war zu lang im Feuer." in seen, "Game Bible §56: Mira widerspricht")
+	assert_true(WorldState.has_memory("mira", "praised_fish"))
+	assert_ne(tr("MEMORY_MIRA_PRAISED_FISH"), "MEMORY_MIRA_PRAISED_FISH", "in the journal")
+	WorldState.new_game()
+	seen = await _play("mira_visit", "…")
+	assert_true("Ihr esst. Der Regen trommelt aufs Dach." in seen)
+	assert_true(WorldState.has_memory("mira", "ate_quietly"))
+
+
+func test_mira_finds_a_free_place_next_to_the_antreiber() -> void:
+	WorldState.set_flag("house.antreiber_by_fire")
+	var seen := await _play("mira_visit")
+	assert_true(
+		(
+			(
+				"Der Antreiber rückt ein Stück zur Seite. Mira setzt sich auf den freien Platz,"
+				+ " als wäre er immer frei gewesen."
+			)
+			in seen
+		)
+	)
+
+
+func test_the_bucket_by_the_fire() -> void:
+	assert_eq((await _play("bucket")).size(), 1)
+	WorldState.set_fire_lit(true)
+	assert_eq(
+		await _play("bucket"),
+		PackedStringArray(["Es tropft in den Eimer. Plink. Lange nichts. Plink."])
+	)
