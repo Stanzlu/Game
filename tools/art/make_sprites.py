@@ -531,24 +531,45 @@ def tall_grass(style, seed, w=18, h=20):
 
 
 def reeds(seed, style="elysia"):
+    """A narrow clump of reeds: thin stems in two tones (back ones dark, front ones mid) with
+    light tips, two cattails. Only the base clump is outlined: an outline around every 1-px
+    stem made each clump a dark pillar three pixels wide, and neighbouring clumps stacked
+    into a wall."""
     rng = np.random.default_rng(seed)
     ex = dict(EXTRA["elysia"])
     if style != "elysia":
         ex["stem"] = pa.STYLES[style]["grass"][1:]
         ex["bark"] = pa.STYLES[style]["wood"]
-    c = Canvas(16, 26)
-    for k in range(6):
-        x0 = 8 + rng.normal(0, 2.5)
-        top = rng.uniform(3, 10)
-        lean = rng.uniform(-0.2, 0.2)
-        for y in range(int(top), 24):
-            x = int(x0 + lean * (24 - y))
-            c.paint(c.rect(x, y, x + 1, y + 1), ex["stem"], 0.3 + 0.5 * (24 - y) / 24, dither=False)
-        if k % 2 == 0:
-            x = int(x0 + lean * (24 - top))
-            c.paint(c.rect(x - 1, int(top), x + 1, int(top) + 4), ex["bark"],
-                    np.where(c.xx < x, 0.8, 0.4))
+    stem, bark = ex["stem"], ex["bark"]
+    w, base = 10, 24
+    c = Canvas(w, 26)
+    xs = np.clip(np.round(w / 2 - 0.5 + np.linspace(-3.2, 3.2, 5) + rng.normal(0, 0.6, 5)), 1, w - 2)
+    order = rng.permutation(5)
+    heads = set(order[:2].tolist())
+    for k in order:  # back stems first (dark), front stems over them (lighter)
+        front = k % 2 == 1
+        top = int(rng.uniform(3, 9)) if k in heads else int(rng.uniform(6, 13))
+        lean = rng.uniform(-0.15, 0.15) + (xs[k] + 0.5 - w / 2) * 0.03
+        tone = stem[2] if front else stem[1]
+        for y in range(top, base):
+            x = int(np.clip(round(xs[k] + lean * (base - y)), 0, w - 1))
+            tip = y < top + (2 if k not in heads else 0)
+            c.fill(c.rect(x, y, x + 1, y + 1), stem[3] if tip else tone)
+        if k in heads:
+            # cattail: lit on the left, shaded on the right, a short light spike on top
+            x = int(np.clip(round(xs[k] + lean * (base - top)), 1, w - 1))
+            c.fill(c.rect(x - 1, top, x, top + 4), bark[3])
+            c.fill(c.rect(x, top, x + 1, top + 4), bark[1])
+            c.fill(c.rect(x, top - 1, x + 1, top), stem[3])
+    # base clump of short blades, the only outlined part (its lowest rows and the ground line)
+    for x in range(1, w - 1):
+        tall = int(rng.integers(1, 4)) if 2 <= x <= w - 3 else 1
+        c.fill(c.rect(x, base - tall, x + 1, base), stem[1] if x >= w / 2 else stem[2])
+        c.fill(c.rect(x, base - tall, x + 1, base - tall + 1), stem[2] if x >= w / 2 else stem[3])
+    before = c.a.copy()
     c.outline(pa.STYLES[style]["outline"])
+    added = c.a & ~before
+    c.a[added & (c.yy < base - 1)] = False
     return c
 
 
@@ -1328,7 +1349,7 @@ def build():
          shadow=[5, 2])
     save("elysia", "lily_pad", [lily_pad(40, False), lily_pad(41, True), lily_pad(42, False)], (7, 5),
          flat=True, bob=1.0)
-    save("elysia", "reeds", [reeds(50), reeds(51)], (8, 23), sway=2.0)
+    save("elysia", "reeds", [reeds(50), reeds(51)], (5, 23), sway=2.0)
     save("elysia", "fence", fence("elysia", 60), (9, 14), shape={"rect": [16, 4], "offset": [0, -1]})
     save("elysia", "bench", bench("elysia"), (10, 18))
     save("elysia", "fountain", fountain(), (30, 42), shape={"circle": 23, "offset": [0, -5]},
@@ -1415,7 +1436,7 @@ def build():
         save(style, "leaves", [fallen_leaves(style, 560 + i) for i in range(4)], (6, 3), flat=True)
         save(style, "small_mushrooms", [small_mushrooms(style, 570 + i) for i in range(3)], (5, 8))
         if style != "elysia":
-            save(style, "reeds", [reeds(580 + i, style) for i in range(2)], (8, 23), sway=2.0)
+            save(style, "reeds", [reeds(580 + i, style) for i in range(2)], (5, 23), sway=2.0)
             save(style, "bush", [bush(style, 590 + i, "foliage") for i in range(2)] + [bush(style, 592, "foliage_blue")],
                  (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
     for style in ("elysia", "tal", "wald"):
