@@ -292,8 +292,9 @@ def bush(style, seed, leaves="foliage", w=26, h=22):
     return c
 
 
-def sacred_tree(seed=7):
-    """Elysia's landmark: twisted dark trunk with roots, huge blossom crown, hanging wisteria."""
+def sacred_tree(seed=7, in_water=True):
+    """Elysia's landmark: twisted dark trunk with roots, huge blossom crown, hanging wisteria.
+    In the game it stands in its basin (wet roots, foam); `in_water=False` for dry ground."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["elysia"]
     W, H = 208, 190
@@ -403,6 +404,9 @@ def sacred_tree(seed=7):
             width = 2 if t < 0.6 else 1
             m = c.rect(x + wobble, y0 + k, x + wobble + width, y0 + k + 2)
             c.paint(m, wis, tone, dither=False)
+    if not in_water:  # standing on grass (the title island)
+        c.outline(st["outline"])
+        return c
     # the roots lie in the water: their lowest pixels are wet and dark-turquoise, and a broken
     # rim of foam runs where they leave the water (below the outline), more at the tips
     water = st["water"]
