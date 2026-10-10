@@ -206,7 +206,10 @@ func _apply(key: String) -> void:
 		if bus >= 0:
 			var step := get_int(key)
 			AudioServer.set_bus_mute(bus, step == 0)
-			AudioServer.set_bus_volume_db(bus, linear_to_db(step / 10.0) if step > 0 else -80.0)
+			# squared taper: half the slider is -12 dB, which sounds about half as loud
+			AudioServer.set_bus_volume_db(
+				bus, linear_to_db(pow(step / 10.0, 2.0)) if step > 0 else -80.0
+			)
 	elif key == "text.large":
 		TextSize.apply(get_bool(key))
 	elif key == "display.vsync":
