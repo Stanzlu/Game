@@ -147,7 +147,7 @@ func _on_spoke(letter: String, letter_index: int, _speed: float) -> void:
 		return
 	# The Real world is quieter than Elysia.
 	var real := WorldState.ui_mode() == GameState.UiMode.REAL
-	AudioDirector.voice(_voice, -5.0 if real else 0.0)
+	AudioDirector.voice(_voice, -5.0 if real else -3.0)
 
 
 func _auto_advance(for_line: DialogueLine) -> void:

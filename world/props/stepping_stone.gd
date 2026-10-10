@@ -58,7 +58,7 @@ func _on_body_entered(body: Node2D) -> void:
 	_falling = true
 	var player := body as Player
 	var heading := player.velocity
-	AudioDirector.sfx("stone_wobble", -3.0)
+	AudioDirector.sfx("stone_wobble", 4.0)
 	var rock := create_tween()
 	rock.tween_property(_sprite, ^"rotation", 0.22, TIP_SECONDS * 0.5)
 	rock.tween_property(_sprite, ^"rotation", -0.12, TIP_SECONDS * 0.5)
