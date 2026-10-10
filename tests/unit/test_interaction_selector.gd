@@ -29,3 +29,17 @@ func test_priority_wins_among_nearby_targets() -> void:
 		_c(Vector2(8, 0), 0, "near"), _c(Vector2(14, 2), 1, "important")
 	]
 	assert_eq(InteractionSelector.pick(Vector2.ZERO, Vector2.RIGHT, cands)["id"], "important")
+
+
+func test_priority_does_not_beat_the_one_you_face() -> void:
+	# NPCs have priority 1, doors 2 (npc_walker.gd, door.gd)
+	var cands: Array[Dictionary] = [
+		_c(Vector2(14, 0), 1, "person ahead"), _c(Vector2(0, 14), 2, "door beside")
+	]
+	assert_eq(InteractionSelector.pick(Vector2.ZERO, Vector2.RIGHT, cands)["id"], "person ahead")
+
+
+func test_the_current_target_holds_against_an_equal_one() -> void:
+	var cands: Array[Dictionary] = [_c(Vector2(14, -3), 0, "a"), _c(Vector2(14, 2), 0, "b")]
+	assert_eq(InteractionSelector.pick(Vector2.ZERO, Vector2.RIGHT, cands)["id"], "b")
+	assert_eq(InteractionSelector.pick(Vector2.ZERO, Vector2.RIGHT, cands, "a")["id"], "a")

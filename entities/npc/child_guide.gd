@@ -85,7 +85,7 @@ func _physics_process(delta: float) -> void:
 				player != null
 				and global_position.distance_to(player.global_position) < CALL_DISTANCE
 			):
-				facing = Facing.from_vector(player.global_position - global_position)
+				facing = Facing.from_vector_stable(facing, player.global_position - global_position)
 			else:
 				facing = Facing.Dir.N
 			_play("idle")
@@ -94,7 +94,7 @@ func _physics_process(delta: float) -> void:
 		Step.WAIT_AT_END:
 			velocity = Vector2.ZERO
 			if player != null:
-				facing = Facing.from_vector(player.global_position - global_position)
+				facing = Facing.from_vector_stable(facing, player.global_position - global_position)
 			_play("idle")
 
 
@@ -105,7 +105,7 @@ func _lead(delta: float, player: Node2D) -> void:
 	if player != null and global_position.distance_to(player.global_position) > KEEP_UP:
 		# wait and look back until the player catches up
 		velocity = Vector2.ZERO
-		facing = Facing.from_vector(player.global_position - global_position)
+		facing = Facing.from_vector_stable(facing, player.global_position - global_position)
 		_play("idle")
 		return
 	var goal := _origin + guide[_target]

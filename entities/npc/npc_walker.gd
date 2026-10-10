@@ -16,6 +16,8 @@ const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
 const ARRIVE_DISTANCE := 2.0
 const STUCK_SECONDS := 1.5
+## Speed the walk cycle is drawn for (the player's walk, entities/player/tuning/direkt.tres).
+const WALK_CYCLE_SPEED := 88.0
 const DEFAULT_DIALOGUE := "res://content/dialogue/sandbox/sandbox.dialogue"
 const TALK_RADIUS := 14.0
 
@@ -142,7 +144,7 @@ func _physics_process(delta: float) -> void:
 			attending = false
 	if attending and player != null:
 		velocity = Vector2.ZERO
-		facing = Facing.from_vector(player.global_position - global_position)
+		facing = Facing.from_vector_stable(facing, player.global_position - global_position)
 		_play("idle")
 		return
 	if route.is_empty() or _wait > 0.0:
@@ -207,6 +209,8 @@ func _play(state_name: String) -> void:
 	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
 		sprite.play(anim)
+	# the walk cycle is drawn for the player's pace; slower walkers step slower, not paddle
+	sprite.speed_scale = clampf(speed / WALK_CYCLE_SPEED, 0.5, 1.0) if state_name == "walk" else 1.0
 
 
 func _on_animation_finished() -> void:

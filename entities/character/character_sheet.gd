@@ -8,8 +8,8 @@ extends Resource
 
 const STATES := [
 	{"name": "idle", "frames": 2, "fps": 2.0, "loop": true},
-	{"name": "walk", "frames": 4, "fps": 8.0, "loop": true},
-	{"name": "run", "frames": 4, "fps": 12.0, "loop": true},
+	{"name": "walk", "frames": 4, "fps": 10.0, "loop": true},
+	{"name": "run", "frames": 4, "fps": 14.0, "loop": true},
 	{"name": "sit", "frames": 1, "fps": 1.0, "loop": false},
 	{"name": "look", "frames": 4, "fps": 4.0, "loop": false},
 ]

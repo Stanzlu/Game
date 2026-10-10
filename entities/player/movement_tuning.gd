@@ -14,7 +14,5 @@ extends Resource
 @export_range(0.1, 1.0) var slow_walk_factor := 0.4
 ## Minimum stick tilt for sprinting.
 @export_range(0.0, 1.0) var sprint_min_tilt := 0.5
-@export var step_distance_walk := 14.0
-@export var step_distance_run := 20.0
 ## How far the player is nudged sideways around a corner they barely clip.
 @export_range(0, 8) var corner_nudge_px := 4

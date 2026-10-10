@@ -24,7 +24,9 @@ func update_target(actor: Node2D, facing_vector: Vector2, active: bool) -> void:
 				candidates.append(
 					{"position": it.global_position, "priority": it.interact_priority, "id": it}
 				)
-		var best := InteractionSelector.pick(actor.global_position, facing_vector, candidates)
+		var best := InteractionSelector.pick(
+			actor.global_position, facing_vector, candidates, current
+		)
 		if not best.is_empty():
 			next = best["id"]
 	if next != current:
