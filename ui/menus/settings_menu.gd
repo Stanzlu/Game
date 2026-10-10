@@ -12,6 +12,8 @@ const VOLUMES := [
 ]
 const STEPS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+var _confirm: ConfirmMenu
+
 
 func _ready() -> void:
 	title_key = "SETTINGS_TITLE"
@@ -65,5 +67,17 @@ func _build() -> void:
 
 
 func _reset() -> void:
-	Settings.reset_to_defaults()
-	rebuild()
+	if _confirm == null:
+		_confirm = ConfirmMenu.new()
+		_confirm.name = "ConfirmReset"
+		_confirm.follow_mode = follow_mode
+		_confirm.sound_set = sound_set
+		add_child(_confirm)
+		stack(_confirm)
+		_confirm.answered.connect(
+			func(yes: bool) -> void:
+				if yes:
+					Settings.reset_to_defaults()
+				rebuild()
+		)
+	_confirm.ask("CONFIRM_RESET_SETTINGS")

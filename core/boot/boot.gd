@@ -34,6 +34,7 @@ var _save_menu: SaveMenu
 var _settings_menu: SettingsMenu
 var _prototypes: PrototypeMenu
 var _name_entry: NameEntry
+var _confirm: ConfirmMenu
 ## Hero name chosen for the next new game (applied after WorldState.new_game()).
 var _new_name := ""
 var _leaving := false
@@ -196,7 +197,17 @@ func _build_menus() -> void:
 	_name_entry.sound_set = _sound_set()
 	_name_entry.chosen.connect(_start_new_game)
 	add_child(_name_entry)
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry]:
+	_confirm = ConfirmMenu.new()
+	_confirm.name = "ConfirmNewGame"
+	_confirm.follow_mode = false
+	_confirm.sound_set = _sound_set()
+	add_child(_confirm)
+	_confirm.answered.connect(
+		func(yes: bool) -> void:
+			if yes:
+				_name_entry.open()
+	)
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry, _confirm]:
 		menu.frame.theme = theme
 	list = OptionList.new()
 	list.sound_skin = _sound_set()
@@ -223,7 +234,7 @@ func _rebuild_list() -> void:
 	_continue = null
 	if not SaveSystem.latest_slot().is_empty():
 		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
-	list.add_action("MENU_NEW_GAME", _name_entry.open)
+	list.add_action("MENU_NEW_GAME", _new_game_requested)
 	list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
 	list.add_action("MENU_PROTOTYPES", _prototypes.open)
 	list.add_action("MENU_SETTINGS", _settings_menu.open)
@@ -268,13 +279,23 @@ func _play_intro() -> void:
 		tween.tween_property(node, ^"modulate:a", 1.0, 0.5).set_delay(0.7)
 
 
+## A new game replaces the autosave: with a running game in it, ask first (slots stay).
+func _new_game_requested() -> void:
+	if SaveSystem.summary(SaveService.AUTOSAVE)["status"] == "ok":
+		_confirm.ask("CONFIRM_NEW_GAME", "CONFIRM_NEW_GAME_YES", "MENU_BACK")
+	else:
+		_name_entry.open()
+
+
 ## Loads the newest readable save ("Fortsetzen", `--continue`).
 func _continue_latest() -> void:
 	var slot := SaveSystem.latest_slot()
 	if slot.is_empty():
 		Log.warn(Log.Category.SAVE, "nothing to continue")
 		return
-	SaveSystem.load_slot(slot)
+	await ScreenFade.fade_out(0.3)
+	if SaveSystem.load_slot(slot) != OK:
+		ScreenFade.fade_in(0.3)
 
 
 func _quit() -> void:

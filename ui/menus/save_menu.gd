@@ -71,6 +71,9 @@ func _ask(slot: String, message: String) -> void:
 	_confirm = slot
 	_message = message
 	rebuild()
+	if not slot.is_empty():
+		# the safe answer first: overwriting or loading a backup needs a deliberate yes
+		list.focus_index.call_deferred(1)
 
 
 func _save(slot: String) -> void:
@@ -79,7 +82,9 @@ func _save(slot: String) -> void:
 
 
 func _load(slot: String, backup: bool) -> void:
+	await ScreenFade.fade_out(0.3)
 	if SaveSystem.load_slot(slot, backup) != OK:
+		ScreenFade.fade_in(0.3)
 		_ask("", tr("LOAD_FAILED"))
 
 

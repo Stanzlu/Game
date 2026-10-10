@@ -52,6 +52,11 @@ PAUSE_LOAD,Laden
 PAUSE_SETTINGS,Einstellungen
 OPTION_YES,Ja
 OPTION_NO,Nein
+CONFIRM_NEW_GAME,"Neues Spiel beginnen? Der automatische Spielstand wird ersetzt, deine Slots bleiben erhalten."
+CONFIRM_NEW_GAME_YES,Neu beginnen
+CONFIRM_LEAVE_UNSAVED,"Hier kann gerade nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
+CONFIRM_LEAVE_YES,Trotzdem gehen
+CONFIRM_RESET_SETTINGS,Alle Einstellungen auf den Anfang zurücksetzen?
 INTERACT_TALK,Ansprechen
 INTERACT_ENTER,Hineingehen
 INTERACT_CATCH,Fangen

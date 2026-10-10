@@ -8,8 +8,11 @@ extends MenuLayer
 ## shared memories (Game Bible §23: relationships show as memories, never as values).
 
 const JOURNAL_GROUP := &"journal"
+## Pixels per second the entry text scrolls (scroll_up/scroll_down: page keys, right stick).
+const SCROLL_SPEED := 160.0
 
 var _detail: Label
+var _detail_scroll: ScrollContainer
 
 
 func _ready() -> void:
@@ -18,12 +21,16 @@ func _ready() -> void:
 	layer = 42
 	super()
 	add_to_group(JOURNAL_GROUP)
+	# long entries scroll instead of growing past the screen (by the end of the slice a
+	# quest has many stages and Mira many memories)
+	_detail_scroll = ScrollContainer.new()
+	_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	body.add_child(_detail_scroll)
 	_detail = Label.new()
 	_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_detail.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
-	_detail.custom_minimum_size = Vector2(240, 120)
-	_detail.size_flags_vertical = Control.SIZE_FILL
-	body.add_child(_detail)
+	_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_detail_scroll.add_child(_detail)
 
 
 func _build() -> void:
@@ -54,7 +61,7 @@ func _add_section(header: String, ids: Array[String]) -> void:
 		var button := list.add_action(
 			"", func() -> void: pass, true, tr(ContentDB.quest(quest_id).title_key())
 		)
-		button.focus_entered.connect(func() -> void: _detail.text = entry_text(quest_id))
+		button.focus_entered.connect(func() -> void: _show_detail(entry_text(quest_id)))
 
 
 func _add_people() -> void:
@@ -69,7 +76,35 @@ func _add_people() -> void:
 		var button := list.add_action(
 			"", func() -> void: pass, true, tr("JOURNAL_PERSON_%s" % npc.to_upper())
 		)
-		button.focus_entered.connect(func() -> void: _detail.text = person_text(npc))
+		button.focus_entered.connect(func() -> void: _show_detail(person_text(npc)))
+
+
+## Shows an entry; the newest lines are at the end, so the view starts there.
+func _show_detail(text: String) -> void:
+	_detail.text = text
+	_fit_detail.call_deferred()
+
+
+func _fit_detail() -> void:
+	var width := 320.0 if TextSize.large else 240.0
+	_detail.custom_minimum_size.x = width
+	_detail_scroll.custom_minimum_size.x = width
+	var lines := _detail.get_line_count()
+	var line_height := _detail.get_line_height() + _detail.get_theme_constant(&"line_spacing")
+	var viewport_height := get_viewport().get_visible_rect().size.y
+	_detail_scroll.custom_minimum_size.y = clampf(
+		lines * line_height, 120.0, viewport_height - 120.0
+	)
+	await get_tree().process_frame
+	_detail_scroll.scroll_vertical = int(_detail_scroll.get_v_scroll_bar().max_value)
+
+
+func _process(delta: float) -> void:
+	if not visible:
+		return
+	var direction := Input.get_axis(&"scroll_up", &"scroll_down")
+	if absf(direction) > 0.1:
+		_detail_scroll.scroll_vertical += roundi(direction * SCROLL_SPEED * delta)
 
 
 ## What happened with a person: one sentence per shared memory, in the order they happened.
@@ -119,6 +154,10 @@ func close() -> void:
 	if not visible:
 		return
 	super()
+	# opened from the pause menu: back to it, the game stays paused
+	for node in get_tree().get_nodes_in_group(GROUP):
+		if node != self and (node as MenuLayer).visible:
+			return
 	get_tree().paused = false
 
 

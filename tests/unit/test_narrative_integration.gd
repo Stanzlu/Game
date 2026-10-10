@@ -164,6 +164,60 @@ func test_journal_opens_lists_and_closes() -> void:
 	assert_false(get_tree().paused)
 
 
+func test_a_long_journal_entry_stays_on_screen() -> void:
+	var scene := await _scene()
+	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	WorldState.start_quest("main_valley_shelter")
+	for stage: String in ["house", "wood", "fire", "done"]:
+		WorldState.advance_quest("main_valley_shelter", stage)
+	for memory: String in [
+		"said_hello",
+		"asked_where",
+		"said_hero",
+		"first_silence",
+		"asked_shelter",
+		"asked_sleep",
+		"said_cold",
+		"stones_warned",
+		"chose_tree",
+		"invited_in",
+		"teased_back",
+		"said_elsewhere",
+		"asked_boot",
+		"told_goat_story",
+		"said_welcome"
+	]:
+		WorldState.add_memory("mira", memory)
+	await _tap(&"journal")
+	await wait_physics_frames(4)
+	var screen := scene.journal.get_viewport().get_visible_rect()
+	var panel := scene.journal.frame.find_children("*", "PanelContainer", true, false)[0] as Control
+	assert_true(screen.encloses(panel.get_global_rect()), "the quest's entry fits on the screen")
+	# the last row is Mira under "Menschen": all her memories
+	var rows := scene.journal.list.buttons()
+	rows[-1].grab_focus()
+	await wait_physics_frames(4)
+	screen = scene.journal.get_viewport().get_visible_rect()
+	panel = scene.journal.frame.find_children("*", "PanelContainer", true, false)[0] as Control
+	assert_true(screen.encloses(panel.get_global_rect()), "fifteen memories fit on the screen")
+	await _tap(&"journal")
+
+
+func test_the_journal_from_the_pause_menu_returns_to_it() -> void:
+	var scene := await _scene()
+	WorldState.start_quest("side_sandbox_gate")
+	await _tap(&"menu")
+	assert_true(scene.pause_menu.is_open())
+	scene.pause_menu._open_journal()
+	await wait_physics_frames(2)
+	assert_true(scene.journal.is_open())
+	await _tap(&"journal")
+	assert_true(scene.pause_menu.is_open(), "back in the pause menu")
+	assert_true(get_tree().paused, "still paused")
+	await _tap(&"menu")
+	assert_false(get_tree().paused)
+
+
 func test_pause_menu_is_navigable_and_wraps() -> void:
 	var scene := await _scene()
 	await _tap(&"menu")
