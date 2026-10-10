@@ -277,3 +277,37 @@ func test_the_rift_opens_in_time_even_after_loading() -> void:
 	add_child_autofree(scene)
 	await wait_process_frames(3)
 	assert_true(WorldState.has_flag("elysia.rift_open"))
+
+
+## First line of `cue` in the Elysia dialogue (its mutations run when it is left).
+func _first_line(cue: String) -> String:
+	var resource := load(ElysiaScene.DIALOGUE) as DialogueResource
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(resource, cue)
+	var text := line.text
+	while line != null:
+		line = await DialogueManager.get_next_dialogue_line(resource, line.next_id)
+	return text
+
+
+func test_the_missing_reflection_cannot_be_skipped() -> void:
+	WorldState.start_quest("side_elysia_fountain")
+	WorldState.advance_quest("side_elysia_fountain", "done")
+	assert_eq(
+		await _first_line("basin"),
+		"Das Wasser im Becken ist klar und vollkommen still.",
+		"the mirror first, even with the fountain fixed"
+	)
+	assert_true(WorldState.has_flag("elysia.mirror_seen"))
+	assert_true((await _first_line("basin")).begins_with("Das Becken plätschert."))
+	assert_eq(await _first_line("basin"), "Das Wasser ist still wie Glas. Es zeigt alles.")
+
+
+func test_the_first_sniff_is_the_first() -> void:
+	assert_eq(
+		await _first_line("flower"),
+		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
+	)
+	assert_ne(
+		await _first_line("flower"),
+		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
+	)
