@@ -20,7 +20,7 @@ enum SoundSet { FOLLOW, ELYSIA, REAL }
 const MUSIC_DIR := "res://assets/generated/music/"
 const TRACKS: PackedStringArray = ["elysia", "valley", "forest", "antreiber"]
 ## Mix level per track (the loops are not loudness-matched by design).
-const TRACK_DB := {"elysia": -9.0, "valley": -6.0, "forest": -8.0, "antreiber": -10.0}
+const TRACK_DB := {"elysia": -9.0, "valley": -7.0, "forest": -6.5, "antreiber": -9.5}
 const SILENT_DB := -60.0
 ## SILENT_DB as amplitude: the floor of linear fades.
 const MIN_AMPLITUDE := 0.001
