@@ -227,7 +227,7 @@ Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
 	Ihr esst. Der Regen trommelt aufs Dach. [ID:haus_mira_34]
 	do WorldState.add_memory("mira", "ate_quietly")
 if WorldState.has_flag("elysia.soup_served")
-	Er schmeckt nach Rauch und ein bisschen nach Bach. Und hat Gräten. Viele. [ID:haus_mira_28]
+	Der Fisch schmeckt nach Rauch und ein bisschen nach Bach. Und hat Gräten. Viele. [ID:haus_mira_28]
 Mira: Die Leute, die hier gewohnt haben, hatten eine Ziege. Die läuft noch rum. [ID:haus_mira_19]
 Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 - Deinen Stiefel? [ID:haus_mira_r7]
