@@ -197,6 +197,20 @@ func test_the_forest_ends_in_a_baked_treeline() -> void:
 	assert_eq(tal.treeline.texture.get_width(), int(tal.map.world_rect().size.x), "full width")
 
 
+func test_the_forest_goes_on_behind_the_treeline() -> void:
+	var image := (load("res://assets/generated/maps/tal_treeline.png") as Texture2D).get_image()
+	assert_eq(image.get_height(), LookScene.TREELINE_ABOVE + 32, "strip reaches up to the far rows")
+	var y := LookScene.TREELINE_ABOVE - 20
+	for x in range(0, image.get_width(), 8):
+		assert_gt(image.get_pixel(x, y).a, 0.5, "no sky between the rows at x=%d" % x)
+	var hazy := 0
+	for x in image.get_width():
+		var a := image.get_pixel(x, LookScene.TREELINE_ABOVE - 36).a
+		if a > 0.0 and a < 0.9:
+			hazy += 1
+	assert_gt(hazy, 0, "the farthest rows let the mist through")
+
+
 func test_the_stream_comes_from_beyond_the_forest() -> void:
 	var path := "res://content/maps/tal.txt"
 	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)

@@ -12,7 +12,7 @@ extends Node2D
 const RIDGES := [
 	[0.16, 92.0, 34.0, Color("#9aaec2"), Color("#d8d3cb"), 74.0, true, 0.75],
 	[0.3, 64.0, 24.0, Color("#738aa0"), Color("#a6a69c"), 52.0, false, 0.6],
-	[0.48, 38.0, 14.0, Color("#4a616e"), Color("#6f7a6c"), 34.0, false, 0.5],
+	[0.48, 54.0, 14.0, Color("#4a616e"), Color("#6f7a6c"), 34.0, false, 0.5],
 ]
 const SKY_TOP := Color("#7d9fc0")
 ## The horizon: warm, the way the evening haze is.
