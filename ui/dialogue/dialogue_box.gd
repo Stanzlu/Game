@@ -33,6 +33,10 @@ const PAUSE_AT := ".?!…,;:–"
 const PAUSES := {"…": 0.45, ",": 0.12, ";": 0.12, ":": 0.15, "–": 0.15}
 const PAUSE_DEFAULT := 0.3
 const DEFAULT_SECONDS_PER_CHAR := 0.025
+## Holding interact this long skips: lines finish and move on every HOLD_STEP seconds. It
+## stops at answers, so holding never picks one.
+const HOLD_TO_SKIP := 0.5
+const HOLD_STEP := 0.15
 
 static var _voices: Dictionary = {}
 
@@ -47,6 +51,8 @@ var _tween: Tween
 var _open := false
 var _voiced_letters := 0
 var _answer_guard_until := 0
+var _held := 0.0
+var _hold_step := 0.0
 
 @onready var _root: Control = $Root
 @onready var _panel: PanelContainer = $Root/Panel
@@ -176,6 +182,24 @@ func _auto_advance(for_line: DialogueLine) -> void:
 	var seconds := AUTO_BASE_SECONDS + AUTO_SECONDS_PER_CHAR * for_line.text.length()
 	await NodeTimer.after(self, seconds * Settings.timing_factor())
 	if _open and _waiting and line == for_line:
+		_advance()
+
+
+func _process(delta: float) -> void:
+	if not _open or not Input.is_action_pressed(&"interact"):
+		_held = 0.0
+		_hold_step = 0.0
+		return
+	_held += delta
+	if _held < HOLD_TO_SKIP or _responses.visible:
+		return
+	_hold_step -= delta
+	if _hold_step > 0.0:
+		return
+	_hold_step = HOLD_STEP
+	if _text.is_typing:
+		_text.skip_typing()
+	elif _waiting:
 		_advance()
 
 

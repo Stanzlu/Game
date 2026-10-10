@@ -106,3 +106,15 @@ func test_a_cue_asked_for_while_another_is_open_waits() -> void:
 		if shown.size() == 2:
 			break
 	assert_eq(shown, ["sign_pond", "sign_meadow"] as Array[String], "the waiting cue followed")
+
+
+func test_holding_skips_but_stops_at_answers() -> void:
+	box.present(resource, "ask")
+	await wait_seconds(0.1)
+	Input.action_press(&"interact")
+	await wait_seconds(1.2)
+	assert_true(box._responses.visible, "the line ran through to the answers")
+	assert_eq(_gold(), 0, "holding never picks an answer")
+	Input.action_release(&"interact")
+	await wait_physics_frames(2)
+	assert_true(box.is_open())
