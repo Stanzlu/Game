@@ -208,6 +208,9 @@ func _setup_day_light() -> void:
 	view.viewport.add_child(light_layer)
 	day_light.rays = SunRays.new()
 	day_light.rays.name = "SunRays"
+	if backdrop != null:
+		day_light.rays.view = view
+		day_light.rays.world_top = map.world_rect().position.y
 	light_layer.add_child(day_light.rays)
 	# The time of day is part of the game state (resting passes it); the scene's own
 	# preset only applies when none was set yet.
