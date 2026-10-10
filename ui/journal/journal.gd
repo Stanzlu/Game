@@ -124,7 +124,7 @@ func close() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
-		if event.is_action_pressed(&"journal") and not MenuLayer.any_open(get_tree()):
+		if event.is_action_pressed(&"journal") and MenuLayer.can_open(get_tree()):
 			get_viewport().set_input_as_handled()
 			open()
 		return

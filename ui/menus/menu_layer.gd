@@ -32,6 +32,18 @@ var _open_tween: Tween
 
 
 ## True while any menu, dialogue or cutscene is open (then pause menu and journal stay closed).
+## True when the pause menu or the journal may open now: nothing else is open, no door is
+## being walked through and the screen is not black or fading (a menu under the cover
+## would be invisible).
+static func can_open(tree: SceneTree) -> bool:
+	return (
+		not any_open(tree)
+		and not SceneTravel.is_travelling()
+		and not ScreenFade.is_covered()
+		and not ScreenFade.is_fading()
+	)
+
+
 static func any_open(tree: SceneTree) -> bool:
 	for group: StringName in [GROUP, &"dialogue_presenter", &"cutscene"]:
 		for node in tree.get_nodes_in_group(group):

@@ -75,8 +75,11 @@ func _ready() -> void:
 	if ScreenFade.is_covered():
 		ScreenFade.fade_in(fade)
 	var door_spawn: Variant = SceneTravel.take_spawn(map)
+	var arrive_facing := SceneTravel.take_facing()
 	if door_spawn != null and player != null:
 		player.teleport(door_spawn)
+		if arrive_facing >= 0:
+			player.facing = arrive_facing as Facing.Dir
 		view.follow(player)
 	var arrival := SaveSystem.scene_entered(scene_key())
 	if arrival.has("position") and player != null:

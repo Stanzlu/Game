@@ -50,11 +50,7 @@ func close() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		# not during a door fade: leaving the scene then would strand the travel
-		if (
-			event.is_action_pressed(&"menu")
-			and not MenuLayer.any_open(get_tree())
-			and not SceneTravel.is_travelling()
-		):
+		if event.is_action_pressed(&"menu") and MenuLayer.can_open(get_tree()):
 			get_viewport().set_input_as_handled()
 			open()
 		return

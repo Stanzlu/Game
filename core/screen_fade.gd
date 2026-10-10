@@ -44,6 +44,15 @@ func _fade(target: Color, seconds: float) -> Signal:
 		faded.emit.call_deferred()
 		return faded
 	_tween = create_tween()
-	_tween.tween_property(_cover, ^"color", target, seconds)
+	# into black it gathers pace, out of black it settles: softer than a linear ramp
+	var ease := Tween.EASE_IN if target.a > _cover.color.a else Tween.EASE_OUT
+	_tween.tween_property(_cover, ^"color", target, seconds).set_trans(Tween.TRANS_SINE).set_ease(
+		ease
+	)
 	_tween.tween_callback(faded.emit)
 	return faded
+
+
+## True while a fade is running (menus stay closed until the picture is back).
+func is_fading() -> bool:
+	return _tween != null and _tween.is_valid() and _tween.is_running()
