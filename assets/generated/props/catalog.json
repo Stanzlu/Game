@@ -1357,7 +1357,8 @@
   "textures": [
    "res://assets/generated/props/tal/stone_flat_0.png",
    "res://assets/generated/props/tal/stone_flat_1.png",
-   "res://assets/generated/props/tal/stone_flat_2.png"
+   "res://assets/generated/props/tal/stone_flat_2.png",
+   "res://assets/generated/props/tal/stone_flat_3.png"
   ]
  },
  "tal/stone_round": {
@@ -1368,7 +1369,8 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/stone_round_0.png",
-   "res://assets/generated/props/tal/stone_round_1.png"
+   "res://assets/generated/props/tal/stone_round_1.png",
+   "res://assets/generated/props/tal/stone_round_2.png"
   ]
  },
  "tal/tall_grass": {

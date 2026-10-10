@@ -27,8 +27,12 @@ func apply_params(params: Dictionary) -> void:
 	_sprite.centered = false
 	_sprite.texture = PropCatalog.texture_for(entry, global_position)
 	var anchor: Array = entry.get("anchor", [0, 0])
-	# no two stones sit the same: a small offset per stone breaks the grid of the field
-	var jitter := Vector2i(hash(global_position) % 5 - 2, hash(global_position * 1.7) % 3 - 1)
+	# no two stones sit the same: a small offset per stone (up to 3 px across, 2 px along the
+	# stream) breaks the grid of the field; only the picture moves, the stone's cell and its
+	# tipping zone stay where the map puts them
+	var jitter := Vector2i(
+		posmod(hash(global_position), 7) - 3, posmod(hash(global_position * 1.7), 5) - 2
+	)
 	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1])) + Vector2(jitter)
 	_sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	add_child(_sprite)

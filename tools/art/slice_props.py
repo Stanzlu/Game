@@ -41,45 +41,64 @@ def feast_table(ms):
 WATER_LINE = ramp("#2a3a40", "#3e555c", "#5a7a80", "#8aaab0")
 
 
-def stone_flat(ms, seed):
+def _wake(c, cx, y, rx, rng):
+    """Short ripple arcs where the stream parts around a stone: one on each side at the
+    waterline, of uneven length, never a full ring (rings of neighbouring stones joined
+    into straight light lines across the whole field)."""
+    for side in (-1, 1):
+        length = int(rng.integers(2, 5))
+        x0 = int(round(cx + side * (rx + 0.5)))
+        for k in range(length):
+            x = x0 + side * k
+            yy = int(round(y + k * 0.5))
+            if 0 <= x < c.w and 0 <= yy < c.h and not c.a[yy, x]:
+                c.paint(c.rect(x, yy, x + 1, yy + 1), WATER_LINE, 0.75 - 0.15 * k, dither=False)
+
+
+def stone_flat(ms, seed, scale=1.0):
     """A flat stepping stone that holds: broad dry top with moss and lichen, low sides,
-    a dark wet band where it sits in the water."""
+    a dark wet band where it sits in the water. `scale` makes smaller stones on the same
+    canvas (one anchor for all variants); they sit in the water at the same line."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["tal"]
     c = ms.Canvas(20, 14)
     noise = pa.value_noise(14, 20, 3, rng)
-    side = c.ellipse(10, 8.5, 9, 4.6) & ((noise - 0.5) * 2 + c.yy > 3)
-    c.paint(side, st["rock"], 0.18 + 0.25 * c.sphere(7, 6, 10, 6), contrast=2.0)
-    top = c.ellipse(10, 6.5, 8.4, 3.6) & ((noise - 0.5) * 1.6 + c.yy > 2.5)
-    c.paint(top, st["rock"], 0.55 + 0.3 * c.sphere(7, 5, 9, 5) + 0.1 * (noise - 0.5), contrast=2.0)
+    sx, sy = scale, 0.6 + 0.4 * scale
+    cx = 10 + rng.uniform(-0.6, 0.6) * (1 - scale) * 4
+    side_y = 13.1 - 4.6 * sy
+    side = c.ellipse(cx, side_y, 9 * sx, 4.6 * sy) & ((noise - 0.5) * 2 + c.yy > 3)
+    c.paint(side, st["rock"], 0.18 + 0.25 * c.sphere(cx - 3, side_y - 2.5, 10, 6), contrast=2.0)
+    top = c.ellipse(cx, side_y - 2 * sy, 8.4 * sx, 3.6 * sy) & ((noise - 0.5) * 1.6 + c.yy > 2.5)
+    light = c.sphere(cx - 3, side_y - 3.5, 9 * sx, 5 * sy)
+    c.paint(top, st["rock"], 0.55 + 0.3 * light + 0.1 * (noise - 0.5), contrast=2.0)
     moss = top & (pa.value_noise(14, 20, 2.5, rng) > 0.55)
-    c.paint(moss, st["grass"], 0.45 + 0.4 * c.sphere(7, 5, 9, 5), contrast=1.8)
+    c.paint(moss, st["grass"], 0.45 + 0.4 * light, contrast=1.8)
     lichen = top & ~moss & (pa.value_noise(14, 20, 1.2, rng) > 0.8)
     c.fill(lichen, np.array([150, 150, 120], np.float32))
     wet = side & (c.yy >= 10.5)
     c.paint(wet, st["water"], 0.35, dither=False)
     c.outline(st["outline"])
-    ripple = c.ellipse(10, 11, 10.5, 2.6) & ~c.ellipse(10, 11, 9.5, 2.0) & ~c.a & (c.yy > 10)
-    c.paint(ripple, WATER_LINE, 0.75, dither=False)
+    _wake(c, cx, 11.5, 9 * sx, rng)
     return c
 
 
-def stone_round(ms, seed):
+def stone_round(ms, seed, scale=1.0):
     """A round stepping stone that tips: a dome of dark wet rock, a shine of water on top,
-    no moss (the water washes over it), ripples where it rocks."""
+    no moss (the water washes over it), ripples where it rocks. `scale` as for stone_flat."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["tal"]
     c = ms.Canvas(18, 15)
     noise = pa.value_noise(15, 18, 3, rng)
-    body = c.ellipse(9, 8, 7.2, 5.6) & ((noise - 0.5) * 1.5 + c.yy > 2)
-    c.paint(body, st["water"], 0.08 + 0.55 * c.sphere(6.5, 5, 8, 6), contrast=2.2)
-    sheen = body & c.ellipse(6.5, 5, 2.4, 1.3)
+    rx, ry = 7.2 * scale, 5.6 * (0.55 + 0.45 * scale)
+    cx, cy = 9 + rng.uniform(-0.6, 0.6) * (1 - scale) * 4, 13.6 - 5.6 * (0.55 + 0.45 * scale)
+    body = c.ellipse(cx, cy, rx, ry) & ((noise - 0.5) * 1.5 + c.yy > 2)
+    hx, hy = cx - 2.5 * scale, cy - 3 * scale
+    c.paint(body, st["water"], 0.08 + 0.55 * c.sphere(hx, hy, rx + 0.8, ry + 0.4), contrast=2.2)
+    sheen = body & c.ellipse(hx, hy, 2.4 * scale, 1.3)
     c.fill(sheen, np.array([170, 196, 204], np.float32))
-    c.fill(body & c.ellipse(6, 4.6, 0.9, 0.7), np.array([230, 240, 244], np.float32))
+    c.fill(body & c.ellipse(hx - 0.5, hy - 0.4, 0.9, 0.7), np.array([230, 240, 244], np.float32))
     c.outline(st["outline"])
-    for r in (8.6, 10.0):
-        ring = c.ellipse(9, 12.2, r, r * 0.28) & ~c.ellipse(9, 12.2, r - 0.9, r * 0.28 - 0.6) & ~c.a
-        c.paint(ring & (c.yy > 11), WATER_LINE, 0.8 if r < 9 else 0.5, dither=False)
+    _wake(c, cx, 12.5, rx, rng)
     return c
 
 
@@ -723,8 +742,11 @@ def build(ms):
     ms.save("elysia", "feast_table", feast_table(ms), (22, 26),
             shape={"rect": [38, 8], "offset": [0, -6]}, shadow=[22, 5])
     # valley (slice): stepping stones lie flat in the water, the player walks over them
-    ms.save("tal", "stone_flat", [stone_flat(ms, s) for s in (3, 4, 5)], (10, 8), flat=True)
-    ms.save("tal", "stone_round", [stone_round(ms, s) for s in (6, 7)], (9, 9), flat=True)
+    # stepping stones: sizes vary, so the field reads as stones in a stream, not a grid
+    ms.save("tal", "stone_flat", [stone_flat(ms, s, k) for s, k in ((3, 1.0), (4, 0.84), (5, 0.93), (8, 0.78))],
+            (10, 8), flat=True)
+    ms.save("tal", "stone_round", [stone_round(ms, s, k) for s, k in ((6, 1.0), (7, 0.82), (9, 0.9))],
+            (9, 9), flat=True)
     ms.save("tal", "fallen_tree", fallen_tree(ms), (22, 13), flat=True)
     ms.save("tal", "planks_broken", planks_broken(ms), (15, 14), flat=True)
     ms.save("tal", "planks_new", planks_new(ms), (43, 25), flat=True)
