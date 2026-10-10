@@ -174,16 +174,28 @@ def pose(state, frame):
         p["gaze"] = {1: -1, 2: 1}.get(frame, 0)
         p["hair"] = 1 if frame == 2 else 0
     elif state in ("walk", "run"):
-        big = 2 if state == "run" else 1
-        if frame in (0, 2):
-            s = 1 if frame == 0 else -1
-            p["legs"] = ((s * big, 0 if s > 0 else big), (-s * big, big if s > 0 else 0))
-            p["arms"] = (-s * big, s * big)
+        # Footfalls on frames 0 and 2 (the game plays the steps there): one foot lands in
+        # front, the other pushes off behind. Frames 1 and 3 are the passing (walk) or airborne
+        # (run) frames, mirror images of each other: the leg that pushed off swings forward,
+        # the arms swing through the middle. Each leg runs the same four phases, the second
+        # one two frames later.
+        run = state == "run"
+        big = 3 if run else 2  # stride: foot in front / behind (side view: twice in pixels)
+        if run:
+            # land, push back through the air, toe-off, swing forward through the air
+            phases = ((big, 0), (-2, 2), (-big, 2), (2, 2))
         else:
+            # land, roll under the body, toe-off, swing forward lifted
+            phases = ((big, 0), (-1, 0), (-big, 1), (1, 1))
+        p["legs"] = (phases[frame % 4], phases[(frame + 2) % 4])
+        half = int(round(big / 2))
+        p["arms"] = {0: (-big, big), 1: (-half, half), 2: (big, -big), 3: (half, -half)}[frame % 4]
+        if frame in (1, 3):
+            # passing: the body rises a pixel; running, both feet also leave the ground (2 px,
+            # knees tucked: a higher body would cut the crown off at the top of the frame)
             p["bob"] = -1
             p["hair"] = 1
-            p["legs"] = ((0, 1 if state == "run" else 0), (0, 1 if state == "run" else 0))
-        p["lean"] = 1 if state == "run" else 0
+        p["lean"] = 1 if run else 0
     elif state == "sit":
         p["sit"] = True
         p["bob"] = 3
@@ -380,7 +392,8 @@ class Figure:
         else:
             for k, ax in enumerate((tx0 - 1, tx1 + 1)):
                 sw = p["arms"][k]
-                end = ty0 + (4 if d.get("child") else 6) + max(sw, -1)
+                # seen from the front a swing only shortens or lengthens the arm a little
+                end = ty0 + (4 if d.get("child") else 6) + int(np.clip(sw, -1, 2))
                 arm = limb(c, ax, ty0 + 1, ax, end, 2)
                 hand = limb(c, ax, end, ax, end + 1, 2)
                 tone = 0.72 if k == 0 else 0.4
