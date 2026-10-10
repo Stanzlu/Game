@@ -79,6 +79,10 @@ func can_save() -> bool:
 	return context != null and bool(context.call(&"is_saveable"))
 
 
+func discard_pending_autosave() -> void:
+	_pending_autosave = ""
+
+
 func has_pending_autosave() -> bool:
 	return not _pending_autosave.is_empty()
 

@@ -160,9 +160,9 @@ func _play_ending() -> void:
 	await cut.wait(2.0)
 	WorldState.set_flag("slice.finished")
 	# the save remembers the ending (the start menu shows the Real title from now on)
-	SaveSystem.unblock(&"cutscene")
+	SaveSystem.unblock(cut.key)
 	SaveSystem.request_autosave("slice_finished")
-	SaveSystem.block(&"cutscene")
+	SaveSystem.block(cut.key)
 	Log.info(
 		Log.Category.WORLD_STATE,
 		"vertical slice finished",

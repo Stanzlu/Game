@@ -19,6 +19,8 @@ var spawn := ""
 ## Tests shorten the pauses and stay in the scene.
 var time_scale := 1.0
 var travel := true
+## The lock and save-block reason of this sequence alone.
+var key := &""
 var _running := false
 
 
@@ -43,10 +45,11 @@ func run() -> void:
 		return
 	Log.info(Log.Category.WORLD_STATE, "rift sequence start", {"target": target})
 	_running = true
+	key = StringName("rift_%d" % get_instance_id())
 	add_to_group(&"cutscene")
 	var calm := Settings.get_bool("display.reduce_flashing")
-	scene.player.lock(&"cutscene")
-	SaveSystem.block(&"cutscene")
+	scene.player.lock(key)
+	SaveSystem.block(key)
 	scene.view.shake(2.0, 1.4)
 	AudioDirector.tape_stop(3.4 * time_scale)
 	while scene.hud.vanish_next(calm):
@@ -58,7 +61,10 @@ func run() -> void:
 	await _wait(1.4)
 	_cross_over()
 	_running = false
-	SaveSystem.unblock(&"cutscene")
+	# the state has crossed over, the scene has not: a save waiting from the sequence would
+	# write the Real state on Elysia's map; the valley saves on arrival anyway
+	SaveSystem.discard_pending_autosave()
+	SaveSystem.unblock(key)
 	if travel:
 		SceneTravel.pending_spawn = spawn
 		SceneTravel.arrival_fade = ARRIVAL_FADE
@@ -87,5 +93,5 @@ func is_open() -> bool:
 func _exit_tree() -> void:
 	# Leaving mid-sequence (e.g. loading a save): never keep saving blocked.
 	if _running:
-		SaveSystem.unblock(&"cutscene")
+		SaveSystem.unblock(key)
 		_running = false
