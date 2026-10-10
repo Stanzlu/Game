@@ -190,6 +190,18 @@ def pose(state, frame):
     return p
 
 
+def shift_x(mask, dx):
+    """`mask` moved dx pixels to the right; what comes in from the edge is empty."""
+    out = np.zeros_like(mask)
+    if dx > 0:
+        out[:, dx:] = mask[:, :-dx]
+    elif dx < 0:
+        out[:, :dx] = mask[:, -dx:]
+    else:
+        out[:] = mask
+    return out
+
+
 def limb(c, x0, y0, x1, y1, width):
     """Mask of a straight limb from (x0, y0) to (x1, y1), `width` pixels wide."""
     m = np.zeros((c.h, c.w), bool)
@@ -482,9 +494,13 @@ class Figure:
             part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
             c.rgb[part] = d["hair"][1]
         if d.get("headband"):
-            # a sweatband across the brow, all the way round
-            band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & c.ellipse(hx, hy - 1, 7.4, 7.6) & (hair | head)
-            self.part(band, "inner", 0.85)
+            # a sweatband across the brow, all the way round, but one pixel inside the head:
+            # the head's own edge pixels (and the outline around them) stay, so the band never
+            # pokes out of the silhouette; a muted light grey, not white, so it sits on the hair
+            sil = hair | head
+            inside = sil & shift_x(sil, 1) & shift_x(sil, -1)
+            band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & inside
+            self.part(band, "inner", 0.6)
             self.part(band & (c.yy >= hy - 2.8), "top", 0.75)
         if self.back3:
             c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
