@@ -7,6 +7,8 @@ extends Node
 ## Music and ambience keep playing while the game is paused (menus).
 ## Also plays the non-positional sounds: menu sounds in the skin of the current world
 ## (ui()), rewards and other game sounds (sfx()) and dialogue voices (voice()).
+## default_bus_layout.tres ends the Master bus in a hard limiter (-1 dB) so stacked rewards
+## never clip, and trims SFX by -2 dB with an effect: the bus volumes belong to Settings.
 
 signal music_changed(track: String)
 ## Fires when a tape stop ends, or is cut short by new music (await tape_stop()).

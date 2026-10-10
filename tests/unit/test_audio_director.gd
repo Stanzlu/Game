@@ -143,3 +143,19 @@ func _midpoint_sum(players: Array[AudioStreamPlayer]) -> float:
 			tween.custom_step(1.0)
 		total += db_to_linear(player.volume_db)
 	return total
+
+
+func test_master_is_limited_and_sfx_sits_lower() -> void:
+	# stacked Elysia rewards must not clip; the SFX trim is an effect because the player's
+	# volume setting owns the bus volume
+	var limiter := AudioServer.get_bus_effect(0, 0) as AudioEffectHardLimiter
+	assert_not_null(limiter, "limiter on Master")
+	if limiter != null:
+		assert_almost_eq(limiter.ceiling_db, -1.0, 0.01)
+		assert_almost_eq(limiter.release, 0.1, 0.001)
+	var trim := (
+		AudioServer.get_bus_effect(AudioServer.get_bus_index(&"SFX"), 0) as AudioEffectAmplify
+	)
+	assert_not_null(trim, "trim on SFX")
+	if trim != null:
+		assert_almost_eq(trim.volume_db, -2.0, 0.01)
