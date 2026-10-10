@@ -134,8 +134,11 @@ func _update_elysia_stage(position: float) -> void:
 	elysia_stage = want
 	var player := _music[_active_music]
 	player.stream = load(MUSIC_DIR + str(ELYSIA_STAGES[want]["file"]))
-	player.play()
-	_last_position = 0.0
+	# All stages begin with the same bars: carry on where the wrapped loop already is (a
+	# frame past the downbeat) instead of playing that frame twice.
+	position = fmod(position, player.stream.get_length())
+	player.play(position)
+	_last_position = position
 	Log.info(Log.Category.AUDIO, "elysia loop shrinks", {"stage": want})
 
 

@@ -113,8 +113,9 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	WorldState.set_flag("elysia.chest_tree_opened")
 	audio._update_elysia_stage(5.0)
 	assert_eq(audio.elysia_stage, 0, "waits for the end of the loop")
-	audio._update_elysia_stage(0.01)
+	audio._update_elysia_stage(0.03)
 	assert_eq(audio.elysia_stage, 1, "switches on the downbeat")
+	assert_almost_eq(audio._last_position, 0.03, 0.001, "goes on where the loop is, no repeat")
 	var playing := audio._music[audio._active_music].stream.resource_path
 	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
 	WorldState.new_game()
