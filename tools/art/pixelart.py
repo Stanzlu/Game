@@ -49,7 +49,7 @@ STYLES = {
     },
     # Wald: a real forest at night (playtest 05.10.: natural like the real world). Moonlight
     # instead of fantasy glow: deep blue-greens, slate rock, dark water. What shines does so
-    # in reality too: the white bark of birches, foxfire on rotten wood, fireflies.
+    # in reality too: moonlit leaves, foxfire on rotten wood, fireflies.
     "wald": {
         "grass": ramp("#0d1514", "#14211d", "#1d2f27", "#293f32", "#3a5341"),
         "grass_dry": ramp("#131616", "#1d221f", "#2a3029", "#3a4134", "#4d5443"),
