@@ -142,3 +142,92 @@ func test_goat_wants_the_potato() -> void:
 	assert_eq(WorldState.quest_stage("side_valley_goat"), "trade")
 	assert_true(DIALOGUE.cues.has("goat"))
 	assert_true(DIALOGUE.cues.has("ending"))
+
+
+# --- Texts and hints (text and puzzle pass, 10.10.) ------------------------------------
+
+
+## Plays `cue` to its end, picking the first allowed answer that contains `pick`.
+func _play(cue: String, pick := "") -> PackedStringArray:
+	var seen: PackedStringArray = []
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(DIALOGUE, cue)
+	while line != null:
+		seen.append(line.text)
+		var next_id := line.next_id
+		if not line.responses.is_empty():
+			var chosen: DialogueResponse = null
+			for r: DialogueResponse in line.responses:
+				if r.is_allowed and (chosen == null or (not pick.is_empty() and pick in r.text)):
+					chosen = r
+			next_id = chosen.next_id
+		line = await DialogueManager.get_next_dialogue_line(DIALOGUE, next_id)
+	return seen
+
+
+func _cue_props(scene: GameScene, cue: String) -> Array[Node]:
+	return scene.map.entities.get_children().filter(
+		func(node: Node) -> bool: return node.has_meta(&"cue") and node.get_meta(&"cue") == cue
+	)
+
+
+func test_the_stones_teach_their_rule_to_whoever_looks() -> void:
+	var scene := await _scene()
+	assert_eq(_cue_props(scene, "stones").size(), 0, "first Mira, then the stones")
+	WorldState.set_flag("valley.mira_met")
+	await wait_physics_frames(2)
+	var spots := _cue_props(scene, "stones")
+	assert_eq(spots.size(), 1, "a spot on the east bank")
+	var cell := scene.map.world_to_cell((spots[0] as Node2D).global_position)
+	assert_eq(cell, Vector2i(45, 18), "right next to the stones")
+	var seen := await _play("stones")
+	assert_true("Moos wächst nur auf dem, was liegen bleibt." in seen)
+	var fell := await _play("fell_in")
+	assert_true(fell[fell.size() - 1].contains("Die flachen daneben"), "falling teaches too")
+
+
+func test_more_to_look_at_in_the_valley() -> void:
+	var scene := await _scene()
+	for cue: String in ["rift_gone", "south_sign", "garden_bed", "rain_barrel"]:
+		assert_gt(_cue_props(scene, cue).size(), 0, cue)
+	assert_eq(_cue_props(scene, "rain_barrel").size(), 2, "both barrels")
+	WorldState.set_flag("house.mira_visited")
+	var evening := await _scene()
+	assert_eq(_cue_props(evening, "rift_gone").size(), 0, "no rain in the air in the evening")
+
+
+func test_mira_says_her_name_once() -> void:
+	var seen := await _play("mira_first")
+	assert_true("Mira, übrigens. Falls du noch mal rüberrufen musst." in seen)
+
+
+func test_mira_notices_the_dry_wood() -> void:
+	WorldState.set_flag("valley.mira_met")
+	WorldState.start_quest("main_valley_shelter")
+	for stage: String in ["house", "wood", "fire"]:
+		WorldState.advance_quest("main_valley_shelter", stage)
+	var seen := await _play("mira")
+	assert_eq(
+		seen, PackedStringArray(["Trockenes Holz. Hm. Dann mach Feuer, bevor es wieder nass ist."])
+	)
+
+
+func test_at_her_fire_mira_asks_after_the_answer_from_the_house() -> void:
+	WorldState.add_memory("mira", "said_hero")
+	WorldState.add_memory("mira", "said_elsewhere")
+	assert_eq((await _play("evening_elysia"))[0], "Dieses Woanders. Wie war's da?")
+	WorldState.new_game()
+	WorldState.add_memory("mira", "said_dont_know")
+	assert_eq(
+		(await _play("evening_elysia"))[0],
+		"Du weißt nicht mehr, wo du herkommst. Weißt du noch, wie es da war?"
+	)
+	WorldState.new_game()
+	WorldState.add_memory("mira", "said_elysia")
+	assert_eq((await _play("evening_elysia"))[0], "Dieses Elysia. Wie war's da?")
+
+
+func test_the_slice_ends_on_zum_meer() -> void:
+	WorldState.set_flag("valley.shell_seen")
+	var seen := await _play("ending", "Wohin")
+	assert_eq(seen[seen.size() - 1], "Zum Meer.", "then black (Game Bible §56)")
+	assert_true("Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus." in seen)

@@ -43,7 +43,7 @@ C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
 R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
 g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
-K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel", "cue": "rain_barrel", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
 W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile", "cue": "woodpile", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
 ; Miras Lager: Plane, Feuer, das Netz, das sie flickt, und Mira selbst
@@ -58,6 +58,12 @@ f = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 a = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bush", "cue": "berries", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
 A = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked", "cue": "crooked_tree", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
 I = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken", "cue": "fence_gap", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
+; noch mehr zum Ansehen: die Steine vom Ostufer aus (sobald Mira gefragt ist), die Stelle, wo der Riss
+; war (bis zum Abend), ein Wegweiser mit einem Wort am Ende der Spur nach Süden, das verwilderte Beet
+l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "stones", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14, "if": "valley.mira_met"}}
+! = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "rift_gone", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 12, "unless": "house.mira_visited"}}
+| = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/signpost", "cue": "south_sign", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14}}
++ = {"ground": "d", "prop": "res://world/props/decor.tscn", "params": {"cue": "garden_bed", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 14}}
 ; Mira hat ihren eigenen Tag: Netz, Feuer, die Angel am Bach, jedes Mal verschieden lang. Abends
 ; sitzt sie auf der anderen Seite ihres Feuers (M).
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "route": [[0, 0], [2, 2], [-3, 2]], "pause": [5, 11], "speed": 24, "unless": "house.mira_visited"}}
@@ -95,17 +101,17 @@ hhhh^^^.................^^^^^^^..........~~~hhhhhhhh........^^^hhhhh
 hhhh^^^...................................~~^^^^^^^.............hhhh
 hhhh...P.....T............................~~..^^^^..............hhhh
 hhhh.....T...............................YyyJ..P................hhhh
-hhh........P.............................~~~.....T............P..hhh
+hhh........P.............................~~~.....T........!...P..hhh
 hh...C...........G...................C...~~~...........T..1......hhh
 hh.................E.............E......~~~........P.............hhh
-hh..........ddddd..E.............E.....~~~~...g..........,.......hhh
+hh..........+dddd..E.............E.....~~~~...g..........,.......hhh
 hh......R...ddddd..E......H......E.....~~~.....g........,,.......hhh
 hh.......R..ddo....E.K....D...WK.E..R~~~~~..............,....T...hhh
 hh.................E..b...2...O..E.R~~~~~~.............,,.a......hhh
 hh.................E......,......E...~~~~~.............,.........hhh
 hhh................FFIFFF,,.FFFBFF.....~~~............,,..gg.....hhh
 hhhh....................f,,............sSSSs....r...uU,.........hhhh
-hhhh..T.................p,,........g..5SSsSsj..,.N...,.........Phhhh
+hhhh..T.................p,,........g..5SSsSsjl.,.N...,.........Phhhh
 hhhhh...gg.C........mmm..,,............ssSSS4..,,..cz,..........hhhh
 hhhh.....g.........,,,,,,,,p.............~~~~....,..M...........hhhh
 hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......A...hhhh
@@ -117,7 +123,7 @@ XZV3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
 ...........m,,..T..............R.^^^^^^^^^^vvv^^^^^^.....^^^^^^^^^hh
 hhh.........,...................R^....^^^^^vvv^..^^^^^^^^^^......^hh
 hhh.....T..,...............................x~~...C..^^^^^.........hh
-hhh..P....,,.....R....T............T........~~............P.......hh
+hhh..P...|,,.....R....T............T........~~............P.......hh
 hhh.......P........C....P........P..........~~~.....P.............hh
 hhhh........................................~~~...................hh
 hhhh........................................~~~...................hh
