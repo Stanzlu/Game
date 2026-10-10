@@ -118,7 +118,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 
 ## The cat gets a name, if the player wants one (Game Bible §28).
 func _name_the_cat() -> void:
-	while dialogue_box.visible:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	var entry := NameEntry.new()
 	entry.name = "CatName"
@@ -153,7 +153,7 @@ func _fire_catches() -> void:
 		create_tween().tween_property(tint, ^"color", WARM_TINT, 5.0).set_trans(Tween.TRANS_SINE)
 	AudioDirector.set_ambience(WARM_AMBIENCE, ambience_db, 4.0)
 	AudioDirector.play_music("valley", 8.0)
-	while dialogue_box.visible:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	await NodeTimer.after(self, mira_after)
 	if not _mira_coming:
@@ -164,7 +164,7 @@ func _fire_catches() -> void:
 func _mira_visits() -> void:
 	if WorldState.has_flag("house.mira_visited") or not is_inside_tree():
 		return
-	while dialogue_box.visible or MenuLayer.any_open(get_tree()):
+	while dialogue_box.is_open() or MenuLayer.any_open(get_tree()):
 		await get_tree().process_frame
 	var cut := Cutscene.begin(self)
 	AudioDirector.sfx("door_knock")

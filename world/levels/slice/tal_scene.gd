@@ -140,7 +140,7 @@ func _look_to_the_mountains() -> void:
 ## Beat 7: Mira makes room at her fire. "Morgen gehe ich weiter." Black. The title.
 func _play_ending() -> void:
 	Beat.mark("ending")
-	while dialogue_box.visible:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	var cut := Cutscene.begin(self)
 	await cut.wait(0.6)

@@ -59,7 +59,7 @@ func test_fire_warms_the_room_and_mira_knocks() -> void:
 	assert_true(Beat.reached("fire"))
 	assert_true((_prop(scene, "Fireplace") as Node).get(&"lit"), "the flames are there")
 	await wait_seconds(1.6)
-	assert_true(scene.dialogue_box.visible, "it knocks")
+	assert_true(scene.dialogue_box.is_open(), "it knocks")
 	await wait_seconds(4.0)
 	Settings.set_value("text.auto_advance", false, false)
 	assert_true(WorldState.has_flag("house.mira_knocked"), "Mira comes in")

@@ -258,8 +258,8 @@ func test_getting_up_sends_the_antreiber_off() -> void:
 		return not scene.map.entities.find_children("*", "AntreiberActor", true, false).is_empty()
 	await wait_until(arrived, 20.0)
 	# his ideas first, then the player gets up instead of staying seated
-	await wait_until(func() -> bool: return scene.dialogue_box.visible, 20.0)
-	await wait_until(func() -> bool: return not scene.dialogue_box.visible, 20.0)
+	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 20.0)
+	await wait_until(func() -> bool: return not scene.dialogue_box.is_open(), 20.0)
 	scene.player.stand_up()
 	await wait_until(func() -> bool: return WorldState.has_flag("house.antreiber_left"), 20.0)
 	assert_true(WorldState.has_flag("house.antreiber_left"))
@@ -314,7 +314,7 @@ func test_naming_the_cat_in_the_house() -> void:
 	assert_false(get_tree().paused)
 	assert_eq(WorldState.cat_name(), "Ofenkatze")
 	assert_false(WorldState.has_flag("house.cat_naming"))
-	assert_true(scene.dialogue_box.visible, "the cat agrees, more or less")
+	assert_true(scene.dialogue_box.is_open(), "the cat agrees, more or less")
 
 
 func test_mira_hears_the_cats_name() -> void:

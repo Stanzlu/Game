@@ -70,7 +70,7 @@ func _on_quest_changed(quest_id: String, stage: String) -> void:
 ## Somebody else fixed it, for you, before you got there.
 func _fountain_solves_itself() -> void:
 	# the clock starts once the gardener has finished talking: the player sets off, and then
-	while dialogue_box != null and dialogue_box.visible:
+	while dialogue_box != null and dialogue_box.is_open():
 		await get_tree().process_frame
 	await NodeTimer.after(self, FOUNTAIN_SOLVES_AFTER)
 	if not WorldState.is_quest_active("side_elysia_fountain"):

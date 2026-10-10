@@ -30,8 +30,8 @@ func _start() -> void:
 
 
 ## Shows a dialogue cue and returns when it closed.
-func say(path: String, cue: String) -> Signal:
-	return Talk.present(self, path, cue, null)
+func say(path: String, cue: String) -> void:
+	await Talk.present(self, path, cue, null)
 
 
 func wait(seconds: float) -> Signal:
