@@ -118,3 +118,28 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	var playing := audio._music[audio._active_music].stream.resource_path
 	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
 	WorldState.new_game()
+
+
+func test_crossfade_keeps_its_level_at_the_midpoint() -> void:
+	# A fade in dB puts both players near -33 dB halfway (a hole of ~9 dB and more);
+	# in amplitude the fading halves add up to about the level they fade between.
+	audio.play_music("valley", 0.0)
+	var start := db_to_linear(float(AudioDirectorService.TRACK_DB["valley"]))
+	audio.play_music("forest", 2.0)
+	assert_gt(_midpoint_sum(audio._music), 0.7 * start, "music crossfade without a hole")
+	var garden: AudioStream = RAIN
+	var rain := load(SoundscapePlayer.bed_path("rain")) as AudioStream
+	audio.set_ambience(garden, -6.0, 0.0)
+	audio.set_ambience(rain, -6.0, 2.0)
+	assert_gt(_midpoint_sum(audio._ambience), 0.7 * db_to_linear(-6.0), "ambience crossfade too")
+
+
+## Steps every fade of `players` to its middle (1 of 2 s) and sums their amplitudes.
+func _midpoint_sum(players: Array[AudioStreamPlayer]) -> float:
+	var total := 0.0
+	for player in players:
+		var tween: Tween = audio._tweens.get(player)
+		if tween != null and tween.is_valid():
+			tween.custom_step(1.0)
+		total += db_to_linear(player.volume_db)
+	return total

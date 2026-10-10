@@ -20,6 +20,8 @@ const TRACKS: PackedStringArray = ["elysia", "valley", "forest", "antreiber"]
 ## Mix level per track (the loops are not loudness-matched by design).
 const TRACK_DB := {"elysia": -9.0, "valley": -6.0, "forest": -8.0, "antreiber": -10.0}
 const SILENT_DB := -60.0
+## SILENT_DB as amplitude: the floor of linear fades.
+const MIN_AMPLITUDE := 0.001
 const DUCK_DB := -7.0
 ## Elysia's loop shrinks the longer the player stays and the further they get (Game Bible
 ## §35 "Loops werden zunehmend wahrnehmbar"): the same music cut to 8, 4 and 2 bars.
@@ -273,10 +275,22 @@ func _fade(player: AudioStreamPlayer, target_db: float, seconds: float, stop_aft
 			player.stop()
 		return
 	var tween := create_tween()
-	tween.tween_property(player, ^"volume_db", target_db, seconds)
+	tween_volume(tween, player, target_db, seconds)
 	if stop_after:
 		tween.tween_callback(player.stop)
 	_tweens[player] = tween
+
+
+## Fades a player's volume in linear amplitude along a sine curve. Two players crossfading
+## this way keep their summed level; a fade in dB leaves a hole of about 9 dB mid-fade.
+static func tween_volume(
+	tween: Tween, player: AudioStreamPlayer, target_db: float, seconds: float
+) -> void:
+	var set_amplitude := func(amplitude: float) -> void:
+		player.volume_db = linear_to_db(maxf(amplitude, MIN_AMPLITUDE))
+	var from := db_to_linear(player.volume_db)
+	var to := db_to_linear(target_db)
+	tween.tween_method(set_amplitude, from, to, seconds).set_trans(Tween.TRANS_SINE)
 
 
 func _kill(player: AudioStreamPlayer) -> void:
