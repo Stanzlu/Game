@@ -67,7 +67,8 @@ DESIGNS = {
         "bag": "none",
     },
     # The host of Elysia's garden (the numbing protector's cameo, Game Bible §14): warm, round,
-    # an apron over a burgundy vest; generous and charming, never sinister.
+    # an apron over a burgundy vest; generous and charming, never sinister. A round belly and
+    # a bun on top, so the host never reads as one more Elysian with the same bob.
     "host": {
         "skin": ramp("#8a4b40", "#c47e60", "#ebb08a", "#ffd9b6"),
         "hair": ramp("#2a1a14", "#4a3020", "#6e4a30", "#94683e", "#c09060"),
@@ -79,13 +80,15 @@ DESIGNS = {
         "eye": pa.hex_rgb("#1a1226"),
         "blush": pa.hex_rgb("#f08878"),
         "outline": pa.hex_rgb("#2a1620"),
-        "hair_style": "neat",
+        "hair_style": "bun",
         "outfit": "jacket",
+        "build": "round",
         "apron": True,
         "bag": "none",
     },
     # The child in Elysia (Game Bible §15): plain, a little too big jumper, no gold at all.
-    # Smaller body, same head. It is the only one there who casts a reflection.
+    # Smaller body, same head, uncombed hair sticking out. It is the only one there who casts
+    # a reflection. The jumper is long and wide at the hem, the sleeves hang over the hands.
     "child": {
         "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
         "hair": ramp("#1e1612", "#3a2a20", "#5a4230", "#7e5e42", "#a88462"),
@@ -99,11 +102,13 @@ DESIGNS = {
         "outline": pa.hex_rgb("#161214"),
         "hair_style": "tousled",
         "outfit": "jacket",
+        "jumper": True,
         "child": True,
         "bag": "none",
     },
     # The Antreiber (Game Bible §14): helpful, efficient, fast, organised; later exhausting.
-    # A faded red training jacket, a sweatband, a stopwatch on a lanyard, a short crew cut.
+    # A faded red training jacket, a sweatband, a stopwatch on a lanyard, a flat-top crew cut,
+    # broad shoulders: square and upright where the others are round.
     "antreiber": {
         "skin": ramp("#84483c", "#be7a5e", "#e6ac88", "#fcd6b4"),
         "hair": ramp("#1a1410", "#2e241c", "#46382c", "#64523e", "#8a7458"),
@@ -115,8 +120,9 @@ DESIGNS = {
         "eye": pa.hex_rgb("#1a1226"),
         "blush": pa.hex_rgb("#e07a6a"),
         "outline": pa.hex_rgb("#1c1012"),
-        "hair_style": "crew",
+        "hair_style": "flattop",
         "outfit": "jacket",
+        "build": "athletic",
         "headband": True,
         "stopwatch": True,
         "bag": "none",
@@ -174,20 +180,44 @@ def pose(state, frame):
         p["gaze"] = {1: -1, 2: 1}.get(frame, 0)
         p["hair"] = 1 if frame == 2 else 0
     elif state in ("walk", "run"):
-        big = 2 if state == "run" else 1
-        if frame in (0, 2):
-            s = 1 if frame == 0 else -1
-            p["legs"] = ((s * big, 0 if s > 0 else big), (-s * big, big if s > 0 else 0))
-            p["arms"] = (-s * big, s * big)
+        # Footfalls on frames 0 and 2 (the game plays the steps there): one foot lands in
+        # front, the other pushes off behind. Frames 1 and 3 are the passing (walk) or airborne
+        # (run) frames, mirror images of each other: the leg that pushed off swings forward,
+        # the arms swing through the middle. Each leg runs the same four phases, the second
+        # one two frames later.
+        run = state == "run"
+        big = 3 if run else 2  # stride: foot in front / behind (side view: twice in pixels)
+        if run:
+            # land, push back through the air, toe-off, swing forward through the air
+            phases = ((big, 0), (-2, 2), (-big, 2), (2, 2))
         else:
+            # land, roll under the body, toe-off, swing forward lifted
+            phases = ((big, 0), (-1, 0), (-big, 1), (1, 1))
+        p["legs"] = (phases[frame % 4], phases[(frame + 2) % 4])
+        half = int(round(big / 2))
+        p["arms"] = {0: (-big, big), 1: (-half, half), 2: (big, -big), 3: (half, -half)}[frame % 4]
+        if frame in (1, 3):
+            # passing: the body rises a pixel; running, both feet also leave the ground (2 px,
+            # knees tucked: a higher body would cut the crown off at the top of the frame)
             p["bob"] = -1
             p["hair"] = 1
-            p["legs"] = ((0, 1 if state == "run" else 0), (0, 1 if state == "run" else 0))
-        p["lean"] = 1 if state == "run" else 0
+        p["lean"] = 1 if run else 0
     elif state == "sit":
         p["sit"] = True
         p["bob"] = 3
     return p
+
+
+def shift_x(mask, dx):
+    """`mask` moved dx pixels to the right; what comes in from the edge is empty."""
+    out = np.zeros_like(mask)
+    if dx > 0:
+        out[:, dx:] = mask[:, :-dx]
+    elif dx < 0:
+        out[:, :dx] = mask[:, -dx:]
+    else:
+        out[:] = mask
+    return out
 
 
 def limb(c, x0, y0, x1, y1, width):
@@ -301,8 +331,24 @@ class Figure:
             tx0, tx1 = cx - 4, cx + 3
         else:
             tx0, tx1 = cx - 4, cx + 4
+        build = d.get("build", "")
+        if build == "round":  # a round belly: a pixel wider, in profile it shows in front
+            if side:
+                tx1 += 1
+            else:
+                tx0, tx1 = tx0 - 1, tx1 + 1
         torso = c.rect(tx0, ty0, tx1, ty1)
         torso &= ~((c.yy == ty0) & ((c.xx < tx0 + 1) | (c.xx >= tx1 - 1)))
+        if build == "round" and side:
+            torso &= ~((c.xx >= tx1 - 1) & ((c.yy < ty0 + 2) | (c.yy >= ty1 - 1)))
+        arm_out = 0
+        if build == "athletic":
+            # broad shoulders over a narrow waist; the arms hang a pixel out from the body
+            if side:
+                torso |= c.rect(tx1, ty0 + 1, tx1 + 1, ty0 + 4)  # chest
+            else:
+                torso |= c.rect(tx0 - 1, ty0 + 1, tx1 + 1, ty0 + 3)
+                arm_out = 1
         if d["outfit"] == "cape":
             # wide cape over the shoulders, flaring toward the hem
             flare = (c.yy - ty0) * 0.35
@@ -310,6 +356,9 @@ class Figure:
             cape &= ~((c.yy == ty0) & ((c.xx < tx0) | (c.xx >= tx1)))
             torso = cape
         hem = c.rect(tx0 - 0.5, ty1 - 1, tx1 + 0.5, ty1)
+        jumper = d.get("jumper", False)
+        if jumper:  # a jumper a size too big: long and wide at the hem
+            hem = c.rect(tx0 - 1, ty1 - 1, tx1 + 1, ty1 + 1)
         self.part(torso | hem, "top", self.cyl(tx0 - 1, tx1 + 1, 0.15, 0.8), line=True)
         if not back and d["outfit"] == "jacket":
             # open collar with a light shirt, jacket seam, belt with buckle
@@ -364,11 +413,12 @@ class Figure:
             sw = p["arms"][0]
             near = limb(c, cx - 0.5 + lean, ty0 + 1, cx - 0.5 + lean + sw, ty0 + 7, 2)
             self.part(near, "top", 0.65, line=True)
-            self.part(near & (c.yy >= ty0 + 6), "skin", 0.65)
+            self.part(near & (c.yy >= ty0 + (7 if jumper else 6)), "skin", 0.65)
         else:
-            for k, ax in enumerate((tx0 - 1, tx1 + 1)):
+            for k, ax in enumerate((tx0 - 1 - arm_out, tx1 + 1 + arm_out)):
                 sw = p["arms"][k]
-                end = ty0 + (4 if d.get("child") else 6) + max(sw, -1)
+                # seen from the front a swing only shortens or lengthens the arm a little
+                end = ty0 + (4 if d.get("child") else 6) + int(np.clip(sw, -1, 2))
                 arm = limb(c, ax, ty0 + 1, ax, end, 2)
                 hand = limb(c, ax, end, ax, end + 1, 2)
                 tone = 0.72 if k == 0 else 0.4
@@ -384,6 +434,9 @@ class Figure:
                 cuff = arm & (c.yy == end - 1)
                 self.part(arm, "top", tone, line=True)
                 self.part(cuff, "top", tone + 0.2)
+                if jumper:  # the sleeve hangs over the hand
+                    self.part(hand & (c.yy == end), "top", tone + 0.2)
+                    hand = hand & (c.yy > end)
                 self.part(hand, "skin", tone)
 
         self.head(cx, lean, b)
@@ -402,7 +455,7 @@ class Figure:
         self.part(head, "skin", 0.48 + 0.5 * c.sphere(hx - 1.5, hy - 1.5, 7, 7))
         hair_v = 0.1 + 0.72 * c.sphere(hx - 2.5, hy - 4, 9, 8)
         style = d["hair_style"]
-        nape = {"swept": 2.5, "neat": 3.5, "crew": 1.0}.get(style, 4)
+        nape = {"swept": 2.5, "neat": 3.5, "crew": 1.0, "flattop": 1.0, "bun": 2.0}.get(style, 4)
         if back:
             hair = head | c.ellipse(hx, hy - 0.6, 7.2, 6.6)
             hair |= c.rect(hx - 6, hy + 1, hx + 6, hy + nape + hb) & c.ellipse(hx, hy + 1, 7.0, 6.0)
@@ -422,13 +475,19 @@ class Figure:
             elif style == "swept":
                 # fringe swept forward over the brow, ending in a point
                 fringe = c.rect(hx + 1, hy - 3, hx + 6.5, hy - 1) | c.rect(hx + 5, hy - 1, hx + 7, hy + 0.5)
-            elif style == "crew":
+            elif style in ("crew", "flattop"):
                 fringe = c.rect(hx + 1, hy - 2.8, hx + 6.3, hy - 2)
+            elif style == "bun":
+                cap &= (c.yy < hy - 2.6) | (c.xx < hx + 2)  # combed back: the brow stays free
+                fringe = np.zeros_like(cap)
             else:
                 fringe = c.rect(hx + 1, hy - 2, hx + 6.5, hy - 0.5) & ((c.xx.astype(int) % 2) == 0)
             hair = cap | back_hair | fringe
         else:
             cap = c.ellipse(hx - (0.5 if three else 0), hy - 1.3, 7.3, 6.5) & (c.yy < hy - 1.8)
+            if style == "bun":
+                # combed back from a high hairline, short at the temples (bun on top, below)
+                cap &= (c.yy < hy - 2.6) | (np.abs(c.xx + 0.5 - hx) > 4.5)
             if style == "neat":
                 # straight, even bangs and locks down to the jaw on both sides
                 bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy - 0.8)
@@ -440,10 +499,13 @@ class Figure:
                 bangs = c.rect(hx - 5.8, hy - 2.5, hx + 5.5, hy + 1) & (c.yy < edge)
                 bangs |= c.rect(hx - 6, hy - 1, hx - 4.5, hy + 1.5)  # tip over the brow
                 locks = c.rect(hx - 7, hy - 2, hx - 5, hy + 1.5 + hb * 0.5) | c.rect(hx + 5, hy - 2, hx + 7, hy + 1)
-            elif style == "crew":
+            elif style in ("crew", "flattop"):
                 # short crew cut: a thin straight hairline, the sides cropped close
                 bangs = c.rect(hx - 5.5, hy - 2.5, hx + 5.5, hy - 1.8)
                 locks = c.rect(hx - 6.8, hy - 2, hx - 5.6, hy) | c.rect(hx + 5.6, hy - 2, hx + 6.8, hy)
+            elif style == "bun":
+                bangs = np.zeros_like(cap)
+                locks = c.rect(hx - 7, hy - 2.5, hx - 5.4, hy + 1.5) | c.rect(hx + 5.4, hy - 2.5, hx + 7, hy + 1.5)
             else:
                 # pointed bangs: a zigzag edge over the forehead
                 zig = ((c.xx.astype(int) + (1 if three else 0)) % 3)
@@ -461,6 +523,25 @@ class Figure:
             # a strand sticking up and a few spikes on the crown
             hair |= c.rect(hx + (0 if not side else -1), hy - 8 + hb * 0, hx + 1 + (0 if not side else -1), hy - 6)
             hair |= c.rect(hx - 3, hy - 7, hx - 2, hy - 6)
+            # and tufts sticking out over the ears: nobody combed it
+            if side:
+                hair |= c.rect(hx - 8, hy - 2, hx - 6.5, hy)
+            else:
+                hair |= c.rect(hx - 8.3, hy - 3, hx - 6.6, hy - 1)
+                if not three:
+                    hair |= c.rect(hx + 6.6, hy - 2, hx + 8.3, hy)
+        if style == "flattop":
+            # a flat top: a square crown a pixel higher than the round head, soft corners
+            x0 = hx - (6.5 if side else 5.5)
+            top = c.rect(x0, hy - 8.6, hx + 5.5, hy - 3)
+            top &= ~((c.yy < hy - 7.6) & ((c.xx < x0 + 1) | (c.xx >= hx + 4.5)))
+            hair |= top
+        bun = np.zeros_like(hair)
+        if style == "bun":
+            # a round bun on the top of the head, a little back, tied off (see below)
+            bx = hx - (2.5 if side else 0)
+            bun = c.ellipse(bx, hy - 7.9, 2.4, 1.8)
+            hair |= bun
         if style == "ponytail":
             tail_x = hx - 6 if side else hx + (5 if three else 0)
             if back or side:
@@ -472,6 +553,11 @@ class Figure:
         ring = np.abs(np.hypot(c.xx + 0.5 - (hx + 1), c.yy + 0.5 - (hy + 3)) - 8.4) < 0.55
         shine = hair & ring & (c.xx >= hx - 4) & (c.xx < hx) & (c.yy < hy - 3)
         c.rgb[shine] = d["hair"][4]
+        if bun.any():
+            # the tie: the bun's lowest row in the darkest tone, so it sits on the head as a
+            # knot of its own instead of drawing the crown out into a point
+            tie = bun & ~np.roll(bun, -1, 0)
+            c.rgb[tie] = d["hair"][0]
         if style == "swept" and not back:
             # one lighter strand following the sweep of the fringe
             strand = hair & (np.abs((c.xx + 0.5 - hx) * 0.32 + (c.yy + 0.5 - (hy - 2.2))) < 0.5)
@@ -482,9 +568,13 @@ class Figure:
             part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
             c.rgb[part] = d["hair"][1]
         if d.get("headband"):
-            # a sweatband across the brow, all the way round
-            band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & c.ellipse(hx, hy - 1, 7.4, 7.6) & (hair | head)
-            self.part(band, "inner", 0.85)
+            # a sweatband across the brow, all the way round, but one pixel inside the head:
+            # the head's own edge pixels (and the outline around them) stay, so the band never
+            # pokes out of the silhouette; a muted light grey, not white, so it sits on the hair
+            sil = hair | head
+            inside = sil & shift_x(sil, 1) & shift_x(sil, -1)
+            band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & inside
+            self.part(band, "inner", 0.6)
             self.part(band & (c.yy >= hy - 2.8), "top", 0.75)
         if self.back3:
             c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
