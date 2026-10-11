@@ -121,6 +121,6 @@ func test_compile_errors_are_reported_with_line() -> void:
 
 func test_runtime_env_isolates_test_runs() -> void:
 	assert_true(RuntimeEnv.is_test_run())
-	assert_eq(RuntimeEnv.user_dir(), "user://profiles/test/")
+	assert_eq(RuntimeEnv.user_dir(), "user://profiles/test_%d/" % OS.get_process_id())
 	assert_eq(RuntimeEnv.profile_from_args(["--profile=smoke"]), "smoke")
 	assert_eq(RuntimeEnv.profile_from_args(["--profile=../x"]), "")

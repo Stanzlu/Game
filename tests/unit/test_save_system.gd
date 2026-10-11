@@ -2,7 +2,7 @@ extends GutTest
 ## SaveSystem on disk (test profile only): atomic writes, backups, refusing and deferring
 ## saves while blocked, reading broken files without crashing.
 
-const DIR := "user://profiles/test/saves_unit"
+var dir_path := RuntimeEnv.user_dir() + "saves_unit"
 
 var saves: SaveService
 var context: FakeContext
@@ -24,7 +24,7 @@ func before_each() -> void:
 	_clear_dir()
 	WorldState.new_game()
 	saves = SaveService.new()
-	saves.save_dir = DIR
+	saves.save_dir = dir_path
 	add_child_autofree(saves)
 	context = FakeContext.new()
 	context.add_to_group(SaveService.CONTEXT_GROUP)
@@ -37,7 +37,7 @@ func after_all() -> void:
 
 
 func _clear_dir() -> void:
-	var dir := DirAccess.open(DIR)
+	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return
 	for file_name in dir.get_files():
@@ -45,7 +45,7 @@ func _clear_dir() -> void:
 
 
 func _write_raw(slot: String, text: String, backup := false) -> void:
-	DirAccess.make_dir_recursive_absolute(DIR)
+	DirAccess.make_dir_recursive_absolute(dir_path)
 	var file := FileAccess.open(saves.path_for(slot, backup), FileAccess.WRITE)
 	file.store_string(text)
 	file.close()
@@ -54,8 +54,8 @@ func _write_raw(slot: String, text: String, backup := false) -> void:
 func test_save_writes_a_readable_slot_with_location() -> void:
 	WorldState.set_flag("valley.saved_once")
 	assert_eq(saves.save_slot("slot_1"), OK)
-	assert_true(FileAccess.file_exists(DIR + "/slot_1.json"))
-	assert_false(FileAccess.file_exists(DIR + "/slot_1.json.tmp"), "temp file is renamed")
+	assert_true(FileAccess.file_exists(dir_path + "/slot_1.json"))
+	assert_false(FileAccess.file_exists(dir_path + "/slot_1.json.tmp"), "temp file is renamed")
 	var result := saves.read_slot("slot_1")
 	assert_true(result.ok, result.error)
 	assert_true(result.state.flags.has("valley.saved_once"))

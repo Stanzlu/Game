@@ -22,6 +22,8 @@ const ELYSIA_MENU_Y := 190.0
 const REAL_MENU_AT := Vector2(34, 112)
 
 static var _start_arg_consumed := false
+## Content check and autopilot belong to the first start menu of a run, not every return.
+static var _first_boot_done := false
 static var _intro_played := false
 ## Set by "Startbild wechseln" in the prototype menu; -1 = decide from the saves.
 static var _forced_title := -1
@@ -60,7 +62,8 @@ func _ready() -> void:
 	list.focus_first()
 	# record: a tester's log names the build it came from
 	Log.record(Log.Category.BOOT, "boot screen ready", info)
-	if not _start_arg_consumed:
+	if not _first_boot_done:
+		_first_boot_done = true
 		Log.info(
 			Log.Category.CONTENT,
 			"content available",

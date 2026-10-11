@@ -14,11 +14,17 @@ static func is_test_run() -> bool:
 	return false
 
 
-## Profile name from `--profile=<name>`; "test" under GUT; empty for normal runs.
+## Profile name from `--profile=<name>`; "test_<pid>" under GUT; empty for normal runs.
 static func profile() -> String:
 	if is_test_run():
-		return TEST_PROFILE
+		return test_profile()
 	return profile_from_args(OS.get_cmdline_user_args())
+
+
+## Every test run has its own folder: checkouts side by side share user://, and two runs
+## at once must not delete each other's saves. tests/hooks/clean_test_profiles.gd tidies up.
+static func test_profile(pid := OS.get_process_id()) -> String:
+	return "%s_%d" % [TEST_PROFILE, pid]
 
 
 static func profile_from_args(args: PackedStringArray) -> String:

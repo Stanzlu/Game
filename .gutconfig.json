@@ -1,10 +1,13 @@
 {
-  "dirs": ["res://tests/unit/"],
+  "dirs": [
+    "res://tests/unit/"
+  ],
   "include_subdirs": true,
   "prefix": "test_",
   "suffix": ".gd",
   "log_level": 1,
   "should_exit": true,
   "should_exit_on_success": true,
-  "hide_orphans": false
+  "hide_orphans": false,
+  "post_run_script": "res://tests/hooks/clean_test_profiles.gd"
 }
