@@ -4,12 +4,17 @@ extends Node2D
 ## button of the current device and the verb ("E  Öffnen"). Pops in, bobs gently, follows
 ## the skins (Elysia gold, Real quiet).
 
+const FADE_IN_SECONDS := 0.12
+const FADE_OUT_SECONDS := 0.08
+
 var _panel: PanelContainer
 var _key: Label
 var _verb: Label
 var _target: Interactable
 var _shown_for: Interactable
 var _time := 0.0
+var _tween: Tween
+var _fading := false
 
 
 func _ready() -> void:
@@ -43,21 +48,39 @@ func show_for(target: Interactable) -> void:
 
 
 func _refresh() -> void:
-	visible = _target != null and is_instance_valid(_target)
-	if not visible:
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
+	if _target == null or not is_instance_valid(_target):
 		_shown_for = null
+		if visible and not _fading:
+			# fade out where it stood instead of vanishing
+			_fading = true
+			_tween = _panel.create_tween()
+			_tween.tween_property(_panel, ^"modulate:a", 0.0, FADE_OUT_SECONDS)
+			_tween.tween_callback(_hide_now)
 		return
+	_fading = false
+	visible = true
 	_key.text = InputDevice.label_for(&"interact")
 	_verb.text = tr(_target.prompt_key)
 	_panel.reset_size()
 	if _shown_for != _target:
 		_shown_for = _target
 		_panel.modulate.a = 0.0
-		var tween := _panel.create_tween()
-		tween.tween_property(_panel, ^"modulate:a", 1.0, 0.12)
+		_tween = _panel.create_tween()
+		_tween.tween_property(_panel, ^"modulate:a", 1.0, FADE_IN_SECONDS)
+	else:
+		_panel.modulate.a = 1.0
+
+
+func _hide_now() -> void:
+	_fading = false
+	visible = false
 
 
 func _process(delta: float) -> void:
+	if _fading:
+		return
 	if visible and (not is_instance_valid(_target) or not _target.can_interact(null)):
 		# the target was taken, opened or freed (e.g. a picked-up stone)
 		_target = null

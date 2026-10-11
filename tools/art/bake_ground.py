@@ -31,6 +31,8 @@ SURFACE_PAINT = {"grass": "grass", "dirt": "path", "stone": "cobble", "water": "
 SOFT = {"grass": (0.30, 0.0), "path": (0.30, 0.03), "mud": (0.40, 0.0), "cobble": (0.08, 0.06),
         "water": (0.18, -0.04), "cliff": (0.10, 0.0), "void": (0.10, 0.0)}
 BLUR = 7
+# How far the banks of real-world water wander off the cell grid (score units, see labels).
+BANK_WOBBLE = 0.7
 # Materials drawn as smooth shapes on top of the soft blend (plazas): (blur, threshold).
 SMOOTH = {"cobble": (12, 0.5), "marble": (14, 0.5)}
 
@@ -127,6 +129,7 @@ class Baker:
         self.style = pa.STYLES[self.style_name]
         # mirror axis (cell column) of a symmetric map: the right half is the left half flipped
         self.axis = meta.get("symmetry")
+        self.seed = seed
         self.rng = np.random.default_rng(seed)
         self.ch, self.cw = len(rows), len(rows[0])
         self.h, self.w = self.ch * T, self.cw * T
@@ -194,6 +197,16 @@ class Baker:
                 score[i] = pa.box_blur(up(onehot), BLUR, 3) + (own * 0.6 + ragged * 0.4) * amp + bias
             else:
                 score[i] = up(onehot) * 3.0 - 1.0
+        if self.style_name != "elysia" and (cells == M["water"]).any():
+            # Real banks wander: a slow wobble on the water's border, so a run of cells along
+            # the grid (the pool of the stepping stones, a straight reach) is not a ruled
+            # line with square corners. Every cell painted as water gets it, walkable or not.
+            # Own generator, so the rest of the bake keeps its random numbers.
+            # Only near water, so no puddle of water appears on a far-off grass/path border.
+            rng = np.random.default_rng(self.seed + 1009)
+            wobble = centered(pa.value_noise(self.h, self.w, 13, rng, 2))
+            close = np.clip(pa.box_blur(up((cells == M["water"]).astype(np.float32)), BLUR, 3) * 3.0, 0, 1)
+            score[M["water"]] += wobble * BANK_WOBBLE * close
         lab = np.argmax(score, 0)
         for name, (blur, threshold) in SMOOTH.items():
             onehot = (cells == M[name]).astype(np.float32)

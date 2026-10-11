@@ -32,8 +32,15 @@ var sprite: Sprite2D
 var mirrored := false
 var lights: Array[PointLight2D] = []
 ## Scales all lamp lights of this prop (DayLight dims lamps by day).
-var light_scale := 1.0
+var light_scale := 1.0:
+	set(value):
+		light_scale = value
+		if not _flicker:
+			# steady lamps are not touched every frame: the scale applies here
+			for i in lights.size():
+				lights[i].energy = _light_energy[i] * value
 var _light_energy: Array[float] = []
+var _flicker := false
 var _bob := 0.0
 var _time := 0.0
 var _glow: Sprite2D
@@ -113,14 +120,8 @@ func apply_params(params: Dictionary) -> void:
 		_add_splash(entry["splash"])
 	_bob = float(entry.get("bob", 0.0))
 	_time = fmod(global_position.x * 0.13 + global_position.y * 0.07, TAU)
-	set_process(
-		(
-			_bob > 0.0
-			or _glow != null
-			or _beam != null
-			or (entry.get("flicker", false) and not lights.is_empty())
-		)
-	)
+	_flicker = entry.get("flicker", false) and not lights.is_empty()
+	set_process(_bob > 0.0 or _glow != null or _beam != null or _flicker)
 
 
 func _process(delta: float) -> void:
@@ -131,8 +132,10 @@ func _process(delta: float) -> void:
 		_glow.modulate.a = 0.55 + 0.2 * sin(_time * 1.7)
 	if _beam != null:
 		_beam.modulate.a = 0.8 + 0.12 * sin(_time * 0.9) + 0.06 * sin(_time * 2.3)
+	if not _flicker:
+		return
+	var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
 	for i in lights.size():
-		var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
 		lights[i].energy = _light_energy[i] * f * light_scale
 
 
@@ -269,11 +272,12 @@ func _add_light(spec: Dictionary) -> void:
 	light.texture = light_texture()
 	light.position = _pos(spec.get("offset", [0, 0]))
 	light.color = Color(str(spec.get("color", "#ffffff")))
-	light.energy = float(spec.get("energy", 1.0))
+	var energy := float(spec.get("energy", 1.0))
+	light.energy = energy * light_scale
 	light.texture_scale = float(spec.get("range", 64)) / 32.0
 	add_child(light)
 	lights.append(light)
-	_light_energy.append(light.energy)
+	_light_energy.append(energy)
 	add_to_group(&"lamp_props")
 
 

@@ -22,6 +22,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import make_sprites  # noqa: E402
 import pixelart as pa  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -169,7 +170,8 @@ def island(seed=11):
     place(prop("tree_blossom_1"), cx + 116, plateau_mid - 2)
     place(prop("pillar"), cx - 64, plateau_mid + 2)
     place(prop("pillar"), cx + 64, plateau_mid + 2)
-    tree = prop("sacred_tree")
+    # the world tree stands on grass here, not in its basin: no wet roots, no foam
+    tree = Image.fromarray(np.clip(make_sprites.sacred_tree(in_water=False).rgba(), 0, 255).astype(np.uint8), "RGBA")
     place(tree, cx, plateau_mid + 14)
     place(prop("crystal"), cx, plateau_mid + 22)
     for i, (dx, dy) in enumerate([(-130, 10), (-92, 16), (98, 15), (134, 9), (-40, 19), (44, 19)]):

@@ -96,3 +96,12 @@ func test_presets_load_and_are_ordered_by_responsiveness() -> void:
 	for t: MovementTuning in [direkt, weich, schwer]:
 		assert_gt(t.run_speed, t.walk_speed)
 		assert_true(t.display_key.begins_with("TUNING_"))
+
+
+func test_a_corner_keeps_its_speed() -> void:
+	var v := Vector2(80, 0)
+	for i in 3:
+		v = MovementModel.step(v, Vector2(0, -80), tuning, 1.0 / 60.0)
+	assert_almost_eq(v, Vector2(0, -80), Vector2.ONE * 0.01, "a 90° turn uses the turn rate")
+	var start := MovementModel.step(Vector2.ZERO, Vector2(0, -80), tuning, 1.0 / 60.0)
+	assert_almost_eq(start.length(), 1000.0 / 60.0, 0.001, "a start still accelerates")

@@ -41,9 +41,15 @@ if WorldState.curiosity_in("shelf_1") == "" and WorldState.curiosity_in("shelf_2
 if WorldState.curiosity_in("shelf_1") != ""
 	Der sehr kleine Löffel steht im Regal. Er sieht aus, als hätte er dort immer gestanden. [ID:haus_shelf_1]
 if WorldState.curiosity_in("shelf_2") != ""
-	Daneben der Stein. Er glänzt nicht. Er liegt einfach gut da. [ID:haus_shelf_6]
+	if WorldState.curiosity_in("shelf_1") != ""
+		Daneben der Stein. Er glänzt nicht. Er liegt einfach gut da. [ID:haus_shelf_6]
+	else
+		Im Regal liegt der Stein. Er glänzt nicht. Er liegt einfach gut da. [ID:haus_shelf_9]
 if WorldState.has_item("curiosity_tiny_spoon") or WorldState.has_item("item_stone")
-	Ein Fach ist noch frei, gerade groß genug für etwas Kleines. [ID:haus_shelf_2]
+	if WorldState.curiosity_in("shelf_1") == "" and WorldState.curiosity_in("shelf_2") == ""
+		Beide gerade groß genug für etwas Kleines. [ID:haus_shelf_8]
+	else
+		Ein Fach ist noch frei, gerade groß genug für etwas Kleines. [ID:haus_shelf_2]
 	- Den Löffel hineinstellen [if WorldState.has_item("curiosity_tiny_spoon") /] [ID:haus_shelf_r1]
 		do WorldState.place_curiosity("shelf_1", "curiosity_tiny_spoon")
 		do WorldState.set_flag("house.shelf_filled")
@@ -52,8 +58,11 @@ if WorldState.has_item("curiosity_tiny_spoon") or WorldState.has_item("item_ston
 		do WorldState.place_curiosity("shelf_2", "item_stone")
 		do WorldState.set_flag("house.shelf_stone")
 		Du legst den Stein ins Fach. Er wiegt fast nichts. Das Fach sieht trotzdem voller aus. [ID:haus_shelf_7]
-	- Behalten, was ich habe [ID:haus_shelf_r2]
-		Du behältst es. Für sehr kleine Suppen, vielleicht. [ID:haus_shelf_4]
+	- Nichts hineinlegen [ID:haus_shelf_r2]
+		if WorldState.has_item("curiosity_tiny_spoon")
+			Du behältst den Löffel. Für sehr kleine Suppen, vielleicht. [ID:haus_shelf_4]
+		else
+			Du behältst den Stein. Das Fach kann warten. [ID:haus_shelf_10]
 	if WorldState.curiosity_in("shelf_1") != "" and WorldState.curiosity_in("shelf_2") != ""
 		do WorldState.set_flag("house.shelf_both")
 => END
@@ -69,7 +78,10 @@ else
 => END
 
 ~ bucket
-Ein Eimer unter einer undichten Stelle im Dach. Halb voll. Jemand hat ihn hingestellt, bevor er gegangen ist. [ID:haus_bucket_1]
+if WorldState.is_fire_lit()
+	Es tropft in den Eimer. Plink. Lange nichts. Plink. [ID:haus_bucket_2]
+else
+	Ein Eimer unter einer undichten Stelle im Dach. Halb voll. Jemand hat ihn hingestellt, bevor er gegangen ist. [ID:haus_bucket_1]
 => END
 
 ~ window
@@ -133,7 +145,7 @@ Antreiber: Oder das Dach. Das Dach tropft. Hast du den Eimer gesehen? [ID:haus_a
 
 ~ antreiber_sits
 Der Antreiber schaut dich an. Dann das Feuer. [ID:haus_antr_3]
-Er setzt sich. Er weiß nicht genau, wohin mit seinen Händen. Dann legt er sie in den Schoß. [ID:haus_antr_4]
+Er setzt sich. Die Hände legt er auf die Knie, dann in den Schoß, dann wieder auf die Knie. [ID:haus_antr_4]
 => END
 
 ~ antreiber_cheers
@@ -154,7 +166,7 @@ Es klopft. [ID:haus_knock_1]
 => END
 
 ~ stay
-Das Feuer brennt gerade erst richtig, und draußen regnet es. Du bleibst noch ein bisschen. [ID:haus_stay_1]
+Das Feuer brennt gerade erst richtig, und draußen regnet es. Der Teppich davor sieht warm aus. [ID:haus_stay_1]
 => END
 
 ~ mira
@@ -174,7 +186,11 @@ Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
 - … [ID:haus_mira_r3]
 	Mira: Ich nehm das als Ja. [ID:haus_mira_6]
 	do WorldState.add_memory("mira", "silent_yes")
-Mira setzt sich ans Feuer, legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
+if WorldState.has_flag("house.antreiber_by_fire")
+	Der Antreiber rückt ein Stück zur Seite. Mira setzt sich auf den freien Platz, als wäre er immer frei gewesen. [ID:haus_mira_29]
+	Sie legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_30]
+else
+	Mira setzt sich ans Feuer, legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
 if WorldState.has_flag("valley.fell_in")
 	if WorldState.has_memory("mira", "stones_warned")
 		Mira: Die runden. Ich hab's gesagt. [ID:haus_mira_8]
@@ -183,7 +199,7 @@ if WorldState.has_flag("valley.fell_in")
 	else
 		Mira: Du bist in den Bach gefallen. Das hört man bis zu mir. [ID:haus_mira_10]
 else
-	Mira: Trocken rübergekommen. Hätte ich nicht gedacht. [ID:haus_mira_11]
+	Mira: Trocken rübergekommen. Immerhin. [ID:haus_mira_11]
 Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 - Von woanders. [ID:haus_mira_r4]
 	Mira: Woanders ist groß. [ID:haus_mira_13]
@@ -200,8 +216,18 @@ Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 	Mira schaut ins Feuer und sagt nichts mehr dazu. [ID:haus_mira_17]
 	do WorldState.add_memory("mira", "said_dont_know")
 Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
+- Der beste Fisch, den ich je gegessen hab. [ID:haus_mira_r9]
+	Mira: Nein. Der war zu lang im Feuer. [ID:haus_mira_31]
+	Mira: Aber gut, ja. [ID:haus_mira_32]
+	do WorldState.add_memory("mira", "praised_fish")
+- Ja. Gut. [ID:haus_mira_r10]
+	Mira: Eben. [ID:haus_mira_33]
+	do WorldState.add_memory("mira", "agreed_fish")
+- … [ID:haus_mira_r11]
+	Ihr esst. Der Regen trommelt aufs Dach. [ID:haus_mira_34]
+	do WorldState.add_memory("mira", "ate_quietly")
 if WorldState.has_flag("elysia.soup_served")
-	Er schmeckt nach Rauch und ein bisschen nach Bach. Du merkst dir den Geschmack, ohne es zu wollen. [ID:haus_mira_28]
+	Der Fisch schmeckt nach Rauch und ein bisschen nach Bach. Und hat Gräten. Viele. [ID:haus_mira_28]
 Mira: Die Leute, die hier gewohnt haben, hatten eine Ziege. Die läuft noch rum. [ID:haus_mira_19]
 Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 - Deinen Stiefel? [ID:haus_mira_r7]

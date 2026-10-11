@@ -11,11 +11,24 @@ enum State { IDLE, WALK, RUN, SIT, LOCKED }
 
 const STAND_UP_THRESHOLD := 0.5
 const NUDGE_SPEED := 60.0
-const INTERACT_COOLDOWN := 0.2
+## After a conversation or getting up, interact waits this long, so the press that closed
+## the last line cannot start the same conversation again.
+const INTERACT_COOLDOWN := 0.35
+## A press of interact waits this long for a target (the overlap check lags a tick).
+const INTERACT_BUFFER := 0.12
+## Releasing a diagonal: two keys rarely lift in the same tick. A straight neighbour of the
+## current diagonal must hold this long before the facing gives up the diagonal.
+const DIAGONAL_GRACE := 0.08
+## Below this speed the player stands; a short tap only turns.
+const WALK_THRESHOLD := 12.0
 const STATE_NAMES := ["idle", "walk", "run", "sit", "idle"]
 ## Seconds of standing still before the protagonist blinks and glances around (Game Bible
 ## §36); random within the range, so it never feels like a timer.
 const GLANCE_AFTER := Vector2(4.0, 9.0)
+## Sitting down and getting up glide the last few pixels instead of jumping; seats farther
+## away (a cutscene placing the player) are still a cut.
+const SEAT_GLIDE_SECONDS := 0.12
+const SEAT_GLIDE_MAX := 40.0
 
 @export var tuning: MovementTuning
 @export var sheet: CharacterSheet
@@ -31,9 +44,15 @@ var surface_provider := Callable()
 var last_surface := &""
 var _locks: Dictionary = {}
 var _sprint_latched := false
-var _step_accum := 0.0
 var _seat_return := Vector2.ZERO
+var _seat_tween: Tween
 var _interact_cooldown := 0.0
+var _interact_buffer := 0.0
+## Direction of travel, held with hysteresis so a stick near a boundary does not flicker.
+var _move_dir := Facing.Dir.S
+var _straight_time := 0.0
+## Walk/run frame that last played a footstep (-1 = standing).
+var _footfall_frame := -1
 var _prev_physics_pos := Vector2.ZERO
 var _curr_physics_pos := Vector2.ZERO
 var _idle_time := 0.0
@@ -84,6 +103,7 @@ func read_input() -> Vector2:
 
 
 func teleport(to: Vector2) -> void:
+	_stop_seat_glide()
 	global_position = to
 	velocity = Vector2.ZERO
 	_prev_physics_pos = to
@@ -102,7 +122,7 @@ func sit_on(seat: Vector2, dir: Facing.Dir) -> void:
 		return
 	_seat_return = global_position
 	_collision.set_deferred(&"disabled", true)
-	teleport(seat)
+	_move_to_seat(seat)
 	facing = dir
 	_set_state(State.SIT)
 	_update_animation(0.0)
@@ -112,10 +132,35 @@ func sit_on(seat: Vector2, dir: Facing.Dir) -> void:
 func stand_up() -> void:
 	if state != State.SIT:
 		return
-	teleport(_seat_return)
-	_collision.set_deferred(&"disabled", false)
 	_set_state(State.IDLE)
+	_move_to_seat(_seat_return)
+	_collision.set_deferred(&"disabled", false)
 	_interact_cooldown = INTERACT_COOLDOWN
+
+
+func _move_to_seat(to: Vector2) -> void:
+	var distance := global_position.distance_to(to)
+	if distance < 1.0 or distance > SEAT_GLIDE_MAX:
+		teleport(to)
+		return
+	_stop_seat_glide()
+	velocity = Vector2.ZERO
+	lock(&"seat")
+	# in physics steps, so physics interpolation smooths it like walking
+	_seat_tween = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	(
+		_seat_tween
+		. tween_property(self, ^"global_position", to, SEAT_GLIDE_SECONDS)
+		. set_trans(Tween.TRANS_SINE)
+		. set_ease(Tween.EASE_OUT)
+	)
+	_seat_tween.tween_callback(unlock.bind(&"seat"))
+
+
+func _stop_seat_glide() -> void:
+	if _seat_tween != null and _seat_tween.is_valid():
+		_seat_tween.kill()
+		unlock(&"seat")
 
 
 func _physics_process(delta: float) -> void:
@@ -133,7 +178,8 @@ func _physics_step(delta: float) -> void:
 			stand_up()
 		return
 	var sprinting := _update_sprint(input)
-	var target := MovementModel.target_velocity(input, tuning, sprinting, snap_eight, speed_scale)
+	var steer := _steer(input)
+	var target := MovementModel.target_velocity(steer, tuning, sprinting, false, speed_scale)
 	velocity = MovementModel.step(velocity, target, tuning, delta)
 	var before := global_position
 	move_and_slide()
@@ -141,21 +187,68 @@ func _physics_step(delta: float) -> void:
 		_nudge_around_corner(input, delta)
 	var moved := global_position.distance_to(before)
 	var speed := moved / delta
-	if input.length_squared() > 0.0001:
-		var look := MovementModel.snap_to_eight(input) if snap_eight else input
-		facing = Facing.from_vector_stable(facing, look)
+	_update_facing(input, delta)
 	if is_locked():
 		_set_state(State.LOCKED)
-	elif speed < 4.0:
+	elif speed < WALK_THRESHOLD:
 		_set_state(State.IDLE)
 	else:
 		_set_state(State.RUN if sprinting and speed > tuning.walk_speed * 1.1 else State.WALK)
-	_advance_steps(moved, state == State.RUN)
 	_update_idle(delta)
 	_update_animation(speed)
+	_update_footfall()
 	sensor.update_target(self, Facing.to_vector(facing), not is_locked())
-	if not is_locked() and _interact_cooldown <= 0.0 and Input.is_action_just_pressed(&"interact"):
-		sensor.try_interact(self)
+	_update_interact(delta)
+
+
+## The direction to move in: with eight directions, the stick's direction is held with a
+## margin before it snaps to a neighbour (snapping first would defeat the margin and let
+## the stick flicker between two directions near a boundary).
+func _steer(input: Vector2) -> Vector2:
+	if input.length_squared() < 0.0001:
+		return Vector2.ZERO
+	if not snap_eight:
+		return input
+	_move_dir = Facing.from_vector_stable(_move_dir, input)
+	return Facing.to_vector(_move_dir) * minf(input.length(), 1.0)
+
+
+func _update_facing(input: Vector2, delta: float) -> void:
+	if input.length_squared() < 0.0001:
+		_straight_time = 0.0
+		return
+	var want := _move_dir if snap_eight else Facing.from_vector_stable(facing, input)
+	if want == facing:
+		_straight_time = 0.0
+		return
+	var turn := wrapi(int(want) - int(facing), -4, 4)
+	var leaving_diagonal := int(facing) % 2 == 1 and absi(turn) == 1
+	if leaving_diagonal and _straight_time + delta < DIAGONAL_GRACE:
+		_straight_time += delta
+		return
+	_straight_time = 0.0
+	facing = want
+
+
+## Interact is buffered for a moment (the target may arrive a tick later) and turns the
+## player toward what they talk to or look at.
+func _update_interact(delta: float) -> void:
+	if is_locked():
+		_interact_buffer = 0.0
+		return
+	if Input.is_action_just_pressed(&"interact"):
+		_interact_buffer = INTERACT_BUFFER
+	else:
+		_interact_buffer = maxf(_interact_buffer - delta, 0.0)
+	if _interact_buffer <= 0.0 or _interact_cooldown > 0.0 or sensor.current == null:
+		return
+	_interact_buffer = 0.0
+	var to_target := sensor.current.global_position - global_position
+	if to_target.length() > 2.0:
+		facing = Facing.from_vector(to_target)
+		_move_dir = facing
+		_update_animation(0.0)
+	sensor.try_interact(self)
 
 
 func _update_sprint(input: Vector2) -> bool:
@@ -187,17 +280,18 @@ func _nudge_around_corner(input: Vector2, delta: float) -> void:
 				return
 
 
-func _advance_steps(moved: float, running: bool) -> void:
-	if moved <= 0.01:
-		_step_accum = 0.0
+## Footsteps follow the feet: the walk and run cycles put a foot down on frames 0 and 2.
+func _update_footfall() -> void:
+	if state != State.WALK and state != State.RUN:
+		_footfall_frame = -1
 		return
-	var distance := tuning.step_distance_run if running else tuning.step_distance_walk
-	if _step_accum == 0.0:
-		_step_accum = distance * 0.5
-	_step_accum += moved
-	if _step_accum < distance:
+	var frame := sprite.frame
+	if frame == _footfall_frame:
 		return
-	_step_accum -= distance
+	_footfall_frame = frame
+	if frame % 2 != 0:
+		return
+	var running := state == State.RUN
 	last_surface = (
 		surface_provider.call(global_position) if surface_provider.is_valid() else &"dirt"
 	)
@@ -238,7 +332,14 @@ func _update_animation(speed: float) -> void:
 	var state_name: String = "look" if _glancing else STATE_NAMES[state]
 	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
+		# turning while walking keeps the step: the cycle goes on in the new direction
+		var same_cycle := String(sprite.animation).begins_with(state_name + "_")
+		var frame := sprite.frame
+		var progress := sprite.frame_progress
 		sprite.play(anim)
+		if same_cycle and (state == State.WALK or state == State.RUN):
+			sprite.set_frame_and_progress(frame, progress)
+			_footfall_frame = frame
 	match state:
 		State.WALK:
 			sprite.speed_scale = clampf(speed / tuning.walk_speed, 0.5, 1.5)

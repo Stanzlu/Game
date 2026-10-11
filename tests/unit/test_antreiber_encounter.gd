@@ -19,9 +19,13 @@ func test_running_never_reaches_the_goal_but_stopping_resolves() -> void:
 	var start_x := encounter.player.global_position.x
 	Input.action_press(&"move_right")
 	Input.action_press(&"sprint")
-	await wait_seconds(4.5)
+	await wait_seconds(9.0)
 	assert_false(encounter.model.is_resolved(), "running does not resolve")
-	assert_gt(encounter.player.global_position.x, start_x + 300.0, "player ran far")
+	assert_gt(
+		encounter.player.global_position.x,
+		start_x + AntreiberModel.ENGAGE_DISTANCE,
+		"player ran far"
+	)
 	assert_gt(
 		encounter.flag.global_position.x, encounter.player.global_position.x + 60.0, "goal ahead"
 	)
@@ -52,3 +56,35 @@ func test_segments_are_recycled_while_running() -> void:
 		7 + 2 * AntreiberEncounter.POOL_SIZE,
 		"pieces that left the window are reused, not piled up"
 	)
+
+
+func test_a_stop_right_at_the_start_is_only_a_pause() -> void:
+	var encounter: AntreiberEncounter = SCENE.instantiate()
+	encounter.stillness_seconds = 1.0
+	add_child_autofree(encounter)
+	await wait_physics_frames(3)
+	Input.action_press(&"move_right")
+	await wait_seconds(2.0)
+	Input.action_release(&"move_right")
+	await wait_seconds(3.0)
+	assert_false(encounter.model.is_resolved(), "the race has not begun yet")
+	assert_eq(
+		encounter.model.mood(0.0, encounter.player.tuning.walk_speed),
+		AntreiberModel.Mood.PUZZLED_EARLY
+	)
+
+
+func test_parked_path_pieces_are_hidden_and_idle() -> void:
+	var encounter: AntreiberEncounter = SCENE.instantiate()
+	add_child_autofree(encounter)
+	await wait_physics_frames(3)
+	var parked := 0
+	for pieces: Array in encounter._pool.values():
+		for segment: MapView in pieces:
+			parked += 1
+			assert_false(segment.visible, "a parked piece is not drawn")
+			assert_eq(segment.process_mode, Node.PROCESS_MODE_DISABLED, "nor processed")
+	assert_gt(parked, 0)
+	for segment: MapView in encounter._segments.values():
+		assert_true(segment.visible, "pieces in use are visible")
+		assert_ne(segment.process_mode, Node.PROCESS_MODE_DISABLED)

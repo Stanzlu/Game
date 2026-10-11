@@ -16,7 +16,7 @@ fi
 # Our own GDScript files (third-party addons are excluded on purpose).
 mapfile -t GD_FILES < <(find . -name '*.gd' \
   -not -path './addons/*' -not -path './.godot/*' -not -path './.venv/*' -not -path './build/*' \
-  | sort)
+  -not -path './.claude/*' | sort)
 
 # Godot prints these markers for script and resource problems but may still exit 0.
 ERROR_PATTERN='SCRIPT ERROR|Parse Error|Failed to load script|ERROR: '
@@ -87,6 +87,27 @@ if has_errors "$smoke_log" || ! grep -q "benchmark done" "$smoke_log"; then
   echo "check: benchmark did not finish" >&2
   exit 1
 fi
+echo "smoke ok"
+
+# The whole vertical slice without a hand (autopilot, instant text, fixed frame rate): every
+# beat in order up to the end. Starts on a fresh profile, so "Neues Spiel" asks nothing.
+step "smoke: full slice (autopilot)"
+case "$(uname -s)" in
+  Darwin) user_root="$HOME/Library/Application Support/REAL" ;;
+  MINGW* | MSYS* | CYGWIN*) user_root="${APPDATA:-$HOME/AppData/Roaming}/REAL" ;;
+  *) user_root="${XDG_DATA_HOME:-$HOME/.local/share}/REAL" ;;
+esac
+rm -rf "$user_root/profiles/slice_check"
+smoke_log="$(mktemp)"
+tools/godot.sh --headless --fixed-fps 30 --quit-after 13800 -- --profile=slice_check --text=instant \
+  --autopilot=res://tools/autopilot/slice_full.json >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
+rm -rf "$user_root/profiles/slice_check"
+if has_errors "$smoke_log" || ! grep -q "vertical slice finished" "$smoke_log"; then
+  grep -E "beat|WARN|ERROR" "$smoke_log" | tail -40
+  echo "check: the slice did not reach its end" >&2
+  exit 1
+fi
+grep -o '"beat":"[a-z_]*"' "$smoke_log" | cut -d'"' -f4 | paste -sd' ' -
 echo "smoke ok"
 
 step "unit tests (GUT)"

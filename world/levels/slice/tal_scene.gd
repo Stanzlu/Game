@@ -45,6 +45,10 @@ func _ready() -> void:
 		and not WorldState.has_flag("valley.antreiber_rests")
 	):
 		_antreiber_follows.call_deferred()
+	# a save from the moment Mira made room at her fire (the game closed during the last
+	# scene): the ending plays again instead of leaving the slice unfinishable
+	if WorldState.has_flag("valley.ending") and not WorldState.has_flag("slice.finished"):
+		_play_ending.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -140,7 +144,7 @@ func _look_to_the_mountains() -> void:
 ## Beat 7: Mira makes room at her fire. "Morgen gehe ich weiter." Black. The title.
 func _play_ending() -> void:
 	Beat.mark("ending")
-	while dialogue_box.visible:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	var cut := Cutscene.begin(self)
 	await cut.wait(0.6)
@@ -156,9 +160,9 @@ func _play_ending() -> void:
 	await cut.wait(2.0)
 	WorldState.set_flag("slice.finished")
 	# the save remembers the ending (the start menu shows the Real title from now on)
-	SaveSystem.unblock(&"cutscene")
+	SaveSystem.unblock(cut.key)
 	SaveSystem.request_autosave("slice_finished")
-	SaveSystem.block(&"cutscene")
+	SaveSystem.block(cut.key)
 	Log.info(
 		Log.Category.WORLD_STATE,
 		"vertical slice finished",

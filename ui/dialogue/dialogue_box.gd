@@ -8,6 +8,7 @@ extends CanvasLayer
 ## plate over the corner, a voice per speaker while the text types
 ## (content/dialogue/voices.json), a bobbing marker when the line waits, a cursor on answers.
 
+signal opened
 signal finished
 
 const VOICES_PATH := "res://content/dialogue/voices.json"
@@ -19,10 +20,23 @@ const LARGE_TOP := -108.0
 ## Auto-advance waits this long plus a little per character.
 const AUTO_BASE_SECONDS := 1.4
 const AUTO_SECONDS_PER_CHAR := 0.05
-## A voice syllable every n typed letters.
+## A voice syllable every n spoken letters (spaces and punctuation do not count).
 const VOICE_EVERY := 2
 const SILENT_LETTERS := ".,;:!?…–-„“\"'()"
 const OPEN_SECONDS := 0.14
+const CLOSE_SECONDS := 0.1
+## After the answers appear, presses are ignored this long: the press that finished the
+## line and a quick second one must not pick the first answer by accident.
+const ANSWER_GUARD_SECONDS := 0.3
+## The typewriter breathes at punctuation: seconds at the default text speed.
+const PAUSE_AT := ".?!…,;:–"
+const PAUSES := {"…": 0.45, ",": 0.12, ";": 0.12, ":": 0.15, "–": 0.15}
+const PAUSE_DEFAULT := 0.3
+const DEFAULT_SECONDS_PER_CHAR := 0.025
+## Holding interact this long skips: lines finish and move on every HOLD_STEP seconds. It
+## stops at answers, so holding never picks one.
+const HOLD_TO_SKIP := 0.5
+const HOLD_STEP := 0.15
 
 static var _voices: Dictionary = {}
 
@@ -34,6 +48,12 @@ var _waiting := false
 var _voice := ""
 var _quiet_focus := false
 var _tween: Tween
+var _open := false
+var _voiced_letters := 0
+## Game time, not the wall clock: fast runs (autopilot, --fixed-fps) keep the same rhythm.
+var _answer_guard_left := 0.0
+var _held := 0.0
+var _hold_step := 0.0
 
 @onready var _root: Control = $Root
 @onready var _panel: PanelContainer = $Root/Panel
@@ -51,6 +71,7 @@ func _ready() -> void:
 	_responses.response_selected.connect(_on_response_selected)
 	_responses.response_focused.connect(_on_response_focused)
 	_text.skip_action = &""
+	_text.pause_at_characters = PAUSE_AT
 	_text.spoke.connect(_on_spoke)
 	UiSkin.attach(_root)
 	Settings.changed.connect(func(_key: String) -> void: _apply_text_size())
@@ -60,18 +81,19 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	if visible:
+	if _open:
 		SaveSystem.unblock(&"dialogue")
 		AudioDirector.duck(false)
 
 
 func is_open() -> bool:
-	return visible
+	return _open
 
 
 func present(dialogue: DialogueResource, start_cue: String, who: Node = null) -> void:
-	if visible:
+	if _open:
 		return
+	_open = true
 	resource = dialogue
 	actor = who
 	cue = start_cue
@@ -83,6 +105,7 @@ func present(dialogue: DialogueResource, start_cue: String, who: Node = null) ->
 	_plate.hide()
 	show()
 	_animate_open()
+	opened.emit()
 	Log.info(Log.Category.DIALOGUE, "dialogue start", {"cue": cue})
 	_show_line(await DialogueManager.get_next_dialogue_line(resource, cue))
 
@@ -105,6 +128,7 @@ func _show_line(next_line: DialogueLine) -> void:
 	_quiet_focus = false
 	_text.dialogue_line = line
 	_text.seconds_per_step = Settings.text_seconds_per_char()
+	_voiced_letters = 0
 	if not line.text.is_empty():
 		_text.type_out()
 		while _text.is_typing:
@@ -113,6 +137,7 @@ func _show_line(next_line: DialogueLine) -> void:
 			return
 	if line.responses.size() > 0:
 		_quiet_focus = true
+		_answer_guard_left = ANSWER_GUARD_SECONDS
 		_responses.show()
 		var items := _responses.get_menu_items()
 		if not items.is_empty():
@@ -140,27 +165,64 @@ static func voice_for(character: String) -> String:
 	return str(_voices.get(character, _voices.get("_default", "neutral")))
 
 
-func _on_spoke(letter: String, letter_index: int, _speed: float) -> void:
-	if _voice.is_empty() or letter_index % VOICE_EVERY != 0:
-		return
+func _on_spoke(letter: String, _letter_index: int, _speed: float) -> void:
+	# the pause after this letter (if it is one to pause at) follows the text speed
+	var speed_factor := Settings.text_seconds_per_char() / DEFAULT_SECONDS_PER_CHAR
+	_text.seconds_per_pause_step = float(PAUSES.get(letter, PAUSE_DEFAULT)) * speed_factor
 	if letter.strip_edges().is_empty() or SILENT_LETTERS.contains(letter):
+		return
+	_voiced_letters += 1
+	if _voice.is_empty() or (_voiced_letters - 1) % VOICE_EVERY != 0:
 		return
 	# The Real world is quieter than Elysia.
 	var real := WorldState.ui_mode() == GameState.UiMode.REAL
-	AudioDirector.voice(_voice, -5.0 if real else 0.0)
+	AudioDirector.voice(_voice, -5.0 if real else -3.0)
 
 
 func _auto_advance(for_line: DialogueLine) -> void:
 	var seconds := AUTO_BASE_SECONDS + AUTO_SECONDS_PER_CHAR * for_line.text.length()
 	await NodeTimer.after(self, seconds * Settings.timing_factor())
-	if visible and _waiting and line == for_line:
+	if _open and _waiting and line == for_line:
 		_advance()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
+func _process(delta: float) -> void:
+	_answer_guard_left = maxf(_answer_guard_left - delta, 0.0)
+	if not _open or not Input.is_action_pressed(&"interact"):
+		_held = 0.0
+		_hold_step = 0.0
 		return
-	if not (event.is_action_pressed(&"interact") or event.is_action_pressed(&"ui_accept")):
+	_held += delta
+	if _held < HOLD_TO_SKIP or _responses.visible:
+		return
+	_hold_step -= delta
+	if _hold_step > 0.0:
+		return
+	_hold_step = HOLD_STEP
+	if _text.is_typing:
+		_text.skip_typing()
+	elif _waiting:
+		_advance()
+
+
+## Swallows presses right after the answers appeared (before the answer list sees them).
+func _input(event: InputEvent) -> void:
+	if not _open or not _responses.visible or _answer_guard_left <= 0.0:
+		return
+	if event.is_action_pressed(&"interact") or event.is_action_pressed(&"ui_accept"):
+		get_viewport().set_input_as_handled()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _open:
+		return
+	# back (B, Backspace) also moves the text on, but never picks an answer; Esc stays the
+	# pause menu's
+	var back := event.is_action_pressed(&"cancel") and not event.is_action_pressed(&"menu")
+	if back and _responses.visible:
+		return
+	var accept := event.is_action_pressed(&"interact") or event.is_action_pressed(&"ui_accept")
+	if not (accept or back):
 		return
 	get_viewport().set_input_as_handled()
 	if _text.is_typing:
@@ -186,6 +248,10 @@ func _on_response_focused(item: Variant) -> void:
 
 
 func _on_response_selected(response: DialogueResponse) -> void:
+	# a second confirm while the next line loads would run the answer twice
+	if not _responses.visible:
+		return
+	_responses.hide()
 	Log.info(Log.Category.DIALOGUE, "choice", {"cue": cue, "id": response.static_id})
 	AudioDirector.ui("confirm")
 	_cursor.target = null
@@ -193,7 +259,8 @@ func _on_response_selected(response: DialogueResponse) -> void:
 
 
 func _close() -> void:
-	hide()
+	_open = false
+	_animate_close()
 	_cursor.target = null
 	Log.info(Log.Category.DIALOGUE, "dialogue end", {"cue": cue})
 	if actor != null and is_instance_valid(actor) and actor.has_method(&"unlock"):
@@ -202,6 +269,19 @@ func _close() -> void:
 	SaveSystem.unblock(&"dialogue")
 	AudioDirector.duck(false)
 	finished.emit()
+
+
+## The box sinks a little and fades out; a new conversation can start right away.
+func _animate_close() -> void:
+	_waiting = false
+	_continue.hide()
+	_responses.hide()
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
+	_tween = create_tween().set_parallel()
+	_tween.tween_property(_root, ^"modulate:a", 0.0, CLOSE_SECONDS)
+	_tween.tween_property(self, ^"offset:y", 4.0, CLOSE_SECONDS)
+	_tween.chain().tween_callback(hide)
 
 
 ## The box rises a few pixels and fades in.

@@ -2,6 +2,11 @@ class_name MovementModel
 extends RefCounted
 ## Pure top-down movement math (no nodes). Unit-tested in tests/unit/test_movement_model.gd.
 
+## Below this cosine between motion and target, a change of direction is a turn (anything
+## sharper than about 15°, not only turnarounds) and uses the turn rate, so a corner keeps
+## its speed instead of ramping up like a start.
+const TURN_COSINE := 0.96
+
 
 ## Desired velocity for an input vector (length 0..1; keyboard gives 1, sticks give less).
 static func target_velocity(
@@ -30,7 +35,10 @@ static func step(
 	var rate := tuning.acceleration
 	if target == Vector2.ZERO:
 		rate = tuning.deceleration
-	elif velocity.length_squared() > 1.0 and velocity.dot(target) < 0.0:
+	elif (
+		velocity.length_squared() > 1.0
+		and velocity.normalized().dot(target.normalized()) < TURN_COSINE
+	):
 		rate = tuning.turn_acceleration
 	return velocity.move_toward(target, rate * delta)
 

@@ -40,6 +40,7 @@ static func stream(
 
 ## One-shot positional sound that frees itself.
 static func play_at(parent: Node, prefix: String, at: Vector2, volume_db: float = 0.0) -> void:
+	AudioDirector.caption(prefix, at)
 	var player := AudioStreamPlayer2D.new()
 	player.stream = stream(prefix)
 	player.bus = &"SFX"

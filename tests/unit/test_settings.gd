@@ -2,16 +2,16 @@ extends GutTest
 ## Settings: schema validation, persistence (test profile), session overrides, side effects
 ## on audio buses and the input map.
 
-const FILE := "user://profiles/test/settings_unit.json"
+var file_path := RuntimeEnv.user_dir() + "settings_unit.json"
 
 var settings: SettingsService
 
 
 func before_each() -> void:
-	if FileAccess.file_exists(FILE):
-		DirAccess.remove_absolute(FILE)
+	if FileAccess.file_exists(file_path):
+		DirAccess.remove_absolute(file_path)
 	settings = SettingsService.new()
-	settings.file_path = FILE
+	settings.file_path = file_path
 	add_child_autofree(settings)
 
 
@@ -21,7 +21,7 @@ func after_each() -> void:
 
 
 func _read_file() -> Dictionary:
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(FILE))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(file_path))
 	return parsed if parsed is Dictionary else {}
 
 
@@ -30,7 +30,7 @@ func test_defaults_without_file() -> void:
 	assert_false(settings.get_bool("controls.sprint_toggle"))
 	assert_true(settings.get_bool("display.smooth_camera"))
 	assert_true(settings.get_bool("display.vsync"), "VSync on unless the player turns it off")
-	assert_false(FileAccess.file_exists(FILE), "nothing written until something changes")
+	assert_false(FileAccess.file_exists(file_path), "nothing written until something changes")
 
 
 func test_valid_values_are_saved_and_loaded_again() -> void:
@@ -39,7 +39,7 @@ func test_valid_values_are_saved_and_loaded_again() -> void:
 	var values: Dictionary = _read_file().get("values", {})
 	assert_eq(values.get("controls.sprint_toggle"), true)
 	var other := SettingsService.new()
-	other.file_path = FILE
+	other.file_path = file_path
 	add_child_autofree(other)
 	assert_true(other.get_bool("controls.sprint_toggle"))
 	assert_eq(other.get_int("text.speed"), 3)
@@ -57,8 +57,8 @@ func test_invalid_values_are_refused() -> void:
 
 
 func test_broken_or_hostile_file_falls_back_to_defaults() -> void:
-	DirAccess.make_dir_recursive_absolute(FILE.get_base_dir())
-	var file := FileAccess.open(FILE, FileAccess.WRITE)
+	DirAccess.make_dir_recursive_absolute(file_path.get_base_dir())
+	var file := FileAccess.open(file_path, FileAccess.WRITE)
 	(
 		file
 		. store_string(
@@ -82,7 +82,7 @@ func test_broken_or_hostile_file_falls_back_to_defaults() -> void:
 	)
 	file.close()
 	var loaded := SettingsService.new()
-	loaded.file_path = FILE
+	loaded.file_path = file_path
 	add_child_autofree(loaded)
 	assert_eq(loaded.get_int("text.speed"), 2)
 	assert_eq(loaded.get_int("audio.music"), 10, "out of range: default")
@@ -95,12 +95,12 @@ func test_broken_or_hostile_file_falls_back_to_defaults() -> void:
 
 
 func test_unreadable_file_is_reported_not_fatal() -> void:
-	DirAccess.make_dir_recursive_absolute(FILE.get_base_dir())
-	var file := FileAccess.open(FILE, FileAccess.WRITE)
+	DirAccess.make_dir_recursive_absolute(file_path.get_base_dir())
+	var file := FileAccess.open(file_path, FileAccess.WRITE)
 	file.store_string('Object(Node, "script": Resource("user://evil.gd"))')
 	file.close()
 	var loaded := SettingsService.new()
-	loaded.file_path = FILE
+	loaded.file_path = file_path
 	add_child_autofree(loaded)
 	assert_push_warning("settings unreadable")
 	assert_eq(loaded.get_int("text.speed"), 1)
@@ -120,7 +120,9 @@ func test_session_overrides_are_never_written() -> void:
 func test_volume_steps_drive_audio_buses() -> void:
 	var bus := AudioServer.get_bus_index(&"Music")
 	settings.set_value("audio.music", 5)
-	assert_almost_eq(AudioServer.get_bus_volume_db(bus), linear_to_db(0.5), 0.01)
+	assert_almost_eq(AudioServer.get_bus_volume_db(bus), linear_to_db(0.25), 0.01, "squared")
+	settings.set_value("audio.music", 10)
+	assert_almost_eq(AudioServer.get_bus_volume_db(bus), 0.0, 0.01, "full is unity")
 	settings.set_value("audio.music", 0)
 	assert_true(AudioServer.is_bus_mute(bus))
 	settings.set_value("audio.music", 10)

@@ -8,6 +8,8 @@ extends Node
 ##   cut.end()
 
 var scene: GameScene
+## The lock and save-block reason of this cutscene alone: ending one never lifts another's.
+var key := &""
 var _running := false
 
 
@@ -22,16 +24,17 @@ static func begin(on_scene: GameScene) -> Cutscene:
 
 func _start() -> void:
 	_running = true
+	key = StringName("cutscene_%d" % get_instance_id())
 	add_to_group(&"cutscene")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if scene.player != null:
-		scene.player.lock(&"cutscene")
-	SaveSystem.block(&"cutscene")
+		scene.player.lock(key)
+	SaveSystem.block(key)
 
 
 ## Shows a dialogue cue and returns when it closed.
-func say(path: String, cue: String) -> Signal:
-	return Talk.present(self, path, cue, null)
+func say(path: String, cue: String) -> void:
+	await Talk.present(self, path, cue, null)
 
 
 func wait(seconds: float) -> Signal:
@@ -43,8 +46,8 @@ func end() -> void:
 		return
 	_running = false
 	if scene != null and is_instance_valid(scene.player):
-		scene.player.unlock(&"cutscene")
-	SaveSystem.unblock(&"cutscene")
+		scene.player.unlock(key)
+	SaveSystem.unblock(key)
 	queue_free()
 
 
@@ -56,4 +59,4 @@ func is_open() -> bool:
 func _exit_tree() -> void:
 	if _running:
 		_running = false
-		SaveSystem.unblock(&"cutscene")
+		SaveSystem.unblock(key)

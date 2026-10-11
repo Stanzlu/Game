@@ -22,6 +22,8 @@ const ELYSIA_MENU_Y := 190.0
 const REAL_MENU_AT := Vector2(34, 112)
 
 static var _start_arg_consumed := false
+## Content check and autopilot belong to the first start menu of a run, not every return.
+static var _first_boot_done := false
 static var _intro_played := false
 ## Set by "Startbild wechseln" in the prototype menu; -1 = decide from the saves.
 static var _forced_title := -1
@@ -34,6 +36,7 @@ var _save_menu: SaveMenu
 var _settings_menu: SettingsMenu
 var _prototypes: PrototypeMenu
 var _name_entry: NameEntry
+var _confirm: ConfirmMenu
 ## Hero name chosen for the next new game (applied after WorldState.new_game()).
 var _new_name := ""
 var _leaving := false
@@ -47,7 +50,8 @@ var _leaving := false
 
 
 func _ready() -> void:
-	_hint.text = tr("MENU_CONTROLS_HINT")
+	_hint.text = controls_hint()
+	InputDevice.device_changed.connect(func(_kind: int) -> void: _hint.text = controls_hint())
 	title_mode = choose_title_mode(OS.get_cmdline_user_args())
 	_background.build(title_mode)
 	_apply_title_mode()
@@ -58,7 +62,8 @@ func _ready() -> void:
 	list.focus_first()
 	# record: a tester's log names the build it came from
 	Log.record(Log.Category.BOOT, "boot screen ready", info)
-	if not _start_arg_consumed:
+	if not _first_boot_done:
+		_first_boot_done = true
 		Log.info(
 			Log.Category.CONTENT,
 			"content available",
@@ -196,7 +201,17 @@ func _build_menus() -> void:
 	_name_entry.sound_set = _sound_set()
 	_name_entry.chosen.connect(_start_new_game)
 	add_child(_name_entry)
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry]:
+	_confirm = ConfirmMenu.new()
+	_confirm.name = "ConfirmNewGame"
+	_confirm.follow_mode = false
+	_confirm.sound_set = _sound_set()
+	add_child(_confirm)
+	_confirm.answered.connect(
+		func(yes: bool) -> void:
+			if yes:
+				_name_entry.open()
+	)
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry, _confirm]:
 		menu.frame.theme = theme
 	list = OptionList.new()
 	list.sound_skin = _sound_set()
@@ -223,9 +238,15 @@ func _rebuild_list() -> void:
 	_continue = null
 	if not SaveSystem.latest_slot().is_empty():
 		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
-	list.add_action("MENU_NEW_GAME", _name_entry.open)
-	list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
-	list.add_action("MENU_PROTOTYPES", _prototypes.open)
+	list.add_action("MENU_NEW_GAME", _new_game_requested)
+	list.add_action(
+		"MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD), _any_save_to_load()
+	)
+	if OS.is_debug_build():
+		list.add_action("MENU_PROTOTYPES", _prototypes.open)
+	else:
+		# testers only get the benchmark: the prototype scenes would replace their autosave
+		list.add_action("MENU_BENCHMARK", func() -> void: BenchmarkRunner.start(get_tree()))
 	list.add_action("MENU_SETTINGS", _settings_menu.open)
 	_quit_button = list.add_action("MENU_QUIT", _quit)
 	list.refresh()
@@ -238,7 +259,8 @@ func _rebuild_list() -> void:
 
 func _on_submenu_closed() -> void:
 	_menu_panel.show()
-	var index := list.buttons().find(get_viewport().gui_get_focus_owner())
+	# the gem still marks the row that opened the submenu (focus returns only after this)
+	var index := list.buttons().find(list.cursor.target)
 	_rebuild_list()
 	list.focus_index(maxi(index, 0))
 
@@ -268,13 +290,45 @@ func _play_intro() -> void:
 		tween.tween_property(node, ^"modulate:a", 1.0, 0.5).set_delay(0.7)
 
 
+func _any_save_to_load() -> bool:
+	for slot in SaveService.SLOTS:
+		if SaveSystem.summary(slot)["status"] != "empty":
+			return true
+	return false
+
+
+## A new game replaces the autosave: with a running game in it, ask first (slots stay).
+func _new_game_requested() -> void:
+	if SaveSystem.summary(SaveService.AUTOSAVE)["status"] == "ok":
+		_confirm.ask("CONFIRM_NEW_GAME", "CONFIRM_NEW_GAME_YES", "MENU_BACK")
+	else:
+		_name_entry.open()
+
+
+## The controls in one line, for the device in hand (keys or a pad's buttons).
+static func controls_hint() -> String:
+	var pad := InputDevice.kind == InputDevice.Kind.GAMEPAD
+	return (
+		TranslationServer.translate("MENU_CONTROLS_HINT")
+		% [
+			TranslationServer.translate("CONTROLS_MOVE_PAD" if pad else "CONTROLS_MOVE_KEYS"),
+			InputDevice.label_for(&"sprint"),
+			InputDevice.label_for(&"interact"),
+			InputDevice.label_for(&"journal"),
+			InputDevice.label_for(&"menu"),
+		]
+	)
+
+
 ## Loads the newest readable save ("Fortsetzen", `--continue`).
 func _continue_latest() -> void:
 	var slot := SaveSystem.latest_slot()
 	if slot.is_empty():
 		Log.warn(Log.Category.SAVE, "nothing to continue")
 		return
-	SaveSystem.load_slot(slot)
+	await ScreenFade.fade_out(0.3)
+	if SaveSystem.load_slot(slot) != OK:
+		ScreenFade.fade_in(0.3)
 
 
 func _quit() -> void:

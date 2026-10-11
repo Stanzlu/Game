@@ -208,10 +208,22 @@ func _setup_day_light() -> void:
 	view.viewport.add_child(light_layer)
 	day_light.rays = SunRays.new()
 	day_light.rays.name = "SunRays"
+	if backdrop != null:
+		day_light.rays.view = view
+		day_light.rays.world_top = map.world_rect().position.y
 	light_layer.add_child(day_light.rays)
 	# The time of day is part of the game state (resting passes it); the scene's own
 	# preset only applies when none was set yet.
 	var start := WorldState.day_preset() if not WorldState.day_preset().is_empty() else day_preset
+	# start with the preset's music and ambience right away, so entering does not switch
+	# twice (scene default first, the time of day a frame later)
+	var preset: Dictionary = DayLight.PRESETS.get(start, {})
+	if not preset.is_empty():
+		if str(preset["music"]) != "keep":
+			music = str(preset["music"])
+		var ambience_path := str(preset["ambience"])
+		ambience = load(ambience_path) if not ambience_path.is_empty() else null
+		ambience_db = float(preset["ambience_db"])
 	day_light.set_preset.call_deferred(start, 0.0)
 
 

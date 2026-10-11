@@ -5,8 +5,8 @@ voices and the glitches of the rift.
 
 The two UI sets follow Game Bible §34/§35: Elysia is glassy, bright and perfectly in tune
 (everything snaps to one major scale); the Real world is wood, paper and breath, short and
-low. Every sound is mono 16-bit 44.1 kHz, peak-normalized per group, and written with an
-.import file to assets/generated/sfx/. Variants are numbered (<name>_0.wav, _1.wav, ...)
+low. Every sound is mono 16-bit 44.1 kHz, freed of DC (20 Hz highpass), peak-normalized per
+group, and written with an .import file to assets/generated/sfx/. Variants are numbered (<name>_0.wav, _1.wav, ...)
 and picked at random by SoundBank.
 
 Usage: .venv/bin/python tools/audio/make_sfx.py [--only coin] [--preview out.png]
@@ -393,7 +393,8 @@ def rift_hum(rng):
         start = int(rng.uniform(0, len(t) - 800))
         burst = noise(400, rng) * env(secs(400 / RATE), 0.0005, 0.004)
         crackle[start:start + 400] += highpass(burst, 2000) * rng.uniform(0.2, 0.5)
-    return lowpass(drone, 400) * 0.6 + whine + crackle
+    # filter two rounds and keep the second: the filter has settled, so the seam is clean
+    return lowpass(np.tile(drone, 2), 400)[len(drone):] * 0.6 + whine + crackle
 
 
 def rift_touch(rng):
@@ -413,9 +414,19 @@ def normalize(x, peak_db=-3.0):
     return x / peak * 10 ** (peak_db / 20)
 
 
+def dc_block(x, loop=False):
+    """20 Hz highpass against DC offset (square waves with uneven duty). Loops are filtered
+    as if they had already played once, so the seam stays clean."""
+    if loop:
+        return highpass(np.tile(x, 2), 20)[len(x):]
+    return highpass(x, 20)
+
+
 def write(name, x, peak_db, loop=False):
     os.makedirs(OUT, exist_ok=True)
-    x = normalize(x, peak_db) if loop else fade_tail(normalize(x, peak_db))
+    x = normalize(dc_block(x, loop), peak_db)
+    if not loop:
+        x = fade_tail(x)
     data = (np.clip(x, -1, 1) * 32767).astype("<i2")
     path = os.path.join(OUT, name + ".wav")
     with wave.open(path, "wb") as w:
@@ -423,8 +434,10 @@ def write(name, x, peak_db, loop=False):
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes(data.tobytes())
-    with open(path + ".import", "w", encoding="utf-8") as f:
-        f.write(IMPORT.replace("edit/loop_mode=0", "edit/loop_mode=2") if loop else IMPORT)
+    # keep Godot's existing .import (it holds the uid); only new files get the template
+    if not os.path.exists(path + ".import"):
+        with open(path + ".import", "w", encoding="utf-8") as f:
+            f.write(IMPORT.replace("edit/loop_mode=0", "edit/loop_mode=2") if loop else IMPORT)
     print(f"{path}  {len(x) / RATE:.2f}s")
 
 
@@ -432,7 +445,7 @@ def write(name, x, peak_db, loop=False):
 GROUPS = {
     "ui_elysia": -6.0,
     "ui_real": -9.0,
-    "coin": -6.0,
+    "coin": -4.0,  # louder peak once the DC is gone: same loudness as before
     "xp": -5.0,
     "level_up": -3.0,
     "chest": -4.0,

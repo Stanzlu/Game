@@ -185,9 +185,16 @@ func _draw_ridge(index: int, cam: Vector2, left: float, right: float) -> void:
 			face.append(_crest(heights, i, shift))
 			if i >= first and i <= last:
 				lit_columns[i - first] = 1
-		# the face narrows into the valley it rises from, like a pyramid's side
+		# the face narrows into the valley it rises from, like a pyramid's side; its edges
+		# break a little on the way down (a ruler-straight spine reads as glass, not rock)
 		var peak := face[face.size() - 1]
-		face.append(Vector2(peak.x + (b - a) * STEP * 0.3, base).round())
+		var valley := face[0]
+		var foot := Vector2(peak.x + (b - a) * STEP * 0.3, base).round()
+		for t: float in [0.33, 0.66]:
+			face.append(peak.lerp(foot, t) + Vector2(_jitter(index, k, t), 0.0))
+		face.append(foot)
+		for t: float in [0.4, 0.75]:
+			face.append(foot.lerp(valley, t) + Vector2(_jitter(index, k + 31, t), 0.0))
 		draw_colored_polygon(face, ridge[4])
 	if ridge[6]:
 		var snow_line: float = float(ridge[1]) + float(ridge[2]) * 0.35
@@ -210,6 +217,12 @@ func _draw_ridge(index: int, cam: Vector2, left: float, right: float) -> void:
 		),
 		PackedColorArray([Color(haze, 0.0), Color(haze, 0.0), haze, haze])
 	)
+
+
+## A whole-pixel offset of -2..2, the same every frame for the same face and point.
+static func _jitter(ridge: int, face: int, t: float) -> float:
+	var h := (ridge * 104729 + face * 7919 + int(t * 100.0) * 131) % 5
+	return float(h - 2)
 
 
 func _crest(heights: PackedFloat32Array, i: int, shift: float) -> Vector2:

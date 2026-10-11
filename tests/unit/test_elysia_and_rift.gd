@@ -125,14 +125,17 @@ func test_rift_sequence_strips_elysia_and_keeps_stone_and_seed() -> void:
 	sequence.travel = false
 	sequence.run()
 	assert_true(scene.player.is_locked(), "player is held during the sequence")
-	assert_has(SaveSystem.blockers(), "cutscene")
+	assert_has(SaveSystem.blockers(), String(sequence.key))
+	# a save asked for during the sequence would write the Real state on Elysia's map
+	SaveSystem.request_autosave("during_rift")
 	await wait_for_signal(sequence.finished, 5.0)
 	assert_eq(WorldState.ui_mode(), GameState.UiMode.REAL)
 	assert_eq(WorldState.state.inventory.keys(), ["item_stone", "item_seed"])
 	assert_true(WorldState.has_flag("elysia.rift_crossed"))
 	assert_eq(AudioDirector.current, "", "music stopped")
 	assert_true(ScreenFade.is_covered(), "ends in black, the next scene fades in")
-	assert_false(SaveSystem.blockers().has("cutscene"))
+	assert_false(SaveSystem.blockers().has(String(sequence.key)))
+	assert_false(SaveSystem.has_pending_autosave(), "the stale save is dropped")
 
 
 func test_screen_shake_respects_the_setting() -> void:
@@ -157,11 +160,12 @@ func test_rift_sequence_blocks_menus_and_frees_saving_when_left_early() -> void:
 	sequence.travel = false
 	sequence.run()
 	assert_true(MenuLayer.any_open(get_tree()), "pause menu and journal stay closed")
-	assert_has(SaveSystem.blockers(), "cutscene")
+	var key := String(sequence.key)
+	assert_has(SaveSystem.blockers(), key)
 	sequence.queue_free()
 	await wait_physics_frames(2)
 	assert_false(MenuLayer.any_open(get_tree()))
-	assert_false(SaveSystem.blockers().has("cutscene"), "leaving mid-sequence unblocks saving")
+	assert_false(SaveSystem.blockers().has(key), "leaving mid-sequence unblocks saving")
 	await wait_seconds(1.0)
 	assert_eq(WorldState.ui_mode(), GameState.UiMode.ELYSIA, "a freed sequence never resumes")
 	AudioDirector.stop_music(0.0)
@@ -175,3 +179,15 @@ func test_node_timer_dies_with_its_owner() -> void:
 	owner.free()
 	await wait_seconds(0.2)
 	assert_false(fired[0], "no callback after the owner is gone")
+
+
+func test_a_flood_of_rewards_comes_in_waves() -> void:
+	var scene := await _scene()
+	var hud := scene.hud
+	for i in 5:
+		hud._enqueue(func() -> void: hud._float_text("+%d XP" % i, ""))
+	for i in 40:
+		await wait_physics_frames(3)
+		assert_lte(hud._visible_popups(), Hud.MAX_POPUPS, "never a whole column at once")
+	await wait_until(func() -> bool: return hud._queue.is_empty(), 10.0)
+	assert_true(hud._queue.is_empty(), "all of them came")

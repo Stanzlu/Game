@@ -292,16 +292,25 @@ def bush(style, seed, leaves="foliage", w=26, h=22):
     return c
 
 
-def sacred_tree(seed=7):
-    """Elysia's landmark: twisted dark trunk with roots, huge blossom crown, hanging wisteria."""
+def sacred_tree(seed=7, in_water=True):
+    """Elysia's landmark: twisted dark trunk with roots, huge blossom crown, hanging wisteria.
+    In the game it stands in its basin (wet roots, foam); `in_water=False` for dry ground."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["elysia"]
     W, H = 208, 190
     c = Canvas(W, H)
     cx, base = 104, 182
     bark = st["bark"]
+    # Trunk, roots and branches are tubes: each stamp of a strand stores where across the
+    # tube a pixel lies (-1..1 along the stamp's normal), so every strand is shaded as a
+    # rounded limb lit from the top left, whatever way it runs. Grooves where strands meet.
+    wood = np.zeros((H, W), bool)
+    across = np.zeros((H, W), np.float32)
+    normal = np.zeros((H, W, 2), np.float32)  # in-picture normal of the strand (y, x)
+    sid = np.full((H, W), -1, np.int32)
+    root = np.zeros((H, W), bool)
 
-    def strand(points, w0, w1, tone):
+    def strand(points, w0, w1, ident, is_root=False):
         pts = np.array(points, np.float32)
         n = 60
         for i in range(n + 1):
@@ -309,9 +318,18 @@ def sacred_tree(seed=7):
             k = min(int(t * (len(pts) - 1)), len(pts) - 2)
             f = t * (len(pts) - 1) - k
             y, x = pts[k] * (1 - f) + pts[k + 1] * f
+            dy, dx = pts[k + 1] - pts[k]
+            ln = max(float(np.hypot(dy, dx)), 1e-3)
+            ny, nx = dx / ln, -dy / ln  # normal of the strand's direction
+            if ny > 0 or (ny == 0 and nx > 0):
+                ny, nx = -ny, -nx  # always the side facing up (and left)
             r = (w0 + (w1 - w0) * t) / 2
             m = c.ellipse(x, y, r + 0.5, r * 0.8 + 0.5)
-            c.paint(m, bark, tone + 0.55 * c.cylinder(x - r - 1, x + r + 1), contrast=3.0, dither=False)
+            off = ((c.yy + 0.5 - y) * ny + (c.xx + 0.5 - x) * nx) / (r + 0.5)
+            wood[m], sid[m] = True, ident
+            across[m] = np.clip(off[m], -1, 1)
+            normal[m] = (ny, nx)
+            root[m] = is_root
 
     # roots spreading into the water, back ones first
     for side in (-1, 1):
@@ -319,7 +337,7 @@ def sacred_tree(seed=7):
             p0 = (base - 14, cx + side * 6)
             p1 = (base - 6 + dy * 0.3, cx + side * dx * 0.45)
             p2 = (base + dy * 0.5, cx + side * dx)
-            strand([p0, p1, p2], w + 4, 3, 0.1 + 0.06 * k)
+            strand([p0, p1, p2], w + 4, 3, 10 + k + 3 * (side > 0), is_root=True)
     # twisted trunk from three strands
     for i, phase in enumerate((0.0, 2.1, 4.2)):
         pts = []
@@ -327,10 +345,27 @@ def sacred_tree(seed=7):
             y = base - 10 - t * 98
             x = cx + np.sin(t * 5.5 + phase) * 9 * (1 - t * 0.35) + (i - 1) * 7 * (1 - t * 0.5)
             pts.append((y, x))
-        strand(pts, 17, 9, 0.12 + 0.08 * i)
+        strand(pts, 17, 9, i)
     # branches into the crown
-    for ex, ey in ((52, 58), (156, 58), (80, 44), (128, 44), (104, 36)):
-        strand([(base - 104, cx), ((base - 104 + ey) / 2, (cx + ex) / 2 + rng.uniform(-6, 6)), (ey, ex)], 7, 3, 0.1)
+    for k, (ex, ey) in enumerate(((52, 58), (156, 58), (80, 44), (128, 44), (104, 36))):
+        strand([(base - 104, cx), ((base - 104 + ey) / 2, (cx + ex) / 2 + rng.uniform(-6, 6)), (ey, ex)],
+               7, 3, 20 + k)
+    # light on a tube: the surface normal tilts from the strand's normal (up/left side, +1)
+    # through facing the viewer (0) to the far side (-1)
+    a = across
+    nz = np.sqrt(np.clip(1 - a * a, 0, 1))
+    lit = pa.sphere_light(a * normal[..., 1], a * normal[..., 0], nz)
+    grain = pa.value_noise(H, W, (9, 2), rng)
+    v = 0.1 + 1.05 * lit - 0.12 * (grain > 0.68) + 0.06 * (grain < 0.25)
+    # the crown shades the top of the trunk
+    v -= 0.22 * np.clip((128 - c.yy) / 26, 0, 1) * ~root
+    # grooves where one strand lies against another
+    groove = np.zeros_like(wood)
+    for oy, ox in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        other = np.roll(np.roll(sid, oy, 0), ox, 1)
+        groove |= wood & (other >= 0) & (other != sid) & (sid >= other)
+    v = np.where(groove, 0.04, v)
+    c.paint(wood, bark, np.clip(v, 0, 1), contrast=3.0, dither=False)
     # blossom crown
     blobs = []
     # a filled core on a jittered grid (no holes), then a bumpy rim
@@ -369,7 +404,24 @@ def sacred_tree(seed=7):
             width = 2 if t < 0.6 else 1
             m = c.rect(x + wobble, y0 + k, x + wobble + width, y0 + k + 2)
             c.paint(m, wis, tone, dither=False)
+    if not in_water:  # standing on grass (the title island)
+        c.outline(st["outline"])
+        return c
+    # the roots lie in the water: their lowest pixels are wet and dark-turquoise, and a broken
+    # rim of foam runs where they leave the water (below the outline), more at the tips
+    water = st["water"]
+    low = root & ~np.roll(root, -1, 0) & ~alpha
+    c.fill(low, water[1] * 0.5 + bark[1] * 0.5)
     c.outline(st["outline"])
+    inwater = (root | wood) & (c.yy >= base - 16)
+    grown = inwater.copy()
+    for _ in range(3):
+        grown = grown | np.roll(grown, 1, 0) | np.roll(grown, -1, 0) | np.roll(grown, 1, 1) | np.roll(grown, -1, 1)
+    above = np.roll(inwater, -1, 0) | np.roll(inwater, -2, 0) | np.roll(inwater, -3, 0)  # root below
+    ring = grown & ~c.a & ~above & (c.yy >= base - 14)
+    pattern = ((c.xx.astype(int) * 7 + c.yy.astype(int) * 3) % 5) < 3
+    c.fill(ring & pattern, water[4])
+    c.fill(ring & ~pattern & (((c.xx.astype(int) + c.yy.astype(int)) % 2) == 0), water[3])
     return c
 
 
@@ -531,24 +583,45 @@ def tall_grass(style, seed, w=18, h=20):
 
 
 def reeds(seed, style="elysia"):
+    """A narrow clump of reeds: thin stems in two tones (back ones dark, front ones mid) with
+    light tips, two cattails. Only the base clump is outlined: an outline around every 1-px
+    stem made each clump a dark pillar three pixels wide, and neighbouring clumps stacked
+    into a wall."""
     rng = np.random.default_rng(seed)
     ex = dict(EXTRA["elysia"])
     if style != "elysia":
         ex["stem"] = pa.STYLES[style]["grass"][1:]
         ex["bark"] = pa.STYLES[style]["wood"]
-    c = Canvas(16, 26)
-    for k in range(6):
-        x0 = 8 + rng.normal(0, 2.5)
-        top = rng.uniform(3, 10)
-        lean = rng.uniform(-0.2, 0.2)
-        for y in range(int(top), 24):
-            x = int(x0 + lean * (24 - y))
-            c.paint(c.rect(x, y, x + 1, y + 1), ex["stem"], 0.3 + 0.5 * (24 - y) / 24, dither=False)
-        if k % 2 == 0:
-            x = int(x0 + lean * (24 - top))
-            c.paint(c.rect(x - 1, int(top), x + 1, int(top) + 4), ex["bark"],
-                    np.where(c.xx < x, 0.8, 0.4))
+    stem, bark = ex["stem"], ex["bark"]
+    w, base = 10, 24
+    c = Canvas(w, 26)
+    xs = np.clip(np.round(w / 2 - 0.5 + np.linspace(-3.2, 3.2, 5) + rng.normal(0, 0.6, 5)), 1, w - 2)
+    order = rng.permutation(5)
+    heads = set(order[:2].tolist())
+    for k in order:  # back stems first (dark), front stems over them (lighter)
+        front = k % 2 == 1
+        top = int(rng.uniform(3, 9)) if k in heads else int(rng.uniform(6, 13))
+        lean = rng.uniform(-0.15, 0.15) + (xs[k] + 0.5 - w / 2) * 0.03
+        tone = stem[2] if front else stem[1]
+        for y in range(top, base):
+            x = int(np.clip(round(xs[k] + lean * (base - y)), 0, w - 1))
+            tip = y < top + (2 if k not in heads else 0)
+            c.fill(c.rect(x, y, x + 1, y + 1), stem[3] if tip else tone)
+        if k in heads:
+            # cattail: lit on the left, shaded on the right, a short light spike on top
+            x = int(np.clip(round(xs[k] + lean * (base - top)), 1, w - 1))
+            c.fill(c.rect(x - 1, top, x, top + 4), bark[3])
+            c.fill(c.rect(x, top, x + 1, top + 4), bark[1])
+            c.fill(c.rect(x, top - 1, x + 1, top), stem[3])
+    # base clump of short blades, the only outlined part (its lowest rows and the ground line)
+    for x in range(1, w - 1):
+        tall = int(rng.integers(1, 4)) if 2 <= x <= w - 3 else 1
+        c.fill(c.rect(x, base - tall, x + 1, base), stem[1] if x >= w / 2 else stem[2])
+        c.fill(c.rect(x, base - tall, x + 1, base - tall + 1), stem[2] if x >= w / 2 else stem[3])
+    before = c.a.copy()
     c.outline(pa.STYLES[style]["outline"])
+    added = c.a & ~before
+    c.a[added & (c.yy < base - 1)] = False
     return c
 
 
@@ -610,12 +683,25 @@ def fence(style, seed, vertical=False):
     ex, st = EXTRA[style], pa.STYLES[style]
     wood = ex["white_wood"] if style == "elysia" else ex["plank"]
     if vertical:
-        # north-south run: rails seen edge-on as one line going up, a post per cell
+        # north-south run, a post per cell: two thin rails with a gap between them run up to
+        # the post of the cell above (one solid rail read as a single tall pole), the post is
+        # a short 4x10 block with a lit cap, one row of shadow at its foot (down-right)
         c = Canvas(8, 30)
-        c.paint(c.rect(3, 0, 5, 24), wood, np.where(c.xx < 4, 0.6, 0.3))
-        c.paint(c.rect(1, 14, 7, 29), wood, np.where(c.xx < 3, 0.8, np.where(c.xx > 5, 0.25, 0.5)))
-        c.paint(c.rect(2, 13, 6, 14), wood, 0.85)
-        c.outline(st["outline"])
+        top = 16
+        line = st["outline"]
+        post = c.rect(2, top, 6, top + 10)
+        c.paint(post, wood, np.where(c.xx < 3, 0.8, np.where(c.xx > 4, 0.3, 0.55)), contrast=3)
+        c.paint(c.rect(2, top, 6, top + 1), wood, np.where(c.xx < 4, 0.95, 0.75), contrast=3)  # cap
+        c.fill(c.rect(4, top + 5, 5, top + 6), wood[0])  # a knot
+        c.outline(line)
+        # one shadow row at the foot, falling down-right
+        c.fill(c.rect(3, top + 11, 8, top + 12) & ~c.a, line * 0.6 + st["grass"][1] * 0.4)
+        # the rails run up to the post of the cell above (16 px up) and stop below its shadow,
+        # so they never cut across it: two thin lines with grass between them and no outline,
+        # so the run narrows between the posts instead of reading as one tall pole
+        r0 = top + 12 - 16
+        for x, lit in ((2, 0.85), (5, 0.55)):
+            c.paint(c.rect(x, r0, x + 1, top - 1), wood, lit, contrast=3)
         return c
     c = Canvas(18, 18)
     tilt = rng.integers(-1, 2) if style == "tal" else 0
@@ -1315,7 +1401,7 @@ def build():
          shadow=[5, 2])
     save("elysia", "lily_pad", [lily_pad(40, False), lily_pad(41, True), lily_pad(42, False)], (7, 5),
          flat=True, bob=1.0)
-    save("elysia", "reeds", [reeds(50), reeds(51)], (8, 23), sway=2.0)
+    save("elysia", "reeds", [reeds(50), reeds(51)], (5, 23), sway=2.0)
     save("elysia", "fence", fence("elysia", 60), (9, 14), shape={"rect": [16, 4], "offset": [0, -1]})
     save("elysia", "bench", bench("elysia"), (10, 18))
     save("elysia", "fountain", fountain(), (30, 42), shape={"circle": 23, "offset": [0, -5]},
@@ -1402,7 +1488,7 @@ def build():
         save(style, "leaves", [fallen_leaves(style, 560 + i) for i in range(4)], (6, 3), flat=True)
         save(style, "small_mushrooms", [small_mushrooms(style, 570 + i) for i in range(3)], (5, 8))
         if style != "elysia":
-            save(style, "reeds", [reeds(580 + i, style) for i in range(2)], (8, 23), sway=2.0)
+            save(style, "reeds", [reeds(580 + i, style) for i in range(2)], (5, 23), sway=2.0)
             save(style, "bush", [bush(style, 590 + i, "foliage") for i in range(2)] + [bush(style, 592, "foliage_blue")],
                  (13, 19), shape={"circle": 7, "offset": [0, -3]}, sway=0.6, shadow=[11, 4])
     for style in ("elysia", "tal", "wald"):

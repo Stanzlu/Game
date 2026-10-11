@@ -44,6 +44,9 @@ var view_size := BASE_SIZE
 var _cam_pos := Vector2.ZERO
 var _lead := Vector2.ZERO
 var _has_position := false
+## True while the camera glides to a new target (follow(node, false)); PIXEL mode otherwise
+## follows rigidly.
+var _gliding := false
 var _shake_time := 0.0
 var _shake_strength := 0.0
 var _shake_length := 0.0
@@ -114,6 +117,7 @@ func follow(node: Node2D, snap_now: bool = true) -> void:
 	target = node
 	if snap_now:
 		_has_position = false
+	_gliding = not snap_now
 
 
 ## Screen shake in whole game pixels, fading out. Does nothing when the player turned
@@ -140,18 +144,24 @@ func _process(delta: float) -> void:
 	if target.has_method(&"interpolated_position"):
 		feet = target.call(&"interpolated_position")
 	var velocity: Vector2 = target.get("velocity") if "velocity" in target else Vector2.ZERO
-	var lead_target := (
-		velocity.normalized() * look_ahead if velocity.length() > 10.0 else Vector2.ZERO
-	)
-	_lead = CameraMath.smooth_toward(_lead, lead_target, look_ahead_sharpness, delta)
+	# The lead stays where it is when the target stops (no drift after every stop); it
+	# only changes while walking.
+	if velocity.length() > 10.0:
+		var lead_target := velocity.normalized() * look_ahead
+		_lead = CameraMath.smooth_toward(_lead, lead_target, look_ahead_sharpness, delta)
 	# Following the rounded feet keeps the snapped player steady on screen.
 	var desired: Vector2 = feet.round() + _lead + FOLLOW_OFFSET
 	if not _has_position:
 		_cam_pos = desired
 		_lead = Vector2.ZERO
 		_has_position = true
+	elif camera_mode == CameraMode.PIXEL and not _gliding:
+		# whole pixels, locked to the feet: the player never wobbles against the screen
+		_cam_pos = feet.round() + _lead.round() + FOLLOW_OFFSET
 	else:
 		_cam_pos = CameraMath.smooth_toward(_cam_pos, desired, follow_sharpness, delta)
+		if _gliding and _cam_pos.distance_to(desired) < 1.0:
+			_gliding = false
 	if bounds.has_area():
 		_cam_pos = CameraMath.clamp_to_bounds(_cam_pos, Vector2(view_size) * 0.5, bounds)
 	var shaken := _cam_pos

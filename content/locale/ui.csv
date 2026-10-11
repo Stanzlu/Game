@@ -12,7 +12,9 @@ MENU_LOOK_ELYSIA,Look: Elysia-Garten
 MENU_LOOK_TAL,Look: Tal im Regen
 MENU_LOOK_WALD,Look: Wald bei Nacht
 MENU_QUIT,Beenden
-MENU_CONTROLS_HINT,Bewegen: WASD/Stick · Sprinten: Shift/X · Interagieren: E/A · Journal: J/Back · Menü: Esc/Start
+MENU_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Ansehen: %s · Journal: %s · Menü: %s
+CONTROLS_MOVE_KEYS,WASD
+CONTROLS_MOVE_PAD,Stick
 PAUSE_TITLE,Pause
 PAUSE_RESUME,Weiter
 PAUSE_TUNING,Bewegungsgefühl
@@ -24,7 +26,7 @@ PAUSE_TO_MENU,Zum Startmenü
 PAUSE_QUIT,Spiel beenden
 TUNING_DIREKT,Direkt
 TUNING_WEICH,Weich
-TUNING_SCHWER,Schwer
+TUNING_SCHWER,Träge
 CAMERA_SMOOTH,Weich
 CAMERA_PIXEL,Pixelgenau
 DIRECTIONS_EIGHT,8 Richtungen
@@ -52,6 +54,11 @@ PAUSE_LOAD,Laden
 PAUSE_SETTINGS,Einstellungen
 OPTION_YES,Ja
 OPTION_NO,Nein
+CONFIRM_NEW_GAME,"Neues Spiel beginnen? Der automatische Spielstand wird ersetzt, deine Slots bleiben erhalten."
+CONFIRM_NEW_GAME_YES,Neu beginnen
+CONFIRM_LEAVE_UNSAVED,"Hier kann gerade nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
+CONFIRM_LEAVE_YES,Trotzdem gehen
+CONFIRM_RESET_SETTINGS,Alle Einstellungen auf den Anfang zurücksetzen?
 INTERACT_TALK,Ansprechen
 INTERACT_ENTER,Hineingehen
 INTERACT_CATCH,Fangen
@@ -70,6 +77,7 @@ SLOT_N,Slot %s
 SLOT_EMPTY,leer
 SLOT_BROKEN,beschädigt
 TIME_MINUTES,%d min
+TIME_UNDER_MINUTE,unter 1 min
 TIME_HOURS,%d:%02d h
 PLACE_SANDBOX,Sandbox
 PLACE_ANTREIBER,Der Weg
@@ -80,7 +88,7 @@ JOURNAL_TITLE,Journal
 JOURNAL_EMPTY,Noch keine Einträge.
 JOURNAL_RUNNING,Offen
 JOURNAL_FINISHED,Abgeschlossen
-JOURNAL_HINT,J oder Esc: schließen
+JOURNAL_HINT,%s oder %s: schließen
 SETTINGS_TITLE,Einstellungen
 SETTINGS_HINT,Links/Rechts ändert den Wert. Änderungen gelten sofort.
 SETTINGS_AUDIO,Ton
@@ -106,10 +114,10 @@ SETTINGS_SCREEN_SHAKE,Bildschirmwackeln
 SETTINGS_REDUCE_FLASHING,Blitzeffekte reduzieren
 SETTINGS_PARALLAX,Tiefenebenen bewegen sich mit
 SETTINGS_ACCESS,Barrierefreiheit
-SETTINGS_TIMING,Zeitfenster
-TIMING_NORMAL,Normal
-TIMING_LONGER,Länger
-TIMING_MUCH_LONGER,Viel länger
+SETTINGS_TIMING,Mehr Zeit lassen
+TIMING_NORMAL,Nein
+TIMING_LONGER,Etwas
+TIMING_MUCH_LONGER,Viel
 SETTINGS_ENCOUNTER_SPEED,Begegnungstempo
 ENCOUNTER_NORMAL,Normal
 ENCOUNTER_CALMER,Ruhiger
@@ -165,8 +173,10 @@ MENU_PROTOTYPES,Prototypen
 HUD_SAVED,Gespeichert
 PLAYER_DEFAULT_NAME,Held
 NAME_TITLE,"Wie lautet dein Name, Held?"
-NAME_SUGGESTIONS,Oder einer dieser
+NAME_SUGGESTIONS,Vorschläge
 NAME_CONFIRM,Das Abenteuer beginnt
+CAT_NAME_CONFIRM,So soll sie heißen
+CAT_NAME_SKIP,Lieber nicht
 NAME_HINT,Tippe einen Namen oder wähle einen aus.
 NAME_SUGGESTION_1,Aren
 NAME_SUGGESTION_2,Kai
@@ -182,3 +192,23 @@ PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus
 PLACE_WEG,Der Weg zum Schuppen
 END_OF_SLICE,"Ende des Prototyps. Danke fürs Spielen."
+SETTINGS_CAPTIONS,Geräusche als Text
+CAPTION_FROGS,Frösche quaken.
+CAPTION_GOAT,Eine Ziege meckert.
+CAPTION_GOAT_MUNCH,Die Ziege kaut.
+CAPTION_HUM,Jemand summt eine Melodie.
+CAPTION_RIFT,Ein tiefes Summen in der Luft.
+CAPTION_WOBBLE,Der Stein kippelt.
+CAPTION_BIRD,Ein Vogel singt.
+CAPTION_FIRE,Das Feuer knistert.
+SETTINGS_SHOW_CONTROLS,Steuerung anzeigen
+CONTROLS_TITLE,Steuerung
+CONTROLS_MOVE,Gehen
+CONTROLS_SPRINT,Rennen (halten)
+CONTROLS_INTERACT,"Ansehen, sprechen, bestätigen"
+CONTROLS_BACK,Zurück
+CONTROLS_MENU,Menü
+CONTROLS_JOURNAL,Journal
+CONTROLS_HINT,Tastatur · Controller
+KEY_STICK,Stick
+KEY_TRIGGER,Trigger

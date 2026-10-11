@@ -16,12 +16,16 @@ const ALLOWED := "abcdefghijklmnopqrstuvwxyzäöüßéèáàâêîôûçñ -'"
 
 var field: LineEdit
 var suggestions: PackedStringArray = SUGGESTIONS
+## Button texts (the cat gets her own: "So soll sie heißen", "Lieber nicht").
+var confirm_key := "NAME_CONFIRM"
+var back_key := "MENU_BACK"
+var _confirm_button: Button
 
 
 func _ready() -> void:
 	if title_key.is_empty():
 		title_key = "NAME_TITLE"
-	panel_width = 220
+	panel_width = 260
 	super()
 
 
@@ -33,13 +37,15 @@ func _build() -> void:
 	field.custom_minimum_size = Vector2(160, 0)
 	field.context_menu_enabled = false
 	field.text_submitted.connect(func(_text: String) -> void: _confirm())
+	# typing: the gem cursor leaves the suggestions, so it is clear where the keys go
+	field.focus_entered.connect(func() -> void: list.cursor.target = null)
 	list.add_custom(field)
 	list.add_header("NAME_SUGGESTIONS")
 	for key in suggestions:
 		var suggestion := tr(key)
-		list.add_action("", func() -> void: field.text = suggestion, true, suggestion)
-	list.add_action("NAME_CONFIRM", _confirm)
-	list.add_action("MENU_BACK", close)
+		list.add_action("", func() -> void: _pick(suggestion), true, suggestion)
+	_confirm_button = list.add_action(confirm_key, _confirm)
+	list.add_action(back_key, close)
 	hint.text = tr("NAME_HINT")
 
 
@@ -50,6 +56,13 @@ func open() -> void:
 	if not buttons.is_empty():
 		field.focus_neighbor_bottom = field.get_path_to(buttons[0])
 		buttons[0].focus_neighbor_top = buttons[0].get_path_to(field)
+
+
+## A suggestion fills the field; the next press confirms it.
+func _pick(suggestion: String) -> void:
+	field.text = suggestion
+	if _confirm_button != null:
+		_confirm_button.grab_focus()
 
 
 ## Letters, spaces, hyphen and apostrophe; trimmed and at most MAX_NAME_LENGTH long.

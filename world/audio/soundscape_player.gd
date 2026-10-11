@@ -194,7 +194,7 @@ func _release_beds(fade: float) -> void:
 				player.queue_free()
 				continue
 			var tween := player.create_tween()
-			tween.tween_property(player, ^"volume_db", SILENT_DB, fade)
+			AudioDirectorService.tween_volume(tween, player, SILENT_DB, fade)
 			tween.tween_callback(player.queue_free)
 	_beds.clear()
 
@@ -205,5 +205,12 @@ func _fade_to(target_db: float, seconds: float) -> void:
 	if seconds <= 0.0:
 		_fade_db = target_db
 		return
+	# in amplitude, like AudioDirectorService.tween_volume(): no hole mid-crossfade
 	_tween = create_tween()
-	_tween.tween_property(self, ^"_fade_db", target_db, seconds)
+	var from := db_to_linear(_fade_db)
+	var to := db_to_linear(target_db)
+	_tween.tween_method(_set_fade, from, to, seconds).set_trans(Tween.TRANS_SINE)
+
+
+func _set_fade(amplitude: float) -> void:
+	_fade_db = linear_to_db(maxf(amplitude, AudioDirectorService.MIN_AMPLITUDE))

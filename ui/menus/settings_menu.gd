@@ -12,6 +12,9 @@ const VOLUMES := [
 ]
 const STEPS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+var _confirm: ConfirmMenu
+var _controls: ControlsMenu
+
 
 func _ready() -> void:
 	title_key = "SETTINGS_TITLE"
@@ -48,6 +51,7 @@ func _build() -> void:
 	list.add_setting("display.reduce_flashing", "SETTINGS_REDUCE_FLASHING")
 	list.add_setting("display.parallax", "SETTINGS_PARALLAX")
 	list.add_header("SETTINGS_ACCESS")
+	list.add_setting("access.captions", "SETTINGS_CAPTIONS")
 	list.add_setting(
 		"access.timing", "SETTINGS_TIMING", ["TIMING_NORMAL", "TIMING_LONGER", "TIMING_MUCH_LONGER"]
 	)
@@ -59,11 +63,35 @@ func _build() -> void:
 	if OS.is_debug_build():
 		list.add_header("SETTINGS_DEBUG")
 		list.add_setting("debug.overlay", "PAUSE_OVERLAY")
+	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_action("SETTINGS_RESET", _reset)
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("SETTINGS_HINT")
 
 
+func _show_controls() -> void:
+	if _controls == null:
+		_controls = ControlsMenu.new()
+		_controls.name = "Controls"
+		_controls.follow_mode = follow_mode
+		_controls.sound_set = sound_set
+		add_child(_controls)
+		stack(_controls)
+	_controls.open()
+
+
 func _reset() -> void:
-	Settings.reset_to_defaults()
-	rebuild()
+	if _confirm == null:
+		_confirm = ConfirmMenu.new()
+		_confirm.name = "ConfirmReset"
+		_confirm.follow_mode = follow_mode
+		_confirm.sound_set = sound_set
+		add_child(_confirm)
+		stack(_confirm)
+		_confirm.answered.connect(
+			func(yes: bool) -> void:
+				if yes:
+					Settings.reset_to_defaults()
+				rebuild()
+		)
+	_confirm.ask("CONFIRM_RESET_SETTINGS")

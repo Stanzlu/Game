@@ -32,6 +32,10 @@ Antreiber: Da vorne ist das Ziel. Das schaffst du locker! [#ph] [ID:antreiber_st
 % Antreiber: … [#ph] [ID:antreiber_puzzled_3]
 => END
 
+~ puzzled_early
+Antreiber: Pause? Wir haben doch noch gar nicht angefangen. [#ph] [ID:antreiber_puzzled_early_1]
+=> END
+
 ~ silent
 Antreiber: … [#ph] [ID:antreiber_silent_1]
 => END

@@ -25,13 +25,19 @@ static func add_area(
 	return area
 
 
-## Shows `cue` of the dialogue file at `path`. Returns the presenter's `finished` signal (or
-## an already finished one when nothing could be shown) so callers can await it.
-static func present(from: Node, path: String, cue: String, actor: Node = null) -> Signal:
+## Shows `cue` of the dialogue file at `path`; await it to continue when the box closed.
+## A cue requested while another conversation is open waits for it instead of being lost.
+static func present(from: Node, path: String, cue: String, actor: Node = null) -> void:
 	var resource := load(path) as DialogueResource
-	var presenter := from.get_tree().get_first_node_in_group(&"dialogue_presenter")
+	var tree := from.get_tree()
+	var presenter := tree.get_first_node_in_group(&"dialogue_presenter")
 	if resource == null or presenter == null:
 		Log.error(Log.Category.CONTENT, "dialogue missing", {"path": path, "cue": cue})
-		return from.get_tree().process_frame
+		await tree.process_frame
+		return
+	while is_instance_valid(presenter) and presenter.call(&"is_open"):
+		await presenter.get(&"finished")
+	if not is_instance_valid(presenter):
+		return
 	presenter.call(&"present", resource, cue, actor)
-	return presenter.get(&"finished")
+	await presenter.get(&"finished")

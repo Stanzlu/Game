@@ -31,7 +31,7 @@ const PRESETS := {
 		"clouds": 0.0,
 		"rays": 0.0,
 		"ambience": "res://content/audio/tal_regentag.tres",
-		"ambience_db": -4.0,
+		"ambience_db": -5.5,
 		"music": "silence",
 	},
 	"abend":

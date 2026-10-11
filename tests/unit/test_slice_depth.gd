@@ -92,7 +92,7 @@ func test_sitting_by_the_fire_comes_before_miras_knock() -> void:
 	var rug := scene.map.cell_to_world(Vector2i(17, 11))
 	scene.player.sit_on(rug, Facing.Dir.N)
 	await wait_seconds(HausScene.REST_BEFORE_KNOCK + 0.5)
-	assert_true(scene.dialogue_box.visible, "a moment by the fire")
+	assert_true(scene.dialogue_box.is_open(), "a moment by the fire")
 	assert_false(WorldState.has_flag("house.mira_knocked"), "nobody knocks yet")
 	# with auto advance the two quiet lines take their time; Mira still comes long before 60 s
 	await wait_until(func() -> bool: return WorldState.has_flag("house.mira_knocked"), 35.0)

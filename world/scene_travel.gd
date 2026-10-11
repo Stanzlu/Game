@@ -4,10 +4,12 @@ extends RefCounted
 ## player on the target's spawn marker "spawn_<name>". The arrival is applied before the
 ## scene autosaves, so a save made on entering already stands at the door.
 
-const FADE_SECONDS := 0.45
+const FADE_SECONDS := 0.35
 
 ## Marker name the next scene puts the player on ("" = the map's player_spawn).
 static var pending_spawn := ""
+## The player's facing when leaving (-1 = none): you arrive looking the way you went.
+static var pending_facing := -1
 ## Seconds the next scene takes to fade in (< 0 = its default). The rift arrives slowly.
 static var arrival_fade := -1.0
 static var _travelling := false
@@ -37,6 +39,7 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 	var player: Node = scene.get(&"player") if scene != null else null
 	if player != null:
 		player.call(&"lock", &"travel")
+		pending_facing = int(player.get(&"facing"))
 	if not sound.is_empty():
 		AudioDirector.sfx(sound)
 	Log.info(Log.Category.WORLD_STATE, "travel", {"target": target, "spawn": spawn})
@@ -44,7 +47,22 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 	await NodeTimer.after(from, FADE_SECONDS)
 	pending_spawn = spawn
 	_travelling = false
-	from.get_tree().change_scene_to_file(SceneRegistry.path(target))
+	var error := from.get_tree().change_scene_to_file(SceneRegistry.path(target))
+	if error != OK:
+		# stay where we are rather than in the dark with a locked player
+		Log.error(Log.Category.CONTENT, "travel failed", {"target": target, "error": error})
+		pending_spawn = ""
+		pending_facing = -1
+		ScreenFade.fade_in(FADE_SECONDS)
+		if is_instance_valid(player):
+			player.call(&"unlock", &"travel")
+
+
+## The facing to arrive with (-1 = keep the scene's). Clears it.
+static func take_facing() -> int:
+	var dir := pending_facing
+	pending_facing = -1
+	return dir
 
 
 ## Fade-in time for a scene that just opened: a requested one, else short after a door and
@@ -55,7 +73,7 @@ static func take_fade() -> float:
 	arrival_fade = -1.0
 	if seconds >= 0.0:
 		return seconds
-	return 2.0 if pending_spawn.is_empty() else 0.5
+	return 2.0 if pending_spawn.is_empty() else 0.4
 
 
 ## The marker cell for the pending spawn in `map`, or null. Clears the pending spawn.

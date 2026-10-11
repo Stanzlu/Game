@@ -113,8 +113,96 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	WorldState.set_flag("elysia.chest_tree_opened")
 	audio._update_elysia_stage(5.0)
 	assert_eq(audio.elysia_stage, 0, "waits for the end of the loop")
-	audio._update_elysia_stage(0.01)
+	audio._update_elysia_stage(0.03)
 	assert_eq(audio.elysia_stage, 1, "switches on the downbeat")
+	assert_almost_eq(audio._last_position, 0.03, 0.001, "goes on where the loop is, no repeat")
 	var playing := audio._music[audio._active_music].stream.resource_path
 	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
 	WorldState.new_game()
+
+
+func test_story_sounds_are_written_out_when_captions_are_on() -> void:
+	var heard: Array[String] = []
+	var record := func(key: String, _at: Variant) -> void: heard.append(key)
+	AudioDirector.caption_requested.connect(record)
+	Settings.set_value("access.captions", false, false)
+	AudioDirector.sfx("stone_wobble", -40.0)
+	assert_eq(heard, [] as Array[String], "off by default")
+	Settings.set_value("access.captions", true, false)
+	AudioDirector.sfx("stone_wobble", -40.0)
+	AudioDirector.sfx("coin", -40.0)
+	AudioDirector.caption_requested.disconnect(record)
+	Settings.set_value("access.captions", false, false)
+	assert_eq(heard, ["CAPTION_WOBBLE"] as Array[String], "story sounds only, not rewards")
+	for key: String in AudioDirectorService.CAPTIONS.values():
+		assert_true(ContentValidator.has_translation(key), key)
+
+
+func test_crossfade_keeps_its_level_at_the_midpoint() -> void:
+	# A fade in dB puts both players near -33 dB halfway (a hole of ~9 dB and more);
+	# in amplitude the fading halves add up to about the level they fade between.
+	audio.play_music("valley", 0.0)
+	var start := db_to_linear(float(AudioDirectorService.TRACK_DB["valley"]))
+	audio.play_music("forest", 2.0)
+	assert_gt(_midpoint_sum(audio._music), 0.7 * start, "music crossfade without a hole")
+	var garden: AudioStream = RAIN
+	var rain := load(SoundscapePlayer.bed_path("rain")) as AudioStream
+	audio.set_ambience(garden, -6.0, 0.0)
+	audio.set_ambience(rain, -6.0, 2.0)
+	assert_gt(_midpoint_sum(audio._ambience), 0.7 * db_to_linear(-6.0), "ambience crossfade too")
+
+
+## Steps every fade of `players` to its middle (1 of 2 s) and sums their amplitudes.
+func _midpoint_sum(players: Array[AudioStreamPlayer]) -> float:
+	var total := 0.0
+	for player in players:
+		var tween: Tween = audio._tweens.get(player)
+		if tween != null and tween.is_valid():
+			tween.custom_step(1.0)
+		total += db_to_linear(player.volume_db)
+	return total
+
+
+func test_master_is_limited_and_sfx_sits_lower() -> void:
+	# stacked Elysia rewards must not clip; the SFX trim is an effect because the player's
+	# volume setting owns the bus volume
+	var limiter := AudioServer.get_bus_effect(0, 0) as AudioEffectHardLimiter
+	assert_not_null(limiter, "limiter on Master")
+	if limiter != null:
+		assert_almost_eq(limiter.ceiling_db, -1.0, 0.01)
+		assert_almost_eq(limiter.release, 0.1, 0.001)
+	var trim := (
+		AudioServer.get_bus_effect(AudioServer.get_bus_index(&"SFX"), 0) as AudioEffectAmplify
+	)
+	assert_not_null(trim, "trim on SFX")
+	if trim != null:
+		assert_almost_eq(trim.volume_db, -2.0, 0.01)
+
+
+func test_valley_rests_between_rounds() -> void:
+	assert_false(AudioDirectorService.TRACK_REST.has("elysia"), "Elysia shrinks, never rests")
+	audio.rest_rules = {
+		"valley": {"loops": [2, 2], "rest": [5.0, 5.0], "fade_out": 1.0, "fade_in": 0.5},
+	}
+	audio.play_music("valley", 0.0)
+	var player := audio._music[audio._active_music]
+	var length := player.stream.get_length()
+	audio._update_rest(0.1, 1.0)
+	audio._update_rest(0.1, length - 0.5)
+	assert_false(audio.is_resting(), "the first round plays to its end")
+	audio._update_rest(0.1, 0.2)
+	audio._update_rest(0.1, length - 3.0)
+	assert_false(audio.is_resting(), "the second round")
+	audio._update_rest(0.1, length - 0.5)
+	assert_true(audio.is_resting(), "fades out into the end of the last round")
+	audio.duck(true)
+	audio._update_rest(5.0, 0.0)
+	assert_true(audio.is_resting(), "a dialogue does not wake it, the rest goes on")
+	audio._update_rest(0.6, 0.0)
+	assert_false(audio.is_resting(), "comes back")
+	assert_true(player.playing)
+	assert_eq(audio.current, "valley", "the track itself never changed")
+	audio.duck(false)
+	audio.play_music("forest", 0.0)
+	audio._process(0.1)
+	assert_false(audio.is_resting(), "other tracks have no rest")

@@ -132,6 +132,25 @@ func test_bench_sit_and_stand_up() -> void:
 	assert_ne(player.global_position, seat)
 
 
+func test_sitting_glides_onto_the_seat_and_back() -> void:
+	await _setup("######\n#....#\n#.@..#\n######")
+	var start := player.global_position
+	var seat := start + Vector2(0, -10)
+	player.sit_on(seat, Facing.Dir.S)
+	await wait_physics_frames(2)
+	assert_lt(player.global_position.y, start.y, "on the way")
+	assert_gt(player.global_position.y, seat.y, "not there yet")
+	await wait_seconds(0.2)
+	assert_eq(player.global_position, seat)
+	assert_false(player.is_locked(), "free once seated")
+	player.stand_up()
+	var elsewhere := start + Vector2(16, 0)
+	player.teleport(elsewhere)
+	await wait_seconds(0.2)
+	assert_eq(player.global_position, elsewhere, "a teleport ends the glide")
+	assert_false(player.is_locked())
+
+
 func test_lever_opens_the_gate() -> void:
 	var text := (
 		"[legend]\n"
@@ -147,3 +166,52 @@ func test_lever_opens_the_gate() -> void:
 	await wait_physics_frames(3)
 	await _tap(&"interact")
 	assert_true(gate.get("is_open"), "lever opened the gate")
+
+
+func test_releasing_a_diagonal_keeps_the_diagonal_facing() -> void:
+	await _setup("########\n#......#\n#......#\n#..@...#\n#......#\n########")
+	Input.action_press(&"move_up")
+	Input.action_press(&"move_right")
+	await wait_physics_frames(10)
+	assert_eq(player.facing, Facing.Dir.NE)
+	# the two keys lift one tick apart, as they do under real fingers
+	Input.action_release(&"move_up")
+	await wait_physics_frames(1)
+	Input.action_release(&"move_right")
+	await wait_physics_frames(3)
+	assert_eq(player.facing, Facing.Dir.NE, "no flick to a straight direction on release")
+
+
+func test_a_held_straight_key_after_a_diagonal_turns() -> void:
+	await _setup("########\n#......#\n#......#\n#..@...#\n#......#\n########")
+	Input.action_press(&"move_up")
+	Input.action_press(&"move_right")
+	await wait_physics_frames(10)
+	Input.action_release(&"move_up")
+	await wait_seconds(0.2)
+	assert_eq(player.facing, Facing.Dir.E, "a deliberate change still turns")
+
+
+func test_a_stick_near_a_boundary_does_not_flicker() -> void:
+	await _setup("##########\n#........#\n#..@.....#\n#........#\n##########")
+	var seen: Dictionary = {}
+	for i in 30:
+		var angle := deg_to_rad(21.0 if i % 2 == 0 else 24.0)
+		Input.action_press(&"move_right", cos(angle))
+		Input.action_press(&"move_down", sin(angle))
+		await wait_physics_frames(1)
+		if i > 4:
+			seen[player.facing] = true
+	assert_eq(seen.size(), 1, "one facing for a stick that wobbles across 22.5°")
+
+
+func test_footsteps_follow_the_walk_cycle() -> void:
+	await _setup("############\n#@,,,,,,,,,#\n############")
+	watch_signals(player)
+	Input.action_press(&"move_right")
+	await wait_seconds(1.0)
+	Input.action_release(&"move_right")
+	await wait_physics_frames(2)
+	var steps: int = get_signal_emit_count(player, "footstep")
+	# walk cycle at 10 fps with feet down on frames 0 and 2: five steps a second
+	assert_between(steps, 4, 7, "steps match the feet, not the distance")

@@ -28,14 +28,19 @@ var save_dir := ""
 var loading := false
 var _blockers: Dictionary[StringName, bool] = {}
 var _pending_autosave := ""
+var _flush_queued := false
 var _arrival: Dictionary = {}
+## The running game scene, looked up again once it is gone (asked every frame).
+var _context_node: Node
 
 
 func _ready() -> void:
 	if save_dir.is_empty():
 		save_dir = RuntimeEnv.user_dir() + "saves"
+	# a quest step is often one of several changes in a row (quest done, then XP, gold and
+	# the beat): the save waits for the end of the frame so it holds all of them
 	WorldState.quest_changed.connect(
-		func(quest_id: String, _stage: String) -> void: request_autosave("quest:" + quest_id)
+		func(quest_id: String, _stage: String) -> void: request_autosave_soon("quest:" + quest_id)
 	)
 	WorldState.state_replaced.connect(func() -> void: _pending_autosave = "")
 
@@ -76,6 +81,10 @@ func can_save() -> bool:
 	return context != null and bool(context.call(&"is_saveable"))
 
 
+func discard_pending_autosave() -> void:
+	_pending_autosave = ""
+
+
 func has_pending_autosave() -> bool:
 	return not _pending_autosave.is_empty()
 
@@ -83,9 +92,16 @@ func has_pending_autosave() -> bool:
 func _context() -> Node:
 	if not is_inside_tree():
 		return null
+	if (
+		is_instance_valid(_context_node)
+		and _context_node.is_inside_tree()
+		and _context_node.is_in_group(CONTEXT_GROUP)
+	):
+		return _context_node
 	var node := get_tree().get_first_node_in_group(CONTEXT_GROUP)
 	if node == null or not node.has_method(&"is_saveable") or not node.has_method(&"save_location"):
 		return null
+	_context_node = node
 	return node
 
 
@@ -132,6 +148,25 @@ func request_autosave(reason: String) -> void:
 		Log.debug(
 			Log.Category.SAVE, "autosave deferred", {"reason": reason, "blockers": blockers()}
 		)
+
+
+## Like request_autosave, but written at the end of the frame (once, however many requests).
+func request_autosave_soon(reason: String) -> void:
+	_pending_autosave = reason
+	if not _flush_queued:
+		_flush_queued = true
+		_flush_queued_pending.call_deferred()
+
+
+func _flush_queued_pending() -> void:
+	_flush_queued = false
+	if has_pending_autosave() and not can_save():
+		Log.debug(
+			Log.Category.SAVE,
+			"autosave deferred",
+			{"reason": _pending_autosave, "blockers": blockers()}
+		)
+	_flush_pending()
 
 
 func _flush_pending() -> void:
@@ -265,16 +300,27 @@ func load_slot(slot: String, backup := false) -> Error:
 			{"slot": slot, "backup": backup, "error": result.error, "detail": result.detail}
 		)
 		return ERR_FILE_NOT_FOUND if result.error == "missing" else ERR_FILE_CORRUPT
+	# all or nothing: a save whose place no longer exists leaves the running game untouched
+	var scene_path := SceneRegistry.path(result.state.player.map)
+	if not ResourceLoader.exists(scene_path):
+		Log.error(
+			Log.Category.SAVE,
+			"load failed: scene missing",
+			{"slot": slot, "map": result.state.player.map}
+		)
+		return ERR_FILE_CORRUPT
 	loading = true
+	var previous := WorldState.state
 	WorldState.replace_state(result.state)
 	_arrival = {"map": result.state.player.map, "position": result.state.player.position}
-	get_tree().paused = false
-	var err := get_tree().change_scene_to_file(SceneRegistry.path(result.state.player.map))
+	var err := get_tree().change_scene_to_file(scene_path)
 	if err != OK:
 		loading = false
 		_arrival = {}
-		Log.error(Log.Category.SAVE, "scene change failed", {"slot": slot})
+		WorldState.replace_state(previous)
+		Log.error(Log.Category.SAVE, "scene change failed", {"slot": slot, "error": err})
 		return err
+	get_tree().paused = false
 	Log.info(Log.Category.SAVE, "loaded", {"slot": slot, "backup": backup})
 	loaded.emit(slot)
 	return OK

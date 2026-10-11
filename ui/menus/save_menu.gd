@@ -71,6 +71,9 @@ func _ask(slot: String, message: String) -> void:
 	_confirm = slot
 	_message = message
 	rebuild()
+	if not slot.is_empty():
+		# the safe answer first: overwriting or loading a backup needs a deliberate yes
+		list.focus_index.call_deferred(1)
 
 
 func _save(slot: String) -> void:
@@ -79,7 +82,9 @@ func _save(slot: String) -> void:
 
 
 func _load(slot: String, backup: bool) -> void:
+	await ScreenFade.fade_out(0.3)
 	if SaveSystem.load_slot(slot, backup) != OK:
+		ScreenFade.fade_in(0.3)
 		_ask("", tr("LOAD_FAILED"))
 
 
@@ -106,6 +111,8 @@ static func describe(slot: String, info: Dictionary) -> String:
 
 static func format_playtime(seconds: float) -> String:
 	var minutes := int(seconds / 60.0)
+	if minutes < 1:
+		return TranslationServer.translate("TIME_UNDER_MINUTE")
 	if minutes < 60:
 		return TranslationServer.translate("TIME_MINUTES") % minutes
 	return TranslationServer.translate("TIME_HOURS") % [minutes / 60, minutes % 60]

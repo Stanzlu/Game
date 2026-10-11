@@ -61,4 +61,4 @@ func test_timing_is_averaged_and_marked_missing_without_samples() -> void:
 
 
 func test_report_lands_in_the_profile_folder() -> void:
-	assert_string_starts_with(BenchmarkRunner.report_path(), "user://profiles/test/")
+	assert_string_starts_with(BenchmarkRunner.report_path(), RuntimeEnv.user_dir())

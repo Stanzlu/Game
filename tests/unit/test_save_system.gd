@@ -2,7 +2,7 @@ extends GutTest
 ## SaveSystem on disk (test profile only): atomic writes, backups, refusing and deferring
 ## saves while blocked, reading broken files without crashing.
 
-const DIR := "user://profiles/test/saves_unit"
+var dir_path := RuntimeEnv.user_dir() + "saves_unit"
 
 var saves: SaveService
 var context: FakeContext
@@ -24,7 +24,7 @@ func before_each() -> void:
 	_clear_dir()
 	WorldState.new_game()
 	saves = SaveService.new()
-	saves.save_dir = DIR
+	saves.save_dir = dir_path
 	add_child_autofree(saves)
 	context = FakeContext.new()
 	context.add_to_group(SaveService.CONTEXT_GROUP)
@@ -37,7 +37,7 @@ func after_all() -> void:
 
 
 func _clear_dir() -> void:
-	var dir := DirAccess.open(DIR)
+	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return
 	for file_name in dir.get_files():
@@ -45,7 +45,7 @@ func _clear_dir() -> void:
 
 
 func _write_raw(slot: String, text: String, backup := false) -> void:
-	DirAccess.make_dir_recursive_absolute(DIR)
+	DirAccess.make_dir_recursive_absolute(dir_path)
 	var file := FileAccess.open(saves.path_for(slot, backup), FileAccess.WRITE)
 	file.store_string(text)
 	file.close()
@@ -54,8 +54,8 @@ func _write_raw(slot: String, text: String, backup := false) -> void:
 func test_save_writes_a_readable_slot_with_location() -> void:
 	WorldState.set_flag("valley.saved_once")
 	assert_eq(saves.save_slot("slot_1"), OK)
-	assert_true(FileAccess.file_exists(DIR + "/slot_1.json"))
-	assert_false(FileAccess.file_exists(DIR + "/slot_1.json.tmp"), "temp file is renamed")
+	assert_true(FileAccess.file_exists(dir_path + "/slot_1.json"))
+	assert_false(FileAccess.file_exists(dir_path + "/slot_1.json.tmp"), "temp file is renamed")
 	var result := saves.read_slot("slot_1")
 	assert_true(result.ok, result.error)
 	assert_true(result.state.flags.has("valley.saved_once"))
@@ -122,6 +122,7 @@ func test_scene_entered_after_load_returns_saved_position() -> void:
 
 
 func test_reading_missing_broken_and_foreign_files() -> void:
+	WorldState.set_flag("test.running_game")
 	assert_eq(saves.read_slot("slot_3").error, "missing")
 	_write_raw("slot_3", "")
 	assert_eq(saves.read_slot("slot_3").error, "parse")
@@ -131,6 +132,8 @@ func test_reading_missing_broken_and_foreign_files() -> void:
 	assert_eq(saves.read_slot("slot_3").error, "unknown_map")
 	assert_eq(saves.load_slot("slot_3"), ERR_FILE_CORRUPT, "load refuses and changes nothing")
 	assert_push_warning("load failed")
+	assert_true(WorldState.has_flag("test.running_game"), "the running game is untouched")
+	assert_false(saves.loading)
 	assert_eq(saves.save_slot("slot_9"), ERR_INVALID_PARAMETER)
 	assert_push_error("unknown slot")
 
@@ -158,3 +161,16 @@ func test_reaching_reality_is_read_from_the_saves() -> void:
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
 	assert_eq(saves.save_slot("slot_2"), OK)
 	assert_true(saves.reached_reality(), "a save after the crossing shows REAL")
+
+
+func test_a_quest_step_and_what_follows_are_saved_together() -> void:
+	var writes: Array[String] = []
+	saves.saved.connect(func(slot: String) -> void: writes.append(slot))
+	WorldState.start_quest("side_sandbox_gate")
+	WorldState.add_xp(100)
+	assert_false(FileAccess.file_exists(saves.path_for("autosave")), "not in the middle of it")
+	await wait_physics_frames(2)
+	var slot := saves.read_slot("autosave")
+	assert_true(slot.ok, "written at the end of the frame")
+	assert_eq(slot.state.elysia.xp, WorldState.state.elysia.xp, "with the XP that came after")
+	assert_eq(writes, ["autosave"] as Array[String], "once")

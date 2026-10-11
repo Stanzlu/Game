@@ -15,6 +15,12 @@ var style := Style.XBOX
 
 func _input(event: InputEvent) -> void:
 	var new_kind := kind
+	if event is InputEventMouseMotion:
+		_show_mouse(true)
+		return
+	if event is InputEventKey or event is InputEventJoypadButton:
+		# playing with keys or a pad: the pointer gets out of the picture
+		_show_mouse(false)
 	if event is InputEventKey or event is InputEventMouseButton:
 		new_kind = Kind.KEYBOARD
 	elif event is InputEventJoypadButton:
@@ -27,6 +33,14 @@ func _input(event: InputEvent) -> void:
 	set_kind(new_kind)
 
 
+func _show_mouse(show: bool) -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var mode := Input.MOUSE_MODE_VISIBLE if show else Input.MOUSE_MODE_HIDDEN
+	if Input.mouse_mode != mode:
+		Input.mouse_mode = mode
+
+
 func set_kind(new_kind: Kind) -> void:
 	if new_kind == kind:
 		return
@@ -37,12 +51,24 @@ func set_kind(new_kind: Kind) -> void:
 
 ## Short label for the first binding of `action` on the current device.
 func label_for(action: StringName) -> String:
+	return label_for_kind(action, kind)
+
+
+## Short label for the first binding of `action` on keyboard or gamepad (sticks and
+## triggers as "Stick"/"Trigger" when the action has no button).
+func label_for_kind(action: StringName, device: Kind) -> String:
+	var axis_label := ""
 	for event: InputEvent in InputMap.action_get_events(action):
-		if kind == Kind.KEYBOARD and event is InputEventKey:
+		if device == Kind.KEYBOARD and event is InputEventKey:
 			return key_label((event as InputEventKey).physical_keycode)
-		if kind == Kind.GAMEPAD and event is InputEventJoypadButton:
+		if device == Kind.GAMEPAD and event is InputEventJoypadButton:
 			return button_label((event as InputEventJoypadButton).button_index, style)
-	return "?"
+		if device == Kind.GAMEPAD and event is InputEventJoypadMotion and axis_label.is_empty():
+			var axis := (event as InputEventJoypadMotion).axis
+			axis_label = TranslationServer.translate(
+				"KEY_TRIGGER" if axis >= JOY_AXIS_TRIGGER_LEFT else "KEY_STICK"
+			)
+	return axis_label if not axis_label.is_empty() else "?"
 
 
 static func key_label(physical: Key) -> String:
@@ -65,7 +91,8 @@ static func key_label(physical: Key) -> String:
 static func button_label(button: JoyButton, pad_style: Style) -> String:
 	var face: Array = ["A", "B", "X", "Y"]
 	if pad_style == Style.PLAYSTATION:
-		face = ["✕", "○", "□", "△"]
+		# "×" instead of "✕": the key-cap font has it (no fallback glyph)
+		face = ["×", "○", "□", "△"]
 	elif pad_style == Style.NINTENDO:
 		face = ["B", "A", "Y", "X"]
 	match button:

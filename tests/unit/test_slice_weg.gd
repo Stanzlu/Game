@@ -38,7 +38,9 @@ func test_standing_still_brings_the_wood() -> void:
 	WorldState.advance_quest("main_valley_shelter", "house")
 	WorldState.advance_quest("main_valley_shelter", "wood")
 	scene.model.stillness_seconds = 0.2
-	scene.model.distance_walked = 10000.0  # walked long enough for stopping to count
+	# walked long enough and hurried, so stopping counts
+	scene.model.distance_walked = 10000.0
+	scene.model.sprint_seconds = AntreiberModel.ENGAGE_SPRINT_SECONDS
 	await wait_seconds(2.0)
 	assert_true(scene.model.is_resolved())
 	assert_not_null(scene._wood, "the wood lies on the path")
@@ -55,8 +57,35 @@ func test_a_second_walk_leads_back_without_wood() -> void:
 	await wait_physics_frames(3)
 	scene.model.stillness_seconds = 0.2
 	scene.model.distance_walked = 10000.0
+	scene.model.sprint_seconds = AntreiberModel.ENGAGE_SPRINT_SECONDS
 	await wait_seconds(2.0)
 	assert_true(scene.model.is_resolved())
 	assert_null(scene._wood, "no second bundle")
 	await wait_seconds(4.0)
 	assert_eq(SceneTravel.last_target, "tal", "back to the valley")
+
+
+func test_the_antreiber_has_a_shadow_and_reads_slowly() -> void:
+	var scene: SliceAntreiber = WEG.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	assert_not_null(scene.antreiber.get_node_or_null("Shadow"), "standing on the ground")
+	assert_eq(AntreiberActor.bark_seconds("Gut."), AntreiberActor.BARK_SECONDS)
+	var long_line := "Ich bin nicht außer Atem. Ich atme nur schneller, um Zeit zu sparen."
+	assert_gt(AntreiberActor.bark_seconds(long_line), 4.5, "long lines stay longer")
+
+
+func test_the_second_sign_is_like_the_first() -> void:
+	var first := await _sign()
+	assert_eq(first, "Ein Wegweiser. »Schuppen 200 m«.")
+	assert_eq(await _sign(), "Noch ein Wegweiser. »Schuppen 200 m«. Wie der letzte.")
+
+
+func _sign() -> String:
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(
+		SliceAntreiber.DIALOGUE, "sign"
+	)
+	var text := line.text
+	while line != null:
+		line = await DialogueManager.get_next_dialogue_line(SliceAntreiber.DIALOGUE, line.next_id)
+	return text

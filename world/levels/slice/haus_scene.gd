@@ -10,8 +10,15 @@ extends LookScene
 
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
 const COLD_TINT := Color(0.5, 0.56, 0.68)
-## The fire's glow fills the room: honey and amber, not grey (ADR-041).
-const WARM_TINT := Color(1.0, 0.84, 0.66)
+## Once the fire burns, the room is lit by it: a dim warm base, and the fireplace's own
+## flickering light gives the falloff (a bright flat tint made the corners as light as the
+## hearth and everything one orange; ADR-041 still holds: honey and amber, not grey).
+const WARM_TINT := Color(0.54, 0.48, 0.48)
+## The room (cells): the camera stays centred on it instead of drifting over the black.
+const ROOM := Rect2i(12, 5, 16, 12)
+## Grey daylight from the rainy window: a cool counterpart to the fire on the floor below it.
+const WINDOW_CELL := Vector2(23.5, 9.0)
+const WINDOW_LIGHT := Color("#7d93c8")
 const COLD_AMBIENCE := preload("res://content/audio/haus_kalt.tres")
 const WARM_AMBIENCE := preload("res://content/audio/haus_feuer.tres")
 ## Seconds the player sits by the burning fire before the quiet moment (Game Bible §45:
@@ -43,6 +50,10 @@ func _ready() -> void:
 	ambience = WARM_AMBIENCE if warm else COLD_AMBIENCE
 	music = "valley" if warm else "silence"
 	super()
+	_add_window_light()
+	view.bounds = Rect2(
+		Vector2(ROOM.position * map.data.tile_size), Vector2(ROOM.size * map.data.tile_size)
+	)
 	WorldState.house_changed.connect(_on_house_changed)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	if WorldState.has_flag("house.cat_naming"):
@@ -54,9 +65,13 @@ func _ready() -> void:
 		WorldState.start_quest("main_valley_shelter")
 		WorldState.advance_quest("main_valley_shelter", "house")
 	if warm and not WorldState.has_flag("house.mira_visited"):
-		# loaded a save between the fire and Mira's visit
-		_mira_coming = true
-		_mira_visits.call_deferred()
+		# loaded a save between the fire and Mira's visit: the rest by the fire (and the
+		# Antreiber, if he has not come yet) still comes first; Mira knocks in any case later
+		if _antreiber_pending():
+			_mira_later.call_deferred()
+		else:
+			_mira_coming = true
+			_mira_visits.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -71,11 +86,7 @@ func _process(delta: float) -> void:
 func _rest_by_the_fire() -> void:
 	_mira_coming = true
 	await Talk.present(self, DIALOGUE, "fire_rest", player)
-	if (
-		WorldState.has_flag("valley.wood_taken")
-		and not WorldState.has_flag("house.antreiber_by_fire")
-		and not WorldState.has_flag("house.antreiber_left")
-	):
+	if _antreiber_pending():
 		await _antreiber_comes()
 	await NodeTimer.after(self, 2.0)
 	_mira_visits()
@@ -89,7 +100,7 @@ func _antreiber_comes() -> void:
 	actor.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	map.entities.add_child(actor)
 	actor.global_position = map.cell_to_world(DOOR_CELL)
-	AudioDirector.sfx("door_open", -10.0)
+	AudioDirector.sfx("door_open", -3.0)
 	await actor.walk_to(map.cell_to_world(ANTREIBER_CELL), 40.0)
 	actor.face(Facing.from_vector(player.global_position - actor.global_position))
 	await Talk.present(self, DIALOGUE, "antreiber_fire", player)
@@ -106,7 +117,7 @@ func _antreiber_comes() -> void:
 		return
 	await Talk.present(self, DIALOGUE, "antreiber_cheers", player)
 	await actor.walk_to(map.cell_to_world(DOOR_CELL), 55.0)
-	AudioDirector.sfx("door_close", -10.0)
+	AudioDirector.sfx("door_close", -3.0)
 	WorldState.set_flag("house.antreiber_left")
 	actor.queue_free()
 
@@ -118,12 +129,14 @@ func _on_flag_changed(id: String, value: bool) -> void:
 
 ## The cat gets a name, if the player wants one (Game Bible §28).
 func _name_the_cat() -> void:
-	while dialogue_box.visible:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	var entry := NameEntry.new()
 	entry.name = "CatName"
 	entry.title_key = "CAT_NAME_TITLE"
 	entry.suggestions = CAT_SUGGESTIONS
+	entry.confirm_key = "CAT_NAME_CONFIRM"
+	entry.back_key = "CAT_NAME_SKIP"
 	add_child(entry)
 	entry.chosen.connect(func(cat: String) -> void: WorldState.set_cat_name(cat))
 	get_tree().paused = true
@@ -153,7 +166,23 @@ func _fire_catches() -> void:
 		create_tween().tween_property(tint, ^"color", WARM_TINT, 5.0).set_trans(Tween.TRANS_SINE)
 	AudioDirector.set_ambience(WARM_AMBIENCE, ambience_db, 4.0)
 	AudioDirector.play_music("valley", 8.0)
-	while dialogue_box.visible:
+	_mira_later()
+
+
+func _add_window_light() -> void:
+	var light := PointLight2D.new()
+	light.name = "WindowLight"
+	light.texture = Decor.light_texture()
+	light.color = WINDOW_LIGHT
+	light.energy = 0.45
+	light.texture_scale = 88.0 / 32.0
+	light.position = WINDOW_CELL * float(map.data.tile_size)
+	map.entities.add_child(light)
+
+
+## Mira comes `mira_after` seconds after the fire at the latest, sitting or not.
+func _mira_later() -> void:
+	while dialogue_box.is_open():
 		await get_tree().process_frame
 	await NodeTimer.after(self, mira_after)
 	if not _mira_coming:
@@ -161,10 +190,18 @@ func _fire_catches() -> void:
 		_mira_visits()
 
 
+func _antreiber_pending() -> bool:
+	return (
+		WorldState.has_flag("valley.wood_taken")
+		and not WorldState.has_flag("house.antreiber_by_fire")
+		and not WorldState.has_flag("house.antreiber_left")
+	)
+
+
 func _mira_visits() -> void:
 	if WorldState.has_flag("house.mira_visited") or not is_inside_tree():
 		return
-	while dialogue_box.visible or MenuLayer.any_open(get_tree()):
+	while dialogue_box.is_open() or MenuLayer.any_open(get_tree()):
 		await get_tree().process_frame
 	var cut := Cutscene.begin(self)
 	AudioDirector.sfx("door_knock")

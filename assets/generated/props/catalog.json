@@ -340,7 +340,7 @@
  },
  "elysia/reeds": {
   "anchor": [
-   8,
+   5,
    23
   ],
   "sway": 2.0,
@@ -663,13 +663,13 @@
   "flicker": true,
   "lights": [
    {
-    "color": "#ff8a3a",
-    "energy": 1.6,
+    "color": "#ff9a4a",
+    "energy": 1.9,
     "offset": [
      0,
      -14
     ],
-    "range": 190
+    "range": 170
    }
   ],
   "shape": {
@@ -1240,7 +1240,7 @@
  },
  "tal/reeds": {
   "anchor": [
-   8,
+   5,
    23
   ],
   "sway": 2.0,
@@ -1357,7 +1357,8 @@
   "textures": [
    "res://assets/generated/props/tal/stone_flat_0.png",
    "res://assets/generated/props/tal/stone_flat_1.png",
-   "res://assets/generated/props/tal/stone_flat_2.png"
+   "res://assets/generated/props/tal/stone_flat_2.png",
+   "res://assets/generated/props/tal/stone_flat_3.png"
   ]
  },
  "tal/stone_round": {
@@ -1368,7 +1369,8 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/stone_round_0.png",
-   "res://assets/generated/props/tal/stone_round_1.png"
+   "res://assets/generated/props/tal/stone_round_1.png",
+   "res://assets/generated/props/tal/stone_round_2.png"
   ]
  },
  "tal/tall_grass": {
@@ -1764,7 +1766,7 @@
  },
  "wald/reeds": {
   "anchor": [
-   8,
+   5,
    23
   ],
   "sway": 2.0,
