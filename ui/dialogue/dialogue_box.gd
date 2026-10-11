@@ -50,7 +50,8 @@ var _quiet_focus := false
 var _tween: Tween
 var _open := false
 var _voiced_letters := 0
-var _answer_guard_until := 0
+## Game time, not the wall clock: fast runs (autopilot, --fixed-fps) keep the same rhythm.
+var _answer_guard_left := 0.0
 var _held := 0.0
 var _hold_step := 0.0
 
@@ -136,7 +137,7 @@ func _show_line(next_line: DialogueLine) -> void:
 			return
 	if line.responses.size() > 0:
 		_quiet_focus = true
-		_answer_guard_until = Time.get_ticks_msec() + int(ANSWER_GUARD_SECONDS * 1000.0)
+		_answer_guard_left = ANSWER_GUARD_SECONDS
 		_responses.show()
 		var items := _responses.get_menu_items()
 		if not items.is_empty():
@@ -186,6 +187,7 @@ func _auto_advance(for_line: DialogueLine) -> void:
 
 
 func _process(delta: float) -> void:
+	_answer_guard_left = maxf(_answer_guard_left - delta, 0.0)
 	if not _open or not Input.is_action_pressed(&"interact"):
 		_held = 0.0
 		_hold_step = 0.0
@@ -205,7 +207,7 @@ func _process(delta: float) -> void:
 
 ## Swallows presses right after the answers appeared (before the answer list sees them).
 func _input(event: InputEvent) -> void:
-	if not _open or not _responses.visible or Time.get_ticks_msec() >= _answer_guard_until:
+	if not _open or not _responses.visible or _answer_guard_left <= 0.0:
 		return
 	if event.is_action_pressed(&"interact") or event.is_action_pressed(&"ui_accept"):
 		get_viewport().set_input_as_handled()
