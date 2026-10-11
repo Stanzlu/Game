@@ -120,7 +120,9 @@ func test_session_overrides_are_never_written() -> void:
 func test_volume_steps_drive_audio_buses() -> void:
 	var bus := AudioServer.get_bus_index(&"Music")
 	settings.set_value("audio.music", 5)
-	assert_almost_eq(AudioServer.get_bus_volume_db(bus), linear_to_db(0.5), 0.01)
+	assert_almost_eq(AudioServer.get_bus_volume_db(bus), linear_to_db(0.25), 0.01, "squared")
+	settings.set_value("audio.music", 10)
+	assert_almost_eq(AudioServer.get_bus_volume_db(bus), 0.0, 0.01, "full is unity")
 	settings.set_value("audio.music", 0)
 	assert_true(AudioServer.is_bus_mute(bus))
 	settings.set_value("audio.music", 10)

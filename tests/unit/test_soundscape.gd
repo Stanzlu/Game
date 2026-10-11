@@ -80,3 +80,10 @@ func test_switching_back_to_a_loop_ends_the_soundscape() -> void:
 	assert_null(audio._soundscape.def)
 	assert_eq(audio._soundscape._beds.size(), 0)
 	assert_eq(audio.wind_gust(), -1.0, "Elysia's wind is no gusty wind")
+
+
+func test_soundscape_fades_in_amplitude() -> void:
+	var scape := audio._soundscape
+	scape.play(load(DEFS[0]) as SoundscapeDef, -6.0, 2.0)
+	scape._tween.custom_step(1.0)
+	assert_almost_eq(db_to_linear(scape._fade_db), 0.5, 0.05, "halfway in amplitude, not -30 dB")

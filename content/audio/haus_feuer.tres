@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_def")
 wind = 0.25
-beds = Array[Dictionary]([{"sound": "fire", "db": -5.0, "gust": 0.0}, {"sound": "roof", "db": -12.0, "gust": 0.2}])
+beds = Array[Dictionary]([{"sound": "fire", "db": -7.8, "gust": 0.0}, {"sound": "roof", "db": -8.2, "gust": 0.2}])
 events = Array[Dictionary]([{"sound": "creak", "every": [14.0, 35.0], "db": -20.0, "pan": 0.8, "pitch": 1.04}])

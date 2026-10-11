@@ -100,7 +100,7 @@ func _antreiber_comes() -> void:
 	actor.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	map.entities.add_child(actor)
 	actor.global_position = map.cell_to_world(DOOR_CELL)
-	AudioDirector.sfx("door_open", -10.0)
+	AudioDirector.sfx("door_open", -3.0)
 	await actor.walk_to(map.cell_to_world(ANTREIBER_CELL), 40.0)
 	actor.face(Facing.from_vector(player.global_position - actor.global_position))
 	await Talk.present(self, DIALOGUE, "antreiber_fire", player)
@@ -117,7 +117,7 @@ func _antreiber_comes() -> void:
 		return
 	await Talk.present(self, DIALOGUE, "antreiber_cheers", player)
 	await actor.walk_to(map.cell_to_world(DOOR_CELL), 55.0)
-	AudioDirector.sfx("door_close", -10.0)
+	AudioDirector.sfx("door_close", -3.0)
 	WorldState.set_flag("house.antreiber_left")
 	actor.queue_free()
 

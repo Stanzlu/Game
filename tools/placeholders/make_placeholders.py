@@ -325,15 +325,16 @@ def make_props(rng):
 RATE = 44100
 
 
-def write_wav(path, samples):
+def write_wav(path, samples, gain=None):
+    """Writes 16-bit mono; without `gain` the peak lands at about -6 dBFS."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     peak = max(1e-6, max(abs(s) for s in samples))
-    scale = 0.5 / peak  # about -6 dBFS
+    scale = 0.5 / peak if gain is None else gain
     with wave.open(path, "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)
         w.setframerate(RATE)
-        w.writeframes(b"".join(struct.pack("<h", int(s * scale * 32767)) for s in samples))
+        w.writeframes(b"".join(struct.pack("<h", int(max(-1.0, min(1.0, s * scale)) * 32767)) for s in samples))
 
 
 def lowpass(samples, alpha):
@@ -380,15 +381,175 @@ def mix(*parts):
     return [sum(p[i] for p in parts if i < len(p)) for i in range(n)]
 
 
+# --------------------------------------------------------------------------- footsteps
+# Every step is a heel and, 18-32 ms later, a softer toe, in the character of the ground.
+# All surfaces have the same loudness (STEP_LOUDNESS); FootstepPlayer sets their levels.
+STEP_VARIANTS = 8  # SoundBank.MAX_VARIANTS
+STEP_LOUDNESS = -21.0  # K-weighted energy over 100 ms (LUFS-like), as loud as the old ones
+
+
+def biquad(samples, b, a):
+    """Direct-form biquad filter."""
+    b0, b1, b2 = (v / a[0] for v in b)
+    a1, a2 = a[1] / a[0], a[2] / a[0]
+    out, x1, x2, y1, y2 = [], 0.0, 0.0, 0.0, 0.0
+    for x in samples:
+        y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2
+        x2, x1, y2, y1 = x1, x, y1, y
+        out.append(y)
+    return out
+
+
+def bandpass(samples, freq, q):
+    w = math.tau * freq / RATE
+    alpha = math.sin(w) / (2 * q)
+    return biquad(samples, (alpha, 0.0, -alpha), (1 + alpha, -2 * math.cos(w), 1 - alpha))
+
+
+def k_weighted(samples):
+    """BS.1770 K filter: high shelf +4 dB around 1.7 kHz, then highpass at 38 Hz."""
+    g = 10 ** (4.0 / 40)
+    w = math.tau * 1681.97 / RATE
+    c, s = math.cos(w), math.sqrt(g) * math.sin(w) / 0.7072
+    shelf = biquad(samples, (g * ((g + 1) + (g - 1) * c + s), -2 * g * ((g - 1) + (g + 1) * c), g * ((g + 1) + (g - 1) * c - s)),
+                   ((g + 1) - (g - 1) * c + s, 2 * ((g - 1) - (g + 1) * c), (g + 1) - (g - 1) * c - s))
+    w = math.tau * 38.135 / RATE
+    c, alpha = math.cos(w), math.sin(w) / (2 * 0.5003)
+    return biquad(shelf, ((1 + c) / 2, -(1 + c), (1 + c) / 2), (1 + alpha, -2 * c, 1 - alpha))
+
+
+def step_loudness(samples):
+    """Energy of a short sound as if spread over 100 ms, in LUFS-like dB."""
+    energy = sum(s * s for s in k_weighted(samples)) / RATE
+    return -0.691 + 10 * math.log10(energy / 0.1 + 1e-20)
+
+
+def burst(rng, dur, attack, tau):
+    """White noise with a short linear attack and an exponential decay (seconds)."""
+    a = max(1, int(attack * RATE))
+    return [rng.uniform(-1, 1) * min(1.0, i / a) * math.exp(-i / (tau * RATE)) for i in range(int(dur * RATE))]
+
+
+def damped(freq, dur, tau, sweep=0.0):
+    """Damped sine: the ring of a board, a stone or a bubble (sweep glides the pitch up)."""
+    out, ph, n = [], 0.0, int(dur * RATE)
+    for i in range(n):
+        ph += freq * (1 + sweep * i / n) / RATE
+        out.append(math.sin(ph * math.tau) * math.exp(-i / (tau * RATE)))
+    return out
+
+
+def gain(samples, g):
+    return [s * g for s in samples]
+
+
+def place(seconds, parts):
+    """Mixes (offset in seconds, samples) parts into a buffer `seconds` long."""
+    out = [0.0] * int(seconds * RATE)
+    for offset, part in parts:
+        start = int(offset * RATE)
+        for i, s in enumerate(part[: max(0, len(out) - start)]):
+            out[start + i] += s
+    return out
+
+
+def grains(rng, seconds, count, freq, q, size=0.0015):
+    """Sparse tiny crackles (grit, grass blades, spray) spread over `seconds`."""
+    parts = []
+    for _ in range(count):
+        g = bandpass(burst(rng, size * 3, 0.0002, size), freq * rng.uniform(0.8, 1.25), q)
+        parts.append((rng.uniform(0, seconds) ** 1.5 / seconds ** 0.5, gain(g, rng.uniform(0.3, 1.0))))
+    return place(seconds + size * 3, parts)
+
+
+def fall_grass(rng, strength):
+    """Soft: a muffled thump into turf and the blades swishing past the shoe."""
+    thump = lowpass(burst(rng, 0.06, 0.003, 0.014), 0.035)
+    swish = bandpass(burst(rng, 0.15, 0.012, 0.04), rng.uniform(1600, 2600), 0.6)
+    blades = grains(rng, 0.08, rng.randint(5, 10), 3500, 1.2)
+    return place(0.17, [(0, gain(thump, 5.0 * strength)), (0.003, gain(swish, 1.3 * strength)),
+                        (0.01, gain(blades, 0.3 * strength))])
+
+
+def fall_dirt(rng, strength):
+    """Dull: a thud with a low body and a little grit under the sole."""
+    thud = lowpass(burst(rng, 0.07, 0.002, 0.018), 0.06)
+    body = damped(rng.uniform(65, 90), 0.08, 0.025)
+    grit = grains(rng, 0.05, rng.randint(4, 8), 2800, 1.5)
+    return place(0.12, [(0, gain(thud, 3.0 * strength)), (0, gain(body, 0.5 * strength)),
+                        (0.003, gain(grit, 0.35 * strength))])
+
+
+def fall_stone(rng, strength):
+    """Hard: a bright click, a short ring of the slab and a scuff of grit."""
+    click = highpass(burst(rng, 0.012, 0.0002, 0.0025), 0.3)
+    ring = mix(damped(rng.uniform(380, 520), 0.05, 0.010), gain(damped(rng.uniform(1100, 1500), 0.03, 0.005), 0.5))
+    scuff = bandpass(burst(rng, 0.06, 0.005, 0.02), rng.uniform(2200, 3200), 0.6)
+    return place(0.1, [(0, gain(click, 1.0 * strength)), (0, gain(ring, 0.35 * strength)),
+                       (0.002, gain(scuff, 0.3 * strength))])
+
+
+def fall_wood(rng, strength, boards):
+    """Hard and hollow: a click on the planks and the boards ringing underneath."""
+    click = highpass(burst(rng, 0.01, 0.0002, 0.002), 0.25)
+    low, mid = boards
+    ring = mix(damped(low * rng.uniform(0.97, 1.03), 0.12, 0.045), gain(damped(mid * rng.uniform(0.97, 1.03), 0.07, 0.022), 0.6),
+               gain(damped(rng.uniform(850, 1100), 0.03, 0.008), 0.3))
+    return place(0.14, [(0, gain(click, 1.2 * strength)), (0, gain(ring, 0.5 * strength))])
+
+
+def fall_puddle(rng, strength, bubbles):
+    """Splashy: a soft slap, water thrown up, spray settling and a few bubbles."""
+    slap = lowpass(burst(rng, 0.04, 0.002, 0.01), 0.08)
+    splash = bandpass(burst(rng, 0.2, 0.004, 0.06), rng.uniform(1400, 2200), 0.5)
+    spray = grains(rng, 0.12, rng.randint(8, 16), 5500, 1.0, 0.002)
+    parts = [(0, gain(slap, 2.0 * strength)), (0.002, gain(splash, 1.4 * strength)), (0.015, gain(spray, 0.4 * strength))]
+    for _ in range(bubbles):
+        parts.append((rng.uniform(0.015, 0.08), gain(damped(rng.uniform(650, 1300), 0.04, 0.012, rng.uniform(0.5, 1.2)), 0.25 * strength)))
+    return place(0.26, parts)
+
+
+def footstep(rng, surface):
+    heel_toe = rng.uniform(0.018, 0.032)
+    toe = rng.uniform(0.45, 0.7)
+    if surface == "grass":
+        heel, tip = fall_grass(rng, 1.0), fall_grass(rng, toe)
+    elif surface == "dirt":
+        heel, tip = fall_dirt(rng, 1.0), fall_dirt(rng, toe * 0.8)
+    elif surface == "stone":
+        heel, tip = fall_stone(rng, 1.0), fall_stone(rng, toe)
+    elif surface == "wood":
+        boards = (rng.uniform(140, 190), rng.uniform(380, 460))
+        heel, tip = fall_wood(rng, 1.0, boards), fall_wood(rng, toe, boards)
+    else:
+        heel, tip = fall_puddle(rng, 1.0, rng.randint(2, 4)), fall_puddle(rng, toe * 0.8, rng.randint(0, 2))
+    step = highpass(mix(heel, [0.0] * int(heel_toe * RATE) + tip), 0.0028)  # no DC (20 Hz)
+    # start and end softly, never on a click
+    for i in range(int(0.001 * RATE)):
+        step[i] *= i / (0.001 * RATE)
+    fade = int(0.006 * RATE)
+    for i in range(fade):
+        step[-1 - i] *= i / fade
+    return step
+
+
+def make_footsteps(rng):
+    a = lambda name: os.path.join(OUT, "audio", name + ".wav")
+    for surface in ("grass", "dirt", "stone", "wood", "puddle"):
+        for i in range(STEP_VARIANTS):
+            step = footstep(rng, surface)
+            level = 10 ** ((STEP_LOUDNESS - step_loudness(step)) / 20)
+            peak = max(abs(s) for s in step) * level
+            if peak > 0.9:
+                print(f"footstep_{surface}_{i}: peak {peak:.2f} limited to 0.9")
+                level *= 0.9 / peak
+            write_wav(a(f"footstep_{surface}_{i}"), step, level)
+
+
 def make_audio(rng):
     a = lambda name: os.path.join(OUT, "audio", name + ".wav")
     for i in range(4):
         v = rng.uniform(0.9, 1.1)
-        write_wav(a(f"footstep_grass_{i}"), noise_burst(rng, 0.09 * v, 0.18, 0.02, 0.004))
-        write_wav(a(f"footstep_dirt_{i}"), mix(noise_burst(rng, 0.07 * v, 0.25, 0.01), tone(90 * v, 0.06, 4)))
-        write_wav(a(f"footstep_stone_{i}"), mix(noise_burst(rng, 0.05 * v, 0.7, 0.2, 0.001, 4), tone(420 * v, 0.03, 5)))
-        write_wav(a(f"footstep_wood_{i}"), mix(tone(170 * v, 0.12, 3), tone(340 * v, 0.06, 4), noise_burst(rng, 0.03, 0.5, 0.1)))
-        write_wav(a(f"footstep_puddle_{i}"), mix(noise_burst(rng, 0.16 * v, 0.45, 0.08, 0.004, 1.6), tone(700 * v, 0.05, 3, sweep=0.6)))
         write_wav(a(f"rustle_{i}"), noise_burst(rng, 0.24 * v, 0.35, 0.15, 0.03, 1.4))
     write_wav(a("splash"), mix(noise_burst(rng, 0.35, 0.5, 0.06, 0.003, 1.3), tone(520, 0.12, 2, sweep=0.8)))
     write_wav(a("ui_move"), tone(880, 0.04, 2))
@@ -413,6 +574,7 @@ def main():
     make_character("antreiber", (208, 96, 42), (230, 200, 170), (40, 40, 48), (250, 220, 80))
     make_props(rng)
     make_audio(rng)
+    make_footsteps(random.Random(SEED + 1))
     print("placeholders written to", os.path.relpath(OUT, ROOT))
 
 

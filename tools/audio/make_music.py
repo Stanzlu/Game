@@ -6,8 +6,9 @@ All four share one motif (scale degrees 3-5-6-5-3-2), the fragment of the later 
 with human timing and a darker mode; the forest hides it in bells; the Antreiber rushes it.
 
 Every loop is seamless: notes that run past the end wrap to the start, and filtering and
-reverb are circular (frequency domain). Writes 16-bit stereo WAVs (22.05 kHz) to
-assets/generated/music/ plus .import files with looping enabled.
+reverb are circular (frequency domain); drones that span the whole loop wrap their release
+over their attack in phase. Writes 16-bit stereo WAVs (44.1 kHz) to assets/generated/music/
+plus .import files with looping enabled (Godot compresses them to QOA on import).
 
 Usage: .venv/bin/python tools/audio/make_music.py [--only elysia]
 """
@@ -19,7 +20,7 @@ import numpy as np
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "assets", "generated", "music")
-RATE = 22050
+RATE = 44100
 
 IMPORT = """[remap]
 
@@ -118,9 +119,14 @@ def piano(freq, seconds=3.0, velocity=0.7, rng=None):
         decay = 0.9 + 0.55 * k + freq / 900.0
         for detune in (0.9997, 1.0003):
             sig += 0.5 * amp * np.sin(2 * np.pi * fk * detune * t + rng.uniform(0, 6.28)) * np.exp(-t * decay)
-    hammer = lowpass_np(rng.uniform(-1, 1, n) * np.exp(-t * 180.0), 0.08) * 0.15 * velocity
+    hammer = lowpass_np(rng.uniform(-1, 1, n) * np.exp(-t * 180.0), alpha_hz(290)) * 0.15 * velocity
     attack = np.minimum(1, t / 0.004)
     return (sig + hammer) * attack * 0.42
+
+
+def alpha_hz(cutoff):
+    """One-pole coefficient for a cutoff in Hz (independent of the sample rate)."""
+    return 1.0 - np.exp(-2 * np.pi * cutoff / RATE)
 
 
 def lowpass_np(x, alpha):
@@ -160,14 +166,20 @@ def pluck(freq, seconds=2.5, rng=None, brightness=0.5):
     return out * 0.6
 
 
-def pad(freqs, seconds, rng, attack=1.2, release=1.6, detune=0.004):
-    """Warm pad: detuned saw-ish stacks per note; filtered later in the mix."""
+def pad(freqs, seconds, rng, attack=1.2, release=1.6, detune=0.004, loop=None):
+    """Warm pad: detuned saw-ish stacks per note; filtered later in the mix.
+
+    `loop` (seconds) rounds every voice to whole cycles per loop: a drone longer than the
+    loop then meets its own start in phase where its release wraps over its attack, so it
+    never fades out at the seam (a shift of at most half a cycle per loop, well under a cent)."""
     n = int(RATE * seconds)
     t = np.arange(n) / RATE
     sig = np.zeros(n)
     for f in freqs:
         for d in (-detune, 0.0, detune):
             ff = f * (1 + d)
+            if loop:
+                ff = round(ff * loop) / loop
             phase = rng.uniform(0, 2 * np.pi)
             # band-limited saw from 6 harmonics
             for h in range(1, 7):
@@ -294,7 +306,7 @@ def elysia(bars=8, name="elysia_loop"):
     # high sparkle on every downbeat (the loop "sparkles" exactly the same every time)
     for bar in range(bars):
         tr.add(bar * 4, music_box(midi_hz(degree(root, MAJOR, 5, 3)), 0.8, 0.5), pan=0.6, gain=0.18)
-    tr.buf = np.stack([circular_filter(ch, lo=45, hi=7500) for ch in tr.buf])
+    tr.buf = np.stack([circular_filter(ch, lo=45, hi=12000) for ch in tr.buf])
     finish(tr, name, reverb=0.32, rev_seconds=3.2)
 
 
@@ -337,9 +349,10 @@ def valley():
         jitter = rng.normal(0.04, 0.03) / tr.beat
         tr.add(pos + jitter, pluck(midi_hz(degree(root, DORIAN, deg, 0)), 3.0, rng, 0.55), pan=0.2, gain=0.35)
         pos += eighths * 0.75
-    # a quiet hum underneath
-    tr.add(0, pad([midi_hz(root - 12), midi_hz(root - 5)], tr.beat * 32, rng, attack=4.0, release=4.0, detune=0.002), gain=0.2)
-    tr.buf = np.stack([circular_filter(ch, lo=50, hi=5200, tilt=-0.1) for ch in tr.buf])
+    # a quiet hum underneath; its release wraps over its attack, so it never stops
+    hum = [midi_hz(root - 12), midi_hz(root - 5)]
+    tr.add(0, pad(hum, tr.beat * 32 + 4.0, rng, attack=4.0, release=4.0, detune=0.002, loop=tr.n / RATE), gain=0.2)
+    tr.buf = np.stack([circular_filter(ch, lo=50, hi=8000, tilt=-0.1) for ch in tr.buf])
     finish(tr, "valley_loop", reverb=0.26, rev_seconds=2.4)
 
 
@@ -349,7 +362,9 @@ def forest():
     tr = Track(bpm=66, bars=8)
     root = 57  # A3
     penta = [0, 3, 5, 7, 10]
-    tr.add(0, pad([midi_hz(root - 12), midi_hz(root - 5), midi_hz(root + 3)], tr.beat * 32, rng, attack=5.0, release=5.0, detune=0.003), gain=0.3)
+    # the drone's release wraps over its attack, so it never stops at the seam
+    drone = [midi_hz(root - 12), midi_hz(root - 5), midi_hz(root + 3)]
+    tr.add(0, pad(drone, tr.beat * 32 + 5.0, rng, attack=5.0, release=5.0, detune=0.003, loop=tr.n / RATE), gain=0.3)
     for k in range(14):
         pos = rng.uniform(0, 32)
         m = root + 12 + penta[rng.integers(0, 5)] + 12 * rng.integers(0, 2)

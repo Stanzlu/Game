@@ -19,6 +19,9 @@ on its physical source rather than drawn as a tone:
 
 Beds go to assets/generated/audio/nature_<name>_bed.wav (looping), one-shots to
 assets/generated/sfx/nature_<name>_<n>.wav (SoundBank variants). 32 kHz mono, 16 bit.
+Beds share one loudness (BED_LUFS, K-weighted as in ITU-R BS.1770) under a soft -1 dBFS
+ceiling, so the dB values in content/audio/*.tres are their real levels; one-shots are
+peak-normalized and fade in over 1.5 ms (no click at the start).
 
 Usage: .venv/bin/python tools/audio/make_nature.py
 """
@@ -31,6 +34,10 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 BED_DIR = os.path.join(ROOT, "assets", "generated", "audio")
 SHOT_DIR = os.path.join(ROOT, "assets", "generated", "sfx")
 RATE = 32000
+# Loudness of every bed (LUFS, K-weighted, ungated: the beds are steady textures) and the
+# sample ceiling their peaks bend towards.
+BED_LUFS = -20.0
+CEILING = 10 ** (-1.0 / 20)
 
 IMPORT = """[remap]
 
@@ -528,9 +535,52 @@ BEDS = {
 }
 
 
+def biquad_gain(f, b, a):
+    """Magnitude of a biquad filter (b, a coefficients) at the frequencies f."""
+    z = np.exp(-2j * np.pi * f / RATE)
+    return np.abs((b[0] + b[1] * z + b[2] * z * z) / (a[0] + a[1] * z + a[2] * z * z))
+
+
+def k_weighting(f):
+    """Magnitude of the BS.1770 K filter: high shelf +4 dB around 1.7 kHz, highpass 38 Hz."""
+    g = 10 ** (4.0 / 40)
+    w = 2 * np.pi * 1681.97 / RATE
+    c, s = np.cos(w), np.sqrt(g) * np.sin(w) / 0.7072
+    shelf = biquad_gain(f, [g * ((g + 1) + (g - 1) * c + s), -2 * g * ((g - 1) + (g + 1) * c), g * ((g + 1) + (g - 1) * c - s)],
+                        [(g + 1) - (g - 1) * c + s, 2 * ((g - 1) - (g + 1) * c), (g + 1) - (g - 1) * c - s])
+    w = 2 * np.pi * 38.135 / RATE
+    c, alpha = np.cos(w), np.sin(w) / (2 * 0.5003)
+    high = biquad_gain(f, [(1 + c) / 2, -(1 + c), (1 + c) / 2], [1 + alpha, -2 * c, 1 - alpha])
+    return shelf * high
+
+
+def loudness(x):
+    """Loudness of a loop in LUFS (K-weighted mean square)."""
+    weighted = spectral(x, k_weighting, periodic=True)
+    return -0.691 + 10 * np.log10(np.mean(weighted ** 2) + 1e-20)
+
+
+def soft_limit(x, ceiling=CEILING, knee=0.5):
+    """Leaves samples below knee * ceiling alone and bends louder ones smoothly towards the
+    ceiling. Works sample by sample, so loops stay seamless."""
+    start = knee * ceiling
+    room = ceiling - start
+    over = np.abs(x) > start
+    out = x.copy()
+    out[over] = np.sign(x[over]) * (start + room * np.tanh((np.abs(x[over]) - start) / room))
+    return out
+
+
 def write(path, signal, loop):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    signal = signal / (np.max(np.abs(signal)) + 1e-9) * 0.85
+    if loop:
+        # every bed at BED_LUFS (the limiter takes a little, so measure again)
+        for _ in range(3):
+            signal = soft_limit(signal * 10 ** ((BED_LUFS - loudness(signal)) / 20))
+    else:
+        signal = signal / (np.max(np.abs(signal)) + 1e-9) * 0.85
+        fade = min(secs(0.0015), len(signal))
+        signal[:fade] *= np.linspace(0, 1, fade)
     pcm = (signal * 32767).astype("<i2")
     with wave.open(path, "wb") as w:
         w.setnchannels(1)
