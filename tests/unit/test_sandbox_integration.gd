@@ -132,6 +132,25 @@ func test_bench_sit_and_stand_up() -> void:
 	assert_ne(player.global_position, seat)
 
 
+func test_sitting_glides_onto_the_seat_and_back() -> void:
+	await _setup("######\n#....#\n#.@..#\n######")
+	var start := player.global_position
+	var seat := start + Vector2(0, -10)
+	player.sit_on(seat, Facing.Dir.S)
+	await wait_physics_frames(2)
+	assert_lt(player.global_position.y, start.y, "on the way")
+	assert_gt(player.global_position.y, seat.y, "not there yet")
+	await wait_seconds(0.2)
+	assert_eq(player.global_position, seat)
+	assert_false(player.is_locked(), "free once seated")
+	player.stand_up()
+	var elsewhere := start + Vector2(16, 0)
+	player.teleport(elsewhere)
+	await wait_seconds(0.2)
+	assert_eq(player.global_position, elsewhere, "a teleport ends the glide")
+	assert_false(player.is_locked())
+
+
 func test_lever_opens_the_gate() -> void:
 	var text := (
 		"[legend]\n"

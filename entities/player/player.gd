@@ -25,6 +25,10 @@ const STATE_NAMES := ["idle", "walk", "run", "sit", "idle"]
 ## Seconds of standing still before the protagonist blinks and glances around (Game Bible
 ## §36); random within the range, so it never feels like a timer.
 const GLANCE_AFTER := Vector2(4.0, 9.0)
+## Sitting down and getting up glide the last few pixels instead of jumping; seats farther
+## away (a cutscene placing the player) are still a cut.
+const SEAT_GLIDE_SECONDS := 0.12
+const SEAT_GLIDE_MAX := 40.0
 
 @export var tuning: MovementTuning
 @export var sheet: CharacterSheet
@@ -41,6 +45,7 @@ var last_surface := &""
 var _locks: Dictionary = {}
 var _sprint_latched := false
 var _seat_return := Vector2.ZERO
+var _seat_tween: Tween
 var _interact_cooldown := 0.0
 var _interact_buffer := 0.0
 ## Direction of travel, held with hysteresis so a stick near a boundary does not flicker.
@@ -98,6 +103,7 @@ func read_input() -> Vector2:
 
 
 func teleport(to: Vector2) -> void:
+	_stop_seat_glide()
 	global_position = to
 	velocity = Vector2.ZERO
 	_prev_physics_pos = to
@@ -116,7 +122,7 @@ func sit_on(seat: Vector2, dir: Facing.Dir) -> void:
 		return
 	_seat_return = global_position
 	_collision.set_deferred(&"disabled", true)
-	teleport(seat)
+	_move_to_seat(seat)
 	facing = dir
 	_set_state(State.SIT)
 	_update_animation(0.0)
@@ -126,10 +132,35 @@ func sit_on(seat: Vector2, dir: Facing.Dir) -> void:
 func stand_up() -> void:
 	if state != State.SIT:
 		return
-	teleport(_seat_return)
-	_collision.set_deferred(&"disabled", false)
 	_set_state(State.IDLE)
+	_move_to_seat(_seat_return)
+	_collision.set_deferred(&"disabled", false)
 	_interact_cooldown = INTERACT_COOLDOWN
+
+
+func _move_to_seat(to: Vector2) -> void:
+	var distance := global_position.distance_to(to)
+	if distance < 1.0 or distance > SEAT_GLIDE_MAX:
+		teleport(to)
+		return
+	_stop_seat_glide()
+	velocity = Vector2.ZERO
+	lock(&"seat")
+	# in physics steps, so physics interpolation smooths it like walking
+	_seat_tween = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	(
+		_seat_tween
+		. tween_property(self, ^"global_position", to, SEAT_GLIDE_SECONDS)
+		. set_trans(Tween.TRANS_SINE)
+		. set_ease(Tween.EASE_OUT)
+	)
+	_seat_tween.tween_callback(unlock.bind(&"seat"))
+
+
+func _stop_seat_glide() -> void:
+	if _seat_tween != null and _seat_tween.is_valid():
+		_seat_tween.kill()
+		unlock(&"seat")
 
 
 func _physics_process(delta: float) -> void:
