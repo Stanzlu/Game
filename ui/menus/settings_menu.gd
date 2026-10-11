@@ -63,7 +63,7 @@ func _build() -> void:
 	if OS.is_debug_build():
 		list.add_header("SETTINGS_DEBUG")
 		list.add_setting("debug.overlay", "PAUSE_OVERLAY")
-	list.add_action("SETTINGS_CONTROLS", _show_controls)
+	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_action("SETTINGS_RESET", _reset)
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("SETTINGS_HINT")
