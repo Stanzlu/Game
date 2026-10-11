@@ -424,7 +424,8 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
     - Das Ende folgt direkt auf »Zum Meer.«.
     - Mira widerspricht beim Fisch; neue Stellen zum Ansehen in Tal und Elysia.
   - **Bild:**
-    - Das Haus füllt den Bildschirm (Kamera ruht auf dem Raum); das Feuer leuchtet aus dem Kamin statt den Raum zu fluten.
+    - Im Haus ruht die Kamera mittig auf dem Raum, statt der Figur ins Schwarz zu folgen; das Feuer leuchtet aus dem Kamin statt den Raum zu fluten. Klein bleibt das Haus mit Zoom 1,25× trotzdem (KNOWN_ISSUES #44).
+    - Belohnungen in Elysia kommen in Wellen (höchstens zwei zugleich) und verdecken die Figur nicht mehr.
     - Der Abendhimmel hat weichen Sonnenschein; Strahlen fallen nur über der Wiese.
     - Figuren haben echte Schritte und eigene Silhouetten.
     - Schilf, Zaun, Trittsteine und Weltenbaum sind überarbeitet; die Streu wächst in Gruppen.

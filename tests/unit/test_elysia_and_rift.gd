@@ -179,3 +179,15 @@ func test_node_timer_dies_with_its_owner() -> void:
 	owner.free()
 	await wait_seconds(0.2)
 	assert_false(fired[0], "no callback after the owner is gone")
+
+
+func test_a_flood_of_rewards_comes_in_waves() -> void:
+	var scene := await _scene()
+	var hud := scene.hud
+	for i in 5:
+		hud._enqueue(func() -> void: hud._float_text("+%d XP" % i, ""))
+	for i in 40:
+		await wait_physics_frames(3)
+		assert_lte(hud._visible_popups(), Hud.MAX_POPUPS, "never a whole column at once")
+	await wait_until(func() -> bool: return hud._queue.is_empty(), 10.0)
+	assert_true(hud._queue.is_empty(), "all of them came")

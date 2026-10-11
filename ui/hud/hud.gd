@@ -21,6 +21,9 @@ const TITLE_FONT := preload("res://assets/fonts/jersey15/Jersey15-Regular.ttf")
 const GOLD := Color(1, 0.84, 0.4)
 const OUTLINE := Color(0.22, 0.08, 0.16)
 const POPUP_GAP := 0.35
+## At most this many rewards on screen at once: a chest's flood comes in waves instead of a
+## column that reaches down over the hero.
+const MAX_POPUPS := 2
 const COINS_PER_GAIN := 7
 const COUNT_SECONDS := 1.0
 ## Elysia elements in the order they disappear at the rift.
@@ -187,7 +190,7 @@ func _build_elysia() -> void:
 	_elements["Quest"] = quest_row
 	_popups = VBoxContainer.new()
 	_popups.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
-	_popups.offset_top = 40
+	_popups.offset_top = 32
 	_popups.offset_left = -150
 	_popups.offset_right = 150
 	_popups.alignment = BoxContainer.ALIGNMENT_BEGIN
@@ -443,9 +446,19 @@ func _next_popup() -> void:
 		_busy = false
 		return
 	_busy = true
+	while _visible_popups() >= MAX_POPUPS:
+		await NodeTimer.after(self, 0.05)
 	(_queue.pop_front() as Callable).call()
 	await NodeTimer.after(self, POPUP_GAP)
 	_next_popup()
+
+
+func _visible_popups() -> int:
+	var count := 0
+	for child in _popups.get_children():
+		if not child.is_queued_for_deletion():
+			count += 1
+	return count
 
 
 func _count_gold_to(target: int) -> void:
