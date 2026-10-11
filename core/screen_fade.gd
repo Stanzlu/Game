@@ -4,12 +4,19 @@ extends CanvasLayer
 ## sequence can fade out in one scene and the next scene fades in from the same black.
 ## Game scenes fade in on their own when they start covered.
 ## Await the returned signal: it also fires when a newer fade replaces this one, so a
-## waiting sequence never hangs.
+## waiting sequence never hangs. Each fade has its own signal, so the end of one never
+## releases whoever waits for the next.
 
-signal faded
+
+## Fires once for the fade that created it.
+class Ticket:
+	extends RefCounted
+	signal done
+
 
 var _cover: ColorRect
 var _tween: Tween
+var _ticket: Ticket
 
 
 func _ready() -> void:
@@ -37,20 +44,34 @@ func fade_in(seconds := 1.0) -> Signal:
 func _fade(target: Color, seconds: float) -> Signal:
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
-		faded.emit()
+	_release()
+	var ticket := Ticket.new()
+	_ticket = ticket
 	if seconds <= 0.0:
-		# at once, so is_covered() is true right away
+		# at once, so is_covered() is true right away; the signal still comes after the
+		# caller started waiting for it
 		_cover.color = target
-		faded.emit.call_deferred()
-		return faded
+		_release.call_deferred(ticket)
+		return ticket.done
 	_tween = create_tween()
 	# into black it gathers pace, out of black it settles: softer than a linear ramp
 	var ease := Tween.EASE_IN if target.a > _cover.color.a else Tween.EASE_OUT
 	_tween.tween_property(_cover, ^"color", target, seconds).set_trans(Tween.TRANS_SINE).set_ease(
 		ease
 	)
-	_tween.tween_callback(faded.emit)
-	return faded
+	_tween.tween_callback(_release.bind(ticket))
+	return ticket.done
+
+
+## Lets the waiters of `ticket` (default: the running fade) go on, once.
+func _release(ticket: Ticket = null) -> void:
+	if ticket == null:
+		ticket = _ticket
+	if ticket == null:
+		return
+	if ticket == _ticket:
+		_ticket = null
+	ticket.done.emit()
 
 
 ## True while a fade is running (menus stay closed until the picture is back).
