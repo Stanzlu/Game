@@ -122,6 +122,7 @@ func test_scene_entered_after_load_returns_saved_position() -> void:
 
 
 func test_reading_missing_broken_and_foreign_files() -> void:
+	WorldState.set_flag("test.running_game")
 	assert_eq(saves.read_slot("slot_3").error, "missing")
 	_write_raw("slot_3", "")
 	assert_eq(saves.read_slot("slot_3").error, "parse")
@@ -131,6 +132,8 @@ func test_reading_missing_broken_and_foreign_files() -> void:
 	assert_eq(saves.read_slot("slot_3").error, "unknown_map")
 	assert_eq(saves.load_slot("slot_3"), ERR_FILE_CORRUPT, "load refuses and changes nothing")
 	assert_push_warning("load failed")
+	assert_true(WorldState.has_flag("test.running_game"), "the running game is untouched")
+	assert_false(saves.loading)
 	assert_eq(saves.save_slot("slot_9"), ERR_INVALID_PARAMETER)
 	assert_push_error("unknown slot")
 

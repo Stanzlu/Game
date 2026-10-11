@@ -118,3 +118,13 @@ func test_entering_in_the_evening_switches_music_once() -> void:
 	AudioDirector.music_changed.disconnect(record)
 	assert_eq(changes, ["valley"] as Array[String], "the evening's music from the start")
 	assert_eq(scene.day_light.preset, "abend")
+
+
+func test_steady_lamps_follow_the_day_too() -> void:
+	var lamp := Decor.new()
+	add_child_autofree(lamp)
+	lamp._add_light({"energy": 2.0})
+	lamp.light_scale = 0.5
+	assert_almost_eq(lamp.lights[0].energy, 1.0, 0.001, "a lamp without flicker is dimmed by day")
+	lamp._add_light({"energy": 1.0})
+	assert_almost_eq(lamp.lights[1].energy, 0.5, 0.001, "and one added later as well")

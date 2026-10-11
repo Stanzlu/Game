@@ -291,16 +291,27 @@ func load_slot(slot: String, backup := false) -> Error:
 			{"slot": slot, "backup": backup, "error": result.error, "detail": result.detail}
 		)
 		return ERR_FILE_NOT_FOUND if result.error == "missing" else ERR_FILE_CORRUPT
+	# all or nothing: a save whose place no longer exists leaves the running game untouched
+	var scene_path := SceneRegistry.path(result.state.player.map)
+	if not ResourceLoader.exists(scene_path):
+		Log.error(
+			Log.Category.SAVE,
+			"load failed: scene missing",
+			{"slot": slot, "map": result.state.player.map}
+		)
+		return ERR_FILE_CORRUPT
 	loading = true
+	var previous := WorldState.state
 	WorldState.replace_state(result.state)
 	_arrival = {"map": result.state.player.map, "position": result.state.player.position}
-	get_tree().paused = false
-	var err := get_tree().change_scene_to_file(SceneRegistry.path(result.state.player.map))
+	var err := get_tree().change_scene_to_file(scene_path)
 	if err != OK:
 		loading = false
 		_arrival = {}
-		Log.error(Log.Category.SAVE, "scene change failed", {"slot": slot})
+		WorldState.replace_state(previous)
+		Log.error(Log.Category.SAVE, "scene change failed", {"slot": slot, "error": err})
 		return err
+	get_tree().paused = false
 	Log.info(Log.Category.SAVE, "loaded", {"slot": slot, "backup": backup})
 	loaded.emit(slot)
 	return OK
