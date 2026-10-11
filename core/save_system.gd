@@ -30,6 +30,8 @@ var _blockers: Dictionary[StringName, bool] = {}
 var _pending_autosave := ""
 var _flush_queued := false
 var _arrival: Dictionary = {}
+## The running game scene, looked up again once it is gone (asked every frame).
+var _context_node: Node
 
 
 func _ready() -> void:
@@ -90,9 +92,16 @@ func has_pending_autosave() -> bool:
 func _context() -> Node:
 	if not is_inside_tree():
 		return null
+	if (
+		is_instance_valid(_context_node)
+		and _context_node.is_inside_tree()
+		and _context_node.is_in_group(CONTEXT_GROUP)
+	):
+		return _context_node
 	var node := get_tree().get_first_node_in_group(CONTEXT_GROUP)
 	if node == null or not node.has_method(&"is_saveable") or not node.has_method(&"save_location"):
 		return null
+	_context_node = node
 	return node
 
 

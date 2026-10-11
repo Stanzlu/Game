@@ -42,6 +42,8 @@ var _stuck_time := 0.0
 var _origin := Vector2.ZERO
 var _pause := Vector2.ZERO
 var _wait := 0.0
+## Looked up once: every NPC asks every physics tick.
+var _player: Node2D
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 
@@ -174,6 +176,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _nearest_player() -> Node2D:
+	if is_instance_valid(_player) and _player.is_inside_tree():
+		return _player
 	var best: Node2D = null
 	for node in get_tree().get_nodes_in_group(&"player"):
 		var candidate := node as Node2D
@@ -187,6 +191,7 @@ func _nearest_player() -> Node2D:
 			)
 		):
 			best = candidate
+	_player = best
 	return best
 
 
