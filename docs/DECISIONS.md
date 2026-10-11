@@ -68,6 +68,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Entscheidung:** Das Hauptfenster nutzt `canvas_items` mit Integer-Scaling und ohne 2D-Snapping. Die Welt rendert pixelgenau in einem SubViewport (642×362, 1 Pixel Rand) und wird als Sprite um Bruchteile eines Spielpixels verschoben. `GameView` setzt die Canvas-Transformation direkt (keine `Camera2D`). Das Anzeige-Sprite ist von der Physik-Interpolation ausgenommen. Beides ist gemessen und beseitigt einen Frame Verzögerung. Physik-Interpolation ist global an, damit 120- und 144-Hz-Bildschirme flüssig laufen. Der Player liefert seine interpolierte Position selbst.
 - **Modi:** *Weich* scrollt gleichmäßig (gemessen 3 bzw. 4 Bildschirmpixel pro Frame bei 2×), die Figur wackelt um ±0,5 Spielpixel. *Pixelgenau* scrollt in ganzen Spielpixeln (2 bzw. 4 Bildschirmpixel), die Figur steht ruhiger. Beide sind im Pause-Menü umschaltbar.
 - **Konsequenzen:** Weltknoten bekommen keine Input-Events und fragen den `Input`-Singleton ab. UI liegt in CanvasLayern außerhalb des SubViewports. Wer Knoten in `_process` bewegt, schaltet deren Physik-Interpolation ab.
+- **Nachtrag 11.10. (ADR-046):** *Pixelgenau* folgt der Figur jetzt starr (gerundete Fußposition plus gerundeter Vorlauf): Die Figur steht auf dem Bildschirm still, nur die Welt scrollt in ganzen Spielpixeln. Der Vorlauf ändert sich nur, solange die Figur sich bewegt; nach dem Anhalten driftet die Kamera nicht mehr nach. *Weich* bleibt Standard.
 
 ## ADR-013 · Kartenformat im Detail
 - **Status:** angenommen · 2026-10-02 · konkretisiert ADR-004
@@ -156,7 +157,7 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - Nahtlosigkeit: Noten laufen über das Loop-Ende in den Anfang, Filter und Hall sind zirkulär (Frequenzraum).
   - Autoload `AudioDirector`: Musik-Tracks mit Überblendung, gleicher Track läuft über Szenenwechsel weiter, leiser während Dialogen, „Bandstopp“ (Tonhöhe und Lautstärke sinken) für den Übergang, Ambience-Betten. Musik und Ambience laufen in Menüs weiter.
   - Szenen wählen Musik und Ambience über `GameScene`-Exports.
-- **Konsequenzen:** Rund 7,6 MB WAV im Repo (22,05 kHz Stereo), im Build komprimiert. Die Klangqualität ist Platzhalter-Niveau; Komposition und Aufnahme brauchen später Budget oder Musiker. Neue Tracks: Funktion in `make_music.py` und Eintrag in `AudioDirector.TRACKS`.
+- **Konsequenzen:** Rund 7,6 MB WAV im Repo (22,05 kHz Stereo; seit ADR-046 44,1 kHz, rund 18 MB), im Build komprimiert. Die Klangqualität ist Platzhalter-Niveau; Komposition und Aufnahme brauchen später Budget oder Musiker. Neue Tracks: Funktion in `make_music.py` und Eintrag in `AudioDirector.TRACKS`.
 
 ## ADR-024 · UI-Bogen: Elysia-Skin mit HUD, Real-Skin fast leer
 - **Status:** angenommen · 2026-10-03
@@ -394,3 +395,58 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - **Nasen:** Die Einzelpixel-Nase wirkte von vorn wie ein Fleck, im Profil wie ein umrandetes Kästchen. Die Figuren haben keine Nase mehr; Augen und Wangen tragen das Gesicht (`make_character.py`).
   - **Größere Karten** wünscht sich der Projektinhaber für das ganze Spiel; das gehört zur Kartenpipeline der Full Production (`OFFENE_PUNKTE.md`).
 
+## ADR-046 · Polish-Runde: Gefühl, Bedienung, Erzählung, Technik, Bild und Ton
+- **Status:** angenommen · 2026-10-11 (Auftrag des Projektinhabers: „allumfassende Optimierungen, Verbesserungen, Korrekturen, Test in jeglichen wichtigen Aspekten und verbessere vor allem Spielgefühl und Design“)
+- **Kontext:** Fünf Prüfungen des Slice (Spielgefühl, Bedienung, Erzählung, Technik, Bild und Ton) ergaben rund 110 Funde. Umgesetzt wurde alles mit hoher und mittlerer Priorität und die meisten kleinen Punkte; keine neuen Systeme, keine neuen Orte.
+- **Entscheidung:**
+  - **Spielgefühl:**
+    - Die Blickrichtung hält eine Diagonale 0,08 s nach dem Loslassen; ein Stick an der Grenze zweier Richtungen flackert nicht mehr.
+    - Scharfe Kurven nutzen das Wendetempo.
+    - Schritte kommen aus dem Gehzyklus (Animation 10 statt 8, Laufen 14 statt 12 Bilder pro Sekunde); der Zyklus beginnt beim Richtungswechsel nicht neu.
+    - Interagieren wird 0,12 s gepuffert und dreht die Figur zum Ziel; das gewählte Ziel haftet, damit der Hinweis nicht springt.
+    - Hinsetzen und Aufstehen gleiten in 0,12 s; Türen behalten die Blickrichtung.
+    - NPCs gehen mit ihrer Geschwindigkeit im Takt.
+  - **Dialoge:**
+    - Eine Sperre von 0,3 s nach dem Erscheinen der Antworten verhindert eine Antwort aus Versehen.
+    - Der Text atmet an Satzzeichen.
+    - Gedrückt halten blättert schnell, hält aber an Antworten; Zurück blättert ebenfalls weiter.
+    - Die Box blendet aus; ein zweiter Dialog wartet, statt verloren zu gehen.
+  - **Bedienung:**
+    - Rückfragen mit vorausgewählter sicherer Antwort: Neues Spiel über einem Autosave, Beenden mit ungespeichertem Fortschritt (sonst wird vorher gespeichert), Einstellungen zurücksetzen, Spielstand überschreiben.
+    - Laden und Menüwechsel blenden.
+    - Das Journal scrollt; Hinweise nennen die Tasten des benutzten Geräts.
+    - Neu: „Steuerung anzeigen“ und „Geräusche als Text“ (Bible §50).
+    - Das Pause-Menü öffnet auch im Gespräch; Namensschild und Hinweise der Wirklichkeit sind lesbar.
+  - **Erzählung (ADR-015, Nachtrag 10.10.):**
+    - Der Antreiber ist nicht mehr zufällig lösbar.
+    - Spiegel vor Brunnen; Elysias Wiederholungen erst nach Truhe und Schmetterlingen.
+    - Die Trittsteine erklären sich beim Ansehen und nach dem Sturz.
+    - Das Ende folgt direkt auf »Zum Meer.«.
+    - Mira widerspricht beim Fisch; neue Stellen zum Ansehen in Tal und Elysia.
+  - **Bild:**
+    - Das Haus füllt den Bildschirm (Kamera ruht auf dem Raum); das Feuer leuchtet aus dem Kamin statt den Raum zu fluten.
+    - Der Abendhimmel hat weichen Sonnenschein; Strahlen fallen nur über der Wiese.
+    - Figuren haben echte Schritte und eigene Silhouetten.
+    - Schilf, Zaun, Trittsteine und Weltenbaum sind überarbeitet; die Streu wächst in Gruppen.
+  - **Ton:**
+    - Limiter auf Master; Überblendungen in Amplitude statt in dB.
+    - Die Lautheit zwischen den Orten ist angeglichen.
+    - Musik in 44,1 kHz; die Tal-Musik pausiert zwischen den Runden.
+    - Schritte mit Ferse und Ballen je Untergrund; Lautstärkeregler mit quadratischer Kurve.
+  - **Technik:**
+    - Zwischensequenzen sperren unter eigenem Schlüssel.
+    - Laden gilt ganz oder gar nicht; jede Blende hat ihr eigenes Signal.
+    - Spielregeln messen Spielzeit, nie die Wanduhr.
+    - Jeder Testlauf hat sein eigenes Profil.
+    - `check.sh` spielt den ganzen Slice per Autopilot (rund 10 Sekunden).
+- **Konsequenzen:**
+  - Version 0.6.0.
+  - Regeln für neue Arbeit:
+    - Zeitfenster im Spiel laufen über `delta` oder `NodeTimer`, nicht über `Time.get_ticks_*` (schnelle Läufe mit `--fixed-fps` hätten sonst eine andere Spielzeit).
+    - Jede neue Rückfrage fokussiert die sichere Antwort.
+    - Klänge mit Erzählwert bekommen einen Eintrag in `AudioDirector.CAPTIONS`.
+    - Ändert sich ein Menüablauf, muss `slice_full.json` mit; `check.sh` meldet es.
+  - Die Klänge sind nur gemessen, nicht angehört (KNOWN_ISSUES #29, #34, #46).
+  - Offen beim Projektinhaber:
+    - die Endkarte („Ende des Prototyps. Danke fürs Spielen.“) gegenüber der Bible (§56: „Schwarz. Titel.“);
+    - ungleich breite Pixel durch den Zoom 1,25× (ADR-045), sichtbar bei genauem Hinsehen.

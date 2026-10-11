@@ -24,7 +24,10 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
   (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
 - In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
-- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`.
+- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`. Zeitfenster
+  im Spiel zählen Spielzeit (`delta`), nie die Wanduhr (`Time.get_ticks_*`): Autopilot-Läufe sind schneller.
+- Rückfragen über `ConfirmMenu` (sichere Antwort vorausgewählt); Klänge mit Erzählwert brauchen einen Eintrag
+  in `AudioDirector.CAPTIONS` („Geräusche als Text“, ADR-046).
 - Karten sind Textdateien (`content/maps`, ADR-013); Platzhalter-Assets erzeugt `tools/placeholders`.
 - Look-Grafik ist prozedural (ADR-017, `docs/ART_DIRECTION.md`): `tools/art/make_sprites.py`, dann
   `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`.
@@ -41,7 +44,8 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne
-  Doppelpunkt. Durchlauf ohne Hand: `--autopilot=res://tools/autopilot/slice_full.json`.
+  Doppelpunkt. Durchlauf ohne Hand: `--autopilot=res://tools/autopilot/slice_full.json`; `check.sh` spielt ihn
+  bis zum Ende, also bei geänderten Menüabläufen das Skript mitziehen. Testläufe nutzen je Prozess ein eigenes Profil.
 
 ## Konventionen
 - Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs.

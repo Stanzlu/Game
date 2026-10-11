@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 10.10. · Build v0.5.1 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 11.10. · Build v0.6.0 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -9,6 +9,7 @@ im weiteren Spiel nichts verloren geht.
 - vorläufige ADRs und die Art Direction
 - die Playtests vom 05. und 06.10.
 - eine eigene Prüfung am 07.10.
+- die fünf Prüfungen der Polish-Runde am 10./11.10. (ADR-046)
 
 **Pflege:** Wer einen Punkt löst, streicht ihn hier und setzt den Eintrag in `KNOWN_ISSUES.md` auf
 „behoben“. Neue Probleme kommen zuerst in `KNOWN_ISSUES.md` und, wenn sie die Planung betreffen, hierher.
@@ -25,9 +26,10 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.5.1“ veröffentlichen; den älteren Entwurf v0.5.0 löschen | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.6.0“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1) löschen | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Endkarte: „Ende des Prototyps. Danke fürs Spielen.“ oder wie in der Bible nur „Schwarz. Titel.“ | ADR-046, Bible §56 | Entscheidung des Projektinhabers; Text in `ui.csv` (`END_OF_SLICE`) |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac mit v0.5.1 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
+| J | Leistung auf dem Mac mit v0.6.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
 
 ## 2. Klärt der Playtest
 
@@ -41,9 +43,10 @@ im weiteren Spiel nichts verloren geht.
 | P | Frösche bei Stille werden nicht erklärt | #50 | so lassen, wenn sie entdeckt werden |
 | P | Berge prozedural, nur in Aufnahmen geprüft | #51 | Farben in `backdrop.gd` |
 | P | Zoom 1,25× überall: genug Überblick? | ADR-045 | `view_zoom` pro Szene |
-| P | Kamera *Weich* wackelt um ±0,5 Spielpixel | #8, ADR-012 | Standard behalten oder *Pixelgenau* |
+| P | Kamera *Weich* wackelt um ±0,5 Spielpixel; *Pixelgenau* steht jetzt still, scrollt aber in ganzen Spielpixeln | #8, ADR-012 | Standard behalten oder *Pixelgenau* |
+| P | Zoom 1,25×: einzelne Spielpixel sind bei genauem Hinsehen ungleich breit | ADR-045, ADR-046 | so lassen, wenn es niemandem auffällt; sonst ganzzahliger Zoom |
 | P | Elysianer-Paar läuft nach dem Ansprechen versetzt | #38 | beide anhalten lassen? |
-| P | Klänge und Musik synthetisch, von Claude nie angehört (Katze, Ziege, Tür, Loop-Wechsel) | #10, #29, #34, #37, #46 | Rückmeldung nach Gehör; sonst neu erzeugen |
+| P | Klänge und Musik synthetisch, von Claude nie angehört (Katze, Ziege, Tür, Loop-Wechsel); Mischung und Lautheit in der Polish-Runde nur gemessen neu eingestellt | #10, #29, #34, #37, #46, ADR-046 | Rückmeldung nach Gehör; sonst neu erzeugen |
 | P | Controller auf echter Hardware, Vollbild, Lautstärken | #11, #28 | Fehlerberichte |
 | P | Große Schrift: feste Breiten außerhalb der Theme-Typen | #40 | Fundstellen beheben |
 | P | Einmaliger Hänger beim ersten Betreten eines Ortes (Shader) | #53 | wenn spürbar: Shader im Ladebildschirm vorwärmen |
@@ -66,7 +69,6 @@ im weiteren Spiel nichts verloren geht.
 | F | Dialogue Manager: ein Zeichen pro Frame, belegte Ressourcen beim Beenden, Schlüssel in Großbuchstaben | #27, #2, #7 | bei jedem Addon-Update prüfen (`DEPENDENCIES.md`) |
 | F | Erster Import eines frischen Checkouts meldet Theme-Fehler | #1 | `check.sh` macht einen Aufwärm-Import; bei Godot-Update prüfen |
 | F | Lineare, scharfe Abtastung kostet im Software-Rendering 25 % | `PERFORMANCE.md` 07.10. | auf Zielhardware messen; notfalls ganzzahligen Zoom erlauben |
-| F | Prototyp-Szenen im Startmenü ersetzen das Autosave | #22 | Prototypen vor einer Veröffentlichung aus dem Menü nehmen |
 | F | Look-Prototypen (`look_tal`, `look_wald`) haben die neue Baumgrenze nicht | ADR-045 | nur Prototypen; bei Bedarf `[meta] treeline` ergänzen |
 | F | Cloud-Sitzungen: keine Tag-Pushes, Asset-Seiten gesperrt | ADR-044, #4 | Releases per manuellem CI-Start; Assets von Hand committen |
 
@@ -88,8 +90,8 @@ Alles ist projekt-eigen erzeugt; Liste aller Dateien in [`PLACEHOLDERS.md`](PLAC
 | Anforderung | Stand | | Offen |
 |---|---|---|---|
 | Skalierbare Textgröße | „Große Schrift“ | P | feste Breiten (#40) |
-| Controller- und Tastatur-Umbelegung | nur per Datei | **F** | Menü zum Umbelegen (#25) |
-| Untertitel | alle Dialoge und Erzählzeilen; „Es klopft.“ als Zeile | **F** | Geräusche ohne Text (Quaken, Riss, Ziege, Katze), #58 |
+| Controller- und Tastatur-Umbelegung | Belegung im Spiel sichtbar („Steuerung anzeigen“), Umbelegen nur per Datei | **F** | Menü zum Umbelegen (#25) |
+| Untertitel | alle Dialoge und Erzählzeilen; „Es klopft.“ als Zeile; „Geräusche als Text“ (Einstellung, #58) | | – |
 | Getrennte Lautstärken | sechs Regler | | – |
 | Dialoggeschwindigkeit, Auto-Advance | ja | | – |
 | Bildschirmwackeln, Blitzeffekte | einstellbar | F | wirkt nur beim Riss; jeder neue Effekt muss fragen (#24) |

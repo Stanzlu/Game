@@ -38,6 +38,9 @@ Tastatur und Controller funktionieren gleichermaßen.
 | Pause-Menü (Speichern, Einstellungen) | Esc oder Tab | Start |
 | Journal | J | Back / Select |
 
+Im Gespräch blättert gedrücktes Bestätigen schnell weiter; an Antworten hält es an. Die ganze Belegung
+zeigt das Spiel unter **Einstellungen → Steuerung anzeigen**.
+
 ## Während du spielst
 
 - **Mitschreiben ist nicht nötig.** Das Spiel notiert im Log, wann du welchen Abschnitt erreichst.
@@ -46,6 +49,7 @@ Tastatur und Controller funktionieren gleichermaßen.
 - **Einstellungen**, die helfen können:
   - Textgeschwindigkeit und „Automatisch weiter“
   - große Schrift
+  - „Geräusche als Text“: wichtige Geräusche erscheinen als Zeile am unteren Rand
   - Bildschirmwackeln und Blitzeffekte reduzieren
   - „Tiefenebenen bewegen sich mit“ (aus, wenn dir Bewegung im Hintergrund unangenehm ist)
   - „Mehr Zeit lassen“ und „Begegnungstempo“ für mehr Geduld
