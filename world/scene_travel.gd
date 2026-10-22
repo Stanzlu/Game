@@ -34,8 +34,9 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 		Log.info(Log.Category.WORLD_STATE, "travel (stay)", {"target": target, "spawn": spawn})
 		return
 	_travelling = true
+	var tree := from.get_tree()
 	# untyped: the pause menu asks is_travelling(), and GameScene preloads the pause menu
-	var scene := from.get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP)
+	var scene := tree.get_first_node_in_group(SaveService.CONTEXT_GROUP)
 	var player: Node = scene.get(&"player") if scene != null else null
 	if player != null:
 		player.call(&"lock", &"travel")
@@ -43,11 +44,12 @@ static func go(from: Node, target: String, spawn := "", sound := "") -> void:
 	if not sound.is_empty():
 		AudioDirector.sfx(sound)
 	Log.info(Log.Category.WORLD_STATE, "travel", {"target": target, "spawn": spawn})
-	ScreenFade.fade_out(FADE_SECONDS)
-	await NodeTimer.after(from, FADE_SECONDS)
+	# Waits on the fade, not on a timer of the door node: a door that is freed meanwhile
+	# (a map reload, a condition flipping) must not leave the player locked in the dark.
+	await ScreenFade.fade_out(FADE_SECONDS)
 	pending_spawn = spawn
 	_travelling = false
-	var error := from.get_tree().change_scene_to_file(SceneRegistry.path(target))
+	var error := tree.change_scene_to_file(SceneRegistry.path(target))
 	if error != OK:
 		# stay where we are rather than in the dark with a locked player
 		Log.error(Log.Category.CONTENT, "travel failed", {"target": target, "error": error})

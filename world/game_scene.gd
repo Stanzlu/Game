@@ -71,12 +71,13 @@ func _ready() -> void:
 		var debug_panel: CanvasLayer = DEBUG_PANEL_SCRIPT.new()
 		debug_panel.name = "DebugPanel"
 		add_child(debug_panel)
+	var fade := SceneTravel.take_fade()
+	var sound_fade := sound_fade_for(fade)
 	if music != "keep":
-		AudioDirector.play_music(music)
-	AudioDirector.set_ambience(ambience, ambience_db)
+		AudioDirector.play_music(music, sound_fade)
+	AudioDirector.set_ambience(ambience, ambience_db, sound_fade)
 	Settings.changed.connect(func(_key: String) -> void: apply_settings())
 	apply_settings()
-	var fade := SceneTravel.take_fade()
 	if ScreenFade.is_covered():
 		ScreenFade.fade_in(fade)
 	var door_spawn: Variant = SceneTravel.take_spawn(map)
@@ -108,6 +109,13 @@ func _build_world() -> void:
 	spawn_player(map.entities, at)
 	player.surface_provider = map.surface_at
 	view.bounds = map.world_rect()
+
+
+## How long music and ambience take to blend for a scene whose picture fades in over
+## `picture_fade` seconds: a door's quick fade is no reason to blend them over two seconds
+## (they trailed the new picture); a fresh start and the rift's slow arrival keep their own.
+static func sound_fade_for(picture_fade: float) -> float:
+	return picture_fade * 2.0 if picture_fade < 1.0 else picture_fade
 
 
 ## The prompt belongs to the scene, not to the player: it is UI and sits on the UI's grid.
