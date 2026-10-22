@@ -62,6 +62,7 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Ein Branch und ein Pull Request pro Phase, kleine thematische Commits.
 - Nach jeder Phase: Ergebnis, Tests, offene Probleme, Entscheidungen, nächster Schritt.
 - Commit-Nachricht mit `[export]` löst in CI Windows-/macOS-Builds aus.
+- CI: GitHub Actions ist abgeschaltet, die CI läuft lokal über `local-ci` (Prüfungen mit `tools/check.sh`, Exports für `main` und `[export]`). Ergebnis nach dem Push: `gh pr checks <Nr>` oder `local-ci status`; sofort prüfen: `local-ci run game <branch|sha>`. `PASS_2.VERSUCH` heißt: erster Versuch rot, zweiter grün (kein sauberes Grün).
 
 ## Cloud-Umgebung
 - Ein SessionStart-Hook installiert Godot 4.7.2 automatisch.
