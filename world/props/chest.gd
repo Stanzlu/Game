@@ -31,7 +31,7 @@ func _on_interacted(_actor: Node) -> void:
 		return
 	_show_open()
 	WorldState.set_flag(flag)
-	AudioDirector.sfx("chest_open")
+	AudioDirector.sfx("chest_open", -2.0)
 	_burst()
 	StateActions.run(actions, "chest:" + flag)
 

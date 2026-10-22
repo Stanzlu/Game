@@ -10,6 +10,9 @@ extends CanvasLayer
 ## In both worlds: the name of a place when entering it (Elysia: a golden banner, Real: a
 ## quiet line) and a small mark in the corner when the game saved.
 
+## Fires when reveal_elysia() has shown the last element.
+signal revealed
+
 ## Seconds before the same sound is written out again.
 const CAPTION_REPEAT := 4.0
 const COIN := preload("res://assets/generated/ui/coin.png")
@@ -25,9 +28,24 @@ const POPUP_GAP := 0.35
 ## column that reaches down over the hero.
 const MAX_POPUPS := 2
 const COINS_PER_GAIN := 7
+## Call-site gains after the loudness normalisation of the effects (tools/audio/check_levels.py).
+## How long a loot card stays, with and without the item's one line of text.
+const LOOT_CARD_SECONDS := 2.6
+const LOOT_CARD_SECONDS_WITH_DESC := 3.4
+const LOOT_DESC_WIDTH := 190.0
+const XP_DB := -6.0
+const LOOT_DB := -2.0
 const COUNT_SECONDS := 1.0
+## No "saved" mark in the first seconds of a game: the arrival save is not news.
+const SAVED_MARK_AFTER := 5.0
 ## Elysia elements in the order they disappear at the rift.
 const VANISH_ORDER: PackedStringArray = ["Quest", "Gold", "Xp", "Level"]
+## ... and in the order they appear when Elysia's hero wakes: the mirror of the rift (Game Bible
+## §34: Elysia rewards everything, loudly), each one popping in on its own.
+const REVEAL_ORDER: PackedStringArray = ["Level", "Xp", "Gold"]
+const REVEAL_POP_SECONDS := 0.35
+const REVEAL_GAP := 0.4
+const REVEAL_SCALE_FROM := 1.3
 
 var elysia_root: Control
 var real_root: Control
@@ -54,7 +72,7 @@ var _time := 0.0
 var _area: Label
 var _caption: Label
 var _caption_tween: Tween
-## Caption key -> seconds (ticks) it was last shown; each sound is written out at most every
+## Caption key -> game time (_time) it was last shown; each sound is written out at most every
 ## CAPTION_REPEAT seconds (frogs croak a lot).
 var _caption_shown: Dictionary[String, float] = {}
 var _area_tween: Tween
@@ -276,10 +294,10 @@ func _build_common() -> void:
 ## A sound written out (setting "Geräusche als Text"), with an arrow to the side it came
 ## from when that side is clear.
 func _on_caption(key: String, at: Variant) -> void:
-	var now := Time.get_ticks_msec() / 1000.0
-	if now - _caption_shown.get(key, -INF) < CAPTION_REPEAT:
+	# game time, like every other window in the game (the wall clock runs on in a pause)
+	if _time - _caption_shown.get(key, -INF) < CAPTION_REPEAT:
 		return
-	_caption_shown[key] = now
+	_caption_shown[key] = _time
 	var text := tr(key)
 	var side := _side_of(at)
 	if side < 0:
@@ -293,6 +311,12 @@ func _on_caption(key: String, at: Variant) -> void:
 	_caption_tween.tween_property(_caption, ^"modulate:a", 1.0, 0.15)
 	_caption_tween.tween_interval(2.4)
 	_caption_tween.tween_property(_caption, ^"modulate:a", 0.0, 0.6)
+
+
+## Writes a sound out whatever the setting says: for the few sounds that carry the story
+## (the rift opening far away, which nobody would otherwise notice).
+func show_caption(key: String, at: Variant = null) -> void:
+	_on_caption(key, at)
 
 
 ## -1 left, 1 right, 0 ahead or unknown.
@@ -317,8 +341,9 @@ static func _readable_over_world(label: Label) -> void:
 
 
 ## The place's name gives way when a conversation starts (it would show through the box).
+## Elysia's golden banner sits at the top, far above the box, and stays for its whole time.
 func hide_area() -> void:
-	if _area.modulate.a <= 0.0:
+	if is_elysia() or _area.modulate.a <= 0.0:
 		return
 	if _area_tween != null and _area_tween.is_valid():
 		_area_tween.kill()
@@ -360,6 +385,11 @@ func show_area(name_key: String) -> void:
 
 
 func _show_saved() -> void:
+	# The mark is for saves the player caused or can place: not the arrival save of a new game
+	# (it would sit under the opening banner) and not one that lands during a cutscene (the
+	# slice's final pan over the mountains).
+	if WorldState.state.playtime_seconds < SAVED_MARK_AFTER or _cutscene_running():
+		return
 	if _saved_tween != null and _saved_tween.is_valid():
 		_saved_tween.kill()
 	_saved.add_theme_color_override(&"font_color", GOLD if is_elysia() else Color(0.7, 0.72, 0.72))
@@ -367,6 +397,13 @@ func _show_saved() -> void:
 	_saved_tween.tween_property(_saved, ^"modulate:a", 1.0, 0.25)
 	_saved_tween.tween_interval(1.2)
 	_saved_tween.tween_property(_saved, ^"modulate:a", 0.0, 0.6)
+
+
+func _cutscene_running() -> bool:
+	for node in get_tree().get_nodes_in_group(&"cutscene"):
+		if node.has_method(&"is_open") and node.call(&"is_open"):
+			return true
+	return false
 
 
 func _full_rect(node_name: String) -> Control:
@@ -397,6 +434,46 @@ func _badge_style() -> StyleBoxFlat:
 	box.content_margin_top = 0
 	box.content_margin_bottom = 1
 	return box
+
+
+# --- Waking up --------------------------------------------------------------------------
+
+
+## Empties Elysia's corner before the hero has woken (reveal_elysia() builds it up). Only the
+## scene that stages the waking calls this; every other Elysia keeps its HUD at once.
+func hold_back() -> void:
+	for element_name in REVEAL_ORDER:
+		var node: Control = _elements[element_name]
+		node.modulate.a = 0.0
+
+
+## Level, XP bar and gold appear one after another, each with a pop, a few sparkles and one
+## chime for all three. Reduced flashing drops the sparkles. Await it or the `revealed` signal.
+func reveal_elysia() -> void:
+	var calm := Settings.get_bool("display.reduce_flashing")
+	for index in REVEAL_ORDER.size():
+		var node: Control = _elements[REVEAL_ORDER[index]]
+		if index > 0:
+			await NodeTimer.after(self, REVEAL_GAP - REVEAL_POP_SECONDS)
+		if index == 0:
+			AudioDirector.ui("confirm")
+		# grows out of its left edge: the corner is anchored there
+		node.pivot_offset = Vector2(0.0, node.size.y * 0.5)
+		node.scale = Vector2.ONE * REVEAL_SCALE_FROM
+		node.modulate.a = 0.0
+		var tween := node.create_tween().set_parallel()
+		tween.tween_property(node, ^"modulate:a", 1.0, REVEAL_POP_SECONDS * 0.4)
+		(
+			tween
+			. tween_property(node, ^"scale", Vector2.ONE, REVEAL_POP_SECONDS)
+			. set_trans(Tween.TRANS_BACK)
+			. set_ease(Tween.EASE_OUT)
+		)
+		if not calm:
+			_sparkle_burst(node.get_global_rect().get_center(), 8)
+		Log.info(Log.Category.UI, "hud element shown", {"element": REVEAL_ORDER[index]})
+		await NodeTimer.after(self, REVEAL_POP_SECONDS)
+	revealed.emit()
 
 
 # --- Rewards ----------------------------------------------------------------------------
@@ -492,7 +569,7 @@ func _float_text(text: String, sound: String, icon: Texture2D = null) -> void:
 	row.add_child(label)
 	_show_popup(row, 1.3, 1.35)
 	if not sound.is_empty():
-		AudioDirector.sfx(sound, -2.0)
+		AudioDirector.sfx(sound, XP_DB)
 
 
 func _level_up(level: int) -> void:
@@ -514,7 +591,7 @@ func _level_up(level: int) -> void:
 			_sparkle_burst(center, 28)
 	)
 	_screen_flash()
-	AudioDirector.sfx("level_up")
+	AudioDirector.sfx("level_up", -2.0)
 
 
 func _loot_card(def: ItemDef, amount: int) -> void:
@@ -565,10 +642,21 @@ func _loot_card(def: ItemDef, amount: int) -> void:
 		shimmer.set_shader_parameter(&"bottom_color", color)
 		shimmer.set_shader_parameter(&"height", 20.0)
 		rarity.material = shimmer
-	_show_popup(card, 2.6, 1.3)
+	var seconds := LOOT_CARD_SECONDS
+	var description := tr(def.desc_key())
+	if description != def.desc_key():
+		# the one line the items were written for (their jokes live here), read in passing
+		var desc := Label.new()
+		desc.theme_type_variation = &"MutedLabel"
+		desc.text = description
+		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc.custom_minimum_size.x = LOOT_DESC_WIDTH
+		rows.add_child(desc)
+		seconds = LOOT_CARD_SECONDS_WITH_DESC
+	_show_popup(card, seconds, 1.3)
 	if def.rarity >= ItemDef.Rarity.EPIC:
 		_after_layout(card, func(center: Vector2) -> void: _sparkle_burst(center, 20))
-	AudioDirector.sfx(def.loot_sound())
+	AudioDirector.sfx(def.loot_sound(), LOOT_DB)
 
 
 ## A Label in Jersey 15 with the gold gradient shader and a dark outline.
@@ -685,7 +773,7 @@ func _fly_coins(count: int) -> void:
 
 
 func _coin_arrived() -> void:
-	AudioDirector.sfx("coin", -6.0)
+	AudioDirector.sfx("coin", -10.0)
 	_gold_icon.scale = Vector2(1.6, 1.6)
 	var tween := _gold_icon.create_tween()
 	tween.tween_property(_gold_icon, ^"scale", Vector2.ONE, 0.15)
@@ -709,7 +797,7 @@ func _quiet_line(def: ItemDef) -> void:
 	_quiet_tween.tween_property(_quiet_row, ^"modulate:a", 1.0, 0.6)
 	_quiet_tween.tween_interval(2.0)
 	_quiet_tween.tween_property(_quiet_row, ^"modulate:a", 0.0, 1.2)
-	AudioDirector.sfx("pickup_real", -4.0, 1.05)
+	AudioDirector.sfx("pickup_real", 0.0, 1.05)
 
 
 # --- Rift -------------------------------------------------------------------------------
@@ -737,7 +825,7 @@ func vanish_next(calm := false) -> bool:
 			tween.tween_property(node, ^"position", home, 0.0)
 			tween.tween_property(node, ^"modulate:a", 0.0, 0.12)
 		tween.tween_callback(node.hide)
-		AudioDirector.sfx("glitch", -4.0)
+		AudioDirector.sfx("glitch", 0.0)
 		Log.info(Log.Category.UI, "hud element gone", {"element": element_name})
 		return true
 	return false

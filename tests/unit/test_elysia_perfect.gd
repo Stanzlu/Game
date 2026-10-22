@@ -3,6 +3,7 @@ extends GutTest
 
 const ELYSIA_MAP := "res://content/maps/look_elysia.txt"
 const ELYSIA_SCENE := preload("res://world/levels/look_elysia.tscn")
+const SLICE_ELYSIA := preload("res://world/levels/slice/elysia.tscn")
 
 
 func test_elysia_map_is_mirror_symmetric_apart_from_its_flaws() -> void:
@@ -87,3 +88,46 @@ func test_elysia_life_repeats_exactly() -> void:
 	life._update_flocks(0.0)
 	assert_eq(life._birds.size() - first, 5, "always the same five birds")
 	assert_almost_eq(life._flock_timer, life._flock_interval, 0.001, "on an exact beat")
+
+
+func test_the_waking_builds_the_hud_up_in_order() -> void:
+	WorldState.new_game()
+	var scene: ElysiaScene = SLICE_ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var hud := scene.hud
+	for element_name in Hud.REVEAL_ORDER:
+		assert_eq(hud._elements[element_name].modulate.a, 0.0, "%s waits" % element_name)
+	assert_eq(scene.player.state, Player.State.SIT, "the hero wakes sitting")
+	var greeter := scene._greeter()
+	assert_not_null(greeter, "the one who greets stands beside the spawn")
+	assert_eq(greeter.facing, Facing.Dir.S, "looking off into the garden until the hero is up")
+	var seen: PackedStringArray = []
+	var waited := 0
+	while seen.size() < Hud.REVEAL_ORDER.size():
+		for element_name in Hud.REVEAL_ORDER:
+			if not element_name in seen and hud._elements[element_name].modulate.a > 0.0:
+				seen.append(element_name)
+		await wait_physics_frames(1)
+		# Local count: the engine's global frame number is already large late in a full suite run.
+		waited += 1
+		if waited > 2000:
+			break
+	assert_eq(seen, Hud.REVEAL_ORDER, "level, then XP, then gold")
+	await wait_for_signal(hud.revealed, 3.0)
+	for element_name in Hud.REVEAL_ORDER:
+		assert_eq(hud._elements[element_name].modulate.a, 1.0, "%s is there" % element_name)
+	assert_ne(scene.player.state, Player.State.SIT, "the hero is up before the first line")
+	await wait_physics_frames(2)
+	assert_eq(greeter.facing, Facing.Dir.W, "the greeter looks at the hero")
+
+
+func test_a_loaded_game_keeps_its_hud_at_once() -> void:
+	WorldState.new_game()
+	WorldState.set_flag("elysia.woke")
+	var scene: ElysiaScene = SLICE_ELYSIA.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	for element_name in Hud.REVEAL_ORDER:
+		assert_eq(scene.hud._elements[element_name].modulate.a, 1.0)
+	assert_eq(get_tree().get_nodes_in_group(&"cutscene").size(), 0, "no waking twice")

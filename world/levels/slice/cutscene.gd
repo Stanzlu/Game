@@ -10,6 +10,9 @@ extends Node
 var scene: GameScene
 ## The lock and save-block reason of this cutscene alone: ending one never lifts another's.
 var key := &""
+## True while a say() dialogue is open: the pause menu may open then (a conversation can be
+## paused, timed phases such as the walk to a door cannot; MenuLayer.can_pause asks).
+var in_dialogue := false
 var _running := false
 
 
@@ -34,7 +37,9 @@ func _start() -> void:
 
 ## Shows a dialogue cue and returns when it closed.
 func say(path: String, cue: String) -> void:
+	in_dialogue = true
 	await Talk.present(self, path, cue, null)
+	in_dialogue = false
 
 
 func wait(seconds: float) -> Signal:
