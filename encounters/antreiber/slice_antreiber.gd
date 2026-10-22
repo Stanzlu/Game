@@ -79,7 +79,13 @@ func _after_resolved() -> void:
 	_actors.add_child(_wood)
 	_wood.global_position = Vector2(player.global_position.x + 20, PATH_Y + 6)
 	_wood.call(
-		&"apply_params", {"item": "item_dry_wood", "flag": WOOD_FLAG, "sprite": "tal/wood_bundle"}
+		&"apply_params",
+		{
+			"item": "item_dry_wood",
+			"flag": WOOD_FLAG,
+			"sprite": "tal/wood_bundle",
+			"sound": "wood_drop"
+		}
 	)
 
 

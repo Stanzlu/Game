@@ -6,7 +6,8 @@ extends StaticBody2D
 ## Glowing parts (emissive layer, halos, light beams) are drawn unshaded in place: correct
 ## depth sorting, and a night tint (CanvasModulate) or lights do not dim them.
 ## With params "cue" (and optional "dialogue", "prompt", "radius") it can be looked at:
-## interacting shows that dialogue cue (descriptions, small discoveries). With "sit":
+## interacting shows that dialogue cue (descriptions, small discoveries); an optional "sound"
+## (a SoundBank prefix) is heard from the prop first (the cat), once per look. With "sit":
 ## {"face": "n|e|s|w", "offset": [x, y]} one can sit down on it (the rug by the fire).
 ## "lift": pixels draws the sprite higher than its cell while it still sorts by that cell
 ## (the cat asleep on the Antreiber's lap, in front of him).
@@ -264,7 +265,14 @@ func _add_inspect(params: Dictionary) -> void:
 	var path := str(params.get("dialogue", Talk.DEFAULT_DIALOGUE))
 	var cue := str(params["cue"])
 	set_meta(&"cue", cue)
-	area.interacted.connect(func(actor: Node) -> void: Talk.present(self, path, cue, actor))
+	var sound := str(params.get("sound", ""))
+	area.interacted.connect(
+		func(actor: Node) -> void:
+			if not sound.is_empty():
+				# on the parent: a prop that changes with the story is freed under its sound
+				SoundBank.play_at(get_parent(), sound, global_position)
+			Talk.present(self, path, cue, actor)
+	)
 
 
 func _add_light(spec: Dictionary) -> void:
