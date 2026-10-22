@@ -33,14 +33,32 @@ Die Builds sind nicht signiert, deshalb warnt das Betriebssystem beim ersten Sta
 - macOS: REAL.app öffnen; wenn macOS blockiert: Systemeinstellungen > Datenschutz & Sicherheit >
   "Dennoch öffnen".
 
+Lizenzen: Die Schriften (Tiny5, Jersey 10, Jersey 15) stehen unter der SIL Open Font License 1.1,
+der Dialogue Manager und GUT unter der MIT-Lizenz. Die Lizenztexte liegen im Ordner "Lizenzen".
+
 Anleitung und Fragen: https://github.com/${GITHUB_REPOSITORY:-Stanzlu/Game}/blob/${tag}/docs/PLAYTEST.md
 TXT
 
+# Licence texts travel with every build (the fonts' OFL asks for it); flat names, one folder.
+licenses="$out/Lizenzen"
+mkdir -p "$licenses"
+for font in assets/fonts/*/; do
+  cp "${font}OFL.txt" "$licenses/OFL-$(basename "$font").txt"
+done
+cp addons/dialogue_manager/LICENSE "$licenses/MIT-DialogueManager.txt"
+cp addons/gut/LICENSE.md "$licenses/MIT-GUT.txt"
+
+add_licenses() {
+  # add_licenses <archive>: puts the Lizenzen folder into a zip (paths are relative to $out)
+  (cd "$out" && zip -q -r "$(basename "$1")" Lizenzen)
+}
+
 pack() {
-  # pack <archive> <files...>: flat zip with the readme next to the game
+  # pack <archive> <files...>: flat zip with the readme next to the game, plus the licences
   local archive="$1"
   shift
   zip -q -j "$archive" "$@" "$readme"
+  add_licenses "$archive"
 }
 
 assets=()
@@ -51,6 +69,7 @@ fi
 if [ -f build/macos/REAL.zip ]; then
   # the macOS export is already a zip with REAL.app; keep it intact (signature, permissions)
   cp build/macos/REAL.zip "$out/REAL-${tag}-macos.zip"
+  add_licenses "$out/REAL-${tag}-macos.zip"
   assets+=("$out/REAL-${tag}-macos.zip")
 fi
 if [ -f build/linux/REAL.x86_64 ]; then
