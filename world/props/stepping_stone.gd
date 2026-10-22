@@ -5,8 +5,13 @@ extends Node2D
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
 const SPLASH := preload("res://assets/generated/props/fx/splash.png")
-## Feet must be this close to the stone's middle before it tips (forgiving at the edges).
-const TIP_RADIUS := Vector2(6, 5)
+## The tipping zone is a thin slice at the painted stone's feet line, not the stone's cell.
+## The player's foot collider (10x5 at (0, -2)) reaches 4.5 px above and 0.5 px below the
+## feet, so with this slice the stone tips when the soles are 5 px above or 4 px below its
+## middle: the same distance either side of the picture's centre (-7 to +6), from every
+## direction. The old 12x10 cell tipped 10 px earlier from below than from above.
+const TIP_ZONE := Vector2(12, 4)
+const TIP_ZONE_CENTER := Vector2(0, -2.5)
 const TIP_SECONDS := 0.18
 
 ## One fall at a time, even when the feet touch two round stones at once.
@@ -27,11 +32,11 @@ func apply_params(params: Dictionary) -> void:
 	_sprite.centered = false
 	_sprite.texture = PropCatalog.texture_for(entry, global_position)
 	var anchor: Array = entry.get("anchor", [0, 0])
-	# no two stones sit the same: a small offset per stone (up to 3 px across, 2 px along the
-	# stream) breaks the grid of the field; only the picture moves, the stone's cell and its
-	# tipping zone stay where the map puts them
+	# no two stones sit the same: a small offset per stone (up to 3 px across, 1 px along the
+	# stream, so the picture stays inside the tipping zone) breaks the grid of the field; only
+	# the picture moves, the stone's cell and its tipping zone stay where the map puts them
 	var jitter := Vector2i(
-		posmod(hash(global_position), 7) - 3, posmod(hash(global_position * 1.7), 5) - 2
+		posmod(hash(global_position), 7) - 3, posmod(hash(global_position * 1.7), 3) - 1
 	)
 	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1])) + Vector2(jitter)
 	_sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -49,8 +54,9 @@ func _add_zone() -> void:
 	_zone.monitorable = false
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = TIP_RADIUS * 2.0
+	rect.size = TIP_ZONE
 	shape.shape = rect
+	shape.position = TIP_ZONE_CENTER
 	_zone.add_child(shape)
 	add_child(_zone)
 	_zone.body_entered.connect(_on_body_entered)
@@ -62,7 +68,7 @@ func _on_body_entered(body: Node2D) -> void:
 	_falling = true
 	var player := body as Player
 	var heading := player.velocity
-	AudioDirector.sfx("stone_wobble", 4.0)
+	AudioDirector.sfx("stone_wobble", 0.0)
 	var rock := create_tween()
 	rock.tween_property(_sprite, ^"rotation", 0.22, TIP_SECONDS * 0.5)
 	rock.tween_property(_sprite, ^"rotation", -0.12, TIP_SECONDS * 0.5)
