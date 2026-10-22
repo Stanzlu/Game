@@ -197,6 +197,8 @@ func _apply_title_mode() -> void:
 		_subtitle.add_theme_color_override(&"font_color", Color(0.96, 0.93, 0.87))
 		_subtitle.add_theme_color_override(&"font_outline_color", Color(0.16, 0.12, 0.13))
 		_subtitle.add_theme_constant_override(&"outline_size", 4)
+		# a quiet line, also with large letters: it must not push the menu out of the picture
+		_subtitle.add_theme_font_size_override(&"font_size", 19)
 		_subtitle.position = Vector2(36.0, 90.0)
 		_subtitle.size = Vector2(400.0, 24.0)
 		AudioDirector.play_music("valley", 3.0)
@@ -302,7 +304,11 @@ func _layout() -> void:
 			roundf((SCREEN.x - _menu_panel.size.x) * 0.5), minf(ELYSIA_MENU_Y, room)
 		)
 	else:
-		_menu_panel.position = Vector2(REAL_MENU_AT.x, minf(REAL_MENU_AT.y, room))
+		# below the line under the logo if there is one, but never into the footer
+		var below_logo := _subtitle.position.y + _subtitle.size.y if _subtitle.text != "" else 0.0
+		var y := maxf(minf(REAL_MENU_AT.y, room), below_logo)
+		y = minf(y, _footer.position.y - _menu_panel.size.y - 4.0)
+		_menu_panel.position = Vector2(REAL_MENU_AT.x, y)
 
 
 func _layout_soon() -> void:

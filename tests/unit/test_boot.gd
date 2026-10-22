@@ -247,3 +247,15 @@ func test_leaving_the_start_menu_at_once_is_clean() -> void:
 	boot.queue_free()
 	await wait_physics_frames(4)
 	assert_false(is_instance_valid(boot))
+
+
+func test_the_real_menu_sits_between_the_closing_line_and_the_footer() -> void:
+	BootScript._forced_title = TitleBackground.Mode.REAL
+	_write_autosave(true)
+	var boot := await _boot()
+	Settings.override("text.large", true)
+	await wait_physics_frames(6)
+	var panel: Control = boot._menu_panel
+	var subtitle: Control = boot._subtitle
+	assert_gte(panel.position.y, subtitle.position.y + subtitle.size.y - 0.5, "below the line")
+	assert_lte(panel.position.y + panel.size.y, boot._footer.position.y, "above the footer")
