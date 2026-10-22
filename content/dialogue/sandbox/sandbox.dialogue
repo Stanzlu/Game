@@ -23,3 +23,8 @@ Garten. Das Tor reagiert auf Hebelwirkung. [#ph] [ID:sandbox_sign_garden_1]
 if not WorldState.has_flag("sandbox.garden_gate_open")
 	do WorldState.start_quest("side_sandbox_gate")
 => END
+
+# Text effects (BBCode) must survive the dialogue box and its themes: tests/unit/test_dialogue_effects.gd
+~ sign_effects
+Elysianer: Ein [wave amp=14 freq=5]Held![/wave] Und [rainbow freq=0.6 sat=0.5]strahlend[/rainbow]. [#ph] [ID:sandbox_sign_effects_1]
+=> END

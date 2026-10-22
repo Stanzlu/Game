@@ -13,7 +13,7 @@ QUEST_MAIN_ELYSIA_HERO_TITLE,Der Held von Elysia
 QUEST_MAIN_ELYSIA_HERO_GREET,"Elysia ist erwacht, und mit ihm sein größter Held! Die Gärtnerin braucht dich. Natürlich braucht sie dich."
 QUEST_MAIN_ELYSIA_HERO_BUTTERFLIES,"Die Gärtnerin hat dir eine Aufgabe anvertraut, die nur du lösen kannst."
 QUEST_MAIN_ELYSIA_HERO_REWARD,"Ganz Elysia spricht von deiner Tat! Am Weltenbaum wartet deine Belohnung."
-QUEST_MAIN_ELYSIA_HERO_CELEBRATED,"Du bist der gefeiertste Held, den Elysia je hatte. Du bist der einzige, aber trotzdem."
+QUEST_MAIN_ELYSIA_HERO_CELEBRATED,"Du bist der gefeiertste Held, den Elysia je hatte."
 QUEST_SIDE_ELYSIA_BUTTERFLIES_TITLE,Die goldenen Schmetterlinge
 QUEST_SIDE_ELYSIA_BUTTERFLIES_CATCH,"Drei goldene Schmetterlinge sind der Gärtnerin entwischt. Sie fliegen ihre Runden über dem Garten."
 QUEST_SIDE_ELYSIA_BUTTERFLIES_OBJ_FIRST,Der erste Schmetterling
@@ -28,7 +28,7 @@ QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräu
 QUEST_MAIN_VALLEY_SHELTER_FIRE,"Ich hab trockenes Holz. Jetzt zurück zum Haus, zum Kamin."
 QUEST_MAIN_VALLEY_SHELTER_DONE,"Das Feuer brennt. Es ist nicht viel. Aber es ist warm."
 QUEST_SIDE_VALLEY_GOAT_TITLE,Der Stiefel
-QUEST_SIDE_VALLEY_GOAT_FIND,"Eine Ziege hat Miras Stiefel. Mira will morgen weiter, mit zwei Stiefeln."
+QUEST_SIDE_VALLEY_GOAT_FIND,"Eine Ziege hat Miras Stiefel. Sie rennt keiner Ziege hinterher. Ich anscheinend schon."
 QUEST_SIDE_VALLEY_GOAT_OBJ_GOAT,Die Ziege finden
 QUEST_SIDE_VALLEY_GOAT_OBJ_POTATO,Etwas finden, das eine Ziege mehr will als einen Stiefel
 QUEST_SIDE_VALLEY_GOAT_TRADE,"Die Ziege will etwas für den Stiefel. Was sie will, weiß nur sie."
@@ -52,6 +52,9 @@ MEMORY_MIRA_SILENT_YES,"Sie kam mit Fisch. Ich habe nichts gesagt, sie hat es al
 MEMORY_MIRA_SAID_ELSEWHERE,"Sie wollte wissen, wo ich herkomme. Von woanders. Woanders ist groß."
 MEMORY_MIRA_SAID_ELYSIA,"Sie wollte wissen, wo ich herkomme. Aus Elysia. Klingt für sie nach einem Ort ohne Regen."
 MEMORY_MIRA_SAID_DONT_KNOW,"Sie wollte wissen, wo ich herkomme. Ich weiß es nicht genau. Sie kennt das."
+MEMORY_MIRA_SAID_NAME,"Sie hat nach meinem Namen gefragt. Ich hab ihn gesagt. Sie hat Hm gesagt."
+MEMORY_MIRA_SAID_TITLE,"Sie hat nach meinem Namen gefragt. Held von Elysia, hab ich gesagt. Kein Name, sagt sie, ein Beruf."
+MEMORY_MIRA_KEPT_NAME,"Sie hat nach meinem Namen gefragt. Ich hab ihn für mich behalten."
 MEMORY_MIRA_PRAISED_FISH,"Ich habe gesagt, das sei der beste Fisch, den ich je gegessen habe. Sie hat widersprochen: zu lang im Feuer. Aber gut."
 MEMORY_MIRA_AGREED_FISH,"Sie meinte, der Fisch sei gut. Ich habe Ja gesagt. Sie hat Eben gesagt."
 MEMORY_MIRA_ATE_QUIETLY,"Wir haben Fisch gegessen und nichts gesagt. Der Regen hat aufs Dach getrommelt."

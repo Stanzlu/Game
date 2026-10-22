@@ -71,6 +71,96 @@ func test_mira_dialogue_follows_relationship_and_memories() -> void:
 	assert_eq(line.static_id, "mira_door_again_1", "remembers the first answer")
 
 
+## Plays `cue` of a slice dialogue; `picks` are the answer texts to choose where a choice
+## comes up (the first answer otherwise). Returns the spoken lines as "Speaker: text".
+func _walk(path: String, cue: String, picks: Array[String] = []) -> Array[String]:
+	var res: DialogueResource = load(path)
+	var seen: Array[String] = []
+	var line := await _next(res, cue)
+	while line != null:
+		seen.append("%s: %s" % [line.character, line.text])
+		if line.responses.is_empty():
+			line = await _next(res, line.next_id)
+			continue
+		var pick: DialogueResponse = line.responses[0]
+		for response: DialogueResponse in line.responses:
+			if response.text in picks:
+				pick = response
+		line = await _next(res, pick.next_id)
+	return seen
+
+
+func test_mira_asks_for_the_name_in_the_house_and_says_it_by_the_fire() -> void:
+	WorldState.set_player_name("Aren")
+	var seen := await _walk("res://content/dialogue/slice/haus.dialogue", "mira_visit", ["Aren."])
+	assert_true("Mira: Und du? Wie heißt du?" in seen)
+	assert_true("Mira: Aren. Hm." in seen, "she repeats the name she was given")
+	assert_true(WorldState.has_memory("mira", "said_name"))
+	assert_string_contains(Journal.person_text("mira"), "Sie hat nach meinem Namen gefragt")
+	var evening := await _walk("res://content/dialogue/slice/tal.dialogue", "ending")
+	assert_true("Mira: Aren." in evening, "the first time the name is said in the real world")
+	assert_true(
+		evening.find("Mira: Aren.") < evening.find("Mira: Morgen gehe ich weiter."),
+		"before she says she is leaving"
+	)
+
+
+func test_a_title_is_not_a_name_and_silence_keeps_it() -> void:
+	var res := "res://content/dialogue/slice/haus.dialogue"
+	var title := await _walk(res, "mira_visit", ["Der Held von Elysia."])
+	assert_true("Mira: Das ist kein Name. Das ist ein Beruf." in title)
+	assert_true(WorldState.has_memory("mira", "said_title"))
+	WorldState.new_game()
+	var silent := await _walk(res, "mira_visit", ["…"])
+	assert_true("Mira: Dann eben nicht. Ich ruf einfach rüber." in silent)
+	assert_true(WorldState.has_memory("mira", "kept_name"))
+	var evening := await _walk("res://content/dialogue/slice/tal.dialogue", "ending")
+	assert_false("Mira: Held." in evening, "without a name she has none to say")
+
+
+func test_whoever_said_the_hero_line_is_not_offered_it_twice() -> void:
+	WorldState.add_memory("mira", "said_hero")
+	var res: DialogueResource = load("res://content/dialogue/slice/haus.dialogue")
+	var line := await _next(res, "mira_visit")
+	var asked_name := false
+	while line != null:
+		if line.static_id == "haus_mira_35":
+			asked_name = true
+			var texts: Array[String] = []
+			for response: DialogueResponse in line.responses:
+				if response.is_allowed:
+					texts.append(response.text)
+			assert_false("Der Held von Elysia." in texts)
+			assert_eq(texts.size(), 2)
+		line = await _next(
+			res, line.responses[0].next_id if line.responses.size() > 0 else line.next_id
+		)
+	assert_true(asked_name)
+
+
+func test_the_evening_remembers_waiting_and_the_tree() -> void:
+	var tal := "res://content/dialogue/slice/tal.dialogue"
+	WorldState.add_memory("mira", "wanted_to_wait")
+	var waited := await _walk(tal, "evening_first")
+	assert_true(
+		"Mira: Der Regen hat aufgehört. Ist aber nicht Donnerstag. Du warst schneller." in waited
+	)
+	WorldState.new_game()
+	WorldState.add_memory("mira", "chose_tree")
+	var tree := await _walk(tal, "evening_first")
+	assert_true("Mira: Oben über den Baum, und trotzdem nass. Halbwegs hab ich gesagt." in tree)
+	WorldState.new_game()
+	assert_eq((await _walk(tal, "evening_first")).size(), 0, "nobody remembers nothing")
+
+
+func test_the_first_meeting_keeps_her_name_back() -> void:
+	var seen := await _walk("res://content/dialogue/slice/tal.dialogue", "mira_first")
+	var introduced := seen.find("Mira: Mira, übrigens. Falls du noch mal rüberrufen musst.")
+	assert_gt(introduced, 0)
+	for line: String in seen.slice(0, introduced):
+		assert_false(line.begins_with("Mira"), "named too early: %s" % line)
+
+
 func test_saving_waits_for_the_dialogue_to_end() -> void:
 	var scene := await _scene()
 	var box := scene.dialogue_box

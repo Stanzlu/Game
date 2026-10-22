@@ -91,7 +91,9 @@ O = {"ground": ".", "prop": "res://world/props/goat.tscn", "params": {"if": "val
 o = {"ground": "d", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "valley.potato_taken", "sprite": "tal/potato", "if": "valley.goat_met"}}
 ; nach dem Regen zeigt die Pfütze am Lager dich selbst; der Antreiber sitzt am Weg (ADR-042)
 e = {"ground": "p", "prop": "res://world/props/decor.tscn", "params": {"cue": "puddle", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 12, "if": "house.mira_visited"}}
-t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_west", "sit": true, "face": "w", "if": "valley.antreiber_rests", "unless": "house.antreiber_by_fire"}}
+t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_west", "sit": true, "face": "w", "if": "valley.antreiber_rests", "unless": ["house.antreiber_by_fire", "house.antreiber_left"]}}
+; hat er das Haus verlassen, steht er stattdessen am Holzstapel (6) und beschäftigt sich mit Dingen, die schon erledigt sind
+6 = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_busy", "face": "e", "if": "house.antreiber_left"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhh^^^hhhhhhhhhh
@@ -106,7 +108,7 @@ hh...C...........G...................C...~~~...........T..1......hhh
 hh.................E.............E......~~~........P.............hhh
 hh..........+dddd..E.............E.....~~~~...g..........,.......hhh
 hh......R...ddddd..E......H......E.....~~~.....g........,,.......hhh
-hh.......R..ddo....E.K....D...WK.E..R~~~~~..............,....T...hhh
+hh.......R..ddo....E.K....D..6WK.E..R~~~~~..............,....T...hhh
 hh.................E..b...2...O..E.R~~~~~~.............,,.a......hhh
 hh.................E......,......E...~~~~~.............,.........hhh
 hhh................FFIFFF,,.FFFBFF.....~~~............,,..gg.....hhh

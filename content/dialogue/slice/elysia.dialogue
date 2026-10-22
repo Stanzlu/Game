@@ -2,29 +2,33 @@
 # Elysians are likeable first (Master-Prompt §57): the unease comes only from repetition.
 
 ~ wake
-Elysianer: Da bist du ja! {{WorldState.player_name()}}! [ID:el_wake_1]
-Elysianer: Alle freuen sich so, dass du da bist. Wir freuen uns eigentlich immer. Aber heute ganz besonders. [ID:el_wake_2]
+Licht. Warm, von überall. Du hast die Augen gerade erst aufgemacht, und schon ist jemand da. [ID:el_wake_0]
+Elysianer: Da bist du ja, {{WorldState.player_name()}}! [ID:el_wake_1]
+Elysianer: Alle freuen sich so, dass du wach bist. Der ganze Garten hat auf dich gewartet. [ID:el_wake_2]
 - Wo bin ich? [ID:el_wake_r1]
 	Elysianer: In Elysia natürlich! Dem schönsten Ort der Welt. [ID:el_wake_3]
-	Elysianer: Und dem einzigen. Da ist das mit dem Schönsten nicht so schwer. [ID:el_wake_4]
 - Hallo. [ID:el_wake_r2]
 	Elysianer: Hallo! Was für ein Hallo. So warm. So entschlossen. [ID:el_wake_5]
 - … [ID:el_wake_r3]
 	Elysianer: Ganz der Held. Wortkarg und geheimnisvoll. Wir lieben das. [ID:el_wake_6]
-Elysianer: Die Gärtnerin sucht dich, drüben bei den Blumen. Sie hat ein Problem, und du bist die Lösung. Du bist immer die Lösung. [ID:el_wake_7]
+Elysianer: Die Gärtnerin sucht dich, drüben bei den Blumen. Sie hat ein Problem, und ich glaube, du kannst ihr helfen. Du kannst das. [ID:el_wake_7]
+Elysianer: Und wenn's eilig ist, hilft {{InputDevice.label_for("sprint")}}. Helden rennen. [ID:el_wake_8]
 do WorldState.start_quest("main_elysia_hero")
 do WorldState.set_flag("elysia.woke")
 => END
 
 ~ elysian
-if WorldState.has_flag("elysia.loops")
+if WorldState.has_flag("elysia.loops") and WorldState.has_flag("elysia.rift_open")
+	# They all say the same thing, every time: what flickers in the corner is "nothing important".
+	Elysianer: Ganz unten rechts, am Rand, da flimmert seit vorhin was. Nichts Wichtiges. Bleib lieber hier bei uns. [ID:el_loop_2]
+elif WorldState.has_flag("elysia.loops")
 	Elysianer: {{WorldState.player_name()}}! Schön, dich zu sehen. Wirklich schön. [ID:el_loop_1]
 else
 	% Elysianer: {{WorldState.player_name()}}! Schön, dich zu sehen. Wirklich schön. [ID:el_praise_1]
 	% Elysianer: Hast du schon gehört? Du bist toll. Das sagen alle. Ich auch. [ID:el_praise_2]
 	% Elysianer: Wie du da stehst. Wie ein Denkmal. Eins, das man gern besucht. [ID:el_praise_3]
 	% Elysianer: Ich hab vorhin gesehen, wie du um die Ecke gegangen bist. Sehr elegant. [ID:el_praise_4]
-	% Elysianer: Ein Held! Hier! Bei uns! Und ich steh einfach so daneben. [ID:el_praise_5]
+	% Elysianer: Ein [wave amp=14 freq=5]Held![/wave] Hier! Bei uns! Und ich steh einfach so daneben. [ID:el_praise_5]
 	% [if WorldState.is_quest_done("side_elysia_fountain") /] Elysianer: Der Brunnen! Du hast ihn gerichtet, ohne hinzugehen! Das kannst nur du. [ID:el_praise_6]
 	do WorldState.add_xp(150)
 => END
@@ -34,9 +38,9 @@ if WorldState.is_quest_done("side_elysia_butterflies")
 	Gärtnerin: {{WorldState.player_name()}}! Meine drei goldenen Schmetterlinge sind ent… [ID:el_gard_done_1]
 	Gärtnerin: Ach nein. Du hast sie ja gefangen. Natürlich hast du das. Du fängst immer alles. [ID:el_gard_done_2]
 elif WorldState.quest_stage("side_elysia_butterflies") == "return"
-	Gärtnerin: Alle drei! In Rekordzeit! Ganz egal, wie lange es gedauert hat! [ID:el_gard_ret_1]
+	Gärtnerin: Alle drei! Und so schnell! [ID:el_gard_ret_1]
 	Gärtnerin: Hörst du, wie zufrieden sie flattern? Sie fliegen wieder ihre Runden. Genau dieselben wie vorher. [ID:el_gard_ret_2]
-	Gärtnerin: Hier. Das ist für dich. Ein Kompliment. Ein echtes. Legendär sogar. [ID:el_gard_ret_3]
+	Gärtnerin: Hier. Das ist für dich. Ein Kompliment. Ein echtes. [rainbow freq=0.6 sat=0.5]Legendär[/rainbow] sogar. [ID:el_gard_ret_3]
 	do WorldState.add_item("item_compliment")
 	do WorldState.add_xp(2000)
 	do WorldState.add_gold(500)
@@ -153,4 +157,32 @@ else
 	Das Kind schaut ins Wasser. Aus dem Wasser schaut ein Kind zurück. [ID:el_child_1]
 	Kind: … [ID:el_child_2]
 	do WorldState.set_flag("elysia.child_met")
+=> END
+
+# Things to look at (Game Bible §57: Elysia must be attractive first). Spoken in Elysia's own
+# voice; the tree and the water repeat the way everything here does once the loops begin.
+~ stone
+Ein Stein. Grau. Das Einzige hier, das nicht glänzt. [ID:el_stone_1]
+=> END
+
+~ sacred_tree
+if WorldState.has_flag("elysia.loops")
+	Der Weltenbaum. Dieselbe Blüte wie vorhin. Dieselbe wie immer. [ID:el_tree_2]
+else
+	Der Weltenbaum. Nicht ein Blatt liegt darunter. Er blüht, seit es ihn gibt. [ID:el_tree_1]
+=> END
+
+~ pillar
+Eine Säule, makellos. Drüben steht genau dieselbe. [ID:el_pillar_1]
+=> END
+
+~ crystal
+Ein Kristall. Er leuchtet, wenn du näher kommst. Für dich. [ID:el_crystal_1]
+if not WorldState.has_flag("elysia.crystal_touched")
+	do WorldState.add_xp(150)
+	do WorldState.set_flag("elysia.crystal_touched")
+=> END
+
+~ splash
+Das Wasser fällt und fällt. Unten wird es nicht mehr. [ID:el_splash_1]
 => END
