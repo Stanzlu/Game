@@ -13,14 +13,14 @@ Nutzen, kann die Engine es selbst, Pflege, Lizenz, Lock-in, Performance, Build-K
 | Tiny5 | Stand google/fonts, 2026-10-02 | github.com/google/fonts (`ofl/tiny5`) | OFL 1.1 | kleine Beschriftungen | `assets/fonts/tiny5/` |
 | Jersey 10 | Stand google/fonts, 2026-10-04 (SHA-256 `db9cbd09…`) | github.com/google/fonts (`ofl/jersey10`, Soft Type) | OFL 1.1, ohne reservierten Namen | Hauptschrift, 19 px (ADR-026) | `assets/fonts/jersey10/` |
 | Jersey 15 | Stand google/fonts, 2026-10-04 (SHA-256 `dbe00479…`) | github.com/google/fonts (`ofl/jersey15`, Soft Type) | OFL 1.1, ohne reservierten Namen | Titel und Belohnungen, 27 px (ADR-026) | `assets/fonts/jersey15/` |
-| numpy | 2.4.6 | PyPI | BSD-3-Clause | Rechnen in den Grafik- und Audio-Generatoren (ADR-017), nur Entwicklung | `requirements-art.txt` |
+| numpy | 2.4.6 | PyPI | BSD-3-Clause | Rechnen in den Grafik- und Audio-Generatoren (ADR-017) und im Pegel-Check `tools/audio/check_levels.py` (Schritt „audio levels“ in `tools/check.sh`, ADR-047); nur Entwicklung, für `check.sh` optional | `requirements-art.txt` |
 | Pillow | 12.3.0 | PyPI | MIT-CMU (HPND) | PNG lesen und schreiben in den Generatoren (ADR-017), nur Entwicklung | `requirements-art.txt` |
 
 ## Hinweise
 - Addons sind **unverändert** übernommen. Anpassungen passieren über Projekteinstellungen oder eigene Wrapper, nicht im Addon-Code.
 - Dialogue Manager bringt C#-Varianten mit (`*.cs`, `DialogueLabel.tscn`, `ExampleBalloon.tscn`, `SmallExampleBalloon.tscn`). Sie werden in `export_presets.cfg` ausgeschlossen. Wir nutzen die GDScript-Varianten.
 - Update-Ablauf: Tag klonen, `addons/<name>/` ersetzen, `tools/check.sh`, Tabelle aktualisieren, eigener Commit.
-- numpy und Pillow: Prüfung nach Abschnitt 35. Godot kann prozedurale Grafik zur Laufzeit erzeugen, aber nicht als reproduzierbare, eingecheckte Dateien mit Vorschau; reines Python wäre für Rauschen und Weichzeichnen zu langsam. Beide sind weit verbreitet, gepflegt, permissiv lizenziert, laufen nur auf Entwicklerrechnern und landen nicht im Build. Kein Lock-in: die Ausgabe sind normale PNG- und WAV-Dateien.
+- numpy und Pillow: Prüfung nach Abschnitt 35. Godot kann prozedurale Grafik zur Laufzeit erzeugen, aber nicht als reproduzierbare, eingecheckte Dateien mit Vorschau; reines Python wäre für Rauschen und Weichzeichnen zu langsam. Beide sind weit verbreitet, gepflegt, permissiv lizenziert, laufen nur auf Entwicklerrechnern und landen nicht im Build. Kein Lock-in: die Ausgabe sind normale PNG- und WAV-Dateien. Seit ADR-047 benutzt auch `tools/check.sh` numpy (Pegel-Check): optional, fehlt es, meldet der Schritt „SKIPPED“ und läuft weiter. Der CI-Workflow installiert nur `requirements-dev.txt`, dort fällt der Schritt also aus (KNOWN_ISSUES #66). Keine neue Abhängigkeit: der Check nutzt nur numpy und die Standardbibliothek.
 - CI nutzt GitHub Actions `checkout@v7`, `setup-python@v7`, `cache@v6`, `upload-artifact@v7`.
 - Jersey 10/15: Prüfung nach Abschnitt 35. Pixelschriften mit ganzzahliger Pixelgröße (18,7 bzw. 27 px pro Geviert), deutsche Zeichen vollständig, OFL ohne reservierten Schriftnamen, nur als Schriftdatei im Build. Verglichen mit Pixelify Sans, Silkscreen, Micro 5, VT323, Press Start 2P und Jacquard (Fraktur bewusst nicht, wegen ihrer Wirkung im Deutschen).
 

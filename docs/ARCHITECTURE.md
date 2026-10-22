@@ -28,12 +28,13 @@ docs/        Dokumentation                                         ✅
 |------|-------|---------|--------|
 | `Log` | `core/log.gd` | strukturiertes Logging mit Kategorien und Levels; `--log-debug` in Release-Builds | ✅ |
 | `DialogueManager` | `addons/dialogue_manager/dialogue_manager.gd` | Dialog-Runtime | ✅ (Addon) |
-| `InputDevice` | `core/input_device.gd` | letztes Eingabegerät, Beschriftung von Actions | ✅ |
-| `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit, Eingabe-Overrides | ✅ |
+| `InputDevice` | `core/input_device.gd` | letztes Eingabegerät, Beschriftung von Actions (`labels_for_kind`: alle Belegungen), Hotplug (letztes Pad weg: zurück auf Tasten) | ✅ |
+| `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit, Eingabe-Overrides; Schreiben gesammelt je Frame (`request_save`, `flush`) | ✅ |
 | `WorldState` | `core/world_state.gd` | typisierter Spielzustand (`GameState`), einzige Schreibstelle (ADR-019) | ✅ |
 | `SaveSystem` | `core/save_system.gd` | JSON-Saves, Slots, Autosave, Sperren, Laden (ADR-021) | ✅ |
-| `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking, Bandstopp, Ambience (ADR-023); Menü-, Spiel- und Stimmklänge `ui()`, `sfx()`, `voice()` (ADR-027) | ✅ |
-| `ScreenFade` | `core/screen_fade.gd` | schwarze Abdeckung über Szenenwechsel (ADR-025) | ✅ |
+| `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking (Dialog: Musik −7 dB, Soundscape und Bett −3 dB; Belohnungen: Musik −3 dB für 1,2 s), Rasten der Tal-Musik (`TRACK_REST`), Bandstopp, Ambience (ADR-023); Menü-, Spiel- und Stimmklänge `ui()`, `sfx()`, `voice()` (ADR-027) | ✅ |
+| `ScreenFade` | `core/screen_fade.gd` | schwarze (oder farbige) Abdeckung über Szenenwechsel (ADR-025); `is_fading_in()`: Menüs dürfen während der Aufblende öffnen | ✅ |
+| `AppGuard` | `core/app_guard.gd` | Fenster schließen schreibt Autosave und Einstellungen, Fokusverlust öffnet das Pause-Menü oder hält den Baum an; Headless und Autopilot ignorieren den Fokus (ADR-047) | ✅ |
 
 ## Spielszenen
 
@@ -42,13 +43,16 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 ├─ GameView                              Welt im SubViewport, Kamera Weich/Pixelgenau (ADR-012), Zoom (ADR-045)
 │  ├─ WorldViewport/World                MapView (Karte, Props), Player, FX, NPCs
 │  └─ WorldDisplay                       Sprite, um Bruchteile verschoben
+├─ PromptLayer (CanvasLayer 11)          Interaktions-Hinweis (GameScene.prompt), unter dem HUD
 ├─ Hud (CanvasLayer 12)                  Elysia: Level, XP, Gold, Quest, Popups · Real: leise Zeile
 ├─ DialogueBox (CanvasLayer 20)          Gruppe "dialogue_presenter", sperrt Speichern, Musik leiser
-├─ Journal (MenuLayer 42)                J / Back
+├─ Journal (MenuLayer 42)                J / Back; Quests, Menschen, Dinge
 ├─ InfoOverlay (CanvasLayer 30)          F3
 ├─ PauseMenu (MenuLayer 40)              Esc / Start
 │  ├─ SettingsMenu (50)
-│  └─ SaveMenu (50)                      Speichern / Laden
+│  ├─ SaveMenu (50)                      Speichern / Laden (Slot-Karten)
+│  ├─ ControlsMenu (55)                  Steuerung anzeigen (ScrollPage)
+│  └─ ConfirmLeave                       Rückfrage beim Verlassen ohne Speichern
 └─ DebugPanel (MenuLayer 60)             F4, nur Debug-Builds
 ```
 
@@ -59,9 +63,23 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   Real minimal. Szenen wählen Musik und Ambience über Exports (`music`, `ambience`, ADR-023).
 - Menüs erben von `MenuLayer` (`ui/menus/menu_layer.gd`) und nutzen `OptionList`: Hoch/Runter mit
   Umbruch, Links/Rechts ändert Werte, Bestätigen mit Enter, Leertaste, E oder A, Zurück mit Esc oder B.
-  Sie laufen auch bei pausiertem Baum.
-- Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia),
-  Laden, Prototypen (jede startet einen neuen Spielzustand), Einstellungen. `--start=<schlüssel>` und
+  Sie laufen auch bei pausiertem Baum. Listen scrollen nie seitwärts (`MenuLayer.keep_upright`), der
+  Scrollbalken ist 3 UI-Pixel breit. Textseiten (`ControlsMenu`, `CreditsMenu`) erben von `ScrollPage`
+  (`ui/menus/scroll_page.gd`): der Fokus zieht die Seite nicht nach unten, Hoch/Runter und der rechte Stick
+  blättern. Gefüllte Slots sind zweizeilige Karten (`OptionList.add_card`, `SaveMenu.card_title` und
+  `card_subtitle`), Lautstärkeregler stoppen an den Enden (`add_choice(..., clamped)`) und spielen auf
+  Wunsch einen Probeklang (`preview`).
+- Das Pause-Menü (`MenuLayer.can_pause`) öffnet auch im Gespräch, in Zwischensequenzen nur, solange
+  `Cutscene.in_dialogue` wahr ist (`Cutscene.say()` setzt es; zeitgesteuerte Phasen bleiben gesperrt), und
+  schon während einer Aufblende, nicht in Türblenden. Es hat acht Zeilen: Weiter, Journal, Speichern, Laden,
+  Einstellungen, Steuerung anzeigen, Zum Startmenü, Spiel beenden. „Bewegungsgefühl“ und „Richtungen“
+  stehen in den Einstellungen nur in Debug-Builds (Gruppe „Entwicklung“).
+- Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia; nach
+  dem Ende ohne Rückfrage), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
+  der Leistungstest), Einstellungen, Mitwirkende (`CreditsMenu`, im Elysia-Titel „Die Helden hinter dem
+  Helden“), Beenden. Die Fußzeile trägt den Tastenhinweis des benutzten Geräts und die Version. Unter dem
+  Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald ein lesbarer Stand das Ende trägt
+  (`SaveSystem.slice_finished()`). `--start=<schlüssel>` und
   `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
   `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
 
@@ -77,6 +95,18 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
 - Szenen-Skripte reagieren nur auf `WorldState` (Flags, Quests, Haus) und inszenieren: `Cutscene`
   (sperrt Spieler und Speichern, zeigt Cues nacheinander), Licht, Musik, Rückfälle gegen Festhängen.
   `Beat.mark(id)` loggt die Spielminute jedes Beats.
+- Erwachen (`ElysiaScene._wake`): weißes Licht (`ScreenFade.fade_out(0.0, WAKE_LIGHT)`, 0,4 s Halt, 2,6 s
+  Aufblende), die Figur sitzt (`Player.sit_on`) und steht auf, die Begrüßerin (Cue `favor`) dreht sich zu
+  ihr, `Hud.hold_back()` und `Hud.reveal_elysia()` bauen Level, XP und Gold nacheinander auf. Geladene
+  Stände (`elysia.woke`) überspringen es.
+- Ende (`TalScene._play_ending`): Cue `ending`, Kamera-Schwenk zu den Bergen (`MOUNTAIN_PAN_SECONDS` 4,0 s),
+  Halt (2,5 s), Cue `ending_sea`, Halt (2,5 s), Flag `slice.finished` und Speichern, Abblende (2,5 s),
+  `TitleCard.play(self, "")` (nur das Logo, ohne Zeile; Bible §56), zurück ins Startmenü.
+- `Cutscene.in_dialogue` ist der Vertrag mit `MenuLayer.can_pause`. `GuestWalker`
+  (`world/levels/slice/guest_walker.gd`) ist ein Besucher, den ein Szenen-Skript von Hand führt (`appear`,
+  `walk_to`, `sit_down`, `stand_up`, `vanish`): Miras Auftritt im Haus. `Fireplace` zündet in zwei Takten
+  (`IGNITE_DELAY`, Aufflackern, Glut). `Decor` und `Pickup` nehmen das Karten-Param `"sound"` (SoundBank-
+  Präfix, hörbar am Requisit), `NpcWalker` zusätzlich `"work_face"`.
 - Karten: Requisiten mit `"if"`/`"unless"` erscheinen live (MapView); wer einen eigenen Abgang hat
   (`leave()`: das Kind verblasst, der Schmetterling blitzt auf), spielt ihn zu Ende. Was sich selbst
   entfernt hat (eingesammelt, gefangen), bleibt weg. `"sprite_when"` baut das Requisit mit dem neuen
@@ -98,8 +128,13 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   nach dem Schuppen (`TalScene`, `HausScene`). `AmbientLife`: Frösche kommen, wenn die Spielfigur
   still steht. `NameEntry` ist wiederverwendbar (`title_key`, `suggestions`) und benennt die Katze
   (`WorldState.cat_name`). Das Journal zeigt in der Wirklichkeit keine Häkchen und unter „Menschen“
-  die Erinnerungen als Sätze (`MEMORY_<FIGUR>_<ID>`). Dialoge nutzen `=><` (Teilgespräch mit
-  Rückkehr) und Antworten mit `[if … /]`, die nur erscheinen, wenn man das Erzählte erlebt hat.
+  die Erinnerungen als Sätze (`MEMORY_<FIGUR>_<ID>`); `Journal.entry_parts` liefert Absätze
+  (`text`, `open`, `done`; in Elysia ein Juwel vor offenen Zielen, `JournalMark`), `thing_parts` die Seite
+  eines Gegenstands unter „Dinge“. Dialoge nutzen `=><` (Teilgespräch mit
+  Rückkehr) und Antworten mit `[if … /]`, die nur erscheinen, wenn man das Erzählte erlebt hat (trifft die
+  Bedingung nicht zu, fehlt die Antwort in der Liste: jede Gruppe braucht eine unbedingte Antwort). Die
+  `DialogueBox` meldet `opened`, `finished` und `syllable(character)`; `NpcWalker`, `ChildGuide` und
+  `AntreiberActor` wippen damit beim Sprechen.
 - Autopilot: `"meet": "<cue>"` stellt die Figur neben die NPC mit diesem Cue, wo immer sie gerade ist.
 - Der Riss gibt das Ziel samt Spawn weiter (`RiftSequence.spawn`), die Ankunft blendet langsam auf.
 - Durchlauf ohne Hand: `tools/autopilot/slice_full.json` (Hauptmenü bis Titelkarte); Teilstrecken
@@ -148,10 +183,10 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 ## Darstellung
 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
-der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen haben `view_zoom` (Vorgabe 1,25, ADR-045): Der
+der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen haben `view_zoom` (Vorgabe 1,25, ADR-045; das Haus 1,5 als Ausnahme für Innenräume): Der
 Welt-Viewport schrumpft auf `view_size` = 640×360 / Zoom, das Anzeige-Sprite wächst um den Zoom, und
 bei nicht ganzzahligem Zoom tastet `sharp_display.gdshader` bzw. `grade.gdshader` scharf ab
-(`sharp_sample.gdshaderinc`). Welt nach UI rechnet `GameView.world_to_ui` um. Theme in
+(`sharp_sample.gdshaderinc`). Welt nach UI rechnet `GameView.world_to_ui` um (zieht den Bruchteil der weichen Kamera ab, `camera_remainder`); der Interaktions-Hinweis nutzt es in einer eigenen CanvasLayer. Theme in
 `ui/theme/base_theme.tres` (ADR-026): Grundschrift Jersey 10 in 19 px, `TitleLabel`/`SubtitleLabel` in
 Jersey 15 (27 px), `SmallLabel`/`HintLabel`/`PromptText` in Tiny5 (8 px), dazu `MutedLabel`,
 `MenuEntry`, `MenuCursor`, `DialogueNamePlate`, `PromptPanel`/`PromptKey`, `TitleMenuPanel`.
@@ -204,6 +239,7 @@ Nur Actions (ADR-011). Belegungen in `project.godot`, Tests in `tests/unit/test_
 | `sprint` | Shift | X / Viereck, rechter Trigger |
 | `menu` | Esc, Tab | Start |
 | `journal` | J | Back / Select |
+| `scroll_up/scroll_down` | Bild auf / Bild ab | rechter Stick (vertikal) |
 | `debug_overlay` | F3 | – (nur Dev-Builds) |
 | `debug_panel` | F4 | – (nur Debug-Builds) |
 
@@ -221,10 +257,22 @@ der Riss ein Brummen. Effekte aus `assets/generated/sfx/` (`tools/audio/make_sfx
 über je sechs Spieler pro Bus: `ui()` wählt das Klangset nach UI-Modus, `voice()` die Stimme aus
 `content/dialogue/voices.json`.
 
+Die Mischung wird gemessen, nicht gehört (ADR-047): Effekte sind nach Lautheit je Gruppe normiert
+(`tools/audio/loudness.py`, K-gewichtet, Gruppenziele in `make_sfx.GROUPS` und `make_slice_sfx.GROUPS`).
+`tools/audio/check_levels.py` prüft Dateien, Schritte (`FootstepPlayer.SURFACE_DB`), Orte
+(`content/audio/*.tres` bei ihrem Ambience-Pegel) und Klangklassen über dem Bett und vergleicht die
+Aufrufgains in den Skripten mit seiner Tabelle `CLASSES` (Abweichungen meldet er als „note:“); er läuft als
+Schritt „audio levels“ in `tools/check.sh`. `tools/audio/measure.sh` nimmt das Spiel mit Ton auf (Xvfb,
+Movie-Writer) und gibt die Lautheit je Sekunde aus (`timeline.py`; `bed_probe.gd` spielt die sechs
+Soundscapes nacheinander). Headless-Läufe rücken das Audio nicht vor: Musikpausen und Loop-Wechsel zeigt
+nur eine Aufnahme. Positionsklänge (`SoundBank.play_at`) tragen 360 px; auf Karten mit `[meta] style =
+"tal"` setzt `MapView` Bach-Emitter aus der Wassermaske. Schritte anderer Figuren erzeugt `NpcSteps`
+(`entities/character/npc_steps.gd`, 6 dB unter dem Spieler, Elysianer stumm).
+
 ## Übergang und Licht (ADR-025)
 
 - `RiftSequence` (`world/fx/rift_sequence.gd`) inszeniert den ersten Übertritt; der Riss
-  (`world/props/rift.tscn`) startet sie. Danach UI-Modus REAL, Inventar Stein und Samen, Tal.
+  (`world/props/rift.tscn`) startet sie (Schritt zum Riss, Anschwellen, Einfrieren des Weltbilds bei jedem Verlust eines HUD-Teils). Danach UI-Modus REAL, Inventar Stein und Samen, Tal.
 - `DayLight` (`world/fx/day_light.gd`) in `LookScene` (`day_preset`): Regentag, Abend, Nacht.
   Die Bank im Tal (`pass_time`) und das Debug-Panel schalten weiter.
 - Elysia-Objekte: Truhe (`chest.tscn`), Aufheben (`pickup.tscn`), Lob mit XP über Dialog-Mutationen.
@@ -241,13 +289,19 @@ Tal und Wald je 12 s mit Bewegung ab und misst Frame-Zeiten (`FrameStats`). Beri
 
 ## Build und Prüfung
 
-- `tools/check.sh`: gdlint, gdformat, Import, Headless-Smoke-Runs (Menü, jede Szene, `--continue`), GUT.
-  Automatische Läufe nutzen eigene Profile (`--profile=smoke`), nie die Spielstände des Spielers.
+- `tools/check.sh`: gdlint, gdformat, Pegel-Check (`audio levels`, braucht numpy, sonst „SKIPPED“), Import,
+  Headless-Smoke-Runs (Menü, jede Szene, `--continue`, Leistungstest), der ganze Slice per Autopilot, GUT.
+  Automatische Läufe nutzen eigene Profile (`--profile=smoke`), nie die Spielstände des Spielers; das
+  letzte `--profile` gewinnt.
 - `tools/export.sh windows|macos|linux`: Export mit Build-Stempel (Commit, Datum).
 - `tools/smoke_export.sh`: startet den exportierten Linux-Build, prüft Boot, Stempel, jede Szene,
   vorhandene Quests und Items sowie das Laden eines Spielstands.
 - `tools/capture.sh`: rendert Frames per Xvfb + OpenGL3 zur Sichtprüfung; Startargumente werden durchgereicht.
+  Jede Aufnahme bekommt ein Profil `capture_<pid>`, das danach gelöscht wird.
 - `tools/autopilot/`: zeitgesteuerte Eingaben für Aufnahmen (nur Debug-Builds).
 - `tools/placeholders/make_placeholders.py`: erzeugt die Grey-Box-Assets (ADR-014).
 - `tools/audio/make_music.py`, `tools/art/make_ui.py`: Musik-Loops, UI-Rahmen, Truhe, Stein, Riss.
+- `tools/audio/check_levels.py`, `loudness.py`, `timeline.py`, `measure.sh`, `bed_probe.gd`: Lautheit messen
+  und prüfen (siehe Audio).
+- `tools/release.sh` legt Lizenztexte (Ordner `Lizenzen`) in jedes Zip.
 - CI: `.github/workflows/ci.yml` (ADR-009).

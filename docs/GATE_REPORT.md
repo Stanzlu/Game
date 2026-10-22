@@ -1,6 +1,6 @@
 # Phase 5: Playtest-Gate
 
-Stand 11.10. · Build **v0.6.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046.
+Stand 22.10. · Build **v0.7.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046, ADR-047.
 
 Der Vertical Slice ist technisch fertig. Ab hier gilt: **STOP.** Kein Inhalt über den Slice hinaus,
 bis Playtest-Ergebnisse vorliegen (Bible §57, Master-Prompt §47). Dieses Dokument bündelt alles, was
@@ -8,7 +8,7 @@ das Gate braucht.
 
 | Gate-Artefakt (Master-Prompt §47) | Wo |
 |---|---|
-| Build | GitHub-Release „Playtest v0.6.0“ (Entwurf, siehe unten; ersetzt v0.5.0 und v0.5.1) |
+| Build | GitHub-Release „Playtest v0.7.0“ (Entwurf, siehe unten; ersetzt v0.5.0, v0.5.1 und v0.6.0) |
 | Testanleitung | [`PLAYTEST.md`](PLAYTEST.md) für alle Tester; Detailfragen für dich in [`PLAYTEST_PHASE4.md`](PLAYTEST_PHASE4.md) |
 | Bekannte Probleme | [`KNOWN_ISSUES.md`](KNOWN_ISSUES.md), Auszug unten |
 | Playtest-Fragen | [`PLAYTEST.md`](PLAYTEST.md), Abschnitt „Danach: Fragen“ (§48 und Gates) |
@@ -19,8 +19,8 @@ das Gate braucht.
 
 ## Build und Ablauf
 
-1. **Build:** Ein manueller CI-Lauf auf `main` mit „Release“ (oder ein Tag `v0.6.0`) lässt CI
-   Windows, macOS und Linux bauen und einen **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt`.
+1. **Build:** Ein manueller CI-Lauf auf `main` mit „Release“ (oder ein Tag `v0.7.0`) lässt CI
+   Windows, macOS und Linux bauen und einen **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt` und dem Ordner `Lizenzen`.
    Ein Entwurf ist nur für dich sichtbar. Du prüfst ihn und veröffentlichst ihn mit einem Klick.
    Erst dann kann jeder mit dem Link herunterladen; das Repository ist öffentlich.
 2. **Tester:** du und **mindestens vier Menschen**, die das Projekt nicht kennen, am besten gemischt
@@ -46,9 +46,9 @@ Projekt nicht kennen; die eigene Runde des Projektinhabers wird getrennt notiert
 | **Movement:** gern unterwegs | M | 8, Technik | das Laufen positiv oder neutral beschreibt und die Steuerung nicht als Hindernis nennt | Beschleunigung, Rennen, Ecken-Ausweichen, weiche Kamera, Schritte je Untergrund |
 | **Elysia:** zunächst attraktiv | Ä | 1, 10 | die ersten Minuten in Elysia als angenehm oder verlockend beschreibt, bevor es kippte | Belohnungen, Level-ups, Lob, Gold, Musik, Symmetrie |
 | **Mystery:** etwas stimmt nicht, unerklärt | M | 2, 6, 12 | einen konkreten Auslöser vor dem Riss nennt und es nicht als „erklärt“ empfand | Wiederholungen, kein Spiegelbild, Stein ohne Zwilling, das Kind |
-| **Mira:** mehr über sie wissen | M | 4, 5, 14 | sie als eigene Person beschreibt und eine Vermutung hat, was sie will | eigenes Nein, eigene Ziele, Abendgespräch mit Erinnerungen |
+| **Mira:** mehr über sie wissen | M | 4, 5, 14 | sie als eigene Person beschreibt und eine Vermutung hat, was sie will | eigenes Nein, eigene Ziele, Namensfrage im Haus, Abendgespräch mit Erinnerungen |
 | **Transition:** substanzieller Wechsel | M/Ä | 3, 10 | den Verlust der Anzeigen als Gefühl beschreibt (nicht nur „ist weg“) | UI zerfällt einzeln, Stille, Regen, Dunst und Berge (ADR-043) |
-| **Encounter:** Optimierung ist nicht alles | M | 7 | „stehen bleiben“ (oder Ähnliches) als Lösung nennt und sie verständlich fand | Weg wächst beim Rennen, Hinweise (Bänke, Frösche, Stocken) |
+| **Encounter:** Optimierung ist nicht alles | M | 7 | „stehen bleiben“ (oder Ähnliches) als Lösung nennt und sie verständlich fand | Weg wächst beim Rennen, Hinweise (Bänke, Frösche, Stocken, die Musik endet beim Lösen) |
 | **Emotion:** ein Moment bleibt | M/Ä | 10 | spontan einen bestimmten Moment nennt | Feuer, Abend an Miras Feuer, Blick zu den Bergen, Katze |
 | **Humor:** ein wiederkehrendes Element trägt | M | 9 | etwas Lustiges nennt; das Gate ist erfüllt, wenn mindestens ein Element von zwei oder mehr Testern genannt wird | Elysias Übertreibung, Ziege, Kartoffel, „Ein Kompliment, legendär“ |
 | **Desire:** „Ich möchte wissen, wie es weitergeht“ | M | 14, 15 | freiwillig weiterspielen würde und einen Grund aus der Geschichte oder Welt nennt (nicht nur „sieht gut aus“) | der ganze Bogen, offenes Ende „Zum Meer.“ |
@@ -86,22 +86,22 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 |---|---|---|---|
 | Platzhalter-Grafik und -Ton verfälschen die Ä-Gates | hoch | hoch | Gate-Klassen M/Ä; Tester-Briefing in `PLAYTEST.md`; Art-Pass erst nach Validierung |
 | Slice kürzer als 45 Minuten | mittel | mittel | Zeit pro Abschnitt aus dem Log; gezielt vertiefen (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“) |
-| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel, Hinweis in `PLAYTEST.md`; Messung mit v0.6.0 offen |
+| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel, Hinweis in `PLAYTEST.md`; Messung mit v0.7.0 offen |
 | Einmalige Hänger beim ersten Laden einer Szene (Shader-Kompilierung) | hoch beim ersten Start | gering | danach im Shader-Cache; bei Bedarf Vorwärmen im Ladebildschirm (KNOWN_ISSUES #53) |
 | Unsignierte Builds schrecken Tester ab | mittel | gering | Schritt-für-Schritt-Anleitung; Signierung erst nach Budgetentscheidung (KNOWN_ISSUES #5) |
 | Texte sind Entwürfe (Ton, Humor, Miras Stimme) | mittel | hoch | Playtest-Fragen; Writing-Pass nach dem Gate (KNOWN_ISSUES #47) |
 | Windows-Build nie auf echter Hardware gestartet | mittel | hoch | Linux-Build startet in CI; Windows im Playtest bestätigen (KNOWN_ISSUES #6) |
 | Controller auf echter Hardware ungetestet | mittel | gering | Tastatur geht immer; Rückmeldung im Playtest (KNOWN_ISSUES #11) |
 | Prozedurale Pipeline (Textkarten, gebackene Böden, generierte Sprites) skaliert nicht auf 7 Regionen | hoch für Full Production | hoch | nach dem Gate entscheiden: Karten-Editor (Tiled/LDtk, ADR-004) und handgemalte Assets |
-| Abhängigkeit von Godot 4.7.2 und Dialogue Manager 4.1.0 | gering | mittel | Version gepinnt, dünne Adapter, 290 automatische Tests; Updates nur bewusst |
+| Abhängigkeit von Godot 4.7.2 und Dialogue Manager 4.1.0 | gering | mittel | Version gepinnt, dünne Adapter, 493 automatische Tests; Updates nur bewusst |
 | Spielstände über Versionen hinweg | gering | mittel | `schema_version` und Migrationen (ADR-021, `SAVE_FORMAT.md`); Playtest-Stände müssen nicht in Full Production überleben |
 | Kostenfallen (CI-Minuten, Artefakt-Speicher, Signierung, Assets) | gering | mittel | öffentliches Repository, Releases statt Artefakte, 0-€-Regel |
 
 ## Performance-Bericht
 
-| Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Stand v0.6.0 |
+| Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Letzter Stand (Messungen bis v0.6.0) |
 |---|---|---|
-| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.6.0 neu messen (Startmenü → Leistungstest) |
+| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.7.0 neu messen (Startmenü → Leistungstest) |
 | Frame-Zeit CPU | 95 % unter 16,6 ms | headless rund 7 ms pro Frame, langsamste 8–10 ms |
 | Container (Software-Rendering, kein Maßstab) | – | 38–48 fps in allen Szenen, 11–186 Draw Calls |
 | Erster Start einer Szene | ohne spürbaren Hänger | einmalig bis 255 ms (Shader-Kompilierung, Software-Rendering), danach max. 37–44 ms |
@@ -119,7 +119,7 @@ Die Berge zeichnen nur neu, wenn sie zu sehen sind.
 
 ## Platzhalter
 
-Alle 479 Asset-Dateien sind projekt-eigen und programmatisch erzeugt, bis auf drei Schriften (OFL 1.1).
+Alle 505 Dateien unter `assets/` (ohne `.import` und `.uid`) sind projekt-eigen und programmatisch erzeugt, bis auf drei Schriften samt Lizenztexten (OFL 1.1).
 CC0-Packs wurden nicht verwendet, weil die Asset-Seiten aus der Cloud-Umgebung gesperrt sind.
 Alles ist reproduzierbar (`tools/art`, `tools/audio`, `tools/placeholders`).
 
@@ -142,6 +142,7 @@ Jede Datei mit Quelle und Lizenz steht in [`PLACEHOLDERS.md`](PLACEHOLDERS.md).
 | 42 | Mac im Stromsparmodus mit VSync | genau 30 fps; Einstellung VSync aus |
 | 43 | Spielzeit ungemessen | möglicherweise unter 45 Minuten |
 | 47 | Texte sind Entwürfe | einzelne Zeilen klingen falsch |
+| 61 | Text bei Miras Besuch | Zeilen beschreiben Tür und Hinsetzen, obwohl Mira schon am Feuer sitzt |
 | 46, 34, 29 | Klänge synthetisch | Katze, Ziege und Tür können künstlich wirken |
 | 51 | Berge prozedural | am Abend zu hell oder zu glatt |
 | 53 | Shader-Kompilierung | ein kurzer Hänger beim ersten Betreten eines Ortes |

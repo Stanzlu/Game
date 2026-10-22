@@ -17,7 +17,7 @@ Wer einzelne Orte ansehen will (ohne den Rest): `--start=elysia`, `--start=tal`,
 
 ## Was dich erwartet (ohne Lösungen)
 
-1. **Elysia.** Du wachst auf, alle freuen sich. Die Gärtnerin hat eine Aufgabe für dich. Alles gelingt.
+1. **Elysia.** Du wachst im Licht auf, alle freuen sich. Die Gärtnerin hat eine Aufgabe für dich. Alles gelingt.
 2. **Elysia, später.** Achte auf Wiederholungen, auf das Wasser, auf das, was keinen Zwilling hat.
 3. **Der Riss und das Tal.** Regen. Eine Frau am Bach, die mit etwas anderem beschäftigt ist.
 4. **Das Tal.** Ein Haus auf der anderen Seite des Bachs. Die Brücke ist kaputt.
@@ -28,11 +28,12 @@ Wer einzelne Orte ansehen will (ohne den Rest): `--start=elysia`, `--start=tal`,
 ## Wenn du feststeckst
 
 - **Elysia:** Sprich das Kind am Becken an und folge ihm. Wer nichts tut, dem öffnet sich der Riss nach
-  einiger Zeit von selbst (rechts unten am Inselrand).
+  einiger Zeit von selbst (rechts unten am Inselrand, ein fernes Grollen kündigt es an).
 - **Bach:** Erst mit der Frau am Feuer sprechen. Die flachen, bemoosten Steine halten, die runden,
   nassen kippen. Weiter oben liegt ein umgestürzter Baum über dem Bach.
 - **Holz:** Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
-- **Der Weg:** Wer rennt, kommt nicht an. Was tut man, wenn ein Weg nicht endet?
+- **Der Weg:** Wer rennt, kommt nicht an. Was tut man, wenn ein Weg nicht endet? Sobald es stimmt,
+  hört die Musik auf.
 - **Feuer:** Wenn es brennt, setz dich auf den Teppich davor.
 - **Die Ziege:** Sie ist bestechlich. Im Gemüsebeet am Haus.
 
@@ -47,6 +48,8 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Wie lange hast du gebraucht (grob)? Das Log zeigt es auch genau (siehe unten).
 
 **Elysia**
+- Wie hat sich das Erwachen angefühlt (das Licht, das Aufstehen, die Anzeigen, die sich nach und nach
+  aufbauen)?
 - Waren die Elysianer am Anfang sympathisch oder gleich unheimlich?
 - Waren die Belohnungen (Level-ups, „Ewiger Ruhm“, das Kompliment) witzig oder zu viel?
 - Ist dir das Becken aufgefallen? Das Kind?
@@ -56,16 +59,23 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Fühlt sie sich lebendig an (sie geht zwischen Netz, Feuer und Bach hin und her)?
 - Ist sie eine eigene Person mit eigenen Zielen, oder eine Funktion der Geschichte?
 - Hat sie sich an deine Antworten erinnert (Bach, Steine)? Wie fühlte sich das an?
+- Sie heißt zuerst „die Frau“. Hast du bemerkt, wann sie ihren Namen sagt? Hat sie im Haus nach deinem
+  Namen gefragt, was hast du geantwortet (Name, „Held von Elysia“, nichts), und wie wirkte ihre Antwort?
 
 **Rätsel und Antreiber**
 - Waren die Trittsteine lesbar (welche halten, welche kippen)? War das Hineinfallen eher lustig oder
   frustrierend?
-- Antreiber: verständlich oder zufällig? Wann hast du begriffen, was zu tun ist?
+- Antreiber: verständlich oder zufällig? Wann hast du begriffen, was zu tun ist? Hast du bemerkt, dass
+  die Musik aufhört, wenn du stehen bleibst, und hast du das als Zeichen gelesen?
 
 **Haus und Abend**
 - Hat das Feuer etwas verändert (Bild, Ton, Gefühl)? Hast du dich davor gesetzt?
 - Die Ziege: Humor angekommen?
-- Das Ende („Zum Meer.“): zu abrupt, genau richtig, zu lang?
+- Mira kommt herein, setzt sich ans Feuer und geht am Ende wieder hinaus: Wirkte das stimmig?
+- Das Haus ist näher herangezoomt als der Rest (1,5×): angenehm oder zu eng? Wie wirkt das Dunkel um
+  den Raum?
+- Das Ende („Zum Meer.“): zu abrupt, genau richtig, zu lang? Waren die Berge ganz zu sehen, bevor sie
+  antwortet? Danach Schwarz und der Titel, ohne Zeile: stimmig?
 - Das Gespräch an Miras Feuer: Fühlte es sich an, als würde sie sich an deinen Tag erinnern, oder
   wie eine Abfrage? Hast du ihr gesagt, dass du nicht über Elysia reden willst, und wie war ihre
   Antwort für dich?
@@ -84,7 +94,9 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 - Der stille Brunnen erledigt sich, bevor du ankommst. Witzig, irritierend, oder hast du es kaum bemerkt?
 
 **Bild und Tiefe**
-- Die Kamera ist überall etwas näher (1,25×). Passt das, oder fehlt dir irgendwo der Überblick?
+- Die Kamera ist überall etwas näher (1,25×, im Haus 1,5×). Passt das, oder fehlt dir irgendwo der
+  Überblick?
+- Der Regen: sichtbar, zu viel, zu wenig? Wirkte der Regentag bedeckt und trotzdem farbig?
 - Ist dir aufgefallen, dass Elysia flach und weit wirkt und das Tal räumlicher?
 - Am Ende schaut Mira zu den Bergen, und die Kamera schaut mit. Wie wirkt das? Und die Berge selbst?
 - Wirken die Waldränder jetzt natürlich (keine geraden Kanten, keine dunklen Blöcke)?
@@ -92,7 +104,7 @@ Kurze Antworten genügen; Stichworte oder Sprachnachricht sind völlig in Ordnun
 **Technik**
 - Ruckler, Hänger, Stellen, an denen du nicht weiterkamst?
 - Texte, die falsch klingen oder zu lang sind?
-- Klänge, die stören (Katze, Ziege, Tür, Wasser)?
+- Klänge, die stören (Katze, Ziege, Tür, Wasser)? Etwas zu laut oder zu leise (Bach, Belohnungen)?
 
 ## Das Log mit den Minuten
 
@@ -107,6 +119,7 @@ dann sehe ich, wie lange jeder Teil gedauert hat, ohne dass du mitschreiben muss
 | `butterflies_caught` | alle drei Schmetterlinge |
 | `irritation` | Truhe geöffnet und Schmetterlinge zurück (in beliebiger Reihenfolge), Elysia wiederholt sich |
 | `mirror`, `child` | Becken angesehen, Kind getroffen |
+| `stone`, `fountain` | Stein genommen, der stille Brunnen erledigt sich von selbst |
 | `rift_found` | der Riss öffnet sich |
 | `valley_arrival` | Ankunft im Tal |
 | `first_no` | Miras Nein |
@@ -121,5 +134,6 @@ dann sehe ich, wie lange jeder Teil gedauert hat, ohne dass du mitschreiben muss
 
 - „Automatisch weiter“ und „Textgeschwindigkeit“: wenn dir das Lesen zu langsam oder zu schnell ist.
 - „Große Schrift“, „Bildschirmwackeln“, „Blitzeffekte reduzieren“ wie in Phase 3.
+- „Kamera“ (Weich oder Pixelgenau): Welche fühlt sich beim Laufen besser an?
 - „Zeitfenster“ und „Begegnungstempo“ machen den Antreiber geduldiger.
 - „Tiefenebenen bewegen sich mit“: aus, wenn dir die Bewegung der Berge unangenehm ist.
