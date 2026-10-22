@@ -125,16 +125,18 @@ func test_mira_comes_in_sits_down_and_goes_in_the_room() -> void:
 				at_left.merge(state)
 	)
 	# a lambda copies plain variables: what it notes goes into a dictionary
-	var seen := {"dark": false, "walked_in": false}
+	var seen := {"dark": false, "walked_in": false, "glare": 0.0}
 	var done := func() -> bool:
 		# nobody blacks the picture out for her: she is seen coming and going
 		seen["dark"] = seen["dark"] or ScreenFade.is_covered() or ScreenFade.is_fading()
 		seen["walked_in"] = seen["walked_in"] or not _guests(scene).is_empty()
+		seen["glare"] = maxf(seen["glare"], scene._window_light.energy)
 		return WorldState.has_flag("house.mira_left")
 	await _answer_until(scene, done, 90.0)
 	assert_eq(order, ["house.mira_knocked", "house.mira_seated", "house.mira_left"])
 	assert_true(seen["walked_in"], "a visitor walks through the room")
 	assert_false(seen["dark"], "no black screen at any time")
+	assert_gt(seen["glare"], HausScene.WINDOW_ENERGY + 0.2, "the window light swells at the door")
 	assert_false(at_seated["beat"], "she has sat down before the talk begins")
 	assert_true(at_left["beat"], "the talk is over when she is gone")
 	assert_true(at_left["visited"])

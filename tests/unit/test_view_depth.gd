@@ -85,8 +85,12 @@ func test_every_place_is_seen_a_little_closer() -> void:
 		var scene: GameScene = packed.instantiate()
 		add_child_autofree(scene)
 		await wait_physics_frames(2)
-		assert_eq(scene.view.zoom, 1.25, scene.name)
-		assert_eq(scene.view.view_size, Vector2i(512, 288), "640x360 / 1.25")
+		# the interior is seen closer still (ADR-045, exception for rooms)
+		var zoom := 1.5 if packed == HAUS else 1.25
+		assert_eq(scene.view.zoom, zoom, scene.name)
+		assert_eq(
+			scene.view.view_size, Vector2i((Vector2(640, 360) / zoom).ceil()), "640x360 / zoom"
+		)
 		scene.queue_free()
 		await wait_physics_frames(1)
 
