@@ -14,8 +14,8 @@ const BEAMS: Array[Array] = [
 ]
 const SLANT := Vector2(0.62, 1.0)
 const LENGTH := 520.0
-const COLOR := Color(1.0, 0.86, 0.58)
-const ALPHA := 0.13
+const COLOR := Color(1.0, 0.84, 0.52)
+const ALPHA := 0.18
 
 var strength := 0.0:
 	set(value):

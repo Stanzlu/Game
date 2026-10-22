@@ -21,11 +21,15 @@ const ANTREIBER_SEAT := Vector2i(6, 23)
 ## He follows this long, or until the player is this far into the valley (column).
 const FOLLOW_SECONDS := 7.0
 const FOLLOW_UNTIL_COLUMN := 13
-## How long the camera takes to look up to the mountains at the end.
-const MOUNTAIN_PAN_SECONDS := 5.0
+## How long the camera takes to look up to the mountains at the end, and how long the
+## mountains stay in view before Mira answers and again before the screen goes dark.
+const MOUNTAIN_PAN_SECONDS := 4.0
+const MOUNTAIN_HOLD_SECONDS := 2.5
+const SEA_HOLD_SECONDS := 2.5
 
 var _follower: AntreiberActor
 var _follow_time := 0.0
+var _mountain_tween: Tween
 
 
 func _ready() -> void:
@@ -126,6 +130,8 @@ func _goat_objective(objective: String) -> void:
 
 ## The camera follows Mira's look north, over the treeline to the mountains (ADR-043).
 func _look_to_the_mountains() -> void:
+	if _mountain_tween != null:
+		return
 	var look := Node2D.new()
 	look.name = "MountainsLook"
 	view.world_root.add_child(look)
@@ -133,15 +139,17 @@ func _look_to_the_mountains() -> void:
 	look.global_position = view.camera_position - GameView.FOLLOW_OFFSET
 	view.follow(look, false)
 	var top := view.bounds.position.y + view.view_size.y * 0.5 - GameView.FOLLOW_OFFSET.y
-	var tween := create_tween()
-	tween.tween_property(look, ^"global_position:y", top, MOUNTAIN_PAN_SECONDS)
-	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# kept so the ending can wait for the mountains to be in full view before it goes on
+	_mountain_tween = create_tween()
+	_mountain_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_mountain_tween.tween_property(look, ^"global_position:y", top, MOUNTAIN_PAN_SECONDS)
 	# the sun's beams belong to the meadow; over the open sky they would only stripe it
 	if day_light != null and day_light.rays != null:
 		create_tween().tween_property(day_light.rays, ^"strength", 0.1, MOUNTAIN_PAN_SECONDS)
 
 
-## Beat 7: Mira makes room at her fire. "Morgen gehe ich weiter." Black. The title.
+## Beat 7: Mira makes room at her fire. "Morgen gehe ich weiter." The camera looks up to the
+## mountains and stays there; only then she says "Zum Meer." Black. The title.
 func _play_ending() -> void:
 	Beat.mark("ending")
 	while dialogue_box.is_open():
@@ -157,7 +165,16 @@ func _play_ending() -> void:
 	await ScreenFade.fade_in(1.6)
 	await cut.wait(1.2)
 	await cut.say(DIALOGUE, "ending")
-	await cut.wait(2.0)
+	# a save from the last scene replays it with the flag already set: no signal, no look
+	if WorldState.has_flag("valley.mountains_seen"):
+		_look_to_the_mountains()
+	# her answer only means something with the mountains in full view (Game Bible §56): the
+	# look is never cut short by the dark, however fast the lines were clicked through
+	if _mountain_tween != null and _mountain_tween.is_running():
+		await _mountain_tween.finished
+	await cut.wait(MOUNTAIN_HOLD_SECONDS)
+	await cut.say(DIALOGUE, "ending_sea")
+	await cut.wait(SEA_HOLD_SECONDS)
 	WorldState.set_flag("slice.finished")
 	# the save remembers the ending (the start menu shows the Real title from now on)
 	SaveSystem.unblock(cut.key)
@@ -169,7 +186,7 @@ func _play_ending() -> void:
 		{"minute": snappedf(WorldState.state.playtime_seconds / 60.0, 0.1)}
 	)
 	await ScreenFade.fade_out(2.5)
-	var card := TitleCard.play(self, "END_OF_SLICE")
+	var card := TitleCard.play(self, "")
 	await card.finished
 	cut.end()
 	get_tree().change_scene_to_file(MAIN_MENU)

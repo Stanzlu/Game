@@ -1324,7 +1324,7 @@ def particles():
                     img[y, x, 3] = alpha
         pa.save_rgba(os.path.join(out, name + ".png"), img)
 
-    px("raindrop", ["a", "a", "b", "b", "c"], {"a": ("#b9c8d6", 90), "b": ("#c9d6e2", 150), "c": ("#e2ecf4", 200)})
+    px("raindrop", ["a", "a", "a", "b", "b", "b", "c", "c"], {"a": ("#b9c8d6", 90), "b": ("#c9d6e2", 150), "c": ("#e2ecf4", 200)})
     px("splash", [".a.a.", "a...a", ".bbb."], {"a": ("#c9d6e2", 170), "b": ("#9fb2c4", 120)})
     px("ripple", [".aaa.", "a...a", ".aaa."], {"a": ("#9fb4c4", 140)})
     px("petal", ["ab", "bc"], {"a": ("#ffd0e4", 255), "b": ("#ff8fbf", 255), "c": ("#e04a8a", 255)})

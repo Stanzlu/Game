@@ -454,6 +454,9 @@ def wood_bundle(ms):
 LOGS = ramp("#22150e", "#352217", "#4d3221", "#68462e", "#86603e", "#a67c52")
 BEAM = ramp("#140d09", "#24180f", "#382519", "#4d3524")
 NIGHT_GLASS = ramp("#0c1018", "#141c28", "#22303f", "#3a4c5c", "#5e7484")
+# the window shows the rainy day outside (ADR-041, the room's WINDOW_LIGHT is the same grey-blue):
+# light enough that the cat in front of it reads as a dark shape
+RAIN_GLASS = ramp("#4a5e7e", "#5f7698", "#7a90b2", "#9bb0cc", "#c4d3e6")
 
 
 def shell(ms):
@@ -487,12 +490,12 @@ def shell(ms):
     # top: the beam along the wall top, darkness of the loft above
     c.paint(c.rect(0, 0, 256, wall_top - 4), BEAM, 0.05, dither=False)
     c.paint(c.rect(4, wall_top - 4, 252, wall_top), BEAM, np.where(c.yy < wall_top - 2, 0.75, 0.4), dither=False)
-    # window in the back wall (cells 22-23): night-blue glass with rain, cross bars, a sill
+    # window in the back wall (cells 22-23): grey daylight glass with rain, cross bars, a sill
     wx0, wx1, wy0, wy1 = 164, 188, 22, 50
     c.paint(c.rect(wx0 - 3, wy0 - 3, wx1 + 3, wy1 + 4), BEAM, 0.6, dither=False)
     glass = c.rect(wx0, wy0, wx1, wy1)
     streak = ((c.xx * 0.3 + c.yy) % 9) < 1.2
-    c.paint(glass, NIGHT_GLASS, np.where(streak, 0.62, 0.2 + 0.25 * (1 - (c.yy - wy0) / (wy1 - wy0))), dither=True)
+    c.paint(glass, RAIN_GLASS, np.where(streak, 0.92, 0.4 + 0.3 * (1 - (c.yy - wy0) / (wy1 - wy0))), dither=True)
     c.paint(c.rect((wx0 + wx1) // 2 - 1, wy0, (wx0 + wx1) // 2 + 1, wy1), BEAM, 0.5, dither=False)
     c.paint(c.rect(wx0, (wy0 + wy1) // 2 - 1, wx1, (wy0 + wy1) // 2 + 1), BEAM, 0.5, dither=False)
     c.paint(c.rect(wx0 - 5, wy1 + 3, wx1 + 5, wy1 + 6), LOGS, np.where(c.yy < wy1 + 4, 0.7, 0.35), dither=False)
@@ -517,10 +520,15 @@ def shell(ms):
     leaves = (c.ellipse(wx1 - 2.5, wy1 - 4, 4.5, 3.5) | c.ellipse(wx1 - 5, wy1 - 6, 2.2, 2.8)) & (c.yy < wy1)
     c.paint(leaves, ramp("#1c3a1e", "#2c5a2a", "#468038", "#6ea64c"), 0.3 + 0.55 * c.sphere(wx1 - 4, wy1 - 6, 5, 4),
             dither=False)
-    # side walls: thick timber seen from above, darkness beyond
-    for x0, x1, edge in ((0, 12, 10), (244, 256, 244)):
+    # side walls: thick timber seen from above, darkness beyond. Two steps like the north wall's
+    # beam: the face lit from the top (darker towards the corner at the bottom), a shadow edge
+    # where it meets the floor; the left one is lit by the window, the right one stays in shade
+    for x0, x1, face, lit in ((0, 12, (4, 9), 0.7), (244, 256, (247, 252), 0.5)):
         c.paint(c.rect(x0, wall_top, x1, 192), BEAM, 0.05, dither=False)
-        c.paint(c.rect(min(edge, x1 - 2), wall_top, min(edge, x1 - 2) + 2, 180), BEAM, 0.7, dither=False)
+        edge = 10 if x0 == 0 else 244
+        top_to_corner = lit - 0.3 * np.clip((c.yy - wall_top) / (176.0 - wall_top), 0.0, 1.0)
+        c.paint(c.rect(face[0], wall_top, face[1], 180), BEAM, top_to_corner, dither=False)
+        c.paint(c.rect(edge, wall_top, edge + 2, 180), BEAM, 0.3, dither=False)
     # front wall: a beam with the open doorway in cell 19 (x 112..128)
     front = c.rect(4, 176, 252, 186) & ~c.rect(112, 170, 128, 192)
     c.paint(front, BEAM, np.where(c.yy < 178, 0.8, 0.35), dither=False)
