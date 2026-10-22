@@ -51,7 +51,16 @@ MENU_LOAD,Laden
 MENU_SETTINGS,Einstellungen
 MENU_CREDITS,Mitwirkende
 MENU_CREDITS_ELYSIA,Die Helden hinter dem Helden
-CREDITS_TEXT,"Nach Elysia\nEin Prototyp.\n\nIdee, Geschichte und Umsetzung: das Projekt REAL.\nGrafik und Klänge entstehen im Projekt selbst.\n\nSchriften: Tiny5, Jersey 10 und Jersey 15 (SIL Open Font License 1.1)\nDialoge: Dialogue Manager (MIT)\nTests: GUT (MIT)\nEngine: Godot (MIT)"
+CREDITS_TEXT,"Nach Elysia
+Ein Prototyp.
+
+Idee, Geschichte und Umsetzung: das Projekt REAL.
+Grafik und Klänge entstehen im Projekt selbst.
+
+Schriften: Tiny5, Jersey 10 und Jersey 15 (SIL Open Font License 1.1)
+Dialoge: Dialogue Manager (MIT)
+Tests: GUT (MIT)
+Engine: Godot (MIT)"
 MENU_BACK,Zurück
 PAUSE_JOURNAL,Journal
 PAUSE_SAVE,Speichern
