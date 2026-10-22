@@ -237,7 +237,7 @@ func _read_file(path: String) -> SaveCodec.LoadResult:
 
 
 ## Short description for slot lists: {"status": "empty"|"ok"|"broken", "saved_at",
-## "playtime", "map", "ui_mode", "error", "backup"}.
+## "playtime", "map", "ui_mode", "finished", "error", "backup"}.
 func summary(slot: String) -> Dictionary:
 	var info := {
 		"status": "empty",
@@ -245,6 +245,7 @@ func summary(slot: String) -> Dictionary:
 		"playtime": 0.0,
 		"map": "",
 		"ui_mode": GameState.UiMode.ELYSIA,
+		"finished": false,
 		"error": "",
 		"backup": has_backup(slot),
 	}
@@ -260,6 +261,7 @@ func summary(slot: String) -> Dictionary:
 	info["playtime"] = result.state.playtime_seconds
 	info["map"] = result.state.player.map
 	info["ui_mode"] = result.state.ui_mode
+	info["finished"] = bool(result.state.flags.get("slice.finished", false))
 	return info
 
 
@@ -269,6 +271,16 @@ func reached_reality() -> bool:
 	for slot in SLOTS:
 		var info := summary(slot)
 		if info["status"] == "ok" and info["ui_mode"] == GameState.UiMode.REAL:
+			return true
+	return false
+
+
+## True once any readable save has reached the end of the vertical slice: the start menu
+## then says so under the logo, and "Neues Spiel" no longer asks about the finished game.
+func slice_finished() -> bool:
+	for slot in SLOTS:
+		var info := summary(slot)
+		if info["status"] == "ok" and info["finished"]:
 			return true
 	return false
 

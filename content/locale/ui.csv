@@ -231,6 +231,8 @@ CONTROLS_BACK,Zurück
 CONTROLS_MENU,Menü
 CONTROLS_JOURNAL,Journal
 CONTROLS_SKIP,Gespräch überspringen: %s halten
+CONTROLS_MOVE_ARROWS,Pfeiltasten
+CONTROLS_SCROLL_ROW,Journal blättern: Bild auf / Bild ab · rechter Stick
 CONTROLS_JOURNAL_SCROLL,Journal blättern: Bild ↑/↓ · rechter Stick
 CONTROLS_PAD_DPAD,Steuerkreuz
 CONTROLS_PS_CROSS,Kreuz

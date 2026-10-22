@@ -56,3 +56,20 @@ func test_title_card_fades_in_and_finishes() -> void:
 	skip.pressed = true
 	card._unhandled_input(skip)
 	assert_signal_emitted(card, "finished")
+
+
+func test_the_last_profile_argument_wins() -> void:
+	# tools/capture.sh puts its own profile before the caller's arguments
+	assert_eq(RuntimeEnv.profile_from_args(["--profile=capture_1", "--profile=mine"]), "mine")
+	assert_eq(RuntimeEnv.profile_from_args(["--profile=a", "--profile=../x"]), "a")
+	assert_eq(RuntimeEnv.profile_from_args(["--title=real"]), "")
+
+
+func test_title_card_without_a_line_has_no_label() -> void:
+	var card := TitleCard.play(self, "")
+	assert_null(card.note, "black, then the title: nothing under it")
+	assert_eq(card.find_children("*", "Label", true, false).size(), 0)
+	card._finish()
+	var with_line := TitleCard.play(self, "END_OF_SLICE")
+	assert_not_null(with_line.note, "a line still works for other callers")
+	with_line._finish()

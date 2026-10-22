@@ -17,9 +17,12 @@ const LOGO_ELYSIA := preload("res://assets/generated/title/logo_elysia.png")
 const LOGO_REAL := preload("res://assets/generated/title/logo_real.png")
 const FADE_SECONDS := 0.4
 const SCREEN := Vector2(640, 360)
-## Elysia's menu sits centered under the island's plateau; REAL's on the left.
-const ELYSIA_MENU_Y := 190.0
+## Elysia's menu sits centered under the island's plateau (below the trunk, so the basin and
+## the pillars stay free when the menu is short); REAL's on the left.
+const ELYSIA_MENU_Y := 232.0
 const REAL_MENU_AT := Vector2(34, 112)
+## Free space between the menu and the footer line.
+const MENU_GAP := 24.0
 
 static var _start_arg_consumed := false
 ## Content check and autopilot belong to the first start menu of a run, not every return.
@@ -35,6 +38,7 @@ var _quit_button: Button
 var _save_menu: SaveMenu
 var _settings_menu: SettingsMenu
 var _prototypes: PrototypeMenu
+var _credits: CreditsMenu
 var _name_entry: NameEntry
 var _confirm: ConfirmMenu
 ## Hero name chosen for the next new game (applied after WorldState.new_game()).
@@ -45,6 +49,7 @@ var _leaving := false
 @onready var _logo: TextureRect = %Logo
 @onready var _subtitle: Label = %Subtitle
 @onready var _menu_panel: PanelContainer = %MenuPanel
+@onready var _footer: PanelContainer = %Footer
 @onready var _hint: Label = %Hint
 @onready var _build: Label = %Build
 
@@ -56,8 +61,15 @@ func _ready() -> void:
 	_background.build(title_mode)
 	_apply_title_mode()
 	_build_menus()
+	# larger letters make the footer and the menu taller: the menu moves up with them
+	Settings.changed.connect(
+		func(key: String) -> void:
+			if key == "text.large":
+				_layout_soon()
+	)
 	var info := read_build_info()
 	_build.text = format_build_line(info)
+	_layout_soon()
 	_play_intro()
 	list.focus_first()
 	# record: a tester's log names the build it came from
@@ -164,17 +176,33 @@ func _apply_title_mode() -> void:
 	_logo.size = _logo.texture.get_size()
 	if _is_elysia():
 		_logo.position = Vector2(roundf((SCREEN.x - _logo.size.x) * 0.5), 2.0)
+		# the tagline sits right under the logo in the gold of its title, readable at any size
+		_menu_panel.theme_type_variation = &"MenuPanel"
+		# the frame is a little see-through: the basin behind it would ghost through the rows
+		var backing := ColorRect.new()
+		backing.color = Color(0.11, 0.08, 0.2)
+		backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_menu_panel.add_child(backing)
 		_subtitle.text = tr("TITLE_ELYSIA_TAGLINE")
 		_subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_subtitle.position = Vector2(0.0, 79.0)
-		_subtitle.size = Vector2(SCREEN.x, 10.0)
+		_subtitle.position = Vector2(0.0, 68.0)
+		_subtitle.size = Vector2(SCREEN.x, 28.0)
 		AudioDirector.play_music("elysia", 2.0)
 		AudioDirector.set_ambience(AMBIENCE, -16.0, 2.0)
 	else:
 		_logo.position = Vector2(30.0, 22.0)
-		_subtitle.text = ""
+		# a finished game says so quietly under the logo (it left the end card, Game Bible §56)
+		_subtitle.text = tr("END_OF_SLICE") if SaveSystem.slice_finished() else ""
+		_subtitle.theme_type_variation = &"MutedLabel"
+		_subtitle.add_theme_color_override(&"font_color", Color(0.96, 0.93, 0.87))
+		_subtitle.add_theme_color_override(&"font_outline_color", Color(0.16, 0.12, 0.13))
+		_subtitle.add_theme_constant_override(&"outline_size", 4)
+		# a quiet line, also with large letters: it must not push the menu out of the picture
+		_subtitle.add_theme_font_size_override(&"font_size", 19)
+		_subtitle.position = Vector2(36.0, 90.0)
+		_subtitle.size = Vector2(400.0, 24.0)
 		AudioDirector.play_music("valley", 3.0)
-		AudioDirector.set_ambience(REAL_AMBIENCE, -12.0, 3.0)
+		AudioDirector.set_ambience(REAL_AMBIENCE, -8.0, 3.0)
 
 
 func _build_menus() -> void:
@@ -195,6 +223,12 @@ func _build_menus() -> void:
 	_prototypes.on_title_card = _play_title_card
 	_prototypes.on_switch_title = _switch_title
 	add_child(_prototypes)
+	_credits = CreditsMenu.new()
+	_credits.name = "CreditsMenu"
+	_credits.elysia = _is_elysia()
+	_credits.follow_mode = false
+	_credits.sound_set = _sound_set()
+	add_child(_credits)
 	_name_entry = NameEntry.new()
 	_name_entry.name = "NameEntry"
 	_name_entry.follow_mode = false
@@ -211,7 +245,9 @@ func _build_menus() -> void:
 			if yes:
 				_name_entry.open()
 	)
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry, _confirm]:
+	for menu: MenuLayer in [
+		_save_menu, _settings_menu, _prototypes, _credits, _name_entry, _confirm
+	]:
 		menu.frame.theme = theme
 	list = OptionList.new()
 	list.sound_skin = _sound_set()
@@ -219,7 +255,7 @@ func _build_menus() -> void:
 	list.custom_minimum_size = Vector2(132, 0)
 	_menu_panel.add_child(list)
 	_rebuild_list()
-	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _name_entry]:
+	for menu: MenuLayer in [_save_menu, _settings_menu, _prototypes, _credits, _name_entry]:
 		menu.opened.connect(func() -> void: _menu_panel.hide())
 		menu.closed.connect(_on_submenu_closed)
 	if BenchmarkRunner.result_pending and not BenchmarkRunner.last_rows.is_empty():
@@ -239,22 +275,50 @@ func _rebuild_list() -> void:
 	if not SaveSystem.latest_slot().is_empty():
 		_continue = list.add_action("MENU_CONTINUE", _continue_latest)
 	list.add_action("MENU_NEW_GAME", _new_game_requested)
-	list.add_action(
-		"MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD), _any_save_to_load()
-	)
+	# no saved game, no row: a greyed-out "Laden" was hardly readable and said nothing
+	if _any_save_to_load():
+		list.add_action("MENU_LOAD", func() -> void: _save_menu.open_mode(SaveMenu.Mode.LOAD))
 	if OS.is_debug_build():
 		list.add_action("MENU_PROTOTYPES", _prototypes.open)
 	else:
 		# testers only get the benchmark: the prototype scenes would replace their autosave
 		list.add_action("MENU_BENCHMARK", func() -> void: BenchmarkRunner.start(get_tree()))
 	list.add_action("MENU_SETTINGS", _settings_menu.open)
+	list.add_action("MENU_CREDITS_ELYSIA" if _is_elysia() else "MENU_CREDITS", _credits.open)
 	_quit_button = list.add_action("MENU_QUIT", _quit)
 	list.refresh()
+	_layout()
+	_layout_soon()
+
+
+## Menu above the footer: under the plateau in Elysia, on the left in REAL; higher when the
+## footer or the rows grow (large text). Labels measure themselves a frame late, hence twice.
+func _layout() -> void:
 	_menu_panel.reset_size()
+	# full width, as tall as the hint needs (a smaller size is lifted to the minimum)
+	_footer.size = Vector2(SCREEN.x, 0.0)
+	_footer.position = Vector2(0.0, SCREEN.y - _footer.size.y)
+	var room := _footer.position.y - _menu_panel.size.y - MENU_GAP
 	if _is_elysia():
-		_menu_panel.position = Vector2(roundf((SCREEN.x - _menu_panel.size.x) * 0.5), ELYSIA_MENU_Y)
+		_menu_panel.position = Vector2(
+			roundf((SCREEN.x - _menu_panel.size.x) * 0.5), minf(ELYSIA_MENU_Y, room)
+		)
 	else:
-		_menu_panel.position = REAL_MENU_AT
+		# below the line under the logo if there is one, but never into the footer
+		var below_logo := _subtitle.position.y + _subtitle.size.y if _subtitle.text != "" else 0.0
+		var y := maxf(minf(REAL_MENU_AT.y, room), below_logo)
+		y = minf(y, _footer.position.y - _menu_panel.size.y - 4.0)
+		_menu_panel.position = Vector2(REAL_MENU_AT.x, y)
+
+
+func _layout_soon() -> void:
+	# the menu may be gone before the labels have measured themselves (--start jumps away)
+	for _frame in 2:
+		if not is_inside_tree():
+			return
+		await get_tree().process_frame
+	if is_inside_tree():
+		_layout()
 
 
 func _on_submenu_closed() -> void:
@@ -285,7 +349,7 @@ func _play_intro() -> void:
 		. set_trans(Tween.TRANS_BACK if _is_elysia() else Tween.TRANS_SINE)
 		. set_ease(Tween.EASE_OUT)
 	)
-	for node: CanvasItem in [_subtitle, _menu_panel, _hint, _build]:
+	for node: CanvasItem in [_subtitle, _menu_panel, _footer]:
 		node.modulate.a = 0.0
 		tween.tween_property(node, ^"modulate:a", 1.0, 0.5).set_delay(0.7)
 
@@ -297,9 +361,11 @@ func _any_save_to_load() -> bool:
 	return false
 
 
-## A new game replaces the autosave: with a running game in it, ask first (slots stay).
+## A new game replaces the autosave: with a running game in it, ask first (slots stay). A
+## finished game has nothing left to lose: the name is asked at once.
 func _new_game_requested() -> void:
-	if SaveSystem.summary(SaveService.AUTOSAVE)["status"] == "ok":
+	var autosave := SaveSystem.summary(SaveService.AUTOSAVE)
+	if autosave["status"] == "ok" and not autosave["finished"]:
 		_confirm.ask("CONFIRM_NEW_GAME", "CONFIRM_NEW_GAME_YES", "MENU_BACK")
 	else:
 		_name_entry.open()
@@ -309,26 +375,32 @@ func _new_game_requested() -> void:
 static func controls_hint() -> String:
 	var pad := InputDevice.kind == InputDevice.Kind.GAMEPAD
 	return (
-		TranslationServer.translate("MENU_CONTROLS_HINT")
+		TranslationServer.translate("TITLE_CONTROLS_HINT")
 		% [
 			TranslationServer.translate("CONTROLS_MOVE_PAD" if pad else "CONTROLS_MOVE_KEYS"),
 			InputDevice.label_for(&"sprint"),
 			InputDevice.label_for(&"interact"),
-			InputDevice.label_for(&"journal"),
-			InputDevice.label_for(&"menu"),
 		]
 	)
 
 
-## Loads the newest readable save ("Fortsetzen", `--continue`).
+## Loads the newest readable save ("Fortsetzen", `--continue`). Pressed twice, the second
+## press changes nothing: the first one is already on its way.
 func _continue_latest() -> void:
 	var slot := SaveSystem.latest_slot()
 	if slot.is_empty():
 		Log.warn(Log.Category.SAVE, "nothing to continue")
 		return
+	if _leaving:
+		return
+	_leaving = true
 	await ScreenFade.fade_out(0.3)
-	if SaveSystem.load_slot(slot) != OK:
-		ScreenFade.fade_in(0.3)
+	var err := SaveSystem.load_slot(slot)
+	if err != OK:
+		_leaving = false
+		# busy: another load is on its way and owns the fade
+		if err != ERR_BUSY:
+			ScreenFade.fade_in(0.3)
 
 
 func _quit() -> void:
@@ -347,14 +419,11 @@ func _validate_content() -> void:
 	)
 
 
-## Cancel first jumps to "Beenden"; cancel on it quits (no accidental quit).
+## Cancel jumps to "Beenden"; leaving needs a confirm there (no accidental quit).
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()
-		if get_viewport().gui_get_focus_owner() == _quit_button:
-			_quit()
-		else:
-			_quit_button.grab_focus()
+		_quit_button.grab_focus()
 
 
 ## Returns the value of `--start=<key>` or an empty string.
