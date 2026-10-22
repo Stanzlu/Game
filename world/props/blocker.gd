@@ -5,6 +5,11 @@ extends StaticBody2D
 ## protagonist thinks when he tries), "if"/"unless" flags (MapView removes it when done).
 
 const TILE := 16
+## The talk zone reaches this far beyond the barrier on each side (total, per axis): the
+## player is stopped at its edge and the sensor reaches in from there.
+const ZONE_MARGIN := Vector2(12, 12)
+## The prompt floats one figure height above the way, not above the top of a long barrier.
+const PROMPT_HEIGHT := 26.0
 
 
 func _ready() -> void:
@@ -27,4 +32,14 @@ func apply_params(params: Dictionary) -> void:
 		var cue := str(params["cue"])
 		var reach := maxf(rect.size.x, rect.size.y) * 0.5 + 6.0
 		var area := Talk.add_area(self, "INTERACT_EXAMINE", reach, offset)
+		# A round zone with the long side as radius reached far over the way and put the
+		# prompt up in the trees; the zone follows the barrier's shape instead.
+		for child in area.get_children():
+			var zone := child as CollisionShape2D
+			if zone != null:
+				var zone_rect := RectangleShape2D.new()
+				zone_rect.size = rect.size + ZONE_MARGIN
+				zone.shape = zone_rect
+		# An offset barrier (the stream stones) is met at the bank, at the prop's own cell.
+		area.prompt_offset = Vector2(0.0, offset.y - PROMPT_HEIGHT)
 		area.interacted.connect(func(actor: Node) -> void: Talk.present(self, path, cue, actor))

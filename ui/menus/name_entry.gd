@@ -36,6 +36,8 @@ func _build() -> void:
 	field.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	field.custom_minimum_size = Vector2(160, 0)
 	field.context_menu_enabled = false
+	field.caret_blink = true
+	field.caret_blink_interval = 0.5
 	field.text_submitted.connect(func(_text: String) -> void: _confirm())
 	# typing: the gem cursor leaves the suggestions, so it is clear where the keys go
 	field.focus_entered.connect(func() -> void: list.cursor.target = null)

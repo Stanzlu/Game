@@ -8,6 +8,8 @@ enum Mode { SAVE, LOAD }
 var mode := Mode.LOAD
 var _confirm := ""
 var _message := ""
+## A load is fading the screen out: further presses must not start it twice.
+var _loading := false
 
 
 func _ready() -> void:
@@ -33,9 +35,17 @@ func _build() -> void:
 			continue
 		var info := SaveSystem.summary(slot)
 		var enabled: bool = mode == Mode.SAVE or info["status"] != "empty"
-		list.add_action("", func() -> void: _choose(slot, info), enabled, describe(slot, info))
+		var choose := func() -> void: _choose(slot, info)
+		if info["status"] == "ok":
+			list.add_card(
+				card_title(slot, info), card_subtitle(info), choose, enabled, slot_name(slot)
+			)
+		else:
+			list.add_action("", choose, enabled, describe(slot, info))
 	list.add_action("MENU_BACK", close)
-	hint.text = _message
+	hint.text = (
+		_message if not _message.is_empty() else tr("SAVE_HINT") % InputDevice.label_for(&"cancel")
+	)
 
 
 func _build_confirm() -> void:
@@ -54,6 +64,8 @@ func _build_confirm() -> void:
 
 
 func _choose(slot: String, info: Dictionary) -> void:
+	if _loading:
+		return
 	if mode == Mode.SAVE:
 		if info["status"] == "empty":
 			_save(slot)
@@ -82,9 +94,13 @@ func _save(slot: String) -> void:
 
 
 func _load(slot: String, backup: bool) -> void:
+	if _loading:
+		return
+	_loading = true
 	await ScreenFade.fade_out(0.3)
 	if SaveSystem.load_slot(slot, backup) != OK:
 		ScreenFade.fade_in(0.3)
+		_loading = false
 		_ask("", tr("LOAD_FAILED"))
 
 
@@ -92,6 +108,27 @@ static func slot_name(slot: String) -> String:
 	if slot == SaveService.AUTOSAVE:
 		return TranslationServer.translate("SLOT_AUTOSAVE")
 	return TranslationServer.translate("SLOT_N") % slot.trim_prefix("slot_")
+
+
+## First line of a filled slot: the hero's name over the place, "Kai · Das Tal".
+static func card_title(slot: String, info: Dictionary) -> String:
+	var place := TranslationServer.translate(SceneRegistry.title_key(str(info["map"])))
+	var hero := ""
+	var result := SaveSystem.read_slot(slot)
+	if result.ok:
+		hero = result.state.player.name
+	if hero.is_empty():
+		return place
+	return TranslationServer.translate("SAVE_ROW_TITLE") % [hero, place]
+
+
+## Second line: how long it was played and when it was saved, "12 min · 03.10. 14:05".
+static func card_subtitle(info: Dictionary) -> String:
+	var when := format_date(str(info["saved_at"]), true)
+	var minutes := int(float(info["playtime"]) / 60.0)
+	if minutes < 1:
+		return "%s · %s" % [TranslationServer.translate("TIME_UNDER_MINUTE"), when]
+	return TranslationServer.translate("SAVE_ROW_SUB") % [minutes, when]
 
 
 ## "Slot 1 · Tal · 12 min · 03.10.2026 14:05", "Slot 2 · leer", "Slot 3 · beschädigt".
@@ -118,11 +155,13 @@ static func format_playtime(seconds: float) -> String:
 	return TranslationServer.translate("TIME_HOURS") % [minutes / 60, minutes % 60]
 
 
-## UTC ISO time to local "DD.MM.YYYY HH:MM".
-static func format_date(iso: String) -> String:
+## UTC ISO time to local "DD.MM.YYYY HH:MM", or "DD.MM. HH:MM" when `short`.
+static func format_date(iso: String, short := false) -> String:
 	if iso.is_empty():
 		return "?"
 	var unix := Time.get_unix_time_from_datetime_string(iso.trim_suffix("Z"))
 	var bias := int(Time.get_time_zone_from_system().get("bias", 0))
 	var d := Time.get_datetime_dict_from_unix_time(unix + bias * 60)
+	if short:
+		return "%02d.%02d. %02d:%02d" % [d["day"], d["month"], d["hour"], d["minute"]]
 	return "%02d.%02d.%d %02d:%02d" % [d["day"], d["month"], d["year"], d["hour"], d["minute"]]

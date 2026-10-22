@@ -215,3 +215,69 @@ func test_footsteps_follow_the_walk_cycle() -> void:
 	var steps: int = get_signal_emit_count(player, "footstep")
 	# walk cycle at 10 fps with feet down on frames 0 and 2: five steps a second
 	assert_between(steps, 4, 7, "steps match the feet, not the distance")
+
+
+func test_a_tap_that_only_turns_makes_no_step_noise() -> void:
+	for ticks: int in [2, 3]:
+		await _setup("############\n#@,,,,,,,,,#\n############")
+		watch_signals(player)
+		Input.action_press(&"move_right")
+		await wait_physics_frames(ticks)
+		Input.action_release(&"move_right")
+		await wait_physics_frames(10)
+		assert_eq(get_signal_emit_count(player, "footstep"), 0, "%d ticks turn, not step" % ticks)
+		assert_eq(player.facing, Facing.Dir.E, "the figure did turn")
+		map.queue_free()
+
+
+func test_a_tap_of_six_ticks_is_a_step() -> void:
+	await _setup("############\n#@,,,,,,,,,#\n############")
+	watch_signals(player)
+	Input.action_press(&"move_right")
+	await wait_physics_frames(6)
+	Input.action_release(&"move_right")
+	await wait_physics_frames(10)
+	assert_eq(get_signal_emit_count(player, "footstep"), 1, "6 ticks cover more than 3 px")
+
+
+func test_starting_to_sprint_does_not_add_a_step() -> void:
+	await _setup("############\n#@,,,,,,,,,#\n############")
+	watch_signals(player)
+	Input.action_press(&"move_right")
+	await wait_seconds(0.25)
+	var before: int = get_signal_emit_count(player, "footstep")
+	var frame_before := player.sprite.frame
+	assert_between(frame_before, 1, 2, "mid-stride, where a restart to frame 0 would show")
+	Input.action_press(&"sprint")
+	await wait_physics_frames(1)
+	assert_eq(player.state, Player.State.RUN)
+	assert_eq(get_signal_emit_count(player, "footstep"), before, "no extra step in the tick")
+	# the cycle goes on (at most one frame further), it does not start over
+	assert_between(
+		player.sprite.frame, frame_before, frame_before + 1, "walk and run are one cycle"
+	)
+
+
+func test_the_state_follows_the_sprint_not_the_speed() -> void:
+	await _setup("############\n#@,,,,,,,,,#\n############")
+	# fatigue slows the run to the speed of a walk; it stays a run for as long as it is one
+	player.speed_scale = 0.55
+	Input.action_press(&"move_right")
+	Input.action_press(&"sprint")
+	await wait_seconds(0.3)
+	watch_signals(player)
+	await wait_seconds(0.6)
+	assert_eq(player.state, Player.State.RUN)
+	assert_true(player.is_sprinting())
+	assert_lt(player.velocity.length(), player.tuning.walk_speed * 1.1, "as slow as a walk")
+	assert_signal_emit_count(player, "state_changed", 0)
+
+
+func test_a_light_stick_tilt_with_sprint_held_still_walks() -> void:
+	await _setup("############\n#@,,,,,,,,,#\n############")
+	Input.action_press(&"move_right", 0.3)
+	Input.action_press(&"sprint")
+	await wait_seconds(0.4)
+	assert_eq(player.state, Player.State.WALK, "below the sprint tilt it is no run")
+	assert_false(player.is_sprinting())
+	Input.action_release(&"move_right")

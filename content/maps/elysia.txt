@@ -29,8 +29,10 @@ h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
 % = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
 @ = {"ground": ",", "marker": "player_spawn"}
 W = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/sacred_tree"}}
-I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar"}}
-C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal"}}
+; Der Weltenbaum steht mitten im Becken, unerreichbar: seine Zeile hängt an einem unsichtbaren Punkt (D) am Südufer.
+D = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"cue": "sacred_tree", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
+I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar", "cue": "pillar", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 16}}
+C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal", "cue": "crystal", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
 T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_blue"}}
 P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_purple"}}
@@ -43,10 +45,12 @@ R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 w = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lily_pad"}}
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fence"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
-x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash"}}
+x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash", "cue": "splash", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
 ; Elysianer laufen exakt gleich: gleiche Route, gleiches Tempo, gleicher Takt (Game Bible §9).
 E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
-; wer dich beim Erwachen begrüßt (sein Zwilling begrüßt auf der anderen Seite niemanden)
+; wer dich beim Erwachen begrüßt, direkt neben dem Startpunkt und ihm zugewandt (sein Zwilling n steht gespiegelt auf der anderen Seite, ohne dass jemand kommt)
+N = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "w"}}
+n = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "e"}}
 G = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor"}}
 ; ihr Spiegelbild auf der anderen Seite: dieselbe Route, gespiegelt, im selben Takt
 e = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
@@ -55,6 +59,8 @@ Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; Truhe am Weltenbaum (Belohnung der Heldenquest), Stein am Becken (Seltenheit: —), Riss am Inselrand.
 Z = {"ground": "M", "prop": "res://world/props/chest.tscn", "params": {"flag": "elysia.chest_tree_opened", "actions": [{"item": "item_fame"}, {"gold": 4200}, {"xp": 10000}, {"quest": "main_elysia_hero", "stage": "celebrated", "start": true}]}}
 j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_stone", "flag": "elysia.stone_taken"}}
+; Die Zeile zum Stein, solange er liegt: unsichtbar, eine Zelle westlich auf dem Marmor (S).
+S = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "stone", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 14, "unless": "elysia.stone_taken"}}
 X = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "tal", "spawn": "rift", "if": "elysia.rift_open"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -74,15 +80,15 @@ hh.................f~~....MMM~~~~~~~MMM....~~f.................hh
 hh................f~~~f..MM~~~~~~~~~~~MM..f~~~f................hh
 hh......T..........~~g..MMMw~~~~~~~~~wMMM..g~~..........T......hh
 hh.................~~...IM~~~~~~~~~~~~~MI...~~.................hh
-hh.................~~...MM~~~~~~W~~~~~~MMjk.~~.................hh
+hh.................~~...MM~~~~~~W~~~~~~MSjk.~~.................hh
 hh.................~~...MMM~~~~~~~~~~~MMM...~~.................hh
 hh................~~~g...MM~~w~~~~~w~~MM...g~~~................hh
-hh............P...~~......MMM~~~~~~~MMM......~~...P............hh
+hh............P...~~......MMM~~~D~~~MMM......~~...P............hh
 hh...U............~~.......IMMBMMMBMMI.......~~............U...hh
 hh................~~.......MMMMMCMMMMM.......~~................hh
 hh................qq..,o,,,MMMMMZMMMMM,,,o,..qq................hh
-hh.,,,,...G....,,,==,,,,,,,,...,,,...,,,,,,,,==,,,....G...,,,,.hh
-hh,,,,,,,@,,,E,,,,QQ,,,,,,...g.,,,.g...,,,,,,QQ,,,,e,,,,,,,,,,,hh
+hh.,,,,........,,,==,,,,,,,,...,,,...,,,,,,,,==,,,........,,,,.hh
+hh,,,,,,,@N,,E,,,,QQ,,,,,,...g.,,,.g...,,,,,,QQ,,,,e,,n,,,,,,,,hh
 hh.,,,,,,,,,,,,,,o~~,.........O,,,O.........,~~o,,,,,,,,,,,,,,.hh
 hh....fffffff.2..~~~....Y....o.,,,.o....Y....~~~..2.fffffff....hh
 hh...ffffffffK...~~...........t,,,t...........~~...Kffffffff...hh

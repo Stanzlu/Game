@@ -23,20 +23,25 @@ const SHARP_SHADER := preload("res://world/shaders/sharp_display.gdshader")
 const FOLLOW_OFFSET := Vector2(0, -8)
 
 @export var camera_mode := CameraMode.SMOOTH
-## How quickly the camera catches up (1/s). Higher = tighter.
-@export var follow_sharpness := 14.0
+## How quickly the camera catches up (1/s). Higher = tighter: at 30 the camera trails a
+## walking figure by about 3 px and has settled (95 %) 0.1 s after it stops, so nothing
+## visibly slides on after the stop (it was 14: 6 px of lag and a 7 px slide).
+@export var follow_sharpness := 30.0
 ## Pixels the camera leads in the walking direction.
-@export var look_ahead := 14.0
-@export var look_ahead_sharpness := 3.0
+@export var look_ahead := 12.0
+@export var look_ahead_sharpness := 4.0
 
 var viewport: SubViewport
 var world_root: Node2D
 var display: Sprite2D
 ## Integer world position at the center of the view (what a Camera2D position would be).
 var camera_position := Vector2.ZERO
+## The fraction of a world pixel the display is shifted by on top of camera_position
+## (smooth mode); overlays that follow the world have to leave it out too.
+var camera_remainder := Vector2.ZERO
 var target: Node2D
 var bounds := Rect2()
-## How many UI pixels one world pixel covers (1 = as before, Elysia; 1.5 = the real world).
+## How many UI pixels one world pixel covers (1.25 in every scene, 1.5 in the house; ADR-045).
 var zoom := 1.0
 ## Size of the visible world in world pixels (BASE_SIZE / zoom, rounded up).
 var view_size := BASE_SIZE
@@ -98,7 +103,7 @@ func set_zoom(value: float) -> void:
 ## Converts a world position to a position in the 640x360 UI space (for overlays that
 ## should keep the UI's pixel size while following something in the world).
 func world_to_ui(world_position: Vector2) -> Vector2:
-	return (world_position - camera_position + Vector2(view_size) * 0.5) * zoom
+	return (world_position - camera_position - camera_remainder + Vector2(view_size) * 0.5) * zoom
 
 
 ## Post-process for the whole world image (color grading, bloom, vignette; ADR-017).
@@ -120,11 +125,15 @@ func follow(node: Node2D, snap_now: bool = true) -> void:
 	_gliding = not snap_now
 
 
-## Screen shake in whole game pixels, fading out. Does nothing when the player turned
-## screen shake off (accessibility).
+## Screen shake in whole game pixels, fading out, with a matching rumble on the first
+## controller. Does nothing when the player turned screen shake off (accessibility).
 func shake(strength: float, seconds: float) -> void:
 	if not Settings.get_bool("display.screen_shake"):
 		return
+	if Input.get_connected_joypads().has(0):
+		Input.start_joy_vibration(
+			0, clampf(strength * 0.3, 0.0, 1.0), clampf(strength * 0.6, 0.0, 1.0), seconds
+		)
 	_shake_strength = strength
 	_shake_length = seconds
 	_shake_time = seconds
@@ -148,7 +157,7 @@ func _process(delta: float) -> void:
 	# only changes while walking.
 	if velocity.length() > 10.0:
 		var lead_target := velocity.normalized() * look_ahead
-		_lead = CameraMath.smooth_toward(_lead, lead_target, look_ahead_sharpness, delta)
+		_lead = CameraMath.lead_toward(_lead, lead_target, look_ahead_sharpness, delta)
 	# Following the rounded feet keeps the snapped player steady on screen.
 	var desired: Vector2 = feet.round() + _lead + FOLLOW_OFFSET
 	if not _has_position:
@@ -173,6 +182,7 @@ func _process(delta: float) -> void:
 	# Set the canvas transform directly: a Camera2D would apply the new position one
 	# frame late while the fractional display shift applies immediately (visible jitter).
 	camera_position = parts[0]
+	camera_remainder = parts[1]
 	var half_view := Vector2(viewport.size) * 0.5
 	viewport.canvas_transform = Transform2D(0.0, half_view - camera_position)
 	display.position = (-Vector2.ONE * BORDER - parts[1]) * zoom

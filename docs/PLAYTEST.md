@@ -23,7 +23,9 @@ Start. Das ist bei kleinen Projekten normal.
 | macOS | `REAL-v…-macos.zip` | Entpacken, `REAL.app` öffnen. Wenn macOS blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal: `xattr -dr com.apple.quarantine REAL.app` |
 | Linux | `REAL-v…-linux.zip` | `REAL.x86_64` ausführen (bei Bedarf `chmod +x REAL.x86_64`). |
 
-Im Startmenü: **Neues Spiel** → Namen wählen (tippen oder einen Vorschlag nehmen) → los.
+Im Startmenü: **Neues Spiel** → Namen wählen (tippen oder einen Vorschlag nehmen) → los. Unter
+**Mitwirkende** steht, wer das Spiel gemacht hat und welche Lizenzen darin stecken. Die Tasten für
+dein Gerät stehen als Zeile am unteren Rand des Startbilds.
 
 ## Steuerung
 
@@ -37,22 +39,32 @@ Tastatur und Controller funktionieren gleichermaßen.
 | Zurück | Esc oder Rücktaste | B / Kreis |
 | Pause-Menü (Speichern, Einstellungen) | Esc oder Tab | Start |
 | Journal | J | Back / Select |
+| Lange Journal-Einträge blättern | Bild auf / Bild ab | rechter Stick |
+| Gespräch schnell durchblättern | Bestätigen halten (hält an Antworten an) | Bestätigen halten |
 
-Im Gespräch blättert gedrücktes Bestätigen schnell weiter; an Antworten hält es an. Die ganze Belegung
-zeigt das Spiel unter **Einstellungen → Steuerung anzeigen**.
+Im Gespräch bringt Bestätigen den Text weiter, ein Linksklick auf die Textbox ebenfalls; gedrücktes
+Bestätigen blättert schnell weiter und hält an Antworten an. Die ganze Belegung zeigt das Spiel unter
+**Einstellungen → Steuerung anzeigen** und direkt im **Pause-Menü** („Steuerung anzeigen“). Die Seite
+nennt alle Tasten je Aktion; Textseiten (Steuerung, Mitwirkende) blättern mit Hoch / Runter oder dem
+rechten Stick. Tasten umbelegen geht in diesem Build noch nicht.
 
 ## Während du spielst
 
 - **Mitschreiben ist nicht nötig.** Das Spiel notiert im Log, wann du welchen Abschnitt erreichst.
-- **Speichern:** über das Pause-Menü; das Spiel speichert auch selbst. Im Startmenü geht es mit
-  **Fortsetzen** weiter.
+- **Speichern:** über das Pause-Menü; das Spiel speichert auch selbst (an jedem Abschnitt und wenn du
+  das Fenster schließt). Die Slots zeigen Name, Ort, Spielminuten und Datum. Im Startmenü geht es mit
+  **Fortsetzen** weiter. Verliert das Fenster den Fokus (Alt+Tab), pausiert das Spiel.
 - **Einstellungen**, die helfen können:
+  - Ton: sechs Regler (Gesamt, Musik, Umgebung, Effekte, Menüs, Stimmen); bei „Effekte“ und „Stimmen“
+    hörst du beim Ändern einen Probeklang
   - Textgeschwindigkeit und „Automatisch weiter“
-  - große Schrift
+  - „Große Schrift“
   - „Geräusche als Text“: wichtige Geräusche erscheinen als Zeile am unteren Rand
-  - Bildschirmwackeln und Blitzeffekte reduzieren
+  - „Bildschirmwackeln“ und „Blitzeffekte reduzieren“ (dann entfallen auch die Bewegungseffekte im
+    Dialogtext)
   - „Tiefenebenen bewegen sich mit“ (aus, wenn dir Bewegung im Hintergrund unangenehm ist)
   - „Mehr Zeit lassen“ und „Begegnungstempo“ für mehr Geduld
+  - „Kamera“ (Weich oder Pixelgenau): Probier gern beide aus und sag uns, welche dir besser gefällt
 - **Wenn du feststeckst:** Versuch es erst ein paar Minuten selbst. Hilft das nicht, steht unten unter
   „Hilfe“ ein Hinweis für jede Stelle.
 - **macOS, ruckelt es mit genau 30 Bildern pro Sekunde?** Das ist meistens der Stromsparmodus im
@@ -82,6 +94,11 @@ Stichworte oder eine Sprachnachricht reichen. Ehrliche Kritik hilft am meisten.
 
 Technik: Gab es Abstürze, Ruckler, Fehler im Bild oder Texte, die abgeschnitten waren?
 
+Zusätzlich (keine Gate-Fragen):
+- Hast du die Einstellung „Kamera“ probiert? Weich oder Pixelgenau, was fühlte sich besser an?
+- War im Ton etwas zu laut, zu leise oder zu dicht (der Bach, die Belohnungen in Elysia, der Abend)?
+- macOS: Hast du das Vollbild benutzt? Blieb ein schwarzer Rand?
+
 ## Was du zurückschickst
 
 1. Deine Antworten.
@@ -102,7 +119,7 @@ Nur lesen, wenn du feststeckst. Jeder Punkt verrät ein wenig.
 <summary>Elysia: Wie geht es weiter?</summary>
 
 Sprich das Kind am Becken an und folge ihm. Wer nichts tut, dem öffnet sich nach einiger Zeit von selbst
-etwas am rechten unteren Inselrand.
+etwas am rechten unteren Inselrand; ein fernes Grollen kündigt es an.
 </details>
 
 <details>
@@ -122,13 +139,13 @@ Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
 <summary>Der Weg, der nicht endet</summary>
 
 Erst ein gutes Stück mitgehen, ruhig auch rennen. Wer rennt, kommt trotzdem nicht an. Was tut man, wenn
-ein Weg nicht endet?
+ein Weg nicht endet? Sobald es stimmt, hört die Musik auf.
 </details>
 
 <details>
 <summary>Das Feuer</summary>
 
-Wenn es brennt, setz dich auf den Teppich davor.
+Das Holz legst du am Kamin ab. Wenn es brennt, setz dich auf den Teppich davor.
 </details>
 
 <details>

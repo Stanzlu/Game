@@ -26,8 +26,13 @@ out_abs="$(cd "$out_dir" && pwd)"
 args=(--rendering-driver opengl3 --audio-driver Dummy
   --fixed-fps "${CAPTURE_FPS:-30}" --write-movie "${out_abs}/frame.png" --quit-after "$frames")
 [ -n "$scene" ] && args+=("$scene")
-# Captures never touch real saves or settings.
-args+=(-- --profile=capture "${user_args[@]}")
+# Captures never touch real saves or settings. Every capture gets a profile of its own (a
+# shared one carries saves from the last run into the next: the start menu then shows
+# "Fortsetzen" and "Neues Spiel" asks first). A --profile in the user args comes later, so it wins.
+profile="capture_$$"
+args+=(-- "--profile=${CAPTURE_PROFILE:-$profile}" "${user_args[@]}")
+profile_dir="${XDG_DATA_HOME:-$HOME/.local/share}/REAL/profiles/$profile"
+trap 'rm -rf "$profile_dir"' EXIT
 
 xvfb-run -a -s "-screen 0 1920x1080x24" tools/godot.sh "${args[@]}" >"${out_abs}/godot.log" 2>&1 || {
   cat "${out_abs}/godot.log"

@@ -32,6 +32,17 @@ step "gdlint (${#GD_FILES[@]} files)"
 step "gdformat --check"
 "$GDFORMAT" --check "${GD_FILES[@]}"
 
+# Nobody can listen in CI: the mix is measured (loudness per sound group, steps, soundscapes,
+# sound classes over the bed). Needs numpy, a dev-only dependency (requirements-art.txt).
+step "audio levels"
+PYTHON="python3"
+[ -x .venv/bin/python ] && PYTHON=".venv/bin/python"
+if "$PYTHON" -c "import numpy" >/dev/null 2>&1; then
+  "$PYTHON" tools/audio/check_levels.py
+else
+  echo "audio levels: SKIPPED, numpy is missing (.venv/bin/pip install -r requirements-art.txt)"
+fi
+
 step "godot import"
 # Warm-up import: on a fresh checkout Godot loads the project theme before the font
 # is imported and logs spurious errors. Only the second, warm import must be clean.

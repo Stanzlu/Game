@@ -56,6 +56,9 @@ const KEYS_PER_EVENT := {
 }
 
 var file_path := ""
+## How often the file was written (a slider drag changes a value every frame: one write).
+var writes := 0
+var _save_queued := false
 var _values: Dictionary[String, Variant] = {}
 var _session: Dictionary[String, Variant] = {}
 var _input_overrides: Dictionary[String, Array] = {}
@@ -71,6 +74,10 @@ func _ready() -> void:
 	load_file()
 	apply_args(OS.get_cmdline_user_args())
 	apply_all()
+
+
+func _exit_tree() -> void:
+	flush()
 
 
 # --- Values ----------------------------------------------------------------------------
@@ -123,7 +130,7 @@ func set_value(key: String, value: Variant, persist := true) -> bool:
 	_apply(key)
 	changed.emit(key)
 	if persist:
-		save_file()
+		request_save()
 	return true
 
 
@@ -147,7 +154,7 @@ func reset_to_defaults(persist := true) -> void:
 		apply_all()
 		for key: String in SCHEMA:
 			changed.emit(key)
-		save_file()
+		request_save()
 
 
 # --- Convenience for consumers ---------------------------------------------------------
@@ -254,14 +261,14 @@ func set_input_override(action: String, events: Array[InputEvent]) -> bool:
 		return false
 	_input_overrides[action] = encoded
 	_apply_input_overrides()
-	save_file()
+	request_save()
 	return true
 
 
 func clear_input_overrides() -> void:
 	_input_overrides.clear()
 	_apply_input_overrides()
-	save_file()
+	request_save()
 
 
 func input_overrides() -> Dictionary:
@@ -322,7 +329,24 @@ static func decode_event(data: Dictionary) -> InputEvent:
 # --- File ------------------------------------------------------------------------------
 
 
+## Writes the file at the end of the frame, once however many values changed (dragging a
+## slider changes one every frame).
+func request_save() -> void:
+	if _save_queued:
+		return
+	_save_queued = true
+	flush.call_deferred()
+
+
+## Writes a queued save now (before the game closes).
+func flush() -> void:
+	if _save_queued:
+		save_file()
+
+
 func save_file() -> Error:
+	_save_queued = false
+	writes += 1
 	var data := {"version": FILE_VERSION, "values": _values.duplicate(), "input": _input_overrides}
 	var err := DirAccess.make_dir_recursive_absolute(file_path.get_base_dir())
 	if err != OK:
@@ -336,9 +360,15 @@ func save_file() -> Error:
 		return err
 	file.store_string(JSON.stringify(data, "\t"))
 	file.close()
-	if FileAccess.file_exists(file_path):
+	# the rename replaces the old file in one step: there is no moment without a settings file
+	err = DirAccess.rename_absolute(tmp, file_path)
+	if err != OK and FileAccess.file_exists(file_path):
+		# a platform whose rename will not overwrite: remove first, only now
 		DirAccess.remove_absolute(file_path)
-	return DirAccess.rename_absolute(tmp, file_path)
+		err = DirAccess.rename_absolute(tmp, file_path)
+	if err != OK:
+		Log.error(Log.Category.UI, "settings not saved", {"error": error_string(err)})
+	return err
 
 
 ## Reads the file if it exists. Invalid entries fall back to defaults and are reported.

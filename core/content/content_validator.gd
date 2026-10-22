@@ -6,7 +6,9 @@ extends RefCounted
 ##
 ## Dialogue rules: every spoken line and answer has a static ID ([ID:...], unique across
 ## all dialogues); no fake choices (answers of one group must not all continue the same
-## way); WorldState calls name existing methods and known quests, items, NPCs and facets.
+## way); an answer that prints a value ({{...}}) needs a condition on that value, so it
+## never shows up empty; text effects ([wave], [shake], ...) only on spoken lines, never in
+## narration; WorldState calls name existing methods and known quests, items, NPCs and facets.
 
 const DIALOGUE_DIR := "res://content/dialogue"
 const WORLD_STATE_SCRIPT := "res://core/world_state.gd"
@@ -29,6 +31,12 @@ const NPC_METHODS: PackedStringArray = [
 const FLAG_METHODS: PackedStringArray = ["has_flag", "set_flag", "clear_flag"]
 const FACET_METHODS: PackedStringArray = ["has_facet", "set_facet"]
 
+## Values that are never empty, so an answer may print them without a condition.
+const ALWAYS_SET_VALUES: PackedStringArray = ["WorldState.player_name()"]
+
+static var _effect_regex := RegEx.create_from_string(
+	"\\[/?(wave|shake|rainbow|tornado|pulse|fade)[\\s=\\]]"
+)
 static var _call_regex := RegEx.create_from_string("WorldState\\.([a-z_]+)\\(([^)]*)\\)")
 static var _string_regex := RegEx.create_from_string('"([^"]*)"')
 
@@ -142,6 +150,13 @@ static func validate_dialogue(
 			seen_ids[static_id] = where
 		if kind == "response" and line.has("responses"):
 			problems.append_array(_check_choice(lines, line, where))
+		if kind == "response":
+			problems.append_array(_check_answer_values(line, where))
+		if kind == "dialogue" and str(line.get("character", "")).is_empty():
+			if _effect_regex.search(str(line.get("text", ""))) != null:
+				problems.append(
+					"%s: text effect in a narration line, effects belong to speech" % where
+				)
 	problems.append_array(_check_world_state_calls(text, path))
 	return problems
 
@@ -156,6 +171,25 @@ static func _check_choice(lines: Dictionary, first: Dictionary, where: String) -
 	if targets.size() < 2:
 		return ["%s: fake choice, every answer continues the same way" % where]
 	return []
+
+
+## An answer with a {{value}} in its text needs a condition that mentions that value (an
+## empty cat name would leave " wohnt jetzt bei mir." on the screen).
+static func _check_answer_values(line: Dictionary, where: String) -> PackedStringArray:
+	var problems: PackedStringArray = []
+	var condition := str(line.get("condition_as_text", ""))
+	for replacement: Dictionary in line.get("text_replacements", []):
+		var value := str(replacement.get("value_in_text", "")).trim_prefix("{{").trim_suffix("}}")
+		value = value.strip_edges()
+		if value in ALWAYS_SET_VALUES or condition.contains(value):
+			continue
+		problems.append(
+			(
+				"%s: answer prints {{%s}} without a condition that rules out an empty value"
+				% [where, value]
+			)
+		)
+	return problems
 
 
 static func _check_world_state_calls(text: String, path: String) -> PackedStringArray:

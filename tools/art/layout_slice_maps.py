@@ -26,6 +26,9 @@ STONE_FIELD = ["oFFFo",
                "FFoFo",
                "ooFFF"]
 LOG_ROW = 7
+# Wander phases of the Antreiber's trail (centre line, width) for the plain and the bench
+# piece, searched so that in any order of pieces no trail edge keeps one row for long.
+TRAIL_PHASES = {False: (9.0, 6.5), True: (10.5, 3.0)}
 
 
 def tal():
@@ -232,6 +235,39 @@ def _fallen_tree(g):
     return cells
 
 
+def _trail(g, bench):
+    """The Antreiber's trail: a trodden track, not a road. Its centre line and width wander
+    (2 to 4.4 cells wide, the centre up to a cell off), so no edge runs straight for more
+    than a few cells (ART_DIRECTION "Trampelpfad statt Straße"); two tongues of grass reach
+    in. The seam columns stay as they are (ADR-038): rows 10 to 12 at both ends of a piece."""
+    w = g.w
+    # phases picked so that, in any order of pieces, no edge stays on one row for more than 5
+    # columns (the seam columns are fixed, which is where runs meet)
+    phase_c, phase_w = TRAIL_PHASES[bench]
+    for x in range(w):
+        env = min(1.0, x / 3.0, (w - 1 - x) / 3.0)
+        centre = 11.0 + env * wobble(x + phase_c, (0.7, 1.7, 0.4), (0.4, 0.95, 1.7))
+        width = 3.2 + env * wobble(x + phase_w, (1.0, 1.05, 1.1), (0.6, 0.65, 0.3))
+        width = min(max(width, 2.0), 4.4)
+        for y in range(g.h):
+            if abs(y - centre) <= width / 2:
+                g.set(x, y, ",", ".")
+    for x in (0, w - 1):  # the seam: the same three path rows at both ends
+        for y in range(9, 14):
+            g.set(x, y, "," if 10 <= y <= 12 else ".")
+    # two grass tongues reaching into the trail, one from each side
+    tongues = [(8.0, 9.6), (15.5, 13.2)] if bench else [(5.5, 13.0), (12.5, 9.5)]
+    for tx, ty in tongues:
+        g.ellipse(tx, ty, 1.3, 0.85, ".", only=",", wobble=0.5, seed=int(tx))
+    # no lone specks: a path cell needs a path neighbour on two sides, or it is grass
+    for _ in range(2):
+        for y in range(g.h):
+            for x in range(1, w - 1):
+                if g.get(x, y) == "," and sum(g.get(x + dx, y + dy) == "," for dx, dy in
+                                              ((1, 0), (-1, 0), (0, 1), (0, -1))) < 2:
+                    g.set(x, y, ".")
+
+
 def antreiber(bench):
     """One piece of the path that does not end (Antreiber, beat 5): forest on both sides, the
     trail through the middle. Pieces repeat endlessly, so both edge columns are identical in
@@ -246,13 +282,7 @@ def antreiber(bench):
             g.set(x, y, "h")
         for y in range(h - south, h):
             g.set(x, y, "h")
-    widths = [2.6, 2.8, 3.2, 2.9, 2.6] if not bench else [2.6, 3.0, 3.4, 3.0, 2.6]
-    g.path([(-1, 11), (5, 11.2), (10, 10.8 if bench else 11.4), (15, 11.1), (20, 11)], 3.0, ",", only=".",
-           widths=widths)
-    for x in range(w):  # the seam: the same three path rows at both ends
-        for y in range(9, 14):
-            if x in (0, w - 1):
-                g.set(x, y, "," if 10 <= y <= 12 else ".")
+    _trail(g, bench)
     g.ellipse(6 if bench else 13, 12.6, 1.8, 0.8, "m", only=",", wobble=0.6, seed=2 if bench else 5)
     for x, y in ([(4, 10), (14, 12)] if bench else [(8, 12), (17, 10)]):
         if g.get(x, y) == ",":

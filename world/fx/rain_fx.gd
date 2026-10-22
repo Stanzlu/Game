@@ -21,7 +21,7 @@ func setup(game_view: GameView, strength: float = 1.0) -> void:
 	drops.name = "Drops"
 	drops.texture = load(FX_DIR + "raindrop.png")
 	drops.local_coords = false
-	drops.amount = int(260 * strength)
+	drops.amount = int(320 * strength)
 	drops.lifetime = 1.25
 	drops.preprocess = 1.25
 	drops.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
@@ -30,10 +30,11 @@ func setup(game_view: GameView, strength: float = 1.0) -> void:
 	drops.direction = Vector2(-0.22, 1.0)
 	drops.spread = 2.0
 	drops.gravity = Vector2.ZERO
-	drops.initial_velocity_min = 330.0
-	drops.initial_velocity_max = 390.0
+	drops.initial_velocity_min = 380.0
+	drops.initial_velocity_max = 440.0
 	drops.particle_flag_align_y = true
-	drops.color = Color(0.78, 0.84, 0.92, 0.55)
+	# the audit found the rain hardly visible: longer, lighter and denser streaks
+	drops.color = Color(0.84, 0.9, 1.0, 0.75)
 	add_child(drops)
 	var splashes := CPUParticles2D.new()
 	splashes.name = "Splashes"

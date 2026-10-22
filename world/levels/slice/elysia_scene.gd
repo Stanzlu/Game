@@ -15,12 +15,24 @@ const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
 ## own (with it the child appears), and the rift opens a while later even if the child was
 ## never followed.
 const LOOPS_AFTER := 720.0
-const RIFT_AFTER_LOOPS := 240.0
+const RIFT_AFTER_LOOPS := 150.0
 ## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
 ## shrinks to nothing (Game Bible §8, §10).
 const FOUNTAIN_SOLVES_AFTER := 3.0
 const FOUNTAIN_XP := 10000
 const FOUNTAIN_GOLD := 2500
+## The waking (Game Bible §56 style, but in light): the world opens out of white, the hero
+## sits for a moment, gets up, and the one who greets turns to them. About 3 s before the first
+## line, with the corner of the HUD building up on the way.
+const WAKE_LIGHT := Color(1.0, 0.98, 0.92)
+const WAKE_LIGHT_HOLD := 0.4
+const WAKE_FADE_SECONDS := 2.6
+const WAKE_SIT_SECONDS := 1.2
+const WAKE_TURN_SECONDS := 0.4
+## The cue of the greeter on the map (content/maps/elysia.txt, letters N and n).
+const GREETER_CUE := "favor"
+## The rift opening on its own is far away: a soft rumble and a little shake, so it is noticed.
+const RIFT_OPENS_DB := -6.0
 
 var _loops_time := -1.0
 
@@ -44,10 +56,54 @@ func _wake() -> void:
 	if not WorldState.has_item("item_seed"):
 		# the seed was there before the first memory of Elysia (Game Bible §30)
 		WorldState.add_item("item_seed", 1, false)
+	var greeter := _greeter()
+	# seated before the cutscene locks the hero, so the lock keeps the pose
+	player.sit_on(player.global_position, Facing.Dir.S)
 	var cut := Cutscene.begin(self)
-	await cut.wait(1.4)
+	hud.hold_back()
+	if greeter != null:
+		# looks off into the garden until the hero is up
+		greeter.talking = true
+		greeter.facing = Facing.Dir.S
+	ScreenFade.fade_out(0.0, WAKE_LIGHT)
+	# the fade-in clears quickly at first: hold the white a moment so it reads as light
+	await cut.wait(WAKE_LIGHT_HOLD)
+	ScreenFade.fade_in(WAKE_FADE_SECONDS)
+	await cut.wait(WAKE_SIT_SECONDS - WAKE_LIGHT_HOLD)
+	player.stand_up()
+	_turn_to_each_other(cut, greeter)
+	await hud.reveal_elysia()
 	await cut.say(DIALOGUE, "wake")
+	if is_instance_valid(greeter):
+		greeter.talking = false
 	cut.end()
+
+
+## The hero and the greeter look at each other (a moment after the hero got up).
+func _turn_to_each_other(cut: Cutscene, greeter: NpcWalker) -> void:
+	await cut.wait(WAKE_TURN_SECONDS)
+	if greeter == null or not is_instance_valid(greeter) or not is_instance_valid(player):
+		return
+	player.facing = Facing.from_vector(greeter.global_position - player.global_position)
+	greeter.facing = Facing.from_vector(player.global_position - greeter.global_position)
+
+
+## The one who greets: the walker with the greeter's cue standing nearest to the hero.
+func _greeter() -> NpcWalker:
+	var nearest: NpcWalker = null
+	for node in map.entities.get_children():
+		var walker := node as NpcWalker
+		if walker == null or walker.cue != GREETER_CUE:
+			continue
+		if (
+			nearest == null
+			or (
+				walker.global_position.distance_squared_to(player.global_position)
+				< nearest.global_position.distance_squared_to(player.global_position)
+			)
+		):
+			nearest = walker
+	return nearest
 
 
 func _process(_delta: float) -> void:
@@ -63,6 +119,23 @@ func _process(_delta: float) -> void:
 	):
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag("elysia.rift_open")
+		_announce_rift()
+
+
+## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
+## and its caption (whatever the captions setting says), so it is not a silent change on the map.
+func _announce_rift() -> void:
+	view.shake(1.0, 0.8)
+	AudioDirector.sfx("rift_touch", RIFT_OPENS_DB)
+	hud.show_caption("CAPTION_RIFT", _rift_position())
+
+
+## Where the rift stands on the map, or null.
+func _rift_position() -> Variant:
+	for placement: Dictionary in map.data.placements:
+		if str(placement["prop"]).ends_with("rift.tscn"):
+			return map.cell_to_world(placement["cell"])
+	return null
 
 
 func _on_quest_changed(quest_id: String, stage: String) -> void:

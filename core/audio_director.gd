@@ -28,21 +28,33 @@ const SILENT_DB := -60.0
 ## SILENT_DB as amplitude: the floor of linear fades.
 const MIN_AMPLITUDE := 0.001
 const DUCK_DB := -7.0
+## Dialogue also takes a little off the ambience, so voices and words sit over the bed.
+const AMBIENCE_DUCK_DB := -3.0
+const AMBIENCE_DUCK_SECONDS := 0.4
+## Rewards that stack up in Elysia take the music down for a moment, so they do not hit the
+## limiter together with it: sfx() ducks the music for REWARD_DUCK_SECONDS by REWARD_DUCK_DB
+## when the sound's name starts with one of these.
+const REWARD_SOUNDS: PackedStringArray = ["coin", "xp", "loot", "level_up", "chest_open", "praise"]
+const REWARD_DUCK_DB := -3.0
+const REWARD_DUCK_SECONDS := 1.2
 ## Elysia's loop shrinks the longer the player stays and the further they get (Game Bible
 ## §35 "Loops werden zunehmend wahrnehmbar"): the same music cut to 8, 4 and 2 bars.
 ## A stage starts after `after` seconds of play or once `flag` is set; the switch waits for
-## the end of the loop, so it lands on the downbeat.
+## the end of the loop, so it lands on the downbeat. The flags are the real trigger: the times
+## only catch someone who dawdles (5 and 10 minutes), the loops are 19, 10 and 5 seconds.
 const ELYSIA_STAGES: Array[Dictionary] = [
 	{"file": "elysia_loop.wav", "after": 0.0, "flag": ""},
-	{"file": "elysia_half_loop.wav", "after": 150.0, "flag": "elysia.chest_tree_opened"},
-	{"file": "elysia_quarter_loop.wav", "after": 300.0, "flag": "elysia.stone_taken"},
+	{"file": "elysia_half_loop.wav", "after": 300.0, "flag": "elysia.chest_tree_opened"},
+	{"file": "elysia_quarter_loop.wav", "after": 600.0, "flag": "elysia.stone_taken"},
 ]
 ## Tracks that rest between rounds, so a short loop does not repeat for an hour: after
 ## `loops` (min, max) loops the music fades out over the last `fade_out` seconds of a loop,
 ## stays away for `rest` (min, max) seconds under the ambience and comes back from the top
-## (`fade_in`). Elysia never rests: its loop shrinks instead (ELYSIA_STAGES).
+## (`fade_in`). Elysia never rests: its loop shrinks instead (ELYSIA_STAGES). Rests only
+## happen inside a GameScene (the start menu keeps its music), and a scene that asks for the
+## resting track again wakes it (play_music).
 const TRACK_REST := {
-	"valley": {"loops": [2, 3], "rest": [40.0, 90.0], "fade_out": 4.0, "fade_in": 3.0},
+	"valley": {"loops": [2, 3], "rest": [25.0, 50.0], "fade_out": 4.0, "fade_in": 3.0},
 }
 const UI_SOUNDS: PackedStringArray = ["move", "confirm", "back", "open", "close", "tick"]
 ## Sounds that tell something (Game Bible §50: hints must not depend on hearing alone).
@@ -55,6 +67,8 @@ const CAPTIONS := {
 	"stone_wobble": "CAPTION_WOBBLE",
 	"bird": "CAPTION_BIRD",
 	"fire_light": "CAPTION_FIRE",
+	"cat_meow": "CAPTION_CAT",
+	"purr": "CAPTION_PURR",
 }
 const POOL_SIZE := 6
 
@@ -71,6 +85,10 @@ var _ambience: Array[AudioStreamPlayer] = []
 var _active_music := 0
 var _active_ambience := 0
 var _ducked := false
+## Rewards playing right now that duck the music (REWARD_SOUNDS).
+var _reward_ducks := 0
+## The level the ambience bed (an AudioStream) was asked for, before dialogue ducking.
+var _ambience_db := SILENT_DB
 var _tweens: Dictionary[Node, Tween] = {}
 var _tape_tween: Tween
 var _pools: Dictionary[StringName, Array] = {}
@@ -100,6 +118,24 @@ func _ready() -> void:
 			pool.append(player)
 		_pools[bus] = pool
 		_next_in_pool[bus] = 0
+
+
+func _exit_tree() -> void:
+	# Players that still hold streams and playbacks at exit show up as leaked objects (the
+	# soundscape player lets go of its own in its _exit_tree).
+	for tween: Tween in _tweens.values():
+		if tween.is_valid():
+			tween.kill()
+	_tweens.clear()
+	var players: Array[AudioStreamPlayer] = []
+	players.append_array(_music)
+	players.append_array(_ambience)
+	for pool: Array in _pools.values():
+		players.append_array(pool)
+	for player in players:
+		player.stop()
+		player.stream = null
+	SoundBank.clear_cache()
 
 
 func _make_player(player_name: String, bus: StringName) -> AudioStreamPlayer:
@@ -133,7 +169,7 @@ func wanted_elysia_stage() -> int:
 func _process(delta: float) -> void:
 	if current == "elysia":
 		_update_elysia_stage(_music[_active_music].get_playback_position())
-	elif rest_rules.has(current):
+	elif rest_rules.has(current) and get_tree().current_scene is GameScene:
 		_update_rest(delta, _music[_active_music].get_playback_position())
 
 
@@ -164,11 +200,7 @@ func _update_rest(delta: float, position: float) -> void:
 	if is_resting():
 		_rest_left -= delta
 		if _rest_left <= 0.0:
-			_start_rounds()
-			player.volume_db = SILENT_DB
-			player.play()
-			_fade(player, _music_db(), float(rule["fade_in"]), false)
-			Log.info(Log.Category.AUDIO, "music returns", {"track": current})
+			_wake(float(rule["fade_in"]))
 		return
 	if position < _last_position:
 		_loops_left -= 1
@@ -181,6 +213,18 @@ func _update_rest(delta: float, position: float) -> void:
 	_rest_left = left + seconds
 	_fade(player, SILENT_DB, left, true)
 	Log.info(Log.Category.AUDIO, "music rests", {"track": current, "seconds": roundf(seconds)})
+
+
+## Ends the rest: the track comes back from the top (or, while it is still fading out into
+## the rest, from where it is) and plays new rounds.
+func _wake(fade_in: float) -> void:
+	_start_rounds()
+	var player := _music[_active_music]
+	if not player.playing:
+		player.volume_db = SILENT_DB
+		player.play()
+	_fade(player, _music_db(), fade_in, false)
+	Log.info(Log.Category.AUDIO, "music returns", {"track": current})
 
 
 ## Whether the current track is resting between its rounds (TRACK_REST).
@@ -205,6 +249,10 @@ func play_music(track: String, fade := 2.0) -> void:
 	if track == "silence":
 		track = ""
 	if track == current:
+		# A scene that asks for the track it already has also ends its rest: the valley
+		# music must be there again for the evening and the ending.
+		if is_resting():
+			_wake(fade)
 		return
 	if not track.is_empty() and not is_track(track):
 		Log.error(Log.Category.AUDIO, "unknown music track", {"track": track})
@@ -260,7 +308,8 @@ func set_ambience(stream: Resource, volume_db := -6.0, fade := 2.0) -> void:
 		if soundscape != null:
 			_soundscape.play(soundscape, volume_db, fade)
 		elif stream != null:
-			_fade(_ambience[_active_ambience], volume_db, fade, false)
+			_ambience_db = volume_db
+			_fade(_ambience[_active_ambience], _ambience_target_db(), fade, false)
 		return
 	var bed := stream as AudioStream
 	if stream != null and soundscape == null and bed == null:
@@ -276,7 +325,8 @@ func set_ambience(stream: Resource, volume_db := -6.0, fade := 2.0) -> void:
 	player.stream = bed
 	player.volume_db = SILENT_DB
 	player.play()
-	_fade(player, volume_db, fade, false)
+	_ambience_db = volume_db
+	_fade(player, _ambience_target_db(), fade, false)
 
 
 ## Strength of the real world's wind right now (0..1), or -1 without a soundscape. The
@@ -285,14 +335,15 @@ func wind_gust() -> float:
 	return _soundscape.gust if _soundscape.def != null else -1.0
 
 
-## Lowers the music while a dialogue is open.
+## Lowers the music (and a little of the ambience) while a dialogue is open.
 func duck(on: bool) -> void:
 	if on == _ducked:
 		return
 	_ducked = on
-	# a resting track comes back at the ducked or normal level by itself
-	if not current.is_empty() and not is_resting():
-		_fade(_music[_active_music], _music_db(), 0.4, false)
+	_apply_music_level()
+	_soundscape.duck_to(AMBIENCE_DUCK_DB if on else 0.0, AMBIENCE_DUCK_SECONDS)
+	if ambience_stream is AudioStream:
+		_fade(_ambience[_active_ambience], _ambience_target_db(), AMBIENCE_DUCK_SECONDS, false)
 
 
 func is_ducked() -> bool:
@@ -315,23 +366,32 @@ func ui(sound: String, skin := SoundSet.FOLLOW) -> void:
 	_play(&"UI", SoundBank.stream(prefix, 1.0 if elysia else 1.05, 0.0 if elysia else 1.0), -4.0)
 
 
-## A non-positional game sound (rewards, the rift) on the SFX bus.
-
-
 ## Asks the HUD to write out a sound, if captions are on and the sound has one.
 func caption(prefix: String, at: Variant = null) -> void:
 	if CAPTIONS.has(prefix) and Settings.get_bool("access.captions"):
 		caption_requested.emit(CAPTIONS[prefix], at)
 
 
+## A non-positional game sound (rewards, the rift) on the SFX bus. Rewards (REWARD_SOUNDS)
+## take the music down for a moment so stacked ones do not hit the limiter with it.
 func sfx(prefix: String, volume_db := 0.0, pitch_spread := 1.0) -> void:
 	caption(prefix)
 	_play(&"SFX", SoundBank.stream(prefix, pitch_spread, 0.0), volume_db)
+	for reward in REWARD_SOUNDS:
+		if prefix.begins_with(reward):
+			_duck_for_reward()
+			return
 
 
-## One syllable of a dialogue voice ("elysia", "warm", "low", "neutral").
+## One syllable of a dialogue voice ("elysia", "warm", "low", "neutral"). Elysia is in
+## tune and never varies, like her menu sounds (ui()); the Real voices vary a little.
 func voice(kind: String, volume_db := 0.0) -> void:
-	_play(&"Voice", SoundBank.stream("voice_" + kind, 1.03, 1.0), volume_db)
+	var elysia := kind == "elysia"
+	_play(
+		&"Voice",
+		SoundBank.stream("voice_" + kind, 1.0 if elysia else 1.03, 0.0 if elysia else 1.0),
+		volume_db
+	)
 
 
 func _play(bus: StringName, stream: AudioStream, volume_db: float) -> void:
@@ -349,8 +409,32 @@ func _release_tape_waiters() -> void:
 	tape_stopped.emit.call_deferred()
 
 
+func _duck_for_reward() -> void:
+	_reward_ducks += 1
+	_apply_music_level()
+	await NodeTimer.after(self, REWARD_DUCK_SECONDS)
+	_reward_ducks -= 1
+	_apply_music_level()
+
+
+## Moves the music to its current level (dialogue and reward ducks). A resting track comes
+## back at the right level by itself.
+func _apply_music_level() -> void:
+	if not current.is_empty() and not is_resting():
+		_fade(_music[_active_music], _music_db(), 0.4, false)
+
+
 func _music_db() -> float:
-	return float(TRACK_DB.get(current, -8.0)) + (DUCK_DB if _ducked else 0.0)
+	var db := float(TRACK_DB.get(current, -8.0))
+	if _ducked:
+		db += DUCK_DB
+	if _reward_ducks > 0:
+		db += REWARD_DUCK_DB
+	return db
+
+
+func _ambience_target_db() -> float:
+	return _ambience_db + (AMBIENCE_DUCK_DB if _ducked else 0.0)
 
 
 func _fade(player: AudioStreamPlayer, target_db: float, seconds: float, stop_after: bool) -> void:

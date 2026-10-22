@@ -10,10 +10,12 @@ extends Node2D
 ## are warm, the others keep the cool blue of the sky. Each range fades into the haze at its
 ## foot, so the ranges separate the way real ones do.
 const RIDGES := [
-	[0.16, 92.0, 34.0, Color("#9aaec2"), Color("#d8d3cb"), 74.0, true, 0.75],
-	[0.3, 64.0, 24.0, Color("#738aa0"), Color("#a6a69c"), 52.0, false, 0.6],
-	[0.48, 54.0, 14.0, Color("#4a616e"), Color("#6f7a6c"), 34.0, false, 0.5],
+	[0.16, 92.0, 34.0, Color("#9aaec2"), Color("#d8d3cb"), 74.0, true, 0.45],
+	[0.3, 64.0, 24.0, Color("#738aa0"), Color("#a6a69c"), 52.0, false, 0.3],
+	[0.48, 54.0, 14.0, Color("#4a616e"), Color("#6f7a6c"), 34.0, false, 0.15],
 ]
+## The sky's default colours; DayLight sets them per time of day, because the evening's
+## warm world tint and grade would turn this blue into beige-grey (they multiply it).
 const SKY_TOP := Color("#7d9fc0")
 ## The horizon: warm, the way the evening haze is.
 const SKY_BOTTOM := Color("#efd9c0")
@@ -33,6 +35,14 @@ var width := 0.0
 var clear := 1.0:
 	set(value):
 		clear = clampf(value, 0.0, 1.0)
+		queue_redraw()
+var sky_top := SKY_TOP:
+	set(value):
+		sky_top = value
+		queue_redraw()
+var sky_bottom := SKY_BOTTOM:
+	set(value):
+		sky_bottom = value
 		queue_redraw()
 ## False when the player turned parallax off (Settings "display.parallax").
 var parallax := true
@@ -131,24 +141,24 @@ func _draw() -> void:
 	var half := Vector2(view.view_size) * 0.5
 	var left := cam.x - half.x - 4.0
 	var right := cam.x + half.x + 4.0
-	var sky_top := top_y - reach
+	var sky_y := top_y - reach
 	draw_polygon(
 		PackedVector2Array(
 			[
-				Vector2(left, sky_top),
-				Vector2(right, sky_top),
+				Vector2(left, sky_y),
+				Vector2(right, sky_y),
 				Vector2(right, top_y + 8.0),
 				Vector2(left, top_y + 8.0)
 			]
 		),
-		PackedColorArray([SKY_TOP, SKY_TOP, SKY_BOTTOM, SKY_BOTTOM])
+		PackedColorArray([sky_top, sky_top, sky_bottom, sky_bottom])
 	)
 	for r in RIDGES.size():
 		_draw_ridge(r, cam, left, right)
 	# mist in front of the mountains; the treeline in front of it is part of the map
 	if clear < 1.0:
 		var mist := Color(MIST, (1.0 - clear) * 0.92)
-		draw_rect(Rect2(left, sky_top, right - left, reach + 8.0), mist)
+		draw_rect(Rect2(left, sky_y, right - left, reach + 8.0), mist)
 
 
 ## One mountain range: far ranges barely move with the camera (they are far away).
@@ -205,7 +215,7 @@ func _draw_ridge(index: int, cam: Vector2, left: float, right: float) -> void:
 				draw_rect(Rect2(_crest(heights, i, shift), Vector2(STEP, cap)), white)
 	# the foot of the range disappears in the haze
 	var haze_top := top_y - float(ridge[1]) * 0.6
-	var haze := Color(SKY_BOTTOM, ridge[7])
+	var haze := Color(sky_bottom, ridge[7])
 	draw_polygon(
 		PackedVector2Array(
 			[

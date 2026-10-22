@@ -15,6 +15,16 @@ const BARK_GAP := 0.8
 ## Walking behind: this far back, never faster than this.
 const TRAIL_DISTANCE := 26.0
 const TRAIL_SPEED := 42.0
+## Slower than this he counts as standing; the cycles are drawn for the player's walk and run.
+const MOVING_PACE := 6.0
+const WALK_CYCLE_SPEED := 88.0
+const RUN_CYCLE_SPEED := 144.0
+## A bark (or a word) lifts him by a pixel for a moment, like a speaker's breath.
+const BOB_PIXELS := 1.0
+const BOB_SECONDS := 0.06
+const BOB_GAP := 0.12
+## The speaker name in the dialogue files: his lines in a dialogue box make him bob by themselves.
+const SPEAKER := "Antreiber"
 const CUES := {
 	AntreiberModel.Mood.START: "start",
 	AntreiberModel.Mood.URGING: "urging",
@@ -31,9 +41,14 @@ const CUES := {
 
 var facing := Facing.Dir.E
 var silent := false
+## A scene sets this while a dialogue box speaks for him (the house): he bobs with the syllables.
+var talking := false:
+	set = _set_talking
 var _bark_cooldown := 0.0
 var _last_mood := -1
 var _bark_time := 0.0
+var _bobbing := false
+var _presenter: Node
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var bark: Label = $Bark
@@ -43,8 +58,10 @@ func _ready() -> void:
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
 	sheet.add_shadow_to(self)
+	NpcSteps.attach(self, sprite)
 	bark.hide()
 	_play("idle")
+	_connect_presenter.call_deferred()
 
 
 func update_actor(player: Player, model: AntreiberModel, delta: float) -> void:
@@ -55,11 +72,15 @@ func update_actor(player: Player, model: AntreiberModel, delta: float) -> void:
 		return
 	var speed := player.velocity.length()
 	var to_target := player.global_position + LEAD - global_position
-	global_position += to_target.limit_length(maxf(speed * 1.3, 70.0) * delta)
-	var moving := to_target.length() > 2.0 and speed > 5.0
-	if moving:
-		facing = Facing.Dir.E
-		_play("run" if speed > player.tuning.walk_speed * 1.2 else "walk")
+	var step := to_target.limit_length(maxf(speed * 1.3, 70.0) * delta)
+	global_position += step
+	# moving is what he actually does this tick, not what the player does: while the player
+	# walks, the rest to the target stays under 2 px and he would slide along in the idle pose
+	var pace := step.length() / delta if delta > 0.0 else 0.0
+	if pace > MOVING_PACE:
+		facing = Facing.from_vector_stable(facing, step)
+		var running := pace > player.tuning.walk_speed * 1.2
+		_play("run" if running else "walk", pace)
 	else:
 		facing = Facing.from_vector(player.global_position - global_position)
 		_play("idle")
@@ -84,7 +105,8 @@ func say(mood: AntreiberModel.Mood) -> void:
 	_center_bark.call_deferred()
 	_bark_time = bark_seconds(line.text)
 	_bark_cooldown = maxf(_bark_cooldown, _bark_time + BARK_GAP)
-	SoundBank.play_at(self, "bark", global_position, -10.0)
+	SoundBank.play_at(self, "bark", global_position, -1.0)
+	_bob()
 
 
 ## How long a bark stays on screen.
@@ -120,7 +142,7 @@ func trail(player: Node2D, delta: float) -> void:
 	var target := player.global_position - to_player.normalized() * TRAIL_DISTANCE
 	global_position = global_position.move_toward(target, TRAIL_SPEED * delta)
 	facing = Facing.from_vector(to_player)
-	_play("walk")
+	_play("walk", TRAIL_SPEED)
 
 
 ## Walks to `target` (world position) at `speed` and stands there.
@@ -129,7 +151,7 @@ func walk_to(target: Vector2, speed := 36.0) -> void:
 	var distance := global_position.distance_to(target)
 	if distance > 0.5:
 		facing = Facing.from_vector(target - global_position)
-		_play("walk")
+		_play("walk", speed)
 		var tween := create_tween()
 		tween.tween_property(self, ^"global_position", target, distance / speed)
 		await tween.finished
@@ -147,7 +169,48 @@ func sit_down(dir: Facing.Dir) -> void:
 	_play("sit")
 
 
-func _play(state_name: String) -> void:
+## `pace`: how fast he really moves (px/s); the walk and run cycles are drawn for the player's
+## pace, so a slower walker steps slower instead of paddling on the spot.
+func _play(state_name: String, pace := WALK_CYCLE_SPEED) -> void:
 	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
 		sprite.play(anim)
+	match state_name:
+		"walk":
+			sprite.speed_scale = clampf(pace / WALK_CYCLE_SPEED, 0.5, 1.5)
+		"run":
+			sprite.speed_scale = clampf(pace / RUN_CYCLE_SPEED, 0.6, 1.4)
+		_:
+			sprite.speed_scale = 1.0
+
+
+func _set_talking(value: bool) -> void:
+	talking = value
+	if value:
+		_connect_presenter()
+
+
+## The signal belongs to the dialogue box: without it he only bobs on barks.
+func _connect_presenter() -> void:
+	if not is_inside_tree() or (_presenter != null and is_instance_valid(_presenter)):
+		return
+	var presenter := get_tree().get_first_node_in_group(&"dialogue_presenter")
+	if presenter != null and presenter.has_signal(&"syllable"):
+		presenter.connect(&"syllable", _on_syllable)
+		_presenter = presenter
+
+
+func _on_syllable(character: Variant = null) -> void:
+	if talking or str(character) == SPEAKER:
+		_bob()
+
+
+func _bob() -> void:
+	if _bobbing:
+		return
+	_bobbing = true
+	sprite.offset = sheet.feet_offset + Vector2(0.0, -BOB_PIXELS)
+	await NodeTimer.after(self, BOB_SECONDS)
+	sprite.offset = sheet.feet_offset
+	await NodeTimer.after(self, BOB_GAP - BOB_SECONDS)
+	_bobbing = false

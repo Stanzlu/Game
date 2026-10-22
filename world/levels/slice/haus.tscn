@@ -6,12 +6,13 @@
 [node name="Haus" type="Node"]
 script = ExtResource("1_scene")
 map_path = "res://content/maps/haus.txt"
+view_zoom = 1.5
 player_sheet = ExtResource("2_sheet")
 ambience_db = -5.0
 saturation = 1.0
 contrast = 1.03
 tint = Color(1.02, 0.99, 0.96, 1)
 shadow_tint = Color(0.04, 0.03, 0.06, 1)
-vignette = 0.34
+vignette = 0.5
 bloom = 0.4
 dust = true

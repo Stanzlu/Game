@@ -19,7 +19,8 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Spielzustand nur über den Autoload `WorldState` ändern (ADR-019); Speichern über `SaveSystem` (ADR-021,
   `docs/SAVE_FORMAT.md`), Einstellungen über `Settings` (ADR-018). Quests/Items sind `.tres` in `content/`,
   `ContentValidator` prüft sie und alle Dialoge (statische IDs, keine Fake Choices).
-- Automatische Läufe mit `--profile=<name>` starten, damit nie echte Spielstände berührt werden.
+- Automatische Läufe mit `--profile=<name>` starten, damit nie echte Spielstände berührt werden (das letzte
+  `--profile` gewinnt; `tools/capture.sh` legt je Aufnahme ein eigenes an).
 - Musik/Ambience über `AudioDirector` (Szenen-Exports `music`, `ambience`), UI-Stil über `UiSkin.attach`
   (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
@@ -38,17 +39,40 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops), `make_nature.py` (Wirklichkeit:
   Soundscapes in `content/audio`, ADR-034), `make_ambience.py` (Elysias Garten); Titel: `tools/art/make_title.py`.
   UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).
-- Zoom `view_zoom` überall 1,25×, scharf abgetastet (ADR-045); Tiefen-Bogen (Dunst, `Backdrop`) nur in der
-  Wirklichkeit (ADR-043). Welt→UI über `GameView.world_to_ui`. Waldränder der Wirklichkeit aus Kronen, nie Raster;
-  Baumgrenze vor dem Himmel als `[meta] treeline` (gebacken, mit Waldreihen in die Tiefe).
+- Zoom `view_zoom` überall 1,25×, scharf abgetastet (ADR-045); einzige Ausnahme sind Innenräume mit 1,5× in
+  ihrer `.tscn` (das Haus, ADR-045 Nachtrag); Tiefen-Bogen (Dunst, `Backdrop`) nur in der Wirklichkeit
+  (ADR-043). Welt→UI über `GameView.world_to_ui`. Waldränder der Wirklichkeit aus Kronen, nie Raster; Baumgrenze
+  vor dem Himmel als `[meta] treeline` (gebacken, mit Waldreihen in die Tiefe).
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne
-  Doppelpunkt. Durchlauf ohne Hand: `--autopilot=res://tools/autopilot/slice_full.json`; `check.sh` spielt ihn
-  bis zum Ende, also bei geänderten Menüabläufen das Skript mitziehen. Testläufe nutzen je Prozess ein eigenes Profil.
+  Doppelpunkt. Das Ende ist Schwarz, dann der Titel ohne Zeile (Bible §56); die Schlusszeile steht im Startmenü
+  unter dem Logo. Durchlauf ohne Hand: `--autopilot=res://tools/autopilot/slice_full.json`; `check.sh` spielt
+  ihn bis zum Ende, also bei geänderten Menüabläufen das Skript mitziehen. Testläufe nutzen je Prozess ein
+  eigenes Profil.
+- Ton wird gemessen, nicht gehört: Effekte sind nach Lautheit je Gruppe normiert (`make_sfx.GROUPS`,
+  `make_slice_sfx.GROUPS`, `tools/audio/loudness.py`); die Aufrufgains stehen in der Tabelle `CLASSES` von
+  `tools/audio/check_levels.py` (Schritt „audio levels“ in `check.sh`, braucht numpy; `note:`-Zeilen
+  abarbeiten). Musikpausen, Loops und Elysias Stufen zeigt nur `tools/audio/measure.sh`: Headless-Läufe rücken
+  das Audio nicht vor.
+- Dialoge: Antworten mit Bedingung verschwinden, wenn sie nicht zutreffen. Jede Antwortgruppe braucht also eine
+  unbedingte Antwort, eine Antwort mit `{{Wert}}` eine Bedingung auf den Wert, Texteffekte (`[wave]`,
+  `[rainbow]` …) stehen nur in gesprochenen Zeilen (Validator, `test_dialogue_box`). Mehrzeilige CSV-Texte mit
+  echten Zeilenumbrüchen, nie mit `\n`.
+- Pause im Gespräch: `MenuLayer.can_pause` lässt das Pause-Menü in Zwischensequenzen nur zu, solange
+  `Cutscene.in_dialogue` gilt; Gespräche dort laufen über `Cutscene.say()`, zeitgesteuerte Phasen bleiben
+  gesperrt. Overlays, die einer Weltposition folgen, liegen in einer eigenen CanvasLayer (Prompt 11 unter HUD
+  12) und rechnen mit `GameView.world_to_ui(...).round()`.
+- Fenster-X und Fokusverlust regelt `AppGuard`, Controller-Hotplug `InputDevice`; `Beat.mark` löst einen
+  Autosave aus. Nach `change_scene_to_file` ist `get_tree()` im freigegebenen Knoten null: den `SceneTree`
+  vorher merken.
+- `tools/art/layout_slice_maps.py tal --write` löscht Handänderungen in `content/maps/tal.txt` (Buchstabe `6`,
+  `unless` von `t`): vorher vergleichen.
 
 ## Konventionen
-- Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs.
+- Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs. Lambdas kopieren einfache Locals
+  (bool, float, String): Zustand für `wait_until` und Signalhandler in Array oder Dictionary halten;
+  Testschleifen zählen Frames lokal, nie mit `get_tree().get_frame()`.
 - Gameplay fragt nur Input-Actions ab, nie konkrete Tasten. Events mit `device = -1`.
 - Alle sichtbaren Texte über `tr()` bzw. Dialogdateien. Inhalte auf Deutsch.
 - Stabile IDs nach `docs/CONTENT_GUIDE.md`. Keine Logik über Anzeigenamen.

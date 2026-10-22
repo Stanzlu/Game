@@ -71,9 +71,9 @@ Antreiber: Wer schnell genug ist, den holt nichts ein. Nicht die Kälte, nicht d
 - Wir sind angekommen. [ID:sl_antr_why_r1]
 	Antreiber: … Ja. Sind wir. [ID:sl_antr_why_3]
 	Antreiber: Hab ich gar nicht gemerkt. [ID:sl_antr_why_4]
-- Du hast geholfen. Auf deine Art. [ID:sl_antr_why_r2]
-	Antreiber: Hab ich? [ID:sl_antr_why_5]
-	Er nickt, sehr schnell, und dann noch einmal, langsamer. [ID:sl_antr_why_6]
+- Ohne dich wär ich noch nicht mal los. [ID:sl_antr_why_r2]
+	Antreiber: Stimmt. [ID:sl_antr_why_5]
+	Er nickt, sehr schnell. Dann noch einmal, langsamer, als müsste er es nachprüfen. [ID:sl_antr_why_6]
 - … [ID:sl_antr_why_r3]
 	Der Antreiber sagt auch nichts. Es ist das erste Mal, dass er nichts sagt, ohne dass es ihn Mühe kostet. [ID:sl_antr_why_7]
 => END

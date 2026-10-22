@@ -36,6 +36,7 @@ func test_defaults_without_file() -> void:
 func test_valid_values_are_saved_and_loaded_again() -> void:
 	assert_true(settings.set_value("controls.sprint_toggle", true))
 	assert_true(settings.set_value("text.speed", 3))
+	await wait_physics_frames(1)
 	var values: Dictionary = _read_file().get("values", {})
 	assert_eq(values.get("controls.sprint_toggle"), true)
 	var other := SettingsService.new()
@@ -112,6 +113,7 @@ func test_session_overrides_are_never_written() -> void:
 	assert_true(settings.get_bool("controls.sprint_toggle"))
 	assert_eq(settings.get_int("controls.tuning"), 2)
 	settings.set_value("text.speed", 2)
+	await wait_physics_frames(1)
 	var values: Dictionary = _read_file().get("values", {})
 	assert_eq(values.get("display.smooth_camera"), true, "file keeps the real value")
 	assert_eq(values.get("controls.sprint_toggle"), false)
@@ -176,3 +178,36 @@ func test_choice_rows_make_room_for_their_value() -> void:
 	var size := row.get_theme_font_size(&"font_size")
 	var label_w := font.get_string_size(row.text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
 	assert_gt(row.custom_minimum_size.x, label_w + 30.0, "label plus value plus gap")
+
+
+func test_ten_changes_in_a_frame_write_the_file_once() -> void:
+	for step in 10:
+		settings.set_value("audio.music", step)
+	assert_eq(settings.writes, 0, "nothing yet: the write waits for the end of the frame")
+	await wait_physics_frames(1)
+	assert_eq(settings.writes, 1, "one write for the whole drag")
+	assert_eq(_read_file().get("values", {}).get("audio.music"), 9, "with the last value")
+	settings.set_value("audio.music", 3)
+	await wait_physics_frames(1)
+	assert_eq(settings.writes, 2, "the next change is written again")
+
+
+func test_a_queued_change_is_written_when_the_game_closes() -> void:
+	settings.set_value("text.speed", 3)
+	settings.flush()
+	assert_eq(settings.writes, 1)
+	assert_eq(_read_file().get("values", {}).get("text.speed"), 3)
+	settings.flush()
+	assert_eq(settings.writes, 1, "nothing queued: nothing written")
+
+
+func test_the_file_is_replaced_in_place_and_leaves_no_temp_file() -> void:
+	settings.set_value("text.speed", 2)
+	settings.flush()
+	assert_true(FileAccess.file_exists(file_path))
+	for speed: int in [3, 0]:
+		settings.set_value("text.speed", speed)
+		settings.flush()
+		assert_true(FileAccess.file_exists(file_path), "never without a settings file")
+		assert_false(FileAccess.file_exists(file_path + ".tmp"), "no temp file left over")
+		assert_eq(_read_file().get("values", {}).get("text.speed"), speed)

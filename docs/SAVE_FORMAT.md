@@ -16,8 +16,9 @@ für das tatsächliche Format. Code: `core/save/save_codec.gd` (Format), `core/s
 
 Hinweis: Ändert sich der Spielname, ändert sich auch dieser Ordner. Dann braucht es eine Migration der Pfade.
 
-Automatische Läufe schreiben nie dorthin (ADR-018): Tests nutzen `user://profiles/test/`, Smoke-Runs
-`user://profiles/smoke/`, Aufnahmen `user://profiles/capture/`. Einstellungen liegen in `settings.json`
+Automatische Läufe schreiben nie dorthin (ADR-018): Tests nutzen `user://profiles/test_<pid>/`, Smoke-Runs
+`user://profiles/smoke/`, Aufnahmen `user://profiles/capture_<pid>/` (je Lauf eigen, danach gelöscht). Bei mehreren
+`--profile=` gewinnt das letzte. Einstellungen liegen in `settings.json`
 im selben Ordner.
 
 ## Dateien
@@ -60,7 +61,7 @@ im selben Ordner.
 |------|----------------------------------|
 | `schema_version` | ganze Zahl ≥ 1, aktuell 2. Neuer als das Spiel: Laden wird abgelehnt. Älter: Migration. |
 | `saved_at` | UTC, ISO 8601. Bestimmt „Fortsetzen“ (neuester lesbarer Slot). |
-| `flags` | nur `true`-Werte; IDs mit Namensraum (`bereich.name`). Gelöschte Flags fehlen. |
+| `flags` | nur `true`-Werte; IDs mit Namensraum (`bereich.name`). Gelöschte Flags fehlen. Seit ADR-047 neu: `house.mira_seated` (Mira sitzt am Feuer: die sitzende Mira der Karte erscheint damit und verschwindet mit `house.mira_left`), `elysia.crystal_touched`; `house.rested` setzt jetzt der Cue `fire_rest` selbst. `house.mira_knocked` gilt weiter und wird beim Öffnen der Tür für Mira gesetzt (nach dem Klopfen). |
 | `quests` | nur bekannte Quests (`content/quests`) und deren Stufen. `history` enthält besuchte Stufen, die aktuelle zuletzt. Fertig ist eine Quest, wenn ihre Stufe kein `next` hat. |
 | `relationships` | nur `mira`, `tess`, `orin`, `lio`. Zustand `stranger`, `cautious`, `familiar`, `close`, `strained`. Erinnerungen als IDs. |
 | `facets` | die acht Facetten-IDs aus `GameState.FACETS`, im Slice nur Flags. |
@@ -84,7 +85,7 @@ Unbekannte Felder werden ignoriert. Ungültige Einträge werden verworfen und al
 - **Robust:** Größenlimit 1 MB, JSON-Parse mit Zeilenangabe, Schema-Version prüfen, jedes Feld typprüfen, unbekannte IDs melden. Bei Fehlern bietet das Lademenü die Sicherung an. Nie ein Absturz.
 - **Sicher:** Kein `str_to_var`, keine Godot-Ressourcen aus dem Nutzerverzeichnis, kein Code aus Daten. Zahlen aus JSON werden auf Endlichkeit, Ganzzahligkeit und Bereich geprüft.
 - **Migration:** `SaveCodec.migrations()`, ein Schritt pro Version (Eintrag *i* macht aus Version *i + 1* die Version *i + 2*). Getestet mit eingefrorenen Beispieldateien unter `tests/fixtures/saves/` (`v1_full.json` muss immer laden).
-- **Wann gespeichert wird:** Autosave beim Betreten eines Bereichs (nicht direkt nach dem Laden) und bei jedem Quest-Schritt. Manuell über das Pause-Menü. Nie während eines Dialogs oder in Encountern; ein dort angefordertes Autosave folgt, sobald es geht.
+- **Wann gespeichert wird:** Autosave beim Betreten eines Bereichs (nicht direkt nach dem Laden), bei jedem Quest-Schritt und jedem Beat (`beat.<id>`-Flag, ADR-047), beim Schließen des Fensters (`AppGuard`) und vor „Zum Startmenü“ und „Spiel beenden“. Manuell über das Pause-Menü. Nie während eines Dialogs oder in Encountern; ein dort angefordertes Autosave folgt, sobald es geht.
 - **Keine Bestrafung:** Keine Ironman-Struktur, kein Löschen von Ständen aus dem Spiel heraus.
 - **Datenschutz:** Spielstände bleiben lokal. Keine psychologischen Profile, keine Telemetrie.
 

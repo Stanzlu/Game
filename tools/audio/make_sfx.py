@@ -5,9 +5,10 @@ voices and the glitches of the rift.
 
 The two UI sets follow Game Bible §34/§35: Elysia is glassy, bright and perfectly in tune
 (everything snaps to one major scale); the Real world is wood, paper and breath, short and
-low. Every sound is mono 16-bit 44.1 kHz, freed of DC (20 Hz highpass), peak-normalized per
-group, and written with an .import file to assets/generated/sfx/. Variants are numbered (<name>_0.wav, _1.wav, ...)
-and picked at random by SoundBank.
+low. Every sound is mono 16-bit 44.1 kHz, freed of DC (20 Hz highpass), loudness-normalized per
+group (LUFS, K-weighted, under a soft -1 dBFS ceiling: tools/audio/loudness.py) and written
+with an .import file to assets/generated/sfx/. Variants are numbered (<name>_0.wav, _1.wav,
+...) and picked at random by SoundBank. tools/audio/check_levels.py guards the result.
 
 Usage: .venv/bin/python tools/audio/make_sfx.py [--only coin] [--preview out.png]
 """
@@ -15,7 +16,12 @@ import argparse
 import os
 import wave
 
+import sys
+
 import numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from loudness import lufs as measure_lufs, normalize_lufs, peak_db  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "assets", "generated", "sfx")
@@ -410,23 +416,26 @@ def rift_touch(rng):
 
 
 def normalize(x, peak_db=-3.0):
+    """Peak normalization, only for the waveform preview."""
     peak = np.max(np.abs(x)) + 1e-9
     return x / peak * 10 ** (peak_db / 20)
 
 
 def dc_block(x, loop=False):
-    """20 Hz highpass against DC offset (square waves with uneven duty). Loops are filtered
-    as if they had already played once, so the seam stays clean."""
-    if loop:
-        return highpass(np.tile(x, 2), 20)[len(x):]
-    return highpass(x, 20)
+    """20 Hz highpass against DC offset (square waves with uneven duty), then the mean that
+    a short sound still keeps is taken off. Loops are filtered as if they had already played
+    once, so the seam stays clean."""
+    y = highpass(np.tile(x, 2), 20)[len(x):] if loop else highpass(x, 20)
+    return y - np.mean(y)
 
 
-def write(name, x, peak_db, loop=False):
+def write(name, x, lufs, loop=False):
+    """Writes `x` at `lufs` loudness (what the ear compares: two sounds with the same peak
+    can be 9 dB apart). Sharp transients that the soft ceiling would flatten too much end up
+    a little quieter than asked; the build prints what came out."""
     os.makedirs(OUT, exist_ok=True)
-    x = normalize(dc_block(x, loop), peak_db)
-    if not loop:
-        x = fade_tail(x)
+    x = dc_block(x, loop) if loop else dc_block(fade_tail(x))
+    x = normalize_lufs(x, RATE, lufs, periodic=loop, max_squash_db=SQUASH_DB)
     data = (np.clip(x, -1, 1) * 32767).astype("<i2")
     path = os.path.join(OUT, name + ".wav")
     with wave.open(path, "wb") as w:
@@ -438,25 +447,30 @@ def write(name, x, peak_db, loop=False):
     if not os.path.exists(path + ".import"):
         with open(path + ".import", "w", encoding="utf-8") as f:
             f.write(IMPORT.replace("edit/loop_mode=0", "edit/loop_mode=2") if loop else IMPORT)
-    print(f"{path}  {len(x) / RATE:.2f}s")
+    got = measure_lufs(x, RATE, loop)
+    note = "" if abs(got - lufs) < 0.5 else f"  (asked {lufs:.0f})"
+    print(f"{os.path.relpath(path, ROOT)}  {len(x) / RATE:.2f}s  {got:.1f} LUFS  peak {peak_db(x):.1f}{note}")
 
 
-# Peak level per group: UI quiet, rewards loud (Elysia overdoes it), Real quiet.
+# Loudness per group (LUFS): UI quiet, rewards loud (Elysia overdoes it), Real quiet. The
+# mix is set by these and the call-site gains together; check_levels.py holds the table.
 GROUPS = {
-    "ui_elysia": -6.0,
-    "ui_real": -9.0,
-    "coin": -4.0,  # louder peak once the DC is gone: same loudness as before
-    "xp": -5.0,
-    "level_up": -3.0,
-    "chest": -4.0,
-    "loot": -3.0,
-    "praise": -7.0,
-    "pickup_real": -9.0,
-    "voice": -10.0,
-    "glitch": -6.0,
-    "rift": -3.0,
-    "rift_hum": -8.0,
+    "ui_elysia": -20.0,
+    "ui_real": -21.0,
+    "coin": -18.0,
+    "xp": -18.0,
+    "level_up": -19.0,
+    "chest": -19.0,
+    "loot": -20.0,
+    "praise": -18.0,
+    "pickup_real": -20.0,
+    "voice": -19.0,  # all dialogue voices alike: the kind only changes the timbre
+    "glitch": -17.0,
+    "rift": -14.0,
+    "rift_hum": -20.0,
 }
+# How far the soft ceiling may flatten the peaks of a sound on its way to its loudness.
+SQUASH_DB = 6.0
 LOOPS = {"rift_hum"}
 
 

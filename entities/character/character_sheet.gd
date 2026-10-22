@@ -5,6 +5,7 @@ extends Resource
 ## facing (state-major, facing order of Facing.Dir), frames left to right.
 ## "look" (blink, glance left and right, blink) is the long idle of the look sheets
 ## (Game Bible §36); sheets whose texture ends before those rows simply do not have it.
+## "work" (hands busy in front of the body) comes after it and exists only on Mira's sheet.
 
 const STATES := [
 	{"name": "idle", "frames": 2, "fps": 2.0, "loop": true},
@@ -12,6 +13,7 @@ const STATES := [
 	{"name": "run", "frames": 4, "fps": 14.0, "loop": true},
 	{"name": "sit", "frames": 1, "fps": 1.0, "loop": false},
 	{"name": "look", "frames": 4, "fps": 4.0, "loop": false},
+	{"name": "work", "frames": 2, "fps": 2.0, "loop": true},
 ]
 
 static var _cache: Dictionary = {}
@@ -60,6 +62,11 @@ func build_frames() -> SpriteFrames:
 ## True if the sheet has the long idle (blink and glance around).
 static func has_look(frames: SpriteFrames) -> bool:
 	return frames.has_animation(animation_name("look", Facing.Dir.S))
+
+
+## True if the sheet has the work pose (hands busy, Mira at her net).
+static func has_work(frames: SpriteFrames) -> bool:
+	return frames.has_animation(animation_name("work", Facing.Dir.S))
 
 
 ## Adds the contact shadow (if the sheet has one) below the character's sprite.

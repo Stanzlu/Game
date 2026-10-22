@@ -72,7 +72,9 @@ if WorldState.is_fire_lit()
 	Ein Bett. Die Decke ist warm geworden vom Feuer. Fast wie eine Einladung. [ID:haus_bed_2]
 else
 	Ein Bett. Die Decke riecht nach Staub und ein bisschen nach jemand anderem. [ID:haus_bed_1]
-	if WorldState.has_flag("elysia.soup_served")
+	if WorldState.has_flag("elysia.offered_house")
+		Drüben hat dir jemand sein Haus geschenkt, einfach so. Dieses hier schenkt dir niemand. Es steht nur da. [ID:haus_bed_5]
+	elif WorldState.has_flag("elysia.soup_served")
 		Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war. [ID:haus_bed_3]
 		Dann ist der Moment vorbei. Das Bett ist immer noch kalt. [ID:haus_bed_4]
 => END
@@ -85,7 +87,9 @@ else
 => END
 
 ~ window
-if WorldState.is_fire_lit()
+if WorldState.is_fire_lit() and WorldState.day_preset() == "abend"
+	Im Fenster spiegelt sich das Feuer. Dahinter wird das Tal golden. [ID:haus_window_3]
+elif WorldState.is_fire_lit()
 	Im Fenster spiegelt sich das Feuer. Dahinter regnet es auf das Tal. [ID:haus_window_2]
 else
 	Draußen regnet es auf das Tal. Am anderen Ufer glimmt ein kleines Feuer. [ID:haus_window_1]
@@ -130,12 +134,23 @@ Er bleibt sitzen. Er wagt nicht, sich zu bewegen. [ID:haus_cat_antr_5]
 => END
 
 ~ fire_rest
-Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
-Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
-if WorldState.has_item("item_stone")
-	Der Stein in deiner Tasche ist warm geworden. [ID:haus_rest_3]
-if WorldState.has_item("item_seed")
-	In der anderen Tasche der Samen. Du weißt nicht, seit wann er da ist. [ID:haus_rest_4]
+if WorldState.has_flag("house.rested")
+	Du sitzt wieder am Feuer. Es hat nicht gewartet, aber es ist noch da. [ID:haus_rest_5]
+else
+	Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
+	if WorldState.day_preset() == "abend"
+		Draußen ist es still geworden. Der Regen ist vorbei. [ID:haus_rest_6]
+	else
+		Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
+	if WorldState.has_flag("elysia.host_warned")
+		Du musst heute nirgends mehr hin, hat der Wirt gesagt. Heute musstest du ziemlich weit. [ID:haus_rest_7]
+	if WorldState.has_item("item_stone") and not WorldState.has_flag("elysia.stone_taken")
+		In deiner Tasche ein Stein. Grau, glatt. Du kannst dich nicht erinnern, ihn aufgehoben zu haben. [ID:haus_rest_8]
+	elif WorldState.has_item("item_stone")
+		Der Stein in deiner Tasche ist warm geworden. [ID:haus_rest_3]
+	if WorldState.has_item("item_seed")
+		In der anderen Tasche der Samen. Du weißt nicht, seit wann er da ist. [ID:haus_rest_4]
+	do WorldState.set_flag("house.rested")
 => END
 
 ~ antreiber_fire
@@ -174,7 +189,7 @@ Mira wärmt sich die Hände am Feuer. Sie scheint gerade nicht reden zu wollen. 
 => END
 
 ~ mira_visit
-Mira steht in der Tür, nass bis auf die Haut. Sie trägt nur einen Stiefel. [ID:haus_mira_1]
+Mira sitzt am Feuer, nass bis auf die Haut. Sie trägt nur einen Stiefel. [ID:haus_mira_1]
 Mira: Ich hab den Rauch gesehen. [ID:haus_mira_2]
 Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
 - Komm rein. [ID:haus_mira_r1]
@@ -187,10 +202,10 @@ Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
 	Mira: Ich nehm das als Ja. [ID:haus_mira_6]
 	do WorldState.add_memory("mira", "silent_yes")
 if WorldState.has_flag("house.antreiber_by_fire")
-	Der Antreiber rückt ein Stück zur Seite. Mira setzt sich auf den freien Platz, als wäre er immer frei gewesen. [ID:haus_mira_29]
+	Der Antreiber ist ein Stück zur Seite gerückt. Mira sitzt auf dem freien Platz, als wäre er immer frei gewesen. [ID:haus_mira_29]
 	Sie legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_30]
 else
-	Mira setzt sich ans Feuer, legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
+	Mira legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
 if WorldState.has_flag("valley.fell_in")
 	if WorldState.has_memory("mira", "stones_warned")
 		Mira: Die runden. Ich hab's gesagt. [ID:haus_mira_8]
@@ -215,6 +230,16 @@ Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 	Mira: Das kenn ich. [ID:haus_mira_16]
 	Mira schaut ins Feuer und sagt nichts mehr dazu. [ID:haus_mira_17]
 	do WorldState.add_memory("mira", "said_dont_know")
+Mira: Und du? Wie heißt du? [ID:haus_mira_35]
+- {{WorldState.player_name()}}. [ID:haus_mira_r12]
+	Mira: {{WorldState.player_name()}}. Hm. [ID:haus_mira_36]
+	do WorldState.add_memory("mira", "said_name")
+- Der Held von Elysia. [if not WorldState.has_memory("mira", "said_hero") /] [ID:haus_mira_r13]
+	Mira: Das ist kein Name. Das ist ein Beruf. [ID:haus_mira_37]
+	do WorldState.add_memory("mira", "said_title")
+- … [ID:haus_mira_r14]
+	Mira: Dann eben nicht. Ich ruf einfach rüber. [ID:haus_mira_38]
+	do WorldState.add_memory("mira", "kept_name")
 Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
 - Der beste Fisch, den ich je gegessen hab. [ID:haus_mira_r9]
 	Mira: Nein. Der war zu lang im Feuer. [ID:haus_mira_31]
@@ -239,7 +264,7 @@ Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 Mira: Sie ist bestechlich. Nur damit du's weißt. [ID:haus_mira_23]
 do WorldState.start_quest("side_valley_goat")
 do WorldState.set_flag("valley.goat_loose")
-Mira steht auf und streckt sich. [ID:haus_mira_24]
+Mira streckt sich und sieht zur Tür. [ID:haus_mira_24]
 Mira: Ich hab ein Brett über die Brücke gelegt. Damit ich zurückkomme. Und du auch, falls. [ID:haus_mira_25]
 Mira: Den Rest vom Fisch kannst du der Katze geben. Die sitzt schon die ganze Zeit am Fenster. [ID:haus_mira_26]
 do WorldState.add_item("item_fish")

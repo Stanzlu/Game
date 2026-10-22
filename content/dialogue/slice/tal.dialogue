@@ -15,49 +15,49 @@ elif WorldState.has_flag("valley.mira_met")
 ~ mira_first
 Die Frau hat ein Stück Netz in den Händen und knotet eine Masche. Sie schaut nicht auf. [ID:tal_mira_1]
 - Hallo. [ID:tal_mira_r1]
-	Mira: Hallo. [ID:tal_mira_2]
-	Mira: Du stehst im Regen. Nur falls dir das keiner gesagt hat. [ID:tal_mira_3]
+	Die Frau: Hallo. [ID:tal_mira_2]
+	Die Frau: Du stehst im Regen. Nur falls dir das keiner gesagt hat. [ID:tal_mira_3]
 	do WorldState.add_memory("mira", "said_hello")
 - Wo bin ich hier? [ID:tal_mira_r2]
-	Mira: Am Bach. Im Tal. Im Regen. Such dir was aus. [ID:tal_mira_4]
+	Die Frau: Am Bach. Im Tal. Im Regen. Such dir was aus. [ID:tal_mira_4]
 	do WorldState.add_memory("mira", "asked_where")
 - Ich bin der Held von Elysia. [ID:tal_mira_r10]
-	Mira: Aha. [ID:tal_mira_22]
-	Mira: Ich bin die, die hier ein Netz flickt. Jetzt kennen wir uns. [ID:tal_mira_23]
+	Die Frau: Aha. [ID:tal_mira_22]
+	Die Frau: Ich bin die, die hier ein Netz flickt. Jetzt kennen wir uns. [ID:tal_mira_23]
 	do WorldState.add_memory("mira", "said_hero")
 - … [ID:tal_mira_r3]
-	Mira: … [ID:tal_mira_5]
-	Mira: Gut. Dann sind wir uns einig. [ID:tal_mira_6]
+	Die Frau: … [ID:tal_mira_5]
+	Die Frau: Gut. Dann sind wir uns einig. [ID:tal_mira_6]
 	do WorldState.add_memory("mira", "first_silence")
-Mira: Brauchst du was? [ID:tal_mira_21]
+Die Frau: Brauchst du was? [ID:tal_mira_21]
 - Kann ich bei dir unterkommen? Nur bis der Regen aufhört. [ID:tal_mira_r4]
-	Mira: Nein. [ID:tal_mira_7]
-	Mira: Ich kenn dich nicht. Und unter die Plane passt genau eine. [ID:tal_mira_8]
+	Die Frau: [wait=0.9]Nein. [ID:tal_mira_7]
+	Die Frau: Ich kenn dich nicht. Und unter die Plane passt genau eine. [ID:tal_mira_8]
 	do WorldState.add_memory("mira", "asked_shelter")
 - Weißt du, wo ich heute Nacht schlafen kann? [ID:tal_mira_r5]
-	Mira: Nicht hier. [ID:tal_mira_9]
-	Mira: Das ist kein Gasthaus. Das ist mein Lager. [ID:tal_mira_10]
+	Die Frau: Nicht hier. [ID:tal_mira_9]
+	Die Frau: Das ist kein Gasthaus. Das ist mein Lager. [ID:tal_mira_10]
 	do WorldState.add_memory("mira", "asked_sleep")
 - Mir ist kalt. [ID:tal_mira_r6]
-	Mira: Mir auch. Deswegen hab ich ein Feuer. [ID:tal_mira_11]
-	Mira: Meins. Nein, du kannst dich nicht dazusetzen. [ID:tal_mira_12]
+	Die Frau: Mir auch. Deswegen hab ich ein Feuer. [ID:tal_mira_11]
+	Die Frau: Meins. Nein, du kannst dich nicht dazusetzen. [ID:tal_mira_12]
 	do WorldState.add_memory("mira", "said_cold")
 if WorldState.has_flag("elysia.asked_for_no")
 	Das Wort bleibt im Regen hängen. [ID:tal_mira_no_1]
 elif WorldState.has_flag("elysia.offered_bed")
 	Für einen Moment denkst du an ein Bett, vor dem jemand auf dem Boden schlafen wollte. [ID:tal_mira_no_2]
-Mira zieht den Knoten fest und nickt über den Bach. [ID:tal_mira_13]
-Mira: Da drüben steht ein Haus. Leer, seit dem Frühjahr. Die Leute sind weg. [ID:tal_mira_14]
-Mira: Die Brücke ist auch weg, jedenfalls die Mitte. Über die Steine kommst du rüber. Oder oben über den Baum, der liegt seit dem Sturm. [ID:tal_mira_15]
+Die Frau zieht den Knoten fest und nickt über den Bach. [ID:tal_mira_13]
+Die Frau: Da drüben steht ein Haus. Leer, seit dem Frühjahr. Die Leute sind weg. [ID:tal_mira_14]
+Die Frau: Die Brücke ist auch weg, jedenfalls die Mitte. Über die Steine kommst du rüber. Oder oben über den Baum, der liegt seit dem Sturm. [ID:tal_mira_15]
 - Ich nehm die Steine. [ID:tal_mira_r7]
-	Mira: Nicht die runden. Die sehen fest aus und sind es nicht. [ID:tal_mira_16]
+	Die Frau: Nicht die runden. Die sehen fest aus und sind es nicht. [ID:tal_mira_16]
 	do WorldState.add_memory("mira", "stones_warned")
 - Ich geh oben über den Baum. [ID:tal_mira_r8]
-	Mira: Dauert länger. Dafür kommst du trocken an. Halbwegs. [ID:tal_mira_17]
+	Die Frau: Dauert länger. Dafür kommst du trocken an. Halbwegs. [ID:tal_mira_17]
 	do WorldState.add_memory("mira", "chose_tree")
 - Ich warte lieber, bis der Regen aufhört. [ID:tal_mira_r9]
-	Mira: Dann wartest du bis Donnerstag. [ID:tal_mira_18]
-	Mira: Geh. Das Haus läuft nicht weg. Der Regen auch nicht. [ID:tal_mira_19]
+	Die Frau: Dann wartest du bis Donnerstag. [ID:tal_mira_18]
+	Die Frau: Geh. Das Haus läuft nicht weg. Der Regen auch nicht. [ID:tal_mira_19]
 	do WorldState.add_memory("mira", "wanted_to_wait")
 Mira: Mira, übrigens. Falls du noch mal rüberrufen musst. [ID:tal_mira_24]
 Mira wendet sich wieder ihrem Netz zu. [ID:tal_mira_20]
@@ -101,12 +101,12 @@ if WorldState.has_item("item_boot")
 	Mira: Die Ziege steht übrigens auf dem Holzstapel am Haus. Ich frag nicht, wie. [ID:tal_mira_eve_9b]
 	do WorldState.remove_item("item_boot")
 	do WorldState.advance_quest("side_valley_goat", "done")
-	Mira zieht den Stiefel an und setzt sich ans Feuer. Nach einer Weile rückt sie ein Stück zur Seite. [ID:tal_mira_eve_7]
+	Mira zieht den Stiefel an, ohne aufzustehen. Nach einer Weile rückt sie ein Stück zur Seite. [ID:tal_mira_eve_7]
 	do WorldState.set_flag("valley.ending")
 elif WorldState.quest_stage("side_valley_goat") == "trade"
 	Mira: Die Ziege will was dafür? Dann gib ihr was. So funktioniert das mit Ziegen. [ID:tal_mira_eve_8]
 else
-	% Mira: Ohne Stiefel geh ich morgen nirgends hin. Die Ziege treibt sich drüben beim Haus rum. [ID:tal_mira_eve_9]
+	% Mira: Ein Stiefel. Mit einem kommt man nicht weit. Die Ziege treibt sich drüben beim Haus rum. [ID:tal_mira_eve_9]
 	% Mira: Einen Stiefel hab ich noch. Den anderen hat die Ziege. Das ist der Stand. [ID:tal_mira_eve_10]
 => END
 
@@ -118,23 +118,33 @@ Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus. [ID:ta
 =>< evening_elysia
 if WorldState.has_flag("valley.shell_seen")
 	=>< evening_shell
+if WorldState.has_memory("mira", "said_name")
+	Mira: {{WorldState.player_name()}}. [ID:tal_end_12]
 Mira: Morgen gehe ich weiter. [ID:tal_end_2]
 - Wohin? [ID:tal_end_r1]
 	do WorldState.add_memory("mira", "asked_where_to")
 	do WorldState.set_flag("valley.mountains_seen")
 	Mira schaut zu den Bergen. Lange. [ID:tal_end_4]
-	Mira: Zum Meer. [ID:tal_end_5]
 - Zum Meer? [if WorldState.has_memory("mira", "asked_shell") /] [ID:tal_end_r3]
 	do WorldState.set_flag("valley.mountains_seen")
-	Mira schaut dich an. Dann zu den Bergen. [ID:tal_end_7]
-	Mira: … Ja. Zum Meer. [ID:tal_end_8]
 	do WorldState.add_memory("mira", "guessed_sea")
+	Mira schaut dich an. Dann zu den Bergen. [ID:tal_end_7]
 - … [ID:tal_end_r2]
 	Mira: Du willst wissen, wohin. Das seh ich dir an. [ID:tal_end_3]
 	do WorldState.add_memory("mira", "end_silence")
 	do WorldState.set_flag("valley.mountains_seen")
 	Mira schaut zu den Bergen. Lange. [ID:tal_end_9]
-	Mira: Zum Meer. [ID:tal_end_10]
+=> END
+
+# Her answer comes after the long look at the mountains (the scene calls this cue once the
+# camera has arrived there): the words only mean something with the mountains in view.
+~ ending_sea
+if WorldState.has_memory("mira", "guessed_sea")
+	Mira: [wait=1.2]… Ja. Zum Meer. [ID:tal_end_8]
+elif WorldState.has_memory("mira", "end_silence")
+	Mira: [wait=1.2]Zum Meer. [ID:tal_end_10]
+else
+	Mira: [wait=1.2]Zum Meer. [ID:tal_end_5]
 => END
 
 # The evening at Mira's fire (ADR-042): she remembers how the day went, from what the
@@ -154,6 +164,10 @@ elif WorldState.has_memory("mira", "asked_sleep")
 elif WorldState.has_memory("mira", "said_cold")
 	Mira: Mein Feuer, übrigens. [ID:tal_eve_cold_1]
 	Mira: Du darfst trotzdem sitzen bleiben. [ID:tal_eve_cold_2]
+if WorldState.has_memory("mira", "wanted_to_wait")
+	Mira: Der Regen hat aufgehört. Ist aber nicht Donnerstag. Du warst schneller. [ID:tal_eve_wait_1]
+elif WorldState.has_memory("mira", "chose_tree")
+	Mira: Oben über den Baum, und trotzdem nass. Halbwegs hab ich gesagt. [ID:tal_eve_tree_1]
 => END
 
 ~ evening_day
@@ -391,4 +405,12 @@ else
 % Antreiber: Ich sitz nur kurz. Sehr kurz. [ID:tal_antr_1]
 % Antreiber: Ich hab ausgerechnet, wie lange man sitzen darf. Ich hab's vergessen. [ID:tal_antr_2]
 % Der Antreiber sitzt am Weg und schaut dahin, wo ihr hergekommen seid. [ID:tal_antr_3]
+=> END
+
+# The Antreiber after he left the house (ADR-042): back out in the rain, busy with things that
+# are already done. Outside he stands; he only sits where he is tired.
+~ antreiber_busy
+% Antreiber: Ich hab das Dach angeschaut. Von außen. Es ist ein Dach. [ID:tal_antr_busy_1]
+% Antreiber: Ich hab den Zaun gezählt. Es ist einer. [ID:tal_antr_busy_2]
+% Antreiber: Ich hab das Holz umgestapelt. Nass ist es immer noch. Aber ordentlich. [ID:tal_antr_busy_3]
 => END

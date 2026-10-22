@@ -11,17 +11,21 @@ const SURFACE_SOUNDS := {
 	&"puddle": "footstep_puddle",
 	&"water": "footstep_puddle",
 }
-## Level per surface, walking and running (dB). The step sounds are equally loud, so this
-## sets the mix: soft ground stays quiet, hard ground and water carry.
+## Level per surface, walking and running (dB). The step files share one loudness
+## (STEP_LOUDNESS in tools/placeholders/make_placeholders.py, peaks at most -6 dBFS), so this
+## sets the mix: walking sits at the level of the bed (hard ground and water a little over),
+## and tall grass is no more than 3 dB from grass, so crossing the border does not jump.
 const SURFACE_DB := {
-	&"grass": Vector2(-10.0, -6.0),
-	&"tall_grass": Vector2(-6.0, -2.0),
-	&"dirt": Vector2(-8.0, -4.0),
-	&"stone": Vector2(-6.0, -2.0),
-	&"wood": Vector2(-6.0, -2.0),
-	&"puddle": Vector2(-5.0, -1.0),
-	&"water": Vector2(-5.0, -1.0),
+	&"grass": Vector2(-5.0, -1.0),
+	&"tall_grass": Vector2(-8.0, -4.0),
+	&"dirt": Vector2(-3.0, 1.0),
+	&"stone": Vector2(-2.0, 2.0),
+	&"wood": Vector2(-2.0, 2.0),
+	&"puddle": Vector2(-1.0, 3.0),
+	&"water": Vector2(-1.0, 3.0),
 }
+## Elysia is led by its music: the steps stay under it.
+const ELYSIA_DB := -3.0
 
 
 func _ready() -> void:
@@ -34,4 +38,6 @@ func play_surface(surface: StringName, running: bool) -> void:
 	stream = SoundBank.stream(SURFACE_SOUNDS[surface])
 	var levels: Vector2 = SURFACE_DB[surface]
 	volume_db = levels.y if running else levels.x
+	if WorldState.ui_mode() == GameState.UiMode.ELYSIA:
+		volume_db += ELYSIA_DB
 	play()

@@ -13,6 +13,7 @@ MENU_LOOK_TAL,Look: Tal im Regen
 MENU_LOOK_WALD,Look: Wald bei Nacht
 MENU_QUIT,Beenden
 MENU_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Ansehen: %s · Journal: %s · Menü: %s
+TITLE_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Bestätigen: %s
 CONTROLS_MOVE_KEYS,WASD
 CONTROLS_MOVE_PAD,Stick
 PAUSE_TITLE,Pause
@@ -24,6 +25,7 @@ PAUSE_SPRINT,Sprinten
 PAUSE_OVERLAY,Info-Anzeige
 PAUSE_TO_MENU,Zum Startmenü
 PAUSE_QUIT,Spiel beenden
+PAUSE_HINT,%s weiter · %s Journal
 TUNING_DIREKT,Direkt
 TUNING_WEICH,Weich
 TUNING_SCHWER,Träge
@@ -47,6 +49,18 @@ KEY_SHIFT,Umschalt
 MENU_CONTINUE,Fortsetzen
 MENU_LOAD,Laden
 MENU_SETTINGS,Einstellungen
+MENU_CREDITS,Mitwirkende
+MENU_CREDITS_ELYSIA,Die Helden hinter dem Helden
+CREDITS_TEXT,"Nach Elysia
+Ein Prototyp.
+
+Idee, Geschichte und Umsetzung: das Projekt REAL.
+Grafik und Klänge entstehen im Projekt selbst.
+
+Schriften: Tiny5, Jersey 10 und Jersey 15 (SIL Open Font License 1.1)
+Dialoge: Dialogue Manager (MIT)
+Tests: GUT (MIT)
+Engine: Godot (MIT)"
 MENU_BACK,Zurück
 PAUSE_JOURNAL,Journal
 PAUSE_SAVE,Speichern
@@ -54,7 +68,7 @@ PAUSE_LOAD,Laden
 PAUSE_SETTINGS,Einstellungen
 OPTION_YES,Ja
 OPTION_NO,Nein
-CONFIRM_NEW_GAME,"Neues Spiel beginnen? Der automatische Spielstand wird ersetzt, deine Slots bleiben erhalten."
+CONFIRM_NEW_GAME,"Neues Spiel beginnen? Dein bisheriger Spielstand wird ersetzt."
 CONFIRM_NEW_GAME_YES,Neu beginnen
 CONFIRM_LEAVE_UNSAVED,"Hier kann gerade nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
 CONFIRM_LEAVE_YES,Trotzdem gehen
@@ -64,6 +78,7 @@ INTERACT_ENTER,Hineingehen
 INTERACT_CATCH,Fangen
 INTERACT_LEAVE,Hinausgehen
 SAVE_TITLE,Speichern
+SAVE_HINT,Slot wählen · %s zurück
 LOAD_TITLE,Laden
 SAVE_NOT_HERE,Hier kann nicht gespeichert werden. Das Spiel speichert danach automatisch.
 SAVE_CONFIRM_OVERWRITE,%s überschreiben?
@@ -76,6 +91,8 @@ SLOT_AUTOSAVE,Automatisch
 SLOT_N,Slot %s
 SLOT_EMPTY,leer
 SLOT_BROKEN,beschädigt
+SAVE_ROW_TITLE,%s · %s
+SAVE_ROW_SUB,%s min · %s
 TIME_MINUTES,%d min
 TIME_UNDER_MINUTE,unter 1 min
 TIME_HOURS,%d:%02d h
@@ -88,7 +105,9 @@ JOURNAL_TITLE,Journal
 JOURNAL_EMPTY,Noch keine Einträge.
 JOURNAL_RUNNING,Offen
 JOURNAL_FINISHED,Abgeschlossen
-JOURNAL_HINT,%s oder %s: schließen
+JOURNAL_THINGS,Dinge
+JOURNAL_HINT,%s blättern · %s oder %s schließen
+JOURNAL_SCROLL_HINT,Bild ↑/↓ · rechter Stick
 SETTINGS_TITLE,Einstellungen
 SETTINGS_HINT,Links/Rechts ändert den Wert. Änderungen gelten sofort.
 SETTINGS_AUDIO,Ton
@@ -191,7 +210,7 @@ PLACE_ELYSIA,Elysia
 PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus
 PLACE_WEG,Der Weg zum Schuppen
-END_OF_SLICE,"Ende des Prototyps. Danke fürs Spielen."
+END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text
 CAPTION_FROGS,Frösche quaken.
 CAPTION_GOAT,Eine Ziege meckert.
@@ -201,6 +220,8 @@ CAPTION_RIFT,Ein tiefes Summen in der Luft.
 CAPTION_WOBBLE,Der Stein kippelt.
 CAPTION_BIRD,Ein Vogel singt.
 CAPTION_FIRE,Das Feuer knistert.
+CAPTION_CAT,Die Katze miaut.
+CAPTION_PURR,Die Katze schnurrt.
 SETTINGS_SHOW_CONTROLS,Steuerung anzeigen
 CONTROLS_TITLE,Steuerung
 CONTROLS_MOVE,Gehen
@@ -209,6 +230,16 @@ CONTROLS_INTERACT,"Ansehen, sprechen, bestätigen"
 CONTROLS_BACK,Zurück
 CONTROLS_MENU,Menü
 CONTROLS_JOURNAL,Journal
+CONTROLS_SKIP,Gespräch überspringen: %s halten
+CONTROLS_MOVE_ARROWS,Pfeiltasten
+CONTROLS_SCROLL_ROW,Journal blättern: Bild auf / Bild ab · rechter Stick
+CONTROLS_JOURNAL_SCROLL,Journal blättern: Bild ↑/↓ · rechter Stick
+CONTROLS_PAD_DPAD,Steuerkreuz
+CONTROLS_PS_CROSS,Kreuz
+CONTROLS_PS_CIRCLE,Kreis
+CONTROLS_PS_SQUARE,Quadrat
+CONTROLS_PS_TRIANGLE,Dreieck
 CONTROLS_HINT,Tastatur · Controller
 KEY_STICK,Stick
 KEY_TRIGGER,Trigger
+PAUSE_LEAVE_SAVE_FAILED,"Der Spielstand konnte nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"

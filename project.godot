@@ -12,7 +12,7 @@ config_version=5
 
 config/name="REAL"
 config/description="Narrative pixel-art adventure RPG (working title). Vertical slice in development."
-config/version="0.6.0"
+config/version="0.7.0"
 run/main_scene="res://core/boot/boot.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="REAL"
@@ -31,6 +31,7 @@ WorldState="*res://core/world_state.gd"
 SaveSystem="*res://core/save_system.gd"
 AudioDirector="*res://core/audio_director.gd"
 ScreenFade="*res://core/screen_fade.gd"
+AppGuard="*res://core/app_guard.gd"
 
 [debug]
 

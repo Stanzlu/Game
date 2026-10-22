@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Procedural sound effects for the vertical slice (Phase 4, 0 €): the Real world's foley.
 A door that creaks, knocking, falling into the stream, a stepping stone that rocks, a match
-and a fire catching, a fire crackling in the fireplace (loop), a cat, a goat, dry wood; and
-the child in Elysia humming the motif of the later main theme.
+and a fire catching, a cat (meowing, behind a door, purring), a goat, dry wood, sitting down
+and standing up, a bird landing, the drover's call; and the child in Elysia humming the motif
+of the later main theme. The fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
 
-Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, peak-normalized per
-group, written with .import files to assets/generated/sfx/. The Real world is quiet and a
+Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
+per group (LUFS, see GROUPS), written with .import files to assets/generated/sfx/. The Real world is quiet and a
 little uneven: no sound is in tune with anything, variants differ in timing and pitch.
 
 Usage: .venv/bin/python tools/audio/make_slice_sfx.py [--only door] [--preview out.png]
@@ -20,6 +21,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from make_music import DORIAN, MOTIF, degree, midi_hz  # noqa: E402
 from make_sfx import (RATE, at, bandpass, env, highpass, knock, lowpass, mix, noise, preview,  # noqa: E402
                       reverb, secs, sine, write)
+import make_nature  # noqa: E402
+
+
+def fft_band(x, lo, hi, order=3):
+    """Steep band-pass by FFT (Butterworth magnitude, zero phase): noise through the one-pole
+    filters of make_sfx stays hissy, a purr or a rustle needs its band to be a band."""
+    n = len(x)
+    f = np.maximum(np.fft.rfftfreq(2 * n, 1.0 / RATE), 1.0)
+    gain = 1.0 / np.sqrt(1 + (lo / f) ** (2 * order)) / np.sqrt(1 + (f / hi) ** (2 * order))
+    return np.fft.irfft(np.fft.rfft(x, 2 * n) * gain, 2 * n)[:n]
 
 
 def room(x, wet=0.18, seconds=0.35):
@@ -151,25 +162,6 @@ def fire_light(rng):
     return room(mix(scratch, at(flare, 0.15), at(whoosh * 1.4, 0.6), at(first, 0.9)), 0.12)
 
 
-def fire_crackle(rng):
-    """A fire in the fireplace, seamless 8 s loop: a low soft roar that breathes, crackles
-    and pops at random, now and then a log settling."""
-    seconds = 8.0
-    n = int(RATE * seconds)
-    t = np.arange(n) / RATE
-    breath = 0.75 + 0.25 * np.sin(2 * np.pi * t / seconds * 3 + 0.4) * np.sin(2 * np.pi * t / seconds * 2)
-    roar = lowpass(noise(n, rng), 260) * 2.2 * breath
-    hiss = bandpass(noise(n, rng), 2500, 6000) * 0.05 * breath
-    pops = crackles(n, rng, 22)
-    settle = at(knock(140, 0.3, rng, 0.2) * 0.35, 5.1, seconds)
-    loop = mix(roar, hiss, pops, settle)[:n]
-    # make it seamless: crossfade the tail into the head
-    fade = int(RATE * 0.5)
-    ramp_in = np.linspace(0, 1, fade)
-    loop[:fade] = loop[:fade] * ramp_in + loop[-fade:] * (1 - ramp_in)
-    return loop[:-fade]
-
-
 # --- Animals ----------------------------------------------------------------------------
 
 
@@ -255,6 +247,73 @@ def munch(rng):
     return outdoors(mix(*parts))
 
 
+def cat_meow_muffled(rng):
+    """The cat's meow heard through the house door: the same voice, but dull (everything
+    above ~1.2 kHz gone) and a little room in it."""
+    return room(lowpass(lowpass(cat_meow(rng, 0), 1200), 1200), 0.3, 0.4)
+
+
+def purr(rng):
+    """A cat purring in your lap: low rumble pulsed at ~25 Hz, breathing in and out."""
+    seconds = 1.2
+    t = secs(seconds)
+    n = len(t)
+    rumble = fft_band(noise(n, rng), 80, 300)
+    pulse = 0.55 + 0.45 * np.sin(2 * np.pi * 25.0 * t)
+    breath = np.sin(np.pi * np.clip(t / seconds, 0, 1)) ** 0.8
+    return rumble * pulse * breath
+
+
+# --- Cloth, wood and wings ----------------------------------------------------------------
+
+
+def cloth(seconds, rng, lo=500, hi=3000, grain=0.6):
+    """A rustle of fabric: noise through a band, shaped as irregular little pushes."""
+    t = secs(seconds)
+    n = len(t)
+    body = fft_band(noise(n, rng), lo, hi, 2)
+    pushes = 0.5 + 0.5 * np.abs(lowpass(noise(n, rng), 45)) * 8 * grain
+    return body * np.minimum(1.0, pushes) * np.sin(np.pi * np.clip(t / seconds, 0, 1)) ** 1.3
+
+
+def sit(rng):
+    """Sitting down on the bench: cloth settling, then the wood takes the weight."""
+    thud = knock(110, 0.2, rng, 0.2) * 0.35
+    return room(mix(cloth(0.28, rng), at(thud, 0.1)), 0.1, 0.25)
+
+
+def stand(rng):
+    """Getting up: a shorter rustle, the bench lets go with a faint tick."""
+    tick = knock(180, 0.08, rng, 0.2) * 0.12
+    return room(mix(cloth(0.18, rng, 600, 3200, 0.5), tick), 0.1, 0.25)
+
+
+def bird_landing(rng, variant):
+    """A bird lands: two wing beats (noise 1.5-4 kHz) and a short blackbird call."""
+    beats = []
+    for k in range(2):
+        t = secs(0.06)
+        beat = fft_band(noise(len(t), rng), 1500, 4000, 2) * np.sin(np.pi * t / 0.06) ** 1.5
+        beats.append(at(beat * (0.8 - 0.25 * k), 0.07 * k))
+    call_rng = np.random.default_rng(100 + variant)
+    call = make_nature.blackbird(call_rng)[: int(make_nature.RATE * 0.7)]
+    call = np.interp(np.arange(int(len(call) * RATE / make_nature.RATE)) / RATE,
+                     np.arange(len(call)) / make_nature.RATE, call)
+    call = call * np.minimum(1.0, np.arange(len(call)) / (0.02 * RATE))
+    call = call * np.clip((len(call) - np.arange(len(call))) / (0.06 * RATE), 0, 1)
+    return outdoors(mix(*beats, at(call * 0.5, 0.2)), 0.1)
+
+
+def drover_call(rng, variant):
+    """The drover's shout, dry and short: three hard knocks of a stick on wood. No voice,
+    nobody here is meant to be heard as a person yet."""
+    parts = []
+    for k in range(3):
+        f = rng.uniform(180, 260)
+        parts.append(at(knock(f, 0.14, rng, 0.6) * (1.0 - 0.12 * k), k * (0.095 + 0.015 * variant)))
+    return mix(*parts)[: int(RATE * 0.3)]
+
+
 # --- The child ----------------------------------------------------------------------------
 
 
@@ -292,9 +351,13 @@ def child_hum(rng):
     return outdoors(lowpass(sig * swell * shape, 1800), 0.14)
 
 
-GROUPS = {"door": -6.0, "knock": -4.0, "water": -3.0, "stone": -6.0, "fire": -6.0, "fire_loop": -10.0,
-          "animal": -6.0, "wood": -6.0, "voice": -8.0}
-LOOPS = {"fire_loop"}
+# Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
+# few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
+# water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
+GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
+          "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "cat": -17.0, "purr": -20.0,
+          "cloth": -18.0, "bird": -16.0, "bark": -17.0}
+LOOPS = set()
 
 
 def build(only=None):
@@ -307,20 +370,28 @@ def build(only=None):
         "splash_fall": (splash_fall(rng), "water"),
         "stone_wobble": (stone_wobble(rng), "stone"),
         "fire_light": (fire_light(rng), "fire"),
-        "fire_crackle": (fire_crackle(rng), "fire_loop"),
         "goat_munch": (munch(rng), "animal"),
     }
     for i in range(2):
-        sounds["cat_meow_%d" % i] = (cat_meow(rng, i), "animal")
+        sounds["cat_meow_%d" % i] = (cat_meow(rng, i), "cat")
         sounds["goat_bleat_%d" % i] = (goat_bleat(rng, i), "animal")
     # its own random stream, so the sounds above stay as they were
     hum_rng = np.random.default_rng(31)
     for i in range(2):
-        sounds["child_hum_%d" % i] = (child_hum(hum_rng), "voice")
+        sounds["child_hum_%d" % i] = (child_hum(hum_rng), "child_hum")
     # frogs get their own random stream too (ADR-042)
     frog_rng = np.random.default_rng(37)
     for i in range(2):
         sounds["frog_croak_%d" % i] = (frog_croak(frog_rng, i), "animal")
+    # the sounds of the second polish round get their own random stream as well
+    new_rng = np.random.default_rng(41)
+    sounds["cat_meow_muffled"] = (cat_meow_muffled(new_rng), "cat")
+    sounds["purr"] = (purr(new_rng), "purr")
+    sounds["sit"] = (sit(new_rng), "cloth")
+    sounds["stand"] = (stand(new_rng), "cloth")
+    sounds["bird"] = (bird_landing(new_rng, 0), "bird")
+    for i in range(3):
+        sounds["bark_%d" % i] = (drover_call(new_rng, i), "bark")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

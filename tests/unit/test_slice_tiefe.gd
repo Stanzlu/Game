@@ -107,11 +107,13 @@ func test_missing_elysia_is_met_without_judgment() -> void:
 
 
 func test_who_asked_about_the_shell_can_guess_where_she_goes() -> void:
-	var before := await _play(TAL_DIALOGUE, "ending", "Zum Meer?")
+	await _play(TAL_DIALOGUE, "ending", "Zum Meer?")
+	var before := await _play(TAL_DIALOGUE, "ending_sea")
 	assert_false("… Ja. Zum Meer." in before)
 	assert_true("Zum Meer." in before, "the ending as in the Game Bible")
 	WorldState.add_memory("mira", "asked_shell")
-	var after := await _play(TAL_DIALOGUE, "ending", "Zum Meer?")
+	await _play(TAL_DIALOGUE, "ending", "Zum Meer?")
+	var after := await _play(TAL_DIALOGUE, "ending_sea")
 	assert_true("… Ja. Zum Meer." in after, "perception pays off (Game Bible §16)")
 	assert_true(WorldState.has_memory("mira", "guessed_sea"))
 
