@@ -84,15 +84,19 @@ func test_work_only_happens_at_the_first_waypoint() -> void:
 	var npc := _walker(MIRA_SHEET, {"pause": [0.2, 0.2], "speed": 120})
 	var worked_at: Array[int] = []
 	var seen_other_pause := false
+	var resting_before := false
 	for i in 140:
 		await wait_physics_frames(1)
+		var resting := npc._wait > 0.0 and npc._last_point == 1
 		if String(npc.sprite.animation).begins_with("work_"):
 			worked_at.append(npc._last_point)
-		elif npc._wait > 0.0 and npc._last_point == 1:
+		elif resting and resting_before:
+			# (the first tick of a pause still shows the last step)
 			seen_other_pause = true
 			assert_true(
 				String(npc.sprite.animation).begins_with("idle_"), "waits at waypoint 1 idle"
 			)
+		resting_before = resting
 	assert_false(worked_at.is_empty(), "it worked")
 	for point in worked_at:
 		assert_eq(point, 0)
@@ -160,10 +164,14 @@ func test_the_bob_is_not_faster_than_its_gap() -> void:
 	var npc := _walker(PLAIN_SHEET, {"cue": "x"})
 	npc._on_talk(null)
 	presenter.syllable.emit("a")
-	await wait_seconds(NpcWalker.TALK_BOB_SECONDS + 0.02)
-	presenter.syllable.emit("b")
-	assert_eq(npc.sprite.offset, npc.sheet.feet_offset, "still within the gap: no second bob")
-	await wait_seconds(NpcWalker.TALK_BOB_GAP)
+	assert_true(npc._bobbing, "a bob starts the gap")
+	# a syllable inside the gap changes nothing, however many there are
+	for i in 5:
+		presenter.syllable.emit("b")
+	assert_eq(npc.sprite.offset, npc.sheet.feet_offset + Vector2(0, -NpcWalker.TALK_BOB_PIXELS))
+	await wait_seconds(NpcWalker.TALK_BOB_GAP + 0.2)
+	assert_false(npc._bobbing, "the gap is over")
+	assert_eq(npc.sprite.offset, npc.sheet.feet_offset)
 	presenter.syllable.emit("c")
 	assert_ne(npc.sprite.offset, npc.sheet.feet_offset, "bobs again after the gap")
 

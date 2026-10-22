@@ -36,8 +36,12 @@ func test_character_sheet_builds_all_animations() -> void:
 	assert_same(sheet.build_frames(), frames, "frames are cached per texture")
 	var look := load("res://entities/character/sheet_player_look.tres") as CharacterSheet
 	var look_frames := look.build_frames()
-	assert_eq(look_frames.get_animation_names().size(), CharacterSheet.STATES.size() * Facing.COUNT)
+	# every state but "work", which only Mira's sheet has
+	assert_eq(
+		look_frames.get_animation_names().size(), (CharacterSheet.STATES.size() - 1) * Facing.COUNT
+	)
 	assert_true(CharacterSheet.has_look(look_frames), "blink and glance around")
+	assert_false(CharacterSheet.has_work(look_frames))
 	var glance := CharacterSheet.animation_name("look", Facing.Dir.S)
 	assert_eq(look_frames.get_frame_count(glance), 4)
 	assert_false(look_frames.get_animation_loop(glance), "a glance plays once")
