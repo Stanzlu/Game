@@ -288,11 +288,16 @@ class Baker:
         water[..., 3] = 255.0
         return ground, water
 
+    def _flat_contrast(self):
+        """Flat colour areas with dither only in narrow bands (ART_DIRECTION: no area noise).
+        Elysia keeps its baked look bit for bit (ADR-045, ADR-031)."""
+        return 3.0 if self.style_name == "elysia" else 6.0
+
     def _grass(self, g):
         big = self.noise(36, 3)
         mid = self.noise(11, 2)
         v = 0.5 + 0.13 * centered(big) + 0.07 * centered(mid)
-        self.put(g, "grass", v, contrast=3.0)
+        self.put(g, "grass", v, contrast=self._flat_contrast())
         # natural variation: drier patches and lusher, darker hollows with dithered borders
         b = pa.BAYER4[np.arange(self.h)[:, None] % 4, np.arange(self.w)[None, :] % 4]
         patch = self.noise(48, 3)
@@ -366,8 +371,10 @@ class Baker:
 
     def _path(self, p):
         soft = pa.box_blur(p.astype(np.float32), 5)
-        v = 0.5 + 0.1 * centered(self.noise(14)) + 0.2 * (soft - 0.5)
-        self.put(p, "path", v, contrast=3.0)
+        # trodden earth is calm: less speckle than the swept paths of paradise
+        speckle = 0.1 if self.style_name == "elysia" else 0.05
+        v = 0.5 + speckle * centered(self.noise(14)) + 0.2 * (soft - 0.5)
+        self.put(p, "path", v, contrast=self._flat_contrast())
         if self.style_name == "elysia":
             return  # swept paths: no loose pebbles in paradise
         f1, _, cid = pa.worley(self.h, self.w, 6, self.rng, 0.9)
