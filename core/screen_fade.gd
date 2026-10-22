@@ -17,6 +17,8 @@ class Ticket:
 var _cover: ColorRect
 var _tween: Tween
 var _ticket: Ticket
+## Alpha the running fade heads for.
+var _target_alpha := 0.0
 
 
 func _ready() -> void:
@@ -47,6 +49,7 @@ func _fade(target: Color, seconds: float) -> Signal:
 	_release()
 	var ticket := Ticket.new()
 	_ticket = ticket
+	_target_alpha = target.a
 	if seconds <= 0.0:
 		# at once, so is_covered() is true right away; the signal still comes after the
 		# caller started waiting for it
@@ -77,3 +80,9 @@ func _release(ticket: Ticket = null) -> void:
 ## True while a fade is running (menus stay closed until the picture is back).
 func is_fading() -> bool:
 	return _tween != null and _tween.is_valid() and _tween.is_running()
+
+
+## True while the picture comes back (a fade towards clear). Menus may open then: the player
+## pressing Esc in the first seconds of a scene is not waiting for a black screen.
+func is_fading_in() -> bool:
+	return is_fading() and _target_alpha <= 0.0

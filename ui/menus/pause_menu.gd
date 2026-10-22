@@ -7,7 +7,11 @@ const MAIN_MENU := "res://core/boot/boot.tscn"
 
 var settings_menu: SettingsMenu
 var save_menu: SaveMenu
+var controls_menu: ControlsMenu
 var confirm: ConfirmMenu
+## Leaving for the start menu fades out first: the world must stay frozen until the scene
+## is gone, or the hero could still walk (and be hit) under the cover.
+var _keeping_paused := false
 
 
 func _ready() -> void:
@@ -20,11 +24,15 @@ func _ready() -> void:
 	save_menu = SaveMenu.new()
 	save_menu.name = "SaveMenu"
 	add_child(save_menu)
+	controls_menu = ControlsMenu.new()
+	controls_menu.name = "Controls"
+	add_child(controls_menu)
 	confirm = ConfirmMenu.new()
 	confirm.name = "ConfirmLeave"
 	add_child(confirm)
 	stack(settings_menu)
 	stack(save_menu)
+	stack(controls_menu)
 	stack(confirm)
 
 
@@ -35,9 +43,14 @@ func _build() -> void:
 	list.add_action("PAUSE_SAVE", func() -> void: save_menu.open_mode(SaveMenu.Mode.SAVE), can_save)
 	list.add_action("PAUSE_LOAD", func() -> void: save_menu.open_mode(SaveMenu.Mode.LOAD))
 	list.add_action("PAUSE_SETTINGS", settings_menu.open)
+	list.add_action("SETTINGS_SHOW_CONTROLS", controls_menu.open)
 	list.add_action("PAUSE_TO_MENU", func() -> void: _leave(_to_main_menu))
 	list.add_action("PAUSE_QUIT", func() -> void: _leave(_quit))
-	hint.text = "" if can_save else tr("SAVE_NOT_HERE")
+	hint.text = (
+		tr("PAUSE_HINT") % [InputDevice.label_for(&"menu"), InputDevice.label_for(&"journal")]
+		if can_save
+		else tr("SAVE_NOT_HERE")
+	)
 
 
 func open() -> void:
@@ -48,8 +61,10 @@ func open() -> void:
 func close() -> void:
 	settings_menu.close()
 	save_menu.close()
+	controls_menu.close()
 	super()
-	get_tree().paused = false
+	if not _keeping_paused:
+		get_tree().paused = false
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -84,24 +99,34 @@ func _show_after_journal() -> void:
 		backdrop.show()
 
 
-## Leaving keeps the progress: the autosave is written first where saving is possible;
-## where it is not (encounter, conversation), the player is asked.
+## Leaving keeps the progress: the autosave is written first where saving is possible; where
+## it is not (encounter, conversation) or it fails, the player is asked.
 func _leave(then: Callable) -> void:
 	if SaveSystem.can_save():
-		SaveSystem.save_slot(SaveService.AUTOSAVE)
-		then.call()
+		if SaveSystem.save_slot(SaveService.AUTOSAVE) == OK:
+			then.call()
+			return
+		_ask_to_leave(then, "PAUSE_LEAVE_SAVE_FAILED")
 		return
+	_ask_to_leave(then, "CONFIRM_LEAVE_UNSAVED")
+
+
+## The safe answer ("Nein") has the focus; only a deliberate yes leaves.
+func _ask_to_leave(then: Callable, question: String) -> void:
 	var on_answer := func(yes: bool) -> void:
 		if yes:
 			then.call()
 	confirm.answered.connect(on_answer, CONNECT_ONE_SHOT)
-	confirm.ask("CONFIRM_LEAVE_UNSAVED", "CONFIRM_LEAVE_YES", "OPTION_NO")
+	confirm.ask(question, "CONFIRM_LEAVE_YES", "OPTION_NO")
 
 
 func _to_main_menu() -> void:
+	_keeping_paused = true
 	close()
 	await ScreenFade.fade_out(0.3)
 	get_tree().change_scene_to_file(MAIN_MENU)
+	_keeping_paused = false
+	get_tree().paused = false
 
 
 func _quit() -> void:

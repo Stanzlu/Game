@@ -13,6 +13,11 @@ const GROUP := &"menu_layer"
 const BACKDROP_SHADER := preload("res://ui/theme/menu_backdrop.gdshader")
 const COMPACT_THEME := preload("res://ui/theme/compact_theme.tres")
 const OPEN_SECONDS := 0.16
+const SCROLLBAR_WIDTH := 3.0
+## Plain text lines wrap this much narrower than the panel (scroll bar, gap, side margins).
+const WRAP_MARGIN := 40.0
+## The panel keeps this much screen free above and below.
+const SCREEN_MARGIN := 120.0
 
 @export var title_key := ""
 @export var panel_width := 240
@@ -31,32 +36,29 @@ var _return_focus: Control
 var _open_tween: Tween
 
 
-## True while any menu, dialogue or cutscene is open (then pause menu and journal stay closed).
-## True when the pause menu or the journal may open now: nothing else is open, no door is
-## being walked through and the screen is not black or fading (a menu under the cover
-## would be invisible).
+## True when the journal may open now: nothing else is open, no door is being walked through
+## and the screen is not black or fading out (a menu under the cover would be invisible).
+## A fade-in does not count: the screen is on its way back and Esc must work at once.
 static func can_open(tree: SceneTree) -> bool:
-	return (
-		not any_open(tree)
-		and not SceneTravel.is_travelling()
-		and not ScreenFade.is_covered()
-		and not ScreenFade.is_fading()
-	)
+	return not any_open(tree) and _screen_allows_menus()
 
 
 ## The pause menu may also open during a conversation (to turn on large text or slow the
-## text down); not during cutscenes, doors or fades.
+## text down) and while a cutscene only talks (its `in_dialogue` flag); not during the rest
+## of a cutscene, doors or fades out.
 static func can_pause(tree: SceneTree) -> bool:
-	for node in tree.get_nodes_in_group(GROUP) + tree.get_nodes_in_group(&"cutscene"):
+	for node in tree.get_nodes_in_group(GROUP):
 		if node.has_method(&"is_open") and bool(node.call(&"is_open")):
 			return false
-	return (
-		not SceneTravel.is_travelling()
-		and not ScreenFade.is_covered()
-		and not ScreenFade.is_fading()
-	)
+	for node in tree.get_nodes_in_group(&"cutscene"):
+		# get(): the flag belongs to the cutscene base class, scripts without it read null
+		if node.has_method(&"is_open") and bool(node.call(&"is_open")):
+			if not bool(node.get(&"in_dialogue")):
+				return false
+	return _screen_allows_menus()
 
 
+## True while any menu, dialogue or cutscene is open (then pause menu and journal stay closed).
 static func any_open(tree: SceneTree) -> bool:
 	for group: StringName in [GROUP, &"dialogue_presenter", &"cutscene"]:
 		for node in tree.get_nodes_in_group(group):
@@ -65,9 +67,18 @@ static func any_open(tree: SceneTree) -> bool:
 	return false
 
 
+static func _screen_allows_menus() -> bool:
+	if SceneTravel.is_travelling():
+		return false
+	if ScreenFade.is_fading_in():
+		return true
+	return not ScreenFade.is_covered() and not ScreenFade.is_fading()
+
+
 func _ready() -> void:
 	add_to_group(GROUP)
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Settings.changed.connect(_on_setting_changed)
 	if layer == 1:
 		layer = 45
 	_build_frame()
@@ -112,7 +123,10 @@ func _build_frame() -> void:
 	scroll.custom_minimum_size = Vector2(panel_width - 16, 0)
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(scroll)
+	# the engine's grey default bar is three times as wide as the pixel art around it
+	scroll.get_v_scroll_bar().custom_minimum_size.x = SCROLLBAR_WIDTH
 	list = OptionList.new()
+	list.wrap_width = panel_width - WRAP_MARGIN
 	list.add_theme_constant_override(&"separation", 0 if compact else 1)
 	if not follow_mode:
 		list.sound_skin = (
@@ -130,6 +144,12 @@ func _build_frame() -> void:
 	rows.add_child(hint)
 
 
+## Large text changes the row heights: the panel is measured again.
+func _on_setting_changed(key: String) -> void:
+	if key == "text.large" and visible:
+		_fit_height_later()
+
+
 func is_open() -> bool:
 	return visible
 
@@ -141,6 +161,7 @@ func open() -> void:
 	_build()
 	list.refresh()
 	_fit_height()
+	_fit_height_later()
 	frame.show()
 	backdrop.show()
 	show()
@@ -212,6 +233,7 @@ func rebuild() -> void:
 	_build()
 	list.refresh()
 	list.focus_index.call_deferred(index)
+	_fit_height_later()
 
 
 ## Hides this menu's panel (and backdrop, the child brings its own) while `child` is open.
@@ -225,6 +247,8 @@ func stack(child: MenuLayer) -> void:
 		func() -> void:
 			frame.show()
 			backdrop.show()
+			# the child may have changed the text size: this panel measured itself before
+			_fit_height_later()
 	)
 
 
@@ -236,7 +260,20 @@ func _build() -> void:
 func _fit_height() -> void:
 	var scroll := list.get_parent() as ScrollContainer
 	var viewport_height := get_viewport().get_visible_rect().size.y
-	scroll.custom_minimum_size.y = minf(list.get_combined_minimum_size().y, viewport_height - 120)
+	scroll.custom_minimum_size.y = minf(
+		list.get_combined_minimum_size().y, viewport_height - SCREEN_MARGIN
+	)
+
+
+## Rows only know their height after a layout pass (wrapped lines, a new font size): measure
+## again once it happened.
+func _fit_height_later() -> void:
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if visible:
+		_fit_height()
 
 
 func _unhandled_input(event: InputEvent) -> void:

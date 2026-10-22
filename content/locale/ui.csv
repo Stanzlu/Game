@@ -240,3 +240,4 @@ CONTROLS_PS_TRIANGLE,Dreieck
 CONTROLS_HINT,Tastatur · Controller
 KEY_STICK,Stick
 KEY_TRIGGER,Trigger
+PAUSE_LEAVE_SAVE_FAILED,"Der Spielstand konnte nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
