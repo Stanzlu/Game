@@ -33,7 +33,7 @@ offset_left = 44.0
 offset_top = 86.0
 offset_right = 260.0
 offset_bottom = 96.0
-theme_type_variation = &"TitleHintLabel"
+theme_type_variation = &"SubtitleLabel"
 text = "Prototyp"
 
 [node name="MenuPanel" type="PanelContainer" parent="."]
@@ -45,34 +45,31 @@ offset_right = 180.0
 offset_bottom = 132.0
 theme_type_variation = &"TitleMenuPanel"
 
-[node name="Hint" type="Label" parent="."]
+[node name="Footer" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -16.0
-offset_right = 420.0
-offset_bottom = -6.0
-grow_vertical = 0
-theme_type_variation = &"TitleHintLabel"
-text = "Steuerung"
+layout_mode = 0
+offset_top = 334.0
+offset_right = 640.0
+offset_bottom = 360.0
+theme_type_variation = &"OverlayPanel"
 
-[node name="Build" type="Label" parent="."]
+[node name="Row" type="HBoxContainer" parent="Footer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Hint" type="Label" parent="Footer/Row"]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -16.0
-offset_right = -8.0
-offset_bottom = -6.0
-grow_horizontal = 0
-grow_vertical = 0
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Steuerung"
+autowrap_mode = 3
+
+[node name="Build" type="Label" parent="Footer/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
 theme_type_variation = &"TitleHintLabel"
 text = "Version"
 horizontal_alignment = 2

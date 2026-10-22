@@ -163,6 +163,17 @@ func test_reaching_reality_is_read_from_the_saves() -> void:
 	assert_true(saves.reached_reality(), "a save after the crossing shows REAL")
 
 
+func test_the_end_of_the_slice_is_read_from_the_saves() -> void:
+	assert_false(saves.slice_finished(), "no saves: nothing finished")
+	assert_eq(saves.save_slot("slot_1"), OK)
+	assert_false(saves.summary("slot_1")["finished"])
+	assert_false(saves.slice_finished())
+	WorldState.set_flag("slice.finished")
+	assert_eq(saves.save_slot("slot_2"), OK)
+	assert_true(saves.summary("slot_2")["finished"])
+	assert_true(saves.slice_finished(), "any slot that reached the end counts")
+
+
 func test_a_quest_step_and_what_follows_are_saved_together() -> void:
 	var writes: Array[String] = []
 	saves.saved.connect(func(slot: String) -> void: writes.append(slot))

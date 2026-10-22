@@ -17,8 +17,9 @@ var _done := false
 
 
 ## Adds a title card on top of everything below `parent` and starts it.
-## `note_key` (optional) is a line shown under the title once it has faded in (the end of
-## the vertical slice thanks the player).
+## `note_key` (optional, empty: no label at all) is a line shown under the title once it
+## has faded in. The end of the slice plays the card without one: black, then the title
+## (Game Bible §56); its thanks live under the logo of the start menu.
 static func play(parent: Node, note_key := "") -> TitleCard:
 	var card := TitleCard.new()
 	card.name = "TitleCard"
