@@ -24,6 +24,7 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			save_on_close()
+			Settings.flush()
 			Log.info(Log.Category.BOOT, "window closed")
 			get_tree().quit()
 		NOTIFICATION_APPLICATION_FOCUS_OUT:
