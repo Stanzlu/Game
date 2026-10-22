@@ -214,3 +214,27 @@ func test_the_hint_names_the_keys_or_the_pad() -> void:
 	var pad: String = BootScript.controls_hint()
 	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
 	assert_true(pad.contains("Stick"), pad)
+
+
+func test_the_credits_page_scrolls_with_up_and_down() -> void:
+	var menu := CreditsMenu.new()
+	add_child_autofree(menu)
+	menu.open()
+	var spacer := Control.new()
+	spacer.custom_minimum_size.y = 800
+	menu.list.add_custom(spacer)
+	await wait_physics_frames(3)
+	var scroll := menu.list.get_parent() as ScrollContainer
+	assert_eq(scroll.scroll_vertical, 0, "starts at the top, not at the focused Zurück")
+	var down := InputEventAction.new()
+	down.action = &"ui_down"
+	down.pressed = true
+	menu._input(down)
+	assert_eq(scroll.scroll_vertical, int(ScrollPage.SCROLL_STEP))
+	var up := InputEventAction.new()
+	up.action = &"ui_up"
+	up.pressed = true
+	menu._input(up)
+	menu._input(up)
+	assert_eq(scroll.scroll_vertical, 0, "and never above the top")
+	assert_eq(menu.title.text, "MENU_CREDITS", "the real world calls it Mitwirkende")

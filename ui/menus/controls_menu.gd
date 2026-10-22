@@ -1,5 +1,5 @@
 class_name ControlsMenu
-extends MenuLayer
+extends ScrollPage
 ## "Steuerung anzeigen": every action with all its keys and its pad buttons, side by side,
 ## read from the input map (so it stays true when bindings change).
 
@@ -17,7 +17,7 @@ const SEPARATOR := " / "
 
 func _ready() -> void:
 	title_key = "CONTROLS_TITLE"
-	panel_width = 380
+	panel_width = 430
 	layer = 55
 	super()
 
@@ -36,6 +36,7 @@ func _build() -> void:
 	list.add_info(tr("CONTROLS_SCROLL_ROW"))
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("CONTROLS_HINT")
+	scroll_to_top()
 
 
 ## "Label:  keys  ·  buttons" for one action. Esc opens the menu, so "Zurück" leaves it out
