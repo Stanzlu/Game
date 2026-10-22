@@ -306,8 +306,11 @@ func _layout() -> void:
 
 
 func _layout_soon() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# the menu may be gone before the labels have measured themselves (--start jumps away)
+	for _frame in 2:
+		if not is_inside_tree():
+			return
+		await get_tree().process_frame
 	if is_inside_tree():
 		_layout()
 

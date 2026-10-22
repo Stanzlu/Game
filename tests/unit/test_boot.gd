@@ -238,3 +238,12 @@ func test_the_credits_page_scrolls_with_up_and_down() -> void:
 	menu._input(up)
 	assert_eq(scroll.scroll_vertical, 0, "and never above the top")
 	assert_eq(menu.title.text, "MENU_CREDITS", "the real world calls it Mitwirkende")
+
+
+func test_leaving_the_start_menu_at_once_is_clean() -> void:
+	# `--start=<scene>` replaces the menu in its first frame: nothing may wait for it after that
+	var boot: Control = BOOT_SCENE.instantiate()
+	add_child(boot)
+	boot.queue_free()
+	await wait_physics_frames(4)
+	assert_false(is_instance_valid(boot))
