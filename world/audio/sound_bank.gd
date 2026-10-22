@@ -7,8 +7,17 @@ extends RefCounted
 const SOUND_DIR := "res://assets/placeholder/audio/"
 const GENERATED_DIR := "res://assets/generated/sfx/"
 const MAX_VARIANTS := 8
+## Reach of a positional sound in pixels (the valley is ~1000 px wide, the view 512): what is
+## further off than this is not heard, so a frog that "comes closer" (ADR-042) also sounds closer.
+const HEARING_DISTANCE := 360.0
+const HEARING_ATTENUATION := 1.5
 
 static var _cache: Dictionary = {}
+
+
+## Drops the cached randomizers, at exit (AudioDirector): they hold the loaded streams.
+static func clear_cache() -> void:
+	_cache.clear()
 
 
 static func stream(
@@ -38,13 +47,23 @@ static func stream(
 	return randomizer
 
 
-## One-shot positional sound that frees itself.
-static func play_at(parent: Node, prefix: String, at: Vector2, volume_db: float = 0.0) -> void:
+## One-shot positional sound that frees itself. `max_distance` is how far it carries, for
+## sounds that must be heard from further (or less far) than HEARING_DISTANCE.
+static func play_at(
+	parent: Node,
+	prefix: String,
+	at: Vector2,
+	volume_db: float = 0.0,
+	max_distance: float = HEARING_DISTANCE
+) -> void:
 	AudioDirector.caption(prefix, at)
 	var player := AudioStreamPlayer2D.new()
 	player.stream = stream(prefix)
 	player.bus = &"SFX"
 	player.volume_db = volume_db
+	player.max_distance = max_distance
+	player.attenuation = HEARING_ATTENUATION
+	player.panning_strength = 1.0
 	parent.add_child(player)
 	player.global_position = at
 	player.finished.connect(player.queue_free)

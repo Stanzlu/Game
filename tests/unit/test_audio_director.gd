@@ -102,7 +102,9 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	var never := func(_flag: String) -> bool: return false
 	var stone := func(flag: String) -> bool: return flag == "elysia.stone_taken"
 	assert_eq(AudioDirectorService.elysia_stage_for(0.0, never), 0)
-	assert_eq(AudioDirectorService.elysia_stage_for(160.0, never), 1, "by play time")
+	assert_eq(AudioDirectorService.elysia_stage_for(160.0, never), 0, "not yet after 160 s")
+	assert_eq(AudioDirectorService.elysia_stage_for(310.0, never), 1, "by play time: 5 min")
+	assert_eq(AudioDirectorService.elysia_stage_for(610.0, never), 2, "by play time: 10 min")
 	assert_eq(AudioDirectorService.elysia_stage_for(10.0, stone), 2, "by progress")
 	for entry: Dictionary in AudioDirectorService.ELYSIA_STAGES:
 		var stream := load(AudioDirectorService.MUSIC_DIR + str(entry["file"])) as AudioStreamWAV
