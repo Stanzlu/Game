@@ -87,7 +87,7 @@ func _on_caught(_actor: Node) -> void:
 	# the flash starts before the flag: MapView then lets it finish (leave)
 	_flash()
 	WorldState.set_flag(flag)
-	AudioDirector.sfx("praise", -4.0)
+	AudioDirector.sfx("praise", -8.0)
 	StateActions.run(actions, "butterfly:" + flag)
 
 
