@@ -1,5 +1,5 @@
 [
-  {"t": 1.8, "dialogue": 9.0, "log": "wake: click through"},
+  {"t": 3.4, "dialogue": 9.0, "log": "wake: click through"},
   {"t": 11.0, "teleport": [11, 7], "log": "gardener"},
   {"t": 11.2, "press": ["move_left"]}, {"t": 11.25, "release": ["move_left"]},
   {"t": 11.6, "tap": ["interact"]},
