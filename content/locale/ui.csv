@@ -240,3 +240,5 @@ CONTROLS_PS_TRIANGLE,Dreieck
 CONTROLS_HINT,Tastatur · Controller
 KEY_STICK,Stick
 KEY_TRIGGER,Trigger
+CONTROLS_MOVE_ARROWS,Pfeiltasten
+CONTROLS_SCROLL_ROW,Journal blättern: Bild auf / Bild ab · rechter Stick
