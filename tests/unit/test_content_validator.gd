@@ -84,6 +84,46 @@ func test_fake_choices_are_found() -> void:
 	assert_eq(ContentValidator.validate_dialogue(real, "res://r.dialogue", {}).size(), 0)
 
 
+func test_answers_that_print_a_value_need_a_condition_on_it() -> void:
+	var open := (
+		"~ a\nMira: Was gibt's? [ID:v1]\n"
+		+ "- {{WorldState.cat_name()}} wohnt jetzt bei mir. [ID:v2]\n\tMira: Hm. [ID:v3]\n"
+		+ "- Nichts. [ID:v4]\n\tMira: Gut. [ID:v5]\n=> END\n"
+	)
+	var problems := ContentValidator.validate_dialogue(open, "res://v.dialogue", {})
+	assert_eq(problems.size(), 1, "\n".join(problems))
+	assert_string_contains(problems[0], "v.dialogue:3:")
+	assert_string_contains(problems[0], "WorldState.cat_name()")
+	var guarded := open.replace(
+		"bei mir. [ID:v2]", 'bei mir. [if WorldState.cat_name() != "" /] [ID:v2]'
+	)
+	assert_eq(ContentValidator.validate_dialogue(guarded, "res://v.dialogue", {}).size(), 0)
+	var name_answer := open.replace(
+		"{{WorldState.cat_name()}} wohnt jetzt bei mir.", "{{WorldState.player_name()}}."
+	)
+	assert_eq(
+		ContentValidator.validate_dialogue(name_answer, "res://v.dialogue", {}).size(),
+		0,
+		"the player's name is never empty"
+	)
+
+
+func test_text_effects_only_belong_to_spoken_lines() -> void:
+	var narration := "~ a\nEin [wave amp=14 freq=5]Held![/wave] Hier. [ID:e1]\n=> END\n"
+	var problems := ContentValidator.validate_dialogue(narration, "res://e.dialogue", {})
+	assert_eq(problems.size(), 1, "\n".join(problems))
+	assert_string_contains(problems[0], "narration")
+	var spoken := (
+		"~ a\nElysianer: Ein [wave amp=14 freq=5]Held![/wave] [ID:e2]\n"
+		+ "Mira: [wait=0.9]Nein. [ID:e3]\nDas ist [wait=1]Erzählung. [ID:e4]\n=> END\n"
+	)
+	assert_eq(
+		ContentValidator.validate_dialogue(spoken, "res://e.dialogue", {}).size(),
+		0,
+		"speech may use effects, narration may still pause"
+	)
+
+
 func test_world_state_calls_are_checked() -> void:
 	ContentFixtures.use()
 	var text := (
