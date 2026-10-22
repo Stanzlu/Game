@@ -4,7 +4,6 @@ GAME_TITLE,Nach Elysia
 TITLE_ELYSIA,Elysia
 BOOT_SUBTITLE,Prototyp · Systeme
 TITLE_ELYSIA_TAGLINE,Ein Abenteuer für die Ewigkeit
-BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
 MENU_ANTREIBER,Antreiber-Prototyp
@@ -12,7 +11,6 @@ MENU_LOOK_ELYSIA,Look: Elysia-Garten
 MENU_LOOK_TAL,Look: Tal im Regen
 MENU_LOOK_WALD,Look: Wald bei Nacht
 MENU_QUIT,Beenden
-MENU_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Ansehen: %s · Journal: %s · Menü: %s
 TITLE_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Bestätigen: %s
 CONTROLS_MOVE_KEYS,WASD
 CONTROLS_MOVE_PAD,Stick
@@ -233,7 +231,6 @@ CONTROLS_JOURNAL,Journal
 CONTROLS_SKIP,Gespräch überspringen: %s halten
 CONTROLS_MOVE_ARROWS,Pfeiltasten
 CONTROLS_SCROLL_ROW,Journal blättern: Bild auf / Bild ab · rechter Stick
-CONTROLS_JOURNAL_SCROLL,Journal blättern: Bild ↑/↓ · rechter Stick
 CONTROLS_PAD_DPAD,Steuerkreuz
 CONTROLS_PS_CROSS,Kreuz
 CONTROLS_PS_CIRCLE,Kreis
@@ -241,5 +238,16 @@ CONTROLS_PS_SQUARE,Quadrat
 CONTROLS_PS_TRIANGLE,Dreieck
 CONTROLS_HINT,Tastatur · Controller
 KEY_STICK,Stick
-KEY_TRIGGER,Trigger
+KEY_ARROW_UP,Pfeil hoch
+KEY_ARROW_DOWN,Pfeil runter
+KEY_ARROW_LEFT,Pfeil links
+KEY_ARROW_RIGHT,Pfeil rechts
+KEY_PAGE_UP,Bild auf
+KEY_PAGE_DOWN,Bild ab
+KEY_DELETE,Entf
+KEY_INSERT,Einfg
+KEY_HOME,Pos1
+KEY_END,Ende
+KEY_CTRL,Strg
+KEY_NUMPAD,Num %s
 PAUSE_LEAVE_SAVE_FAILED,"Der Spielstand konnte nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"

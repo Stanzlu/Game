@@ -32,6 +32,12 @@ func test_style_detection_from_names() -> void:
 func test_german_key_names() -> void:
 	assert_eq(InputDevice.key_label(KEY_SPACE), "Leertaste")
 	assert_eq(InputDevice.key_label(KEY_ESCAPE), "Esc")
+	assert_eq(InputDevice.key_label(KEY_SHIFT), "Umschalt")
+	assert_eq(InputDevice.key_label(KEY_UP), "Pfeil hoch")
+	assert_eq(InputDevice.key_label(KEY_DELETE), "Entf")
+	assert_eq(InputDevice.key_label(KEY_CTRL), "Strg")
+	assert_eq(InputDevice.key_label(KEY_PAGEUP), "Bild auf")
+	assert_eq(InputDevice.key_label(KEY_KP_5), "Num 5")
 
 
 func test_device_change_is_signalled_once() -> void:
@@ -71,8 +77,8 @@ func test_every_binding_is_listed_once() -> void:
 	InputDevice.style = InputDevice.Style.XBOX
 	assert_eq(
 		InputDevice.labels_for_kind(&"sprint", InputDevice.Kind.GAMEPAD),
-		PackedStringArray(["X", "Trigger"]),
-		"buttons first, then triggers"
+		PackedStringArray(["X", "RT"]),
+		"the button and the trigger, each by its name"
 	)
 
 

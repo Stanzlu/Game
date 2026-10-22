@@ -69,5 +69,7 @@ static func row_text(action: StringName, label_key: String) -> String:
 	return "%s:  %s  ·  %s" % [TranslationServer.translate(label_key), keys_text, pad_text]
 
 
+## The first name of an action's binding; "?" instead of a crash if a broken map has none.
 func _first(action: StringName, device: InputDevice.Kind) -> String:
-	return InputDevice.labels_for_kind(action, device, true)[0]
+	var labels := InputDevice.labels_for_kind(action, device, true)
+	return labels[0] if not labels.is_empty() else "?"
