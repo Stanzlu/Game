@@ -51,7 +51,12 @@ func _build() -> void:
 	if WorldState.is_real():
 		_add_people()
 	hint.text = (
-		tr("JOURNAL_HINT") % [InputDevice.label_for(&"journal"), InputDevice.label_for(&"cancel")]
+		tr("JOURNAL_HINT")
+		% [
+			InputDevice.label_for(&"interact"),
+			InputDevice.label_for(&"journal"),
+			InputDevice.label_for(&"cancel")
+		]
 	)
 
 
