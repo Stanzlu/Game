@@ -56,3 +56,10 @@ func test_title_card_fades_in_and_finishes() -> void:
 	skip.pressed = true
 	card._unhandled_input(skip)
 	assert_signal_emitted(card, "finished")
+
+
+func test_the_last_profile_argument_wins() -> void:
+	# tools/capture.sh puts its own profile before the caller's arguments
+	assert_eq(RuntimeEnv.profile_from_args(["--profile=capture_1", "--profile=mine"]), "mine")
+	assert_eq(RuntimeEnv.profile_from_args(["--profile=a", "--profile=../x"]), "a")
+	assert_eq(RuntimeEnv.profile_from_args(["--title=real"]), "")

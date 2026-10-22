@@ -27,14 +27,18 @@ static func test_profile(pid := OS.get_process_id()) -> String:
 	return "%s_%d" % [TEST_PROFILE, pid]
 
 
+## The last valid `--profile=` wins, so a caller's own choice beats a script's default
+## (tools/capture.sh puts its profile in front of the user's arguments).
 static func profile_from_args(args: PackedStringArray) -> String:
+	var found := ""
 	for arg in args:
 		if arg.begins_with("--profile="):
 			var name := arg.trim_prefix("--profile=")
 			if name.is_valid_filename() and not name.is_empty():
-				return name
-			Log.warn(Log.Category.BOOT, "invalid profile name ignored", {"profile": name})
-	return ""
+				found = name
+			else:
+				Log.warn(Log.Category.BOOT, "invalid profile name ignored", {"profile": name})
+	return found
 
 
 ## Base folder for saves and settings, always ending with "/".
