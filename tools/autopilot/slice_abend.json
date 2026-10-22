@@ -51,5 +51,5 @@
   {"t": 117.2, "press": ["move_up"]},
   {"t": 117.25, "release": ["move_up"]},
   {"t": 117.6, "tap": ["interact"]},
-  {"t": 118.2, "dialogue": 40.0, "log": "the ending"}
+  {"t": 118.2, "dialogue": 60.0, "log": "the ending, the look at the mountains, Zum Meer, the title card"}
 ]
