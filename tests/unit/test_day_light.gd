@@ -43,6 +43,19 @@ func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	assert_lt(day.world_tint.color.b, 0.9, "night darkens the valley")
 
 
+## The rain grade stays cool and rich (ADR-041): the audit measured the baked warm ground
+## turning grey-green under a green-lifting shadow tint and a thick mist.
+func test_the_rainy_day_is_cool_and_rich_not_grey() -> void:
+	var rain: Dictionary = DayLight.PRESETS["regentag"]
+	var shadow: Color = rain["shadow_tint"]
+	assert_lt(shadow.g, 0.03, "no green lift in the shadows")
+	assert_gt(shadow.b, shadow.r, "the shadows lean blue")
+	assert_lte(float(rain["depth_haze"]), 0.12, "a thin mist")
+	assert_gte(float(rain["saturation"]), 1.0, "the colours are not drained")
+	var haze: Color = rain["haze_color"]
+	assert_gt(haze.get_luminance(), 0.8, "the mist is light, not a grey veil")
+
+
 func test_unknown_preset_is_refused() -> void:
 	var day := DayLight.new()
 	add_child_autofree(day)

@@ -12,18 +12,20 @@ const ORDER := GameState.DAY_PRESETS
 const PRESETS := {
 	"regentag":
 	{
-		# soft summer rain (ADR-041): the greens stay luminous, wet things glisten
-		"world_tint": Color(0.88, 0.94, 0.97),
-		"saturation": 0.97,
-		"contrast": 0.98,
-		"brightness": 0.02,
+		# soft summer rain (ADR-041): cool and rich, not grey
+		"world_tint": Color(0.97, 0.99, 1.0),
+		# the shadows only lean blue (the old green-grey lift flattened the baked warm ground)
+		# and the colours keep a little more punch than the dry grade
+		"saturation": 1.14,
+		"contrast": 1.08,
+		"brightness": 0.07,
 		"tint": Color(0.97, 1.0, 1.02),
-		"shadow_tint": Color(0.03, 0.07, 0.08),
+		"shadow_tint": Color(0.0, 0.02, 0.05),
 		"vignette": 0.1,
 		"bloom": 0.3,
-		# rain mist in the distance, the mountains behind it (ADR-043)
-		"depth_haze": 0.2,
-		"haze_color": Color(0.7, 0.78, 0.8),
+		# thin rain mist in the distance, the mountains behind it (ADR-043)
+		"depth_haze": 0.12,
+		"haze_color": Color(0.8, 0.87, 0.9),
 		"mountains": 0.12,
 		"lamps": 0.15,
 		"rain": true,

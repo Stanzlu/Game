@@ -387,7 +387,7 @@ func _come_closer(f: Dictionary, player: Node2D, dist: float) -> void:
 		f["rest"] = _rng.randf_range(4.0, 8.0)
 		var sprite: Sprite2D = f["sprite"]
 		sprite.flip_h = player.global_position.x < pos.x
-		SoundBank.play_at(self, "frog_croak", pos, -14.0)
+		SoundBank.play_at(self, "frog_croak", pos, -2.0)
 		return
 	var goal := player.global_position + (pos - player.global_position).normalized() * FROG_NEAR
 	var target := _nearest_bank_point(pos.move_toward(goal, 22.0))
