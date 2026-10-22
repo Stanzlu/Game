@@ -1,11 +1,18 @@
 class_name InteractionPrompt
-extends Node2D
-## Small hint above the current interaction target (inside the world): a key cap with the
-## button of the current device and the verb ("E  Öffnen"). Pops in, bobs gently, follows
-## the skins (Elysia gold, Real quiet).
+extends Control
+## Small hint above the current interaction target: a key cap with the button of the
+## current device and the verb ("E  Öffnen"). Pops in, bobs gently, follows the skins
+## (Elysia gold, Real quiet).
+##
+## Lives in a CanvasLayer of the scene, outside the world viewport: drawn there, the world's
+## 1.25x zoom would stretch the pixel font unevenly. The anchor in the world is converted
+## with GameView.world_to_ui and rounded, so the letters sit on the UI's pixel grid.
 
 const FADE_IN_SECONDS := 0.12
 const FADE_OUT_SECONDS := 0.08
+
+## Set by the scene that owns the layer: converts the target's world position to the UI.
+var view: GameView
 
 var _panel: PanelContainer
 var _key: Label
@@ -18,11 +25,10 @@ var _fading := false
 
 
 func _ready() -> void:
-	top_level = true
-	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
-	z_index = 50
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_panel = PanelContainer.new()
 	_panel.theme_type_variation = &"PromptPanel"
+	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_panel)
 	UiSkin.attach(_panel)
 	var row := HBoxContainer.new()
@@ -30,6 +36,7 @@ func _ready() -> void:
 	_panel.add_child(row)
 	var cap := PanelContainer.new()
 	cap.theme_type_variation = &"PromptKey"
+	cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(cap)
 	_key = Label.new()
 	_key.theme_type_variation = &"PromptKeyLabel"
@@ -87,9 +94,9 @@ func _process(delta: float) -> void:
 		_shown_for = null
 		visible = false
 		return
-	if visible:
+	if visible and view != null:
 		_time += delta
 		var anchor := _target.global_position + _target.prompt_offset
-		global_position = anchor.round()
+		position = view.world_to_ui(anchor).round()
 		var bob := float(int(_time * 2.0) % 2)
 		_panel.position = Vector2(-roundf(_panel.size.x * 0.5), -_panel.size.y - bob)

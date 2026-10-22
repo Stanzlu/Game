@@ -5,7 +5,6 @@
 [ext_resource type="Resource" path="res://entities/player/tuning/direkt.tres" id="3_tuning"]
 [ext_resource type="Script" path="res://world/audio/footstep_player.gd" id="4_steps"]
 [ext_resource type="Script" path="res://entities/interaction/interaction_sensor.gd" id="5_sensor"]
-[ext_resource type="Script" path="res://ui/world/interaction_prompt.gd" id="6_prompt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_feet"]
 size = Vector2(10, 5)
@@ -33,6 +32,3 @@ script = ExtResource("5_sensor")
 
 [node name="Shape" type="CollisionShape2D" parent="InteractionSensor"]
 shape = SubResource("CircleShape2D_sensor")
-
-[node name="Prompt" type="Node2D" parent="."]
-script = ExtResource("6_prompt")

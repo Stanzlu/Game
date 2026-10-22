@@ -70,7 +70,6 @@ var _rng := RandomNumberGenerator.new()
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var steps: FootstepPlayer = $Steps
 @onready var sensor: InteractionSensor = $InteractionSensor
-@onready var prompt: InteractionPrompt = $Prompt
 @onready var _collision: CollisionShape2D = $Collision
 
 
@@ -84,7 +83,6 @@ func _ready() -> void:
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
 	sheet.add_shadow_to(self)
-	sensor.target_changed.connect(prompt.show_for)
 	sprite.animation_finished.connect(_on_animation_finished)
 	_next_glance = _rng.randf_range(GLANCE_AFTER.x, GLANCE_AFTER.y)
 	_update_animation(0.0)

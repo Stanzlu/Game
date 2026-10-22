@@ -34,6 +34,9 @@ var world_root: Node2D
 var display: Sprite2D
 ## Integer world position at the center of the view (what a Camera2D position would be).
 var camera_position := Vector2.ZERO
+## The fraction of a world pixel the display is shifted by on top of camera_position
+## (smooth mode); overlays that follow the world have to leave it out too.
+var camera_remainder := Vector2.ZERO
 var target: Node2D
 var bounds := Rect2()
 ## How many UI pixels one world pixel covers (1 = as before, Elysia; 1.5 = the real world).
@@ -98,7 +101,7 @@ func set_zoom(value: float) -> void:
 ## Converts a world position to a position in the 640x360 UI space (for overlays that
 ## should keep the UI's pixel size while following something in the world).
 func world_to_ui(world_position: Vector2) -> Vector2:
-	return (world_position - camera_position + Vector2(view_size) * 0.5) * zoom
+	return (world_position - camera_position - camera_remainder + Vector2(view_size) * 0.5) * zoom
 
 
 ## Post-process for the whole world image (color grading, bloom, vignette; ADR-017).
@@ -173,6 +176,7 @@ func _process(delta: float) -> void:
 	# Set the canvas transform directly: a Camera2D would apply the new position one
 	# frame late while the fractional display shift applies immediately (visible jitter).
 	camera_position = parts[0]
+	camera_remainder = parts[1]
 	var half_view := Vector2(viewport.size) * 0.5
 	viewport.canvas_transform = Transform2D(0.0, half_view - camera_position)
 	display.position = (-Vector2.ONE * BORDER - parts[1]) * zoom

@@ -13,6 +13,8 @@ const DIALOGUE_BOX_SCENE := preload("res://ui/dialogue/dialogue_box.tscn")
 const PAUSE_MENU_SCENE := preload("res://ui/menus/pause_menu.tscn")
 const JOURNAL_SCENE := preload("res://ui/journal/journal.tscn")
 const DEBUG_PANEL_SCRIPT := preload("res://ui/debug/debug_panel.gd")
+## The interaction prompt lies in the UI, just under the HUD (layer 12).
+const PROMPT_LAYER := 11
 
 @export_file("*.txt") var map_path := ""
 ## Optional art override for the player (look prototype uses the 24x32 sheet).
@@ -33,6 +35,7 @@ var view: GameView
 var map: MapView
 var player: Player
 var fx: FootstepFx
+var prompt: InteractionPrompt
 var dialogue_box: DialogueBox
 var pause_menu: PauseMenu
 var journal: Journal
@@ -48,6 +51,7 @@ func _ready() -> void:
 	add_child(view)
 	fx = FootstepFx.new()
 	fx.name = "FootstepFx"
+	_build_prompt()
 	_build_world()
 	hud = Hud.new()
 	hud.name = "Hud"
@@ -106,11 +110,24 @@ func _build_world() -> void:
 	view.bounds = map.world_rect()
 
 
+## The prompt belongs to the scene, not to the player: it is UI and sits on the UI's grid.
+func _build_prompt() -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "PromptLayer"
+	layer.layer = PROMPT_LAYER
+	add_child(layer)
+	prompt = InteractionPrompt.new()
+	prompt.name = "Prompt"
+	prompt.view = view
+	layer.add_child(prompt)
+
+
 func spawn_player(parent: Node, at: Vector2) -> Player:
 	player = PLAYER_SCENE.instantiate()
 	if player_sheet != null:
 		player.sheet = player_sheet
 	parent.add_child(player)
+	player.sensor.target_changed.connect(prompt.show_for)
 	player.teleport(at)
 	view.follow(player)
 	fx.watch(player)
