@@ -61,7 +61,7 @@ func leave() -> void:
 	var box := get_tree().get_first_node_in_group(&"dialogue_presenter")
 	while box != null and is_instance_valid(box) and bool(box.get(&"visible")):
 		await get_tree().process_frame
-	SoundBank.play_at(get_parent(), "goat_bleat", global_position, -6.0)
+	SoundBank.play_at(get_parent(), "goat_bleat", global_position, -2.0)
 	var tween := create_tween()
 	tween.tween_property(self, ^"position:x", position.x + 28.0, 1.4)
 	tween.parallel().tween_property(self, ^"modulate:a", 0.0, 1.4)
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 	_next_bleat -= delta
 	if _next_bleat <= 0.0:
 		_next_bleat = _rng.randf_range(7.0, 14.0)
-		SoundBank.play_at(self, "goat_bleat", global_position, -6.0)
+		SoundBank.play_at(self, "goat_bleat", global_position, -2.0)
 	if _frames.size() < 2:
 		return
 	_time += delta
