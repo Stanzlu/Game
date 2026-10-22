@@ -128,3 +128,17 @@ func test_he_bobs_with_the_syllables_while_a_scene_lets_him_talk() -> void:
 	actor.talking = false
 	presenter.syllable.emit("b")
 	assert_eq(actor.sprite.offset, rest, "silent again")
+
+
+func test_his_own_lines_in_a_dialogue_box_make_him_bob() -> void:
+	var presenter := StubPresenter.new()
+	presenter.add_to_group(&"dialogue_presenter")
+	add_child_autofree(presenter)
+	var actor: AntreiberActor = ACTOR.instantiate()
+	add_child_autofree(actor)
+	await wait_physics_frames(2)
+	var rest := actor.sheet.feet_offset
+	presenter.syllable.emit("Mira")
+	assert_eq(actor.sprite.offset, rest, "somebody else speaks: still")
+	presenter.syllable.emit(AntreiberActor.SPEAKER)
+	assert_ne(actor.sprite.offset, rest, "his line: he bobs without being told to")

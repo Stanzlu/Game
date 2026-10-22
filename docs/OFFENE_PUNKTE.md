@@ -32,7 +32,6 @@ im weiteren Spiel nichts verloren geht.
 | J | Leistung auf dem Mac mit v0.7.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
 | J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
 | J | **Tastenumbelegung als eigener PR nach dieser Runde:** Das Menü zum Umbelegen (Bible §50) mit eigenem ADR; `controls_menu`, `input_device` und `settings` werden dafür angefasst | #25, ADR-011, Owner-Entscheidung 22.10. | Auftrag zum PR, vor dem Playtest |
-| J | Miras Besuch: Erzähltext und Bild widersprechen sich (sie sitzt schon, wenn der Cue „Mira steht in der Tür“ sagt); der Antreiber wippt im Haus nicht mit | #61, #62 | Cue teilen oder Zeilen umschreiben, `haus_scene.gd` setzt `actor.talking`; Tests nachziehen |
 | J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
 | J | Von Hand prüfen, was der Container nicht kann: Fenster-X speichert, Fokusverlust öffnet das Pause-Menü, Controller abziehen, PlayStation-Beschriftung, Rumble | #63, #64, #11 | Liste in KNOWN_ISSUES #63; Ergebnis dort eintragen |
 
@@ -100,13 +99,12 @@ im weiteren Spiel nichts verloren geht.
 | F | Look-Prototypen (`look_tal`, `look_wald`) haben die neue Baumgrenze nicht | ADR-045 | nur Prototypen; bei Bedarf `[meta] treeline` ergänzen |
 | F | Cloud-Sitzungen: keine Tag-Pushes, Asset-Seiten gesperrt | ADR-044, #4 | Releases per manuellem CI-Start; Assets von Hand committen |
 | F | Objekte, die beim Beenden nicht freigegeben werden: Audio-Wiedergaben laufen noch | #2 | Audio einige Frames vor `get_tree().quit()` anhalten (`PauseMenu._quit`, `Boot._quit`, `AppGuard`) |
-| F | Pegel-Check ausbauen: `haus_abend` in `PLACES`, Platzhalter-Klänge nach Lautheit, `goat.gd` angleichen, numpy in CI | #65, #66 | bei der nächsten Klangarbeit |
+| F | Pegel-Check ausbauen: Platzhalter-Klänge (`gate`, `lever`, `splash`, UI-Töne) nach Lautheit, `goat_munch` angleichen, numpy in CI | #65, #66 | bei der nächsten Klangarbeit |
 | F | `MapData` behält `paint` nicht; `FootstepFx` liest die Legende der Karte selbst (kleines Duplikat) | – | `paint` in `MapData.tiles` halten, dann entfällt `_find_mud_symbols` |
 | F | Antreiber-Sprechblasen (`$Bark`) liegen noch im Weltraum; `GuestWalker` und `AntreiberActor` bauen Ähnliches | – | wie der Prompt in eine UI-Schicht über `world_to_ui` heben; beide Figuren zusammenlegen |
 | F | Blende nach dem Riss erst nach dem ersten gezeichneten Bild starten (ruckelfreie Ankunft) | #69 | `GameScene` und `SceneTravel` |
 | F | `layout_slice_maps.py tal --write` überschreibt Handänderungen an `tal.txt` | #72 | Handänderungen ins Skript übernehmen |
 | F | Godot schreibt bei jedem Import oder Testlauf eine `uid` in `default_bus_layout.tres` (laut Bericht des Pakets menus; im Arbeitsbaum zurückgesetzt) | – | die `uid` einmal einchecken, dann entfällt die Änderung |
-| F | Der Kommentar zu `zoom` in `world/view/game_view.gd` nennt „1.5 = the real world“; richtig ist 1,25 überall, 1,5 in Innenräumen (ADR-045) | – | Kommentar anpassen (Code, nicht Doku) |
 
 ## 4. Grafik, Ton und Text
 

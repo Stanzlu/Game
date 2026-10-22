@@ -460,7 +460,7 @@ func test_mira_finds_a_free_place_next_to_the_antreiber() -> void:
 	assert_true(
 		(
 			(
-				"Der Antreiber rückt ein Stück zur Seite. Mira setzt sich auf den freien Platz,"
+				"Der Antreiber ist ein Stück zur Seite gerückt. Mira sitzt auf dem freien Platz,"
 				+ " als wäre er immer frei gewesen."
 			)
 			in seen

@@ -23,6 +23,8 @@ const RUN_CYCLE_SPEED := 144.0
 const BOB_PIXELS := 1.0
 const BOB_SECONDS := 0.06
 const BOB_GAP := 0.12
+## The speaker name in the dialogue files: his lines in a dialogue box make him bob by themselves.
+const SPEAKER := "Antreiber"
 const CUES := {
 	AntreiberModel.Mood.START: "start",
 	AntreiberModel.Mood.URGING: "urging",
@@ -59,6 +61,7 @@ func _ready() -> void:
 	NpcSteps.attach(self, sprite)
 	bark.hide()
 	_play("idle")
+	_connect_presenter.call_deferred()
 
 
 func update_actor(player: Player, model: AntreiberModel, delta: float) -> void:
@@ -183,22 +186,22 @@ func _play(state_name: String, pace := WALK_CYCLE_SPEED) -> void:
 
 func _set_talking(value: bool) -> void:
 	talking = value
-	if _presenter != null and is_instance_valid(_presenter):
-		_presenter.disconnect(&"syllable", _on_syllable)
-	_presenter = null
-	if not value:
+	if value:
+		_connect_presenter()
+
+
+## The signal belongs to the dialogue box: without it he only bobs on barks.
+func _connect_presenter() -> void:
+	if not is_inside_tree() or (_presenter != null and is_instance_valid(_presenter)):
 		return
-	var presenter := (
-		get_tree().get_first_node_in_group(&"dialogue_presenter") if is_inside_tree() else null
-	)
-	# the signal belongs to the dialogue box of the menus package: without it he only bobs on barks
+	var presenter := get_tree().get_first_node_in_group(&"dialogue_presenter")
 	if presenter != null and presenter.has_signal(&"syllable"):
 		presenter.connect(&"syllable", _on_syllable)
 		_presenter = presenter
 
 
-func _on_syllable(_character: Variant = null) -> void:
-	if talking:
+func _on_syllable(character: Variant = null) -> void:
+	if talking or str(character) == SPEAKER:
 		_bob()
 
 

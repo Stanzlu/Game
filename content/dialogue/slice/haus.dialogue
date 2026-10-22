@@ -189,7 +189,7 @@ Mira wärmt sich die Hände am Feuer. Sie scheint gerade nicht reden zu wollen. 
 => END
 
 ~ mira_visit
-Mira steht in der Tür, nass bis auf die Haut. Sie trägt nur einen Stiefel. [ID:haus_mira_1]
+Mira sitzt am Feuer, nass bis auf die Haut. Sie trägt nur einen Stiefel. [ID:haus_mira_1]
 Mira: Ich hab den Rauch gesehen. [ID:haus_mira_2]
 Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
 - Komm rein. [ID:haus_mira_r1]
@@ -202,10 +202,10 @@ Mira: Ich hab Fisch. Du hast Feuer. [ID:haus_mira_3]
 	Mira: Ich nehm das als Ja. [ID:haus_mira_6]
 	do WorldState.add_memory("mira", "silent_yes")
 if WorldState.has_flag("house.antreiber_by_fire")
-	Der Antreiber rückt ein Stück zur Seite. Mira setzt sich auf den freien Platz, als wäre er immer frei gewesen. [ID:haus_mira_29]
+	Der Antreiber ist ein Stück zur Seite gerückt. Mira sitzt auf dem freien Platz, als wäre er immer frei gewesen. [ID:haus_mira_29]
 	Sie legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_30]
 else
-	Mira setzt sich ans Feuer, legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
+	Mira legt den Fisch auf einen Stein und hält die Hände an die Flammen. Eine Weile sagt keiner etwas. [ID:haus_mira_7]
 if WorldState.has_flag("valley.fell_in")
 	if WorldState.has_memory("mira", "stones_warned")
 		Mira: Die runden. Ich hab's gesagt. [ID:haus_mira_8]
@@ -264,7 +264,7 @@ Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 Mira: Sie ist bestechlich. Nur damit du's weißt. [ID:haus_mira_23]
 do WorldState.start_quest("side_valley_goat")
 do WorldState.set_flag("valley.goat_loose")
-Mira steht auf und streckt sich. [ID:haus_mira_24]
+Mira streckt sich und sieht zur Tür. [ID:haus_mira_24]
 Mira: Ich hab ein Brett über die Brücke gelegt. Damit ich zurückkomme. Und du auch, falls. [ID:haus_mira_25]
 Mira: Den Rest vom Fisch kannst du der Katze geben. Die sitzt schon die ganze Zeit am Fenster. [ID:haus_mira_26]
 do WorldState.add_item("item_fish")

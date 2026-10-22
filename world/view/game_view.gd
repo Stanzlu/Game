@@ -41,7 +41,7 @@ var camera_position := Vector2.ZERO
 var camera_remainder := Vector2.ZERO
 var target: Node2D
 var bounds := Rect2()
-## How many UI pixels one world pixel covers (1 = as before, Elysia; 1.5 = the real world).
+## How many UI pixels one world pixel covers (1.25 in every scene, 1.5 in the house; ADR-045).
 var zoom := 1.0
 ## Size of the visible world in world pixels (BASE_SIZE / zoom, rounded up).
 var view_size := BASE_SIZE
