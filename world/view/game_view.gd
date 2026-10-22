@@ -23,11 +23,13 @@ const SHARP_SHADER := preload("res://world/shaders/sharp_display.gdshader")
 const FOLLOW_OFFSET := Vector2(0, -8)
 
 @export var camera_mode := CameraMode.SMOOTH
-## How quickly the camera catches up (1/s). Higher = tighter.
-@export var follow_sharpness := 14.0
+## How quickly the camera catches up (1/s). Higher = tighter: at 30 the camera trails a
+## walking figure by about 3 px and has settled (95 %) 0.1 s after it stops, so nothing
+## visibly slides on after the stop (it was 14: 6 px of lag and a 7 px slide).
+@export var follow_sharpness := 30.0
 ## Pixels the camera leads in the walking direction.
-@export var look_ahead := 14.0
-@export var look_ahead_sharpness := 3.0
+@export var look_ahead := 12.0
+@export var look_ahead_sharpness := 4.0
 
 var viewport: SubViewport
 var world_root: Node2D
@@ -151,7 +153,7 @@ func _process(delta: float) -> void:
 	# only changes while walking.
 	if velocity.length() > 10.0:
 		var lead_target := velocity.normalized() * look_ahead
-		_lead = CameraMath.smooth_toward(_lead, lead_target, look_ahead_sharpness, delta)
+		_lead = CameraMath.lead_toward(_lead, lead_target, look_ahead_sharpness, delta)
 	# Following the rounded feet keeps the snapped player steady on screen.
 	var desired: Vector2 = feet.round() + _lead + FOLLOW_OFFSET
 	if not _has_position:
