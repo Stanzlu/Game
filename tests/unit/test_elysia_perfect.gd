@@ -103,12 +103,15 @@ func test_the_waking_builds_the_hud_up_in_order() -> void:
 	assert_not_null(greeter, "the one who greets stands beside the spawn")
 	assert_eq(greeter.facing, Facing.Dir.S, "looking off into the garden until the hero is up")
 	var seen: PackedStringArray = []
+	var waited := 0
 	while seen.size() < Hud.REVEAL_ORDER.size():
 		for element_name in Hud.REVEAL_ORDER:
 			if not element_name in seen and hud._elements[element_name].modulate.a > 0.0:
 				seen.append(element_name)
 		await wait_physics_frames(1)
-		if get_tree().get_frame() > 2000:
+		# Local count: the engine's global frame number is already large late in a full suite run.
+		waited += 1
+		if waited > 2000:
 			break
 	assert_eq(seen, Hud.REVEAL_ORDER, "level, then XP, then gold")
 	await wait_for_signal(hud.revealed, 3.0)
