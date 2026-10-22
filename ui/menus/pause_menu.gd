@@ -121,12 +121,15 @@ func _ask_to_leave(then: Callable, question: String) -> void:
 
 
 func _to_main_menu() -> void:
+	# The scene change frees this menu, so get_tree() is null afterwards: keep the tree and lift
+	# the pause through it, or the start menu would come up frozen.
+	var tree := get_tree()
 	_keeping_paused = true
 	close()
 	await ScreenFade.fade_out(0.3)
-	get_tree().change_scene_to_file(MAIN_MENU)
+	tree.paused = false
+	tree.change_scene_to_file(MAIN_MENU)
 	_keeping_paused = false
-	get_tree().paused = false
 
 
 func _quit() -> void:

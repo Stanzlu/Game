@@ -407,3 +407,25 @@ func test_a_long_journal_entry_names_the_way_to_scroll() -> void:
 	await wait_physics_frames(8)
 	assert_false(tr("JOURNAL_SCROLL_HINT") in scene.journal.hint.text, "short pages need none")
 	await _tap(&"journal")
+
+
+func test_leaving_to_the_start_menu_lifts_the_pause() -> void:
+	var scene: GameScene = SANDBOX.instantiate()
+	get_tree().root.add_child(scene)
+	var previous := get_tree().current_scene
+	get_tree().current_scene = scene
+	await wait_physics_frames(3)
+	scene.pause_menu.open()
+	await wait_physics_frames(2)
+	assert_true(get_tree().paused, "paused while the menu is open")
+	scene.pause_menu._to_main_menu()
+	# pause-proof timer: a frozen tree must fail the asserts below, not hang the wait
+	await get_tree().create_timer(1.0, true).timeout
+	var boot := get_tree().current_scene
+	assert_eq(boot.scene_file_path, PauseMenu.MAIN_MENU, "the start menu is the current scene")
+	var frozen := get_tree().paused
+	get_tree().paused = false
+	assert_false(frozen, "the start menu runs, it is not frozen")
+	assert_true(boot.can_process(), "the start menu processes")
+	boot.queue_free()
+	get_tree().current_scene = previous
