@@ -226,8 +226,43 @@ func test_at_her_fire_mira_asks_after_the_answer_from_the_house() -> void:
 	assert_eq((await _play("evening_elysia"))[0], "Dieses Elysia. Wie war's da?")
 
 
+## Game Bible §56: Mira's "Zum Meer." is said with the mountains in full view, and the slice
+## does not end before the look. A save from the last scene replays the ending with the
+## mountain flag already set, which is the harder case for the camera.
+func test_the_ending_waits_for_the_mountains_before_zum_meer() -> void:
+	Settings.set_value("text.auto_advance", true, false)
+	WorldState.set_flag("house.mira_visited")
+	WorldState.set_flag("valley.mountains_seen")
+	WorldState.set_flag("valley.ending")
+	var scene := await _scene()
+	var box := scene.dialogue_box
+	var answered := false
+	var said_sea := func() -> bool:
+		var responses: Array = box.line.responses if box.line != null else []
+		if not answered and not responses.is_empty() and box.is_open():
+			answered = true
+			box.call(&"_on_response_selected", responses[0])
+		return box.line != null and box.line.text.begins_with("Zum Meer")
+	await wait_until(said_sea, 90.0)
+	assert_true(said_sea.call(), "the ending reached her answer")
+	var pan: Tween = scene.get(&"_mountain_tween")
+	assert_not_null(pan, "the look to the mountains started")
+	assert_false(pan.is_running(), "the camera is up when she says it")
+	var top := scene.view.bounds.position.y + scene.view.view_size.y * 0.5
+	assert_almost_eq(scene.view.camera_position.y, top, 1.5, "the mountains are in full view")
+	assert_false(WorldState.has_flag("slice.finished"), "the slice is not over yet")
+	Settings.set_value("text.auto_advance", false, false)
+
+
 func test_the_slice_ends_on_zum_meer() -> void:
 	WorldState.set_flag("valley.shell_seen")
 	var seen := await _play("ending", "Wohin")
-	assert_eq(seen[seen.size() - 1], "Zum Meer.", "then black (Game Bible §56)")
+	assert_eq(
+		seen[seen.size() - 1],
+		"Mira schaut zu den Bergen. Lange.",
+		"the look comes first, her answer waits for the mountains in view"
+	)
+	assert_false("Zum Meer." in seen, "not before the look")
+	var answer := await _play("ending_sea")
+	assert_eq(answer, PackedStringArray(["Zum Meer."]), "then black (Game Bible §56)")
 	assert_true("Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus." in seen)
