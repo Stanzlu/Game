@@ -21,6 +21,14 @@ class StubPresenter:
 		pass
 
 
+## A parent that knows the ground, like MapView.
+class GroundNode:
+	extends Node2D
+
+	func surface_at(_at: Vector2) -> StringName:
+		return &"stone"
+
+
 class SilentPresenter:
 	extends Node
 	signal finished
@@ -117,6 +125,17 @@ func test_the_walk_cycle_puts_a_foot_down_on_frames_0_and_2_only() -> void:
 	for frame in frames:
 		assert_eq(frame % 2, 0, "contact frames only")
 	assert_lt(steps.volume_db, FootstepPlayer.SURFACE_DB[&"grass"].x - 5.0, "under the player's")
+
+
+func test_the_steps_use_the_ground_of_the_map_they_walk_on() -> void:
+	var ground := GroundNode.new()
+	add_child_autofree(ground)
+	var npc: NpcWalker = WALKER.instantiate()
+	ground.add_child(npc)
+	npc.apply_params({"sheet": PLAIN_SHEET, "route": ROUTE, "pause": [0, 0], "speed": 60})
+	await wait_seconds(1.0)
+	var steps := npc.get_node("Steps") as NpcSteps
+	assert_eq(steps.stream, SoundBank.stream(FootstepPlayer.SURFACE_SOUNDS[&"stone"]))
 
 
 func test_a_standing_walker_makes_no_steps() -> void:
