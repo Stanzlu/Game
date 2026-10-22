@@ -11,6 +11,12 @@ const VOLUMES := [
 	["audio.voice", "SETTINGS_VOLUME_VOICE"],
 ]
 const STEPS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+## Volumes of sounds the menu does not make itself play one of theirs when changed, so the
+## level can be judged (music and ambience are running behind the menu anyway).
+const PREVIEWS := {
+	"audio.sfx": ["sfx", "wood_drop", 0.0],
+	"audio.voice": ["voice", "neutral", -2.0],
+}
 
 var _confirm: ConfirmMenu
 var _controls: ControlsMenu
@@ -26,7 +32,7 @@ func _ready() -> void:
 func _build() -> void:
 	list.add_header("SETTINGS_AUDIO")
 	for entry: Array in VOLUMES:
-		list.add_setting(entry[0], entry[1], STEPS)
+		list.add_setting(entry[0], entry[1], STEPS, true, _preview_for(str(entry[0])))
 	list.add_header("SETTINGS_TEXT")
 	list.add_setting(
 		"text.speed",
@@ -37,12 +43,6 @@ func _build() -> void:
 	list.add_setting("text.large", "SETTINGS_TEXT_LARGE")
 	list.add_header("SETTINGS_CONTROLS")
 	list.add_setting("controls.sprint_toggle", "PAUSE_SPRINT", ["SPRINT_HOLD", "SPRINT_TOGGLE"])
-	list.add_setting(
-		"controls.tuning", "PAUSE_TUNING", ["TUNING_DIREKT", "TUNING_WEICH", "TUNING_SCHWER"]
-	)
-	list.add_setting(
-		"controls.eight_directions", "PAUSE_DIRECTIONS", ["DIRECTIONS_FREE", "DIRECTIONS_EIGHT"]
-	)
 	list.add_header("SETTINGS_DISPLAY")
 	list.add_setting("display.fullscreen", "SETTINGS_FULLSCREEN")
 	list.add_setting("display.vsync", "SETTINGS_VSYNC")
@@ -60,13 +60,30 @@ func _build() -> void:
 		"SETTINGS_ENCOUNTER_SPEED",
 		["ENCOUNTER_NORMAL", "ENCOUNTER_CALMER", "ENCOUNTER_MUCH_CALMER"]
 	)
+	# The movement feel and the direction mode are prototype tuning (ADR-016), not options for
+	# players: the finished feel is the default.
 	if OS.is_debug_build():
 		list.add_header("SETTINGS_DEBUG")
+		list.add_setting(
+			"controls.tuning", "PAUSE_TUNING", ["TUNING_DIREKT", "TUNING_WEICH", "TUNING_SCHWER"]
+		)
+		list.add_setting(
+			"controls.eight_directions", "PAUSE_DIRECTIONS", ["DIRECTIONS_FREE", "DIRECTIONS_EIGHT"]
+		)
 		list.add_setting("debug.overlay", "PAUSE_OVERLAY")
 	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_action("SETTINGS_RESET", _reset)
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("SETTINGS_HINT")
+
+
+func _preview_for(key: String) -> Callable:
+	if not PREVIEWS.has(key):
+		return Callable()
+	var preview: Array = PREVIEWS[key]
+	if preview[0] == "voice":
+		return func() -> void: AudioDirector.voice(str(preview[1]), float(preview[2]))
+	return func() -> void: AudioDirector.sfx(str(preview[1]), float(preview[2]))
 
 
 func _show_controls() -> void:

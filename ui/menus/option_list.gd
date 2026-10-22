@@ -9,13 +9,20 @@ extends VBoxContainer
 signal value_changed(key: String)
 
 const ARROWS := "<  %s  >"
+## Left edge of a row's text: the menu entry style's margin, where the cursor stands before.
+const CARD_INDENT := 14.0
 
+## Width the plain text lines wrap at (the menu sets it from its panel); 0 = natural width.
+var wrap_width := 0.0
 ## Which menu sounds to play (the start menu always uses the Real set).
 var sound_skin := AudioDirectorService.SoundSet.FOLLOW
 var cursor: MenuCursor
 var _rows: Array[Dictionary] = []
 ## Focus set by code (opening, rebuilding) makes no sound.
 var _quiet := false
+## A pointer resting where a fresh row appears must not pull the focus there: hovering counts
+## once the mouse has moved since the rows were built.
+var _hover_armed := false
 
 
 func _ready() -> void:
@@ -31,7 +38,14 @@ func _on_setting_changed(key: String) -> void:
 		refresh.call_deferred()
 
 
+func _input(event: InputEvent) -> void:
+	var motion := event as InputEventMouseMotion
+	if motion != null and motion.relative != Vector2.ZERO:
+		_hover_armed = true
+
+
 func clear_rows() -> void:
+	_hover_armed = false
 	for row in _rows:
 		var node: Control = row["node"]
 		remove_child(node)
@@ -44,7 +58,7 @@ func add_header(key: String) -> Label:
 	label.theme_type_variation = &"MutedLabel"
 	label.text = key
 	add_child(label)
-	_rows.append({"node": label, "key": key})
+	_rows.append({"node": label, "key": key, "header": true})
 	return label
 
 
@@ -61,6 +75,11 @@ func add_info(text: String) -> Label:
 	label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.text = text
+	if wrap_width > 0.0:
+		# Without a width the wrapping label measures itself one word per line and the panel
+		# grows to its maximum height around a single sentence.
+		label.custom_minimum_size.x = wrap_width
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	add_child(label)
 	_rows.append({"node": label})
 	return label
@@ -79,8 +98,54 @@ func add_action(key: String, callback: Callable, enabled := true, label := "") -
 	return button
 
 
+## A two-line row (a save slot): `title` over a muted `subtitle`, an optional `tag` on the
+## right of the first line. Texts are shown as given.
+func add_card(
+	title: String, subtitle: String, callback: Callable, enabled := true, tag := ""
+) -> Button:
+	var button := _make_button()
+	button.pressed.connect(func() -> void: AudioDirector.ui("confirm", sound_skin))
+	button.pressed.connect(callback)
+	button.disabled = not enabled
+	var sub := Label.new()
+	sub.theme_type_variation = &"MutedLabel"
+	sub.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	sub.text = subtitle
+	sub.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sub.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+	sub.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	button.add_child(sub)
+	sub.offset_left = CARD_INDENT
+	var row := {"node": button, "label": title, "key": "", "sub": sub}
+	if not tag.is_empty():
+		var tag_label := Label.new()
+		tag_label.theme_type_variation = &"MutedLabel"
+		tag_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+		tag_label.text = tag
+		tag_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tag_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		tag_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		tag_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		tag_label.offset_right = -6
+		button.add_child(tag_label)
+		row["tag_label"] = tag_label
+	_rows.append(row)
+	_refresh_row(row)
+	return button
+
+
 ## `values` are translation keys (or plain numbers); getter returns the index, setter takes it.
-func add_choice(key: String, values: Array, getter: Callable, setter: Callable) -> Button:
+## A `clamped` row stops at its ends (a volume must not jump from 10 to mute); the others wrap.
+## `preview` plays instead of the tick when the value changes: it lets the player hear the
+## level of a sound the menu itself does not make.
+func add_choice(
+	key: String,
+	values: Array,
+	getter: Callable,
+	setter: Callable,
+	clamped := false,
+	preview := Callable()
+) -> Button:
 	var button := _make_button()
 	var value_label := Label.new()
 	value_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
@@ -96,6 +161,8 @@ func add_choice(key: String, values: Array, getter: Callable, setter: Callable) 
 		"get": getter,
 		"set": setter,
 		"value_label": value_label,
+		"clamped": clamped,
+		"preview": preview,
 	}
 	button.pressed.connect(func() -> void: _cycle(row, 1))
 	button.gui_input.connect(
@@ -113,7 +180,9 @@ func add_choice(key: String, values: Array, getter: Callable, setter: Callable) 
 
 
 ## Choice for a Settings key. Booleans show Off/On unless `values` names false and true.
-func add_setting(key: String, label_key: String, values: Array = []) -> Button:
+func add_setting(
+	key: String, label_key: String, values: Array = [], clamped := false, preview := Callable()
+) -> Button:
 	var is_bool := SettingsService.default_value(key) is bool
 	var shown: Array = values if not values.is_empty() else ["OPTION_OFF", "OPTION_ON"]
 	return add_choice(
@@ -121,6 +190,8 @@ func add_setting(key: String, label_key: String, values: Array = []) -> Button:
 		shown,
 		func() -> int: return int(Settings.get_bool(key)) if is_bool else Settings.get_int(key),
 		func(i: int) -> void: Settings.set_value(key, bool(i) if is_bool else i),
+		clamped,
+		preview,
 	)
 
 
@@ -163,7 +234,7 @@ func _make_button() -> Button:
 	# the mouse moves the focus, so hover and focus never mark two rows at once
 	button.mouse_entered.connect(
 		func() -> void:
-			if not button.disabled and not button.has_focus():
+			if _hover_armed and not button.disabled and not button.has_focus():
 				button.grab_focus()
 	)
 	# The interact key (E) confirms like ui_accept; keys bound to both fire only once.
@@ -185,13 +256,40 @@ func _on_focus(button: Button) -> void:
 	cursor.target = button
 	if not _quiet:
 		AudioDirector.ui("move", sound_skin)
+	_show_header_of.call_deferred(button)
+
+
+## The first row of a group scrolls its header into view too: in a long list the header
+## would otherwise stay cut off above the focused row.
+func _show_header_of(button: Button) -> void:
+	if not is_instance_valid(button) or not button.is_inside_tree():
+		return
+	var scroll := get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	for i in range(1, _rows.size()):
+		if _rows[i]["node"] == button and bool(_rows[i - 1].get("header", false)):
+			scroll.ensure_control_visible(_rows[i - 1]["node"])
+			return
 
 
 func _cycle(row: Dictionary, step: int) -> void:
-	AudioDirector.ui("tick", sound_skin)
 	var values: Array = row["values"]
-	var index := wrapi(int((row["get"] as Callable).call()) + step, 0, values.size())
+	var current := int((row["get"] as Callable).call())
+	var index := current + step
+	if bool(row["clamped"]):
+		index = clampi(index, 0, values.size() - 1)
+		if index == current:
+			# at the end: nothing changes, so nothing sounds either
+			return
+	else:
+		index = wrapi(index, 0, values.size())
+	var preview: Callable = row["preview"]
 	(row["set"] as Callable).call(index)
+	if preview.is_valid():
+		preview.call()
+	else:
+		AudioDirector.ui("tick", sound_skin)
 	refresh()
 	value_changed.emit(str(row["key"]))
 
@@ -203,6 +301,8 @@ func _refresh_row(row: Dictionary) -> void:
 	var text: String = row["label"] if not str(row.get("label", "")).is_empty() else tr(row["key"])
 	var button := node as Button
 	button.text = text
+	if row.has("sub"):
+		_refresh_card(button, row)
 	if row.has("values"):
 		var values: Array = row["values"]
 		var index := clampi(int((row["get"] as Callable).call()), 0, values.size() - 1)
@@ -218,6 +318,18 @@ func _refresh_row(row: Dictionary) -> void:
 			+ 34.0
 		)
 		button.custom_minimum_size.x = ceilf(need)
+
+
+## The second line sits under the title: every style of the row gets room for it.
+func _refresh_card(button: Button, row: Dictionary) -> void:
+	var sub := row["sub"] as Label
+	var room := sub.get_minimum_size().y
+	for state: StringName in [
+		&"normal", &"hover", &"pressed", &"hover_pressed", &"focus", &"disabled"
+	]:
+		var style := button.get_theme_stylebox(state).duplicate() as StyleBox
+		style.content_margin_bottom = room
+		button.add_theme_stylebox_override(state, style)
 
 
 ## Up/down wraps around and skips disabled rows and labels.

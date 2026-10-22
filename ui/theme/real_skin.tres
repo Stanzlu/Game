@@ -28,7 +28,7 @@ content_margin_left = 4.0
 content_margin_top = 1.0
 content_margin_right = 4.0
 content_margin_bottom = 2.0
-bg_color = Color(0.09, 0.08, 0.07, 0.8)
+bg_color = Color(0.11, 0.1, 0.09, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
 content_margin_left = 3.0
@@ -67,6 +67,64 @@ content_margin_top = 6.0
 content_margin_right = 10.0
 content_margin_bottom = 7.0
 bg_color = Color(0.09, 0.08, 0.07, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scroll"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(0.09, 0.08, 0.07, 0.5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(0.6, 0.57, 0.52, 0.7)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber_hi"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(0.8, 0.77, 0.7, 0.85)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber_press"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(0.9, 0.88, 0.83, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_line"]
+content_margin_left = 4
+content_margin_top = 2
+content_margin_right = 4
+content_margin_bottom = 2
+bg_color = Color(0.09, 0.08, 0.07, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.38, 0.35, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_line_focus"]
+content_margin_left = 4
+content_margin_top = 2
+content_margin_right = 4
+content_margin_bottom = 2
+bg_color = Color(0.09, 0.08, 0.07, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.64, 0.62, 0.58, 1)
+anti_aliasing = false
 
 [resource]
 Label/colors/font_color = Color(0.91, 0.89, 0.84, 1)
@@ -128,3 +186,14 @@ TitleHintLabel/colors/font_color = Color(0.96, 0.93, 0.87, 1)
 TitleHintLabel/colors/font_outline_color = Color(0.16, 0.12, 0.13, 1)
 HintLabel/base_type = &"SmallLabel"
 HintLabel/colors/font_color = Color(0.6, 0.57, 0.52, 1)
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scroll")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_grabber_hi")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_grabber_press")
+LineEdit/colors/font_color = Color(0.91, 0.89, 0.84, 1)
+LineEdit/colors/font_placeholder_color = Color(0.56, 0.53, 0.49, 1)
+LineEdit/colors/caret_color = Color(0.9, 0.88, 0.83, 1)
+LineEdit/colors/selection_color = Color(0.9, 0.88, 0.83, 0.25)
+LineEdit/styles/normal = SubResource("StyleBoxFlat_line")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_line_focus")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_line")

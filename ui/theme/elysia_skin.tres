@@ -100,6 +100,64 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scroll"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(0.12, 0.08, 0.22, 0.5)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(1, 0.84, 0.4, 0.7)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber_hi"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(1, 0.86, 0.45, 0.9)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber_press"]
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+bg_color = Color(1, 0.9, 0.55, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_line"]
+content_margin_left = 4
+content_margin_top = 2
+content_margin_right = 4
+content_margin_bottom = 2
+bg_color = Color(0.16, 0.1, 0.26, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.62, 0.3, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_line_focus"]
+content_margin_left = 4
+content_margin_top = 2
+content_margin_right = 4
+content_margin_bottom = 2
+bg_color = Color(0.16, 0.1, 0.26, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.84, 0.4, 1)
+anti_aliasing = false
+
 [resource]
 Label/colors/font_color = Color(1, 0.96, 0.88, 1)
 RichTextLabel/colors/default_color = Color(1, 0.96, 0.88, 1)
@@ -163,3 +221,14 @@ PromptText/base_type = &"Label"
 PromptText/colors/font_color = Color(1, 0.94, 0.75, 1)
 HintLabel/base_type = &"SmallLabel"
 HintLabel/colors/font_color = Color(0.78, 0.7, 0.9, 1)
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scroll")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_grabber_hi")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_grabber_press")
+LineEdit/colors/font_color = Color(1, 0.96, 0.88, 1)
+LineEdit/colors/font_placeholder_color = Color(0.78, 0.7, 0.9, 0.7)
+LineEdit/colors/caret_color = Color(1, 0.84, 0.36, 1)
+LineEdit/colors/selection_color = Color(1, 0.84, 0.4, 0.3)
+LineEdit/styles/normal = SubResource("StyleBoxFlat_line")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_line_focus")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_line")
