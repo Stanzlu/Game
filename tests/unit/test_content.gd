@@ -130,6 +130,74 @@ func test_slice_speakers_are_known() -> void:
 			)
 
 
+## Compiled lines of one dialogue file by static ID.
+func _lines_by_id(path: String) -> Dictionary:
+	var by_id := {}
+	var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
+	for key: String in result.lines:
+		var line: Dictionary = result.lines[key]
+		if line.has("static_id"):
+			by_id[str(line["static_id"])] = line
+	return by_id
+
+
+func test_the_woman_at_the_stream_is_nameless_until_she_says_her_name() -> void:
+	# The name plate must not give "Mira" away before "Mira, übrigens." (tal_mira_24).
+	var lines := _lines_by_id("res://content/dialogue/slice/tal.dialogue")
+	var checked := 0
+	for n in range(1, 24):
+		if n == 20:
+			continue  # "Mira wendet sich wieder ihrem Netz zu": after her introduction
+		var id := "tal_mira_%d" % n
+		if not lines.has(id):
+			continue
+		checked += 1
+		var line: Dictionary = lines[id]
+		assert_ne(line.get("character", ""), "Mira", "%s speaks as Mira too early" % id)
+		assert_false(str(line["text"]).begins_with("Mira"), "%s names her in narration" % id)
+	assert_gt(checked, 15, "the whole first meeting was checked")
+	assert_eq(lines["tal_mira_24"].get("character"), "Mira", "she introduces herself here")
+
+
+func test_polish_two_lines_are_in_the_dialogues() -> void:
+	var elysia := _lines_by_id("res://content/dialogue/slice/elysia.dialogue")
+	for id: String in [
+		"el_wake_0",
+		"el_wake_8",
+		"el_loop_2",
+		"el_stone_1",
+		"el_tree_1",
+		"el_tree_2",
+		"el_pillar_1",
+		"el_crystal_1",
+		"el_splash_1"
+	]:
+		assert_true(elysia.has(id), "elysia.dialogue lost %s" % id)
+	assert_false(elysia.has("el_wake_4"), "the joke about 'the only one' is gone")
+	var haus := _lines_by_id("res://content/dialogue/slice/haus.dialogue")
+	for id: String in ["haus_mira_35", "haus_mira_r12", "haus_mira_r13", "haus_mira_r14"]:
+		assert_true(haus.has(id), "haus.dialogue lost %s" % id)
+	var tal := _lines_by_id("res://content/dialogue/slice/tal.dialogue")
+	for id: String in ["tal_end_12", "tal_antr_busy_1", "tal_antr_busy_2", "tal_antr_busy_3"]:
+		assert_true(tal.has(id), "tal.dialogue lost %s" % id)
+
+
+func test_every_memory_has_a_journal_entry() -> void:
+	# add_memory("npc", "id") in a dialogue shows up in the journal as MEMORY_<NPC>_<ID>.
+	var keys := _csv_keys()
+	var regex := RegEx.create_from_string('add_memory\\(\\s*"([a-z_]+)"\\s*,\\s*"([a-z_]+)"')
+	var seen := 0
+	for path in _files("res://content/dialogue/slice", ["dialogue"]):
+		for found in regex.search_all(FileAccess.get_file_as_string(path)):
+			seen += 1
+			var key := ("MEMORY_%s_%s" % [found.get_string(1), found.get_string(2)]).to_upper()
+			assert_true(
+				keys.has(key),
+				"%s remembers %s but %s is missing" % [path, found.get_string(2), key]
+			)
+	assert_gt(seen, 30, "the slice remembers a lot")
+
+
 func test_world_actions_in_maps_are_valid() -> void:
 	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
 	var checked := 0
