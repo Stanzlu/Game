@@ -42,6 +42,39 @@ func test_running_never_reaches_the_goal_but_stopping_resolves() -> void:
 	assert_true(encounter.antreiber.silent, "Antreiber fell silent")
 
 
+func test_a_long_sprint_stays_a_run_and_tires_all_the_way() -> void:
+	var encounter: AntreiberEncounter = SCENE.instantiate()
+	add_child_autofree(encounter)
+	await wait_physics_frames(3)
+	Input.action_press(&"move_right")
+	Input.action_press(&"sprint")
+	await wait_seconds(2.0)
+	watch_signals(encounter.player)
+	await wait_seconds(13.0)
+	# fatigue slows the run below the speed of a walk (144 * (1 - 0.45 * 0.9) < 96); the
+	# state followed the measured speed and flickered between walk and run 20 times a second
+	assert_lte(get_signal_emit_count(encounter.player, "state_changed"), 2, "no flicker")
+	assert_gte(encounter.model.fatigue, 0.85, "the sprint kept counting")
+	assert_eq(encounter.player.state, Player.State.RUN)
+
+
+func test_stopping_ends_the_music_with_a_fade_not_a_tape_stop() -> void:
+	var encounter: AntreiberEncounter = SCENE.instantiate()
+	encounter.stillness_seconds = 1.0
+	add_child_autofree(encounter)
+	await wait_physics_frames(3)
+	assert_eq(AudioDirector.current, "antreiber", "the chase has its music")
+	Input.action_press(&"move_right")
+	Input.action_press(&"sprint")
+	await wait_seconds(9.0)
+	assert_eq(AudioDirector.current, "antreiber", "still playing while running")
+	Input.action_release(&"sprint")
+	Input.action_release(&"move_right")
+	await wait_seconds(1.8)
+	assert_true(encounter.model.is_resolved())
+	assert_eq(AudioDirector.current, "", "the music ended with the stopping")
+
+
 func test_segments_are_recycled_while_running() -> void:
 	var encounter: AntreiberEncounter = SCENE.instantiate()
 	add_child_autofree(encounter)

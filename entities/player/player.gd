@@ -11,6 +11,11 @@ enum State { IDLE, WALK, RUN, SIT, LOCKED }
 
 const STAND_UP_THRESHOLD := 0.5
 const NUDGE_SPEED := 60.0
+## The first footfall of a walk waits for this much travel: a tap that only turns the
+## figure makes no step noise. Measured with the Direkt tuning at 60 ticks: 2 ticks move
+## 5 px, 3 ticks (50 ms) 8 px, 4 ticks 11 px, so from the fourth tick it is a step. Distance,
+## not time, so it holds at any frame rate.
+const FIRST_STEP_DISTANCE := 9.0
 ## After a conversation or getting up, interact waits this long, so the press that closed
 ## the last line cannot start the same conversation again.
 const INTERACT_COOLDOWN := 0.35
@@ -53,6 +58,8 @@ var _move_dir := Facing.Dir.S
 var _straight_time := 0.0
 ## Walk/run frame that last played a footstep (-1 = standing).
 var _footfall_frame := -1
+## Travel since the walk began (reset when standing); gates the first footfall.
+var _press_distance := 0.0
 var _prev_physics_pos := Vector2.ZERO
 var _curr_physics_pos := Vector2.ZERO
 var _idle_time := 0.0
@@ -111,6 +118,13 @@ func teleport(to: Vector2) -> void:
 	reset_physics_interpolation()
 
 
+## True while the player runs on purpose (sprint held or latched, and steering). The state
+## follows the intent, not the measured speed: fatigue slows the run below the walking
+## threshold, and a state read back from the speed flickered between walk and run.
+func is_sprinting() -> bool:
+	return state == State.RUN
+
+
 ## Position between the last two physics steps, matching what is rendered with
 ## physics interpolation on. Cameras follow this, not global_position.
 func interpolated_position() -> Vector2:
@@ -126,12 +140,13 @@ func sit_on(seat: Vector2, dir: Facing.Dir) -> void:
 	facing = dir
 	_set_state(State.SIT)
 	_update_animation(0.0)
-	SoundBank.play_at(self, "sit", global_position, -4.0)
+	SoundBank.play_at(self, "sit", global_position, 0.0)
 
 
 func stand_up() -> void:
 	if state != State.SIT:
 		return
+	SoundBank.play_at(self, "stand", global_position, 0.0)
 	_set_state(State.IDLE)
 	_move_to_seat(_seat_return)
 	_collision.set_deferred(&"disabled", false)
@@ -193,10 +208,10 @@ func _physics_step(delta: float) -> void:
 	elif speed < WALK_THRESHOLD:
 		_set_state(State.IDLE)
 	else:
-		_set_state(State.RUN if sprinting and speed > tuning.walk_speed * 1.1 else State.WALK)
+		_set_state(State.RUN if sprinting and input != Vector2.ZERO else State.WALK)
 	_update_idle(delta)
 	_update_animation(speed)
-	_update_footfall()
+	_update_footfall(moved)
 	sensor.update_target(self, Facing.to_vector(facing), not is_locked())
 	_update_interact(delta)
 
@@ -281,12 +296,17 @@ func _nudge_around_corner(input: Vector2, delta: float) -> void:
 
 
 ## Footsteps follow the feet: the walk and run cycles put a foot down on frames 0 and 2.
-func _update_footfall() -> void:
+func _update_footfall(moved: float) -> void:
 	if state != State.WALK and state != State.RUN:
 		_footfall_frame = -1
+		_press_distance = 0.0
 		return
+	_press_distance += moved
 	var frame := sprite.frame
 	if frame == _footfall_frame:
+		return
+	if _footfall_frame == -1 and frame % 2 == 0 and _press_distance < FIRST_STEP_DISTANCE:
+		# a tap that only turns: wait to see whether this becomes a walk
 		return
 	_footfall_frame = frame
 	if frame % 2 != 0:
@@ -328,12 +348,18 @@ func _on_animation_finished() -> void:
 		_next_glance = _rng.randf_range(GLANCE_AFTER.x, GLANCE_AFTER.y)
 
 
+func _in_gait_cycle(animation: String) -> bool:
+	return animation.begins_with("walk_") or animation.begins_with("run_")
+
+
 func _update_animation(speed: float) -> void:
 	var state_name: String = "look" if _glancing else STATE_NAMES[state]
 	var anim := CharacterSheet.animation_name(state_name, facing)
 	if sprite.animation != anim:
-		# turning while walking keeps the step: the cycle goes on in the new direction
-		var same_cycle := String(sprite.animation).begins_with(state_name + "_")
+		# turning while walking keeps the step: the cycle goes on in the new direction. Walk
+		# and run are one cycle (feet down on frames 0 and 2), so starting or ending a sprint
+		# does not restart it either.
+		var same_cycle := _in_gait_cycle(String(sprite.animation)) and _in_gait_cycle(anim)
 		var frame := sprite.frame
 		var progress := sprite.frame_progress
 		sprite.play(anim)
