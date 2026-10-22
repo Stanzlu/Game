@@ -28,6 +28,10 @@ FEET = 30
 # "look" is the long idle (Game Bible §36 "viele Idle-Animationen"): blink, glance to one
 # side, to the other, blink. Its rows come last, so older sheets without them still work.
 STATES = [("idle", 2), ("walk", 4), ("run", 4), ("sit", 1), ("look", 4)]
+# "work" (two frames, hands in front of the body going up and down) is a state of its own after
+# "look", only for the designs that ask for it (design["work"]): Mira mends her net. Sheets
+# without it keep their size, and CharacterSheet reads what the texture has.
+WORK_STATE = ("work", 2)
 FACINGS = ["E", "SE", "S", "SW", "W", "NW", "N", "NE"]
 
 DESIGNS = {
@@ -142,6 +146,7 @@ DESIGNS = {
         "hair_style": "ponytail",
         "outfit": "cape",
         "bag": "backpack",
+        "work": True,
     },
 }
 
@@ -171,8 +176,13 @@ for _name in SOFT:
 def pose(state, frame):
     """Per-frame offsets. legs: (forward, lift) per leg; arms: swing per arm; bob: upper body."""
     p = {"bob": 0, "legs": ((0, 0), (0, 0)), "arms": (0, 0), "sit": False, "lean": 0, "hair": 0,
-         "gaze": 0, "blink": False}
-    if state == "idle":
+         "gaze": 0, "blink": False, "work": None, "gait": False}
+    if state == "work":
+        # the hands in front of the body pull the thread, one up while the other goes down;
+        # the head nods with it
+        p["work"] = frame
+        p["bob"] = frame
+    elif state == "idle":
         p["bob"] = frame
         p["hair"] = frame
     elif state == "look":
@@ -186,6 +196,7 @@ def pose(state, frame):
         # the arms swing through the middle. Each leg runs the same four phases, the second
         # one two frames later.
         run = state == "run"
+        p["gait"] = True
         big = 3 if run else 2  # stride: foot in front / behind (side view: twice in pixels)
         if run:
             # land, push back through the air, toe-off, swing forward through the air
@@ -196,10 +207,14 @@ def pose(state, frame):
         p["legs"] = (phases[frame % 4], phases[(frame + 2) % 4])
         half = int(round(big / 2))
         p["arms"] = {0: (-big, big), 1: (-half, half), 2: (big, -big), 3: (half, -half)}[frame % 4]
-        if frame in (1, 3):
-            # passing: the body rises a pixel; running, both feet also leave the ground (2 px,
-            # knees tucked: a higher body would cut the crown off at the top of the frame)
-            p["bob"] = -1
+        if frame in (0, 2):
+            # contact: the body is at its lowest. The cycle's bounce is drawn downwards from
+            # the passing frames instead of upwards from the contacts: the feet stay on y=30
+            # and the crown stays inside the frame (a body a pixel higher cut the top of the
+            # hair off, a flicker of two pixels at every step)
+            p["bob"] = 1
+        else:
+            # passing (walk) or airborne (run, both feet leave the ground by 2 px, knees tucked)
             p["hair"] = 1
         p["lean"] = 1 if run else 0
     elif state == "sit":
@@ -303,7 +318,12 @@ class Figure:
             for li, tint in order:
                 fwd, lift = p["legs"][li]
                 if side:
-                    hx, fx = cx - 0.5 + lean, cx - 0.5 + fwd * 2
+                    # the far leg hangs from a hip a pixel further front and reaches a little
+                    # shorter: with both legs alike, near-forward and far-forward were the same
+                    # silhouette and the four frames read as a two-frame wobble
+                    far = li == 1 and p["gait"]
+                    hx = cx - 0.5 + lean + (1 if far else 0)
+                    fx = hx + fwd * (1.5 if far else 2)
                 else:
                     hx = cx - 2 + 4 * li
                     fx = hx + (fwd * 0.5 if three else 0)
@@ -318,11 +338,18 @@ class Figure:
                 self.part(boot, "boots", 0.5 + tint + 0.25 * (c.yy == FEET - lift - 2))
 
         # far arm (side view) behind the torso
+        work = p["work"]
         if side:
             sw = p["arms"][1]
-            far = limb(c, cx + lean, ty0 + 1, cx + lean + sw, ty0 + 7, 2)
+            if work is None:
+                far = limb(c, cx + lean, ty0 + 1, cx + lean + sw, ty0 + 7, 2)
+                hand_y = ty0 + 6
+            else:
+                # both hands reach forward at chest height, the far one a step behind the near one
+                far = limb(c, cx + lean, ty0 + 1, cx + lean + 3, ty0 + 4 + 2 * work, 2)
+                hand_y = ty0 + 4 + 2 * work
             self.part(far, "top", 0.2)
-            self.part(far & (c.yy >= ty0 + 6), "skin", 0.35)
+            self.part(far & (c.yy >= hand_y), "skin", 0.35)
 
         # torso
         if side:
@@ -411,9 +438,14 @@ class Figure:
         # near arms
         if side:
             sw = p["arms"][0]
-            near = limb(c, cx - 0.5 + lean, ty0 + 1, cx - 0.5 + lean + sw, ty0 + 7, 2)
+            if work is None:
+                near = limb(c, cx - 0.5 + lean, ty0 + 1, cx - 0.5 + lean + sw, ty0 + 7, 2)
+                hand_y = ty0 + (7 if jumper else 6)
+            else:
+                near = limb(c, cx - 0.5 + lean, ty0 + 1, cx + 3.5 + lean, ty0 + 6 - 2 * work, 2)
+                hand_y = ty0 + 6 - 2 * work
             self.part(near, "top", 0.65, line=True)
-            self.part(near & (c.yy >= ty0 + (7 if jumper else 6)), "skin", 0.65)
+            self.part(near & (c.yy >= hand_y), "skin", 0.65)
         else:
             for k, ax in enumerate((tx0 - 1 - arm_out, tx1 + 1 + arm_out)):
                 sw = p["arms"][k]
@@ -421,6 +453,15 @@ class Figure:
                 end = ty0 + (4 if d.get("child") else 6) + int(np.clip(sw, -1, 2))
                 arm = limb(c, ax, ty0 + 1, ax, end, 2)
                 hand = limb(c, ax, end, ax, end + 1, 2)
+                if work is not None:
+                    # working: the forearms cross in front of the body, the hands alternate
+                    # (from behind only the elbows move, the hands are hidden by the body)
+                    wx = cx + (-1.5 if k == 0 else 1.5) + (1 if three else 0)
+                    end = ty0 + 6 - 2 * (work if k == 0 else 1 - work)
+                    arm = limb(c, ax, ty0 + 1, wx, end, 2)
+                    hand = limb(c, wx, end, wx, end + 1, 2)
+                    if back:
+                        hand = np.zeros_like(hand)
                 tone = 0.72 if k == 0 else 0.4
                 if three and k == 1:
                     tone = 0.3
@@ -602,12 +643,17 @@ class Figure:
                 c.fill(c.rect(eyes[-1] + 1, ey + 2, eyes[-1] + 2, ey + 3), d["blush"])
 
 
+def states_of(design):
+    return STATES + ([WORK_STATE] if design.get("work") else [])
+
+
 def sheet(design):
-    cols = max(n for _, n in STATES)
-    rows = len(STATES) * len(FACINGS)
+    states = states_of(design)
+    cols = max(n for _, n in states)
+    rows = len(states) * len(FACINGS)
     out = np.zeros((rows * FH, cols * FW, 4), np.float32)
     row = 0
-    for state, frames in STATES:
+    for state, frames in states:
         for facing in FACINGS:
             for f in range(frames):
                 src = {"W": "E", "SW": "SE", "NW": "NE"}.get(facing, facing)
@@ -619,14 +665,15 @@ def sheet(design):
     return out
 
 
-def preview(sheets, path):
+def preview(designs, sheets, path):
     from PIL import Image
     tiles = []
-    for data in sheets:
+    for design, data in zip(designs, sheets):
+        states = states_of(design)
         img = Image.fromarray(data.astype(np.uint8), "RGBA")
-        strip = Image.new("RGBA", (8 * 4 * FW + 7 * 8, 4 * FH), (96, 140, 110, 255))
+        strip = Image.new("RGBA", (8 * 4 * FW + 7 * 8, len(states) * FH), (96, 140, 110, 255))
         r = 0
-        for si, (_, frames) in enumerate(STATES):
+        for si, (_, frames) in enumerate(states):
             for fi in range(8):
                 for f in range(frames):
                     tile = img.crop((f * FW, r * FH, (f + 1) * FW, (r + 1) * FH))
@@ -653,4 +700,4 @@ if __name__ == "__main__":
         made.append(data)
         print("wrote", os.path.relpath(path, ROOT))
     if args.preview:
-        preview(made, args.preview)
+        preview(list(DESIGNS.values()), made, args.preview)
