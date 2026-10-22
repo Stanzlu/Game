@@ -103,7 +103,7 @@ func _physics_process(delta: float) -> void:
 	_last_player_pos = player.global_position
 	var input_active := not player.is_locked() and player.read_input().length() > 0.2
 	var sitting := player.state == Player.State.SIT
-	var sprinting := player.state == Player.State.RUN
+	var sprinting := player.is_sprinting()
 	model.update(delta, moved, input_active, sprinting, sitting)
 	_ensure_segments(player.global_position.x)
 	if model.is_resolved():
@@ -121,6 +121,9 @@ func _physics_process(delta: float) -> void:
 func _on_resolved() -> void:
 	Log.info(Log.Category.ENCOUNTER, "antreiber resolved", model.stats())
 	WorldState.set_flag("encounter.antreiber_resolved")
+	# The music follows the player's stopping: it ends here, with no tape stop (that gesture
+	# belongs to the rift alone); rain, bird and steps are left.
+	AudioDirector.play_music("silence", 2.5)
 	player.speed_scale = 1.0
 	antreiber.resolve(player)
 	var beside := Vector2(player.global_position.x + goal_beside, PATH_Y + goal_offset_y)
@@ -141,7 +144,7 @@ func _land_bird() -> void:
 	_actors.add_child(bird)
 	bird.global_position = flag.global_position + bird_offset
 	bird.z_index = 5
-	SoundBank.play_at(bird, "bird", bird.global_position, -8.0)
+	SoundBank.play_at(bird, "bird", bird.global_position, -2.0)
 
 
 func _check_goal() -> void:

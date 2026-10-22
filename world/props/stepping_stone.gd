@@ -5,9 +5,18 @@ extends Node2D
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
 const SPLASH := preload("res://assets/generated/props/fx/splash.png")
-## Feet must be this close to the stone's middle before it tips (forgiving at the edges).
-const TIP_RADIUS := Vector2(6, 5)
+## The tipping zone is a thin slice at the painted stone's feet line, not the stone's cell.
+## The player's foot collider (10x5 at (0, -2)) reaches 4.5 px above and 0.5 px below the
+## feet, so with this slice the stone tips when the soles are 5 px above or 4 px below its
+## middle: the same distance either side of the picture's centre (-7 to +6), from every
+## direction. The old 12x10 cell tipped 10 px earlier from below than from above.
+const TIP_ZONE := Vector2(12, 4)
+const TIP_ZONE_CENTER := Vector2(0, -2.5)
 const TIP_SECONDS := 0.18
+## The cold water takes the picture to a dark blue-grey, not to the black of a cut.
+const FALL_FADE_COLOR := Color(0.05, 0.08, 0.12)
+## A plunge shakes the view a little (screen shake setting applies) and the controller.
+const FALL_SHAKE := Vector2(1.5, 0.35)
 
 ## One fall at a time, even when the feet touch two round stones at once.
 static var _falling := false
@@ -27,11 +36,11 @@ func apply_params(params: Dictionary) -> void:
 	_sprite.centered = false
 	_sprite.texture = PropCatalog.texture_for(entry, global_position)
 	var anchor: Array = entry.get("anchor", [0, 0])
-	# no two stones sit the same: a small offset per stone (up to 3 px across, 2 px along the
-	# stream) breaks the grid of the field; only the picture moves, the stone's cell and its
-	# tipping zone stay where the map puts them
+	# no two stones sit the same: a small offset per stone (up to 3 px across, 1 px along the
+	# stream, so the picture stays inside the tipping zone) breaks the grid of the field; only
+	# the picture moves, the stone's cell and its tipping zone stay where the map puts them
 	var jitter := Vector2i(
-		posmod(hash(global_position), 7) - 3, posmod(hash(global_position * 1.7), 5) - 2
+		posmod(hash(global_position), 7) - 3, posmod(hash(global_position * 1.7), 3) - 1
 	)
 	_sprite.offset = -Vector2(float(anchor[0]), float(anchor[1])) + Vector2(jitter)
 	_sprite.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -49,8 +58,9 @@ func _add_zone() -> void:
 	_zone.monitorable = false
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = TIP_RADIUS * 2.0
+	rect.size = TIP_ZONE
 	shape.shape = rect
+	shape.position = TIP_ZONE_CENTER
 	_zone.add_child(shape)
 	add_child(_zone)
 	_zone.body_entered.connect(_on_body_entered)
@@ -62,7 +72,7 @@ func _on_body_entered(body: Node2D) -> void:
 	_falling = true
 	var player := body as Player
 	var heading := player.velocity
-	AudioDirector.sfx("stone_wobble", 4.0)
+	AudioDirector.sfx("stone_wobble", 0.0)
 	var rock := create_tween()
 	rock.tween_property(_sprite, ^"rotation", 0.22, TIP_SECONDS * 0.5)
 	rock.tween_property(_sprite, ^"rotation", -0.12, TIP_SECONDS * 0.5)
@@ -80,14 +90,16 @@ func _fall(player: Player, heading: Vector2) -> void:
 	Log.info(Log.Category.WORLD_STATE, "fell into the stream", {"cell": global_position / 16.0})
 	AudioDirector.sfx("splash_fall")
 	_splash(player.global_position)
+	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
+	if scene != null:
+		scene.view.shake(FALL_SHAKE.x, FALL_SHAKE.y)
 	var sink := player.create_tween()
 	sink.tween_property(player.sprite, ^"position:y", 7.0, 0.22).set_ease(Tween.EASE_IN)
-	await ScreenFade.fade_out(0.45)
+	await ScreenFade.fade_out(0.45, FALL_FADE_COLOR)
 	var bank: Variant = _bank_for(player, heading)
 	if bank != null:
 		player.teleport(bank)
 	player.sprite.position.y = 0.0
-	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
 	if scene != null:
 		scene.view.follow(player)
 	await NodeTimer.after(self, 0.35)
@@ -122,17 +134,17 @@ func _splash(at: Vector2) -> void:
 	var burst := CPUParticles2D.new()
 	burst.name = "Splash"
 	burst.texture = SPLASH
-	burst.amount = 18
+	burst.amount = 30
 	burst.lifetime = 0.7
 	burst.one_shot = true
 	burst.explosiveness = 0.9
 	burst.direction = Vector2(0, -1)
-	burst.spread = 70.0
+	burst.spread = 80.0
 	burst.gravity = Vector2(0, 260)
-	burst.initial_velocity_min = 50.0
-	burst.initial_velocity_max = 95.0
+	burst.initial_velocity_min = 55.0
+	burst.initial_velocity_max = 120.0
 	burst.scale_amount_min = 0.6
-	burst.scale_amount_max = 1.2
+	burst.scale_amount_max = 1.4
 	var fade := Gradient.new()
 	fade.set_color(0, Color(0.85, 0.92, 0.95, 0.9))
 	fade.set_color(1, Color(0.85, 0.92, 0.95, 0.0))
