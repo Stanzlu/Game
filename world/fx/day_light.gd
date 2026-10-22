@@ -26,6 +26,8 @@ const PRESETS := {
 		# thin rain mist in the distance, the mountains behind it (ADR-043)
 		"depth_haze": 0.12,
 		"haze_color": Color(0.8, 0.87, 0.9),
+		"sky_top": Color("#7d9fc0"),
+		"sky_bottom": Color("#efd9c0"),
 		"mountains": 0.12,
 		"lamps": 0.15,
 		"rain": true,
@@ -50,6 +52,10 @@ const PRESETS := {
 		# the air clears: warm haze far off, the mountains Mira looks at are there
 		"depth_haze": 0.14,
 		"haze_color": Color(0.98, 0.82, 0.64),
+		# the sky is multiplied by the warm world tint and grade: this blue arrives as a cool
+		# dusk violet at the top and the golden horizon below it
+		"sky_top": Color(0.45, 0.6, 1.0),
+		"sky_bottom": Color("#efd9c0"),
 		"mountains": 1.0,
 		"lamps": 0.7,
 		"rain": false,
@@ -73,6 +79,8 @@ const PRESETS := {
 		"bloom": 0.9,
 		"depth_haze": 0.1,
 		"haze_color": Color(0.2, 0.24, 0.36),
+		"sky_top": Color("#7d9fc0"),
+		"sky_bottom": Color("#efd9c0"),
 		"mountains": 0.5,
 		"lamps": 1.0,
 		"rain": true,
@@ -134,6 +142,8 @@ func set_preset(preset_name: String, seconds := 4.0) -> void:
 		_blend(rays, ^"strength", float(p["rays"]), t)
 	if backdrop != null:
 		_blend(backdrop, ^"clear", float(p["mountains"]), t)
+		_blend(backdrop, ^"sky_top", p["sky_top"], t)
+		_blend(backdrop, ^"sky_bottom", p["sky_bottom"], t)
 	for node in get_tree().get_nodes_in_group(&"lamp_props"):
 		_blend(node, ^"light_scale", float(p["lamps"]), t)
 	if rain != null:

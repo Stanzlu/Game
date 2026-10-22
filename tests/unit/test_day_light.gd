@@ -56,6 +56,26 @@ func test_the_rainy_day_is_cool_and_rich_not_grey() -> void:
 	assert_gt(haze.get_luminance(), 0.8, "the mist is light, not a grey veil")
 
 
+## The evening's warm tint and grade multiply the sky: its blue has to be chosen so that it
+## still arrives cool at the top (the audit measured grey-beige there).
+func test_the_evening_sky_arrives_cool_and_the_backdrop_follows_the_preset() -> void:
+	var evening: Dictionary = DayLight.PRESETS["abend"]
+	var tint: Color = evening["world_tint"]
+	var grade_tint: Color = evening["tint"]
+	var top: Color = evening["sky_top"]
+	var seen := Color(
+		top.r * tint.r * grade_tint.r, top.g * tint.g * grade_tint.g, top.b * tint.b * grade_tint.b
+	)
+	assert_gt(seen.b, seen.r + 0.15, "cool at the top, not beige")
+	var scene: LookScene = load("res://world/levels/slice/tal.tscn").instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	scene.day_light.set_preset("abend", 0.0)
+	assert_not_null(scene.backdrop, "the slice valley has mountains behind it")
+	assert_eq(scene.backdrop.sky_top, top)
+	assert_eq(scene.backdrop.sky_bottom, evening["sky_bottom"])
+
+
 func test_unknown_preset_is_refused() -> void:
 	var day := DayLight.new()
 	add_child_autofree(day)
