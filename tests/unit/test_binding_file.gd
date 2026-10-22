@@ -59,6 +59,11 @@ func before_each() -> void:
 	model = InputBindings.new(false)
 
 
+func after_each() -> void:
+	Settings.bindings.reset()
+	Settings.apply_all()
+
+
 func _loaded(data: Variant) -> InputBindings:
 	var fresh := InputBindings.new(false)
 	fresh.load_data(data)

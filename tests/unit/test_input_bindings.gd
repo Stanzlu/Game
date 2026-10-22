@@ -13,6 +13,11 @@ func before_each() -> void:
 	model = InputBindings.new(false)
 
 
+func after_each() -> void:
+	Settings.bindings.reset()
+	Settings.apply_all()
+
+
 ## [fixed, slots, effective] per action and device, from the table in the design (0.3) with
 ## pad A pinned on interact.
 func _expected() -> Dictionary:

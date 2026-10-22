@@ -3,6 +3,9 @@ extends Node
 ## and provides short labels for actions, e.g. "E" or "A". Used by all prompts.
 
 signal device_changed(kind: Kind)
+## The keys or buttons behind the labels changed (the player rebound something; emitted by
+## Settings). Prompts that show a key name connect this as well as `device_changed`.
+signal labels_changed
 
 enum Kind { KEYBOARD, GAMEPAD }
 enum Style { XBOX, PLAYSTATION, NINTENDO }
