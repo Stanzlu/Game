@@ -387,3 +387,20 @@ func test_save_slots_show_name_place_and_time() -> void:
 	menu.close()
 	DirAccess.remove_absolute(SaveSystem.path_for("slot_3"))
 	assert_false(FileAccess.file_exists(SaveSystem.path_for("slot_3")))
+
+
+func test_a_long_journal_entry_names_the_way_to_scroll() -> void:
+	var scene := await _sandbox()
+	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	WorldState.start_quest("main_valley_shelter")
+	for stage: String in ["house", "wood", "fire", "done"]:
+		WorldState.advance_quest("main_valley_shelter", stage)
+	await _tap(&"journal")
+	await wait_physics_frames(8)
+	assert_string_contains(scene.journal.hint.text, tr("JOURNAL_SCROLL_HINT"))
+	await _tap(&"journal")
+	WorldState.new_game()
+	await _tap(&"journal")
+	await wait_physics_frames(8)
+	assert_false(tr("JOURNAL_SCROLL_HINT") in scene.journal.hint.text, "short pages need none")
+	await _tap(&"journal")
