@@ -116,8 +116,8 @@ func teleport(to: Vector2) -> void:
 	reset_physics_interpolation()
 
 
-## True while the player runs on purpose (sprint held or latched, and steering). The state
-## follows the intent, not the measured speed: fatigue slows the run below the walking
+## True while the player runs on purpose (sprint held or latched, and steering firmly). The
+## state follows the intent, not the measured speed: fatigue slows the run below the walking
 ## threshold, and a state read back from the speed flickered between walk and run.
 func is_sprinting() -> bool:
 	return state == State.RUN
@@ -206,7 +206,11 @@ func _physics_step(delta: float) -> void:
 	elif speed < WALK_THRESHOLD:
 		_set_state(State.IDLE)
 	else:
-		_set_state(State.RUN if sprinting and input != Vector2.ZERO else State.WALK)
+		# the same condition under which the movement model really runs (a light stick tilt
+		# with sprint held still walks)
+		_set_state(
+			State.RUN if sprinting and input.length() >= tuning.sprint_min_tilt else State.WALK
+		)
 	_update_idle(delta)
 	_update_animation(speed)
 	_update_footfall(moved)
