@@ -38,7 +38,7 @@ var _open_tween: Tween
 
 ## True when the journal may open now: nothing else is open, no door is being walked through
 ## and the screen is not black or fading out (a menu under the cover would be invisible).
-## A fade-in does not count: the screen is on its way back and Esc must work at once.
+## A fade-in does not count: the screen is on its way back and Esc (by default) must work at once.
 static func can_open(tree: SceneTree) -> bool:
 	return not any_open(tree) and _screen_allows_menus()
 
@@ -235,8 +235,12 @@ func close() -> void:
 		_return_focus.grab_focus()
 
 
-## Rebuilds the rows and keeps the focused row (after values or slots changed).
+## Rebuilds the rows and keeps the focused row (after values or slots changed). A menu that is
+## not shown does nothing: it has no focus of its own, and the focus owner it would not find in
+## its list would send the focus to its first (invisible) row, away from the visible menu.
 func rebuild() -> void:
+	if not visible:
+		return
 	var focused := get_viewport().gui_get_focus_owner()
 	var index := list.buttons().find(focused)
 	list.clear_rows()

@@ -237,7 +237,7 @@ func _make_button() -> Button:
 			if _hover_armed and not button.disabled and not button.has_focus():
 				button.grab_focus()
 	)
-	# The interact key (E) confirms like ui_accept; keys bound to both fire only once.
+	# The interact key (E by default) confirms like ui_accept; keys bound to both fire only once.
 	button.gui_input.connect(
 		func(event: InputEvent) -> void:
 			if (

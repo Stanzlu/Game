@@ -1,7 +1,8 @@
 class_name PauseMenu
 extends MenuLayer
-## Pause menu (menu action: Esc, Tab, Start). Resume, journal, save, load, settings,
-## back to the start menu, quit. Saving is disabled where the scene cannot be resumed.
+## Pause menu (menu action: Esc, Tab and Start by default; Esc and Start are pinned, ADR-048).
+## Resume, journal, save, load, settings, back to the start menu, quit. Saving is disabled where
+## the scene cannot be resumed.
 
 const MAIN_MENU := "res://core/boot/boot.tscn"
 
@@ -34,6 +35,8 @@ func _ready() -> void:
 	stack(save_menu)
 	stack(controls_menu)
 	stack(confirm)
+	InputDevice.device_changed.connect(func(_kind: int) -> void: _refresh_hint())
+	InputDevice.labels_changed.connect(_refresh_hint)
 
 
 func _build() -> void:
@@ -46,9 +49,20 @@ func _build() -> void:
 	list.add_action("SETTINGS_SHOW_CONTROLS", controls_menu.open)
 	list.add_action("PAUSE_TO_MENU", func() -> void: _leave(_to_main_menu))
 	list.add_action("PAUSE_QUIT", func() -> void: _leave(_quit))
+	_set_hint()
+
+
+## The hint names the keys of the moment: it follows a rebinding and a change of device while
+## the menu (or a page stacked on it) is open.
+func _refresh_hint() -> void:
+	if visible:
+		_set_hint()
+
+
+func _set_hint() -> void:
 	hint.text = (
 		tr("PAUSE_HINT") % [InputDevice.label_for(&"menu"), InputDevice.label_for(&"journal")]
-		if can_save
+		if SaveSystem.can_save()
 		else tr("SAVE_NOT_HERE")
 	)
 

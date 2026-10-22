@@ -57,6 +57,8 @@ var _leaving := false
 func _ready() -> void:
 	_hint.text = controls_hint()
 	InputDevice.device_changed.connect(func(_kind: int) -> void: _hint.text = controls_hint())
+	# the footer names the keys: rebinding them (Einstellungen > Tastenbelegung) changes it
+	InputDevice.labels_changed.connect(func() -> void: _hint.text = controls_hint())
 	title_mode = choose_title_mode(OS.get_cmdline_user_args())
 	_background.build(title_mode)
 	_apply_title_mode()
@@ -373,11 +375,10 @@ func _new_game_requested() -> void:
 
 ## The controls in one line, for the device in hand (keys or a pad's buttons).
 static func controls_hint() -> String:
-	var pad := InputDevice.kind == InputDevice.Kind.GAMEPAD
 	return (
 		TranslationServer.translate("TITLE_CONTROLS_HINT")
 		% [
-			TranslationServer.translate("CONTROLS_MOVE_PAD" if pad else "CONTROLS_MOVE_KEYS"),
+			InputDevice.move_label(InputDevice.kind),
 			InputDevice.label_for(&"sprint"),
 			InputDevice.label_for(&"interact"),
 		]

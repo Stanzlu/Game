@@ -1,7 +1,7 @@
 class_name InfoOverlay
 extends CanvasLayer
 ## Development info (FPS, frame time, player state, surface, save state). Toggle with
-## debug_overlay (F3) or in the settings. Helps to talk about movement feel with numbers.
+## debug_overlay (F3 by default) or in the settings. Helps to talk about movement feel with numbers.
 
 var _scene: GameScene
 var _label: Label
