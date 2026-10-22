@@ -13,6 +13,10 @@ const SPLASH := preload("res://assets/generated/props/fx/splash.png")
 const TIP_ZONE := Vector2(12, 4)
 const TIP_ZONE_CENTER := Vector2(0, -2.5)
 const TIP_SECONDS := 0.18
+## The cold water takes the picture to a dark blue-grey, not to the black of a cut.
+const FALL_FADE_COLOR := Color(0.05, 0.08, 0.12)
+## A plunge shakes the view a little (screen shake setting applies) and the controller.
+const FALL_SHAKE := Vector2(1.5, 0.35)
 
 ## One fall at a time, even when the feet touch two round stones at once.
 static var _falling := false
@@ -86,14 +90,16 @@ func _fall(player: Player, heading: Vector2) -> void:
 	Log.info(Log.Category.WORLD_STATE, "fell into the stream", {"cell": global_position / 16.0})
 	AudioDirector.sfx("splash_fall")
 	_splash(player.global_position)
+	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
+	if scene != null:
+		scene.view.shake(FALL_SHAKE.x, FALL_SHAKE.y)
 	var sink := player.create_tween()
 	sink.tween_property(player.sprite, ^"position:y", 7.0, 0.22).set_ease(Tween.EASE_IN)
-	await ScreenFade.fade_out(0.45)
+	await ScreenFade.fade_out(0.45, FALL_FADE_COLOR)
 	var bank: Variant = _bank_for(player, heading)
 	if bank != null:
 		player.teleport(bank)
 	player.sprite.position.y = 0.0
-	var scene := get_tree().get_first_node_in_group(SaveService.CONTEXT_GROUP) as GameScene
 	if scene != null:
 		scene.view.follow(player)
 	await NodeTimer.after(self, 0.35)
@@ -128,17 +134,17 @@ func _splash(at: Vector2) -> void:
 	var burst := CPUParticles2D.new()
 	burst.name = "Splash"
 	burst.texture = SPLASH
-	burst.amount = 18
+	burst.amount = 30
 	burst.lifetime = 0.7
 	burst.one_shot = true
 	burst.explosiveness = 0.9
 	burst.direction = Vector2(0, -1)
-	burst.spread = 70.0
+	burst.spread = 80.0
 	burst.gravity = Vector2(0, 260)
-	burst.initial_velocity_min = 50.0
-	burst.initial_velocity_max = 95.0
+	burst.initial_velocity_min = 55.0
+	burst.initial_velocity_max = 120.0
 	burst.scale_amount_min = 0.6
-	burst.scale_amount_max = 1.2
+	burst.scale_amount_max = 1.4
 	var fade := Gradient.new()
 	fade.set_color(0, Color(0.85, 0.92, 0.95, 0.9))
 	fade.set_color(1, Color(0.85, 0.92, 0.95, 0.0))

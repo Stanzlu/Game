@@ -125,11 +125,15 @@ func follow(node: Node2D, snap_now: bool = true) -> void:
 	_gliding = not snap_now
 
 
-## Screen shake in whole game pixels, fading out. Does nothing when the player turned
-## screen shake off (accessibility).
+## Screen shake in whole game pixels, fading out, with a matching rumble on the first
+## controller. Does nothing when the player turned screen shake off (accessibility).
 func shake(strength: float, seconds: float) -> void:
 	if not Settings.get_bool("display.screen_shake"):
 		return
+	if Input.get_connected_joypads().has(0):
+		Input.start_joy_vibration(
+			0, clampf(strength * 0.3, 0.0, 1.0), clampf(strength * 0.6, 0.0, 1.0), seconds
+		)
 	_shake_strength = strength
 	_shake_length = seconds
 	_shake_time = seconds
