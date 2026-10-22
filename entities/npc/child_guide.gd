@@ -13,7 +13,7 @@ enum Step { WATCH, LEAD, WAIT_AT_END, GONE }
 const KEEP_UP := 96.0
 const CALL_DISTANCE := 40.0
 ## Seconds between two hums (random in this range); heard up to HUM_RANGE pixels away.
-const HUM_PAUSE := Vector2(7.0, 13.0)
+const HUM_PAUSE := Vector2(4.0, 8.0)
 const HUM_RANGE := 360.0
 
 var guide: Array[Vector2] = []
@@ -49,6 +49,11 @@ func _ready() -> void:
 	_hum.attenuation = 1.6
 	add_child(_hum)
 	_hum_now_and_then()
+
+
+## The child is the one real thing in Elysia (it casts a reflection): its steps are heard.
+func _steps_audible() -> bool:
+	return true
 
 
 func _hum_now_and_then() -> void:

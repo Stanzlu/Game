@@ -11,6 +11,9 @@ extends CharacterBody2D
 ## with something to do); Elysians walk on without pause, always the same. "face": "n", "e",
 ## "s" or "w" is where it looks while standing at its spawn. "sit": true seats it there (Mira
 ## across her fire, the Antreiber by the path): it stays seated, also when talked to.
+## A sheet with the "work" pose (Mira's) works while it lingers at the first waypoint, turned
+## towards "work_face" (default "nw": her net hangs up and to the left of that point).
+## Walkers step audibly (NpcSteps), except in Elysia; while talking they bob with the voice.
 
 const ATTENTION_RADIUS := 30.0
 const RELEASE_RADIUS := 44.0
@@ -20,6 +23,10 @@ const STUCK_SECONDS := 1.5
 const WALK_CYCLE_SPEED := 88.0
 const DEFAULT_DIALOGUE := "res://content/dialogue/sandbox/sandbox.dialogue"
 const TALK_RADIUS := 14.0
+## A speaker lifts by a pixel for a moment on a syllable, and not more often than every GAP.
+const TALK_BOB_PIXELS := 1.0
+const TALK_BOB_SECONDS := 0.06
+const TALK_BOB_GAP := 0.12
 
 @export var sheet: CharacterSheet
 @export var speed := 38.0
@@ -34,6 +41,11 @@ var cue := ""
 var glances := false
 var seated := false
 var _index := 0
+## Waypoint it reached last (-1: none, or it was blocked on the way).
+var _last_point := -1
+var _has_work := false
+var _work_facing := Facing.Dir.NW
+var _bobbing := false
 var _idle_time := 0.0
 var _next_glance := 3.0
 var _glancing := false
@@ -57,6 +69,7 @@ func _ready() -> void:
 	sprite.animation_finished.connect(_on_animation_finished)
 	_rng.seed = hash(name)
 	_next_glance = _rng.randf_range(2.5, 6.0)
+	NpcSteps.attach(self, sprite, Callable(), _steps_audible)
 	_play("idle")
 
 
@@ -85,9 +98,20 @@ func apply_params(params: Dictionary) -> void:
 		if pause is Array
 		else Vector2(float(pause), float(pause))
 	)
-	var faces := {"n": Facing.Dir.N, "e": Facing.Dir.E, "s": Facing.Dir.S, "w": Facing.Dir.W}
+	var faces := {
+		"n": Facing.Dir.N,
+		"ne": Facing.Dir.NE,
+		"e": Facing.Dir.E,
+		"se": Facing.Dir.SE,
+		"s": Facing.Dir.S,
+		"sw": Facing.Dir.SW,
+		"w": Facing.Dir.W,
+		"nw": Facing.Dir.NW,
+	}
 	if faces.has(str(params.get("face", ""))):
 		facing = faces[str(params["face"])]
+	if faces.has(str(params.get("work_face", ""))):
+		_work_facing = faces[str(params["work_face"])]
 	if params.has("cue"):
 		cue = str(params["cue"])
 		dialogue_path = str(params.get("dialogue", DEFAULT_DIALOGUE))
@@ -119,13 +143,44 @@ func _on_talk(actor: Node) -> void:
 	talking = true
 	if actor is Node2D:
 		facing = Facing.from_vector((actor as Node2D).global_position - global_position)
-	presenter.connect(&"finished", func() -> void: talking = false, CONNECT_ONE_SHOT)
+	presenter.connect(&"finished", _on_talk_finished.bind(presenter), CONNECT_ONE_SHOT)
+	# the bob follows the dialogue box's syllables (a signal of the box; without it: no bob)
+	if presenter.has_signal(&"syllable"):
+		presenter.connect(&"syllable", _on_syllable)
 	presenter.call(&"present", resource, cue, actor)
+
+
+func _on_talk_finished(presenter: Node) -> void:
+	talking = false
+	if (
+		is_instance_valid(presenter)
+		and presenter.has_signal(&"syllable")
+		and presenter.is_connected(&"syllable", _on_syllable)
+	):
+		presenter.disconnect(&"syllable", _on_syllable)
+	sprite.offset = sheet.feet_offset
+
+
+func _on_syllable(_character: Variant = null) -> void:
+	if not talking or _bobbing:
+		return
+	_bobbing = true
+	sprite.offset = sheet.feet_offset + Vector2(0.0, -TALK_BOB_PIXELS)
+	await NodeTimer.after(self, TALK_BOB_SECONDS)
+	sprite.offset = sheet.feet_offset
+	await NodeTimer.after(self, TALK_BOB_GAP - TALK_BOB_SECONDS)
+	_bobbing = false
+
+
+## Elysians do not step: their world is silent under its music.
+func _steps_audible() -> bool:
+	return WorldState.ui_mode() != GameState.UiMode.ELYSIA
 
 
 func _apply_sheet() -> void:
 	sprite.sprite_frames = sheet.build_frames()
 	sprite.offset = sheet.feet_offset
+	_has_work = CharacterSheet.has_work(sprite.sprite_frames)
 	var old_shadow := get_node_or_null("Shadow")
 	if old_shadow != null:
 		old_shadow.free()
@@ -152,11 +207,17 @@ func _physics_process(delta: float) -> void:
 	if route.is_empty() or _wait > 0.0:
 		_wait = maxf(_wait - delta, 0.0)
 		velocity = Vector2.ZERO
-		_play("idle")
+		if _has_work and _last_point == 0 and not route.is_empty():
+			# lingering at the first waypoint: at her work
+			facing = _work_facing
+			_play("work")
+		else:
+			_play("idle")
 		return
 	var goal := _origin + route[_index]
 	var to_goal := goal - position
 	if to_goal.length() <= ARRIVE_DISTANCE:
+		_last_point = _index
 		_index = (_index + 1) % route.size()
 		_stuck_time = 0.0
 		_wait = _rng.randf_range(_pause.x, _pause.y)
@@ -167,6 +228,7 @@ func _physics_process(delta: float) -> void:
 	if position.distance_to(before) < speed * delta * 0.25:
 		_stuck_time += delta
 		if _stuck_time > STUCK_SECONDS:
+			_last_point = -1
 			_index = (_index + 1) % route.size()
 			_stuck_time = 0.0
 	else:
