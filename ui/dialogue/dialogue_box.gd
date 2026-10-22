@@ -10,6 +10,9 @@ extends CanvasLayer
 
 signal opened
 signal finished
+## A voice blip was played for a spoken (not narrated) line: the speaker's name as written in
+## the dialogue file. Lets a speaker's sprite move its mouth in time with the voice.
+signal syllable(character: String)
 
 const VOICES_PATH := "res://content/dialogue/voices.json"
 const LARGE_FONT := preload("res://assets/fonts/jersey15/Jersey15-Regular.ttf")
@@ -37,8 +40,16 @@ const DEFAULT_SECONDS_PER_CHAR := 0.025
 ## stops at answers, so holding never picks one.
 const HOLD_TO_SKIP := 0.5
 const HOLD_STEP := 0.15
+## Voice level at the call, after the files were normalised by loudness (check_levels.py).
+## The Real world is quieter than Elysia.
+const VOICE_DB_REAL := -2.0
+const VOICE_DB_ELYSIA := -1.0
+## Text effects that move or flash the letters; "Weniger Flackern" removes them. [wait]
+## stays: a pause is no flicker.
+const MOTION_TAGS := "wave|rainbow|shake|tornado|pulse|fade"
 
 static var _voices: Dictionary = {}
+static var _motion_regex: RegEx
 
 var resource: DialogueResource
 var line: DialogueLine
@@ -73,6 +84,10 @@ func _ready() -> void:
 	_text.skip_action = &""
 	_text.pause_at_characters = PAUSE_AT
 	_text.spoke.connect(_on_spoke)
+	# A click moves the text on like confirm. The label would swallow it, so it lets it pass
+	# to the panel.
+	_text.mouse_filter = Control.MOUSE_FILTER_PASS
+	_panel.gui_input.connect(_on_panel_input)
 	UiSkin.attach(_root)
 	Settings.changed.connect(func(_key: String) -> void: _apply_text_size())
 	_panel.resized.connect(_place_decorations)
@@ -126,6 +141,8 @@ func _show_line(next_line: DialogueLine) -> void:
 	_quiet_focus = true
 	_responses.responses = line.responses
 	_quiet_focus = false
+	if Settings.get_bool("display.reduce_flashing"):
+		line.text = without_motion_tags(line.text)
 	_text.dialogue_line = line
 	_text.seconds_per_step = Settings.text_seconds_per_char()
 	_voiced_letters = 0
@@ -142,12 +159,23 @@ func _show_line(next_line: DialogueLine) -> void:
 		var items := _responses.get_menu_items()
 		if not items.is_empty():
 			(items[0] as Control).grab_focus()
+			# The addon reports focus changes only; the first answer is focused already
+			# (a visible list grabs it), so the cursor is told by hand.
+			_on_response_focused(items[0])
 		_quiet_focus = false
 	else:
 		_waiting = true
 		_continue.show()
 		if Settings.get_bool("text.auto_advance"):
 			_auto_advance(next_line)
+
+
+## The text without the effect tags that move or flash letters ([wave], [rainbow], [shake]
+## ...), for the setting "Weniger Flackern". Inline pauses stay: they are no tags of letters.
+static func without_motion_tags(text: String) -> String:
+	if _motion_regex == null:
+		_motion_regex = RegEx.create_from_string("\\[/?(?:%s)(?:[ =][^\\]]*)?\\]" % MOTION_TAGS)
+	return _motion_regex.sub(text, "", true)
 
 
 ## Voice kind for a speaker as written in the dialogue file; "" for none (signs, narration).
@@ -174,9 +202,10 @@ func _on_spoke(letter: String, _letter_index: int, _speed: float) -> void:
 	_voiced_letters += 1
 	if _voice.is_empty() or (_voiced_letters - 1) % VOICE_EVERY != 0:
 		return
-	# The Real world is quieter than Elysia.
 	var real := WorldState.ui_mode() == GameState.UiMode.REAL
-	AudioDirector.voice(_voice, -5.0 if real else -3.0)
+	AudioDirector.voice(_voice, VOICE_DB_REAL if real else VOICE_DB_ELYSIA)
+	if not line.character.is_empty():
+		syllable.emit(line.character)
 
 
 func _auto_advance(for_line: DialogueLine) -> void:
@@ -225,6 +254,22 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (accept or back):
 		return
 	get_viewport().set_input_as_handled()
+	_confirm_text()
+
+
+## A left click on the box moves the text on like confirm (never while answers are shown:
+## those take their own clicks).
+func _on_panel_input(event: InputEvent) -> void:
+	if not _open or _responses.visible:
+		return
+	var click := event as InputEventMouseButton
+	if click == null or not click.pressed or click.button_index != MOUSE_BUTTON_LEFT:
+		return
+	_panel.accept_event()
+	_confirm_text()
+
+
+func _confirm_text() -> void:
 	if _text.is_typing:
 		_text.skip_typing()
 	elif _waiting:
