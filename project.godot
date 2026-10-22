@@ -31,6 +31,7 @@ WorldState="*res://core/world_state.gd"
 SaveSystem="*res://core/save_system.gd"
 AudioDirector="*res://core/audio_director.gd"
 ScreenFade="*res://core/screen_fade.gd"
+AppGuard="*res://core/app_guard.gd"
 
 [debug]
 

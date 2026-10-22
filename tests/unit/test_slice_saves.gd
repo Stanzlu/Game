@@ -260,3 +260,91 @@ func test_valley_after_the_end() -> void:
 	assert_true(WorldState.is_quest_done("side_valley_goat"))
 	assert_true(WorldState.has_flag("slice.finished"))
 	assert_eq(WorldState.relationship_state("mira"), "familiar")
+
+
+# --- Beats and the window (AppGuard) ------------------------------------------------------
+
+
+func _autosave_path() -> String:
+	return SaveSystem.path_for(SaveService.AUTOSAVE)
+
+
+func _clear_autosave() -> void:
+	SaveSystem.discard_pending_autosave()
+	for backup: bool in [false, true]:
+		var path := SaveSystem.path_for(SaveService.AUTOSAVE, backup)
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
+
+
+func test_a_beat_asks_for_an_autosave() -> void:
+	SaveSystem.discard_pending_autosave()
+	Beat.mark("test_beat_pending")
+	assert_true(SaveSystem.has_pending_autosave(), "the beat is progress worth keeping")
+	SaveSystem.discard_pending_autosave()
+	Beat.mark("test_beat_pending")
+	assert_false(SaveSystem.has_pending_autosave(), "a beat already marked asks for nothing")
+
+
+func test_a_beat_writes_the_autosave_after_the_scene_allows_it() -> void:
+	await _build(TAL)
+	_clear_autosave()
+	SaveSystem.block(&"dialogue")
+	Beat.mark("test_beat_saved")
+	await wait_physics_frames(3)
+	assert_false(FileAccess.file_exists(_autosave_path()), "not during a conversation")
+	assert_true(SaveSystem.has_pending_autosave(), "it waits")
+	SaveSystem.unblock(&"dialogue")
+	assert_true(FileAccess.file_exists(_autosave_path()), "written when the conversation ends")
+	var result := SaveSystem.read_slot(SaveService.AUTOSAVE)
+	assert_true(result.ok)
+	assert_true(result.state.flags.has("beat.test_beat_saved"), "and it holds the beat")
+	_clear_autosave()
+
+
+func test_closing_the_window_saves_where_saving_is_possible() -> void:
+	var guard := AppGuardService.new()
+	add_child_autofree(guard)
+	_clear_autosave()
+	assert_false(guard.save_on_close(), "no game running: nothing to save")
+	assert_false(FileAccess.file_exists(_autosave_path()))
+	await _build(TAL)
+	_clear_autosave()
+	SaveSystem.block(&"dialogue")
+	assert_false(guard.save_on_close(), "in a conversation the window just closes")
+	SaveSystem.unblock(&"dialogue")
+	_clear_autosave()
+	assert_true(guard.save_on_close())
+	assert_true(FileAccess.file_exists(_autosave_path()))
+	_clear_autosave()
+
+
+func test_losing_focus_opens_the_pause_menu_or_holds_the_tree() -> void:
+	var guard := AppGuardService.new()
+	guard.ignore_focus = false
+	add_child_autofree(guard)
+	var scene := await _build(TAL)
+	guard.focus_lost()
+	assert_true(scene.pause_menu.visible, "the pause menu opens")
+	assert_true(get_tree().paused)
+	guard.focus_returned()
+	assert_true(scene.pause_menu.visible, "and waits for the player")
+	scene.pause_menu.close()
+	assert_false(get_tree().paused)
+	# a door is being walked through: the menu may not open, the tree is held instead
+	ScreenFade.fade_out(0.0)
+	guard.focus_lost()
+	assert_false(scene.pause_menu.visible)
+	assert_true(get_tree().paused, "the tree waits for the window")
+	guard.focus_returned()
+	assert_false(get_tree().paused, "and runs on with it")
+
+
+func test_automated_runs_ignore_focus() -> void:
+	var guard := AppGuardService.new()
+	add_child_autofree(guard)
+	assert_true(guard.ignore_focus, "headless")
+	var scene := await _build(TAL)
+	guard.focus_lost()
+	assert_false(scene.pause_menu.visible)
+	assert_false(get_tree().paused)

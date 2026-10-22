@@ -10,6 +10,9 @@ static func mark(id: String) -> void:
 	if WorldState.has_flag(flag):
 		return
 	WorldState.set_flag(flag)
+	# a beat is progress worth keeping: the save waits for the end of the frame (and for a
+	# dialogue or cutscene to end) and then holds the beat's other changes too
+	SaveSystem.request_autosave_soon("beat:" + id)
 	var seconds := WorldState.state.playtime_seconds
 	# record: the playtest log of a release build needs these lines without --log-debug
 	Log.record(
