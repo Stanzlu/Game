@@ -125,6 +125,7 @@ func _build_frame() -> void:
 	body.add_child(scroll)
 	# the engine's grey default bar is three times as wide as the pixel art around it
 	scroll.get_v_scroll_bar().custom_minimum_size.x = SCROLLBAR_WIDTH
+	keep_upright(scroll)
 	list = OptionList.new()
 	list.wrap_width = panel_width - WRAP_MARGIN
 	list.add_theme_constant_override(&"separation", 0 if compact else 1)
@@ -142,6 +143,15 @@ func _build_frame() -> void:
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hint.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	rows.add_child(hint)
+
+
+## A list is as wide as its widest row, which can be wider than the view beside the bar. Following
+## the focus then slides the whole list sideways and cuts the first letters off. The menus never
+## scroll sideways: the bar covers the few pixels of margin instead.
+static func keep_upright(scroll: ScrollContainer) -> void:
+	scroll.get_h_scroll_bar().value_changed.connect(
+		func(_value: float) -> void: scroll.scroll_horizontal = 0
+	)
 
 
 ## Large text changes the row heights: the panel is measured again.

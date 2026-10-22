@@ -236,6 +236,9 @@ func test_the_first_row_of_a_group_brings_its_header_into_view() -> void:
 		var focused := get_viewport().gui_get_focus_owner()
 		var at := focused.get_index()
 		var above := menu.list.get_child(at - 1) as Label if at > 0 else null
+		# a row as wide as the list must not slide it sideways (that cut the first letter of
+		# the headers off)
+		assert_eq(scroll.scroll_horizontal, 0, "%s: the list stays put" % (focused as Button).text)
 		if above != null and above.theme_type_variation == &"MutedLabel":
 			checked += 1
 			var inside := above.get_global_rect()

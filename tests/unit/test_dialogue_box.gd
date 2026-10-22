@@ -298,3 +298,18 @@ func test_calm_text_drops_moving_effects_but_keeps_pauses() -> void:
 	assert_false("[wave" in box._text.text, "no effect tag reaches the label")
 	assert_eq(box._text.get_parsed_text(), "Ein Held! Und strahlend.")
 	Settings.override("display.reduce_flashing", false)
+
+
+func test_confirming_skips_a_pause_that_is_still_ahead() -> void:
+	resource = DialogueManager.create_resource_from_text(
+		"~ w\nMira: " + "Erst das und noch mehr davon. ".repeat(3) + "[wait=5]Dann das.\n=> END\n"
+	)
+	box.present(resource, "w")
+	await wait_seconds(0.1)
+	assert_true(box._text.is_typing)
+	await _send(&"interact")
+	assert_false(box._text.is_typing, "the press finishes the line")
+	assert_eq(box._text.visible_characters, box._text.get_total_character_count())
+	await _send(&"interact")
+	await wait_seconds(0.3)
+	assert_false(box.is_open(), "the five seconds of [wait] did not hold the line back")

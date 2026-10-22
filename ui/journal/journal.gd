@@ -35,6 +35,7 @@ func _ready() -> void:
 	_detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	body.add_child(_detail_scroll)
 	_detail_scroll.get_v_scroll_bar().custom_minimum_size.x = SCROLLBAR_WIDTH
+	keep_upright(_detail_scroll)
 	# one label per paragraph: done objectives are muted, open ones carry the gem
 	_detail_box = VBoxContainer.new()
 	_detail_box.add_theme_constant_override(&"separation", PARAGRAPH_GAP)
@@ -169,7 +170,8 @@ func _show_detail(parts: Array[Dictionary]) -> void:
 
 func _fit_detail() -> void:
 	var width := DETAIL_WIDTH_LARGE if TextSize.large else DETAIL_WIDTH
-	_detail_box.custom_minimum_size.x = width
+	# the page is the width of the scroll view without its bar, or the text ends under the bar
+	_detail_box.custom_minimum_size.x = width - SCROLLBAR_WIDTH
 	_detail_scroll.custom_minimum_size.x = width
 	# wrapped lines have their height one layout pass after the width is known
 	await get_tree().process_frame
