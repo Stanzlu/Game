@@ -256,7 +256,8 @@ func _add_sky() -> void:
 	sky.name = "Sky"
 	view.world_root.add_child(sky)
 	view.world_root.move_child(sky, 0)
-	sky.setup(view, sky_top, sky_bottom)
+	# ten bands: with the dither limited to the seams, six would show as stripes
+	sky.setup(view, sky_top, sky_bottom, 10)
 	var rect := map.world_rect()
 	var bottom := rect.end.y
 	# [texture, x on screen, world y, drift speed, parallax]: far clouds first
