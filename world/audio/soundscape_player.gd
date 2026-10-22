@@ -22,6 +22,8 @@ var gust := 0.0
 var _volume_db := -6.0
 ## Fade level on top of the volume, tweened in and out.
 var _fade_db := SILENT_DB
+## Dialogue ducking on top of the fade (AudioDirector.duck()), 0 or negative.
+var _duck_db := 0.0
 ## {"players": Array[AudioStreamPlayer], "db": float, "gust": float}
 var _beds: Array[Dictionary] = []
 ## {"event": Dictionary, "next": float}
@@ -32,6 +34,7 @@ var _time := 0.0
 var _noise := FastNoiseLite.new()
 var _rng := RandomNumberGenerator.new()
 var _tween: Tween
+var _duck_tween: Tween
 
 
 static func bed_path(sound: String) -> String:
@@ -79,6 +82,19 @@ func _ready() -> void:
 		_pool.append(player)
 
 
+func _exit_tree() -> void:
+	# queue_free() never runs at exit: players that still hold streams show up as leaks
+	for tween: Tween in [_tween, _duck_tween]:
+		if tween != null:
+			tween.kill()
+	var players: Array[AudioStreamPlayer] = _pool.duplicate()
+	for bed in _beds:
+		players.append_array(bed["players"])
+	for player in players:
+		player.stop()
+		player.stream = null
+
+
 ## Starts `new_def` (null fades out). The same definition only changes the level.
 func play(new_def: SoundscapeDef, volume_db := -6.0, fade := 2.0) -> void:
 	_volume_db = volume_db
@@ -119,7 +135,7 @@ func _process(delta: float) -> void:
 		return
 	gust = gust_at(_time)
 	for bed in _beds:
-		var db := float(bed["db"]) + _volume_db + _fade_db + _gust_db(float(bed["gust"]))
+		var db := float(bed["db"]) + _volume_db + _fade_db + _duck_db + _gust_db(float(bed["gust"]))
 		for player: AudioStreamPlayer in bed["players"]:
 			player.volume_db = db
 	for entry in _events:
@@ -160,7 +176,11 @@ func _fire(event: Dictionary) -> void:
 		"nature_" + str(event["sound"]), float(event.get("pitch", 1.04)), 0.0
 	)
 	player.volume_db = (
-		float(event.get("db", -12.0)) + _volume_db + _fade_db + _rng.randf_range(-5.0, 1.0)
+		float(event.get("db", -12.0))
+		+ _volume_db
+		+ _fade_db
+		+ _duck_db
+		+ _rng.randf_range(-5.0, 1.0)
 	)
 	player.play()
 
@@ -210,6 +230,24 @@ func _fade_to(target_db: float, seconds: float) -> void:
 	var from := db_to_linear(_fade_db)
 	var to := db_to_linear(target_db)
 	_tween.tween_method(_set_fade, from, to, seconds).set_trans(Tween.TRANS_SINE)
+
+
+## Takes the whole soundscape down by `target_db` (0 = back to normal) while a dialogue is
+## open; in amplitude like every fade here.
+func duck_to(target_db: float, seconds: float) -> void:
+	if _duck_tween != null:
+		_duck_tween.kill()
+	if seconds <= 0.0:
+		_duck_db = target_db
+		return
+	_duck_tween = create_tween()
+	var from := db_to_linear(_duck_db)
+	var to := db_to_linear(target_db)
+	_duck_tween.tween_method(_set_duck, from, to, seconds).set_trans(Tween.TRANS_SINE)
+
+
+func _set_duck(amplitude: float) -> void:
+	_duck_db = linear_to_db(maxf(amplitude, AudioDirectorService.MIN_AMPLITUDE))
 
 
 func _set_fade(amplitude: float) -> void:

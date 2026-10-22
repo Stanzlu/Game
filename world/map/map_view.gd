@@ -6,10 +6,21 @@ extends Node2D
 
 signal built(data: MapData)
 
+## What the baked water mask shows in a cell (_water_kind).
+enum WaterKind { NONE, OPEN, FALL }
+
 const DEFAULT_LEGEND := "res://content/maps/legend.json"
 const GROUND_SHADER := preload("res://world/shaders/ground.gdshader")
 const REFLECTION_SHADER := preload("res://world/shaders/reflection.gdshader")
 const SCATTER_LIGHT_MASK := 0
+## The brook of the valley is heard where it flows: one looping emitter about every
+## STREAM_SPACING_CELLS cells of water, in the Ambience bus, quieter further than STREAM_REACH.
+const STREAM_SPACING_CELLS := 8
+const STREAM_REACH := 220.0
+const STREAM_ATTENUATION := 1.5
+const STREAM_DB := -6.0
+## Waterfalls roar louder than the flat water.
+const FALL_EXTRA_DB := 4.0
 
 @export_file("*.txt") var map_path := ""
 @export_file("*.json") var legend_path := DEFAULT_LEGEND
@@ -100,6 +111,7 @@ func build_from_text(text: String, source: String = "") -> bool:
 		_apply_baked_ground()
 	_spawn_props()
 	_spawn_scatter()
+	_spawn_water_sound()
 	_add_reflections()
 	Log.info(
 		Log.Category.CONTENT,
@@ -324,6 +336,82 @@ func _near_water(cell: Vector2i) -> bool:
 			if data.surface_at_cell(cell + Vector2i(dx, dy)) == &"water":
 				return true
 	return false
+
+
+## Looping stream sound at the water of a valley map ([meta] style "tal"), read from the
+## baked water mask (it covers the water under stepping stones and the bridge too, and tells
+## waterfalls and puddles apart). Falls get an emitter first, then water cells in the order of
+## their distance from the middle of the water, each at least STREAM_SPACING_CELLS from every
+## emitter placed so far: the middle of the brook is covered and the spacing runs out evenly
+## to both ends. The emitters differ slightly in speed, so neighbours do not add up in phase.
+func _spawn_water_sound() -> void:
+	if str(data.meta.get("style", "")) != "tal" or not data.meta.has("water"):
+		return
+	var bed := load(SoundscapePlayer.bed_path("stream")) as AudioStream
+	var mask := load(str(data.meta["water"])) as Texture2D
+	if bed == null or mask == null:
+		Log.error(Log.Category.AUDIO, "stream sound: bed or water mask missing")
+		return
+	var image := mask.get_image()
+	var falls: Array[Vector2i] = []
+	var open: Array[Vector2i] = []
+	for y in data.height:
+		for x in data.width:
+			var kind := _water_kind(image, Vector2i(x, y))
+			if kind == WaterKind.FALL:
+				falls.append(Vector2i(x, y))
+			elif kind == WaterKind.OPEN:
+				open.append(Vector2i(x, y))
+	var middle := Vector2.ZERO
+	for cell in falls + open:
+		middle += Vector2(cell)
+	middle /= maxf(1.0, float(falls.size() + open.size()))
+	open.sort_custom(
+		func(a: Vector2i, b: Vector2i) -> bool:
+			return Vector2(a).distance_squared_to(middle) < Vector2(b).distance_squared_to(middle)
+	)
+	var spacing := STREAM_SPACING_CELLS * STREAM_SPACING_CELLS
+	var placed: Array[Vector2i] = []
+	for is_fall: bool in [true, false]:
+		for cell in falls if is_fall else open:
+			if placed.any(
+				func(other: Vector2i) -> bool: return (other - cell).length_squared() < spacing
+			):
+				continue
+			placed.append(cell)
+			_add_stream_emitter(bed, cell, is_fall)
+	Log.info(Log.Category.AUDIO, "stream sound", {"emitters": placed.size()})
+
+
+## What the water mask (R: water, puddle or fall; B: 255 puddle, 128 fall) shows at the
+## middle of a cell.
+func _water_kind(image: Image, cell: Vector2i) -> WaterKind:
+	var tile := data.tile_size
+	var pixel := Vector2i(cell.x * tile + tile / 2, cell.y * tile + tile / 2)
+	if pixel.x >= image.get_width() or pixel.y >= image.get_height():
+		return WaterKind.NONE
+	var color := image.get_pixelv(pixel)
+	if color.r < 0.5 or color.b > 0.75:
+		return WaterKind.NONE
+	return WaterKind.FALL if color.b > 0.25 else WaterKind.OPEN
+
+
+func _add_stream_emitter(bed: AudioStream, cell: Vector2i, fall: bool) -> void:
+	var emitter := AudioStreamPlayer2D.new()
+	emitter.name = "Stream%d_%d" % [cell.x, cell.y]
+	emitter.stream = bed
+	emitter.bus = &"Ambience"
+	emitter.volume_db = STREAM_DB + (FALL_EXTRA_DB if fall else 0.0)
+	emitter.max_distance = STREAM_REACH
+	emitter.attenuation = STREAM_ATTENUATION
+	emitter.pitch_scale = 1.0 + 0.008 * float((cell.x * 7 + cell.y * 3) % 9 - 4)
+	# the brook goes on in menus, like the rest of the ambience
+	emitter.process_mode = Node.PROCESS_MODE_ALWAYS
+	emitter.autoplay = true
+	emitter.position = (
+		Vector2(cell) * float(data.tile_size) + Vector2.ONE * float(data.tile_size) * 0.5
+	)
+	add_child(emitter)
 
 
 ## Small decorations (grass tufts, pebbles, leaves) from [meta] "scatter" rules: plain
