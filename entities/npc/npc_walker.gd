@@ -12,7 +12,8 @@ extends CharacterBody2D
 ## "s" or "w" is where it looks while standing at its spawn. "sit": true seats it there (Mira
 ## across her fire, the Antreiber by the path): it stays seated, also when talked to.
 ## A sheet with the "work" pose (Mira's) works while it lingers at the first waypoint, turned
-## towards "work_face" (default "nw": her net hangs up and to the left of that point).
+## towards "work_face" (default "w": her net hangs to the left of that point; seen from behind,
+## facing it, the hands would be hidden and only the head nod would show).
 ## Walkers step audibly (NpcSteps), except in Elysia; while talking they bob with the voice.
 
 const ATTENTION_RADIUS := 30.0
@@ -44,7 +45,7 @@ var _index := 0
 ## Waypoint it reached last (-1: none, or it was blocked on the way).
 var _last_point := -1
 var _has_work := false
-var _work_facing := Facing.Dir.NW
+var _work_facing := Facing.Dir.W
 var _bobbing := false
 var _idle_time := 0.0
 var _next_glance := 3.0

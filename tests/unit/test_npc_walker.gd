@@ -61,14 +61,14 @@ func test_a_walker_with_a_work_pose_works_at_the_first_waypoint() -> void:
 		String(npc.sprite.animation).begins_with("work_"),
 		"lingering at waypoint 0: %s" % npc.sprite.animation
 	)
-	assert_eq(npc.facing, Facing.Dir.NW, "towards the net")
+	assert_eq(npc.facing, Facing.Dir.W, "towards the net")
 	assert_true(npc.sprite.is_playing(), "the pose moves")
 
 
 func test_the_work_facing_can_be_set_from_the_map() -> void:
-	var npc := _walker(MIRA_SHEET, {"work_face": "e"})
+	var npc := _walker(MIRA_SHEET, {"work_face": "s"})
 	await wait_physics_frames(4)
-	assert_eq(npc.sprite.animation, CharacterSheet.animation_name("work", Facing.Dir.E))
+	assert_eq(npc.sprite.animation, CharacterSheet.animation_name("work", Facing.Dir.S))
 
 
 func test_a_walker_without_a_work_pose_only_stands() -> void:
