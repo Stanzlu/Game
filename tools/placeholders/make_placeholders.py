@@ -383,9 +383,11 @@ def mix(*parts):
 
 # --------------------------------------------------------------------------- footsteps
 # Every step is a heel and, 18-32 ms later, a softer toe, in the character of the ground.
-# All surfaces have the same loudness (STEP_LOUDNESS); FootstepPlayer sets their levels.
+# All surfaces have the same loudness (STEP_LOUDNESS) and none peaks above STEP_PEAK_DB, so a
+# click on stone is no louder than a step on grass; FootstepPlayer sets their levels.
 STEP_VARIANTS = 8  # SoundBank.MAX_VARIANTS
-STEP_LOUDNESS = -21.0  # K-weighted energy over 100 ms (LUFS-like), as loud as the old ones
+STEP_LOUDNESS = -19.0  # K-weighted energy over 100 ms (LUFS-like); walking sits at the bed
+STEP_PEAK_DB = -6.0
 
 
 def biquad(samples, b, a):
@@ -422,6 +424,29 @@ def step_loudness(samples):
     """Energy of a short sound as if spread over 100 ms, in LUFS-like dB."""
     energy = sum(s * s for s in k_weighted(samples)) / RATE
     return -0.691 + 10 * math.log10(energy / 0.1 + 1e-20)
+
+
+def fit_step(samples):
+    """Scales a short sound to STEP_LOUDNESS with its peaks bent under STEP_PEAK_DB (a smooth
+    tanh knee above half the ceiling), so surfaces with a sharp click end up about as loud and
+    as peaky as the soft ones. The limiter takes some loudness back: scale again, three times."""
+    ceiling = 10 ** (STEP_PEAK_DB / 20)
+    start = ceiling * 0.5
+    room = ceiling - start
+
+    def limit(x):
+        a = abs(x)
+        return x if a <= start else math.copysign(start + room * math.tanh((a - start) / room), x)
+
+    level = 10 ** ((STEP_LOUDNESS - step_loudness(samples)) / 20)
+    out = [limit(x * level) for x in samples]
+    for _ in range(3):
+        error = STEP_LOUDNESS - step_loudness(out)
+        if abs(error) < 0.1:
+            break
+        level *= 10 ** (error / 20)
+        out = [limit(x * level) for x in samples]
+    return out
 
 
 def burst(rng, dur, attack, tau):
@@ -537,33 +562,23 @@ def make_footsteps(rng):
     a = lambda name: os.path.join(OUT, "audio", name + ".wav")
     for surface in ("grass", "dirt", "stone", "wood", "puddle"):
         for i in range(STEP_VARIANTS):
-            step = footstep(rng, surface)
-            level = 10 ** ((STEP_LOUDNESS - step_loudness(step)) / 20)
-            peak = max(abs(s) for s in step) * level
-            if peak > 0.9:
-                print(f"footstep_{surface}_{i}: peak {peak:.2f} limited to 0.9")
-                level *= 0.9 / peak
-            write_wav(a(f"footstep_{surface}_{i}"), step, level)
+            step = fit_step(footstep(rng, surface))
+            write_wav(a(f"footstep_{surface}_{i}"), step, 1.0)
 
 
 def make_audio(rng):
     a = lambda name: os.path.join(OUT, "audio", name + ".wav")
     for i in range(4):
         v = rng.uniform(0.9, 1.1)
-        write_wav(a(f"rustle_{i}"), noise_burst(rng, 0.24 * v, 0.35, 0.15, 0.03, 1.4))
+        # the steps through tall grass: as loud as every other step (fit_step)
+        write_wav(a(f"rustle_{i}"), fit_step(noise_burst(rng, 0.24 * v, 0.35, 0.15, 0.03, 1.4)), 1.0)
     write_wav(a("splash"), mix(noise_burst(rng, 0.35, 0.5, 0.06, 0.003, 1.3), tone(520, 0.12, 2, sweep=0.8)))
     write_wav(a("ui_move"), tone(880, 0.04, 2))
     write_wav(a("ui_confirm"), tone(660, 0.05, 2) + tone(990, 0.08, 2))
     write_wav(a("ui_back"), tone(660, 0.05, 2) + tone(440, 0.08, 2))
     write_wav(a("lever"), mix(noise_burst(rng, 0.05, 0.8, 0.3, 0.001, 5), tone(300, 0.08, 4)))
     write_wav(a("gate"), tone(140, 0.45, 1.2, attack=0.02, sweep=0.5))
-    write_wav(a("sit"), noise_burst(rng, 0.12, 0.12, 0.01, 0.01, 2))
-    write_wav(a("bird"), tone(2400, 0.07, 2, sweep=0.3) + [0.0] * 2000 + tone(2700, 0.09, 2, sweep=-0.2))
-    for i in range(3):
-        blips = []
-        for _ in range(rng.randrange(3, 6)):
-            blips += tone(rng.uniform(320, 480), 0.035, 1.5) + [0.0] * 600
-        write_wav(a(f"bark_{i}"), blips)
+    # sit, stand, bird and bark are real sounds now: tools/audio/make_slice_sfx.py
 
 
 def main():
