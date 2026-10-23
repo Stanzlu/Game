@@ -103,7 +103,8 @@ func test_the_menu_stays_clear_of_the_footer_in_large_text() -> void:
 	_write_autosave(false)
 	var boot := await _boot()
 	Settings.override("text.large", true)
-	await wait_physics_frames(6)
+	# the menu lays itself out two PROCESS frames later (a physics frame count can run ahead)
+	await wait_process_frames(8)
 	var menu_bottom: float = boot._menu_panel.position.y + boot._menu_panel.size.y
 	assert_true(boot._footer.size.y > 0.0)
 	assert_lte(menu_bottom + 24.0, boot._footer.position.y + 0.5, "24 px of air above the hint")
@@ -195,7 +196,8 @@ func test_the_real_menu_sits_between_the_closing_line_and_the_footer() -> void:
 	_write_autosave(true)
 	var boot := await _boot()
 	Settings.override("text.large", true)
-	await wait_physics_frames(6)
+	# the menu lays itself out two PROCESS frames later (a physics frame count can run ahead)
+	await wait_process_frames(8)
 	var panel: Control = boot._menu_panel
 	var subtitle: Control = boot._subtitle
 	assert_gte(panel.position.y, subtitle.position.y + subtitle.size.y - 0.5, "below the line")
