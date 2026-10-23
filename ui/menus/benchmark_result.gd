@@ -2,7 +2,7 @@ class_name BenchmarkResult
 extends MenuLayer
 ## Shows the last performance test: one row per scene with average fps, the slow 5 % of
 ## frames, fps without VSync and a verdict in words, a hint when VSync holds the game at
-## 30 fps, plus where the full report was saved.
+## 30 fps or under the screen's refresh rate, plus where the full report was saved.
 
 
 func _ready() -> void:
@@ -22,16 +22,19 @@ func _build() -> void:
 		head.text = key
 		grid.add_child(head)
 	var capped := false
+	var held := false
+	var hz := DisplayServer.screen_get_refresh_rate()
 	for row: Dictionary in BenchmarkRunner.last_rows:
 		var s: Dictionary = row["stats"]
 		var raw: Dictionary = row.get("raw", {})
 		capped = capped or FrameStats.capped_at_30(s, raw)
+		held = held or FrameStats.held_by_vsync(s, raw, hz)
 		var values := [
 			tr(SceneRegistry.title_key(str(row["scene"]))),
 			"%.0f" % s["avg_fps"],
 			"%.1f ms" % s["p95_ms"],
 			"%.0f" % raw["avg_fps"] if not raw.is_empty() else "–",
-			tr(FrameStats.verdict(s, raw)),
+			tr(FrameStats.verdict(s, raw, hz)),
 		]
 		for value: String in values:
 			var cell := Label.new()
@@ -41,6 +44,8 @@ func _build() -> void:
 	list.add_custom(grid)
 	if capped:
 		list.add_info(tr("BENCH_CAPPED_HINT"))
+	if held:
+		list.add_info(tr("BENCH_VSYNC_HINT"))
 	list.add_info(tr("BENCH_SAVED") % BenchmarkRunner.report_path(true))
 	list.add_action("OPTION_OK", close)
 	hint.text = tr("BENCH_HINT")

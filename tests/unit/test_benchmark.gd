@@ -50,6 +50,31 @@ func test_a_steady_30_with_headroom_reads_as_capped_not_stutter() -> void:
 	assert_false(FrameStats.capped_at_30({"avg_fps": 60.0}, {"avg_fps": 240.0}))
 
 
+## Playtest 23.10., MacBook with a 120 Hz screen: VSync on gave 58 to 108 fps, off 145 to 474.
+func test_vsync_that_costs_frames_reads_as_vsync_not_stutter() -> void:
+	var elysia := {"avg_fps": 60.0, "p95_ms": 18.6}
+	var tal := {"avg_fps": 58.0, "p95_ms": 33.3}
+	var wald := {"avg_fps": 108.0, "p95_ms": 17.3}
+	assert_true(FrameStats.held_by_vsync(elysia, {"avg_fps": 205.0}, 120.0))
+	assert_true(FrameStats.held_by_vsync(tal, {"avg_fps": 474.0}, 120.0))
+	assert_eq(FrameStats.verdict(tal, {"avg_fps": 474.0}, 120.0), "BENCH_VSYNC")
+	assert_false(FrameStats.held_by_vsync(wald, {"avg_fps": 145.0}, 120.0), "near the refresh rate")
+	assert_eq(FrameStats.verdict(wald, {"avg_fps": 145.0}, 120.0), "BENCH_SMOOTH")
+
+
+func test_vsync_is_not_blamed_without_headroom_or_a_known_screen() -> void:
+	var sixty := {"avg_fps": 60.0, "p95_ms": 17.0}
+	assert_false(FrameStats.held_by_vsync(sixty, {"avg_fps": 300.0}, 60.0), "60 on a 60 Hz screen")
+	var slow := {"avg_fps": 40.0, "p95_ms": 30.0}
+	assert_false(FrameStats.held_by_vsync(slow, {"avg_fps": 70.0}, 120.0), "really too slow")
+	assert_false(FrameStats.held_by_vsync(slow, {"avg_fps": 474.0}, -1.0), "refresh rate unknown")
+	assert_false(FrameStats.held_by_vsync(slow, {}, 120.0), "no raw run")
+	var thirty := {"avg_fps": 30.0, "p95_ms": 34.4}
+	assert_eq(
+		FrameStats.verdict(thirty, {"avg_fps": 240.0}, 60.0), "BENCH_CAPPED", "30 keeps its own"
+	)
+
+
 func test_timing_is_averaged_and_marked_missing_without_samples() -> void:
 	var stats := FrameStats.new()
 	assert_eq(stats.summary()["gpu_ms"], -1.0)

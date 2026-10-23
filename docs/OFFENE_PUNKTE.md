@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 23.10. · Build v0.8.0 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 23.10. · Build v0.8.1 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -27,9 +27,9 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.8.0“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.8.1“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac mit v0.8.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
+| J | Leistung auf dem Mac: mit v0.8.0 liefert VSync an nur 58 bis 108 fps auf einem 120-Hz-Bildschirm, ohne VSync schafft die Maschine 145 bis 474; auf einem anderen Bildschirm lief nur Elysia mit 37 statt 145 fps. v0.8.1 frischt VSync beim Start einmal auf (unbelegt) und nennt „VSync bremst“ im Leistungstest | #78, #79, #42, `PERFORMANCE.md` | Einstellungen → Anzeige → Bildsynchronisierung **aus**: ruhig? Dann Standard auf macOS ändern (Entscheidung des Projektinhabers). Leistungstest mit v0.8.1 und `benchmark.txt` schicken |
 | J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
 | J | **Tastenbelegung am Mac, mit deutscher Tastatur und am Controller ausprobieren:** Stimmen die Beschriftungen der Tasten, kommt Fn+Löschen als Entf an, erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #75, #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #75 und #76 eintragen |
 | J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
@@ -74,7 +74,7 @@ im weiteren Spiel nichts verloren geht.
 | P | **Bild:** Ist der Regen sichtbar genug, ohne zu rauschen (320 Tropfen, 1×8 px, Alpha 0,75)? Ist der Regentag mit Sättigung 1,14 und Helligkeit 0,07 noch bedeckt genug (95. Perzentil 0,57, geplant waren 0,65)? Lesen sich die Abendstrahlen (Alpha 0,18)? Ist das Fensterglas im Haus heller und bläulicher als geplant? | #51, ADR-041 | `DayLight`, `rain_fx.gd`, `sun_rays.gd`, `RAIN_GLASS` in `slice_props.py` |
 | P | **Bild:** Passt der Rhythmus des Endes (4 s Schwenk, 2,5 s Halt, „Zum Meer.“, 2,5 s Halt, 2,5 s Abblende)? | ADR-030, Nachtrag | `MOUNTAIN_PAN_SECONDS`, `MOUNTAIN_HOLD_SECONDS`, `SEA_HOLD_SECONDS` in `tal_scene.gd` |
 | P | **Bild:** Liest sich das Haus mit 1,5×, Vignette 0,5 und dunklem Ring als Nacht draußen, oder ist der Ring zu dunkel? Fällt der Lichtstoß am Fenster beim Öffnen der Tür auf, oder soll ein Licht an der Tür her? | #44, ADR-045 | `haus.tscn`, `haus_scene.gd` (`NIGHT_ALPHA`, `DOOR_GLARE`) |
-| P | **Gefühl:** Ist der Sturz in den Bach kräftig genug (Wackeln 1,5 px, 30 Spritzer, blaugraue Blende)? Ist das Antippen zum Umdrehen leise genug (Schritt erst ab 9 px Weg)? Klingt das Ausblenden der Antreiber-Musik (2,5 s) beim Stehenbleiben richtig? Fühlt sich das Umkehren der Kamera gut an (der Vorlauf springt um bis zu 18 px)? | #8, #50 | `FALL_SHAKE`, `FIRST_STEP_DISTANCE`, `CameraMath.lead_toward` |
+| P | **Gefühl:** Ist der Sturz in den Bach kräftig genug (Wackeln 1,5 px, 30 Spritzer, blaugraue Blende)? Ist das Antippen zum Umdrehen leise genug (Schritt erst ab 9 px Weg)? Klingt das Ausblenden der Antreiber-Musik (2,5 s) beim Stehenbleiben richtig? | #8, #50 | `FALL_SHAKE`, `FIRST_STEP_DISTANCE` |
 | P | **Elysia:** Wirkt das Weiß des Erwachens (0,4 s Halt, 2,6 s Aufblende) wie warmes Licht, oder ist es zu lang? Überstrahlt das Glühen am Riss die Figur (rund 1,5 s nach der Berührung)? Ist die Beute-Karte mit Zeile (3,4 s) bei drei Gegenständen aus der Truhe zu lang? | #70 | `WAKE_*` in `elysia_scene.gd`, `SWELL_*` in `rift.gd`, `LOOT_CARD_SECONDS_WITH_DESC` |
 | P | **Haus und Figuren:** Stimmt der Takt von Miras Besuch (herein mit 40 px/s, hinaus mit 45 px/s)? Summt das Kind jetzt zu oft (alle 4 bis 8 s), wenn man am Becken verweilt? Reicht Miras Arbeitspose am Netz (Kopfnicken 1 px, Hände 2 px)? | #71 | `MIRA_SPEED_*`, `ChildGuide.HUM_PAUSE`, `make_character.py` |
 | P | **Start:** Verdeckt das Elysia-Menü die Insel zu sehr (soll sie kleiner oder höher sitzen)? Ist die goldene Tagline (27 px) zu groß, die Fußzeile mit dem Tastenhinweis zu auffällig? Verwirrt der Hinweis „blättern“ im leeren Journal? Ist es in Ordnung, dass im Pause-Menü „Hier kann nicht gespeichert werden“ den Tastenhinweis ersetzt? | #35 | Layout in `boot.gd`, `JOURNAL_HINT`, `PAUSE_HINT` |

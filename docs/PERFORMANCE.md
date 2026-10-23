@@ -177,3 +177,34 @@ Leistungstest im Fenster 1280×720, jeweils zweiter Lauf.
   (KNOWN_ISSUES #53).
 - **Offen:** Die Messung auf dem Mac.
 
+## Playtest v0.8.0 auf dem Mac (23.10.)
+
+Foto des Ergebnisbildschirms (Bildschirm mit 145 Hz):
+
+| Szene | Ø fps | langsamste 5 % | ohne VSync | Urteil |
+|-------|-------|----------------|------------|--------|
+| Elysia | 37 | 36,4 ms | 312 | ruckelt |
+| Das Tal | 145 | 8,5 ms | 145 | flüssig |
+| Das Haus | 145 | 8,3 ms | 145 | flüssig |
+| Der Weg zum Schuppen | 144 | 9,6 ms | 145 | flüssig |
+| Wald | 145 | 8,5 ms | 145 | flüssig |
+
+- **Deutung:** Die Szenen sind für die Grafikkarte kein Problem (Elysia schafft ohne VSync 312 fps, also gut 3 ms pro Bild). Elysia läuft mit VSync auf rund ein Viertel der Bildwiederholrate (145 / 4 = 36), und nur dort, als einzige Szene vor dem ersten Umschalten von VSync im Test. Die Reihenfolge deutet auf den Zustand des Fensters hin, nicht auf die Szene.
+- **Umgesetzt (0.8.1):** `SettingsService.restart_vsync` schaltet VSync beim ersten Start einmal kurz aus und wieder an (nur macOS). Das ist eine Vermutung (KNOWN_ISSUES #78); der nächste Leistungstest entscheidet. Bleibt Elysia dann bei 37 fps, liegt es an der Szene, und der Bericht `benchmark.txt` (CPU ms, GPU ms) zeigt, wo.
+- **Hütte beim Laufen:** Im Leistungstest wandert die Hütte mit der Figur mit. Das ist die Antreiber-Mechanik („Der Weg zum Schuppen“): Das Ziel hält sich 120 bis 250 Pixel vor der Figur und weicht zurück, solange sie läuft; der Test läuft auch nach links, und die Hütte folgt.
+
+### Zweiter Lauf, Bericht `benchmark.txt` (23.10.)
+
+MacBook mit Apple M1 Pro, eingebauter Bildschirm 3024×1964 mit 120 Hz, Fenster 1294×734, VSync an. Der Lauf gehört nicht zum Screenshot oben (dort 145 fps, also vermutlich ein anderer Bildschirm).
+
+| Szene | Ø fps | langsamste 5 % | ohne VSync | Draw Calls |
+|-------|-------|----------------|------------|------------|
+| Elysia | 60 | 18,6 ms | 205 | 80 |
+| Tal | 58 | 33,3 ms | 474 | 81 |
+| Haus | 76 | 18,1 ms | 184 | 14 |
+| Weg | 60 | 19,4 ms | 461 | 88 |
+| Wald | 108 | 17,3 ms | 145 | 128 |
+
+- **Deutung:** Die Maschine schafft in jeder Szene deutlich mehr als die 120 Hz des Bildschirms. Mit VSync liefert sie die Hälfte oder weniger, im Tal mit Aussetzern von 33 ms (jedes vierte Bild). Das passt nicht zur Vermutung „nur die erste Szene“ aus dem ersten Lauf: Elysia ist hier die erste Szene und mit 60 fps nicht schlechter als Weg. Beides spricht für die Bildsynchronisierung von macOS (Spiel läuft über die OpenGL-Schicht, `Compatibility`), nicht für die Szenen. Die Spalten CPU ms und GPU ms taugen nicht: GPU-Zeit liefert macOS mit OpenGL nicht (0,00), und die CPU-Zeit (bis 12 ms bei 205 fps) zählt Wartezeiten des Treibers mit.
+- **Umgesetzt:** Der Leistungstest zeigt jetzt „VSync bremst“ und den Hinweis auf die Einstellung, wenn eine Szene ohne VSync mindestens das 1,5-Fache der Bildwiederholrate schafft, mit VSync aber unter 85 % davon bleibt (`FrameStats.held_by_vsync`, `BENCH_VSYNC_HINT`; die Werte dieses Laufs sind die Testfälle).
+- **Offen:** Läuft das Spiel mit Einstellungen → Anzeige → Bildsynchronisierung **aus** ruhig (die Engine begrenzt dann selbst auf 120 fps)? Wenn ja, wird „aus“ auf macOS der Standard (OFFENE_PUNKTE).

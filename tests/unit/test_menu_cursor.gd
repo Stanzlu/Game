@@ -18,18 +18,18 @@ func test_the_cursor_goes_with_a_row_that_scrolls_out_of_view() -> void:
 	add_child_autofree(scroll)
 	var cursor := MenuCursor.new()
 	add_child_autofree(cursor)
-	await wait_physics_frames(3)
+	await wait_process_frames(4)
 	cursor.target = rows[0]
-	await wait_physics_frames(2)
+	await wait_process_frames(3)
 	assert_true(cursor.visible, "the first row is in view")
 	cursor.target = rows[9]
-	await wait_physics_frames(2)
+	await wait_process_frames(3)
 	assert_false(cursor.visible, "a row below the fold takes no cursor out of the panel")
 	scroll.scroll_vertical = 1000
-	await wait_physics_frames(3)
+	await wait_process_frames(4)
 	assert_true(cursor.visible, "scrolled to, it is back")
 	cursor.target = rows[0]
-	await wait_physics_frames(2)
+	await wait_process_frames(3)
 	assert_false(cursor.visible, "and a row above the view has none either")
 
 
@@ -39,7 +39,7 @@ func test_a_row_outside_a_scroll_area_keeps_its_cursor() -> void:
 	add_child_autofree(row)
 	var cursor := MenuCursor.new()
 	add_child_autofree(cursor)
-	await wait_physics_frames(3)
+	await wait_process_frames(4)
 	cursor.target = row
-	await wait_physics_frames(2)
+	await wait_process_frames(3)
 	assert_true(cursor.visible)
