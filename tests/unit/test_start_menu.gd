@@ -38,7 +38,7 @@ func _write_autosave(finished: bool) -> void:
 	WorldState.new_game()
 	WorldState.set_location("elysia", Vector2.ZERO)
 	if finished:
-		WorldState.set_flag("slice.finished")
+		Chapter.mark("slice")
 	assert_eq(SaveSystem.write_slot(SaveService.AUTOSAVE, SaveCodec.encode(WorldState.state)), OK)
 
 

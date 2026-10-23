@@ -250,7 +250,7 @@ func test_the_ending_waits_for_the_mountains_before_zum_meer() -> void:
 	assert_false(pan.is_running(), "the camera is up when she says it")
 	var top := scene.view.bounds.position.y + scene.view.view_size.y * 0.5
 	assert_almost_eq(scene.view.camera_position.y, top, 1.5, "the mountains are in full view")
-	assert_false(WorldState.has_flag("slice.finished"), "the slice is not over yet")
+	assert_false(Chapter.reached("slice"), "the slice is not over yet")
 	Settings.set_value("text.auto_advance", false, false)
 
 

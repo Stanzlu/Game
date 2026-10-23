@@ -141,7 +141,7 @@ func _the_end() -> void:
 	WorldState.remove_item("item_boot")
 	WorldState.advance_quest("side_valley_goat", "done")
 	WorldState.set_flag("valley.ending")
-	WorldState.set_flag("slice.finished")
+	Chapter.mark("slice")
 
 
 # --- Tests ------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ func test_valley_in_the_evening() -> void:
 
 func test_valley_during_the_ending() -> void:
 	_the_end()
-	WorldState.set_flag("slice.finished", false)
+	WorldState.set_flag(Chapter.flag_for("slice"), false)
 	_save_and_load()
 	await _build(TAL)
 	await wait_physics_frames(2)
@@ -258,7 +258,7 @@ func test_valley_after_the_end() -> void:
 	assert_null(get_tree().get_first_node_in_group(&"cutscene"), "the ending does not replay")
 	assert_eq(_alive(scene, "Goat").size(), 1)
 	assert_true(WorldState.is_quest_done("side_valley_goat"))
-	assert_true(WorldState.has_flag("slice.finished"))
+	assert_true(Chapter.reached("slice"))
 	assert_eq(WorldState.relationship_state("mira"), "familiar")
 
 

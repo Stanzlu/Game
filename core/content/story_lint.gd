@@ -47,8 +47,8 @@ static var _flag_param_regex := RegEx.create_from_string(
 	'"(?:flag|start_flag)"\\s*:\\s*("[^"]*"|[A-Za-z_][A-Za-z0-9_]*)'
 )
 static var _token_regex := RegEx.create_from_string('"[^"]*"|[A-Za-z_][A-Za-z0-9_]*')
-static var _beat_regex := RegEx.create_from_string(
-	'\\bBeat\\.(mark|reached)\\(\\s*("[^"]*"|[A-Za-z_][A-Za-z0-9_]*)(?=\\s*[,)])'
+static var _mark_regex := RegEx.create_from_string(
+	'\\b(Beat|Chapter)\\.(mark|reached)\\(\\s*("[^"]*"|[A-Za-z_][A-Za-z0-9_]*)(?=\\s*[,)])'
 )
 static var _flags_dict_regex := RegEx.create_from_string('flags(?:\\.get\\(|\\[)\\s*"([^"]+)"')
 static var _literal_flag_regex := RegEx.create_from_string('"([a-z0-9_]+\\.[a-z0-9_]+)"')
@@ -256,9 +256,10 @@ static func quest_problems(src: Sources) -> PackedStringArray:
 
 
 ## Flags read by content are set somewhere, and flags set by content are read somewhere.
-## Setting counts literal calls, map params ("flag", "start_flag", world actions) and
-## `Beat.mark`; reading counts `has_flag`, `Beat.reached`, map conditions ("if", "unless",
-## "sprite_when"), the "flag" param of one-shot props and any other literal use in a script.
+## Setting counts literal calls, map params ("flag", "start_flag", world actions) and the
+## marks `Beat.mark` and `Chapter.mark`; reading counts `has_flag`, `Beat.reached`,
+## `Chapter.reached`, map conditions ("if", "unless", "sprite_when"), the "flag" param of
+## one-shot props and any other literal use in a script.
 static func flag_problems(src: Sources) -> PackedStringArray:
 	var problems: PackedStringArray = []
 	var sets := {}
@@ -293,10 +294,10 @@ static func flag_problems(src: Sources) -> PackedStringArray:
 				if GameState.is_flag_id(param):
 					sets[param] = path
 					reads[param] = path
-			for m in _beat_regex.search_all(text):
-				var beat := _value(m.get_string(2), consts)
-				if not beat.is_empty():
-					(sets if m.get_string(1) == "mark" else reads)["beat." + beat] = path
+			for m in _mark_regex.search_all(text):
+				var mark := _value(m.get_string(3), consts)
+				if not mark.is_empty():
+					(sets if m.get_string(2) == "mark" else reads)[_mark_flag(m.get_string(1), mark)] = path
 			for m in _flags_dict_regex.search_all(text):
 				reads[m.get_string(1)] = path
 				_count(read_mentions, m.get_string(1))
@@ -336,6 +337,11 @@ static func flag_problems(src: Sources) -> PackedStringArray:
 	return problems
 
 
+## The flag a `Beat` or `Chapter` mark stands for.
+static func _mark_flag(kind: String, id: String) -> String:
+	return (Chapter.PREFIX if kind == "Chapter" else "beat.") + id
+
+
 static func _write_only_prefix(flag: String) -> bool:
 	for prefix in WRITE_ONLY_FLAG_PREFIXES:
 		if flag.begins_with(prefix):
@@ -346,8 +352,8 @@ static func _write_only_prefix(flag: String) -> bool:
 # --- Duplicates ---------------------------------------------------------------------------
 
 
-## A spawn marker twice in one map (the player arrives at the first) and a beat marked at two
-## places (the log would show whichever comes first).
+## A spawn marker twice in one map (the player arrives at the first) and a beat or chapter
+## marked at two places (the log would show whichever comes first).
 static func duplicate_problems(src: Sources) -> PackedStringArray:
 	var problems: PackedStringArray = []
 	for map_path: String in src.maps:
@@ -369,15 +375,15 @@ static func duplicate_problems(src: Sources) -> PackedStringArray:
 	for code_path: String in src.code:
 		var text: String = src.code[code_path]
 		var consts := _consts(text)
-		for m in _beat_regex.search_all(text):
-			if m.get_string(1) != "mark":
+		for m in _mark_regex.search_all(text):
+			if m.get_string(2) != "mark":
 				continue
-			var beat := _value(m.get_string(2), consts)
+			var flag := _mark_flag(m.get_string(1), _value(m.get_string(3), consts))
 			var where := "%s:%d" % [code_path, _line_of(text, m.get_start())]
-			if beats.has(beat):
-				problems.append("%s: beat '%s' is also marked at %s" % [where, beat, beats[beat]])
+			if beats.has(flag):
+				problems.append("%s: '%s' is also marked at %s" % [where, flag, beats[flag]])
 			else:
-				beats[beat] = where
+				beats[flag] = where
 	return problems
 
 

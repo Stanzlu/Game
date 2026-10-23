@@ -107,5 +107,7 @@ static func decode(
 	result.saved_at = saved_at if saved_at is String else ""
 	result.game_version = made_with if made_with is String else ""
 	result.state = GameState.from_dict(data["world_state"], result.warnings)
+	# a scene renamed since the save was made: the save moves to the new key (ADR-052)
+	result.state.player.map = SceneRegistry.resolve(result.state.player.map)
 	result.ok = true
 	return result

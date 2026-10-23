@@ -261,7 +261,7 @@ func summary(slot: String) -> Dictionary:
 	info["playtime"] = result.state.playtime_seconds
 	info["map"] = result.state.player.map
 	info["ui_mode"] = result.state.ui_mode
-	info["finished"] = bool(result.state.flags.get("slice.finished", false))
+	info["finished"] = Chapter.in_flags(result.state.flags, "slice")
 	return info
 
 

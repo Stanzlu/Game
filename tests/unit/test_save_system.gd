@@ -168,7 +168,7 @@ func test_the_end_of_the_slice_is_read_from_the_saves() -> void:
 	assert_eq(saves.save_slot("slot_1"), OK)
 	assert_false(saves.summary("slot_1")["finished"])
 	assert_false(saves.slice_finished())
-	WorldState.set_flag("slice.finished")
+	Chapter.mark("slice")
 	assert_eq(saves.save_slot("slot_2"), OK)
 	assert_true(saves.summary("slot_2")["finished"])
 	assert_true(saves.slice_finished(), "any slot that reached the end counts")
