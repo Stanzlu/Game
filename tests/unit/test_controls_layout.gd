@@ -401,6 +401,16 @@ func test_the_autopilot_taps_real_keys_and_buttons_and_lets_go() -> void:
 	assert_eq(action_up.action, &"ui_down", "an action still lets go as an action")
 
 
+func test_a_key_the_autopilot_does_not_know_is_named_once() -> void:
+	var pilot: Node = AUTOPILOT.new()
+	pilot.set(&"_events", [{"t": 0.0, "key": ["NoSuchKey"]}])
+	add_child_autofree(pilot)
+	# long enough for the release that must not be tried a second time
+	await wait_physics_frames(24)
+	assert_push_error_count(1, "one script typo, one error")
+	assert_true((pilot.get(&"_tapped") as Dictionary).is_empty(), "nothing waits for a release")
+
+
 func test_the_autopilot_names_a_key_it_does_not_know_and_nothing_else() -> void:
 	assert_null(AUTOPILOT.event_for("key:NoSuchKey", true))
 	assert_push_error("autopilot key unknown")

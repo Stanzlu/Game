@@ -8,8 +8,10 @@ extends Node
 ## taps real keys (names as Godot spells them, physical keys) and "pad": [0, 6] real gamepad
 ## buttons (joypad button indices; 3 = Y does nothing in the world, 6 = Start): they pass the
 ## input device tracking like a player's press, which flips the prompts, and the key layout
-## page captures them. "teleport": [cx, cy] puts the
-## player on the centre of a map cell (captures of distant spots without long walks).
+## page captures them. While that page captures, send keys and buttons: a tapped ui_* action is
+## no key, it passes the capture and moves the focus (only "cancel" ends it). "teleport":
+## [cx, cy] puts the player on the centre of a map cell (captures of distant spots without long
+## walks).
 ## "repeat": n with "every": seconds repeats an event. "dialogue": seconds clicks through
 ## any open conversation for that long (taps interact while a dialogue box is visible,
 ## picking the first answer), so a stray tap never starts a new one. "give": "<item id>"
@@ -118,15 +120,20 @@ func _dialogue_open() -> bool:
 	return box != null and bool(box.get(&"visible"))
 
 
+## A token that stands for no event (a key name Godot does not know) is reported once, at the
+## press, and nothing waits to let go of it.
 func _tap(token: String) -> void:
-	_send(token, true)
-	_tapped[token] = _ticks + TAP_TICKS
+	if _send(token, true):
+		_tapped[token] = _ticks + TAP_TICKS
 
 
-func _send(token: String, pressed: bool) -> void:
+## False when the token stands for no event.
+func _send(token: String, pressed: bool) -> bool:
 	var event := event_for(token, pressed)
-	if event != null:
-		Input.parse_input_event(event)
+	if event == null:
+		return false
+	Input.parse_input_event(event)
+	return true
 
 
 ## The event a tap token stands for: "key:F" a real key press, "pad:3" a real gamepad button, the
