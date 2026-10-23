@@ -242,3 +242,12 @@ func test_a_readable_file_leaves_no_copy_behind() -> void:
 	settings.flush()
 	_restarted()
 	assert_false(FileAccess.file_exists(file_path + ".bad"))
+
+
+func test_fill_screen_switches_the_window_scaling() -> void:
+	assert_false(Settings.get_bool("display.fill_screen"), "off by default: whole-number scaling")
+	assert_eq(get_tree().root.content_scale_stretch, Window.CONTENT_SCALE_STRETCH_INTEGER)
+	Settings.set_value("display.fill_screen", true, false)
+	assert_eq(get_tree().root.content_scale_stretch, Window.CONTENT_SCALE_STRETCH_FRACTIONAL)
+	Settings.set_value("display.fill_screen", false, false)
+	assert_eq(get_tree().root.content_scale_stretch, Window.CONTENT_SCALE_STRETCH_INTEGER)

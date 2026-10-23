@@ -51,7 +51,7 @@ MENU_CREDITS_ELYSIA,Die Helden hinter dem Helden
 CREDITS_TEXT,"Nach Elysia
 Ein Prototyp.
 
-Idee, Geschichte und Umsetzung: das Projekt REAL.
+Idee, Geschichte und Umsetzung: Luca Stanzl.
 Grafik und Klänge entstehen im Projekt selbst.
 
 Schriften: Tiny5, Jersey 10 und Jersey 15 (SIL Open Font License 1.1)
@@ -125,6 +125,7 @@ SETTINGS_TEXT_LARGE,Große Schrift
 SETTINGS_CONTROLS,Steuerung
 SETTINGS_DISPLAY,Anzeige
 SETTINGS_FULLSCREEN,Vollbild
+SETTINGS_FILL_SCREEN,Bild füllen (schmalere Ränder)
 SETTINGS_VSYNC,Bildsynchronisierung (VSync)
 SETTINGS_SCREEN_SHAKE,Bildschirmwackeln
 SETTINGS_REDUCE_FLASHING,Blitzeffekte reduzieren

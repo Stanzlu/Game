@@ -46,6 +46,7 @@ func _build() -> void:
 	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_header("SETTINGS_DISPLAY")
 	list.add_setting("display.fullscreen", "SETTINGS_FULLSCREEN")
+	list.add_setting("display.fill_screen", "SETTINGS_FILL_SCREEN")
 	list.add_setting("display.vsync", "SETTINGS_VSYNC")
 	list.add_setting("display.smooth_camera", "PAUSE_CAMERA", ["CAMERA_PIXEL", "CAMERA_SMOOTH"])
 	list.add_setting("display.screen_shake", "SETTINGS_SCREEN_SHAKE")
