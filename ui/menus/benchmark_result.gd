@@ -27,7 +27,7 @@ func _build() -> void:
 		grid.add_child(head)
 	var capped := false
 	var held := false
-	var hz := refresh_hz
+	var hz := refresh_hz if BenchmarkRunner.last_vsync_on else 0.0
 	for row: Dictionary in BenchmarkRunner.last_rows:
 		var s: Dictionary = row["stats"]
 		var raw: Dictionary = row.get("raw", {})
