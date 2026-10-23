@@ -12,7 +12,7 @@ var settings: SettingsService
 
 
 func before_each() -> void:
-	for path: String in [file_path, file_path + ".other"]:
+	for path: String in [file_path, file_path + ".other", file_path + ".newer"]:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(path)
 	settings = SettingsService.new()
@@ -134,6 +134,31 @@ func test_newer_file_version_warns_but_loads() -> void:
 	assert_push_warning("newer version")
 	assert_eq(loaded.get_int("text.speed"), 2, "read as far as it is understood")
 	assert_eq(loaded.bindings.slots(&"journal", KB), [_key(KEY_K)])
+
+
+func test_a_newer_file_is_kept_aside_before_this_build_saves_over_it() -> void:
+	var newer := JSON.stringify(
+		{"version": 3, "values": {"text.speed": 2}, "input": {}, "future": {"a": 1}}
+	)
+	_write_file(newer)
+	var loaded := _restarted()
+	assert_push_warning("newer version")
+	assert_eq(FileAccess.get_file_as_string(file_path + ".newer"), newer, "the copy is exact")
+	loaded.set_value("text.speed", 3)
+	loaded.flush()
+	assert_eq(_read_file().get("version"), SettingsService.FILE_VERSION, "this build's own file")
+	assert_false(_read_file().has("future"), "what it does not know is gone from the live file")
+	assert_eq(FileAccess.get_file_as_string(file_path + ".newer"), newer, "but not from the copy")
+
+
+func test_a_file_of_this_version_leaves_no_copy_behind() -> void:
+	settings.set_value("text.speed", 2)
+	settings.flush()
+	_restarted()
+	_write_file(JSON.stringify({"version": 2, "values": {}}))
+	_restarted()
+	assert_false(FileAccess.file_exists(file_path + ".newer"))
+	assert_false(FileAccess.file_exists(file_path + ".bad"))
 
 
 func test_reset_to_defaults_leaves_the_bindings() -> void:

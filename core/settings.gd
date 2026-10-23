@@ -304,15 +304,16 @@ func save_file() -> Error:
 
 
 ## Reads the file if it exists. Invalid entries fall back to defaults and are reported. A file
-## that cannot be read at all is kept as settings.json.bad before the next save replaces it
-## (the key layout is the one thing in it that costs the player time to redo).
+## that cannot be read at all is kept as settings.json.bad before the next save replaces it, and
+## a file from a newer build as settings.json.newer (the key layout is the one thing in it that
+## costs the player time to redo).
 func load_file() -> void:
 	if not FileAccess.file_exists(file_path):
 		return
 	var text := FileAccess.get_file_as_string(file_path)
 	var json := JSON.new()
 	if text.length() > 65536 or json.parse(text) != OK or not json.data is Dictionary:
-		var info := {"path": file_path, "kept_as": _keep_unreadable_file()}
+		var info := {"path": file_path, "kept_as": _keep_file_as(".bad")}
 		Log.warn(Log.Category.UI, "settings unreadable, using defaults", info)
 		return
 	var data: Dictionary = json.data
@@ -329,13 +330,16 @@ func load_file() -> void:
 
 
 ## A newer build may have written the file: read it as far as it is understood, never refuse.
-## No version (or no whole number) counts as 1.
+## The next save writes it as FILE_VERSION and loses what this build does not know, so the
+## newer file is copied aside first. No version (or no whole number) counts as 1.
 func _check_version(version: Variant) -> void:
 	if (version is int or version is float) and float(version) > float(FILE_VERSION):
-		Log.warn(Log.Category.UI, "settings from a newer version", {"version": version})
+		var info := {"version": version, "kept_as": _keep_file_as(".newer")}
+		Log.warn(Log.Category.UI, "settings from a newer version", info)
 
 
-## Copies the unreadable file next to itself; returns where it went ("" if that failed).
-func _keep_unreadable_file() -> String:
-	var kept := file_path + ".bad"
+## Copies the settings file next to itself with `suffix`; returns where it went ("" if that
+## failed).
+func _keep_file_as(suffix: String) -> String:
+	var kept := file_path + suffix
 	return kept if DirAccess.copy_absolute(file_path, kept) == OK else ""
