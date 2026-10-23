@@ -324,7 +324,11 @@ Tal und Wald je 12 s mit Bewegung ab und misst Frame-Zeiten (`FrameStats`). Beri
   (`--fixed-fps 60`, ADR-051; `GUT_FIXED_FPS=0` für Echtzeit). Am Ende steht die Zeit je Schritt, nach GUT die
   langsamsten Testdateien (`tools/gut_times.py`); `tools/adr_index.py --check` hält den Index von `DECISIONS.md` aktuell.
   Gesamtzeit rund 3 Minuten (vorher 12). Dazu der Schritt „map stamps“ (`tools/art/map_stamp.py`, Stempel je gebackener
-  Karte, ADR-052). Querprüfungen über Karten, Skripte, Dialoge und Quests: `StoryLint` (`core/content/story_lint.gd`, in GUT).
+  Karte, ADR-052). Querprüfungen über Karten, Skripte, Dialoge und Quests: `StoryLint` (`core/content/story_lint.gd`, in GUT); Karten selbst
+  (Spawn, Erreichbarkeit, feste Zellen, Spiegelsymmetrie): `MapLint` (`core/content/map_lint.gd`, ADR-055; Übersichtsbild mit
+  `tools/art/map_overview.py`). Elysias Uhr und Stufen: `ElysiaDirector` (`world/elysia_director.gd`), Sammelstücke: `Collection`
+  (`core/slice/collection.gd`), Smoke- und Leistungstestliste: `SceneRegistry.SMOKE`/`BENCHMARK`, Spielzeitmodell:
+  `tools/writing/calibrate.py` (`docs/KALIBRIERUNG.md`).
   Automatische Läufe nutzen eigene Profile (`--profile=smoke`), nie die Spielstände des Spielers; das
   letzte `--profile` gewinnt.
 - `tools/export.sh windows|macos|linux`: Export mit Build-Stempel (Commit, Datum).
