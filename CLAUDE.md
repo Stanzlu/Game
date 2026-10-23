@@ -53,6 +53,10 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   Einstellung. Dafür Flags, Quest-IDs und Cues als Literale oder Konstanten schreiben, nicht aus Variablen bauen. Szenen-Schlüssel
   werden nie entfernt (umbenennen über `SceneRegistry.aliases`), Spielstand-Schemas behalten ein eingefrorenes Beispiel
   (`tests/fixtures/saves/v<N>_*.json`), Kapitel mit `Chapter.mark` (ADR-052).
+- Story-Text prüfen `tools/writing/lint.py` (in `check.sh`, ADR-053): Vokabel-Lint gegen Therapie-, Diagnose- und Suchtsprache,
+  Ziffern, Status-Tags `[#draft]`/`[#ok]` und die ID-Sperre `content/dialogue/ids.lock` (neue IDs mit
+  `tools/writing/id_lock.py --update` sperren, eine ID nie still umbenennen: `--retire`). `note:`-Zeilen abarbeiten, eingefrorene
+  (`[#ok]`) Zeilen nur mit `--refreeze` ändern. Statistik: `tools/writing/report.py`.
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne

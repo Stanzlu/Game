@@ -42,6 +42,9 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
 | `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen (schreibt den Stempel) |
 | `python3 tools/art/map_stamp.py` | prüft, ob alle gebackenen Böden zu ihren Karten passen |
+| `python3 tools/writing/lint.py` | Story-Text: Vokabel- und Zahlen-Lint, Status-Tags, ID-Sperre (Schritt „writing lint“ in `check.sh`) |
+| `python3 tools/writing/report.py` | Zeilen und Wörter je Sprecher, Entwurfsstand je Datei, ungenutzte Cues |
+| `python3 tools/writing/id_lock.py --update` | neue Zeilen-IDs sperren (`--retire`, `--refreeze` siehe Kopf des Skripts) |
 | `python3 tools/art/layout_slice_maps.py tal --write` | Layout der Slice-Karten (`tal`, `antreiber_tal`, `antreiber_tal_bench`) |
 | `.venv/bin/python tools/audio/make_slice_sfx.py` | Klänge des Slice (Tür, Klopfen, Bach, Feuer, Katze, Ziege) |
 | `.venv/bin/python tools/audio/check_levels.py` | Pegel der Klänge, Schritte, Orte und Klangklassen messen (Schritt „audio levels“ in `tools/check.sh`, braucht numpy aus `requirements-art.txt`) |
