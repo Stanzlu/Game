@@ -157,3 +157,18 @@ func test_the_report_names_the_screens_and_the_timeline() -> void:
 	var long := PackedFloat32Array()
 	long.resize(20)
 	assert_string_ends_with(BenchmarkRunner.timeline_text(long, 3), "0 0 0 …")
+
+
+func test_drawn_frames_are_told_from_loop_iterations() -> void:
+	# 100 iterations in one second but only 36 of them drawn: the loop ran, the picture did not
+	var frames: Array = []
+	for i in 100:
+		frames.append(10.0)
+	var stats := _stats(frames)
+	stats.drawn_frames = 36
+	stats.cannot_draw = 25
+	var summary := stats.summary()
+	assert_almost_eq(float(summary["avg_fps"]), 100.0, 0.5)
+	assert_almost_eq(float(summary["drawn_fps"]), 36.0, 0.5)
+	assert_almost_eq(float(summary["cannot_draw_pct"]), 25.0, 0.01)
+	assert_eq(FrameStats.new().summary()["drawn_fps"], -1.0, "not recorded")

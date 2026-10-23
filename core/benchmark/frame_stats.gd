@@ -8,6 +8,13 @@ const FRAME_30 := 1000.0 / 30.0
 
 var frames: PackedFloat32Array = []
 var draw_calls := 0.0
+## Frames the engine really drew during the run (`Engine.get_frames_drawn()` difference), -1
+## if not recorded: the loop can run more often than it draws (a window the system treats as
+## hidden), and then the frame times above say more about the loop than about the picture.
+var drawn_frames := -1
+## Loop iterations while the window could not draw / did not have the focus.
+var cannot_draw := 0
+var unfocused := 0
 var _draw_samples := 0
 var _cpu_ms := 0.0
 var _gpu_ms := 0.0
@@ -67,6 +74,7 @@ func summary() -> Dictionary:
 		over_30 += int(f > FRAME_30 * 1.1)
 	var count := maxi(frames.size(), 1)
 	var avg := total / count
+	var seconds := total / 1000.0
 	return {
 		"frames": frames.size(),
 		"avg_fps": 1000.0 / avg if avg > 0.0 else 0.0,
@@ -76,6 +84,9 @@ func summary() -> Dictionary:
 		"max_ms": worst,
 		"slow_60": 100.0 * over_60 / count,
 		"slow_30": 100.0 * over_30 / count,
+		"drawn_fps": drawn_frames / seconds if drawn_frames >= 0 and seconds > 0.0 else -1.0,
+		"cannot_draw_pct": 100.0 * cannot_draw / count,
+		"unfocused_pct": 100.0 * unfocused / count,
 		"draw_calls": draw_calls / maxi(_draw_samples, 1),
 		"cpu_ms": _cpu_ms / _timing_samples if _timing_samples > 0 else -1.0,
 		"gpu_ms": _gpu_ms / _timing_samples if _timing_samples > 0 else -1.0,

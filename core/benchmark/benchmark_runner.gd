@@ -118,6 +118,10 @@ func _process(_delta: float) -> void:
 	var draw_calls := int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))
 	_measuring.add((now - _last_usec) / 1000.0, draw_calls)
 	_last_usec = now
+	if not DisplayServer.window_can_draw():
+		_measuring.cannot_draw += 1
+	if not DisplayServer.window_is_focused():
+		_measuring.unfocused += 1
 	var cpu := Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
 	cpu += RenderingServer.get_frame_setup_time_cpu()
 	var gpu := 0.0
@@ -129,10 +133,12 @@ func _process(_delta: float) -> void:
 
 func _measure(seconds: float) -> FrameStats:
 	var stats := FrameStats.new()
+	var drawn_before := Engine.get_frames_drawn()
 	_last_usec = Time.get_ticks_usec()
 	_measuring = stats
 	await _walk(seconds)
 	_measuring = null
+	stats.drawn_frames = Engine.get_frames_drawn() - drawn_before
 	return stats
 
 
@@ -279,6 +285,27 @@ func report() -> String:
 				)
 			)
 		)
+	lines.append("")
+	lines.append("Gezeichnet (fps) mit VSync | ohne VSync · Fenster nicht zeichenbar | ohne Fokus:")
+	for key in SCENES:
+		if _stats.has(key):
+			var s := _stats[key].summary()
+			var raw := _raw_stats[key].summary()
+			(
+				lines
+				. append(
+					(
+						"%-11s %6.0f | %6.0f · %5.1f %% | %5.1f %%"
+						% [
+							key.trim_prefix("look_"),
+							s["drawn_fps"],
+							raw["drawn_fps"],
+							s["cannot_draw_pct"],
+							s["unfocused_pct"],
+						]
+					)
+				)
+			)
 	lines.append("")
 	lines.append("Verlauf (fps je Sekunde, mit VSync | ohne VSync):")
 	for key in SCENES:
