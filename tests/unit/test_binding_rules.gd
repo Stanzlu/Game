@@ -341,3 +341,32 @@ func _owned_by_a_default(owners: Array, data: Dictionary) -> bool:
 			if H.ids(model.effective(action, kind)).has(BindingCodec.event_id(data)):
 				return true
 	return false
+
+
+func test_the_result_of_a_bind_is_not_the_stored_event() -> void:
+	var result := model.bind(&"journal", KB, 0, H.key(KEY_K))
+	assert_eq(result.code, InputBindings.Code.OK)
+	result.data["physical_keycode"] = KEY_ESCAPE
+	assert_eq(H.slot_ids(model, &"journal", KB), H.key_ids([KEY_K]), "a caller cannot reach in")
+	var swapped := model.bind(&"journal", KB, 0, H.key(KEY_E), InputBindings.Resolve.SWAP)
+	swapped.data["physical_keycode"] = KEY_ESCAPE
+	assert_eq(H.violations(model), PackedStringArray())
+	assert_eq(H.slot_ids(model, &"journal", KB), H.key_ids([KEY_E]))
+
+
+func test_a_device_that_does_not_exist_is_an_empty_answer() -> void:
+	var nowhere := 2 as InputBindings.Device
+	var below := -1 as InputBindings.Device
+	for device: InputBindings.Device in [nowhere, below]:
+		assert_eq(model.fixed(&"journal", device), [] as Array[Dictionary])
+		assert_eq(model.slots(&"journal", device), [] as Array[Dictionary])
+		assert_eq(model.default_slots(&"journal", device), [] as Array[Dictionary])
+		assert_eq(model.effective(&"journal", device), [] as Array[Dictionary])
+		assert_false(model.is_editable(&"journal", device))
+		assert_false(model.is_overridden(&"journal", device))
+		assert_eq(model.clear(&"journal", device, 0), InputBindings.Code.NOT_EDITABLE)
+		var result := model.bind(&"journal", device, 0, H.key(KEY_K))
+		assert_eq(result.code, InputBindings.Code.NOT_EDITABLE)
+	model.reset(&"journal", nowhere)
+	assert_eq(H.violations(model), PackedStringArray())
+	assert_false(model.is_overridden())

@@ -52,7 +52,7 @@ const ACTIONS: Array[StringName] = [
 const SLOTS := 2
 ## Fixed events come first in the display order (and the InputMap) of these actions, so the
 ## label of "Zurück" stays Esc and the pause key stays Esc/Start. Everything else shows its
-## own keys first (the interaction prompt keeps showing "E", not "Enter").
+## own keys first (the interaction prompt shows the player's key, "E" by default, not "Enter").
 const FIXED_FIRST: Array[StringName] = [&"cancel", &"menu"]
 ## Default events that are fixed (everything else a default has is an editable slot).
 const FIXED_KEYS := {
@@ -137,7 +137,7 @@ func _init(live_map := true) -> void:
 
 ## The editable events, compact, at most SLOTS.
 func slots(action: StringName, device: Device) -> Array[Dictionary]:
-	if not ACTIONS.has(action):
+	if not _known(action, device):
 		return []
 	var key := _pair(action, device)
 	if _override.has(key):
@@ -147,7 +147,7 @@ func slots(action: StringName, device: Device) -> Array[Dictionary]:
 
 ## The pinned events in default order.
 func fixed(action: StringName, device: Device) -> Array[Dictionary]:
-	if not ACTIONS.has(action):
+	if not _known(action, device):
 		return []
 	return _copy((_defaults[_pair(action, device)] as Dictionary)["fixed"])
 
@@ -158,14 +158,17 @@ func effective(action: StringName, device: Device) -> Array[Dictionary]:
 
 
 func default_slots(action: StringName, device: Device) -> Array[Dictionary]:
-	if not ACTIONS.has(action):
+	if not _known(action, device):
 		return []
 	return _copy((_defaults[_pair(action, device)] as Dictionary)["slots"])
 
 
-## False for the walk on the pad (all fixed) and for unknown actions.
+## False for the walk on the pad (all fixed), for unknown actions and for a device that does
+## not exist.
 func is_editable(action: StringName, device: Device) -> bool:
-	return ACTIONS.has(action) and not (device == Device.GAMEPAD and PAD_FIXED_ACTIONS.has(action))
+	return _known(action, device) and not (
+		device == Device.GAMEPAD and PAD_FIXED_ACTIONS.has(action)
+	)
 
 
 ## "" = any action, -1 = any device.
@@ -228,14 +231,19 @@ func clear(action: StringName, device: Device, slot: int) -> Code:
 	return Code.OK
 
 
-## Back to the defaults. "" = every action, -1 = both devices.
+## Back to the defaults. "" = every action, -1 = both devices. One action's defaults may have
+## been taken by another action meanwhile: the reset wins them back (that holder loses the key
+## and gets its own defaults if it would be left with nothing), so no key ever belongs to two
+## actions. Every action whose events changed is announced, not only the one named.
 func reset(action := &"", device := -1) -> void:
-	var touched := _actions_in(action)
-	var before := _fingerprints(touched)
-	for target in touched:
+	var before := _fingerprints(ACTIONS)
+	var targets := _actions_in(action)
+	for target in targets:
 		for dev in _devices_in(device):
 			_override.erase(_pair(target, dev))
-	_announce(touched, before, "bindings reset", {"action": action, "device": device})
+	if action != &"" and not targets.is_empty():
+		_repair_claims(true)
+	_announce(ACTIONS, before, "bindings reset", {"action": action, "device": device})
 
 
 # --- Persistence and InputMap ------------------------------------------------------------
@@ -270,11 +278,11 @@ func load_data(data: Variant) -> int:
 	var dropped := 0
 	for key: Variant in data as Dictionary:
 		dropped += _load_action(key, (data as Dictionary)[key])
-	return dropped + _repair_claims()
+	return dropped + _repair_claims(false)
 
 
 ## Brings the InputMap in line with the model: only actions whose events differ are touched
-## (a held Shift stays pressed while journal is rebound), changed ones are released. The
+## (a held Shift stays pressed while journal is rebound), changed ones are let go of. The
 ## deadzones stay. An action is never left without events in between.
 func apply(only: PackedStringArray = []) -> void:
 	if not live:
@@ -450,6 +458,11 @@ func _settle(
 # --- Model helpers (private) ---------------------------------------------------------------
 
 
+## A rebindable action on a device that exists (the enum accepts any int, a caller may not).
+static func _known(action: StringName, device: int) -> bool:
+	return ACTIONS.has(action) and Device.values().has(device)
+
+
 static func _pair(action: StringName, device: int) -> String:
 	return "%s:%d" % [action, device]
 
@@ -497,12 +510,13 @@ static func _devices_in(device: int) -> Array[int]:
 	return out
 
 
-## Slots are filled in place; `slot == size` appends.
+## Slots are filled in place; `slot == size` appends. The model keeps its own copy: the
+## Result of bind() hands the same dictionary to the caller.
 static func _put(list: Array[Dictionary], slot: int, data: Dictionary) -> void:
 	if slot >= list.size():
-		list.append(data)
+		list.append(data.duplicate())
 	else:
-		list[slot] = data
+		list[slot] = data.duplicate()
 
 
 func _effective_of(
@@ -607,11 +621,11 @@ func _apply_action(action: StringName) -> void:
 		return
 	if _event_ids(InputMap.action_get_events(action)) == _event_ids(desired):
 		return
+	# erasing the events also lets go of a held action (Godot 4.7.2; a test pins it): a key held
+	# while its meaning changed does not stay "pressed" under the new one
 	InputMap.action_erase_events(action)
 	for event in desired:
 		InputMap.action_add_event(action, event)
-	# a key held while its meaning changed must not stay "pressed" under the new one
-	Input.action_release(action)
 
 
 static func _event_ids(events: Array[InputEvent]) -> PackedStringArray:
@@ -624,8 +638,13 @@ static func _event_ids(events: Array[InputEvent]) -> PackedStringArray:
 # --- Loading (private) -------------------------------------------------------------------------
 
 
-func _drop(reason: String, info: Dictionary = {}) -> int:
-	Log.warn(Log.Category.INPUT, "binding dropped: " + reason, info)
+## One piece that cannot be kept; always counts 1. A damaged file is a warning, a reset that
+## hands a key back is an ordinary event (`quiet`).
+func _drop(reason: String, info: Dictionary = {}, quiet := false) -> int:
+	if quiet:
+		Log.info(Log.Category.INPUT, "binding handed back: " + reason, info)
+	else:
+		Log.warn(Log.Category.INPUT, "binding dropped: " + reason, info)
 	return 1
 
 
@@ -681,16 +700,16 @@ func _load_device(action: StringName, device: Device, entries: Array) -> int:
 ## events are claimed first, an overridden list loses what is claimed. An action left without
 ## any binding gets its defaults back and the walk starts again (each round removes one
 ## override, so it ends).
-func _repair_claims() -> int:
+func _repair_claims(quiet: bool) -> int:
 	var dropped := 0
 	for device: int in Device.values():
-		var walk := _claim_round(device as Device)
+		var walk := _claim_round(device as Device, quiet)
 		dropped += int(walk["dropped"])
 		while walk["emptied"] != &"":
 			var emptied: StringName = walk["emptied"]
-			dropped += _drop("nothing left, defaults back", {"action": emptied})
+			dropped += _drop("nothing left, defaults back", {"action": emptied}, quiet)
 			_override.erase(_pair(emptied, device))
-			walk = _claim_round(device as Device)
+			walk = _claim_round(device as Device, quiet)
 			dropped += int(walk["dropped"])
 	# a list may have become the defaults again
 	for action in ACTIONS:
@@ -702,7 +721,7 @@ func _repair_claims() -> int:
 
 ## One walk over the actions of a device: {"dropped": n, "emptied": the first action that
 ## was left with no binding, or &""}.
-func _claim_round(device: Device) -> Dictionary:
+func _claim_round(device: Device, quiet: bool) -> Dictionary:
 	var claimed := {}
 	for action in ACTIONS:
 		for data in fixed(action, device):
@@ -719,7 +738,8 @@ func _claim_round(device: Device) -> Dictionary:
 		for data in slots(action, device):
 			var id := BindingCodec.event_id(data)
 			if claimed.has(id):
-				dropped += _drop("key belongs to another action", {"action": action, "event": id})
+				var info := {"action": action, "event": id}
+				dropped += _drop("key belongs to another action", info, quiet)
 			else:
 				claimed[id] = true
 				kept.append(data)

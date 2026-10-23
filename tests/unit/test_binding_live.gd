@@ -70,6 +70,18 @@ func test_apply_releases_only_changed_actions() -> void:
 	assert_false(Input.is_action_pressed(&"journal"))
 
 
+func test_a_full_apply_leaves_a_held_key_alone_when_nothing_differs() -> void:
+	# the start-up path and "Einstellungen zurücksetzen" rewrite all nine actions
+	_hold_shift(true)
+	assert_true(Input.is_action_pressed(&"sprint"))
+	live.apply()
+	assert_true(Input.is_action_pressed(&"sprint"), "InputBindings.apply() with nothing to do")
+	Settings.apply_all()
+	assert_true(Input.is_action_pressed(&"sprint"), "Settings.apply_all() with nothing to do")
+	Settings.bindings.bind(&"sprint", KB, 0, H.key(KEY_F))
+	assert_false(Input.is_action_pressed(&"sprint"), "its keys changed: let go")
+
+
 func test_apply_heals_a_foreign_change() -> void:
 	var wanted := _map(&"interact")
 	InputMap.action_erase_events(&"interact")

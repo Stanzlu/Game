@@ -365,33 +365,46 @@ func test_the_loader_survives_hostile_data() -> void:
 
 
 func test_invariants_hold_over_random_edits() -> void:
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 48
-	var live := InputBindings.new()
+	# several walks: a single seed never reached a reset of one action after a take or a swap
 	var seen := {}
-	var settled := 0
+	var settled := [0]
+	for seed_value: int in [48, 49, 50, 51]:
+		_walk_random_edits(seed_value, seen, settled)
+	# the walks have to be real ones: edits that worked, conflicts that were settled, refusals
+	assert_gt(int(seen.get(InputBindings.Code.OK, 0)), 40, str(seen))
+	assert_gt(int(settled[0]), 5, "swaps and takes happened: " + str(seen))
+	assert_gt(seen.size(), 7, "many kinds of refusal: " + str(seen))
+
+
+## One walk of 400 random edits; counts the results into `seen` and the settled conflicts into
+## settled[0].
+func _walk_random_edits(seed_value: int, seen: Dictionary, settled: Array) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var live := InputBindings.new()
 	for step in 400:
 		var before := H.layout(live)
 		var result := _random_edit(rng, live)
 		if result != null:
 			seen[result.code] = int(seen.get(result.code, 0)) + 1
-			settled += int(result.code == InputBindings.Code.OK and result.other != &"")
+			settled[0] = (
+				int(settled[0]) + int(result.code == InputBindings.Code.OK and result.other != &"")
+			)
 		var found := H.violations(live)
-		assert_eq(found, PackedStringArray(), "step %d: %s" % [step, str(result)])
+		var where := "seed %d step %d: %s" % [seed_value, step, str(result)]
+		assert_eq(found, PackedStringArray(), where)
 		if result != null and not result.ok():
-			assert_eq(H.layout(live), before, "step %d: a refusal changed something" % step)
+			assert_eq(H.layout(live), before, where + ": a refusal changed something")
 		var copy := InputBindings.new(false)
-		assert_eq(copy.load_data(live.to_data()), 0, "step %d: the file needs no repair" % step)
-		assert_eq(H.layout(copy), H.layout(live), "step %d: the file says the same" % step)
+		assert_eq(copy.load_data(live.to_data()), 0, where + ": the file needs no repair")
+		assert_eq(H.layout(copy), H.layout(live), where + ": the file says the same")
 		if step % 25 == 0:
 			_assert_input_map_follows(live, step)
+		if not found.is_empty():
+			break
 	live.reset()
 	live.apply()
 	_assert_input_map_follows(live, -1)
-	# the walk has to be a real one: edits that worked, conflicts that were settled, refusals
-	assert_gt(int(seen.get(InputBindings.Code.OK, 0)), 40, str(seen))
-	assert_gt(settled, 5, "swaps and takes happened: " + str(seen))
-	assert_gt(seen.size(), 7, "many kinds of refusal: " + str(seen))
 
 
 func _assert_input_map_follows(live: InputBindings, step: int) -> void:
