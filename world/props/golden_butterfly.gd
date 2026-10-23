@@ -84,21 +84,21 @@ func _on_caught(_actor: Node) -> void:
 	if _caught:
 		return
 	_caught = true
-	# the flash starts before the flag: MapView then lets it finish (leave)
-	_flash()
+	# the vanishing starts before the flag: MapView then lets it finish (leave)
+	_vanish()
 	WorldState.set_flag(flag)
 	AudioDirector.sfx("praise", -8.0)
 	StateActions.run(actions, "butterfly:" + flag)
 
 
-## Its condition turned false (caught, or the quest is over): a last golden flash.
+## Its condition turned false (caught, or the quest is over): a last golden fade.
 func leave() -> void:
 	if not _caught:
 		_caught = true
-		_flash()
+		_vanish()
 
 
-func _flash() -> void:
+func _vanish() -> void:
 	if _butterfly == null:
 		queue_free()
 		return

@@ -9,6 +9,7 @@ const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
 ## XP for the first, second and third butterfly (Game Bible §10: rewards escalate).
 const BUTTERFLY_XP: Array[int] = [100, 500, 2000]
 const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
+const BUTTERFLY_QUEST := "side_elysia_butterflies"
 ## Repetition starts once the chest is open and the butterflies are back, whichever comes
 ## last: the chest lies on the main path, and opening it on the way must not cut the
 ## miniquest short. Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its
@@ -172,15 +173,15 @@ func _fountain_solves_itself() -> void:
 
 
 func _on_objective_changed(quest_id: String, _objective_id: String) -> void:
-	if quest_id != "side_elysia_butterflies":
+	if quest_id != BUTTERFLY_QUEST:
 		return
 	var caught := 0
 	for objective in BUTTERFLY_OBJECTIVES:
-		if WorldState.is_objective_done(quest_id, objective):
+		if WorldState.is_objective_done(BUTTERFLY_QUEST, objective):
 			caught += 1
 	WorldState.add_xp(BUTTERFLY_XP[clampi(caught - 1, 0, BUTTERFLY_XP.size() - 1)])
 	if caught == BUTTERFLY_OBJECTIVES.size():
-		WorldState.advance_quest(quest_id, "return")
+		WorldState.advance_quest(BUTTERFLY_QUEST, "return")
 		Beat.mark("butterflies_caught")
 
 
