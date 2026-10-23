@@ -388,7 +388,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.1** | T1 Prüfschleife, T10 Doku und CI | gleiche Zahl Tests, Zeit vorher/nachher, 10 Läufe ohne Flackern | – |
 | **P6.2** | T2 Validator, T3 Speicher-Politik | je Regel ein roter Test-Fixture, v2-Fixture lädt | – |
 | **P6.3** | Schreibwerkzeuge S (9.5) · **erledigt** (ADR-053) | Lints als `note:`, ID-Sperre aktiv | – |
-| **P6.4** | Stilbuch, Stimmenblätter, Motivbuch | – | Blätter lesen (rund 45 Min) |
+| **P6.4** | Stilbuch, Stimmenblätter, Motivbuch · **geschrieben** (ADR-054), wartet auf deine Lektüre | Prüfer `motifs.py` grün | Blätter lesen (rund 45 Min) |
 | **P6.5** | Writing-Pass auf den Slice, Tests auf IDs | `slice_full.json` grün | Lesefassung des Slice (rund 60 Min) |
 | **P6.6** | T4 Karten-Linter, T5 Elysia-Regler und Konventionen, T11 Kalibrierung | der Slice spielt sich unverändert | – |
 | **P6.7** | Grafik und Ton für Akt I: Props im Elysia-Stil für Gasthaus und Markt, OGG, Pixel-Format für kleine Bilder; Sample-Hörprobe nur nach Entscheidung 1 | Kontaktbogen, `check_levels.py` | Kontaktbogen (rund 15 Min) |

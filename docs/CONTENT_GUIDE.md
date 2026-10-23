@@ -118,6 +118,7 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - **ID-Sperre** (`content/dialogue/ids.lock`, `tools/writing/id_lock.py`): neue Zeilen-IDs mit `--update` eintragen; verschwindet eine ID, schlägt `check.sh` fehl, bis sie wiederkommt oder mit `--retire <id> <Grund>` zurückgezogen ist. Eingefrorene Zeilen tragen einen Hash; nach einer gewollten Änderung `--refreeze <id>`.
 - **Vokabel-Lint** (`tools/writing/vocabulary.json`): keine Therapie-, Diagnose- oder Suchtsprache (Bible §3.2). Ein berechtigter Treffer steht mit Zeilen-ID, Begriff und Grund unter `exceptions`.
 - **Zahlen:** Zahlen im Story-Text werden ausgeschrieben (Dialoge, Journal, Gegenstandsbeschreibungen); Schilder und Größen sind Ausnahmen mit Grund.
+- **Schreiben gegen die Blätter:** `docs/writing/STIL.md` (Stil und „Nie“-Liste), `docs/writing/stimmen/<figur>.md` (Funktion, Signatur, Goldzeilen), `docs/writing/MOTIVE.md` (Motive und Konsequenzen-Register, erzeugt aus `motive.json` mit `tools/writing/motifs.py --write`). Zitate mit `` `id` „Text“ `` auf diesen Seiten prüft der Check gegen den Spieltext.
 - `tools/writing/report.py` zeigt Zeilen und Wörter je Sprecher, den Stand je Datei und Cues, die nichts mehr startet.
 
 ## Szenen: Musik, Ambience, Licht
