@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 23.10. · Build v0.8.3 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 23.10. · Build v0.8.4 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -27,13 +27,10 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.8.3“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0, v0.8.1, v0.8.2) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
-| J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
+| J | Windows-Build wurde nie auf echter Hardware gestartet; der Projektinhaber kann es nicht prüfen (23.10.), das Risiko ist akzeptiert | #6, ADR-049 | ein Tester mit Windows, wenn sich einer findet |
 | J | Leistung auf dem Mac (M1 Pro, 120 Hz): Der Leistungstest zeigt mit VSync an 36 bis 108 fps, ohne VSync 145 bis 474. Im Spiel fühlt es sich für den Projektinhaber gleich an, ob VSync aus oder an ist, und läuft gut (Maus, Bild, VSync; 23.10., Version 0.8.2). Der Standard bleibt VSync an. Ob die gemessenen fps echte Bilder waren, zeigt erst der Bericht von 0.8.3 (gezeichnete Bilder, fps je Sekunde); Godot hat im OpenGL-Pfad von macOS ein offenes VSync-Problem (Issue 79646) | #78, #79, `PERFORMANCE.md` | Optional: Leistungstest mit 0.8.3 und `benchmark.txt` schicken. Spürt ein Tester Ruckeln, hilft VSync aus (Einstellung oder Knopf im Leistungstest) |
 | J | Möglicher Ausweg für den Mac: Godots ANGLE-Treiber (OpenGL über Metal, `rendering/gl_compatibility/driver.macos=opengl3_angle`) stellt VSync über Metal statt über Apples OpenGL ein. Der Export von Linux aus legt die ANGLE-Bibliotheken nicht bei (geprüft: `application/export_angle=1` ändert das Zip nicht); sie müssten aus dem offiziellen macOS-Editor kommen, signiert werden und brauchen ADR und Eintrag in `DEPENDENCIES.md` | `PERFORMANCE.md` (Recherche) | Erst entscheiden, wenn „VSync aus“ nicht reicht |
-| J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
-| J | **Tastenbelegung am Mac, mit deutscher Tastatur und am Controller ausprobieren:** Stimmen die Beschriftungen der Tasten, kommt Fn+Löschen als Entf an, erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #75, #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #75 und #76 eintragen |
-| J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
+| J | **Tastenbelegung am Controller ausprobieren** (am Mac passt sie, 23.10.): Erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #76 eintragen |
 | J | Von Hand prüfen, was der Container nicht kann: Fenster-X speichert, Fokusverlust öffnet das Pause-Menü, Controller abziehen, PlayStation-Beschriftung, Rumble | #63, #64, #11 | Liste in KNOWN_ISSUES #63; Ergebnis dort eintragen |
 
 **Entschieden am 22.10. und umgesetzt** (der Projektinhaber antwortete „Weiter“ auf die Empfehlungen, ADR-047):
@@ -46,6 +43,16 @@ im weiteren Spiel nichts verloren geht.
 | Mischpixel | Unverändert bis zum Playtest; keine Option „Pixelraster exakt“, keine Vollbild-Rand-Option, solange niemand es nennt. | ADR-045, Nachtrag 22.10. |
 | Elysias erste Zeilen | Wärmer und ernster geschrieben; die unheimlich-aufrichtigen Sätze bleiben. | ADR-047 |
 | Tastenumbelegung | gebaut, ADR-048 (Seite „Tastenbelegung“ im Pause-Menü und unter Einstellungen). | ADR-048, ADR-011 und ADR-018, Nachträge |
+
+**Entschieden am 23.10.** (der Projektinhaber, nach dem Test von v0.8.3, ADR-049):
+
+| Punkt | Entscheidung | Wo |
+|---|---|---|
+| Playtest-Gate | Ohne Tester abgenommen; Vorproduktion für Full Production freigegeben (Content-Plan Akt I, Writing-Pass, Karten-Pipeline, Art und Audio ohne Kosten). | ADR-049, `PRODUKTIONSPLAN.md` |
+| Vollbild-Rand | Der Rand ist bestätigt; Einstellung „Bild füllen (schmalere Ränder)“ gebaut, vorab aus. | ADR-045, Nachtrag 23.10. |
+| Mitwirkende | „Idee, Geschichte und Umsetzung: Luca Stanzl.“ | `CREDITS_TEXT` |
+| Release-Entwurf | Muss nicht veröffentlicht werden; die Entwürfe unter Releases dürfen gelöscht werden. | – |
+| VSync | Fühlt sich an und aus gleich an; der Standard bleibt an. | `PERFORMANCE.md` |
 
 ## 2. Klärt der Playtest
 

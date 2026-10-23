@@ -47,6 +47,7 @@ const SCHEMA := {
 	"controls.eight_directions": [true],
 	"display.fullscreen": [false],
 	"display.vsync": [true],
+	"display.fill_screen": [false],
 	"display.smooth_camera": [true],
 	"display.screen_shake": [true],
 	"display.reduce_flashing": [false],
@@ -223,6 +224,8 @@ func _apply(key: String) -> void:
 		TextSize.apply(get_bool(key))
 	elif key == "display.vsync":
 		apply_vsync(get_bool(key))
+	elif key == "display.fill_screen":
+		apply_fill_screen(get_bool(key))
 	elif key == "display.fullscreen" and DisplayServer.get_name() != "headless":
 		DisplayServer.window_set_mode(
 			(
@@ -231,6 +234,16 @@ func _apply(key: String) -> void:
 				else DisplayServer.WINDOW_MODE_WINDOWED
 			)
 		)
+
+
+## Whole-number scaling keeps every game pixel the same size but leaves black bars on screens
+## that do not fit (a 3024x1964 Retina screen: a bar of 15 % at the sides and 27 % above and
+## below). "Fill screen" scales by any factor instead: the bars shrink to what the aspect
+## ratio needs, at the price of game pixels that are not all the same width (ADR-045).
+func apply_fill_screen(on: bool) -> void:
+	get_tree().root.content_scale_stretch = (
+		Window.CONTENT_SCALE_STRETCH_FRACTIONAL if on else Window.CONTENT_SCALE_STRETCH_INTEGER
+	)
 
 
 ## VSync on: the display paces the frames. Off: the engine caps them at the display's
