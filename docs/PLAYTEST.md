@@ -35,7 +35,7 @@ lässt sich im Spiel ändern (siehe unten).
 | Aktion | Tastatur | Controller |
 |--------|----------|------------|
 | Gehen | WASD oder Pfeiltasten | linker Stick oder Steuerkreuz |
-| Rennen | Shift halten | X / Viereck oder rechter Trigger |
+| Rennen | Shift halten | X / Quadrat oder rechter Trigger |
 | Ansehen, Sprechen, Bestätigen | E, Leertaste oder Enter | A / Kreuz |
 | Zurück | Esc oder Backspace | B / Kreis |
 | Pause-Menü (Speichern, Einstellungen) | Esc oder Tab | Start |
@@ -49,16 +49,19 @@ Bestätigen blättert schnell weiter und hält an Antworten an.
 **Tasten umbelegen:** Im **Pause-Menü** („Tastenbelegung“) oder unter **Einstellungen → Steuerung →
 Tastenbelegung** (auch vom Startmenü aus) steht jede Aktion mit zwei Feldern für die Tastatur und für
 den Controller. Mit Links / Rechts ein Feld wählen, mit Enter, Leertaste, E oder A drücken und dann die
-neue Taste (oder den neuen Knopf) drücken; Entf oder Y leert das Feld. Gehört die Taste schon einer
-anderen Aktion, fragt das Spiel, ob die beiden tauschen. Enter, Esc, Start und A (am Controller) bleiben
-immer belegt, damit niemand sich aussperren kann; Pfeile, WASD und das Steuerkreuz bewegen in Menüs immer
+neue Taste (oder den neuen Knopf) drücken; Entf oder Y leert das Feld (auch während man auf die neue
+Taste wartet). Gehört die Taste schon einer anderen Aktion, fragt das Spiel, ob getauscht oder die Taste
+hier verwendet werden soll, oder erklärt, warum beides nicht geht. Enter, Esc, Start und A (am
+Controller) bleiben immer belegt, damit niemand sich aussperren kann; Pfeile, WASD und das Steuerkreuz bewegen in Menüs immer
 den Cursor und gehören nur dem Gehen; am Controller gehen immer Stick und Steuerkreuz. „Weitere Tasten“
 zeigt, was fest ist. **Alles auf Standard** holt die ursprüngliche Belegung zurück.
 
 Notausgang, falls doch etwas hakt: im Spiel Esc (oder Start), „Tastenbelegung“, „Alles auf Standard“; ist
-das Spiel gar nicht mehr zu bedienen, im Ordner mit den Einstellungen (siehe `SAVE_FORMAT.md`) in
-`settings.json` den Block `input` löschen und neu starten. Eine Datei, die das Spiel nicht lesen konnte,
-bleibt als `settings.json.bad` daneben liegen.
+das Spiel gar nicht mehr zu bedienen, in der Datei `settings.json` den Block `input` löschen und neu
+starten (Windows: `%APPDATA%\REAL\settings.json`, macOS:
+`~/Library/Application Support/REAL/settings.json`, Linux: `~/.local/share/REAL/settings.json`; die Datei
+liegt neben dem Ordner `saves`, nicht darin). Eine Datei, die das Spiel nicht lesen konnte, bleibt als
+`settings.json.bad` daneben liegen.
 
 ## Während du spielst
 

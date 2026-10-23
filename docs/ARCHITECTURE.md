@@ -239,7 +239,7 @@ Nur Actions (ADR-011); die Standardbelegung steht in `project.godot`, Tests in
 | `move_up/down/left/right` | WASD, Pfeiltasten | linker Stick, D-Pad (immer fest) |
 | `interact` | E, Leertaste, Enter (fest) | A / Kreuz (fest) |
 | `cancel` | Esc (fest), Backspace | B / Kreis |
-| `sprint` | Shift | X / Viereck, rechter Trigger |
+| `sprint` | Shift | X / Quadrat, rechter Trigger |
 | `menu` | Esc (fest), Tab | Start (fest) |
 | `journal` | J | Back / Select |
 | `scroll_up/scroll_down` | Bild auf / Bild ab | rechter Stick (vertikal), nicht umbelegbar |
@@ -254,14 +254,16 @@ In Menüs bestätigen `ui_accept` (Enter, Num-Enter, Leertaste) und `interact` (
 - Kern ohne Szene: `core/binding_codec.gd` (`BindingCodec`: Ereignis ↔ `{"type": ...}`, streng, nie geklemmt),
   `core/input_bindings.gd` (`InputBindings`, als `Settings.bindings`: Felder, feste Ereignisse, Regeln,
   Konflikte, Abgleich mit der `InputMap`, Laden und Schreiben) und `core/binding_capture.gd` (`BindingCapture`:
-  Erfassung einer Taste als Zustandsmaschine). Die Standardwerte liest `InputBindings` aus `ProjectSettings`.
+  Erfassung einer Taste als Zustandsmaschine; Entf und Y leeren das Feld, Esc und Start brechen ab). Die
+  Standardwerte liest `InputBindings` aus `ProjectSettings`.
 - Modell: je Aktion und Gerät feste Ereignisse (Esc, Enter, Start, A auf `interact`, Stick und Steuerkreuz für
   das Gehen) und bis zu zwei Felder; es bleibt immer mindestens eine Belegung, eine Taste gehört je Gerät einer
   Aktion. Reserviert sind Esc, Enter, Entf, Bild auf/ab, F3/F4, Pfeile und WASD (nur Gehen), Leertaste (`interact`,
   `sprint`), Tab (`menu`, `sprint`), am Controller A, Y, Start, Steuerkreuz; nie belegbar Alt, Meta, Sticks,
   Feststelltasten und Sondertasten, Trigger nur für `sprint`. Konflikte: tauschen, übernehmen oder erklären.
 - Datei: `settings.json` Version 2 (`docs/SAVE_FORMAT.md`); ein Gerät gilt als überschrieben, wenn die Liste
-  Ereignisse dieses Geräts enthält; feste Ereignisse und beide Geräte werden mitgeschrieben, Standardwerte nie.
+  Ereignisse dieses Geräts enthält; feste Ereignisse und beide Geräte werden mitgeschrieben, Aktionen ohne
+  Änderung nie.
 - Signale: `InputBindings.changed(actions)` (die `InputMap` hält die neuen Ereignisse schon),
   `Settings.bindings_changed(actions)` und `InputDevice.labels_changed` (Hinweise mit Tastennamen
   aktualisieren sich: Interaktions-Hinweis, Fußzeile des Startmenüs, Hinweis des Pause-Menüs, die Seite).
@@ -269,7 +271,8 @@ In Menüs bestätigen `ui_accept` (Enter, Num-Enter, Leertaste) und `interact` (
 - Oberfläche: `ui/menus/controls_menu.gd` (`ControlsMenu`, `MenuLayer`; fängt Tasten in `_input` ab, solange eine
   Erfassung wartet), `ui/menus/binding_row.gd` (`BindingRow`: Zeile mit Namen, festen Tasten und zwei Feldern),
   `ui/menus/controls_notes.gd` (`ControlsNotes`, `ScrollPage`: „Weitere Tasten“). Theme-Typen `BindCell*` und
-  `BindFixed` in `base_theme.tres` und beiden Skins. `ConfirmMenu.ask_text` fragt mit fertigem Text.
+  `BindFixed` in `base_theme.tres` und beiden Skins. `ConfirmMenu.ask_text` fragt mit fertigem Text. Die Seiten,
+  die ein Menü öffnet, hängt `MenuLayer.stack` an; folgt es der Welt nicht (Startmenü), bekommen sie dessen Theme.
 - Autopilot: `"key": ["F"]` und `"pad": [3]` senden echte Tasten und Knöpfe (`tools/autopilot/controls_rebind.json`,
   `controls_pad.json`).
 

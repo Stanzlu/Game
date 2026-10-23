@@ -67,8 +67,10 @@ sind nicht signiert, deshalb warnt das Betriebssystem beim ersten Start.
   blockiert: **Systemeinstellungen → Datenschutz & Sicherheit → Dennoch öffnen**. Alternativ im Terminal:
   `xattr -dr com.apple.quarantine REAL.app`
 - **Ausführliche Logs für Fehlerberichte:** mit dem Argument `-- --log-debug` starten.
-- **Steuerung und Tests:** siehe `docs/PLAYTEST_PHASE3.md` und `docs/PLAYTEST_PHASE2.md`. Standardmäßig öffnet Esc oder Start das Pause-Menü, J oder Back das
-  Journal; die Tasten lassen sich unter Einstellungen → Steuerung → Tastenbelegung umbelegen.
+- **Steuerung und Tests:** siehe `docs/PLAYTEST.md` (Tabelle der Tasten, Umbelegen, Notausgang); die Testbögen
+  der früheren Phasen stehen in `docs/PLAYTEST_PHASE3.md` und `docs/PLAYTEST_PHASE2.md`. Standardmäßig öffnet
+  Esc oder Start das Pause-Menü, J oder Back das Journal; die Tasten lassen sich unter Einstellungen →
+  Steuerung → Tastenbelegung umbelegen.
 - **Spielstände und Einstellungen** liegen lokal unter `%APPDATA%\REAL\` (Windows) bzw.
   `~/Library/Application Support/REAL/` (macOS), siehe `docs/SAVE_FORMAT.md`.
 

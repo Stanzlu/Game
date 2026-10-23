@@ -1,6 +1,6 @@
 # Phase 5: Playtest-Gate
 
-Stand 22.10. · Build **v0.8.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046, ADR-047.
+Stand 23.10. · Build **v0.8.0** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046, ADR-047, ADR-048.
 
 Der Vertical Slice ist technisch fertig. Ab hier gilt: **STOP.** Kein Inhalt über den Slice hinaus,
 bis Playtest-Ergebnisse vorliegen (Bible §57, Master-Prompt §47). Dieses Dokument bündelt alles, was
