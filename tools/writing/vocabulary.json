@@ -1,0 +1,21 @@
+{
+ "_comment": "Words the story text avoids (Game Bible 3.2 'Show, Don't Therapize': no diagnoses, no therapy language, no addiction terms). Patterns are case-insensitive regular expressions on the visible text. A hit is a note while a line is a draft and an error on a line tagged [#ok]. A hit that belongs may be listed under 'exceptions' with its line ID (or CSV key), the term name and a reason.",
+ "terms": {
+  "trauma": "\\btrauma\\w*|\\btraumatis\\w*",
+  "therapy": "\\btherap\\w*",
+  "diagnosis": "\\bdiagnos\\w*|\\bsymptom\\w*|\\bsyndrom\\w*",
+  "disorder": "\\b(angst|zwangs|essst|persönlichkeits)\\w*stör\\w*|\\bpsychische[nrms]? stör\\w*",
+  "psychology": "\\bpsych\\w*",
+  "depression": "\\bdepressi\\w*",
+  "attacks": "\\bpanikattack\\w*|\\bburn-?out\\b",
+  "addiction": "\\bsüchtig\\w*|\\bsuchtkrank\\w*|\\bentzug\\b|\\brückfall\\w*|\\babstinen\\w*|\\balkoholik\\w*|\\bdrogen?\\b|\\babhängigkeit\\w*",
+  "self_help": "\\bselbstfürsorge\\b|\\bachtsam\\w*|\\bresilien\\w*|\\bselbstliebe\\b|\\bselbstwert\\w*|\\bselbstmitgefühl\\b|\\bselbstreflexi\\w*|\\breflektier\\w*|\\bselbstoptimier\\w*",
+  "jargon": "\\bgrenzen setzen\\b|\\btrigger\\w*|\\btoxisch\\w*|\\bcoping\\b|\\bbewältigungsstrateg\\w*|\\bheilung\\w*|\\bglaubenssätze?\\b|\\bkomfortzone\\b|\\bmindset\\b|\\binnere[sn]? kind\\b|\\bgefühle (zulassen|validier\\w*)",
+  "english": "\\bhealing\\b|\\bself-?care\\b|\\bmindful\\w*|\\btrigger(ed)?\\b"
+ },
+ "exceptions": [
+  {"where": "sl_antr_sign_1", "term": "number", "reason": "the number is on the signpost, as the sign says it"},
+  {"where": "sl_antr_sign_2", "term": "number", "reason": "the number is on the signpost, as the sign says it"},
+  {"where": "ITEM_BOOT_DESC", "term": "number", "reason": "a shoe size is a size, not a count"}
+ ]
+}
