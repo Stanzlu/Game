@@ -373,14 +373,15 @@ func _new_game_requested() -> void:
 		_name_entry.open()
 
 
-## The controls in one line, for the device in hand (keys or a pad's buttons).
+## The controls in one line, for the device in hand (keys or a pad's buttons). The footer is
+## set in the body font, which has no PlayStation glyphs (○ □ △): the buttons are words here.
 static func controls_hint() -> String:
 	return (
 		TranslationServer.translate("TITLE_CONTROLS_HINT")
 		% [
 			InputDevice.move_label(InputDevice.kind),
-			InputDevice.label_for(&"sprint"),
-			InputDevice.label_for(&"interact"),
+			InputDevice.label_for(&"sprint", true),
+			InputDevice.label_for(&"interact", true),
 		]
 	)
 

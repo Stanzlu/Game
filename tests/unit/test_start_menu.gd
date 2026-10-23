@@ -146,6 +146,17 @@ func test_the_hint_names_the_keys_or_the_pad() -> void:
 	assert_true(pad.contains("Stick"), pad)
 
 
+func test_the_hint_spells_out_playstation_buttons() -> void:
+	# the footer's font has no ○ □ △: Kreuz and Quadrat instead (the pad prompts keep the glyphs)
+	InputDevice.style = InputDevice.Style.PLAYSTATION
+	InputDevice.set_kind(InputDevice.Kind.GAMEPAD)
+	var pad: String = BootScript.controls_hint()
+	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
+	InputDevice.style = InputDevice.Style.XBOX
+	assert_true(pad.contains("Quadrat") and pad.contains("Kreuz"), pad)
+	assert_false(pad.contains("□") or pad.contains("×"), pad)
+
+
 func test_the_credits_page_scrolls_with_up_and_down() -> void:
 	var menu := CreditsMenu.new()
 	add_child_autofree(menu)

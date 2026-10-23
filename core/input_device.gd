@@ -118,15 +118,16 @@ func set_kind(new_kind: Kind) -> void:
 	device_changed.emit(kind)
 
 
-## Short label for the first binding of `action` on the current device.
-func label_for(action: StringName) -> String:
-	return label_for_kind(action, kind)
+## Short label for the first binding of `action` on the current device (`words`: see
+## labels_for_kind).
+func label_for(action: StringName, words := false) -> String:
+	return label_for_kind(action, kind, words)
 
 
 ## Short label for the first binding of `action` on keyboard or gamepad ("?" if it has none,
 ## which the layout rules prevent but a page must survive).
-func label_for_kind(action: StringName, device: Kind) -> String:
-	var labels := labels_for_kind(action, device)
+func label_for_kind(action: StringName, device: Kind, words := false) -> String:
+	var labels := labels_for_kind(action, device, words)
 	return labels[0] if not labels.is_empty() else "?"
 
 
