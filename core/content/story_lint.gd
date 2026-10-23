@@ -29,7 +29,7 @@ const TRAVEL_PROPS: PackedStringArray = [
 ]
 ## Flags that are set and never read, by design. Each needs its reason. The beat flags
 ## ("beat.<id>") are read by the beat log and the autosave, not by logic.
-const WRITE_ONLY_FLAG_PREFIXES: PackedStringArray = ["beat."]
+const WRITE_ONLY_FLAG_PREFIXES: PackedStringArray = ["beat.", "fragment.", "melody."]
 const WRITE_ONLY_FLAGS := {
 	"house.mira_knocked": "marker that tests and autopilot scripts wait for; no reader in the game",
 	"elysia.rift_crossed":
