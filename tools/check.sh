@@ -24,13 +24,44 @@ ERROR_PATTERN='SCRIPT ERROR|Parse Error|Failed to load script|ERROR: '
 IGNORE_PATTERN='resources still in use at exit'
 has_errors() { grep -E "$ERROR_PATTERN" "$1" | grep -vEq "$IGNORE_PATTERN"; }
 
-step() { echo; echo "== $*"; }
+# Time per step (the check is a cost on every push; the table at the end shows where it goes).
+STEP_NAMES=()
+STEP_SECONDS=()
+STEP_NAME=""
+STEP_T0=$SECONDS
+end_step() {
+  if [ -n "$STEP_NAME" ]; then
+    STEP_NAMES+=("$STEP_NAME")
+    STEP_SECONDS+=($((SECONDS - STEP_T0)))
+  fi
+}
+step() {
+  end_step
+  STEP_NAME="$*"
+  STEP_T0=$SECONDS
+  echo; echo "== $*"
+}
+print_timings() {
+  end_step
+  STEP_NAME=""
+  echo
+  echo "== timings (seconds)"
+  local i
+  for i in "${!STEP_NAMES[@]}"; do
+    printf '%6d  %s\n' "${STEP_SECONDS[$i]}" "${STEP_NAMES[$i]}"
+  done
+  printf '%6d  total\n' "$SECONDS"
+}
+trap print_timings EXIT
 
 step "gdlint (${#GD_FILES[@]} files)"
 "$GDLINT" "${GD_FILES[@]}"
 
 step "gdformat --check"
 "$GDFORMAT" --check "${GD_FILES[@]}"
+
+step "adr index"
+python3 tools/adr_index.py --check
 
 # Nobody can listen in CI: the mix is measured (loudness per sound group, steps, soundscapes,
 # sound classes over the bed). Needs numpy, a dev-only dependency (requirements-art.txt).
@@ -122,7 +153,15 @@ grep -o '"beat":"[a-z_]*"' "$smoke_log" | cut -d'"' -f4 | paste -sd' ' -
 echo "smoke ok"
 
 step "unit tests (GUT)"
-tools/godot.sh --headless -s addons/gut/gut_cmdln.gd -gexit
+# Fixed frame rate: game time runs as fast as the machine can step it (a day of waits in the story
+# tests takes seconds, not minutes). GUT_FIXED_FPS=0 runs in real time, e.g. to hunt a timing bug.
+gut_fps="${GUT_FIXED_FPS:-60}"
+gut_args=()
+[ "$gut_fps" != "0" ] && gut_args+=(--fixed-fps "$gut_fps")
+gut_xml="$(mktemp)"
+tools/godot.sh --headless "${gut_args[@]}" -s addons/gut/gut_cmdln.gd -gjunit_xml_file="$gut_xml" -gexit
+python3 tools/gut_times.py "$gut_xml" 5 || true
+rm -f "$gut_xml"
 
 echo
 echo "check: all green"
