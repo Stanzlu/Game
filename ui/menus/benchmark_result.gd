@@ -2,7 +2,11 @@ class_name BenchmarkResult
 extends MenuLayer
 ## Shows the last performance test: one row per scene with average fps, the slow 5 % of
 ## frames, fps without VSync and a verdict in words, a hint when VSync holds the game at
-## 30 fps or under the screen's refresh rate, plus where the full report was saved.
+## 30 fps or under the screen's refresh rate (with a button that turns VSync off), plus where
+## the full report was saved.
+
+## The screen's refresh rate, to tell "VSync holds it back" from "too slow" (a test sets it).
+var refresh_hz := DisplayServer.screen_get_refresh_rate()
 
 
 func _ready() -> void:
@@ -23,7 +27,7 @@ func _build() -> void:
 		grid.add_child(head)
 	var capped := false
 	var held := false
-	var hz := DisplayServer.screen_get_refresh_rate()
+	var hz := refresh_hz
 	for row: Dictionary in BenchmarkRunner.last_rows:
 		var s: Dictionary = row["stats"]
 		var raw: Dictionary = row.get("raw", {})
@@ -46,6 +50,13 @@ func _build() -> void:
 		list.add_info(tr("BENCH_CAPPED_HINT"))
 	if held:
 		list.add_info(tr("BENCH_VSYNC_HINT"))
+		list.add_action("BENCH_VSYNC_OFF", _turn_vsync_off)
 	list.add_info(tr("BENCH_SAVED") % BenchmarkRunner.report_path(true))
 	list.add_action("OPTION_OK", close)
 	hint.text = tr("BENCH_HINT")
+
+
+## The remedy the hint names, one press away: the engine paces the frames itself afterwards.
+func _turn_vsync_off() -> void:
+	Settings.set_value("display.vsync", false)
+	close()

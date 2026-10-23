@@ -89,3 +89,19 @@ func _sign() -> String:
 	while line != null:
 		line = await DialogueManager.get_next_dialogue_line(SliceAntreiber.DIALOGUE, line.next_id)
 	return text
+
+
+func test_the_shed_follows_the_walker_only_while_the_goal_recedes() -> void:
+	var scene: SliceAntreiber = WEG.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var before := scene.flag.global_position
+	scene.player.teleport(scene.player.global_position + Vector2(300, 0))
+	await wait_physics_frames(40)
+	assert_gt(scene.flag.global_position.x, before.x + 100.0, "the encounter drags the goal along")
+	# the performance test's stage: the bot walks both ways, the shed stands
+	scene.goal_recedes = false
+	var parked := scene.flag.global_position
+	scene.player.teleport(scene.player.global_position + Vector2(-300, 0))
+	await wait_physics_frames(40)
+	assert_eq(scene.flag.global_position, parked)

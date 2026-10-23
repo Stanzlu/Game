@@ -70,6 +70,7 @@ func run() -> void:
 		get_tree().paused = false
 		get_tree().change_scene_to_file(SceneRegistry.path(key))
 		await _wait(settle_seconds)
+		_freeze_story()
 		_measure_viewports()
 		_stats[key] = await _measure(measure_seconds)
 		# the same scene without VSync and frame cap: what the machine could do
@@ -127,6 +128,14 @@ func _measure(seconds: float) -> FrameStats:
 	await _walk(seconds)
 	_measuring = null
 	return stats
+
+
+## The measured scene is a fixed stage: the path's goal (the woodshed) stays where it is
+## instead of following the walking bot (playtest 23.10.).
+func _freeze_story() -> void:
+	var scene := get_tree().current_scene
+	if scene != null and &"goal_recedes" in scene:
+		scene.set(&"goal_recedes", false)
 
 
 ## Turns on render time measurement for the window and the scene's world viewport.
