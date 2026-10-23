@@ -157,7 +157,12 @@ static func elysia_stage_for(playtime: float, has_flag: Callable) -> int:
 	for i in ELYSIA_STAGES.size():
 		var entry := ELYSIA_STAGES[i]
 		var flag := str(entry["flag"])
-		if playtime >= float(entry["after"]) or (not flag.is_empty() and has_flag.call(flag)):
+		# the stage flag of the ElysiaDirector (elysia.loops_<n>) is the same fact, set once
+		if (
+			playtime >= float(entry["after"])
+			or (not flag.is_empty() and has_flag.call(flag))
+			or (i > 0 and bool(has_flag.call(ElysiaDirector.stage_flag(i))))
+		):
 			stage = i
 	return stage
 

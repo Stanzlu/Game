@@ -609,6 +609,16 @@
    "meaning": "Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen."
   },
   {
+   "flag": "elysia.loops_1",
+   "axis": "Elysia",
+   "meaning": "Elysias Musik-Schleife ist nur noch halb so lang (Truhe offen oder fünf Minuten; ElysiaDirector)."
+  },
+  {
+   "flag": "elysia.loops_2",
+   "axis": "Elysia",
+   "meaning": "Nur noch ein Viertel (Stein genommen oder zehn Minuten; ElysiaDirector)."
+  },
+  {
    "flag": "elysia.loops",
    "axis": "Elysia",
    "meaning": "Die Schleife ist hörbar geworden (wiederholte Sätze)."

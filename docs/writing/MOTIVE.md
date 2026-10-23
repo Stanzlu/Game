@@ -69,8 +69,10 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.soup_served` | Beschützer | `elysia.dialogue` | `elysia.dialogue`, `haus.dialogue` | Der Gastwirt hat die Suppe serviert (Betäuber). |
 | `elysia.soup_tasteless` | Beschützer | `elysia.dialogue` | `tal.dialogue` | Die Spielerin hat gemerkt, dass die Suppe nach nichts schmeckt. |
 | `elysia.host_warned` | Beschützer | `elysia.dialogue` | `haus.dialogue` | Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen. |
-| `elysia.loops` | Elysia | `elysia.txt`, `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
-| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Der Riss ist offen. |
+| `elysia.loops_1` | Elysia | – | – | Elysias Musik-Schleife ist nur noch halb so lang (Truhe offen oder fünf Minuten; ElysiaDirector). |
+| `elysia.loops_2` | Elysia | – | – | Nur noch ein Viertel (Stein genommen oder zehn Minuten; ElysiaDirector). |
+| `elysia.loops` | Elysia | `elysia.txt` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
+| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
 | `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `tal.dialogue`, `tal.txt`, `world_state.gd` | Mira kennengelernt (noch als „Die Frau“). |
