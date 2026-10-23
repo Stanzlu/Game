@@ -43,6 +43,7 @@ func _build() -> void:
 	list.add_setting("text.large", "SETTINGS_TEXT_LARGE")
 	list.add_header("SETTINGS_CONTROLS")
 	list.add_setting("controls.sprint_toggle", "PAUSE_SPRINT", ["SPRINT_HOLD", "SPRINT_TOGGLE"])
+	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_header("SETTINGS_DISPLAY")
 	list.add_setting("display.fullscreen", "SETTINGS_FULLSCREEN")
 	list.add_setting("display.vsync", "SETTINGS_VSYNC")
@@ -71,7 +72,6 @@ func _build() -> void:
 			"controls.eight_directions", "PAUSE_DIRECTIONS", ["DIRECTIONS_FREE", "DIRECTIONS_EIGHT"]
 		)
 		list.add_setting("debug.overlay", "PAUSE_OVERLAY")
-	list.add_action("SETTINGS_SHOW_CONTROLS", _show_controls)
 	list.add_action("SETTINGS_RESET", _reset)
 	list.add_action("MENU_BACK", close)
 	hint.text = tr("SETTINGS_HINT")
