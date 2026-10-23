@@ -402,7 +402,7 @@ func _capture_hint() -> String:
 	var cancel := InputDevice.key_label(KEY_ESCAPE)
 	if InputDevice.kind == InputDevice.Kind.GAMEPAD:
 		var start := InputDevice.button_label(JOY_BUTTON_START, InputDevice.style, true)
-		return tr("BIND_CAPTURE_PAD") % [_action_name(_target_action), start]
+		return tr("BIND_CAPTURE_PAD") % [_action_name(_target_action), start, _clear_label()]
 	if _target_device == InputBindings.Device.GAMEPAD and Input.get_connected_joypads().is_empty():
 		return tr("BIND_NO_PAD") % cancel
 	return tr("BIND_CAPTURE_KEYS") % [_action_name(_target_action), cancel, _clear_label()]

@@ -22,7 +22,7 @@ enum Kind {
 	EVENT,
 	## Esc or pad Start: leave the capture.
 	CANCEL,
-	## Delete: empty the cell.
+	## Delete or pad Y: empty the cell (the same two that do it on a row that is not capturing).
 	CLEAR,
 	## A stick was pushed (they cannot be bound): tell the player, keep capturing.
 	STICK,
@@ -147,6 +147,8 @@ func _feed_button(button: InputEventJoypadButton) -> Outcome:
 		return _outcome(Kind.CANCEL)
 	if armed_in > 0.0:
 		return _outcome(Kind.NONE)
+	if button.button_index == JOY_BUTTON_Y:
+		return _outcome(Kind.CLEAR)
 	var data := BindingCodec.encode(button)
 	if data.is_empty():
 		return _outcome(Kind.INVALID)

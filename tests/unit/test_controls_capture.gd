@@ -61,7 +61,7 @@ func test_a_pad_cell_asks_for_a_button() -> void:
 	menu._input(Helpers.key(KEY_ESCAPE))
 	InputDevice.set_kind(InputDevice.Kind.GAMEPAD)
 	Helpers.capture(menu, &"sprint", PAD, 0)
-	assert_eq(menu.hint.text, tr("BIND_CAPTURE_PAD") % [_name(&"sprint"), "Start"])
+	assert_eq(menu.hint.text, tr("BIND_CAPTURE_PAD") % [_name(&"sprint"), "Start", "Y"])
 	menu._input(Helpers.pad_button(JOY_BUTTON_START))
 
 

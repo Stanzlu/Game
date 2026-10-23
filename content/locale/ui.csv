@@ -264,7 +264,7 @@ BIND_PRESS_KEY,Drücke die neue Taste
 BIND_PRESS_PAD,Drücke den neuen Knopf
 BIND_HINT,%s ändert · Links/Rechts wählt das Feld · %s löscht · %s zurück
 BIND_CAPTURE_KEYS,Für »%s« · %s bricht ab · %s löscht
-BIND_CAPTURE_PAD,Für »%s« · %s bricht ab
+BIND_CAPTURE_PAD,Für »%s« · %s bricht ab · %s löscht
 BIND_NO_PAD,Kein Controller gefunden · %s bricht ab
 BIND_CLEAR_MAC,Fn+Löschen
 BIND_DONE,»%s« liegt jetzt auf %s.

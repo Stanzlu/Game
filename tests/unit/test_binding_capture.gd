@@ -68,6 +68,8 @@ func test_esc_cancels_in_both_modes_and_delete_clears() -> void:
 		var capture := _capture(device)
 		assert_eq(_kind(capture, _key(KEY_ESCAPE)), KIND.CANCEL)
 		assert_eq(_kind(capture, _key(KEY_DELETE)), KIND.CLEAR)
+		assert_eq(_kind(capture, _button(JOY_BUTTON_Y)), KIND.CLEAR, "Y is the pad's Delete")
+		assert_eq(_kind(capture, _button(JOY_BUTTON_Y, false)), KIND.NONE, "the release")
 		assert_eq(_kind(capture, _button(JOY_BUTTON_START)), KIND.CANCEL, "Start is the pad's Esc")
 		assert_eq(_kind(capture, _key(KEY_ESCAPE, false)), KIND.NONE, "the release")
 	var by_name := InputEventKey.new()
@@ -219,6 +221,7 @@ func test_presses_are_ignored_while_the_capture_is_arming() -> void:
 func test_pad_presses_are_ignored_while_arming_but_start_leaves() -> void:
 	var capture := _capture(PAD, true)
 	assert_eq(_kind(capture, _button(JOY_BUTTON_A)), KIND.NONE, "A started the capture")
+	assert_eq(_kind(capture, _button(JOY_BUTTON_Y)), KIND.NONE, "Y waits like Delete does")
 	assert_eq(_kind(capture, _button(JOY_BUTTON_START)), KIND.CANCEL)
 	capture.tick(BindingCapture.ARM_SECONDS)
 	assert_eq(_kind(capture, _button(JOY_BUTTON_A)), KIND.EVENT)

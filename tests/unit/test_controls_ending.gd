@@ -76,3 +76,20 @@ func test_a_text_size_change_ends_a_capture() -> void:
 	await wait_physics_frames(4)
 	assert_false(menu.is_capturing(), "the page is built anew, nothing may wait on the old rows")
 	assert_true(menu.is_open())
+
+
+func test_pad_y_clears_in_a_pad_capture_like_delete_on_the_keyboard() -> void:
+	InputDevice.set_kind(InputDevice.Kind.GAMEPAD)
+	var menu := await _open()
+	assert_eq(Helpers.slots(&"sprint", PAD), ["b%d" % JOY_BUTTON_X, "a5+"])
+	Helpers.capture(menu, &"sprint", PAD, 1)
+	menu._input(Helpers.pad_button(JOY_BUTTON_Y))
+	assert_eq(Helpers.slots(&"sprint", PAD), ["b%d" % JOY_BUTTON_X], "the trigger is gone")
+	assert_false(menu.is_capturing())
+	assert_eq(menu.hint.text, tr("BIND_CLEARED") % ["RT", _name(&"sprint")])
+	# the only button of an action stays, and the capture goes on like after any refusal
+	Helpers.capture(menu, &"sprint", PAD, 0)
+	menu._input(Helpers.pad_button(JOY_BUTTON_Y))
+	assert_true(menu.is_capturing())
+	assert_eq(menu.hint.text, tr("BIND_LAST_PAD") % _name(&"sprint"))
+	menu._input(Helpers.pad_button(JOY_BUTTON_START))
