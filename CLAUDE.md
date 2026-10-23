@@ -100,10 +100,11 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 - Ein Branch und ein Pull Request pro Phase, kleine thematische Commits.
 - Nach jeder Phase: Ergebnis, Tests, offene Probleme, Entscheidungen, nächster Schritt.
 - Commit-Nachricht mit `[export]` löst in CI Windows-/macOS-Builds aus.
-- CI: Der GitHub-Workflow `CI` (`.github/workflows/ci.yml`) ist normalerweise abgeschaltet (ADR-009, Budget) und wird
-  für Release-Entwürfe eingeschaltet (manueller Lauf mit „release“: Prüfung, Exports, Entwurf unter Releases). Die
-  tägliche Prüfung ist `tools/check.sh` (lokal, in Cloud-Sitzungen und über `local-ci`); sie schreibt am Ende die
-  Zeit je Schritt. `PASS_2.VERSUCH` bei `local-ci` heißt: erster Versuch rot, zweiter grün (kein sauberes Grün).
+- CI: Der GitHub-Workflow `CI` (`.github/workflows/ci.yml`, ADR-009) führt bei jedem Push `tools/check.sh` aus (Stand 23.10.
+  läuft er, Ergebnis als Check-Run am Pull Request); Exporte nur auf `main`, bei `[export]`, manuell oder auf einem Tag, ein
+  manueller Lauf mit „release“ legt den Release-Entwurf an. Ist der Workflow abgeschaltet, ersetzt ihn `local-ci`
+  (`local-ci status`, `local-ci run game <branch|sha>`). `PASS_2.VERSUCH` heißt: erster Versuch rot, zweiter grün (kein
+  sauberes Grün). `check.sh` schreibt am Ende die Zeit je Schritt.
 
 ## Cloud-Umgebung
 - Ein SessionStart-Hook installiert Godot 4.7.2 automatisch.

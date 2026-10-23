@@ -4,8 +4,7 @@
 # not on every push. A version tag (v*) or a manual run with "release" ticked also
 # creates a draft playtest release (ADR-044), which does not count towards the
 # artifact storage.
-# The daily check is tools/check.sh (local, cloud sessions, local-ci); this workflow is switched on
-# for release drafts only.
+# The check itself is tools/check.sh, the same command as locally and in cloud sessions.
 name: CI
 
 # Push runs also report their status on pull requests, so no separate PR trigger.

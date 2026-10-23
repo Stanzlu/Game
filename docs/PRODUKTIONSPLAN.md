@@ -290,7 +290,7 @@ kurz davor.
 | T7 | **Baker lokal:** eigener Zufallsstrom je Durchgang, Blöcke mit Rand, Vergleichsbild alt/neu; vorher `git gc` messen (die 108 MB sind unverpackt) und gebackene Bilder nur beim Einfrieren einer Region committen | S Spike, L Umsetzung | vor der ersten M-Karte |
 | T8 | **Autopilot v2:** relative Zeiten, `until_flag`, `goto_marker`, Start aus Spielstand, ein Skript je Akt | M | vor dem Akt-I-Durchlauf |
 | T9 | **Zustandsmodell je Akt, wenn er es braucht:** Haus-Zustand, Besucher, Garten, Werte, Beschützer, Erscheinungsbild; `world_state.gd` nach Bereichen teilen; Schema 3 einmal mit Migrationstest | M je Bereich | mit dem Akt |
-| T10 | **Doku und CI:** `.github/workflows/ci.yml` angleichen oder entfernen, `local-ci` beschreiben, alte Testzahlen korrigieren, eine Kurzfassung der Regeln vor `DECISIONS.md` | S | P6.1 · **erledigt**: Workflow bleibt für Release-Entwürfe (Kopfzeile erklärt es), `CLAUDE.md` und `GATE_REPORT.md` aktuell, ADR-Index oben in `DECISIONS.md` (`tools/adr_index.py`, Schritt in `check.sh`) |
+| T10 | **Doku und CI:** `.github/workflows/ci.yml` angleichen oder entfernen, `local-ci` beschreiben, alte Testzahlen korrigieren, eine Kurzfassung der Regeln vor `DECISIONS.md` | S | P6.1 · **erledigt**: Workflow bleibt (prüft jeden Push mit `check.sh`, ADR-009), `CLAUDE.md` und `GATE_REPORT.md` aktuell, ADR-Index oben in `DECISIONS.md` (`tools/adr_index.py`, Schritt in `check.sh`) |
 | T11 | **Kalibrierung:** Modell aus Wörtern mal Textgeschwindigkeit plus Wegen; dein Durchlauf-Log nur, wenn du magst | S | P6.6 |
 
 **Bewusst vertagt, mit Auslöser** (`OFFENE_PUNKTE.md`, Abschnitt 3): Licht (12 Lichtquellen im Wald, Lampen auf
