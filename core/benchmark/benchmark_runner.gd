@@ -10,8 +10,9 @@ extends Node
 ## pause the measured scenes. `--quit-after-benchmark` ends the program after the report
 ## (tools/check.sh).
 
-## Elysia and the night forest from the look prototype, the valley, house and path of the slice.
-const SCENES: PackedStringArray = ["look_elysia", "tal", "haus", "weg", "look_wald"]
+## Elysia and the night forest from the look prototype, the valley, house and path of the slice
+## (SceneRegistry.BENCHMARK; new Act I maps join the list there).
+const SCENES: PackedStringArray = SceneRegistry.BENCHMARK
 const REPORT_NAME := "benchmark.txt"
 const VSYNC_NAMES := {
 	DisplayServer.VSYNC_DISABLED: "aus",

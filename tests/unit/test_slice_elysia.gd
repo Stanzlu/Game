@@ -208,11 +208,11 @@ func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
-	WorldState.state.playtime_seconds = ElysiaScene.LOOPS_AFTER + 1.0
+	WorldState.state.playtime_seconds = ElysiaDirector.LOOPS_AFTER + 1.0
 	await wait_process_frames(3)
 	assert_true(WorldState.has_flag("elysia.loops"))
 	assert_eq(get_tree().get_nodes_in_group(&"child_guide").size(), 1, "the child appears")
-	WorldState.state.playtime_seconds += ElysiaScene.RIFT_AFTER_LOOPS + 1.0
+	WorldState.state.playtime_seconds += ElysiaDirector.RIFT_AFTER_LOOPS + 1.0
 	await wait_process_frames(3)
 	assert_true(WorldState.has_flag("elysia.rift_open"), "nobody gets stuck in Elysia")
 
@@ -271,7 +271,7 @@ func test_the_rift_opens_in_time_even_after_loading() -> void:
 	WorldState.set_flag("elysia.woke")
 	WorldState.set_flag("elysia.loops")
 	WorldState.state.playtime_seconds = (
-		ElysiaScene.LOOPS_AFTER + ElysiaScene.RIFT_AFTER_LOOPS + 1.0
+		ElysiaDirector.LOOPS_AFTER + ElysiaDirector.RIFT_AFTER_LOOPS + 1.0
 	)
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)

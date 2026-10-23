@@ -8,7 +8,8 @@ binary="${1:-build/linux/REAL.x86_64}"
 fail() { echo "smoke_export: $*" >&2; exit 1; }
 
 # Boots the menu and each start target; every run must reach its ready line cleanly.
-for target in "" sandbox antreiber look_elysia look_tal look_wald elysia tal haus weg; do
+# (the scene list lives in core/scene_registry.gd, SMOKE)
+for target in "" $(python3 "$(dirname "${BASH_SOURCE[0]}")/scene_keys.py" smoke); do
   log="$(mktemp)"
   args=(--headless --quit-after 240 -- --log-debug --profile=smoke)
   [ -n "$target" ] && args+=("--start=$target")

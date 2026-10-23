@@ -3,6 +3,7 @@ import os
 import tempfile
 import unittest
 
+import calibrate
 import dialogue
 import id_lock
 import lint
@@ -273,6 +274,56 @@ class MotifTests(unittest.TestCase):
             f.write("old")
         found = motifs.problems(self.DATA, {"a_1": "Hm."}, self.SITES, folder, {}, output)
         self.assertTrue(any("out of date" in m for _, m in found))
+
+
+class CalibrationTests(unittest.TestCase):
+    def test_the_text_speeds_come_from_the_game(self):
+        self.assertEqual(calibrate.text_speeds(), [0.045, 0.025, 0.012, 0.0])
+
+    def test_reading_scales_with_the_seen_share_and_the_speed(self):
+        slow = calibrate.reading_seconds(100, 4000, 0.045, seen=0.5, pause=1.0)
+        fast = calibrate.reading_seconds(100, 4000, 0.012, seen=0.5, pause=1.0)
+        self.assertAlmostEqual(slow, 0.5 * (4000 * 0.045 + 100))
+        self.assertGreater(slow, fast)
+
+    def test_a_segment_is_the_way_times_the_factor_plus_the_reading(self):
+        minutes = calibrate.estimate(600, 0, 0, 0.025, wander=2.0)
+        self.assertAlmostEqual(minutes, 20.0)
+        with_text = calibrate.estimate(600, 100, 4000, 0.025, wander=2.0, seen=1.0, pause=1.0)
+        self.assertAlmostEqual(with_text, 20.0 + (4000 * 0.025 + 100) / 60.0)
+
+    def test_the_slice_estimate_has_both_worlds_and_slower_text_takes_longer(self):
+        slow = calibrate.slice_estimate(0)
+        fast = calibrate.slice_estimate(2)
+        self.assertAlmostEqual(slow["total"], slow["elysia"] + slow["real"])
+        self.assertGreater(slow["total"], fast["total"])
+        self.assertTrue(10.0 < calibrate.slice_estimate(1)["total"] < 45.0)
+
+    def test_the_baseline_is_the_autopilot_run(self):
+        floor = calibrate.baseline()
+        self.assertGreater(floor["real"], floor["elysia"])
+        self.assertIn("rift_found", floor["beats"])
+        self.assertEqual(floor["elysia"] + floor["real"], 372)
+
+    def test_a_log_is_read_and_fits_the_factor_back(self):
+        log = '[1s] INFO  WORLD_STATE: beat {"beat":"elysia_start","minute":0.0,"seconds":0}\n'
+        log += '[2s] INFO  WORLD_STATE: beat {"beat":"ending","minute":20.0,"seconds":1200}\n'
+        beats = calibrate.parse_log(log)
+        self.assertEqual(beats, [("elysia_start", 0), ("ending", 1200)])
+        factor = calibrate.fit(beats, 1)
+        text = calibrate.story_text()
+        reading = sum(calibrate.reading_seconds(text[w][0], text[w][1], 0.025) for w in text)
+        walk = calibrate.baseline()["elysia"] + calibrate.baseline()["real"]
+        self.assertAlmostEqual(factor * walk + reading, 1200, delta=1)
+
+    def test_a_log_without_beats_is_refused(self):
+        with self.assertRaises(ValueError):
+            calibrate.fit([], 1)
+
+    def test_per_beat_compares_with_the_autopilot(self):
+        rows = calibrate.per_beat([("fire", 900), ("not_a_beat", 5)])
+        self.assertEqual([r[0] for r in rows], ["fire"])
+        self.assertEqual(rows[0][1:], (900, calibrate.baseline()["beats"]["fire"]))
 
 
 class ProjectTests(unittest.TestCase):

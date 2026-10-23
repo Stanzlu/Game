@@ -42,6 +42,8 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
 | `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen (schreibt den Stempel) |
 | `python3 tools/art/map_stamp.py` | prüft, ob alle gebackenen Böden zu ihren Karten passen |
+| `python3 tools/art/map_overview.py content/maps/<karte>.txt` | Übersichtsbild einer Karte (Boden mit allen Platzierungen) nach `build/map_overview`; die Karten prüft `MapLint` in GUT |
+| `python3 tools/writing/calibrate.py` | Spielzeit des Slice bei jedem Tempo; `--segment WÖRTER ZEILEN WEG_MIN` für ein geplantes Segment (`docs/KALIBRIERUNG.md`) |
 | `python3 tools/writing/lint.py` | Story-Text: Vokabel- und Zahlen-Lint, Status-Tags, ID-Sperre (Schritt „writing lint“ in `check.sh`) |
 | `python3 tools/writing/motifs.py` | Motivbuch und Konsequenzen-Register (`docs/writing/`): Zitate und Flags prüfen, `--write` erzeugt `MOTIVE.md` |
 | `python3 tools/writing/report.py` | Zeilen und Wörter je Sprecher, Entwurfsstand je Datei, ungenutzte Cues |

@@ -1,0 +1,74 @@
+{
+ "_comment": "Beat seconds of the full-slice autopilot (tools/autopilot/slice_full.json, instant text, fixed 30 fps, v0.8.4): the time the way, the waits and the scenes take without reading and without dawdling. The floor of the calibration model (tools/writing/calibrate.py).",
+ "end_seconds": 372,
+ "beats": [
+  {
+   "beat": "elysia_start",
+   "seconds": 0
+  },
+  {
+   "beat": "butterflies_caught",
+   "seconds": 26
+  },
+  {
+   "beat": "fountain",
+   "seconds": 36
+  },
+  {
+   "beat": "irritation",
+   "seconds": 40
+  },
+  {
+   "beat": "mirror",
+   "seconds": 59
+  },
+  {
+   "beat": "child",
+   "seconds": 67
+  },
+  {
+   "beat": "rift_found",
+   "seconds": 91
+  },
+  {
+   "beat": "valley_arrival",
+   "seconds": 102
+  },
+  {
+   "beat": "first_no",
+   "seconds": 116
+  },
+  {
+   "beat": "crossed",
+   "seconds": 147
+  },
+  {
+   "beat": "house_entered",
+   "seconds": 165
+  },
+  {
+   "beat": "shed_path",
+   "seconds": 195
+  },
+  {
+   "beat": "wood",
+   "seconds": 215
+  },
+  {
+   "beat": "fire",
+   "seconds": 236
+  },
+  {
+   "beat": "mira_visit",
+   "seconds": 261
+  },
+  {
+   "beat": "evening",
+   "seconds": 329
+  },
+  {
+   "beat": "ending",
+   "seconds": 353
+  }
+ ]
+}

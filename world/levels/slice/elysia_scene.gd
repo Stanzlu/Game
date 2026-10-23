@@ -15,8 +15,6 @@ const BUTTERFLY_QUEST := "side_elysia_butterflies"
 ## miniquest short. Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its
 ## own (with it the child appears), and the rift opens a while later even if the child was
 ## never followed.
-const LOOPS_AFTER := 720.0
-const RIFT_AFTER_LOOPS := 150.0
 ## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
 ## shrinks to nothing (Game Bible §8, §10).
 const FOUNTAIN_SOLVES_AFTER := 3.0
@@ -35,18 +33,18 @@ const GREETER_CUE := "favor"
 ## The rift opening on its own is far away: a soft rumble and a little shake, so it is noticed.
 const RIFT_OPENS_DB := -6.0
 
-var _loops_time := -1.0
+var director: ElysiaDirector
 
 
 func _ready() -> void:
 	super()
+	director = ElysiaDirector.attach(self)
+	director.rift_opened.connect(_announce_rift)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.objective_changed.connect(_on_objective_changed)
 	WorldState.quest_changed.connect(_on_quest_changed)
 	if not WorldState.has_flag("elysia.woke"):
 		_wake.call_deferred()
-	elif WorldState.has_flag("elysia.loops"):
-		_loops_time = WorldState.state.playtime_seconds
 	if WorldState.is_quest_active("side_elysia_fountain"):
 		# loaded while the fountain was about to fix itself
 		_fountain_solves_itself()
@@ -107,22 +105,6 @@ func _greeter() -> NpcWalker:
 	return nearest
 
 
-func _process(_delta: float) -> void:
-	var t := WorldState.state.playtime_seconds
-	if not WorldState.has_flag("elysia.loops") and t > LOOPS_AFTER:
-		WorldState.set_flag("elysia.loops")
-	# the loop start is not saved: after a load the wait starts again, but never past the
-	# latest possible start of the loops
-	if (
-		_loops_time >= 0.0
-		and not WorldState.has_flag("elysia.rift_open")
-		and (t - _loops_time > RIFT_AFTER_LOOPS or t > LOOPS_AFTER + RIFT_AFTER_LOOPS)
-	):
-		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
-		WorldState.set_flag("elysia.rift_open")
-		_announce_rift()
-
-
 ## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
 ## and its caption (whatever the captions setting says), so it is not a silent change on the map.
 func _announce_rift() -> void:
@@ -155,7 +137,7 @@ func _start_loops_when_ready() -> void:
 		and WorldState.is_quest_done("side_elysia_butterflies")
 	):
 		Beat.mark("irritation")
-		WorldState.set_flag("elysia.loops")
+		director.begin_loops()
 
 
 ## Somebody else fixed it, for you, before you got there.
@@ -191,8 +173,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	match id:
 		"elysia.chest_tree_opened":
 			_start_loops_when_ready()
-		"elysia.loops":
-			_loops_time = WorldState.state.playtime_seconds
 		"elysia.mirror_seen":
 			Beat.mark("mirror")
 		"elysia.stone_taken":

@@ -89,6 +89,10 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   Die Erfassung ist der eine bewusste `_input`-Verbraucher der UI (`ControlsMenu`, sie ruft `InputDevice.observe` selbst
   auf). Seiten, die ein Menü öffnet, hängt `MenuLayer.stack` an; folgt das Menü der Welt nicht (Startmenü), erben sie
   dessen Theme.
+- Karten und Elysia (ADR-055): `MapLint` prüft in GUT jede Karte (Spawn, Erreichbarkeit, feste Zellen, Spiegelsymmetrie;
+  `tools/art/map_overview.py content/maps/<karte>.txt` zeichnet sie). Elysia-Szenen hängen `ElysiaDirector.attach(self)` an (Uhr und Stufen-Flags
+  `elysia.loops_1`/`_2`/`loops`), Sammelstücke gehen über `Collection`, Szenenlisten für Smoke und Leistungstest stehen in
+  `SceneRegistry.SMOKE`/`BENCHMARK`. Dauer eines Segments rechnet `tools/writing/calibrate.py` (`docs/KALIBRIERUNG.md`).
 - `tools/art/layout_slice_maps.py tal --write` löscht Handänderungen in `content/maps/tal.txt` (Buchstabe `6`,
   `unless` von `t`): vorher vergleichen.
 
