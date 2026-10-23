@@ -26,6 +26,8 @@ static var last_report := ""
 ## Per scene: {"scene", "stats" (FrameStats.summary())}, for the result screen.
 static var last_rows: Array[Dictionary] = []
 static var running := false
+## Whether VSync was on while the last run measured (the verdict "VSync bremst" needs it).
+static var last_vsync_on := true
 ## Set when a run finished; the start menu shows the result once and clears it.
 static var result_pending := false
 
@@ -68,6 +70,7 @@ func is_open() -> bool:
 
 func run() -> void:
 	running = true
+	last_vsync_on = Settings.get_bool("display.vsync")
 	SaveSystem.block(&"benchmark")
 	Log.info(Log.Category.BOOT, "benchmark start", {"seconds": measure_seconds})
 	for key in SCENES:
@@ -225,6 +228,8 @@ func report() -> String:
 	)
 	var screen := DisplayServer.screen_get_size()
 	var hz := DisplayServer.screen_get_refresh_rate()
+	# with VSync off the engine paces the frames itself: nothing for VSync to blame
+	var verdict_hz := hz if last_vsync_on else 0.0
 	(
 		lines
 		. append(
@@ -262,7 +267,7 @@ func report() -> String:
 		var s := _stats[key].summary()
 		var raw := _raw_stats[key].summary()
 		capped = capped or FrameStats.capped_at_30(s, raw)
-		held = held or FrameStats.held_by_vsync(s, raw, hz)
+		held = held or FrameStats.held_by_vsync(s, raw, verdict_hz)
 		(
 			lines
 			. append(
@@ -280,7 +285,7 @@ func report() -> String:
 						raw["avg_fps"],
 						raw["cpu_ms"],
 						raw["gpu_ms"],
-						TranslationServer.translate(FrameStats.verdict(s, raw, hz)),
+						TranslationServer.translate(FrameStats.verdict(s, raw, verdict_hz)),
 					]
 				)
 			)

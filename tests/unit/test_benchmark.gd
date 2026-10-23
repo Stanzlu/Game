@@ -172,3 +172,18 @@ func test_drawn_frames_are_told_from_loop_iterations() -> void:
 	assert_almost_eq(float(summary["drawn_fps"]), 36.0, 0.5)
 	assert_almost_eq(float(summary["cannot_draw_pct"]), 25.0, 0.01)
 	assert_eq(FrameStats.new().summary()["drawn_fps"], -1.0, "not recorded")
+
+
+func test_the_result_page_blames_vsync_only_when_it_was_on() -> void:
+	var held := {"avg_fps": 58.0, "p95_ms": 33.3}
+	BenchmarkRunner.last_rows = [{"scene": "tal", "stats": held, "raw": {"avg_fps": 474.0}}]
+	BenchmarkRunner.last_vsync_on = false
+	var page := BenchmarkResult.new()
+	page.refresh_hz = 120.0
+	add_child_autofree(page)
+	page.open()
+	await wait_process_frames(3)
+	for button: Button in page.find_children("*", "Button", true, false):
+		assert_ne(button.text, TranslationServer.translate("BENCH_VSYNC_OFF"), "VSync was off")
+	BenchmarkRunner.last_vsync_on = true
+	BenchmarkRunner.last_rows = []
