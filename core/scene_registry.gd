@@ -1,7 +1,8 @@
 class_name SceneRegistry
 extends RefCounted
 ## Stable scene keys for the start menu, `--start=<key>` and save files. A key that may be
-## stored in a save file is never renamed (docs/CONTENT_GUIDE.md, IDs).
+## stored in a save file is never removed (docs/CONTENT_GUIDE.md, IDs, ADR-052): when a scene is
+## renamed, the old key moves to `aliases` and keeps working everywhere.
 
 const SCENES := {
 	"elysia": "res://world/levels/slice/elysia.tscn",
@@ -18,17 +19,27 @@ const SCENES := {
 ## UI mode a scene starts in when it is opened from the prototype menu (new game).
 const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA, "elysia": GameState.UiMode.ELYSIA}
 
+## Renamed scenes: old key -> current key. Saves, doors, `--start=` and the start menu accept the
+## old key; saves are rewritten to the new one on load. Empty until the first rename; tests fill
+## it and put it back.
+static var aliases := {}
+
+
+## The current key for `key`: itself, or what an alias points to.
+static func resolve(key: String) -> String:
+	return aliases.get(key, key)
+
 
 static func start_mode(key: String) -> GameState.UiMode:
-	return START_MODES.get(key, GameState.UiMode.REAL)
+	return START_MODES.get(resolve(key), GameState.UiMode.REAL)
 
 
 static func has(key: String) -> bool:
-	return SCENES.has(key)
+	return SCENES.has(resolve(key))
 
 
 static func path(key: String) -> String:
-	return SCENES.get(key, "")
+	return SCENES.get(resolve(key), "")
 
 
 ## Key for a scene file, or "" for scenes that are not registered.
@@ -41,4 +52,4 @@ static func key_for_path(scene_path: String) -> String:
 
 ## Translation key of the place name shown in save slots.
 static func title_key(key: String) -> String:
-	return "PLACE_%s" % key.to_upper()
+	return "PLACE_%s" % resolve(key).to_upper()

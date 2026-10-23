@@ -47,7 +47,8 @@ func _process(delta: float) -> void:
 	if _wraps > 0 and _shown >= 1.0:
 		_wraps -= 1
 		_shown = 0.0
-		_flash = 1.0
+		# reduced flashing: the bar wraps without the white flare
+		_flash = 0.0 if Settings.get_bool("display.reduce_flashing") else 1.0
 	_flash = maxf(_flash - delta * 3.0, 0.0)
 	queue_redraw()
 

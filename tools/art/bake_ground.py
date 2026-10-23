@@ -11,7 +11,6 @@ Everything is painted as (ramp, index) pairs first and turned into colors at the
 light and shadow always stay inside the hand-picked palettes of tools/art/pixelart.py.
 """
 import argparse
-import json
 import os
 import sys
 
@@ -19,14 +18,12 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pixelart as pa  # noqa: E402
+from mapfile import (DEFAULT_SEED, T, load_catalog, paint_of, parse_map,  # noqa: E402
+                     res_path, shadow_cells, write_stamp)
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-T = 16
 MATERIALS = ["void", "grass", "path", "mud", "puddle", "cobble", "water", "planks_v", "planks_h",
              "hedge", "cliff", "marble", "stairs", "fall", "field"]
 M = {name: i for i, name in enumerate(MATERIALS)}
-SURFACE_PAINT = {"grass": "grass", "dirt": "path", "stone": "cobble", "water": "water",
-                 "wood": "planks_h", "puddle": "puddle"}
 # Soft materials share one blur so their borders are comparable; (noise amplitude, bias).
 SOFT = {"grass": (0.30, 0.0), "path": (0.30, 0.03), "mud": (0.40, 0.0), "cobble": (0.08, 0.06),
         "water": (0.18, -0.04), "cliff": (0.10, 0.0), "void": (0.10, 0.0)}
@@ -43,50 +40,6 @@ TUFTS = [
     [(0, 0, 2), (1, 0, 1), (2, 0, -1)],
     [(0, 0, 1), (1, 0, 1), (0, 2, 1), (1, 1, 1), (2, 0, -1), (2, 1, -1)],
 ]
-
-
-# --------------------------------------------------------------------------- map parsing
-def res_path(path):
-    return os.path.join(ROOT, path[len("res://"):]) if path.startswith("res://") else path
-
-
-def parse_map(path):
-    """Mirror of world/map/map_data.gd: [meta], [legend] and [map] blocks, ';' comments."""
-    with open(os.path.join(ROOT, "content/maps/legend.json"), encoding="utf-8") as f:
-        legend = json.load(f)
-    symbols = dict(legend["symbols"])
-    meta, rows, section, saw_header = {}, [], "map", False
-    with open(path, encoding="utf-8") as f:
-        for raw in f.read().replace("\r", "").split("\n"):
-            s = raw.strip()
-            if s in ("[legend]", "[map]", "[meta]"):
-                section, saw_header = s[1:-1], True
-                continue
-            if s.startswith(";") and not (section == "map" and saw_header):
-                continue
-            if section in ("legend", "meta"):
-                if not s:
-                    continue
-                if section == "legend":
-                    # first character is the symbol (it may itself be '=')
-                    symbols[s[0]] = json.loads(s[1:].strip()[1:])
-                else:
-                    key, _, value = s.partition("=")
-                    meta[key.strip()] = json.loads(value)
-            elif s:
-                rows.append(raw.rstrip())
-    return meta, symbols, rows
-
-
-def paint_of(symbol, symbols):
-    d = symbols[symbol]
-    if "atlas" not in d:
-        d = symbols[d["ground"]]
-    if "paint" in d:
-        return d["paint"]
-    if d.get("solid") and d.get("surface") == "stone":
-        return "cliff"
-    return SURFACE_PAINT.get(d.get("surface", ""), "grass")
 
 
 # --------------------------------------------------------------------------- helpers
@@ -144,15 +97,7 @@ class Baker:
                 cells[y, x] = M[paint]
         self.cells = cells
         # decor placements whose catalog entry asks for a ground shadow
-        self.shadows = []
-        catalog_path = os.path.join(ROOT, "assets", "generated", "props", "catalog.json")
-        catalog = json.load(open(catalog_path, encoding="utf-8")) if os.path.exists(catalog_path) else {}
-        for y, row in enumerate(rows):
-            for x, c in enumerate(row):
-                sprite = symbols[c].get("params", {}).get("sprite")
-                entry = catalog.get(sprite, {}) if sprite else {}
-                if "shadow" in entry:
-                    self.shadows.append((y * T + T // 2, x * T + T // 2, entry["shadow"]))
+        self.shadows = shadow_cells(rows, symbols, load_catalog())
         self.ramps = []
         self.ramp_ids = {}
         for name in ("grass", "path", "mud", "stone", "water", "wood", "foliage", "cliff"):
@@ -982,7 +927,7 @@ def bake_treeline(baker):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("map")
-    ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--seed", type=int, default=DEFAULT_SEED)
     ap.add_argument("--preview-dir", help="also write <name>_preview.png (sky behind void) here")
     args = ap.parse_args()
     meta, symbols, rows = parse_map(args.map)
@@ -995,6 +940,7 @@ def main():
         pa.save_rgba(res_path(meta["water"]), water)
     if "treeline" in meta:
         pa.save_rgba(res_path(meta["treeline"]), bake_treeline(baker))
+    write_stamp(args.map, args.seed)
     print("baked %s -> %s (%dx%d)" % (args.map, meta["ground"], baker.w, baker.h))
     if args.preview_dir:
         from PIL import Image

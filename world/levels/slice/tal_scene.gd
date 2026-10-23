@@ -51,7 +51,7 @@ func _ready() -> void:
 		_antreiber_follows.call_deferred()
 	# a save from the moment Mira made room at her fire (the game closed during the last
 	# scene): the ending plays again instead of leaving the slice unfinishable
-	if WorldState.has_flag("valley.ending") and not WorldState.has_flag("slice.finished"):
+	if WorldState.has_flag("valley.ending") and not Chapter.reached("slice"):
 		_play_ending.call_deferred()
 
 
@@ -175,7 +175,7 @@ func _play_ending() -> void:
 	await cut.wait(MOUNTAIN_HOLD_SECONDS)
 	await cut.say(DIALOGUE, "ending_sea")
 	await cut.wait(SEA_HOLD_SECONDS)
-	WorldState.set_flag("slice.finished")
+	Chapter.mark("slice")
 	# the save remembers the ending (the start menu shows the Real title from now on)
 	SaveSystem.unblock(cut.key)
 	SaveSystem.request_autosave("slice_finished")

@@ -40,7 +40,8 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `python3 tools/placeholders/make_placeholders.py` | Grey-Box-Platzhalter neu erzeugen |
 | `.venv/bin/pip install -r requirements-art.txt` | numpy und Pillow für die Look-Generatoren |
 | `.venv/bin/python tools/art/make_sprites.py` | Look-Props und Katalog erzeugen (siehe `docs/ART_DIRECTION.md`) |
-| `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen |
+| `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen (schreibt den Stempel) |
+| `python3 tools/art/map_stamp.py` | prüft, ob alle gebackenen Böden zu ihren Karten passen |
 | `python3 tools/art/layout_slice_maps.py tal --write` | Layout der Slice-Karten (`tal`, `antreiber_tal`, `antreiber_tal_bench`) |
 | `.venv/bin/python tools/audio/make_slice_sfx.py` | Klänge des Slice (Tür, Klopfen, Bach, Feuer, Katze, Ziege) |
 | `.venv/bin/python tools/audio/check_levels.py` | Pegel der Klänge, Schritte, Orte und Klangklassen messen (Schritt „audio levels“ in `tools/check.sh`, braucht numpy aus `requirements-art.txt`) |

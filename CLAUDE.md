@@ -35,7 +35,8 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   in `AudioDirector.CAPTIONS` („Geräusche als Text“, ADR-046).
 - Karten sind Textdateien (`content/maps`, ADR-013); Platzhalter-Assets erzeugt `tools/placeholders`.
 - Look-Grafik ist prozedural (ADR-017, `docs/ART_DIRECTION.md`): `tools/art/make_sprites.py`, dann
-  `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`.
+  `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`. Der Bake schreibt
+  einen Stempel (`tools/art/map_stamps.json`); `check.sh` meldet Karten, die nach einer Änderung nicht neu gebacken sind (ADR-052).
 - Autopilot für reproduzierbare Aufnahmen: `tools/autopilot/*.json` (nur Debug; `tap` für Menüs/Dialoge).
 - Elysia ist spiegelsymmetrisch (`[meta] symmetry`, ADR-031); das Startbild heißt „Elysia“, bis ein Stand
   die Wirklichkeit erreicht, danach „Nach Elysia“ (ADR-030, ADR-035; REAL bleibt Projektname;
@@ -47,6 +48,11 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   ihrer `.tscn` (das Haus, ADR-045 Nachtrag); Tiefen-Bogen (Dunst, `Backdrop`) nur in der Wirklichkeit
   (ADR-043). Welt→UI über `GameView.world_to_ui`. Waldränder der Wirklichkeit aus Kronen, nie Raster; Baumgrenze
   vor dem Himmel als `[meta] treeline` (gebacken, mit Waldreihen in die Tiefe).
+- Querprüfung `StoryLint` (`core/content/story_lint.gd`, Test `test_story_lint`): Türziele und Spawn-Marker, Cues, Quest-Stufen
+  ohne Auslöser, gesetzte und nie gelesene Flags (Ausnahmen mit Begründung in `WRITE_ONLY_FLAGS`), doppelte Marken, Effekte ohne
+  Einstellung. Dafür Flags, Quest-IDs und Cues als Literale oder Konstanten schreiben, nicht aus Variablen bauen. Szenen-Schlüssel
+  werden nie entfernt (umbenennen über `SceneRegistry.aliases`), Spielstand-Schemas behalten ein eingefrorenes Beispiel
+  (`tests/fixtures/saves/v<N>_*.json`), Kapitel mit `Chapter.mark` (ADR-052).
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne

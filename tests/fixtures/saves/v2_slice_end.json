@@ -1,0 +1,168 @@
+{
+	"game_version": "0.8.4",
+	"saved_at": "2026-10-23T22:02:24Z",
+	"schema_version": 2,
+	"world_state": {
+		"day_preset": "abend",
+		"discovered": [],
+		"elysia": {
+			"gold": 7200,
+			"xp": 24600
+		},
+		"facets": {},
+		"flags": {
+			"beat.butterflies_caught": true,
+			"beat.child": true,
+			"beat.crossed": true,
+			"beat.elysia_start": true,
+			"beat.ending": true,
+			"beat.evening": true,
+			"beat.fire": true,
+			"beat.first_no": true,
+			"beat.fountain": true,
+			"beat.house_entered": true,
+			"beat.irritation": true,
+			"beat.mira_visit": true,
+			"beat.mirror": true,
+			"beat.rift_found": true,
+			"beat.shed_path": true,
+			"beat.valley_arrival": true,
+			"beat.wood": true,
+			"elysia.butterflies_asked": true,
+			"elysia.butterfly_first": true,
+			"elysia.butterfly_second": true,
+			"elysia.butterfly_third": true,
+			"elysia.chest_tree_opened": true,
+			"elysia.child_met": true,
+			"elysia.child_vanished": true,
+			"elysia.loops": true,
+			"elysia.mirror_seen": true,
+			"elysia.rift_crossed": true,
+			"elysia.rift_open": true,
+			"elysia.soup_served": true,
+			"elysia.woke": true,
+			"encounter.antreiber_resolved": true,
+			"house.antreiber_by_fire": true,
+			"house.cat_fed": true,
+			"house.fire_lit": true,
+			"house.mira_knocked": true,
+			"house.mira_left": true,
+			"house.mira_seated": true,
+			"house.mira_visited": true,
+			"house.rested": true,
+			"house.shelf_filled": true,
+			"house.spoon_found": true,
+			"slice.finished": true,
+			"valley.antreiber_rests": true,
+			"valley.arrived": true,
+			"valley.bridge_fixed": true,
+			"valley.crossed": true,
+			"valley.ending": true,
+			"valley.fell_in": true,
+			"valley.goat_loose": true,
+			"valley.goat_met": true,
+			"valley.goat_traded": true,
+			"valley.mira_met": true,
+			"valley.mountains_seen": true,
+			"valley.potato_taken": true,
+			"valley.wood_needed": true,
+			"valley.wood_taken": true
+		},
+		"house": {
+			"cat_name": "",
+			"curiosity_slots": {
+				"shelf_1": "curiosity_tiny_spoon"
+			},
+			"fire_lit": true
+		},
+		"inventory": {
+			"item_seed": 1,
+			"item_stone": 1
+		},
+		"player": {
+			"map": "tal",
+			"name": "Kai",
+			"preset": 0,
+			"x": 808.0,
+			"y": 330.0
+		},
+		"playtime_seconds": 372.533333333414,
+		"quests": {
+			"main_elysia_hero": {
+				"history": [
+					"greet",
+					"butterflies",
+					"reward",
+					"celebrated"
+				],
+				"objectives_done": [],
+				"stage": "celebrated"
+			},
+			"main_valley_shelter": {
+				"history": [
+					"cross",
+					"house",
+					"wood",
+					"fire",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_butterflies": {
+				"history": [
+					"catch",
+					"return",
+					"done"
+				],
+				"objectives_done": [
+					"first",
+					"second",
+					"third"
+				],
+				"stage": "done"
+			},
+			"side_elysia_fountain": {
+				"history": [
+					"check",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_valley_goat": {
+				"history": [
+					"find",
+					"trade",
+					"return",
+					"done"
+				],
+				"objectives_done": [
+					"goat",
+					"potato"
+				],
+				"stage": "done"
+			}
+		},
+		"relationships": {
+			"mira": {
+				"memories": [
+					"said_hello",
+					"asked_shelter",
+					"stones_warned",
+					"invited_in",
+					"said_elsewhere",
+					"said_name",
+					"praised_fish",
+					"asked_boot",
+					"told_goat_story",
+					"told_path",
+					"told_elysia_easy",
+					"asked_where_to"
+				],
+				"state": "familiar"
+			}
+		},
+		"ui_mode": "REAL"
+	}
+}

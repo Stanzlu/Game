@@ -135,7 +135,9 @@ func _process(delta: float) -> void:
 		_beam.modulate.a = 0.8 + 0.12 * sin(_time * 0.9) + 0.06 * sin(_time * 2.3)
 	if not _flicker:
 		return
-	var f := 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
+	# reduced flashing: the lamps burn steady
+	var steady := Settings.get_bool("display.reduce_flashing")
+	var f := 1.0 if steady else 1.0 + 0.07 * sin(_time * 13.0) + 0.05 * sin(_time * 7.3 + 1.0)
 	for i in lights.size():
 		lights[i].energy = _light_energy[i] * f * light_scale
 
