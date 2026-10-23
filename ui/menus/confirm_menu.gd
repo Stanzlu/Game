@@ -5,14 +5,19 @@ extends MenuLayer
 
 signal answered(yes: bool)
 
+## A page with long questions (the key layout) sets a wider panel before adding the menu to
+## the tree: the frame is built in _ready. 0 keeps the narrow default.
+var panel_width_override := 0
 var question_key := ""
 var yes_key := "OPTION_YES"
 var no_key := "OPTION_NO"
+## The question is shown as given (already formatted), not looked up as a translation key.
+var _literal := false
 
 
 func _ready() -> void:
 	title_key = ""
-	panel_width = 220
+	panel_width = panel_width_override if panel_width_override > 0 else 220
 	# above every menu it can be asked from
 	layer = 60
 	super()
@@ -20,7 +25,17 @@ func _ready() -> void:
 
 ## Opens the question; `answered` tells the result.
 func ask(question: String, yes := "OPTION_YES", no := "OPTION_NO") -> void:
+	_ask(question, false, yes, no)
+
+
+## The same question with a text that was formatted already (names of keys and actions in it).
+func ask_text(text: String, yes := "OPTION_YES", no := "OPTION_NO") -> void:
+	_ask(text, true, yes, no)
+
+
+func _ask(question: String, literal: bool, yes: String, no: String) -> void:
 	question_key = question
+	_literal = literal
 	yes_key = yes
 	no_key = no
 	open()
@@ -29,7 +44,7 @@ func ask(question: String, yes := "OPTION_YES", no := "OPTION_NO") -> void:
 
 func _build() -> void:
 	title.visible = false
-	list.add_info(tr(question_key))
+	list.add_info(question_key if _literal else tr(question_key))
 	list.add_action(yes_key, func() -> void: _answer(true))
 	list.add_action(no_key, func() -> void: _answer(false))
 	hint.text = ""
