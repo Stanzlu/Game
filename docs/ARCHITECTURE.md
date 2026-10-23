@@ -28,8 +28,8 @@ docs/        Dokumentation                                         ✅
 |------|-------|---------|--------|
 | `Log` | `core/log.gd` | strukturiertes Logging mit Kategorien und Levels; `--log-debug` in Release-Builds | ✅ |
 | `DialogueManager` | `addons/dialogue_manager/dialogue_manager.gd` | Dialog-Runtime | ✅ (Addon) |
-| `InputDevice` | `core/input_device.gd` | letztes Eingabegerät, Beschriftung von Actions (`labels_for_kind`: alle Belegungen), Hotplug (letztes Pad weg: zurück auf Tasten) | ✅ |
-| `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit, Eingabe-Overrides; Schreiben gesammelt je Frame (`request_save`, `flush`) | ✅ |
+| `InputDevice` | `core/input_device.gd` | letztes Eingabegerät, Beschriftung von Actions und Ereignissen (`label_for`, `labels_for_kind`, `data_label`, `move_label`; Tasten deutsch, Trigger und Knöpfe je Pad), `labels_changed` und `observe` (ADR-048), Hotplug (letztes Pad weg: zurück auf Tasten) | ✅ |
+| `Settings` | `core/settings.gd` | Einstellungen (JSON, ADR-018): Lautstärken, Text, Steuerung, Anzeige, Barrierefreiheit; `bindings` (`InputBindings`) hält die Tastenbelegung (ADR-048); Schreiben gesammelt je Frame (`request_save`, `flush`) | ✅ |
 | `WorldState` | `core/world_state.gd` | typisierter Spielzustand (`GameState`), einzige Schreibstelle (ADR-019) | ✅ |
 | `SaveSystem` | `core/save_system.gd` | JSON-Saves, Slots, Autosave, Sperren, Laden (ADR-021) | ✅ |
 | `AudioDirector` | `core/audio_director.gd` | Musik-Tracks mit Überblendung, Ducking (Dialog: Musik −7 dB, Soundscape und Bett −3 dB; Belohnungen: Musik −3 dB für 1,2 s), Rasten der Tal-Musik (`TRACK_REST`), Bandstopp, Ambience (ADR-023); Menü-, Spiel- und Stimmklänge `ui()`, `sfx()`, `voice()` (ADR-027) | ✅ |
@@ -51,7 +51,8 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 ├─ PauseMenu (MenuLayer 40)              Esc / Start
 │  ├─ SettingsMenu (50)
 │  ├─ SaveMenu (50)                      Speichern / Laden (Slot-Karten)
-│  ├─ ControlsMenu (55)                  Steuerung anzeigen (ScrollPage)
+│  ├─ ControlsMenu (55)                  Tastenbelegung (MenuLayer, ADR-048)
+│  │  └─ ControlsNotes (56)              Weitere Tasten (ScrollPage)
 │  └─ ConfirmLeave                       Rückfrage beim Verlassen ohne Speichern
 └─ DebugPanel (MenuLayer 60)             F4, nur Debug-Builds
 ```
@@ -64,7 +65,7 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 - Menüs erben von `MenuLayer` (`ui/menus/menu_layer.gd`) und nutzen `OptionList`: Hoch/Runter mit
   Umbruch, Links/Rechts ändert Werte, Bestätigen mit Enter, Leertaste, E oder A, Zurück mit Esc oder B.
   Sie laufen auch bei pausiertem Baum. Listen scrollen nie seitwärts (`MenuLayer.keep_upright`), der
-  Scrollbalken ist 3 UI-Pixel breit. Textseiten (`ControlsMenu`, `CreditsMenu`) erben von `ScrollPage`
+  Scrollbalken ist 3 UI-Pixel breit. Textseiten (`CreditsMenu`, `ControlsNotes`) erben von `ScrollPage`
   (`ui/menus/scroll_page.gd`): der Fokus zieht die Seite nicht nach unten, Hoch/Runter und der rechte Stick
   blättern. Gefüllte Slots sind zweizeilige Karten (`OptionList.add_card`, `SaveMenu.card_title` und
   `card_subtitle`), Lautstärkeregler stoppen an den Enden (`add_choice(..., clamped)`) und spielen auf
@@ -72,7 +73,7 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 - Das Pause-Menü (`MenuLayer.can_pause`) öffnet auch im Gespräch, in Zwischensequenzen nur, solange
   `Cutscene.in_dialogue` wahr ist (`Cutscene.say()` setzt es; zeitgesteuerte Phasen bleiben gesperrt), und
   schon während einer Aufblende, nicht in Türblenden. Es hat acht Zeilen: Weiter, Journal, Speichern, Laden,
-  Einstellungen, Steuerung anzeigen, Zum Startmenü, Spiel beenden. „Bewegungsgefühl“ und „Richtungen“
+  Einstellungen, Tastenbelegung, Zum Startmenü, Spiel beenden. „Bewegungsgefühl“ und „Richtungen“
   stehen in den Einstellungen nur in Debug-Builds (Gruppe „Entwicklung“).
 - Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia; nach
   dem Ende ohne Rückfrage), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
@@ -229,22 +230,48 @@ deshalb nicht mit `UV` als 0..1 der Figur.
 
 ## Eingabe
 
-Nur Actions (ADR-011). Belegungen in `project.godot`, Tests in `tests/unit/test_project_settings.gd`.
+Nur Actions (ADR-011); die Standardbelegung steht in `project.godot`, Tests in
+`tests/unit/test_project_settings.gd`. Der Spieler kann neun Actions umbelegen (ADR-048, Seite
+„Tastenbelegung“); die Tabelle zeigt den Standard.
 
 | Action | Tastatur | Controller |
 |--------|----------|------------|
-| `move_up/down/left/right` | WASD, Pfeiltasten | linker Stick, D-Pad |
-| `interact` | E, Leertaste, Enter | A / Kreuz |
-| `cancel` | Esc, Rücktaste | B / Kreis |
+| `move_up/down/left/right` | WASD, Pfeiltasten | linker Stick, D-Pad (immer fest) |
+| `interact` | E, Leertaste, Enter (fest) | A / Kreuz (fest) |
+| `cancel` | Esc (fest), Backspace | B / Kreis |
 | `sprint` | Shift | X / Viereck, rechter Trigger |
-| `menu` | Esc, Tab | Start |
+| `menu` | Esc (fest), Tab | Start (fest) |
 | `journal` | J | Back / Select |
-| `scroll_up/scroll_down` | Bild auf / Bild ab | rechter Stick (vertikal) |
-| `debug_overlay` | F3 | – (nur Dev-Builds) |
-| `debug_panel` | F4 | – (nur Debug-Builds) |
+| `scroll_up/scroll_down` | Bild auf / Bild ab | rechter Stick (vertikal), nicht umbelegbar |
+| `debug_overlay` | F3 | – (nur Dev-Builds), nicht umbelegbar |
+| `debug_panel` | F4 | – (nur Debug-Builds), nicht umbelegbar |
 
-In Menüs bestätigen `ui_accept` (Enter, Leertaste, A) und `interact` (E) gleichermaßen.
-Eingabe-Overrides liegen in den Einstellungen; die Belegungsoberfläche folgt nach dem Slice (ADR-011).
+In Menüs bestätigen `ui_accept` (Enter, Num-Enter, Leertaste) und `interact` (E; am Controller A) gleichermaßen;
+`ui_accept` hat keinen Pad-Knopf, A bestätigt nur über `interact`.
+
+**Umbelegen (ADR-048):**
+
+- Kern ohne Szene: `core/binding_codec.gd` (`BindingCodec`: Ereignis ↔ `{"type": ...}`, streng, nie geklemmt),
+  `core/input_bindings.gd` (`InputBindings`, als `Settings.bindings`: Felder, feste Ereignisse, Regeln,
+  Konflikte, Abgleich mit der `InputMap`, Laden und Schreiben) und `core/binding_capture.gd` (`BindingCapture`:
+  Erfassung einer Taste als Zustandsmaschine). Die Standardwerte liest `InputBindings` aus `ProjectSettings`.
+- Modell: je Aktion und Gerät feste Ereignisse (Esc, Enter, Start, A auf `interact`, Stick und Steuerkreuz für
+  das Gehen) und bis zu zwei Felder; es bleibt immer mindestens eine Belegung, eine Taste gehört je Gerät einer
+  Aktion. Reserviert sind Esc, Enter, Entf, Bild auf/ab, F3/F4, Pfeile und WASD (nur Gehen), Leertaste (`interact`,
+  `sprint`), Tab (`menu`, `sprint`), am Controller A, Y, Start, Steuerkreuz; nie belegbar Alt, Meta, Sticks,
+  Feststelltasten und Sondertasten, Trigger nur für `sprint`. Konflikte: tauschen, übernehmen oder erklären.
+- Datei: `settings.json` Version 2 (`docs/SAVE_FORMAT.md`); ein Gerät gilt als überschrieben, wenn die Liste
+  Ereignisse dieses Geräts enthält; feste Ereignisse und beide Geräte werden mitgeschrieben, Standardwerte nie.
+- Signale: `InputBindings.changed(actions)` (die `InputMap` hält die neuen Ereignisse schon),
+  `Settings.bindings_changed(actions)` und `InputDevice.labels_changed` (Hinweise mit Tastennamen
+  aktualisieren sich: Interaktions-Hinweis, Fußzeile des Startmenüs, Hinweis des Pause-Menüs, die Seite).
+  `Settings.changed(key)` bleibt den Werten vorbehalten.
+- Oberfläche: `ui/menus/controls_menu.gd` (`ControlsMenu`, `MenuLayer`; fängt Tasten in `_input` ab, solange eine
+  Erfassung wartet), `ui/menus/binding_row.gd` (`BindingRow`: Zeile mit Namen, festen Tasten und zwei Feldern),
+  `ui/menus/controls_notes.gd` (`ControlsNotes`, `ScrollPage`: „Weitere Tasten“). Theme-Typen `BindCell*` und
+  `BindFixed` in `base_theme.tres` und beiden Skins. `ConfirmMenu.ask_text` fragt mit fertigem Text.
+- Autopilot: `"key": ["F"]` und `"pad": [3]` senden echte Tasten und Knöpfe (`tools/autopilot/controls_rebind.json`,
+  `controls_pad.json`).
 
 ## Audio
 

@@ -19,7 +19,7 @@ Hinweis: Ändert sich der Spielname, ändert sich auch dieser Ordner. Dann brauc
 Automatische Läufe schreiben nie dorthin (ADR-018): Tests nutzen `user://profiles/test_<pid>/`, Smoke-Runs
 `user://profiles/smoke/`, Aufnahmen `user://profiles/capture_<pid>/` (je Lauf eigen, danach gelöscht). Bei mehreren
 `--profile=` gewinnt das letzte. Einstellungen liegen in `settings.json`
-im selben Ordner.
+im selben Ordner (Format: Abschnitt „Einstellungen“ unten).
 
 ## Dateien
 
@@ -92,3 +92,33 @@ Unbekannte Felder werden ignoriert. Ungültige Einträge werden verworfen und al
 ## Kennzahlen
 
 Speichern dauert im Container 0,5 bis 1,5 ms (Autosave mit Prototyp-Zustand, siehe `PERFORMANCE.md`).
+
+## Einstellungen (`settings.json`)
+
+Im Ordner des Profils (Ablage oben), geschrieben von `Settings` (ADR-018, ADR-048). Version 2:
+
+```json
+{
+  "version": 2,
+  "values": { "text.speed": 1 },
+  "input": {
+    "interact": [
+      {"type": "key", "physical_keycode": 70}, {"type": "key", "physical_keycode": 32},
+      {"type": "key", "physical_keycode": 4194309}, {"type": "key", "physical_keycode": 4194310},
+      {"type": "joy_button", "button": 0}
+    ],
+    "sprint": [
+      {"type": "key", "physical_keycode": 4194325},
+      {"type": "joy_button", "button": 9}, {"type": "joy_axis", "axis": 5, "value": 1.0}
+    ]
+  }
+}
+```
+
+- `values`: je Schlüssel ein Wert nach dem Schema in `core/settings.gd`; Ungültiges fällt auf den Standard zurück (Warnung `setting reset`).
+- `input`: je umbelegbarer Aktion (`move_up`, `move_down`, `move_left`, `move_right`, `sprint`, `interact`, `cancel`, `menu`, `journal`) eine flache Liste von Ereignissen: `key` (`physical_keycode`), `joy_button` (`button` 0 bis 25) oder `joy_axis` (`axis` 4 oder 5, die Trigger, `value` 1.0). `device` steht nie darin, geladen wird immer mit `device = -1`.
+- **Ein Gerät gilt als überschrieben, wenn die Liste Ereignisse dieses Geräts enthält.** Ist eine Aktion auf einem Gerät überschrieben, schreibt das Spiel die Ereignisse **beider** Geräte (Tastatur zuerst, feste Ereignisse wie Esc, Enter und Start eingeschlossen). Standardwerte werden nie geschrieben; eine Liste, die den Standard ergibt, zählt als nicht überschrieben (die Reihenfolge zählt: `[Leertaste, E]` ist eine Umbelegung, `[E, Leertaste]` nicht). Das Beispiel oben: `interact` hat auf der Tastatur F und Leertaste als Felder, dazu die festen Enter und Num-Enter, und auf dem Controller nur das feste A; bei `sprint` ist nur der Controller verändert (linke Schultertaste und rechter Trigger), die Tastatur schreibt ihren Standard (Umschalt) mit.
+- Version 1 (nur `input` mit Tasten oder Knöpfen) lädt unverändert; eine Liste nur mit Tasten lässt die Controller-Standards der Aktion stehen. Eine neuere Version wird gelesen, soweit sie verstanden wird (Warnung `settings from a newer version`).
+- Der Lader ist nachsichtig: Unbekannte Aktionen (auch `ui_accept`, `debug_*`, `scroll_*`), Einträge, die kein Ereignis sind, reservierte Tasten, Sticks, Trigger an anderen Aktionen als `sprint`, Knöpfe für das Gehen am Controller, mehr als zwei Felder und Tasten, die zwei Aktionen beanspruchen, werden verworfen, jedes mit einer Warnung `binding dropped`; bleibt einer Aktion nichts, gelten ihre Standardwerte.
+- Eine Datei über 64 KiB oder mit ungültigem JSON wird als Ganzes ignoriert (Standardwerte) und vor dem nächsten Speichern als `settings.json.bad` kopiert; die Datei einer neueren Version bleibt als `settings.json.newer` erhalten.
+- Notausgang: den Block `input` löschen (oder die Datei), dann gelten wieder alle Standardtasten.

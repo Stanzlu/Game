@@ -66,6 +66,10 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 - Fenster-X und Fokusverlust regelt `AppGuard`, Controller-Hotplug `InputDevice`; `Beat.mark` löst einen
   Autosave aus. Nach `change_scene_to_file` ist `get_tree()` im freigegebenen Knoten null: den `SceneTree`
   vorher merken.
+- Tasten: Belegungen nur über `Settings.bindings` (`InputBindings`, ADR-048). Feste Tasten (Esc, Enter, Start, A auf
+  `interact`, Pfeile/WASD/Steuerkreuz in Menüs) sind die Schutzregeln gegen Aussperren; `ControlsMenu` erfasst über
+  `BindingCapture`. Hinweise mit Tastennamen holen `InputDevice.label_for(...)` und frischen sich über
+  `InputDevice.labels_changed` auf (`Settings.changed` nur für Werte). Der Autopilot tippt echte Tasten mit `key`/`pad`.
 - `tools/art/layout_slice_maps.py tal --write` löscht Handänderungen in `content/maps/tal.txt` (Buchstabe `6`,
   `unless` von `t`): vorher vergleichen.
 
