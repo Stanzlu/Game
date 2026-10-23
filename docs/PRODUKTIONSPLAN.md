@@ -281,7 +281,7 @@ kurz davor.
 
 | Nr | Arbeit | Größe | Wann |
 |---|---|---|---|
-| T1 | **Prüfschleife:** Zeit je Schritt in `check.sh`, Zeit je Testdatei; dann Story-Tests mit fester Bildrate, wo kein Audio wartet (der Dummy-Audiotreiber läuft auf der Wanduhr, KNOWN_ISSUES #67); Aufteilung auf mehrere Prozesse (4 Kerne); eine schnelle Stufe `check.sh --quick` für Zwischenpushes, die volle vor jedem Merge (ADR) | S Messung, M Umbau | P6.1 |
+| T1 | **Prüfschleife:** Zeit je Schritt in `check.sh`, Zeit je Testdatei; dann Story-Tests mit fester Bildrate, wo kein Audio wartet (der Dummy-Audiotreiber läuft auf der Wanduhr, KNOWN_ISSUES #67); Aufteilung auf mehrere Prozesse (4 Kerne); eine schnelle Stufe `check.sh --quick` für Zwischenpushes, die volle vor jedem Merge (ADR) | S Messung, M Umbau | P6.1 · **erledigt**: feste Bildrate genügt, GUT 592 → 70 s, `check.sh` 12 → 3 Min (ADR-051); Aufteilung und `--quick` bewusst nicht gebaut, erst über 6 Min wieder prüfen |
 | T2 | **Validator:** Türziele und Spawn-Marker, `cut.say`-Cues, Quest-Stufen ohne Auslöser, gesetzte und nie gelesene Flags, doppelte Marken, Effekte ohne Einstellungsabfrage | S je Regel | P6.2 |
 | T3 | **Speicher-Politik und Kartenstempel:** ADR, eingefrorenes v2-Fixture, Alias-Tabelle in `SceneRegistry`, Kapitelmarken statt `slice.finished`; Prüfsumme je gebackener Karte | S | P6.2 |
 | T4 | **Karten-Linter im heutigen Format:** Erreichbarkeit ab den Spawns, Platzierung auf festen Zellen, Spiegelsymmetrie für Elysia (ADR-031, außer Stein und Riss), Übersichtsbild je Karte | S–M | P6.6 |
@@ -290,7 +290,7 @@ kurz davor.
 | T7 | **Baker lokal:** eigener Zufallsstrom je Durchgang, Blöcke mit Rand, Vergleichsbild alt/neu; vorher `git gc` messen (die 108 MB sind unverpackt) und gebackene Bilder nur beim Einfrieren einer Region committen | S Spike, L Umsetzung | vor der ersten M-Karte |
 | T8 | **Autopilot v2:** relative Zeiten, `until_flag`, `goto_marker`, Start aus Spielstand, ein Skript je Akt | M | vor dem Akt-I-Durchlauf |
 | T9 | **Zustandsmodell je Akt, wenn er es braucht:** Haus-Zustand, Besucher, Garten, Werte, Beschützer, Erscheinungsbild; `world_state.gd` nach Bereichen teilen; Schema 3 einmal mit Migrationstest | M je Bereich | mit dem Akt |
-| T10 | **Doku und CI:** `.github/workflows/ci.yml` angleichen oder entfernen, `local-ci` beschreiben, alte Testzahlen korrigieren, eine Kurzfassung der Regeln vor `DECISIONS.md` | S | P6.1 |
+| T10 | **Doku und CI:** `.github/workflows/ci.yml` angleichen oder entfernen, `local-ci` beschreiben, alte Testzahlen korrigieren, eine Kurzfassung der Regeln vor `DECISIONS.md` | S | P6.1 · **erledigt**: Workflow bleibt (prüft jeden Push mit `check.sh`, ADR-009), `CLAUDE.md` und `GATE_REPORT.md` aktuell, ADR-Index oben in `DECISIONS.md` (`tools/adr_index.py`, Schritt in `check.sh`) |
 | T11 | **Kalibrierung:** Modell aus Wörtern mal Textgeschwindigkeit plus Wegen; dein Durchlauf-Log nur, wenn du magst | S | P6.6 |
 
 **Bewusst vertagt, mit Auslöser** (`OFFENE_PUNKTE.md`, Abschnitt 3): Licht (12 Lichtquellen im Wald, Lampen auf
@@ -435,7 +435,7 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung.
 
 | Risiko | Wirkung | Gegenmaßnahme |
 |---|---|---|
-| Prüfschleife wächst mit dem Inhalt | bei siebenfachem Inhalt grob eine Stunde je Prüfung [S] | P6.1 |
+| Prüfschleife wächst mit dem Inhalt | bei siebenfachem Inhalt grob eine Stunde je Prüfung [S] | P6.1 erledigt: 3 Min bei 691 Tests (ADR-051) |
 | Alle Minutenzahlen sind Schätzungen | Spielzeit des Slice nie gemessen | Messmarken, Kalibrierung, P6.12 |
 | Ohne Tester | Ton, Humor, Miras Stimme und Verständlichkeit prüft nur, wer sie geschrieben hat | Stimmenblätter, Prüflinsen, Lesefassung; externe Tests vor dem Release (§61) |
 | Claude hört nicht | Lautheit gemessen, Schönheit nie gehört | Hörproben für dich, Themenbuch |

@@ -204,10 +204,11 @@ func test_mira_does_not_knock_into_the_black_after_loading() -> void:
 	var scene := HAUS.instantiate()
 	add_child_autofree(scene)
 	# the picture comes back over two seconds; the knock must wait for it, and then a moment
-	var marks := {"faded": -1.0, "knocked": -1.0}
-	var start := Time.get_ticks_msec()
+	# counted in game time (the predicate runs once per physics tick), never by the wall clock
+	var marks := {"faded": -1.0, "knocked": -1.0, "now": 0.0}
 	var watch := func() -> bool:
-		var now := float(Time.get_ticks_msec() - start) / 1000.0
+		marks["now"] += get_physics_process_delta_time()
+		var now: float = marks["now"]
 		if marks["faded"] < 0.0 and not ScreenFade.is_covered() and not ScreenFade.is_fading():
 			marks["faded"] = now
 		if scene.dialogue_box.is_open():

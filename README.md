@@ -22,7 +22,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `tools/setup_godot.sh` | Godot 4.7.2 laden (Linux) |
 | `tools/setup_godot.sh --templates` | zusätzlich Export-Templates |
 | `python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt` | gdlint und gdformat |
-| `tools/check.sh` | Lint, Format, Import, Smoke-Run, Unit-Tests |
+| `tools/check.sh` | Lint, Format, Import, Smoke-Run, Unit-Tests; rund 3 Minuten, Zeit je Schritt am Ende (`GUT_FIXED_FPS=0` für Echtzeit) |
 | `tools/export.sh windows\|macos\|linux` | Build nach `build/` |
 | `tools/smoke_export.sh` | exportierten Linux-Build starten und prüfen |
 | `RELEASE_DRY_RUN=1 tools/release.sh v0.8.4` | Builds für Tester packen, ohne den Release-Entwurf anzulegen |

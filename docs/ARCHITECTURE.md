@@ -320,7 +320,10 @@ Tal und Wald je 12 s mit Bewegung ab und misst Frame-Zeiten (`FrameStats`). Beri
 ## Build und Prüfung
 
 - `tools/check.sh`: gdlint, gdformat, Pegel-Check (`audio levels`, braucht numpy, sonst „SKIPPED“), Import,
-  Headless-Smoke-Runs (Menü, jede Szene, `--continue`, Leistungstest), der ganze Slice per Autopilot, GUT.
+  Headless-Smoke-Runs (Menü, jede Szene, `--continue`, Leistungstest), der ganze Slice per Autopilot, GUT
+  (`--fixed-fps 60`, ADR-051; `GUT_FIXED_FPS=0` für Echtzeit). Am Ende steht die Zeit je Schritt, nach GUT die
+  langsamsten Testdateien (`tools/gut_times.py`); `tools/adr_index.py --check` hält den Index von `DECISIONS.md` aktuell.
+  Gesamtzeit rund 3 Minuten (vorher 12).
   Automatische Läufe nutzen eigene Profile (`--profile=smoke`), nie die Spielstände des Spielers; das
   letzte `--profile` gewinnt.
 - `tools/export.sh windows|macos|linux`: Export mit Build-Stempel (Commit, Datum).
