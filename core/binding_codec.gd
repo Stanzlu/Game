@@ -14,10 +14,36 @@ const TYPE_AXIS := "joy_axis"
 const BUTTON_COUNT := 26
 ## JOY_AXIS_SDL_MAX: the axes 0..5 (4 and 5 are the triggers).
 const AXIS_COUNT := 6
-## The last code point that exists (the engine complains about anything above it).
-const LAST_CODE_POINT := 0x10FFFF
-## Codes of the engine's named special keys (measured with the round trip below, Godot 4.7).
-const LAST_NAMED_SPECIAL := KEY_JIS_KANA
+## The printable codes a physical key can have besides 0..9 and A..Z (the keys of a US layout,
+## plus the ISO key next to Shift and the Japanese and Mac extras). The other printable codes
+## (! " # $ % & ( ) * + : > ? @ ^ _ { } | ~) exist as characters, never as a physical key.
+const PHYSICAL_PRINTABLE: Array[int] = [
+	KEY_SPACE,
+	KEY_APOSTROPHE,
+	KEY_COMMA,
+	KEY_MINUS,
+	KEY_PERIOD,
+	KEY_SLASH,
+	KEY_SEMICOLON,
+	KEY_LESS,
+	KEY_EQUAL,
+	KEY_BRACKETLEFT,
+	KEY_BACKSLASH,
+	KEY_BRACKETRIGHT,
+	KEY_QUOTELEFT,
+	KEY_YEN,
+	KEY_SECTION,
+]
+## The engine's named special keys (Godot 4.7) as runs of codes without a gap: first, last.
+## Between the runs the engine has no name; asking it for one prints a complaint.
+const SPECIAL_RUNS: Array[Vector2i] = [
+	Vector2i(KEY_ESCAPE, KEY_F35),
+	Vector2i(KEY_MENU, KEY_HYPER),
+	Vector2i(KEY_HELP, KEY_HELP),
+	Vector2i(KEY_BACK, KEY_VOLUMEUP),
+	Vector2i(KEY_MEDIAPLAY, KEY_JIS_KANA),
+	Vector2i(KEY_KP_MULTIPLY, KEY_KP_9),
+]
 
 
 ## Encodes a key, pad button or pad axis. {} for everything else: mouse, action, touch, MIDI,
@@ -91,20 +117,21 @@ static func is_trigger(axis: int) -> bool:
 	return axis == JOY_AXIS_TRIGGER_LEFT or axis == JOY_AXIS_TRIGGER_RIGHT
 
 
-## A physical key code the engine knows by name. 1 <= code < KEY_UNKNOWN, not KEY_SPECIAL, and
-## OS.find_keycode_from_string(OS.get_keycode_string(code)) == code: the round trip refuses
-## codes that are no key (99999, lower-case letters) and modifier-masked codes such as Shift+A
-## (they are above KEY_UNKNOWN). The engine prints a complaint when it is asked to name an
-## impossible code point, so those are filtered first.
+## A code a physical key can have: a letter, a digit, one of PHYSICAL_PRINTABLE or a named
+## special key (Backtab is the Shift+Tab character, not a key). Decided from the lists alone,
+## the engine is never asked to name an unknown code. Rejects 0, KEY_SPECIAL, KEY_UNKNOWN,
+## modifier-masked codes such as Shift+A and every character that is no key (lower case, "!").
 static func key_is_valid(code: int) -> bool:
-	if code <= 0 or code >= KEY_UNKNOWN or code == KEY_SPECIAL:
-		return false
 	if code < KEY_SPECIAL:
-		if code > LAST_CODE_POINT or (code >= 0xD800 and code <= 0xDFFF):
-			return false
-	elif code > LAST_NAMED_SPECIAL and not (code >= KEY_KP_MULTIPLY and code <= KEY_KP_9):
+		var letter := code >= KEY_A and code <= KEY_Z
+		var digit := code >= KEY_0 and code <= KEY_9
+		return letter or digit or PHYSICAL_PRINTABLE.has(code)
+	if code == KEY_BACKTAB:
 		return false
-	return OS.find_keycode_from_string(OS.get_keycode_string(code)) == code
+	for run in SPECIAL_RUNS:
+		if code >= run.x and code <= run.y:
+			return true
+	return false
 
 
 static func _decode_key(fields: Dictionary) -> InputEvent:

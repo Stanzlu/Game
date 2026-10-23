@@ -90,6 +90,13 @@ func test_decode_rejects_garbage() -> void:
 		{"type": "joy_axis", "axis": 1, "value": nan},
 		{"type": "joy_axis", "axis": 1, "value": inf},
 		{"type": "joy_axis", "axis": 1, "value": 0.0},
+		{"type": "joy_axis", "axis": 5, "value": true},
+		{"type": "joy_axis", "axis": 1, "value": false},
+		{"type": "joy_axis", "axis": 1, "value": [1.0]},
+		{"type": "joy_axis", "axis": true, "value": 1.0},
+		{"type": "joy_button", "button": true},
+		{"type": "key", "physical_keycode": KEY_EXCLAM},
+		{"type": "key", "physical_keycode": KEY_BACKTAB},
 	]
 	for entry: Variant in table:
 		assert_null(BindingCodec.decode(entry), "refused: " + str(entry))
@@ -121,7 +128,11 @@ func test_key_is_valid() -> void:
 		KEY_SPACE,
 		KEY_ESCAPE,
 		KEY_SEMICOLON,
+		KEY_LESS,
 		KEY_SECTION,
+		KEY_YEN,
+		KEY_HELP,
+		KEY_VOLUMEUP,
 		KEY_JIS_KANA,
 	]:
 		assert_true(BindingCodec.key_is_valid(code), "valid: %d" % code)
@@ -143,6 +154,45 @@ func test_key_is_valid() -> void:
 		assert_false(BindingCodec.key_is_valid(code), "invalid: %d" % code)
 
 
+func test_characters_that_are_no_physical_key_are_refused() -> void:
+	# these have a name in the engine but exist only as characters (Shift+1, Shift+;, ...)
+	for code: int in [
+		KEY_EXCLAM,
+		KEY_QUOTEDBL,
+		KEY_NUMBERSIGN,
+		KEY_DOLLAR,
+		KEY_PERCENT,
+		KEY_AMPERSAND,
+		KEY_PARENLEFT,
+		KEY_PARENRIGHT,
+		KEY_ASTERISK,
+		KEY_PLUS,
+		KEY_COLON,
+		KEY_GREATER,
+		KEY_QUESTION,
+		KEY_AT,
+		KEY_ASCIICIRCUM,
+		KEY_UNDERSCORE,
+		KEY_BRACELEFT,
+		KEY_BRACERIGHT,
+		KEY_BAR,
+		KEY_ASCIITILDE,
+		KEY_BACKTAB,
+	]:
+		assert_false(BindingCodec.key_is_valid(code), "no key: %d" % code)
+		assert_eq(BindingCodec.encode(_key(code)), {}, "not encoded: %d" % code)
+		assert_eq(BindingCodec.normalize({"type": "key", "physical_keycode": code}), {})
+
+
+func test_the_gaps_between_the_named_special_keys_are_refused() -> void:
+	# the engine has no name for these (asking prints a complaint): refused without asking
+	var gaps: Array[int] = [0x40003f, 0x400040, 0x400041, 0x400044, 0x400046, 0x400047]
+	gaps.append_array(range(0x40004f, 0x400054))
+	gaps.append_array(range(KEY_JIS_KANA + 1, KEY_KP_MULTIPLY))
+	for code in gaps:
+		assert_false(BindingCodec.key_is_valid(code), "gap: %x" % code)
+
+
 func test_the_key_filter_agrees_with_the_engine_names() -> void:
 	# every code the codec lets through has a name the engine can turn back into the code
 	var accepted := 0
@@ -153,6 +203,7 @@ func test_the_key_filter_agrees_with_the_engine_names() -> void:
 			accepted += 1
 			assert_eq(OS.find_keycode_from_string(OS.get_keycode_string(code)), code)
 	assert_gt(accepted, 150, "letters, digits, signs, F1..F35, keypad and the named keys")
+	assert_lt(accepted, 200, "no characters that are no key")
 
 
 func test_encode_refuses_other_event_types() -> void:
