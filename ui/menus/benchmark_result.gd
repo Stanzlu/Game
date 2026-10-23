@@ -46,13 +46,16 @@ func _build() -> void:
 			cell.text = value
 			grid.add_child(cell)
 	list.add_custom(grid)
+	# the buttons come first, OK on top: the safe answer is what the page opens on, and both
+	# stay in the 240 px of the list's view (the explanation below them scrolls)
+	list.add_action("OPTION_OK", close)
+	if held:
+		list.add_action("BENCH_VSYNC_OFF", _turn_vsync_off)
 	if capped:
 		list.add_info(tr("BENCH_CAPPED_HINT"))
 	if held:
 		list.add_info(tr("BENCH_VSYNC_HINT"))
-		list.add_action("BENCH_VSYNC_OFF", _turn_vsync_off)
 	list.add_info(tr("BENCH_SAVED") % BenchmarkRunner.report_path(true))
-	list.add_action("OPTION_OK", close)
 	hint.text = tr("BENCH_HINT")
 
 

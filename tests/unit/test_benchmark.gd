@@ -102,6 +102,10 @@ func test_the_result_page_offers_to_turn_vsync_off_when_it_holds_the_game_back()
 		if button.text == TranslationServer.translate("BENCH_VSYNC_OFF"):
 			off = button
 	assert_not_null(off, "the remedy is one press away")
+	var focused := page.get_viewport().gui_get_focus_owner() as Button
+	assert_eq(
+		focused.text, TranslationServer.translate("OPTION_OK"), "the page opens on the safe answer"
+	)
 	assert_true(Settings.get_bool("display.vsync"))
 	off.pressed.emit()
 	assert_false(Settings.get_bool("display.vsync"))

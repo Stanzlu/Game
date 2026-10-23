@@ -125,8 +125,10 @@ func test_it_keeps_listening_while_the_tree_is_paused() -> void:
 	Input.parse_input_event(press)
 	await wait_process_frames(2)
 	var kind := InputDevice.kind
+	get_tree().paused = false
 	press = press.duplicate()
 	press.pressed = false
 	Input.parse_input_event(press)
-	get_tree().paused = false
+	# the release is buffered: let it arrive now, not after after_each reset the device
+	Input.flush_buffered_events()
 	assert_eq(kind, InputDevice.Kind.GAMEPAD, "an event during the pause is still seen")
