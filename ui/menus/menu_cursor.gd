@@ -28,7 +28,9 @@ func snap() -> void:
 
 
 func _process(delta: float) -> void:
-	visible = target != null and is_instance_valid(target) and target.is_visible_in_tree()
+	visible = (
+		target != null and is_instance_valid(target) and target.is_visible_in_tree() and _in_view()
+	)
 	if not visible:
 		return
 	_time += delta
@@ -39,6 +41,20 @@ func _process(delta: float) -> void:
 		global_position = global_position.lerp(goal, 1.0 - exp(-delta * GLIDE))
 	global_position = global_position.round()
 	queue_redraw()
+
+
+## The cursor lies over the whole screen, not inside the list: a row that scrolled out of view
+## (the "Zurück" at the end of a page of text, with large letters) must not leave it hanging
+## outside the panel.
+func _in_view() -> bool:
+	var node := target.get_parent()
+	while node != null:
+		if node is ScrollContainer:
+			var middle := target.get_global_rect().get_center().y
+			var view := (node as ScrollContainer).get_global_rect()
+			return middle >= view.position.y and middle <= view.end.y
+		node = node.get_parent()
+	return true
 
 
 func _target_position() -> Vector2:
