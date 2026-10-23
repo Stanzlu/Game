@@ -39,11 +39,12 @@ def load(path=SOURCE):
 
 
 def code_files():
+    """All script, map and dialogue files, in an order that does not depend on the file system."""
+    found = []
     for folder in CODE_DIRS:
         for base, _, files in os.walk(os.path.join(ROOT, folder)):
-            for name in sorted(files):
-                if name.endswith(CODE_EXTENSIONS):
-                    yield os.path.join(base, name)
+            found += [os.path.join(base, name) for name in files if name.endswith(CODE_EXTENSIONS)]
+    return sorted(found)
 
 
 def flag_sites(files=None):
@@ -60,6 +61,9 @@ def flag_sites(files=None):
                     for kind, context in (("set", SET_CONTEXT), ("read", READ_CONTEXT)):
                         if context.search(line) and relative not in entry[kind]:
                             entry[kind].append(relative)
+    for entry in sites.values():
+        entry["set"].sort()
+        entry["read"].sort()
     return sites
 
 

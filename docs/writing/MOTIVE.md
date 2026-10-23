@@ -54,56 +54,56 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.asked_for_no` | Entscheidungen | `elysia.dialogue` | `tal.dialogue` | Sie hat die Elysianer gebeten, einmal Nein zu sagen. |
 | `elysia.offered_bed` | Elysia | `elysia.dialogue` | `tal.dialogue` | Der Elysianer hat sein Bett angeboten. |
 | `elysia.offered_house` | Elysia | `elysia.dialogue` | `haus.dialogue` | Der Elysianer hat sein Haus angeboten. |
-| `elysia.butterflies_asked` | Fortschritt | `elysia.txt`, `elysia.dialogue` | `elysia.txt` | Die Gärtnerin hat um die Schmetterlinge gebeten. |
+| `elysia.butterflies_asked` | Fortschritt | `elysia.dialogue`, `elysia.txt` | `elysia.txt` | Die Gärtnerin hat um die Schmetterlinge gebeten. |
 | `elysia.butterfly_first` | Fortschritt | `elysia.txt` | `elysia.txt` | Erster Schmetterling gefangen. |
 | `elysia.butterfly_second` | Fortschritt | `elysia.txt` | `elysia.txt` | Zweiter Schmetterling gefangen. |
 | `elysia.butterfly_third` | Fortschritt | `elysia.txt` | `elysia.txt` | Dritter Schmetterling gefangen. |
-| `elysia.chest_tree_opened` | Gegenstände | `audio_director.gd`, `elysia.txt`, `look_elysia.txt` | `elysia_scene.gd`, `elysia.dialogue` | Die Truhe am Weltenbaum ist offen („Ein Kompliment“). |
+| `elysia.chest_tree_opened` | Gegenstände | `elysia.txt`, `look_elysia.txt`, `audio_director.gd` | `elysia.dialogue`, `elysia_scene.gd` | Die Truhe am Weltenbaum ist offen („Ein Kompliment“). |
 | `elysia.flower_smelled` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue`, `tal.dialogue` | An der Blume gerochen (riecht nach nichts). |
 | `elysia.fountain_seen` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue` | Das Becken angesehen. |
 | `elysia.mirror_seen` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue`, `tal.dialogue` | Das fehlende Spiegelbild bemerkt. |
-| `elysia.child_met` | Kind | `elysia.txt`, `elysia.dialogue` | `elysia.txt`, `elysia.dialogue` | Das Kind getroffen. |
-| `elysia.child_vanished` | Kind | `elysia.txt`, `elysia.dialogue` | `elysia.txt` | Das Kind ist wieder verschwunden. |
-| `elysia.stone_taken` | Gegenstände | `audio_director.gd`, `elysia.txt`, `look_elysia.txt` | `elysia.txt`, `haus.dialogue` | Den Stein mitgenommen. |
+| `elysia.child_met` | Kind | `elysia.dialogue`, `elysia.txt` | `elysia.dialogue`, `elysia.txt` | Das Kind getroffen. |
+| `elysia.child_vanished` | Kind | `elysia.dialogue`, `elysia.txt` | `elysia.txt` | Das Kind ist wieder verschwunden. |
+| `elysia.stone_taken` | Gegenstände | `elysia.txt`, `look_elysia.txt`, `audio_director.gd` | `haus.dialogue`, `elysia.txt` | Den Stein mitgenommen. |
 | `elysia.crystal_touched` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue` | Den Kristall berührt. |
 | `elysia.soup_served` | Beschützer | `elysia.dialogue` | `elysia.dialogue`, `haus.dialogue` | Der Gastwirt hat die Suppe serviert (Betäuber). |
 | `elysia.soup_tasteless` | Beschützer | `elysia.dialogue` | `tal.dialogue` | Die Spielerin hat gemerkt, dass die Suppe nach nichts schmeckt. |
 | `elysia.host_warned` | Beschützer | `elysia.dialogue` | `haus.dialogue` | Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen. |
-| `elysia.loops` | Elysia | `elysia_scene.gd`, `elysia.txt` | `elysia_scene.gd`, `elysia.txt`, `elysia.dialogue` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
-| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia_scene.gd`, `elysia.txt`, `elysia.dialogue` | Der Riss ist offen. |
+| `elysia.loops` | Elysia | `elysia.txt`, `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
+| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
-| `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `world_state.gd`, `tal.txt`, `tal.dialogue` | Mira kennengelernt (noch als „Die Frau“). |
+| `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `tal.dialogue`, `tal.txt`, `world_state.gd` | Mira kennengelernt (noch als „Die Frau“). |
 | `valley.mountains_seen` | Fortschritt | `tal.dialogue` | `tal_scene.gd` | Die Berge gesehen. |
 | `valley.reflection_seen` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | Das eigene Spiegelbild in der Pfütze gesehen. |
 | `valley.shell_seen` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | Die Muschel an Miras Plane gesehen. |
 | `valley.shed_sign_read` | Wahrnehmung | `antreiber.dialogue` | `antreiber.dialogue` | Das Schild zum Schuppen gelesen. |
 | `valley.berries_eaten` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | Brombeeren gegessen. |
 | `valley.flower_smelled` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | An der Blume im Tal gerochen. |
-| `valley.crossed` | Fortschritt | `tal_scene.gd` | `tal_scene.gd`, `tal.dialogue` | Den Bach überquert. |
-| `valley.fell_in` | Entscheidungen | `stepping_stone.gd` | `stepping_stone.gd`, `haus.dialogue`, `tal.dialogue` | In den Bach gefallen (nur der Weg über die runden Steine). |
+| `valley.crossed` | Fortschritt | `tal_scene.gd` | `tal.dialogue`, `tal_scene.gd` | Den Bach überquert. |
+| `valley.fell_in` | Entscheidungen | `stepping_stone.gd` | `haus.dialogue`, `tal.dialogue`, `stepping_stone.gd` | In den Bach gefallen (nur der Weg über die runden Steine). |
 | `valley.fell_twice` | Gag | `stepping_stone.gd` | `tal.dialogue` | Ein zweites Mal in den Bach gefallen. |
-| `valley.bridge_fixed` | Mira | `haus.dialogue` | `tal.txt`, `tal.dialogue` | Mira hat ein Brett über die Brücke gelegt. |
-| `valley.wood_needed` | Fortschritt | `haus.dialogue` | `tal.txt`, `haus.dialogue` | Trockenes Holz wird gebraucht. |
-| `valley.wood_taken` | Beschützer | – | `haus_scene.gd`, `tal_scene.gd`, `tal.txt`, `tal.dialogue` | Das Holz wurde geholt (Ende des Antreiber-Weges). |
-| `valley.antreiber_rests` | Beschützer | `tal_scene.gd` | `tal_scene.gd`, `tal.txt` | Der Antreiber sitzt, statt zu laufen. |
-| `valley.goat_met` | Gag | `tal.txt`, `tal.dialogue` | `tal.txt`, `tal.dialogue` | Der Ziege begegnet. |
-| `valley.goat_loose` | Gag | `haus.dialogue` | `tal.txt`, `tal.dialogue` | Die Ziege ist los (Lücke im Zaun). |
-| `valley.goat_traded` | Gag | `tal.dialogue` | `tal.txt`, `tal.dialogue` | Kartoffel gegen Stiefel getauscht. |
+| `valley.bridge_fixed` | Mira | `haus.dialogue` | `tal.dialogue`, `tal.txt` | Mira hat ein Brett über die Brücke gelegt. |
+| `valley.wood_needed` | Fortschritt | `haus.dialogue` | `haus.dialogue`, `tal.txt` | Trockenes Holz wird gebraucht. |
+| `valley.wood_taken` | Beschützer | – | `tal.dialogue`, `tal.txt`, `haus_scene.gd`, `tal_scene.gd` | Das Holz wurde geholt (Ende des Antreiber-Weges). |
+| `valley.antreiber_rests` | Beschützer | `tal_scene.gd` | `tal.txt`, `tal_scene.gd` | Der Antreiber sitzt, statt zu laufen. |
+| `valley.goat_met` | Gag | `tal.dialogue`, `tal.txt` | `tal.dialogue`, `tal.txt` | Der Ziege begegnet. |
+| `valley.goat_loose` | Gag | `haus.dialogue` | `tal.dialogue`, `tal.txt` | Die Ziege ist los (Lücke im Zaun). |
+| `valley.goat_traded` | Gag | `tal.dialogue` | `tal.dialogue`, `tal.txt` | Kartoffel gegen Stiefel getauscht. |
 | `valley.potato_taken` | Gag | `tal.txt` | `tal.txt` | Die Kartoffel genommen. |
 | `valley.ending` | Fortschritt | `tal.dialogue` | `tal_scene.gd` | Das Ende des Slice läuft („Zum Meer.“). |
 | `encounter.antreiber_resolved` | Beschützer | `antreiber_encounter.gd` | – | Der Weg des Antreibers ist durch Stehenbleiben aufgelöst. |
-| `house.fire_lit` | Haus | `haus_scene.gd` | `haus_scene.gd`, `haus.txt`, `tal.txt` | Das Feuer brennt. |
-| `house.rested` | Haus | `haus.dialogue` | `haus_scene.gd`, `haus.dialogue` | Am Feuer ausgeruht (Abend). |
+| `house.fire_lit` | Haus | `haus_scene.gd` | `haus.txt`, `tal.txt`, `haus_scene.gd` | Das Feuer brennt. |
+| `house.rested` | Haus | `haus.dialogue` | `haus.dialogue`, `haus_scene.gd` | Am Feuer ausgeruht (Abend). |
 | `house.spoon_found` | Haus | `haus.dialogue` | `haus.dialogue` | Den kleinen Löffel gefunden. |
 | `house.shelf_filled` | Haus | `haus.dialogue` | `haus.txt` | Der Löffel steht im Regal. |
 | `house.shelf_stone` | Haus | `haus.dialogue` | `haus.txt` | Der Stein liegt im Regal. |
 | `house.shelf_both` | Haus | `haus.dialogue` | `haus.txt` | Löffel und Stein stehen im Regal. |
-| `house.cat_fed` | Haus | `haus.dialogue` | `haus.txt`, `haus.dialogue`, `tal.dialogue` | Die Katze ist gefüttert und im Haus. |
-| `house.cat_naming` | Haus | `haus_scene.gd`, `haus.dialogue` | `haus_scene.gd` | Die Katze wird benannt. |
-| `house.antreiber_by_fire` | Beschützer | `haus_scene.gd` | `haus_scene.gd`, `haus.txt`, `tal.txt`, `haus.dialogue` | Der Antreiber sitzt am Feuer des Hauses. |
-| `house.antreiber_left` | Beschützer | `haus_scene.gd` | `haus_scene.gd`, `tal.txt` | Der Antreiber hat das Haus wieder verlassen. |
+| `house.cat_fed` | Haus | `haus.dialogue` | `haus.dialogue`, `tal.dialogue`, `haus.txt` | Die Katze ist gefüttert und im Haus. |
+| `house.cat_naming` | Haus | `haus.dialogue`, `haus_scene.gd` | `haus_scene.gd` | Die Katze wird benannt. |
+| `house.antreiber_by_fire` | Beschützer | `haus_scene.gd` | `haus.dialogue`, `haus.txt`, `tal.txt`, `haus_scene.gd` | Der Antreiber sitzt am Feuer des Hauses. |
+| `house.antreiber_left` | Beschützer | `haus_scene.gd` | `tal.txt`, `haus_scene.gd` | Der Antreiber hat das Haus wieder verlassen. |
 | `house.mira_knocked` | Mira | `haus_scene.gd` | – | Mira hat geklopft (Marke für Tests und Autopilot). |
 | `house.mira_seated` | Mira | `haus_scene.gd` | `haus.txt` | Mira sitzt am Feuer. |
-| `house.mira_visited` | Mira | `haus.dialogue` | `haus_scene.gd`, `tal_scene.gd`, `haus.txt`, `tal.txt`, `tal.dialogue` | Mira war zu Besuch. |
+| `house.mira_visited` | Mira | `haus.dialogue` | `tal.dialogue`, `haus.txt`, `tal.txt`, `haus_scene.gd`, `tal_scene.gd` | Mira war zu Besuch. |
 | `house.mira_left` | Mira | `haus_scene.gd` | `haus.txt` | Mira ist wieder gegangen. |
