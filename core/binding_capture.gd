@@ -10,8 +10,9 @@ extends RefCounted
 ##    ARM_SECONDS (Esc and pad Start still cancel at once), key echo and releases never count;
 ##  - a stick or trigger that is still deflected when the capture starts (the stick that moved
 ##    to the row) counts only after it was seen at rest;
-##  - Alt+Tab, Ctrl+W: Shift and Ctrl are bound when they are RELEASED without another key in
-##    between, and only if their press was seen during this capture;
+##  - Ctrl+W, Shift+Tab: Shift and Ctrl are bound when they are RELEASED without another key in
+##    between, and only if their press was seen during this capture; Alt and Cmd (Alt+Tab,
+##    Cmd+Tab) are never bound, the model refuses them at once;
 ##  - an analog axis reports a stream of events: a trigger counts once per pull, a stick is
 ##    only reported (it can never be bound).
 
@@ -53,9 +54,16 @@ var _held := {}
 ## Remembers every axis of every connected pad that is deflected right now.
 func _init(for_device: InputBindings.Device) -> void:
 	_device = for_device
-	for pad in Input.get_connected_joypads():
+	snapshot(Input.get_connected_joypads(), Input.get_joy_axis)
+
+
+## Holds every axis of the given pads whose position, asked as axis_value.call(pad, axis), is
+## at REST or beyond in either direction. The constructor passes the real pads; a test passes
+## a stand-in (headless has no pad).
+func snapshot(pads: Array[int], axis_value: Callable) -> void:
+	for pad in pads:
 		for axis: int in range(BindingCodec.AXIS_COUNT):
-			if absf(Input.get_joy_axis(pad, axis as JoyAxis)) >= REST:
+			if absf(float(axis_value.call(pad, axis))) >= REST:
 				hold_axis(pad, axis)
 
 

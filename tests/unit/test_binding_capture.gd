@@ -257,7 +257,27 @@ func test_an_axis_deflected_at_the_start_has_to_come_to_rest_first() -> void:
 	assert_eq(_kind(other_pad, _motion(JOY_AXIS_LEFT_X, 0.9, 1)), KIND.NONE)
 
 
-func test_a_capture_can_start_without_a_pad() -> void:
-	# headless has no pad: the snapshot of the axes finds nothing and must not fail
+func test_the_snapshot_holds_every_deflected_axis_of_every_pad() -> void:
+	var positions := {"0:0": 0.9, "0:5": 0.31, "1:2": -0.5, "1:4": 0.29, "1:5": 0.0}
+	var reader := func(pad: int, axis: int) -> float:
+		return float(positions.get("%d:%d" % [pad, axis], 0.0))
+	var capture := _capture(PAD)
+	capture.snapshot([0, 1] as Array[int], reader)
+	assert_eq(_kind(capture, _motion(JOY_AXIS_LEFT_X, 0.9, 0)), KIND.NONE, "stick of pad 0")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_TRIGGER_RIGHT, 0.9, 0)), KIND.NONE, "0.31 is held")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_RIGHT_X, 0.9, 1)), KIND.NONE, "pulled backwards")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_TRIGGER_LEFT, 0.9, 1)), KIND.EVENT, "0.29 is rest")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_TRIGGER_RIGHT, 0.9, 1)), KIND.EVENT, "0.0 is rest")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_LEFT_Y, 0.9, 0)), KIND.STICK, "a free axis")
+	assert_eq(_kind(capture, _motion(JOY_AXIS_LEFT_X, 0.9, 1)), KIND.STICK, "pad 1 is not pad 0")
+	# the first event of a held axis that is back at rest frees it
+	capture.feed(_motion(JOY_AXIS_LEFT_X, 0.0, 0))
+	assert_eq(_kind(capture, _motion(JOY_AXIS_LEFT_X, 0.9, 0)), KIND.STICK)
+	var none := _capture(PAD)
+	none.snapshot([] as Array[int], reader)
+	assert_eq(_kind(none, _motion(JOY_AXIS_LEFT_X, 0.9, 0)), KIND.STICK, "no pads: nothing held")
+	# headless has no pad: the constructor's own snapshot finds nothing and must not fail
 	assert_not_null(BindingCapture.new(PAD))
+	var real: Callable = Input.get_joy_axis
+	assert_eq(float(real.call(0, JOY_AXIS_LEFT_X)), 0.0, "the reader the constructor hands over")
 	assert_eq(BindingCapture.new(KB).armed_in, BindingCapture.ARM_SECONDS)
