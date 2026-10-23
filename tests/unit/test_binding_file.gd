@@ -275,7 +275,7 @@ func _loader_cases() -> Array[Dictionary]:
 
 
 func test_loader_table() -> void:
-	Log.muted_categories.append(Log.Category.INPUT)
+	var warned := 0
 	for entry in _loader_cases():
 		var loaded := InputBindings.new(false)
 		var drops := loaded.load_data(entry["data"])
@@ -283,22 +283,10 @@ func test_loader_table() -> void:
 		assert_eq(drops, entry["drops"], label + ": dropped pieces")
 		assert_eq(_slots_of(loaded), _slots_except(entry["slots"]), label + ": slots")
 		assert_eq(H.violations(loaded), PackedStringArray(), label + ": rules")
-	Log.muted_categories.erase(Log.Category.INPUT)
-
-
-func test_every_dropped_piece_is_one_warning() -> void:
-	var warned := 0
-	for entry in _loader_cases():
-		if not (
-			["unknown action", "script entry", "same key on two actions: the later one loses it"]
-			. has(entry["name"])
-		):
-			continue
-		var drops := InputBindings.new(false).load_data(entry["data"])
 		warned += drops
-		assert_push_warning_count(warned, str(entry["name"]))
-		assert_gt(drops, 0)
-	# the texts name what was dropped
+	# every dropped piece is exactly one warning, and the texts say what happened
+	assert_gt(warned, 20, "the table has to drop a lot")
+	assert_push_warning_count(warned)
 	var errors: Array = gut.error_tracker.get_errors_for_test()
 	for tracked: GutTrackedError in errors:
 		assert_true(tracked.contains_text("binding dropped"), str(tracked.code))
