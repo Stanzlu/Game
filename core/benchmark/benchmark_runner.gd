@@ -233,12 +233,14 @@ func report() -> String:
 		)
 	)
 	var capped := false
+	var held := false
 	for key in SCENES:
 		if not _stats.has(key):
 			continue
 		var s := _stats[key].summary()
 		var raw := _raw_stats[key].summary()
 		capped = capped or FrameStats.capped_at_30(s, raw)
+		held = held or FrameStats.held_by_vsync(s, raw, hz)
 		(
 			lines
 			. append(
@@ -256,7 +258,7 @@ func report() -> String:
 						raw["avg_fps"],
 						raw["cpu_ms"],
 						raw["gpu_ms"],
-						TranslationServer.translate(FrameStats.verdict(s, raw)),
+						TranslationServer.translate(FrameStats.verdict(s, raw, hz)),
 					]
 				)
 			)
@@ -264,6 +266,9 @@ func report() -> String:
 	if capped:
 		lines.append("")
 		lines.append(TranslationServer.translate("BENCH_CAPPED_HINT"))
+	if held:
+		lines.append("")
+		lines.append(TranslationServer.translate("BENCH_VSYNC_HINT"))
 	return "\n".join(lines)
 
 

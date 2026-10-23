@@ -68,15 +68,27 @@ func summary() -> Dictionary:
 ## "flüssig" (p95 within a 60 fps frame), "meist flüssig" (within 40 fps) or "ruckelt".
 ## With the uncapped measurement (`raw`): "auf 30 begrenzt" when the machine could do far
 ## more but something (VSync in macOS Low Power Mode) holds it at a steady 30.
-static func verdict(stats: Dictionary, raw: Dictionary = {}) -> String:
+static func verdict(stats: Dictionary, raw: Dictionary = {}, refresh_hz := 0.0) -> String:
 	if capped_at_30(stats, raw):
 		return "BENCH_CAPPED"
+	if held_by_vsync(stats, raw, refresh_hz):
+		return "BENCH_VSYNC"
 	var p95: float = stats["p95_ms"]
 	if p95 <= FRAME_60 * 1.1:
 		return "BENCH_SMOOTH"
 	if p95 <= 25.0:
 		return "BENCH_MOSTLY"
 	return "BENCH_STUTTER"
+
+
+## The scene runs at least one and a half times the screen's refresh rate without VSync but
+## stays clearly under it with VSync (playtest 23.10.: a MacBook with a 120 Hz screen gave
+## 58 to 76 fps with VSync and 184 to 474 without): the synchronisation costs the frames, not
+## the scene. `refresh_hz` <= 0 (unknown, headless) never says so.
+static func held_by_vsync(stats: Dictionary, raw: Dictionary, refresh_hz: float) -> bool:
+	if raw.is_empty() or refresh_hz <= 0.0:
+		return false
+	return float(raw["avg_fps"]) >= refresh_hz * 1.5 and float(stats["avg_fps"]) < refresh_hz * 0.85
 
 
 ## A steady ~30 fps while the same scene runs well above 60 without VSync.
