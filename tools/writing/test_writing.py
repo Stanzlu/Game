@@ -6,6 +6,7 @@ import unittest
 import dialogue
 import id_lock
 import lint
+import motifs
 import report
 import texts
 
@@ -19,6 +20,8 @@ Mira: [wait=0.5]Nein. [ID:s_2] [#ok]
 	Mira: Dann nicht. [ID:s_3] [#draft]
 	do WorldState.set_flag("a.c")
 % Gärtnerin: Blumen {{name}}. [ID:s_4]
+% [if WorldState.has_flag("a.b") /] Mira: Die Steine. [ID:s_6]
+- [if WorldState.has_flag("a.b") /] Doch. [ID:s_r2]
 => END
 
 ~ later
@@ -52,7 +55,13 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(self.by_id["s_4"].speaker, "Gärtnerin", "the random-line mark is not the name")
 
     def test_code_and_comments_are_skipped(self):
-        self.assertEqual(sorted(self.by_id), ["s_1", "s_2", "s_3", "s_4", "s_5", "s_r1"])
+        self.assertEqual(sorted(self.by_id), ["s_1", "s_2", "s_3", "s_4", "s_5", "s_6", "s_r1", "s_r2"])
+
+    def test_an_inline_condition_is_not_part_of_the_line(self):
+        self.assertEqual(self.by_id["s_6"].speaker, "Mira")
+        self.assertEqual(self.by_id["s_6"].kind, "speech")
+        self.assertEqual(self.by_id["s_r2"].kind, "response")
+        self.assertEqual(self.by_id["s_r2"].text, "Doch.")
 
     def test_text_is_the_visible_text(self):
         self.assertEqual(self.by_id["s_2"].text, "Nein.")
@@ -143,7 +152,7 @@ class IdLockTests(unittest.TestCase):
     def test_new_ids_are_notes(self):
         found = id_lock.compare(self.now(SAMPLE), {}, {})
         self.assertEqual({level for level, _ in found}, {"note"})
-        self.assertEqual(len(found), 6)
+        self.assertEqual(len(found), 8)
 
     def test_a_frozen_line_that_changes_is_an_error(self):
         now = self.now(SAMPLE)
@@ -170,7 +179,7 @@ class IdLockTests(unittest.TestCase):
         locked, _ = id_lock.update(now, locked, {})
         self.assertEqual(locked["s_2"][1], "oldhash123")
         self.assertEqual(locked["s_1"][1], "-")
-        self.assertEqual(len(locked), 6)
+        self.assertEqual(len(locked), 8)
 
     def test_update_freezes_a_new_ok_line(self):
         now = self.now(SAMPLE)
@@ -190,14 +199,14 @@ class IdLockTests(unittest.TestCase):
 class ReportTests(unittest.TestCase):
     def test_speaker_statistics(self):
         stats = report.speaker_stats([make_source(SAMPLE)])
-        self.assertEqual(stats["Mira"]["lines"], 2)
+        self.assertEqual(stats["Mira"]["lines"], 3)
         self.assertEqual(stats["(Erzählung)"]["lines"], 2)
-        self.assertEqual(stats["(Spielerin/Spieler)"]["lines"], 1)
+        self.assertEqual(stats["(Spielerin/Spieler)"]["lines"], 2)
 
     def test_status_counts(self):
         counts = report.status_stats([make_source(SAMPLE)])
         entry = list(counts.values())[0]
-        self.assertEqual((entry["ok"], entry["draft"], entry["ph"], entry["untagged"]), (1, 1, 1, 3))
+        self.assertEqual((entry["ok"], entry["draft"], entry["ph"], entry["untagged"]), (1, 1, 1, 5))
 
     def test_cues_nothing_starts_are_found(self):
         source = make_source(SAMPLE.replace("~ later", "~ later\n\n~ orphan\nNichts. [ID:s_9]"))
@@ -207,6 +216,65 @@ class ReportTests(unittest.TestCase):
         self.assertIn("orphan", found[0])
 
 
+class MotifTests(unittest.TestCase):
+    DATA = {
+        "intro": "Intro.", "register_intro": "Register.",
+        "sections": [{"kind": "gag", "title": "Gags", "intro": "Gags."}],
+        "motifs": [{"id": "ziege", "kind": "gag", "title": "Die Ziege", "bible": "§33", "payoff": "Rathaus.",
+                    "appears": [{"type": "line", "ref": "a_1"}, {"type": "flag", "ref": "valley.goat_met"}]}],
+        "register": [{"flag": "valley.goat_met", "axis": "Gag", "meaning": "Begegnung."}],
+    }
+    SITES = {"valley.goat_met": {"set": ["x.gd"], "read": ["y.gd"]}}
+
+    def check(self, data=None, texts_now=None, sites=None, docs=None):
+        folder = tempfile.mkdtemp()
+        output = os.path.join(folder, "MOTIVE.md")
+        data = data or self.DATA
+        sites = self.SITES if sites is None else sites
+        with open(output, "w", encoding="utf-8") as f:
+            f.write(motifs.render(data, sites))
+        for name, text in (docs or {}).items():
+            with open(os.path.join(folder, name), "w", encoding="utf-8") as f:
+                f.write(text)
+        return motifs.problems(data, {"a_1": "Hm."} if texts_now is None else texts_now, sites,
+                               folder, {}, output)
+
+    def test_a_consistent_book_has_no_problems(self):
+        self.assertEqual(self.check(), [])
+
+    def test_a_vanished_line_id_is_an_error(self):
+        found = self.check(texts_now={})
+        self.assertEqual([m for level, m in found if level == "error"], ["motif ziege: line ID 'a_1' is gone"])
+
+    def test_a_vanished_flag_is_an_error(self):
+        found = self.check(sites={})
+        self.assertTrue(any("flag 'valley.goat_met' does not exist" in m for _, m in found))
+
+    def test_a_quote_that_no_longer_matches_is_an_error(self):
+        found = self.check(docs={"a.md": "- `a_1` „Doch.“\n"})
+        self.assertTrue(any("reads „Hm.“ now" in m for _, m in found), found)
+        self.assertEqual(self.check(docs={"a.md": "- `a_1` „Hm.“\n"}), [])
+
+    def test_a_flag_missing_from_the_register_is_a_note(self):
+        sites = dict(self.SITES, **{"house.new_thing": {"set": ["z.gd"], "read": []}})
+        found = self.check(sites=sites)
+        self.assertEqual([level for level, _ in found], ["note"])
+        self.assertIn("house.new_thing", found[0][1])
+
+    def test_beats_and_chapters_need_no_register_entry(self):
+        sites = dict(self.SITES, **{"beat.fire": {"set": ["z.gd"], "read": []},
+                                    "chapter.slice": {"set": ["z.gd"], "read": []}})
+        self.assertEqual(self.check(sites=sites), [])
+
+    def test_a_stale_book_is_an_error(self):
+        folder = tempfile.mkdtemp()
+        output = os.path.join(folder, "MOTIVE.md")
+        with open(output, "w", encoding="utf-8") as f:
+            f.write("old")
+        found = motifs.problems(self.DATA, {"a_1": "Hm."}, self.SITES, folder, {}, output)
+        self.assertTrue(any("out of date" in m for _, m in found))
+
+
 class ProjectTests(unittest.TestCase):
     def test_the_story_text_passes_the_lints(self):
         errors = [m for level, m in lint.run() if level == "error"]
@@ -214,6 +282,20 @@ class ProjectTests(unittest.TestCase):
 
     def test_the_story_has_text_to_lint(self):
         self.assertGreater(len(texts.all_texts()), 400)
+
+    def test_the_motif_book_is_true_to_the_game(self):
+        found = motifs.problems()
+        self.assertEqual([m for level, m in found if level == "error"], [])
+
+    def test_the_register_knows_every_story_flag(self):
+        self.assertEqual([m for level, m in motifs.problems() if level == "note"], [])
+
+    def test_the_quotes_on_the_voice_sheets_are_checked(self):
+        count = 0
+        for name in motifs._markdown(motifs.DOCS):
+            with open(os.path.join(motifs.DOCS, name), encoding="utf-8") as f:
+                count += len(motifs.QUOTE_RE.findall(f.read()))
+        self.assertGreater(count, 70)
 
     def test_every_locked_id_still_exists(self):
         locked, retired = id_lock.read_lock()

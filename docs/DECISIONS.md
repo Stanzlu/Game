@@ -64,6 +64,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-051 | Unit-Tests mit fester Bildrate |
 | ADR-052 | Speicher-Politik, Kapitelmarken, Kartenstempel und Querprüfung (P6.2) |
 | ADR-053 | Schreibwerkzeuge: Status-Tags, ID-Sperre, Vokabel- und Zahlen-Lint (P6.3) |
+| ADR-054 | Stilbuch, Stimmenblätter und Motivbuch (P6.4) |
 
 ---
 
@@ -693,5 +694,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Vokabel-Lint** (`tools/writing/vocabulary.json`): Begriffe aus Trauma, Therapie, Diagnose, Störungen, Psychologie, Depression, Sucht, Selbsthilfe-Jargon und Englisch; Gewöhnliches (»sucht«, »Störung«, »nüchtern«) trifft nicht. Treffer sind Hinweise im Entwurf und Fehler in `[#ok]`-Zeilen; berechtigte Treffer stehen mit Grund unter `exceptions`.
   - **Zahlen-Lint:** Ziffern in Story-Text (Dialoge, Journal, Gegenstände) sind Hinweise bzw. Fehler; Zahlen werden ausgeschrieben, Schilder und Größen stehen als Ausnahme mit Grund (heute drei).
   - **Bericht** (`tools/writing/report.py`, nicht in `check.sh`): Zeilen und Wörter je Sprecher, Entwurf/Frei/Platzhalter je Datei, Cues, die nichts mehr startet. »Gesetzt, aber nie gelesen« (Flags) prüft `StoryLint` (ADR-052).
-- **Messwerte des Slice** (für das Stilbuch, P6.4): 444 Zeilen, 3.828 Wörter, im Mittel 8,6 Wörter je Zeile; Erzählung 39 % der Zeilen, Mira 19 %, Antworten 15 %, Antreiber 10 %. Kein Treffer im Vokabel-Lint; Ziffern nur auf dem Wegweiser (»200 m«) und in der Schuhgröße.
+- **Messwerte des Slice** (für das Stilbuch, P6.4): 444 Zeilen, 3.826 Wörter, im Mittel 8,6 Wörter je Zeile; Erzählung 39 % der Zeilen, Mira 19 %, Antworten 15 %, Antreiber 10 %. Kein Treffer im Vokabel-Lint; Ziffern nur auf dem Wegweiser (»200 m«) und in der Schuhgröße.
 - **Konsequenzen:** Die Hinweise gelten als Arbeitsliste, nicht als Sperre, bis eine Zeile eingefroren ist; dann sind sie Fehler. Frei gegebene Zeilen lassen sich nur mit Absicht ändern (`--refreeze`). Der Writing-Pass (P6.5) setzt die Slice-Zeilen auf `[#ok]` und friert sie ein. Die Wortliste ist ein Netz mit Löchern, kein Urteil über Ton: Stimme und Takt prüfen weiter die Prüflinsen (Plan 9.4) und der Leser.
+
+## ADR-054 · Stilbuch, Stimmenblätter und Motivbuch (P6.4)
+- **Status:** angenommen als Entwurf · 2026-10-23 · wird verbindlich, wenn der Projektinhaber die Blätter gelesen hat
+- **Kontext:** Stimmenblätter, Glossar, Motivbuch und eine lesbare Fassung des Texts gab es nicht (Plan 9.1). Neue Segmente brauchen etwas, wogegen sie geschrieben und gemessen werden, und der einzige Leser (ADR-049) braucht es kurz.
+- **Entscheidung:** Unter `docs/writing/`:
+  - **`STIL.md`**: ein Stilbuch, gemessen am Slice (444 Zeilen, `report.py`) und an der Bible: kurze Zeilen, Erzählung in der zweiten Person Präsens ohne Doppelpunkt und ohne Ausrufe, Gefühl durch Geste, Humor je Welt (Elysia: Wiederholung und Lob; Wirklichkeit: Untertreibung und Dinge), eine „Nie“-Liste (keine ständigen Weisheiten, kein Trost durch Worte, keine Beschämung, keine Therapiesprache, Mira nie Mentorin).
+  - **`stimmen/`**: 15 Blätter mit Funktion, Signatur, Verlauf, Goldzeilen und Gegenbeispielen. Sieben haben Beleg im Slice (Mira, Antreiber, Elysianer, Gärtnerin, Gastwirt, Kind, Spielfigur), acht stammen aus der Bible (Tess, Orin, Lio, Richter, Gefälliger, Einsiedler, Wächter, Betäuber) und tragen statt Goldzeilen „Probezeilen“ als Entwurf; Betäuber verweist auf den Gastwirt als Gesicht.
+  - **`MOTIVE.md`** (erzeugt aus `motive.json`): Vorausdeutungen (§46), Gags (§33), Kind-Bilder (§15) mit Auftritten im Slice und Auflösung, dazu das **Konsequenzen-Register** (Plan 5.7) mit allen 57 Story-Flags, ihrer Achse und den Dateien, die sie setzen und lesen.
+  - **Prüfer** `tools/writing/motifs.py` (in `check.sh`): Zitate mit Zeilen-ID in den Seiten (`` `id` „Text“ ``) müssen dem Text im Spiel entsprechen (85 geprüft); eine verschwundene ID oder ein verschwundenes Flag im Buch ist ein Fehler; ein Story-Flag, das nicht im Register steht, ist ein Hinweis; `MOTIVE.md` muss der Erzeugung entsprechen.
+- **Annahmen, die du kippen kannst:** Alles bei den Figuren ohne Beleg (Signatur, Probezeilen) ist eine Lesart der Bible und kein Text; die Messwerte des Stilbuchs beschreiben den Slice, nicht eine Pflicht, ihn in allem zu wiederholen. Orin, Lio und der Richter sind in Akt IV bzw. II, IV, VI angesetzt, wie der Plan es zeigt.
+- **Konsequenzen:** Ein Segment schreibt gegen sein Blatt; ändert sich eine Goldzeile, ändert sich das Blatt im selben Pull Request, sonst schlägt `check.sh` fehl. Neue Flags tragen sich ins Register ein. Der Writing-Pass (P6.5) misst den Slice am Stilbuch.

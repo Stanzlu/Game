@@ -43,6 +43,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `.venv/bin/python tools/art/bake_ground.py content/maps/look_tal.txt` | Boden einer Look-Karte backen (schreibt den Stempel) |
 | `python3 tools/art/map_stamp.py` | prüft, ob alle gebackenen Böden zu ihren Karten passen |
 | `python3 tools/writing/lint.py` | Story-Text: Vokabel- und Zahlen-Lint, Status-Tags, ID-Sperre (Schritt „writing lint“ in `check.sh`) |
+| `python3 tools/writing/motifs.py` | Motivbuch und Konsequenzen-Register (`docs/writing/`): Zitate und Flags prüfen, `--write` erzeugt `MOTIVE.md` |
 | `python3 tools/writing/report.py` | Zeilen und Wörter je Sprecher, Entwurfsstand je Datei, ungenutzte Cues |
 | `python3 tools/writing/id_lock.py --update` | neue Zeilen-IDs sperren (`--retire`, `--refreeze` siehe Kopf des Skripts) |
 | `python3 tools/art/layout_slice_maps.py tal --write` | Layout der Slice-Karten (`tal`, `antreiber_tal`, `antreiber_tal_bench`) |

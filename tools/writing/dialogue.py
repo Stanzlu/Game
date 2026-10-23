@@ -24,6 +24,8 @@ CODE_RE = re.compile(r"^(if|elif|else|while|match|when|do|do!|set|using|import)\
 JUMP_RE = re.compile(r"=>[<]?\s*([A-Za-z0-9_]+)")
 # "% line" marks one line of a group of which one is picked at random ("%2 " weights it)
 RANDOM_RE = re.compile(r"^%\d*\s+")
+# an inline condition in front of a line: "[if WorldState.has_flag(...) /] Mira: ..."
+CONDITION_RE = re.compile(r"^\[(?:if|elif|else)\b[^\]]*\]\s*")
 
 
 class Line:
@@ -83,9 +85,11 @@ def parse(path):
                 source.jumps.add(target)
             if text.startswith("=>") or CODE_RE.match(text):
                 continue
-            text = RANDOM_RE.sub("", text)
+            text = CONDITION_RE.sub("", RANDOM_RE.sub("", text))
             if text.startswith("- "):
-                source.lines.append(Line(path, number, "response", "", text[2:], cue))
+                source.lines.append(
+                    Line(path, number, "response", "", CONDITION_RE.sub("", text[2:]), cue)
+                )
                 continue
             match = SPEAKER_RE.match(text)
             if match:

@@ -83,6 +83,7 @@ step "writing lint"
 # Vocabulary, numbers, status tags and the ID lock of the story text; `note:` lines are to be
 # worked off, `error:` lines fail (standard library only, ADR-053).
 python3 tools/writing/lint.py
+python3 tools/writing/motifs.py
 python3 -m unittest discover -s tools/writing -p 'test_*.py' -q
 
 step "godot import"

@@ -1,0 +1,39 @@
+# Das Kind
+
+**Beleg im Slice:** 2 Zeilen (`el_child_3`, `el_child_2`) und das Bild am Becken (`el_child_1`). Mehr Goldzeilen
+entstehen in Akt II (das Lied im Haus).
+
+## Funktion
+
+Das Kind steht für keine festgelegte Ursache, keine Diagnose, keine Tätergeschichte (Bible §15). Rückblenden bleiben
+Fragmente: ein Flur, eine geschlossene Tür, eine Hand, ein Lied, Warten, Verstecken, ein leeres Zimmer, das ursprüngliche
+Haus. Die zentrale Szene (Akt V) ist, dass der Erwachsene bleibt und höchstens sagt: „Ich bin da.“
+
+## Signatur
+
+- Höchstens drei Wörter je Zeile, meist eine Frage oder ein Schweigen. Keine Erwachsenensprache, keine Begriffe.
+- Summt leise das Motiv der Tal-Musik (nur in der Nähe zu hören; das Summen führt zum Riss). Es lobt nicht und hat ein
+  Spiegelbild, anders als alle in Elysia. Sein Bild im Wasser ist die Erzählung, nicht seine Rede.
+- Antwortet nicht auf das, was gefragt wurde. Schaut, wartet, geht.
+- Nie Anklage, nie Erklärung, nie Beifall.
+
+## Verlauf
+
+I Spur und Summen (Becken, Spiegelung) → II das Lied im Haus → III ein Echo im Wald → IV kein Auftritt → V die zentrale
+Szene mit sechs Fragmenten → VI ein Blick in Elysia → VII im Finale (Plan 5.3). Jedes Fragment geht durch die
+Prüflinse Kind und Sensibilität (§15, §51).
+
+## Goldzeilen
+
+- `el_child_3` „Hörst du das?“
+- `el_child_2` „…“
+
+(Die Erzählung neben dem Kind: `el_child_1` „Das Kind schaut ins Wasser. Aus dem Wasser schaut ein Kind zurück.“)
+
+## Gegenbeispiele
+
+1. „Mama hat mich immer allein gelassen.“ — Ursache und Täter; ausgeschlossen (§15).
+2. „Ich fühle mich verlassen und wertlos.“ — benennt Gefühle in Erwachsenensprache.
+3. „Du musst dein inneres Kind heilen.“ — Therapiesprache (Lint).
+4. Ein Satz mit mehr als fünf Wörtern — das Kind spricht in Bruchstücken.
+5. „Alles wird gut.“ — Trost aus dem Mund des Kindes; es tröstet nicht, es wartet.
