@@ -16,6 +16,23 @@ const SCENES := {
 	"look_wald": "res://world/levels/look_wald.tscn",
 }
 
+## The scenes the automatic runs visit; a new scene lists itself here and nowhere else.
+## SMOKE: tools/check.sh and tools/smoke_export.sh start each one headless and expect its ready
+## line (they read this list through tools/scene_keys.py). BENCHMARK: the performance test walks
+## through these, in this order (BenchmarkRunner). Elysia and the forest are the look prototype.
+const SMOKE: PackedStringArray = [
+	"sandbox",
+	"antreiber",
+	"look_elysia",
+	"look_tal",
+	"look_wald",
+	"elysia",
+	"tal",
+	"haus",
+	"weg",
+]
+const BENCHMARK: PackedStringArray = ["look_elysia", "tal", "haus", "weg", "look_wald"]
+
 ## UI mode a scene starts in when it is opened from the prototype menu (new game).
 const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA, "elysia": GameState.UiMode.ELYSIA}
 
