@@ -62,6 +62,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-049 | Playtest-Gate ohne Tester: Freigabe der Vorproduktion für Full Production |
 | ADR-050 | Arbeitsannahmen für Full Production |
 | ADR-051 | Unit-Tests mit fester Bildrate |
+| ADR-052 | Speicher-Politik, Kapitelmarken, Kartenstempel und Querprüfung (P6.2) |
 
 ---
 
@@ -669,3 +670,15 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Nicht gebaut (Cut-First):** keine Aufteilung auf mehrere Prozesse und keine Stufe `check.sh --quick`; bei 3 Minuten lohnt beides nicht. Wieder prüfen, wenn der Lauf über 6 Minuten liegt.
 - **Grenzen:** Der Dummy-Audiotreiber läuft weiter auf der Wanduhr (KNOWN_ISSUES #67): Audio-Zeiten prüft nur `tools/audio/measure.sh`. Fehler, die nur bei echter Bildrate auftreten (ungleiche Bildzeiten, Rennen zwischen Physik und Bild), fängt der schnelle Lauf nicht; dafür der Echtzeitlauf vor jedem Phasenende.
 - **Konsequenzen:** Schnellere Rückmeldung (3 statt 12 Minuten) bei gleicher Testzahl. Tests sind unter fester Bildrate deterministischer (ein Physikschritt je Bild).
+
+## ADR-052 · Speicher-Politik, Kapitelmarken, Kartenstempel und Querprüfung (P6.2)
+- **Status:** angenommen · 2026-10-23 (T2 und T3 des Produktionsplans)
+- **Kontext:** ADR-050 nimmt an, dass Spielstände aus Slice-Builds nicht überleben müssen. Ab dem ersten veröffentlichten Stand von Full Production gilt das nicht mehr, und ein Schema-Bruch oder eine umbenannte Szene wird dann teuer. Der Slice hatte außerdem eine einzige Endmarke (`slice.finished`), und Karten mussten von Hand neu gebacken werden, ohne dass etwas auffiel, wenn man es vergaß. Querbezüge zwischen Karten, Skripten, Dialogen und Quests prüfte nur ein einzelner Test (Cues und gelesene Flags).
+- **Entscheidung:**
+  - **Speicher-Politik:** Ein Spielstand eines veröffentlichten Full-Production-Builds lädt in jedem späteren Build. Jede Schema-Version behält ein eingefrorenes Beispiel `tests/fixtures/saves/v<N>_*.json`, das nie von Hand geändert wird; `test_save_policy` verlangt es und lässt alle laden. `v2_slice_end.json` ist der echte End-Spielstand des Slice (v0.8.4, vom Autopilot geschrieben). Neue Felder sind optional mit Vorgabe; ein Bruch bekommt einen Migrationsschritt (`SaveCodec.migrations()`) und ein neues Beispiel im selben Pull Request. Das nächste Schema (3) kommt einmal, mit dem Zustandsmodell der Akte (T9).
+  - **Alias-Tabelle:** Ein Szenen-Schlüssel, der in Spielständen stehen kann, wird nie entfernt. Wird eine Szene umbenannt, zieht der alte Schlüssel nach `SceneRegistry.aliases` (alt → neu); Türen, `--start=`, Titel und Spielstände nehmen ihn weiter an, `SaveCodec` schreibt auf den neuen um.
+  - **Kapitelmarken:** `Chapter.mark("<id>")` setzt `chapter.<id>` (der Slice ist das Kapitel `slice`, die Akte folgen). Startmenü und Spielstand-Liste lesen `Chapter`; das alte Flag `slice.finished` wird weiter gelesen, aber nicht mehr gesetzt.
+  - **Kartenstempel:** `tools/art/map_stamps.json` hält je gebackener Karte eine Prüfsumme aus allem, was der Baker liest (Malart jeder Zelle, Schatten platzierter Deko, `[meta]` ohne `scatter`, Seed, Quelltext von Baker, Paletten und `mapfile.py`). `tools/art/bake_ground.py` schreibt sie nach dem Backen; Schritt „map stamps“ in `check.sh` meldet vergessene Bakes. Reine Requisiten-Parameter ändern den Stempel nicht. Alle acht gebackenen Karten ließen sich vorher bitgenau neu erzeugen (47 s).
+  - **Querprüfung:** `StoryLint` (`core/content/story_lint.gd`) prüft über Dateien hinweg: Türziele und Spawn-Marker, Cues aus Karten und Skripten (`Talk.present`, `cut.say`), Quest-Stufen ohne Auslöser, gelesene Flags ohne Setzer und gesetzte ohne Leser (Ausnahmen mit Begründung in `WRITE_ONLY_FLAGS`), doppelte Spawn-Marker, Beats und Kapitel, Blitz- und Wackeleffekte ohne Einstellungsabfrage. Je Regel ein roter Fixture in `test_story_lint`.
+- **Funde beim ersten Lauf:** Lampenflackern (`Decor`) und das weiße Aufblitzen der XP-Leiste ignorierten »Blitzeffekte reduzieren« (behoben); drei Flags nur für Tests und Autopilot (`house.mira_knocked`, `elysia.rift_crossed`, `encounter.antreiber_resolved`) stehen mit Begründung auf der Ausnahmeliste.
+- **Konsequenzen:** Jeder Akt, der ein Flag setzt, muss es auch lesen oder begründen: so gilt »keine Fake Choices« über Akte hinweg (Plan 5.7). Die Regeln lesen Quelltext und laufen nur im Projekt, nicht im Export. Muster, die sie nicht verstehen (Flags aus Variablen, Quest-IDs aus Variablen), zwingen zu Konstanten oder Literalen: das ist gewollt.

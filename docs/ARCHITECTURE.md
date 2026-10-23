@@ -80,7 +80,7 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   der Leistungstest), Einstellungen, Mitwirkende (`CreditsMenu`, im Elysia-Titel „Die Helden hinter dem
   Helden“), Beenden. Die Fußzeile trägt den Tastenhinweis des benutzten Geräts und die Version. Unter dem
   Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald ein lesbarer Stand das Ende trägt
-  (`SaveSystem.slice_finished()`). `--start=<schlüssel>` und
+  (`SaveSystem.slice_finished()`, liest `Chapter`). `--start=<schlüssel>` und
   `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
   `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
 
@@ -95,13 +95,13 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
 
 - Szenen-Skripte reagieren nur auf `WorldState` (Flags, Quests, Haus) und inszenieren: `Cutscene`
   (sperrt Spieler und Speichern, zeigt Cues nacheinander), Licht, Musik, Rückfälle gegen Festhängen.
-  `Beat.mark(id)` loggt die Spielminute jedes Beats.
+  `Beat.mark(id)` loggt die Spielminute jedes Beats; `Chapter.mark(id)` setzt `chapter.<id>` (Slice und später die Akte, ADR-052).
 - Erwachen (`ElysiaScene._wake`): weißes Licht (`ScreenFade.fade_out(0.0, WAKE_LIGHT)`, 0,4 s Halt, 2,6 s
   Aufblende), die Figur sitzt (`Player.sit_on`) und steht auf, die Begrüßerin (Cue `favor`) dreht sich zu
   ihr, `Hud.hold_back()` und `Hud.reveal_elysia()` bauen Level, XP und Gold nacheinander auf. Geladene
   Stände (`elysia.woke`) überspringen es.
 - Ende (`TalScene._play_ending`): Cue `ending`, Kamera-Schwenk zu den Bergen (`MOUNTAIN_PAN_SECONDS` 4,0 s),
-  Halt (2,5 s), Cue `ending_sea`, Halt (2,5 s), Flag `slice.finished` und Speichern, Abblende (2,5 s),
+  Halt (2,5 s), Cue `ending_sea`, Halt (2,5 s), Kapitelmarke `chapter.slice` (`Chapter.mark`) und Speichern, Abblende (2,5 s),
   `TitleCard.play(self, "")` (nur das Logo, ohne Zeile; Bible §56), zurück ins Startmenü.
 - `Cutscene.in_dialogue` ist der Vertrag mit `MenuLayer.can_pause`. `GuestWalker`
   (`world/levels/slice/guest_walker.gd`) ist ein Besucher, den ein Szenen-Skript von Hand führt (`appear`,
@@ -323,7 +323,8 @@ Tal und Wald je 12 s mit Bewegung ab und misst Frame-Zeiten (`FrameStats`). Beri
   Headless-Smoke-Runs (Menü, jede Szene, `--continue`, Leistungstest), der ganze Slice per Autopilot, GUT
   (`--fixed-fps 60`, ADR-051; `GUT_FIXED_FPS=0` für Echtzeit). Am Ende steht die Zeit je Schritt, nach GUT die
   langsamsten Testdateien (`tools/gut_times.py`); `tools/adr_index.py --check` hält den Index von `DECISIONS.md` aktuell.
-  Gesamtzeit rund 3 Minuten (vorher 12).
+  Gesamtzeit rund 3 Minuten (vorher 12). Dazu der Schritt „map stamps“ (`tools/art/map_stamp.py`, Stempel je gebackener
+  Karte, ADR-052). Querprüfungen über Karten, Skripte, Dialoge und Quests: `StoryLint` (`core/content/story_lint.gd`, in GUT).
   Automatische Läufe nutzen eigene Profile (`--profile=smoke`), nie die Spielstände des Spielers; das
   letzte `--profile` gewinnt.
 - `tools/export.sh windows|macos|linux`: Export mit Build-Stempel (Commit, Datum).

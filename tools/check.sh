@@ -74,6 +74,11 @@ else
   echo "audio levels: SKIPPED, numpy is missing (.venv/bin/pip install -r requirements-art.txt)"
 fi
 
+step "map stamps"
+# Every baked ground image is as new as its map (standard library only, ADR-052).
+python3 tools/art/map_stamp.py
+python3 -m unittest discover -s tools/art -p 'test_*.py' -q
+
 step "godot import"
 # Warm-up import: on a fresh checkout Godot loads the project theme before the font
 # is imported and logs spurious errors. Only the second, warm import must be clean.

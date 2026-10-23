@@ -90,7 +90,8 @@ Der Projektinhaber hat drei Runden Referenzbilder geschickt (nicht im Repo, frem
 | `tools/art/layout_look_maps.py elysia\|tal\|wald --write` | `[map]`-Block der Look-Karten aus Formen (optional, Karten sind auch von Hand editierbar) |
 | `tools/art/make_sprites.py [--sheet x.png]` | Props, Wolken, Partikel und `assets/generated/props/catalog.json` (entfernt nicht mehr katalogisierte Sprites) |
 | `tools/art/make_character.py [--preview x.png]` | `assets/generated/characters/{player,mira,elysian}.png` |
-| `tools/art/bake_ground.py <karte> [--preview-dir d]` | gebackener Boden und Wassermaske laut `[meta]` (nach `make_sprites.py`, wegen der Prop-Schatten) |
+| `tools/art/bake_ground.py <karte> [--preview-dir d]` | gebackener Boden und Wassermaske laut `[meta]` (nach `make_sprites.py`, wegen der Prop-Schatten); schreibt den Stempel in `tools/art/map_stamps.json` |
+| `python3 tools/art/map_stamp.py [--list]` | prüft, dass jede gebackene Karte aktuell ist (nur Standardbibliothek; Schritt „map stamps“ in `check.sh`) |
 | `tools/audio/make_ambience.py` | Regen-, Garten-, Wasser-, Nachtwald-, Wind-, Regen-mit-Wind- und Abend-Loops (nahtlos) |
 | `tools/audio/make_sfx.py`, `make_slice_sfx.py`, `make_nature.py` | Effekte, Klänge des Slice und Naturklänge, nach Lautheit normiert (`loudness.py`); `check_levels.py` und `measure.sh` messen sie (ADR-047) |
 | `tools/audio/make_music.py [--only elysia]` | Musik-Loops Elysia (drei Längen), Tal, Wald, Antreiber (nahtlos, gemeinsames Motiv) |

@@ -1,6 +1,6 @@
 # Save-Format
 
-**Status:** umgesetzt in Phase 2 (ADR-008, ADR-021). Schema-Version 1. Dieses Dokument ist die Referenz
+**Status:** umgesetzt in Phase 2 (ADR-008, ADR-021). Schema-Version 2; Speicher-Politik ab Full Production: ADR-052. Dieses Dokument ist die Referenz
 für das tatsächliche Format. Code: `core/save/save_codec.gd` (Format), `core/state/game_state.gd`
 (Inhalt), `core/save_system.gd` (Dateien, Slots, Laden).
 
@@ -62,7 +62,7 @@ Automatische Läufe schreiben nie dorthin (ADR-018): Tests nutzen `user://profil
 |------|----------------------------------|
 | `schema_version` | ganze Zahl ≥ 1, aktuell 2. Neuer als das Spiel: Laden wird abgelehnt. Älter: Migration. |
 | `saved_at` | UTC, ISO 8601. Bestimmt „Fortsetzen“ (neuester lesbarer Slot). |
-| `flags` | nur `true`-Werte; IDs mit Namensraum (`bereich.name`). Gelöschte Flags fehlen. Seit ADR-047 neu: `house.mira_seated` (Mira sitzt am Feuer: die sitzende Mira der Karte erscheint damit und verschwindet mit `house.mira_left`), `elysia.crystal_touched`; `house.rested` setzt jetzt der Cue `fire_rest` selbst. `house.mira_knocked` gilt weiter und wird beim Öffnen der Tür für Mira gesetzt (nach dem Klopfen). |
+| `flags` | nur `true`-Werte; IDs mit Namensraum (`bereich.name`). Gelöschte Flags fehlen. Kapitelmarken `chapter.<id>` (ADR-052; das Ende des Slice ist `chapter.slice`, der Stand `slice.finished` älterer Builds gilt weiter). Seit ADR-047 neu: `house.mira_seated` (Mira sitzt am Feuer: die sitzende Mira der Karte erscheint damit und verschwindet mit `house.mira_left`), `elysia.crystal_touched`; `house.rested` setzt jetzt der Cue `fire_rest` selbst. `house.mira_knocked` gilt weiter und wird beim Öffnen der Tür für Mira gesetzt (nach dem Klopfen). |
 | `quests` | nur bekannte Quests (`content/quests`) und deren Stufen. `history` enthält besuchte Stufen, die aktuelle zuletzt. Fertig ist eine Quest, wenn ihre Stufe kein `next` hat. |
 | `relationships` | nur `mira`, `tess`, `orin`, `lio`. Zustand `stranger`, `cautious`, `familiar`, `close`, `strained`. Erinnerungen als IDs. |
 | `facets` | die acht Facetten-IDs aus `GameState.FACETS`, im Slice nur Flags. |
@@ -85,10 +85,18 @@ Unbekannte Felder werden ignoriert. Ungültige Einträge werden verworfen und al
 - **Atomar:** in `*.tmp` schreiben, flushen, die bisherige Datei nach `*.bak` verschieben (nur wenn sie lesbar ist), dann umbenennen. Eine beschädigte Datei verdrängt nie eine gute Sicherung.
 - **Robust:** Größenlimit 1 MB, JSON-Parse mit Zeilenangabe, Schema-Version prüfen, jedes Feld typprüfen, unbekannte IDs melden. Bei Fehlern bietet das Lademenü die Sicherung an. Nie ein Absturz.
 - **Sicher:** Kein `str_to_var`, keine Godot-Ressourcen aus dem Nutzerverzeichnis, kein Code aus Daten. Zahlen aus JSON werden auf Endlichkeit, Ganzzahligkeit und Bereich geprüft.
-- **Migration:** `SaveCodec.migrations()`, ein Schritt pro Version (Eintrag *i* macht aus Version *i + 1* die Version *i + 2*). Getestet mit eingefrorenen Beispieldateien unter `tests/fixtures/saves/` (`v1_full.json` muss immer laden).
+- **Migration:** `SaveCodec.migrations()`, ein Schritt pro Version (Eintrag *i* macht aus Version *i + 1* die Version *i + 2*). Getestet mit eingefrorenen Beispieldateien unter `tests/fixtures/saves/` (`v1_full.json`, `v2_slice_end.json`; sie werden nie von Hand geändert und müssen immer laden).
 - **Wann gespeichert wird:** Autosave beim Betreten eines Bereichs (nicht direkt nach dem Laden), bei jedem Quest-Schritt und jedem Beat (`beat.<id>`-Flag, ADR-047), beim Schließen des Fensters (`AppGuard`) und vor „Zum Startmenü“ und „Spiel beenden“. Manuell über das Pause-Menü. Nie während eines Dialogs oder in Encountern; ein dort angefordertes Autosave folgt, sobald es geht.
 - **Keine Bestrafung:** Keine Ironman-Struktur, kein Löschen von Ständen aus dem Spiel heraus.
 - **Datenschutz:** Spielstände bleiben lokal. Keine psychologischen Profile, keine Telemetrie.
+
+## Politik (ADR-052)
+
+- **Versprechen:** Ein Spielstand eines veröffentlichten Builds von Full Production lädt in jedem späteren Build. Spielstände aus Slice-Builds (bis 0.8.x) sind davon ausgenommen (ADR-050), laden aber heute noch.
+- **Schema-Wechsel:** Neue Felder sind optional mit Vorgabe. Bricht etwas, gibt es im selben Pull Request einen Migrationsschritt in `SaveCodec.migrations()`, ein neues eingefrorenes Beispiel `tests/fixtures/saves/v<N>_*.json` und einen Eintrag hier. `test_save_policy` verlangt je Schema-Version ein Beispiel.
+- **Szenen-Schlüssel** stehen im Spielstand (`player.map`) und werden nie entfernt. Bei einer Umbenennung wandert der alte Schlüssel in `SceneRegistry.aliases` (alt → neu); beim Laden wird auf den neuen umgeschrieben.
+- **Flags und IDs** (Quests, Items, Erinnerungen) werden ebenfalls nicht umbenannt; ein unbekannter Eintrag wird beim Laden verworfen und gemeldet (siehe Regeln oben). Eine Umbenennung braucht einen Migrationsschritt.
+- **Kapitel:** `Chapter.mark("<id>")` setzt `chapter.<id>`; Startmenü und Spielstand-Liste lesen es über `Chapter` (`SaveSystem.summary()["finished"]` gilt dem Slice).
 
 ## Kennzahlen
 
