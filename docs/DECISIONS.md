@@ -581,3 +581,23 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 - **Entscheidung:** Das Playtest-Gate gilt als vom Projektinhaber abgenommen, ohne Rückmeldungen von Testern (Abweichung von Bible §57, vom Projektinhaber so entschieden). Freigegeben ist die **Vorproduktion für Full Production** (GATE_REPORT, „Nächste mögliche Schritte“, erste Zeile): Content-Plan für Akt I nach Bible §48, Writing-Pass, Karten-Pipeline, Art- und Audio-Weg ohne Kosten, Plan in `docs/PRODUKTIONSPLAN.md` (entsteht im nächsten Schritt). Es bleiben die Regeln des Projekts: kleine Schritte, ein Pull Request je Phase, `tools/check.sh` vor jedem Push, die 0-€-Regel (nichts Kostenpflichtiges ohne ausdrückliche Zustimmung), Fragen bei großen Weichenstellungen (Master-Prompt), Bible-Abweichungen nur mit ADR.
 - **Verworfen:** Auf Tester warten (der Projektinhaber verzichtet). Full Production ohne Plan: Die Kartenpipeline skaliert nicht auf sieben Regionen (OFFENE_PUNKTE, Abschnitt 3), und die Art- und Audio-Entscheidung hängt an der 0-€-Regel.
 - **Konsequenzen:** Die Fragen in `PLAYTEST*.md` bleiben für spätere Tester gültig. Die Gates M und Ä des Gate-Berichts werden nicht mehr gemessen; der Desire-Test ist der des Projektinhabers. Ohne fremde Spieler fehlen Daten zur Verständlichkeit des Antreibers, zur Spielzeit (vermutlich unter 45 Minuten) und zu den Texten; sie stehen als Fragen für einen späteren Test in `OFFENE_PUNKTE.md`.
+
+## ADR-050 · Arbeitsannahmen für Full Production
+- **Status:** angenommen als Arbeitsannahmen · 2026-10-23 · gelten, bis der Projektinhaber einer widerspricht (`docs/PRODUKTIONSPLAN.md`, Abschnitt 3 und 11: ohne Antwort oder mit „Weiter“ gilt die Empfehlung, umkehrbar)
+- **Kontext:** ADR-049 gibt die Vorproduktion frei. Der Produktionsplan entstand aus vier Analysen und zwei Gegenprüfungen; einige Fragen beantwortet die Bible nicht eindeutig. Statt jede einzeln zu stellen, stehen die Lesarten hier gesammelt. Keine davon weicht von der Bible ab; echte Weichen stehen im Plan als Entscheidungen.
+- **Entscheidung:**
+  - Twist I (§38, „Elysia ist nicht die gesamte Welt“, ca. 20–25 %) ist der Riss, bei 11 h Hauptpfad rechnerisch bei 16 %; kein zusätzlicher Story-Beat.
+  - Die Signature-Begegnung des Antreibers bleibt die aus dem Slice; Akt III zeigt sein Warum, die neue Begegnung dort gehört dem Einsiedler.
+  - Mira reist nicht dauerhaft mit (Bible §13, §37; ADR-042); die Wege kreuzen sich in Akt II, IV, VI und VII.
+  - Der Richter beginnt in Akt II, sein Bogen läuft über drei Akte.
+  - Elysias Mini-Quests zählen nicht zu den 15–20 Nebenquests (§43); sie sind die RPG-Täuschung.
+  - Elysias Humor bleibt auf dem Niveau des Slice (§59 Risiko 9).
+  - Erscheinungsbild (§6): wenige symmetrische Startvarianten beim neuen Spiel, Zusätze später als Überlagerungen; die Zusätze sind Cut-First.
+  - Das Haus bleibt im Tal und ist Rückkehrort jedes Akts; keine Schnellreise.
+  - Spielstände aus Slice-Builds müssen nicht überleben; dafür ein eingefrorenes v2-Fixture und eine Alias-Tabelle für Szenen.
+  - Textkarten bleiben; Prototyp-Szenen bleiben, bis eine echte Szene sie ersetzt (der Leistungstest bleibt vergleichbar).
+  - Englisch gehört nicht zu diesem Plan.
+  - Kuriositäten-Ziel 36; Porträts erst nach einem Pilot.
+  - ADR-007 und ADR-015 gelten als angenommen; ADR-017 schließt Entscheidung 1 des Plans.
+  - Ohne Tester ist der Desire-Test aus §57 das Urteil des Projektinhabers; die offenen Playtest-Fragen gelten mit den heutigen Werten, bis er beim Akt-I-Durchlauf etwas anders sieht.
+- **Konsequenzen:** Jede Annahme lässt sich mit einem Satz des Projektinhabers kippen; betroffene Teile des Plans werden dann neu geschnitten. Externe Playtests bleiben vor einer Veröffentlichung Pflicht (Bible §61, `OFFENE_PUNKTE.md`).
