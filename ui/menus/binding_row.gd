@@ -82,7 +82,7 @@ func _init(
 
 
 ## Shows the cells: `texts` are the labels of the filled ones (the rest is empty), `fixed_text`
-## the pinned keys, `selected` the cell with the frame (-1 none), `capturing` the "…" in it.
+## the pinned keys, `selected` the lit cell (-1 none), `capturing` the "…" in it.
 func show_cells(
 	texts: PackedStringArray, fixed_text: String, selected: int, capturing: bool
 ) -> void:
