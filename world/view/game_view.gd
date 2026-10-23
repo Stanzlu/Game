@@ -26,10 +26,10 @@ const FOLLOW_OFFSET := Vector2(0, -8)
 ## How quickly the camera catches up (1/s). Higher = tighter: at 30 the camera trails a
 ## walking figure by about 3 px and has settled (95 %) 0.1 s after it stops, so nothing
 ## visibly slides on after the stop (it was 14: 6 px of lag and a 7 px slide).
+## There is no look-ahead: the figure stays where it is on screen, whichever way it turns. A
+## lead that swung to the other side when the figure reversed made the picture jump (up to
+## 18 px in a few frames; playtest v0.8.0).
 @export var follow_sharpness := 30.0
-## Pixels the camera leads in the walking direction.
-@export var look_ahead := 12.0
-@export var look_ahead_sharpness := 4.0
 
 var viewport: SubViewport
 var world_root: Node2D
@@ -47,7 +47,6 @@ var zoom := 1.0
 var view_size := BASE_SIZE
 
 var _cam_pos := Vector2.ZERO
-var _lead := Vector2.ZERO
 var _has_position := false
 ## True while the camera glides to a new target (follow(node, false)); PIXEL mode otherwise
 ## follows rigidly.
@@ -152,21 +151,14 @@ func _process(delta: float) -> void:
 	var feet := target.global_position
 	if target.has_method(&"interpolated_position"):
 		feet = target.call(&"interpolated_position")
-	var velocity: Vector2 = target.get("velocity") if "velocity" in target else Vector2.ZERO
-	# The lead stays where it is when the target stops (no drift after every stop); it
-	# only changes while walking.
-	if velocity.length() > 10.0:
-		var lead_target := velocity.normalized() * look_ahead
-		_lead = CameraMath.lead_toward(_lead, lead_target, look_ahead_sharpness, delta)
 	# Following the rounded feet keeps the snapped player steady on screen.
-	var desired: Vector2 = feet.round() + _lead + FOLLOW_OFFSET
+	var desired: Vector2 = feet.round() + FOLLOW_OFFSET
 	if not _has_position:
 		_cam_pos = desired
-		_lead = Vector2.ZERO
 		_has_position = true
 	elif camera_mode == CameraMode.PIXEL and not _gliding:
 		# whole pixels, locked to the feet: the player never wobbles against the screen
-		_cam_pos = feet.round() + _lead.round() + FOLLOW_OFFSET
+		_cam_pos = desired
 	else:
 		_cam_pos = CameraMath.smooth_toward(_cam_pos, desired, follow_sharpness, delta)
 		if _gliding and _cam_pos.distance_to(desired) < 1.0:

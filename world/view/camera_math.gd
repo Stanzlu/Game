@@ -12,17 +12,6 @@ static func smooth_toward(
 	return current.lerp(target, 1.0 - exp(-sharpness * delta))
 
 
-## One step of the look-ahead lead. It eases toward `lead_target`, but when the target
-## points the other way (turning around) the lead swings over to half of it at once: the
-## camera then does not first drag the old lead through the figure and lag behind the turn.
-static func lead_toward(
-	lead: Vector2, lead_target: Vector2, sharpness: float, delta: float
-) -> Vector2:
-	if lead.dot(lead_target) < 0.0:
-		lead = lead_target * 0.5
-	return smooth_toward(lead, lead_target, sharpness, delta)
-
-
 ## Splits a camera position into the integer part used inside the pixel-snapped world
 ## and the remainder the world display is shifted by. Pixel mode rounds and drops it.
 static func split(position: Vector2, smooth: bool) -> Array[Vector2]:

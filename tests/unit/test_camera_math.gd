@@ -1,6 +1,12 @@
 extends GutTest
 
 
+## A walker the way the player is for the camera: a position and a velocity.
+class Walker:
+	extends Node2D
+	var velocity := Vector2.ZERO
+
+
 func test_pixel_mode_rounds_and_has_no_remainder() -> void:
 	var parts := CameraMath.split(Vector2(10.6, -3.4), false)
 	assert_eq(parts[0], Vector2(11, -3))
@@ -68,11 +74,47 @@ func test_the_picture_does_not_slide_on_after_the_figure_stops() -> void:
 	assert_gt(_walk_and_stop(14.0, 6), 0.5, "the old sharpness still slid on")
 
 
-func test_the_look_ahead_swings_at_once_when_turning_around() -> void:
-	var lead := Vector2(12, 0)
-	var swung := CameraMath.lead_toward(lead, Vector2(-12, 0), 4.0, 1.0 / 60.0)
-	assert_lt(swung.x, 0.0, "already on the new side in the first step")
-	var kept := CameraMath.lead_toward(lead, Vector2(12, 0), 4.0, 1.0 / 60.0)
-	assert_almost_eq(kept.x, 12.0, 0.001, "same direction: unchanged")
-	var sideways := CameraMath.lead_toward(Vector2(12, 0), Vector2(0, 12), 4.0, 1.0 / 60.0)
-	assert_gt(sideways.x, 10.0, "a turn of 90 degrees still eases")
+## Walks a figure at 96 px/s along each leg ({"dir": Vector2, "ticks": int}) and returns the
+## biggest distance the picture moved in one frame and the figure's screen x range (UI px).
+func _walk_legs(legs: Array[Dictionary]) -> Dictionary:
+	var view := GameView.new()
+	add_child_autofree(view)
+	var target := Walker.new()
+	view.add_child(target)
+	target.global_position = Vector2(500, 500)
+	view.follow(target)
+	view._process(1.0 / 60.0)
+	var previous := view.camera_position + view.camera_remainder
+	var biggest := 0.0
+	var seen_x := Vector2(INF, -INF)
+	for leg in legs:
+		target.velocity = (leg["dir"] as Vector2) * 96.0
+		for i: int in leg["ticks"]:
+			target.global_position += (leg["dir"] as Vector2) * 1.6
+			view._process(1.0 / 60.0)
+			var shown := view.camera_position + view.camera_remainder
+			biggest = maxf(biggest, shown.distance_to(previous))
+			previous = shown
+			var x := view.world_to_ui(target.global_position.round()).x
+			seen_x = Vector2(minf(seen_x.x, x), maxf(seen_x.y, x))
+	return {"step": biggest, "x": seen_x}
+
+
+func test_the_picture_does_not_jump_when_the_figure_turns_around() -> void:
+	# playtest v0.8.0: down, then up made the picture jump (the look-ahead swung over, 7 px a frame)
+	var down_up: Array[Dictionary] = [
+		{"dir": Vector2.DOWN, "ticks": 60}, {"dir": Vector2.UP, "ticks": 60}
+	]
+	var result := _walk_legs(down_up)
+	assert_lt(result["step"], 3.0, "walking is 1.6 px a frame; turning around adds no jump")
+	var left_right: Array[Dictionary] = [
+		{"dir": Vector2.LEFT, "ticks": 60}, {"dir": Vector2.RIGHT, "ticks": 60}
+	]
+	assert_lt(_walk_legs(left_right)["step"], 3.0)
+
+
+func test_the_figure_keeps_its_place_on_screen_while_walking() -> void:
+	var east: Array[Dictionary] = [{"dir": Vector2.RIGHT, "ticks": 120}]
+	var seen_x: Vector2 = _walk_legs(east)["x"]
+	assert_lt(absf(seen_x.x - 320.0), 6.0, "only the small follow lag, no lead drifting ahead")
+	assert_lt(absf(seen_x.y - 320.0), 6.0)
