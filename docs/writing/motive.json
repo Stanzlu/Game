@@ -1,0 +1,802 @@
+{
+ "intro": "Wo Motive im Slice vorkommen, wohin sie führen und was das Spiel sich merkt. Die Tabellen entstehen aus `docs/writing/motive.json`; ein Prüfer (`tools/writing/motifs.py`, in `check.sh`) meldet verschwundene Zeilen-IDs und Flags und erinnert an Flags, die noch nicht im Register stehen. Gilt für den Slice; jedes neue Segment trägt seine Motive ein, bevor es geschrieben wird (Plan 9.4).",
+ "sections": [
+  {
+   "kind": "vorausdeutung",
+   "title": "Vorausdeutungen (Bible §46)",
+   "intro": "Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf Informationen beruhen, die unmittelbar vorher eingeführt wurden."
+  },
+  {
+   "kind": "gag",
+   "title": "Laufende Gags (Bible §33)",
+   "intro": "Jeder Gag hat Auftritte und eine Auflösung. Gags tragen einen Gegenstand, eine Figur oder ein Wetter; sie folgen einem schweren Moment nicht zwangsläufig."
+  },
+  {
+   "kind": "kind",
+   "title": "Das Kind (Bible §15)",
+   "intro": "Fragmente, keine Ursache, keine Diagnose, keine Tätergeschichte. Jedes Fragment geht durch die Prüflinse Kind und Sensibilität."
+  }
+ ],
+ "register_intro": "Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Beziehungen, Haus, Garten, Besucher, Beschützer, Musik, Gegenstände, Samen, Mira, Entscheidungen; dazu Fortschritt, Wahrnehmung, Elysia, Kind, Gag). Das Ende liest die Achsen, nie eine Zahl. Neue Flags tragen sich hier ein, sonst meldet der Prüfer sie. Flags nur für Fortschritt haben keinen Bezug zum Ende.",
+ "motifs": [
+  {
+   "id": "spiegelung",
+   "kind": "vorausdeutung",
+   "title": "Fehlende Spiegelung",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_basin_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_basin_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_basin_4"
+    },
+    {
+     "type": "line",
+     "ref": "el_basin_5"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.mirror_seen"
+    },
+    {
+     "type": "line",
+     "ref": "el_child_1"
+    }
+   ],
+   "payoff": "Pfütze im Tal: zum ersten Mal ein Bild der Spielerin (`tal_puddle_2`, `tal_puddle_7`); Twist II (Elysia entstand aus einem Bedürfnis nach Schutz) liest die fehlende Spiegelung zurück.",
+   "payoff_lines": [
+    "tal_puddle_2",
+    "tal_puddle_7"
+   ]
+  },
+  {
+   "id": "npc-bewegung",
+   "kind": "vorausdeutung",
+   "title": "Identische Bewegungen und Sätze",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_loop_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_praise_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.loops"
+    },
+    {
+     "type": "note",
+     "ref": "Elysianer-Routen gespiegelt (ADR-031)"
+    }
+   ],
+   "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
+  },
+  {
+   "id": "loop-musik",
+   "kind": "vorausdeutung",
+   "title": "Schnell loopende Musik",
+   "bible": "§35, §46",
+   "appears": [
+    {
+     "type": "note",
+     "ref": "Elysia-Loop wird mit jedem Besuch kürzer (Musik-Arc)"
+    },
+    {
+     "type": "line",
+     "ref": "el_loop_2"
+    }
+   ],
+   "payoff": "Im Finale erkennt die Spielerin, dass Fragmente des späteren Hauptthemas schon in Elysia vorhanden waren (§35)."
+  },
+  {
+   "id": "kein-nein",
+   "kind": "vorausdeutung",
+   "title": "Menschen ohne echte Ablehnung",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_favor_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_favor_3"
+    },
+    {
+     "type": "line",
+     "ref": "el_favor_5"
+    },
+    {
+     "type": "line",
+     "ref": "el_favor_6"
+    },
+    {
+     "type": "line",
+     "ref": "el_favor_r3"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.asked_for_no"
+    }
+   ],
+   "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`).",
+   "payoff_lines": [
+    "tal_mira_7",
+    "tal_mira_no_2",
+    "haus_bed_5"
+   ]
+  },
+  {
+   "id": "perfekte-natur",
+   "kind": "vorausdeutung",
+   "title": "Perfekte Natur",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_flower_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_flower_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_tree_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_tree_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_pillar_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_feast_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.flower_smelled"
+    }
+   ],
+   "payoff": "Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`.",
+   "payoff_lines": [
+    "tal_flower_2",
+    "tal_flower_4",
+    "tal_berry_2"
+   ]
+  },
+  {
+   "id": "stein",
+   "kind": "vorausdeutung",
+   "title": "Der Stein",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_stone_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.stone_taken"
+    },
+    {
+     "type": "line",
+     "ref": "haus_rest_8"
+    },
+    {
+     "type": "line",
+     "ref": "haus_shelf_6"
+    }
+   ],
+   "payoff": "Der Stein liegt im Regal (`haus_shelf_9`) und bleibt ein Hausmotiv; seine Herkunft bleibt offen.",
+   "payoff_lines": [
+    "haus_shelf_9"
+   ]
+  },
+  {
+   "id": "samen",
+   "kind": "vorausdeutung",
+   "title": "Der Samen",
+   "bible": "§30, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "haus_rest_4"
+    }
+   ],
+   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat im Slice keinen Flag; die Spielfigur trägt ihn schon."
+  },
+  {
+   "id": "hausmotive",
+   "kind": "vorausdeutung",
+   "title": "Hausmotive",
+   "bible": "§26, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "haus_table_1"
+    },
+    {
+     "type": "line",
+     "ref": "haus_table_2"
+    },
+    {
+     "type": "line",
+     "ref": "haus_bucket_1"
+    },
+    {
+     "type": "line",
+     "ref": "haus_fire_9"
+    },
+    {
+     "type": "line",
+     "ref": "haus_shelf_1"
+    },
+    {
+     "type": "flag",
+     "ref": "house.spoon_found"
+    },
+    {
+     "type": "flag",
+     "ref": "house.shelf_filled"
+    }
+   ],
+   "payoff": "Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste."
+  },
+  {
+   "id": "betaeuber",
+   "kind": "vorausdeutung",
+   "title": "Der Betäuber (Gastwirt)",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_host_3"
+    },
+    {
+     "type": "line",
+     "ref": "el_host_11"
+    },
+    {
+     "type": "line",
+     "ref": "haus_rest_7"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.soup_served"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.host_warned"
+    }
+   ],
+   "payoff": "Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit.",
+   "payoff_lines": [
+    "haus_rest_7"
+   ]
+  },
+  {
+   "id": "formulierungen",
+   "kind": "vorausdeutung",
+   "title": "Wiederkehrende Formulierungen",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_host_3"
+    },
+    {
+     "type": "line",
+     "ref": "haus_rest_7"
+    },
+    {
+     "type": "line",
+     "ref": "tal_mira_8"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_tarp_1"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_tarp_2"
+    },
+    {
+     "type": "line",
+     "ref": "haus_mira_8"
+    },
+    {
+     "type": "line",
+     "ref": "tal_mira_again_1"
+    },
+    {
+     "type": "line",
+     "ref": "tal_end_5"
+    },
+    {
+     "type": "line",
+     "ref": "tal_south_sign_2"
+    }
+   ],
+   "payoff": "„Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII)."
+  },
+  {
+   "id": "melodien",
+   "kind": "vorausdeutung",
+   "title": "Fragmente späterer Melodien",
+   "bible": "§31, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_child_3"
+    },
+    {
+     "type": "line",
+     "ref": "tal_shell_1"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_shell_2"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.shell_seen"
+    }
+   ],
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII)."
+  },
+  {
+   "id": "ziege",
+   "kind": "gag",
+   "title": "Die Ziege",
+   "bible": "§33",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "haus_mira_19"
+    },
+    {
+     "type": "line",
+     "ref": "tal_goat_1"
+    },
+    {
+     "type": "line",
+     "ref": "tal_goat_8"
+    },
+    {
+     "type": "line",
+     "ref": "tal_mira_eve_3"
+    },
+    {
+     "type": "line",
+     "ref": "tal_fence_2"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.goat_met"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.goat_loose"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.goat_traded"
+    }
+   ],
+   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen."
+  },
+  {
+   "id": "kartoffel",
+   "kind": "gag",
+   "title": "Die Kartoffel",
+   "bible": "§33",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "tal_goat_4"
+    },
+    {
+     "type": "line",
+     "ref": "tal_mira_eve_r1"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.potato_taken"
+    }
+   ],
+   "payoff": "Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung."
+  },
+  {
+   "id": "ente",
+   "kind": "gag",
+   "title": "Die Ente",
+   "bible": "§33",
+   "appears": [],
+   "payoff": "Orins Erzfeind (Akt IV). Die Ente verhält sich vollkommen normal. Kein Auftritt im Slice."
+  },
+  {
+   "id": "antreiber-freizeit",
+   "kind": "gag",
+   "title": "Der Antreiber optimiert Freizeit",
+   "bible": "§33",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "tal_antr_2"
+    },
+    {
+     "type": "line",
+     "ref": "tal_antr_busy_1"
+    },
+    {
+     "type": "line",
+     "ref": "tal_antr_busy_3"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.antreiber_rests"
+    },
+    {
+     "type": "flag",
+     "ref": "house.antreiber_by_fire"
+    }
+   ],
+   "payoff": "Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2)."
+  },
+  {
+   "id": "richter",
+   "kind": "gag",
+   "title": "Der Richter überdramatisiert",
+   "bible": "§33",
+   "appears": [],
+   "payoff": "Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Kein Auftritt im Slice."
+  },
+  {
+   "id": "kind-lied",
+   "kind": "kind",
+   "title": "Lied und Summen",
+   "bible": "§15",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_child_3"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.child_met"
+    }
+   ],
+   "payoff": "Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente."
+  },
+  {
+   "id": "kind-warten",
+   "kind": "kind",
+   "title": "Warten und Verschwinden",
+   "bible": "§15",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_child_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_child_2"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.child_vanished"
+    }
+   ],
+   "payoff": "Akt III: ein Echo im Wald; Akt VI: ein Blick in Elysia."
+  },
+  {
+   "id": "kind-fragmente",
+   "kind": "kind",
+   "title": "Flur, Tür, Hand, Verstecken, leeres Zimmer, ursprüngliches Haus",
+   "bible": "§15",
+   "appears": [],
+   "payoff": "Noch nicht im Slice. Akt V: sechs Fragmente und die zentrale Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51)."
+  }
+ ],
+ "register": [
+  {
+   "flag": "elysia.woke",
+   "axis": "Fortschritt",
+   "meaning": "Die Spielerin ist in Elysia aufgewacht."
+  },
+  {
+   "flag": "elysia.asked_for_no",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat die Elysianer gebeten, einmal Nein zu sagen."
+  },
+  {
+   "flag": "elysia.offered_bed",
+   "axis": "Elysia",
+   "meaning": "Der Elysianer hat sein Bett angeboten."
+  },
+  {
+   "flag": "elysia.offered_house",
+   "axis": "Elysia",
+   "meaning": "Der Elysianer hat sein Haus angeboten."
+  },
+  {
+   "flag": "elysia.butterflies_asked",
+   "axis": "Fortschritt",
+   "meaning": "Die Gärtnerin hat um die Schmetterlinge gebeten."
+  },
+  {
+   "flag": "elysia.butterfly_first",
+   "axis": "Fortschritt",
+   "meaning": "Erster Schmetterling gefangen."
+  },
+  {
+   "flag": "elysia.butterfly_second",
+   "axis": "Fortschritt",
+   "meaning": "Zweiter Schmetterling gefangen."
+  },
+  {
+   "flag": "elysia.butterfly_third",
+   "axis": "Fortschritt",
+   "meaning": "Dritter Schmetterling gefangen."
+  },
+  {
+   "flag": "elysia.chest_tree_opened",
+   "axis": "Gegenstände",
+   "meaning": "Die Truhe am Weltenbaum ist offen („Ein Kompliment“)."
+  },
+  {
+   "flag": "elysia.flower_smelled",
+   "axis": "Wahrnehmung",
+   "meaning": "An der Blume gerochen (riecht nach nichts)."
+  },
+  {
+   "flag": "elysia.fountain_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Das Becken angesehen."
+  },
+  {
+   "flag": "elysia.mirror_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Das fehlende Spiegelbild bemerkt."
+  },
+  {
+   "flag": "elysia.child_met",
+   "axis": "Kind",
+   "meaning": "Das Kind getroffen."
+  },
+  {
+   "flag": "elysia.child_vanished",
+   "axis": "Kind",
+   "meaning": "Das Kind ist wieder verschwunden."
+  },
+  {
+   "flag": "elysia.stone_taken",
+   "axis": "Gegenstände",
+   "meaning": "Den Stein mitgenommen."
+  },
+  {
+   "flag": "elysia.crystal_touched",
+   "axis": "Wahrnehmung",
+   "meaning": "Den Kristall berührt."
+  },
+  {
+   "flag": "elysia.soup_served",
+   "axis": "Beschützer",
+   "meaning": "Der Gastwirt hat die Suppe serviert (Betäuber)."
+  },
+  {
+   "flag": "elysia.soup_tasteless",
+   "axis": "Beschützer",
+   "meaning": "Die Spielerin hat gemerkt, dass die Suppe nach nichts schmeckt."
+  },
+  {
+   "flag": "elysia.host_warned",
+   "axis": "Beschützer",
+   "meaning": "Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen."
+  },
+  {
+   "flag": "elysia.loops",
+   "axis": "Elysia",
+   "meaning": "Die Schleife ist hörbar geworden (wiederholte Sätze)."
+  },
+  {
+   "flag": "elysia.rift_open",
+   "axis": "Fortschritt",
+   "meaning": "Der Riss ist offen."
+  },
+  {
+   "flag": "elysia.rift_crossed",
+   "axis": "Fortschritt",
+   "meaning": "Die Spielerin ist in die Wirklichkeit übergetreten."
+  },
+  {
+   "flag": "valley.arrived",
+   "axis": "Fortschritt",
+   "meaning": "Im Tal angekommen."
+  },
+  {
+   "flag": "valley.mira_met",
+   "axis": "Mira",
+   "meaning": "Mira kennengelernt (noch als „Die Frau“)."
+  },
+  {
+   "flag": "valley.mountains_seen",
+   "axis": "Fortschritt",
+   "meaning": "Die Berge gesehen."
+  },
+  {
+   "flag": "valley.reflection_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Das eigene Spiegelbild in der Pfütze gesehen."
+  },
+  {
+   "flag": "valley.shell_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Die Muschel an Miras Plane gesehen."
+  },
+  {
+   "flag": "valley.shed_sign_read",
+   "axis": "Wahrnehmung",
+   "meaning": "Das Schild zum Schuppen gelesen."
+  },
+  {
+   "flag": "valley.berries_eaten",
+   "axis": "Wahrnehmung",
+   "meaning": "Brombeeren gegessen."
+  },
+  {
+   "flag": "valley.flower_smelled",
+   "axis": "Wahrnehmung",
+   "meaning": "An der Blume im Tal gerochen."
+  },
+  {
+   "flag": "valley.crossed",
+   "axis": "Fortschritt",
+   "meaning": "Den Bach überquert."
+  },
+  {
+   "flag": "valley.fell_in",
+   "axis": "Entscheidungen",
+   "meaning": "In den Bach gefallen (nur der Weg über die runden Steine)."
+  },
+  {
+   "flag": "valley.fell_twice",
+   "axis": "Gag",
+   "meaning": "Ein zweites Mal in den Bach gefallen."
+  },
+  {
+   "flag": "valley.bridge_fixed",
+   "axis": "Mira",
+   "meaning": "Mira hat ein Brett über die Brücke gelegt."
+  },
+  {
+   "flag": "valley.wood_needed",
+   "axis": "Fortschritt",
+   "meaning": "Trockenes Holz wird gebraucht."
+  },
+  {
+   "flag": "valley.wood_taken",
+   "axis": "Beschützer",
+   "meaning": "Das Holz wurde geholt (Ende des Antreiber-Weges)."
+  },
+  {
+   "flag": "valley.antreiber_rests",
+   "axis": "Beschützer",
+   "meaning": "Der Antreiber sitzt, statt zu laufen."
+  },
+  {
+   "flag": "valley.goat_met",
+   "axis": "Gag",
+   "meaning": "Der Ziege begegnet."
+  },
+  {
+   "flag": "valley.goat_loose",
+   "axis": "Gag",
+   "meaning": "Die Ziege ist los (Lücke im Zaun)."
+  },
+  {
+   "flag": "valley.goat_traded",
+   "axis": "Gag",
+   "meaning": "Kartoffel gegen Stiefel getauscht."
+  },
+  {
+   "flag": "valley.potato_taken",
+   "axis": "Gag",
+   "meaning": "Die Kartoffel genommen."
+  },
+  {
+   "flag": "valley.ending",
+   "axis": "Fortschritt",
+   "meaning": "Das Ende des Slice läuft („Zum Meer.“)."
+  },
+  {
+   "flag": "encounter.antreiber_resolved",
+   "axis": "Beschützer",
+   "meaning": "Der Weg des Antreibers ist durch Stehenbleiben aufgelöst."
+  },
+  {
+   "flag": "house.fire_lit",
+   "axis": "Haus",
+   "meaning": "Das Feuer brennt."
+  },
+  {
+   "flag": "house.rested",
+   "axis": "Haus",
+   "meaning": "Am Feuer ausgeruht (Abend)."
+  },
+  {
+   "flag": "house.spoon_found",
+   "axis": "Haus",
+   "meaning": "Den kleinen Löffel gefunden."
+  },
+  {
+   "flag": "house.shelf_filled",
+   "axis": "Haus",
+   "meaning": "Der Löffel steht im Regal."
+  },
+  {
+   "flag": "house.shelf_stone",
+   "axis": "Haus",
+   "meaning": "Der Stein liegt im Regal."
+  },
+  {
+   "flag": "house.shelf_both",
+   "axis": "Haus",
+   "meaning": "Löffel und Stein stehen im Regal."
+  },
+  {
+   "flag": "house.cat_fed",
+   "axis": "Haus",
+   "meaning": "Die Katze ist gefüttert und im Haus."
+  },
+  {
+   "flag": "house.cat_naming",
+   "axis": "Haus",
+   "meaning": "Die Katze wird benannt."
+  },
+  {
+   "flag": "house.antreiber_by_fire",
+   "axis": "Beschützer",
+   "meaning": "Der Antreiber sitzt am Feuer des Hauses."
+  },
+  {
+   "flag": "house.antreiber_left",
+   "axis": "Beschützer",
+   "meaning": "Der Antreiber hat das Haus wieder verlassen."
+  },
+  {
+   "flag": "house.mira_knocked",
+   "axis": "Mira",
+   "meaning": "Mira hat geklopft (Marke für Tests und Autopilot)."
+  },
+  {
+   "flag": "house.mira_seated",
+   "axis": "Mira",
+   "meaning": "Mira sitzt am Feuer."
+  },
+  {
+   "flag": "house.mira_visited",
+   "axis": "Mira",
+   "meaning": "Mira war zu Besuch."
+  },
+  {
+   "flag": "house.mira_left",
+   "axis": "Mira",
+   "meaning": "Mira ist wieder gegangen."
+  }
+ ]
+}
