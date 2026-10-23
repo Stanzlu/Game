@@ -200,3 +200,37 @@ func test_the_real_menu_sits_between_the_closing_line_and_the_footer() -> void:
 	var subtitle: Control = boot._subtitle
 	assert_gte(panel.position.y, subtitle.position.y + subtitle.size.y - 0.5, "below the line")
 	assert_lte(panel.position.y + panel.size.y, boot._footer.position.y, "above the footer")
+
+
+## The panel style a menu draws with, as its theme resolves it.
+func _panel_style(menu: MenuLayer) -> StyleBox:
+	return (menu.frame.get_child(0) as PanelContainer).get_theme_stylebox(&"panel")
+
+
+## Every page the settings menu opens (the key layout, its question and second page, the reset
+## question) is a layer of its own and wears the skin of the title, like the menu itself.
+func _check_pages_wear_the_skin(mode: TitleBackground.Mode, skin: Theme) -> void:
+	BootScript._forced_title = mode
+	var boot := await _boot()
+	var settings: SettingsMenu = boot._settings_menu
+	assert_true(settings.frame.theme == skin, "the start menu's settings use the title skin")
+	settings.open()
+	settings._show_controls()
+	settings._reset()
+	var page: ControlsMenu = settings._controls
+	page._open_notes()
+	var pages: Array[MenuLayer] = [page, page._question(), page._notes, settings._confirm]
+	for child in pages:
+		assert_true(child.frame.theme == skin, "%s wears the skin" % child.name)
+		assert_true(_panel_style(child) == _panel_style(settings), child.name)
+	for child in pages:
+		child.close()
+	settings.close()
+
+
+func test_the_pages_behind_settings_wear_the_elysia_skin() -> void:
+	await _check_pages_wear_the_skin(TitleBackground.Mode.ELYSIA, UiSkin.ELYSIA_SKIN)
+
+
+func test_the_pages_behind_settings_wear_the_real_skin() -> void:
+	await _check_pages_wear_the_skin(TitleBackground.Mode.REAL, UiSkin.REAL_SKIN)

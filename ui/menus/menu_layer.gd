@@ -237,7 +237,9 @@ func close() -> void:
 
 ## Rebuilds the rows and keeps the focused row (after values or slots changed). A menu that is
 ## not shown does nothing: it has no focus of its own, and the focus owner it would not find in
-## its list would send the focus to its first (invisible) row, away from the visible menu.
+## its list would send the focus to its first (invisible) row, away from the visible menu. The
+## same goes for a menu with a page or a question open over it: the rows are built again, the
+## focus stays where it is.
 func rebuild() -> void:
 	if not visible:
 		return
@@ -246,12 +248,18 @@ func rebuild() -> void:
 	list.clear_rows()
 	_build()
 	list.refresh()
-	list.focus_index.call_deferred(index)
+	if focused == null or index >= 0:
+		list.focus_index.call_deferred(index)
 	_fit_height_later()
 
 
-## Hides this menu's panel (and backdrop, the child brings its own) while `child` is open.
+## Hides this menu's panel (and backdrop, the child brings its own) while `child` is open. A menu
+## that does not follow the world (start menu) gets its skin from outside (Boot sets the theme
+## of its frame): the child, which is a layer of its own, is given the same one. `child` is in
+## the tree already, so its frame exists.
 func stack(child: MenuLayer) -> void:
+	if not follow_mode:
+		child.frame.theme = frame.theme
 	child.opened.connect(
 		func() -> void:
 			frame.hide()

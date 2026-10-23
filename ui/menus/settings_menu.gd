@@ -86,6 +86,16 @@ func _preview_for(key: String) -> Callable:
 	return func() -> void: AudioDirector.sfx(str(preview[1]), float(preview[2]))
 
 
+## The pages this menu opened go with it: the pause menu closes its menus from outside, and a
+## page that stayed open would go on eating keys.
+func close() -> void:
+	if _controls != null:
+		_controls.close()
+	if _confirm != null:
+		_confirm.close()
+	super()
+
+
 func _show_controls() -> void:
 	if _controls == null:
 		_controls = ControlsMenu.new()

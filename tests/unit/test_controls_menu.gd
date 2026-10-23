@@ -11,6 +11,7 @@ const PAD := InputBindings.Device.GAMEPAD
 func after_each() -> void:
 	Settings.bindings.reset()
 	Settings.apply_all()
+	Settings.set_value("text.large", false, false)
 	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
 	get_tree().paused = false
 
@@ -375,3 +376,63 @@ func test_a_binding_change_leaves_the_focus_of_the_shown_page_alone() -> void:
 	page.close()
 	settings.close()
 	pause.close()
+
+
+func test_closing_the_pause_menu_closes_the_pages_settings_opened() -> void:
+	var scene := await _sandbox()
+	var pause: PauseMenu = scene.pause_menu
+	pause.open()
+	var settings: SettingsMenu = pause.settings_menu
+	settings.open()
+	settings._show_controls()
+	await wait_physics_frames(2)
+	var page: ControlsMenu = settings._controls
+	Helpers.capture(page, &"sprint", KB)
+	assert_true(page.is_capturing())
+	pause.close()
+	assert_false(page.is_open(), "the page of the settings menu goes with it")
+	assert_false(page.is_capturing(), "and no longer eats the keys")
+	assert_false(settings.is_open())
+	# the same for the reset question
+	pause.open()
+	settings.open()
+	settings._reset()
+	assert_true(settings._confirm.is_open())
+	pause.close()
+	assert_false(settings._confirm.is_open())
+	assert_false(get_tree().paused)
+
+
+func test_a_text_size_change_under_a_question_or_a_page_leaves_the_focus_there() -> void:
+	var menu := await _open()
+	Helpers.capture(menu, &"journal", KB)
+	menu._input(Helpers.key(KEY_E))
+	var question := menu._confirm
+	assert_true(question.is_open())
+	Settings.set_value("text.large", true, false)
+	await wait_physics_frames(4)
+	var focus := get_viewport().gui_get_focus_owner()
+	assert_true(question.list.buttons().has(focus), "the question keeps the focus")
+	question.list.buttons()[1].pressed.emit()
+	await wait_physics_frames(2)
+	menu._open_notes()
+	await wait_physics_frames(2)
+	Settings.set_value("text.large", false, false)
+	await wait_physics_frames(4)
+	assert_true(menu._notes.list.buttons().has(get_viewport().gui_get_focus_owner()))
+	menu.close()
+
+
+func test_real_confirm_presses_start_a_capture_and_the_release_binds_nothing() -> void:
+	var menu := await _open()
+	for code: int in [KEY_E, KEY_ENTER, KEY_SPACE, KEY_KP_ENTER]:
+		Helpers.focus(menu, &"journal", KB)
+		await _tap_key(code)
+		assert_true(menu.is_capturing(), "key %d starts the capture" % code)
+		assert_eq(Helpers.slots(&"journal", KB), ["k%d" % KEY_J], "and is not the new key")
+		menu._input(Helpers.key(KEY_ESCAPE))
+	Helpers.focus(menu, &"journal", PAD)
+	await _tap_pad(JOY_BUTTON_A)
+	assert_true(menu.is_capturing(), "pad A starts it")
+	assert_eq(Helpers.slots(&"journal", PAD), ["b%d" % JOY_BUTTON_BACK], "and is not bound")
+	menu._input(Helpers.pad_button(JOY_BUTTON_START))
