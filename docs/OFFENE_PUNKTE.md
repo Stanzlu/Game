@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 23.10. · Build v0.8.1 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 23.10. · Build v0.8.2 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -27,9 +27,9 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.8.1“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.8.2“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0, v0.8.1) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac: mit v0.8.0 liefert VSync an nur 58 bis 108 fps auf einem 120-Hz-Bildschirm, ohne VSync schafft die Maschine 145 bis 474; auf einem anderen Bildschirm lief nur Elysia mit 37 statt 145 fps. v0.8.1 frischt VSync beim Start einmal auf (unbelegt) und nennt „VSync bremst“ im Leistungstest | #78, #79, #42, `PERFORMANCE.md` | Einstellungen → Anzeige → Bildsynchronisierung **aus**: ruhig? Dann Standard auf macOS ändern (Entscheidung des Projektinhabers). Leistungstest mit v0.8.1 und `benchmark.txt` schicken |
+| J | Leistung auf dem Mac (M1 Pro, 120 Hz): Mit VSync an liefert das Spiel 36 bis 108 fps, ohne VSync schafft die Maschine 145 bis 474; in drei Läufen war mal nur die erste Szene (Elysia, 36 bis 37 fps), mal fast jede Szene betroffen. Der Leistungstest sagt jetzt „VSync bremst“ und bietet einen Knopf „Bildsynchronisierung ausschalten“. Die Auffrischung von VSync beim Start (0.8.1) half nicht und ist raus | #78, #79, #42, `PERFORMANCE.md` | Knopf oder Einstellungen → Anzeige → Bildsynchronisierung **aus**: läuft es ruhig? Dann wird „aus“ auf macOS der Standard (Entscheidung des Projektinhabers). Leistungstest mit v0.8.2 und `benchmark.txt` schicken |
 | J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
 | J | **Tastenbelegung am Mac, mit deutscher Tastatur und am Controller ausprobieren:** Stimmen die Beschriftungen der Tasten, kommt Fn+Löschen als Entf an, erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #75, #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #75 und #76 eintragen |
 | J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
