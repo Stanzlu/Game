@@ -5,6 +5,66 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
 
 ---
 
+## Index
+
+Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß). Der Index steht oben, neue ADRs hängen unten an und kommen hier hinein (`tools/adr_index.py` erzeugt ihn).
+
+| ADR | Titel |
+|---|---|
+| ADR-001 | Engine: Godot 4.7.2 mit typisiertem GDScript |
+| ADR-002 | Sprache Deutsch, Lokalisierung vorbereitet |
+| ADR-003 | Placeholder: CC0 bzw. OFL, austauschbar |
+| ADR-004 | Level-Layouts als Textkarten |
+| ADR-005 | Plattformen: Desktop-only für den Slice |
+| ADR-006 | Dependencies: vendored und gepinnt |
+| ADR-007 | Darstellung: 640×360, Integer-Scaling, Nearest |
+| ADR-008 | Savegames als JSON |
+| ADR-009 | CI-Budget |
+| ADR-010 | Git-Workflow: ein Branch und ein Pull Request pro Phase |
+| ADR-011 | Eingabe über Actions, physische Tasten, alle Geräte |
+| ADR-012 | Welt im SubViewport, zwei Kameramodi |
+| ADR-013 | Kartenformat im Detail |
+| ADR-014 | Programmatische Grey-Box-Platzhalter |
+| ADR-015 | Regeln des Antreiber-Prototyps |
+| ADR-016 | Testoptionen und Autopilot in Phase 1 |
+| ADR-017 | Look-Pipeline: eigene, prozedural erzeugte Pixel-Art |
+| ADR-018 | Einstellungen als JSON, getrennte Profile für automatische Läufe |
+| ADR-019 | Spielzustand und Inhalte |
+| ADR-020 | Dialoge mit statischen IDs und geprüften Zustandsaufrufen |
+| ADR-021 | Speichern im Spiel |
+| ADR-022 | Renderer: Compatibility (OpenGL 3) auf allen Plattformen |
+| ADR-023 | Musik: eigene prozedurale Loops und ein AudioDirector |
+| ADR-024 | UI-Bogen: Elysia-Skin mit HUD, Real-Skin fast leer |
+| ADR-025 | Übergangssequenz und Tageslicht |
+| ADR-026 | Schrift und Bewegung der Oberfläche |
+| ADR-027 | Soundeffekte: eigene, prozedural erzeugte Klänge |
+| ADR-028 | Requisiten-Atlas je Stil |
+| ADR-029 | Spielstand Schema 2 |
+| ADR-030 | Zwei Startbilder: Elysias Schein-Titel, REAL erst nach dem Übertritt |
+| ADR-031 | Elysia perfekt, die Wirklichkeit ungepflegt |
+| ADR-032 | Elysias Loop schrumpft |
+| ADR-033 | Idle-Animationen und große Schrift überall |
+| ADR-034 | Naturklang der Wirklichkeit: Schichten und Zufall statt Schleife |
+| ADR-035 | Der wahre Titel heißt „Nach Elysia“ |
+| ADR-036 | Slice-Texte sind Playtest-Text, Prototypen bleiben markiert |
+| ADR-037 | Die Geschichte steht in Flags, Karten und Szenen reagieren darauf |
+| ADR-038 | Der Antreiber im Slice: dieselben Regeln, neues Gewand |
+| ADR-039 | Das Haus von innen: kleine Karte, gemalte Raumhülle |
+| ADR-040 | Der Slice nach dem Bible-Abgleich: mehr Leben, keine neuen Systeme |
+| ADR-041 | Die Wirklichkeit warm gemalt (Ghibli-Gefühl), Elysia bleibt Hochglanz |
+| ADR-042 | Tiefe statt Breite: der Slice nach dem Abgleich mit vier Referenzspielen |
+| ADR-043 | Zoom und Tiefen-Bogen: Elysia flach, die Wirklichkeit näher und tiefer |
+| ADR-044 | Playtest-Gate: Release-Entwurf auf Versions-Tag, Beat-Zeilen in jedem Build |
+| ADR-045 | Nach dem ersten Spielen: Zoom 1,25× überall, gewachsene Waldränder, Gate-Schwellen |
+| ADR-046 | Polish-Runde: Gefühl, Bedienung, Erzählung, Technik, Bild und Ton |
+| ADR-047 | Polish-Runde 2: Ton nach Lautheit, Erwachen und Ende, Bedienung, Figuren und Bild |
+| ADR-048 | Tastenumbelegung: Modell, Schutzregeln und Oberfläche |
+| ADR-049 | Playtest-Gate ohne Tester: Freigabe der Vorproduktion für Full Production |
+| ADR-050 | Arbeitsannahmen für Full Production |
+| ADR-051 | Unit-Tests mit fester Bildrate |
+
+---
+
 ## ADR-001 · Engine: Godot 4.7.2 mit typisiertem GDScript
 - **Status:** angenommen · 2026-10-02
 - **Kontext:** 2D-Pixel-Art, Licht, Wetter, kein Combat, Desktop zuerst, 0 €, Arbeit mit Claude Code ohne GUI in der Cloud.
@@ -601,3 +661,11 @@ sondern mit „Ersetzt durch ADR-xxx“ markieren. Grundlage: [`PRE_IMPLEMENTATI
   - ADR-007 und ADR-015 gelten als angenommen; ADR-017 schließt Entscheidung 1 des Plans.
   - Ohne Tester ist der Desire-Test aus §57 das Urteil des Projektinhabers; die offenen Playtest-Fragen gelten mit den heutigen Werten, bis er beim Akt-I-Durchlauf etwas anders sieht.
 - **Konsequenzen:** Jede Annahme lässt sich mit einem Satz des Projektinhabers kippen; betroffene Teile des Plans werden dann neu geschnitten. Externe Playtests bleiben vor einer Veröffentlichung Pflicht (Bible §61, `OFFENE_PUNKTE.md`).
+
+## ADR-051 · Unit-Tests mit fester Bildrate
+- **Status:** angenommen · 2026-10-23 (P6.1 des Produktionsplans)
+- **Kontext:** Die GUT-Suite (691 Tests) brauchte 592 s in Echtzeit, `check.sh` rund 12 Minuten. Fast alles davon war Warten: Die Story-Tests spielen Szenen, Zwischensequenzen und Fades in Spielzeit ab (`test_slice_haus` 148 s, `test_slice_tiefe` 112 s, `test_slice_tal` 55 s). Der Plan rechnete bei wachsendem Inhalt mit einer Stunde je Prüfung (`docs/PRODUKTIONSPLAN.md`, Risiken).
+- **Entscheidung:** `tools/check.sh` startet GUT mit `--fixed-fps 60`: Jedes Bild zählt 1/60 s Spielzeit, der Rechner rechnet so schnell er kann. Danach 70 s statt 592 s (`check.sh` insgesamt 189 s); 3 Wiederholungen mit je 691 von 691 grün. `GUT_FIXED_FPS=0` fährt in Echtzeit. Der Smoke-Lauf des ganzen Slice nutzte schon `--fixed-fps 30`. Ein Test maß mit der Wanduhr (`Time.get_ticks_msec`) und schlug als einziger fehl; er zählt jetzt Spielzeit. Regel in `CLAUDE.md`: Tests messen nie mit der Wanduhr. Am Ende der GUT-Stufe zeigt `tools/gut_times.py` die fünf langsamsten Testdateien, damit Wachstum sichtbar bleibt.
+- **Nicht gebaut (Cut-First):** keine Aufteilung auf mehrere Prozesse und keine Stufe `check.sh --quick`; bei 3 Minuten lohnt beides nicht. Wieder prüfen, wenn der Lauf über 6 Minuten liegt.
+- **Grenzen:** Der Dummy-Audiotreiber läuft weiter auf der Wanduhr (KNOWN_ISSUES #67): Audio-Zeiten prüft nur `tools/audio/measure.sh`. Fehler, die nur bei echter Bildrate auftreten (ungleiche Bildzeiten, Rennen zwischen Physik und Bild), fängt der schnelle Lauf nicht; dafür der Echtzeitlauf vor jedem Phasenende.
+- **Konsequenzen:** Schnellere Rückmeldung (3 statt 12 Minuten) bei gleicher Testzahl. Tests sind unter fester Bildrate deterministischer (ein Physikschritt je Bild).

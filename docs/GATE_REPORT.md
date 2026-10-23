@@ -97,7 +97,7 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 | Windows-Build nie auf echter Hardware gestartet | mittel | hoch | Linux-Build startet in CI; Windows im Playtest bestätigen (KNOWN_ISSUES #6) |
 | Controller auf echter Hardware ungetestet | mittel | gering | Tastatur geht immer; Rückmeldung im Playtest (KNOWN_ISSUES #11) |
 | Prozedurale Pipeline (Textkarten, gebackene Böden, generierte Sprites) skaliert nicht auf 7 Regionen | hoch für Full Production | hoch | nach dem Gate entscheiden: Karten-Editor (Tiled/LDtk, ADR-004) und handgemalte Assets |
-| Abhängigkeit von Godot 4.7.2 und Dialogue Manager 4.1.0 | gering | mittel | Version gepinnt, dünne Adapter, 493 automatische Tests; Updates nur bewusst |
+| Abhängigkeit von Godot 4.7.2 und Dialogue Manager 4.1.0 | gering | mittel | Version gepinnt, dünne Adapter, 691 automatische Tests (Stand v0.8.4); Updates nur bewusst |
 | Spielstände über Versionen hinweg | gering | mittel | `schema_version` und Migrationen (ADR-021, `SAVE_FORMAT.md`); Playtest-Stände müssen nicht in Full Production überleben |
 | Kostenfallen (CI-Minuten, Artefakt-Speicher, Signierung, Assets) | gering | mittel | öffentliches Repository, Releases statt Artefakte, 0-€-Regel |
 

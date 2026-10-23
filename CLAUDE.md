@@ -7,11 +7,13 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 
 ## Zuerst lesen
 - `docs/GAME_BIBLE.md` – verbindliche Produktvision. Abweichungen nur nach Rückfrage und ADR.
-- `docs/DECISIONS.md` – getroffene Entscheidungen. `docs/ARCHITECTURE.md` – Aufbau und Status.
+- `docs/DECISIONS.md` – getroffene Entscheidungen (Index oben; nur den passenden ADR lesen). `docs/ARCHITECTURE.md` – Aufbau und Status.
 - `docs/TECH_MASTER_PROMPT.md` – Prozessregeln (Fragen bei großen Entscheidungen, 0-€-Regel, Cut-First).
 
 ## Befehle
-- `tools/check.sh` vor jedem Push (Lint, Format, Import, Smoke-Run, GUT). Muss grün sein.
+- `tools/check.sh` vor jedem Push (Lint, Format, Import, Smoke-Run, GUT). Muss grün sein; rund 3 Minuten, die Tabelle am
+  Ende zeigt die Zeit je Schritt. GUT läuft mit `--fixed-fps 60` (Spielzeit so schnell wie der Rechner rechnet, ADR-051);
+  `GUT_FIXED_FPS=0 tools/check.sh` fährt in Echtzeit (rund 12 Minuten, vor jedem Phasenende und bei Zeitfehlern).
 - Einzelne Testdatei: `tools/godot.sh --headless -s addons/gut/gut_cmdln.gd -gselect=test_log -gexit`
 - `tools/export.sh <ziel>` und `tools/smoke_export.sh` für Builds; `tools/capture.sh` für Screenshots.
 - gdtoolkit liegt in `.venv/` (`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`).
@@ -81,7 +83,8 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 ## Konventionen
 - Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs. Lambdas kopieren einfache Locals
   (bool, float, String): Zustand für `wait_until` und Signalhandler in Array oder Dictionary halten;
-  Testschleifen zählen Frames lokal, nie mit `get_tree().get_frame()`. Was sich in `_process` oder nach
+  Tests messen Zeit nie mit der Wanduhr (`Time.get_ticks_*`), sondern in Spielzeit (`get_physics_process_delta_time()` je
+  Prüfaufruf); Testschleifen zählen Frames lokal, nie mit `get_tree().get_frame()`. Was sich in `_process` oder nach
   `process_frame` aufbaut (Menü-Layout, `MenuCursor`), wartet der Test mit `wait_process_frames` ab: Unter Last laufen
   mehrere Physik-Schritte in einem Bild, `wait_physics_frames` ist dort zu früh fertig.
 - Gameplay fragt nur Input-Actions ab, nie konkrete Tasten. Events mit `device = -1`.
@@ -97,7 +100,10 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 - Ein Branch und ein Pull Request pro Phase, kleine thematische Commits.
 - Nach jeder Phase: Ergebnis, Tests, offene Probleme, Entscheidungen, nächster Schritt.
 - Commit-Nachricht mit `[export]` löst in CI Windows-/macOS-Builds aus.
-- CI: GitHub Actions ist abgeschaltet, die CI läuft lokal über `local-ci` (Prüfungen mit `tools/check.sh`, Exports für `main` und `[export]`). Ergebnis nach dem Push: `gh pr checks <Nr>` oder `local-ci status`; sofort prüfen: `local-ci run game <branch|sha>`. `PASS_2.VERSUCH` heißt: erster Versuch rot, zweiter grün (kein sauberes Grün).
+- CI: Der GitHub-Workflow `CI` (`.github/workflows/ci.yml`) ist normalerweise abgeschaltet (ADR-009, Budget) und wird
+  für Release-Entwürfe eingeschaltet (manueller Lauf mit „release“: Prüfung, Exports, Entwurf unter Releases). Die
+  tägliche Prüfung ist `tools/check.sh` (lokal, in Cloud-Sitzungen und über `local-ci`); sie schreibt am Ende die
+  Zeit je Schritt. `PASS_2.VERSUCH` bei `local-ci` heißt: erster Versuch rot, zweiter grün (kein sauberes Grün).
 
 ## Cloud-Umgebung
 - Ein SessionStart-Hook installiert Godot 4.7.2 automatisch.
