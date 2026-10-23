@@ -177,3 +177,18 @@ Leistungstest im Fenster 1280×720, jeweils zweiter Lauf.
   (KNOWN_ISSUES #53).
 - **Offen:** Die Messung auf dem Mac.
 
+## Playtest v0.8.0 auf dem Mac (23.10.)
+
+Foto des Ergebnisbildschirms (Bildschirm mit 145 Hz):
+
+| Szene | Ø fps | langsamste 5 % | ohne VSync | Urteil |
+|-------|-------|----------------|------------|--------|
+| Elysia | 37 | 36,4 ms | 312 | ruckelt |
+| Das Tal | 145 | 8,5 ms | 145 | flüssig |
+| Das Haus | 145 | 8,3 ms | 145 | flüssig |
+| Der Weg zum Schuppen | 144 | 9,6 ms | 145 | flüssig |
+| Wald | 145 | 8,5 ms | 145 | flüssig |
+
+- **Deutung:** Die Szenen sind für die Grafikkarte kein Problem (Elysia schafft ohne VSync 312 fps, also gut 3 ms pro Bild). Elysia läuft mit VSync auf rund ein Viertel der Bildwiederholrate (145 / 4 = 36), und nur dort, als einzige Szene vor dem ersten Umschalten von VSync im Test. Die Reihenfolge deutet auf den Zustand des Fensters hin, nicht auf die Szene.
+- **Umgesetzt (0.8.1):** `SettingsService.restart_vsync` schaltet VSync beim ersten Start einmal kurz aus und wieder an (nur macOS). Das ist eine Vermutung (KNOWN_ISSUES #78); der nächste Leistungstest entscheidet. Bleibt Elysia dann bei 37 fps, liegt es an der Szene, und der Bericht `benchmark.txt` (CPU ms, GPU ms) zeigt, wo.
+- **Hütte beim Laufen:** Im Leistungstest wandert die Hütte mit der Figur mit. Das ist die Antreiber-Mechanik („Der Weg zum Schuppen“): Das Ziel hält sich 120 bis 250 Pixel vor der Figur und weicht zurück, solange sie läuft; der Test läuft auch nach links, und die Hütte folgt.

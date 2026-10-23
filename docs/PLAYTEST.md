@@ -82,6 +82,9 @@ liegt neben dem Ordner `saves`, nicht darin). Eine Datei, die das Spiel nicht le
   - „Kamera“ (Weich oder Pixelgenau): Probier gern beide aus und sag uns, welche dir besser gefällt
 - **Wenn du feststeckst:** Versuch es erst ein paar Minuten selbst. Hilft das nicht, steht unten unter
   „Hilfe“ ein Hinweis für jede Stelle.
+- **macOS, ruckelt es von Anfang an, besonders in Elysia?** Schalte unter **Einstellungen → Anzeige →
+  Bildsynchronisierung (VSync)** aus und wieder an (oder starte den Leistungstest im Startmenü). Läuft es
+  danach flüssig, schreib uns das bitte, mit dem Bericht `benchmark.txt`.
 - **macOS, ruckelt es mit genau 30 Bildern pro Sekunde?** Das ist meistens der Stromsparmodus im
   Vollbild. Netzteil anschließen oder unter **Einstellungen → Anzeige → Bildsynchronisierung (VSync)**
   ausschalten.
