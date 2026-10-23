@@ -166,8 +166,8 @@ func default_slots(action: StringName, device: Device) -> Array[Dictionary]:
 ## False for the walk on the pad (all fixed), for unknown actions and for a device that does
 ## not exist.
 func is_editable(action: StringName, device: Device) -> bool:
-	return _known(action, device) and not (
-		device == Device.GAMEPAD and PAD_FIXED_ACTIONS.has(action)
+	return (
+		_known(action, device) and not (device == Device.GAMEPAD and PAD_FIXED_ACTIONS.has(action))
 	)
 
 
