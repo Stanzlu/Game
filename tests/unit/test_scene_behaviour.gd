@@ -215,7 +215,7 @@ func test_prototype_tuning_is_not_among_the_player_options() -> void:
 			headers.append(group)
 		elif row is Button:
 			in_group[group] = int(in_group.get(group, 0)) + 1
-	assert_eq(in_group["SETTINGS_CONTROLS"], 1, "only the sprint mode under Steuerung")
+	assert_eq(in_group["SETTINGS_CONTROLS"], 2, "sprint mode and Tastenbelegung under Steuerung")
 	assert_eq(headers.count("SETTINGS_DEBUG") > 0, OS.is_debug_build(), "tuning is developer-only")
 	menu.close()
 

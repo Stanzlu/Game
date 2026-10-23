@@ -1,6 +1,6 @@
 class_name ScrollPage
 extends MenuLayer
-## A menu page that is mostly text (Mitwirkende, Steuerung): the only row that can take the
+## A menu page that is mostly text (Mitwirkende, Weitere Tasten): the only row that can take the
 ## focus is "Zurück" at the end, so the focus must not drag the page down, and up/down and
 ## the right stick scroll it instead. Matters with large letters, when the page outgrows
 ## the screen.

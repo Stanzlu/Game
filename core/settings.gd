@@ -5,12 +5,17 @@ extends Node
 ## replaced by the default and logged. Start arguments (--camera=pixel, --tuning=schwer, ...)
 ## override values for the running session only and are never written.
 ##
-## Input overrides: {"<action>": [{"type": "key", "physical_keycode": 87}, ...]}. They are
-## prepared for a rebinding menu after the slice (ADR-011); all events use device -1.
+## Key and button layout: `bindings` (InputBindings, ADR-048) holds the overrides, the file
+## stores them as {"<action>": [{"type": "key", "physical_keycode": 87}, ...]} (version 2: a
+## device is overridden if the list holds events of that device; the fixed events and the
+## other device's events are written along). `bindings_changed` is the signal for it:
+## `changed(key)` is for values only (every scene re-applies its settings on it).
 
 signal changed(key: String)
+## The InputMap holds new events for these actions (the player rebound something).
+signal bindings_changed(actions: PackedStringArray)
 
-const FILE_VERSION := 1
+const FILE_VERSION := 2
 const TUNING_PRESETS: PackedStringArray = ["direkt", "weich", "schwer"]
 const AUDIO_BUSES := {
 	"audio.master": &"Master",
@@ -51,25 +56,21 @@ const SCHEMA := {
 	"access.captions": [false],
 	"debug.overlay": [false],
 }
-const KEYS_PER_EVENT := {
-	"key": ["physical_keycode"], "joy_button": ["button"], "joy_axis": ["axis", "value"]
-}
 
 var file_path := ""
 ## How often the file was written (a slider drag changes a value every frame: one write).
 var writes := 0
+## The key and button layout. Edits go through here; the InputMap follows by itself.
+var bindings := InputBindings.new()
 var _save_queued := false
 var _values: Dictionary[String, Variant] = {}
 var _session: Dictionary[String, Variant] = {}
-var _input_overrides: Dictionary[String, Array] = {}
-var _default_events: Dictionary[String, Array] = {}
 
 
 func _ready() -> void:
 	if file_path.is_empty():
 		file_path = RuntimeEnv.user_dir() + "settings.json"
-	for action in InputMap.get_actions():
-		_default_events[str(action)] = InputMap.action_get_events(action)
+	bindings.changed.connect(_on_bindings_changed)
 	reset_to_defaults(false)
 	load_file()
 	apply_args(OS.get_cmdline_user_args())
@@ -205,7 +206,7 @@ func apply_args(args: PackedStringArray) -> void:
 func apply_all() -> void:
 	for key: String in SCHEMA:
 		_apply(key)
-	_apply_input_overrides()
+	bindings.apply()
 
 
 func _apply(key: String) -> void:
@@ -245,85 +246,14 @@ static func apply_vsync(on: bool) -> void:
 	Engine.max_fps = 0 if on else (roundi(hz) if hz >= 30.0 else 60)
 
 
-# --- Input overrides -------------------------------------------------------------------
+# --- Key layout -------------------------------------------------------------------------
 
 
-func set_input_override(action: String, events: Array[InputEvent]) -> bool:
-	var encoded: Array = []
-	for event in events:
-		var data := encode_event(event)
-		if data.is_empty():
-			Log.error(Log.Category.INPUT, "unsupported binding", {"action": action})
-			return false
-		encoded.append(data)
-	if not InputMap.has_action(action) or encoded.is_empty():
-		Log.error(Log.Category.INPUT, "invalid override", {"action": action})
-		return false
-	_input_overrides[action] = encoded
-	_apply_input_overrides()
+## A rebinding was made: save it and let every prompt that names a key look again.
+func _on_bindings_changed(actions: PackedStringArray) -> void:
 	request_save()
-	return true
-
-
-func clear_input_overrides() -> void:
-	_input_overrides.clear()
-	_apply_input_overrides()
-	request_save()
-
-
-func input_overrides() -> Dictionary:
-	return _input_overrides.duplicate(true)
-
-
-func _apply_input_overrides() -> void:
-	for action: String in _default_events:
-		InputMap.action_erase_events(action)
-		var events: Array = _default_events[action]
-		if _input_overrides.has(action):
-			events = []
-			for data: Dictionary in _input_overrides[action]:
-				events.append(decode_event(data))
-		for event: InputEvent in events:
-			InputMap.action_add_event(action, event)
-
-
-static func encode_event(event: InputEvent) -> Dictionary:
-	if event is InputEventKey:
-		return {"type": "key", "physical_keycode": int((event as InputEventKey).physical_keycode)}
-	if event is InputEventJoypadButton:
-		return {"type": "joy_button", "button": int((event as InputEventJoypadButton).button_index)}
-	if event is InputEventJoypadMotion:
-		var motion := event as InputEventJoypadMotion
-		return {"type": "joy_axis", "axis": int(motion.axis), "value": signf(motion.axis_value)}
-	return {}
-
-
-## Builds an event from untrusted data; returns null if anything is off.
-static func decode_event(data: Dictionary) -> InputEvent:
-	var kind: Variant = data.get("type")
-	if not kind is String or not KEYS_PER_EVENT.has(kind):
-		return null
-	for field: String in KEYS_PER_EVENT[kind]:
-		var v: Variant = data.get(field)
-		if not (v is float or v is int) or not is_finite(float(v)):
-			return null
-	match kind:
-		"key":
-			var key := InputEventKey.new()
-			key.physical_keycode = clampi(int(data["physical_keycode"]), 0, 0x7FFFFFFF) as Key
-			key.device = -1
-			return key
-		"joy_button":
-			var button := InputEventJoypadButton.new()
-			button.button_index = clampi(int(data["button"]), 0, 127) as JoyButton
-			button.device = -1
-			return button
-		_:
-			var motion := InputEventJoypadMotion.new()
-			motion.axis = clampi(int(data["axis"]), 0, 9) as JoyAxis
-			motion.axis_value = 1.0 if float(data["value"]) >= 0.0 else -1.0
-			motion.device = -1
-			return motion
+	bindings_changed.emit(actions)
+	InputDevice.labels_changed.emit()
 
 
 # --- File ------------------------------------------------------------------------------
@@ -347,7 +277,9 @@ func flush() -> void:
 func save_file() -> Error:
 	_save_queued = false
 	writes += 1
-	var data := {"version": FILE_VERSION, "values": _values.duplicate(), "input": _input_overrides}
+	var data := {
+		"version": FILE_VERSION, "values": _values.duplicate(), "input": bindings.to_data()
+	}
 	var err := DirAccess.make_dir_recursive_absolute(file_path.get_base_dir())
 	if err != OK:
 		Log.error(Log.Category.UI, "settings folder", {"error": error_string(err)})
@@ -371,16 +303,21 @@ func save_file() -> Error:
 	return err
 
 
-## Reads the file if it exists. Invalid entries fall back to defaults and are reported.
+## Reads the file if it exists. Invalid entries fall back to defaults and are reported. A file
+## that cannot be read at all is kept as settings.json.bad before the next save replaces it, and
+## a file from a newer build as settings.json.newer (the key layout is the one thing in it that
+## costs the player time to redo).
 func load_file() -> void:
 	if not FileAccess.file_exists(file_path):
 		return
 	var text := FileAccess.get_file_as_string(file_path)
 	var json := JSON.new()
 	if text.length() > 65536 or json.parse(text) != OK or not json.data is Dictionary:
-		Log.warn(Log.Category.UI, "settings unreadable, using defaults", {"path": file_path})
+		var info := {"path": file_path, "kept_as": _keep_file_as(".bad")}
+		Log.warn(Log.Category.UI, "settings unreadable, using defaults", info)
 		return
 	var data: Dictionary = json.data
+	_check_version(data.get("version"))
 	var values: Variant = data.get("values")
 	if values is Dictionary:
 		for key: Variant in values:
@@ -389,16 +326,20 @@ func load_file() -> void:
 				Log.warn(Log.Category.UI, "setting reset", {"key": str(key)})
 			else:
 				_values[str(key)] = checked
-	var input: Variant = data.get("input")
-	if input is Dictionary:
-		for action: Variant in input:
-			var list: Variant = (input as Dictionary)[action]
-			if not (action is String and InputMap.has_action(str(action)) and list is Array):
-				Log.warn(Log.Category.INPUT, "binding dropped", {"action": str(action)})
-				continue
-			var kept: Array = []
-			for entry: Variant in list:
-				if entry is Dictionary and decode_event(entry) != null:
-					kept.append(encode_event(decode_event(entry)))
-			if not kept.is_empty():
-				_input_overrides[str(action)] = kept
+	bindings.load_data(data.get("input"))
+
+
+## A newer build may have written the file: read it as far as it is understood, never refuse.
+## The next save writes it as FILE_VERSION and loses what this build does not know, so the
+## newer file is copied aside first. No version (or no whole number) counts as 1.
+func _check_version(version: Variant) -> void:
+	if (version is int or version is float) and float(version) > float(FILE_VERSION):
+		var info := {"version": version, "kept_as": _keep_file_as(".newer")}
+		Log.warn(Log.Category.UI, "settings from a newer version", info)
+
+
+## Copies the settings file next to itself with `suffix`; returns where it went ("" if that
+## failed).
+func _keep_file_as(suffix: String) -> String:
+	var kept := file_path + suffix
+	return kept if DirAccess.copy_absolute(file_path, kept) == OK else ""

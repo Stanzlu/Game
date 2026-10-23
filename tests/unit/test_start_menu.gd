@@ -146,6 +146,17 @@ func test_the_hint_names_the_keys_or_the_pad() -> void:
 	assert_true(pad.contains("Stick"), pad)
 
 
+func test_the_hint_spells_out_playstation_buttons() -> void:
+	# the footer's font has no ○ □ △: Kreuz and Quadrat instead (the pad prompts keep the glyphs)
+	InputDevice.style = InputDevice.Style.PLAYSTATION
+	InputDevice.set_kind(InputDevice.Kind.GAMEPAD)
+	var pad: String = BootScript.controls_hint()
+	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
+	InputDevice.style = InputDevice.Style.XBOX
+	assert_true(pad.contains("Quadrat") and pad.contains("Kreuz"), pad)
+	assert_false(pad.contains("□") or pad.contains("×"), pad)
+
+
 func test_the_credits_page_scrolls_with_up_and_down() -> void:
 	var menu := CreditsMenu.new()
 	add_child_autofree(menu)
@@ -189,3 +200,37 @@ func test_the_real_menu_sits_between_the_closing_line_and_the_footer() -> void:
 	var subtitle: Control = boot._subtitle
 	assert_gte(panel.position.y, subtitle.position.y + subtitle.size.y - 0.5, "below the line")
 	assert_lte(panel.position.y + panel.size.y, boot._footer.position.y, "above the footer")
+
+
+## The panel style a menu draws with, as its theme resolves it.
+func _panel_style(menu: MenuLayer) -> StyleBox:
+	return (menu.frame.get_child(0) as PanelContainer).get_theme_stylebox(&"panel")
+
+
+## Every page the settings menu opens (the key layout, its question and second page, the reset
+## question) is a layer of its own and wears the skin of the title, like the menu itself.
+func _check_pages_wear_the_skin(mode: TitleBackground.Mode, skin: Theme) -> void:
+	BootScript._forced_title = mode
+	var boot := await _boot()
+	var settings: SettingsMenu = boot._settings_menu
+	assert_true(settings.frame.theme == skin, "the start menu's settings use the title skin")
+	settings.open()
+	settings._show_controls()
+	settings._reset()
+	var page: ControlsMenu = settings._controls
+	page._open_notes()
+	var pages: Array[MenuLayer] = [page, page._question(), page._notes, settings._confirm]
+	for child in pages:
+		assert_true(child.frame.theme == skin, "%s wears the skin" % child.name)
+		assert_true(_panel_style(child) == _panel_style(settings), child.name)
+	for child in pages:
+		child.close()
+	settings.close()
+
+
+func test_the_pages_behind_settings_wear_the_elysia_skin() -> void:
+	await _check_pages_wear_the_skin(TitleBackground.Mode.ELYSIA, UiSkin.ELYSIA_SKIN)
+
+
+func test_the_pages_behind_settings_wear_the_real_skin() -> void:
+	await _check_pages_wear_the_skin(TitleBackground.Mode.REAL, UiSkin.REAL_SKIN)

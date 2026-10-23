@@ -4,7 +4,6 @@ GAME_TITLE,Nach Elysia
 TITLE_ELYSIA,Elysia
 BOOT_SUBTITLE,Prototyp · Systeme
 TITLE_ELYSIA_TAGLINE,Ein Abenteuer für die Ewigkeit
-BOOT_HINT_QUIT,Esc oder B-Taste: Beenden
 BOOT_VERSION,Version %s
 MENU_SANDBOX,Bewegungs-Sandbox
 MENU_ANTREIBER,Antreiber-Prototyp
@@ -12,16 +11,14 @@ MENU_LOOK_ELYSIA,Look: Elysia-Garten
 MENU_LOOK_TAL,Look: Tal im Regen
 MENU_LOOK_WALD,Look: Wald bei Nacht
 MENU_QUIT,Beenden
-MENU_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Ansehen: %s · Journal: %s · Menü: %s
-TITLE_CONTROLS_HINT,Bewegen: %s · Rennen: %s · Bestätigen: %s
-CONTROLS_MOVE_KEYS,WASD
+TITLE_CONTROLS_HINT,Gehen: %s · Rennen: %s · Bestätigen: %s
 CONTROLS_MOVE_PAD,Stick
 PAUSE_TITLE,Pause
 PAUSE_RESUME,Weiter
 PAUSE_TUNING,Bewegungsgefühl
 PAUSE_CAMERA,Kamera
 PAUSE_DIRECTIONS,Richtungen
-PAUSE_SPRINT,Sprinten
+PAUSE_SPRINT,Rennen
 PAUSE_OVERLAY,Info-Anzeige
 PAUSE_TO_MENU,Zum Startmenü
 PAUSE_QUIT,Spiel beenden
@@ -72,7 +69,7 @@ CONFIRM_NEW_GAME,"Neues Spiel beginnen? Dein bisheriger Spielstand wird ersetzt.
 CONFIRM_NEW_GAME_YES,Neu beginnen
 CONFIRM_LEAVE_UNSAVED,"Hier kann gerade nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
 CONFIRM_LEAVE_YES,Trotzdem gehen
-CONFIRM_RESET_SETTINGS,Alle Einstellungen auf den Anfang zurücksetzen?
+CONFIRM_RESET_SETTINGS,Alle Einstellungen auf den Anfang zurücksetzen? Die Tastenbelegung bleibt.
 INTERACT_TALK,Ansprechen
 INTERACT_ENTER,Hineingehen
 INTERACT_CATCH,Fangen
@@ -142,7 +139,7 @@ ENCOUNTER_NORMAL,Normal
 ENCOUNTER_CALMER,Ruhiger
 ENCOUNTER_MUCH_CALMER,Viel ruhiger
 SETTINGS_DEBUG,Entwicklung
-SETTINGS_RESET,Alles zurücksetzen
+SETTINGS_RESET,Einstellungen zurücksetzen
 DEBUG_TITLE,Entwicklung
 DEBUG_QUICKSAVE,Schnell speichern (eigener Debug-Slot)
 DEBUG_QUICKLOAD,Schnell laden (Debug-Slot)
@@ -222,24 +219,81 @@ CAPTION_BIRD,Ein Vogel singt.
 CAPTION_FIRE,Das Feuer knistert.
 CAPTION_CAT,Die Katze miaut.
 CAPTION_PURR,Die Katze schnurrt.
-SETTINGS_SHOW_CONTROLS,Steuerung anzeigen
-CONTROLS_TITLE,Steuerung
+SETTINGS_SHOW_CONTROLS,Tastenbelegung
+CONTROLS_TITLE,Tastenbelegung
 CONTROLS_MOVE,Gehen
-CONTROLS_SPRINT,Rennen (halten)
-CONTROLS_INTERACT,"Ansehen, sprechen, bestätigen"
-CONTROLS_BACK,Zurück
-CONTROLS_MENU,Menü
+CONTROLS_SPRINT,Rennen
+CONTROLS_INTERACT,"Ansehen, Sprechen"
+CONTROLS_BACK,"Zurück, Abbrechen"
+CONTROLS_MENU,Pause
 CONTROLS_JOURNAL,Journal
 CONTROLS_SKIP,Gespräch überspringen: %s halten
 CONTROLS_MOVE_ARROWS,Pfeiltasten
 CONTROLS_SCROLL_ROW,Journal blättern: Bild auf / Bild ab · rechter Stick
-CONTROLS_JOURNAL_SCROLL,Journal blättern: Bild ↑/↓ · rechter Stick
 CONTROLS_PAD_DPAD,Steuerkreuz
 CONTROLS_PS_CROSS,Kreuz
 CONTROLS_PS_CIRCLE,Kreis
 CONTROLS_PS_SQUARE,Quadrat
 CONTROLS_PS_TRIANGLE,Dreieck
-CONTROLS_HINT,Tastatur · Controller
 KEY_STICK,Stick
-KEY_TRIGGER,Trigger
+KEY_ARROW_UP,Pfeil hoch
+KEY_ARROW_DOWN,Pfeil runter
+KEY_ARROW_LEFT,Pfeil links
+KEY_ARROW_RIGHT,Pfeil rechts
+KEY_PAGE_UP,Bild auf
+KEY_PAGE_DOWN,Bild ab
+KEY_DELETE,Entf
+KEY_INSERT,Einfg
+KEY_HOME,Pos1
+KEY_END,Ende
+KEY_CTRL,Strg
+KEY_NUMPAD,Num %s
 PAUSE_LEAVE_SAVE_FAILED,"Der Spielstand konnte nicht gespeichert werden. Was seit dem letzten Speichern geschehen ist, geht verloren. Trotzdem gehen?"
+CONTROLS_MOVE_UP,Nach oben gehen
+CONTROLS_MOVE_DOWN,Nach unten gehen
+CONTROLS_MOVE_LEFT,Nach links gehen
+CONTROLS_MOVE_RIGHT,Nach rechts gehen
+BIND_KEYBOARD,Tastatur
+BIND_PAD,Controller
+BIND_RESET_ALL,Alles auf Standard
+BIND_RESET_YES,Zurücksetzen
+BIND_ABORT,Abbrechen
+BIND_SWAP,Tauschen
+BIND_TAKE,Hier verwenden
+BIND_PRESS_KEY,Drücke die neue Taste
+BIND_PRESS_PAD,Drücke den neuen Knopf
+BIND_HINT,%s ändert · Links/Rechts wählt das Feld · %s löscht · %s zurück
+BIND_CAPTURE_KEYS,Für »%s« · %s bricht ab · %s löscht
+BIND_CAPTURE_PAD,Für »%s« · %s bricht ab · %s löscht
+BIND_NO_PAD,Kein Controller gefunden · %s bricht ab
+BIND_CLEAR_MAC,Fn+Löschen
+BIND_DONE,»%s« liegt jetzt auf %s.
+BIND_DONE_SWAP,»%s« und »%s« sind getauscht.
+BIND_CLEARED,%s ist bei »%s« entfernt.
+BIND_RESET_DONE,Auf Standard zurückgesetzt.
+BIND_ALREADY_DEFAULT,Schon alles auf Standard.
+BIND_NOTHING,Hier ist nichts belegt.
+BIND_LAST,»%s« braucht mindestens eine Taste.
+BIND_LAST_PAD,»%s« braucht mindestens einen Knopf.
+BIND_FIXED_KEY,%s ist fest belegt.
+BIND_RESERVED_FOR,%s gehört fest zu »%s«.
+BIND_RESERVED_TWO,%s ist für »%s« oder »%s« reserviert.
+BIND_INVALID,Diese Taste lässt sich nicht belegen.
+BIND_STICK,Die Sticks bleiben fürs Gehen und Blättern.
+BIND_TRIGGER,Trigger gehen nur bei »%s«.
+BIND_ONLY_KEY,Hier zählt nur eine Taste der Tastatur.
+BIND_ONLY_PAD,Hier zählt nur ein Knopf des Controllers.
+BIND_SAME_ACTION,»%s« hat %s schon.
+BIND_SOLE,%s ist bei »%s« die einzige Taste.
+BIND_SOLE_PAD,%s ist bei »%s« der einzige Knopf.
+BIND_ASK_SWAP,%s ist schon bei »%s«. Tauschen? Dort gilt dann %s.
+BIND_ASK_TAKE,%s ist schon bei »%s«. Dort entfernen und hier verwenden?
+BIND_ASK_RESET_ALL,Tastatur und Controller auf Standard zurücksetzen?
+BIND_MORE_PAGE,Weitere Tasten
+BIND_MORE_TITLE,Weitere Tasten
+BIND_MORE_HINT,Hier lässt sich nichts ändern · Hoch/Runter blättert
+BIND_NOTE_ENTER,Enter bestätigt.
+BIND_NOTE_ESC,Esc öffnet die Pause und geht zurück.
+BIND_NOTE_START,Start öffnet die Pause.
+BIND_NOTE_MENUS,"In Menüs bewegen Pfeiltasten, WASD und das Steuerkreuz."
+BIND_PAD_WALK,Gehen mit dem Controller: %s

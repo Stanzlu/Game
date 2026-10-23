@@ -1,6 +1,9 @@
 extends GutTest
 ## Settings: schema validation, persistence (test profile), session overrides, side effects
-## on audio buses and the input map.
+## on audio buses and the input map, the key layout in the file (version 2).
+
+const KB := InputBindings.Device.KEYBOARD
+const PAD := InputBindings.Device.GAMEPAD
 
 var file_path := RuntimeEnv.user_dir() + "settings_unit.json"
 
@@ -8,8 +11,9 @@ var settings: SettingsService
 
 
 func before_each() -> void:
-	if FileAccess.file_exists(file_path):
-		DirAccess.remove_absolute(file_path)
+	for path: String in [file_path, file_path + ".bad"]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(path)
 	settings = SettingsService.new()
 	settings.file_path = file_path
 	add_child_autofree(settings)
@@ -17,7 +21,27 @@ func before_each() -> void:
 
 func after_each() -> void:
 	# The instance under test changes global audio and input; restore the autoload's view.
+	Settings.bindings.reset()
 	Settings.apply_all()
+
+
+func _write_file(content: String) -> void:
+	DirAccess.make_dir_recursive_absolute(file_path.get_base_dir())
+	var file := FileAccess.open(file_path, FileAccess.WRITE)
+	file.store_string(content)
+	file.close()
+
+
+## A second service on the same file, as after a restart (it writes the global input map).
+func _restarted() -> SettingsService:
+	var other := SettingsService.new()
+	other.file_path = file_path
+	add_child_autofree(other)
+	return other
+
+
+func _key(code: int) -> Dictionary:
+	return {"type": "key", "physical_keycode": code}
 
 
 func _read_file() -> Dictionary:
@@ -88,10 +112,14 @@ func test_broken_or_hostile_file_falls_back_to_defaults() -> void:
 	assert_eq(loaded.get_int("text.speed"), 2)
 	assert_eq(loaded.get_int("audio.music"), 10, "out of range: default")
 	assert_false(loaded.get_bool("display.fullscreen"))
-	assert_eq(loaded.input_overrides().keys(), ["interact"])
+	assert_true(loaded.bindings.is_overridden(&"interact"))
+	assert_eq(loaded.bindings.slots(&"interact", KB)[0], _key(KEY_F))
+	assert_false(loaded.bindings.is_overridden(&"cancel"), "the script entry is no binding")
+	assert_false(loaded.bindings.is_overridden(&"no_action"))
 	assert_push_warning("setting reset")
 	assert_push_warning("setting reset")
 	assert_push_warning("setting reset")
+	assert_push_warning("binding dropped")
 	assert_push_warning("binding dropped")
 
 
@@ -105,6 +133,11 @@ func test_unreadable_file_is_reported_not_fatal() -> void:
 	add_child_autofree(loaded)
 	assert_push_warning("settings unreadable")
 	assert_eq(loaded.get_int("text.speed"), 1)
+	assert_true(FileAccess.file_exists(file_path + ".bad"), "kept for the player, not lost")
+	assert_eq(
+		FileAccess.get_file_as_string(file_path + ".bad"),
+		'Object(Node, "script": Resource("user://evil.gd"))'
+	)
 
 
 func test_session_overrides_are_never_written() -> void:
@@ -129,26 +162,6 @@ func test_volume_steps_drive_audio_buses() -> void:
 	assert_true(AudioServer.is_bus_mute(bus))
 	settings.set_value("audio.music", 10)
 	assert_false(AudioServer.is_bus_mute(bus))
-
-
-func test_input_overrides_replace_and_restore_bindings() -> void:
-	var f_key := InputEventKey.new()
-	f_key.physical_keycode = KEY_F
-	assert_true(settings.set_input_override("interact", [f_key]))
-	var events := InputMap.action_get_events(&"interact")
-	assert_eq(events.size(), 1)
-	assert_eq((events[0] as InputEventKey).physical_keycode, KEY_F)
-	assert_eq(events[0].device, -1)
-	settings.clear_input_overrides()
-	assert_gt(InputMap.action_get_events(&"interact").size(), 1, "defaults are back")
-
-
-func test_event_codec_rejects_garbage() -> void:
-	assert_null(SettingsService.decode_event({"type": "key"}))
-	assert_null(SettingsService.decode_event({"type": "joy_axis", "axis": 1, "value": "up"}))
-	assert_null(SettingsService.decode_event({"type": "mouse"}))
-	var axis := SettingsService.decode_event({"type": "joy_axis", "axis": 1, "value": -0.3})
-	assert_eq((axis as InputEventJoypadMotion).axis_value, -1.0)
 
 
 func test_large_text_scales_every_theme_together() -> void:
@@ -211,3 +224,21 @@ func test_the_file_is_replaced_in_place_and_leaves_no_temp_file() -> void:
 		assert_true(FileAccess.file_exists(file_path), "never without a settings file")
 		assert_false(FileAccess.file_exists(file_path + ".tmp"), "no temp file left over")
 		assert_eq(_read_file().get("values", {}).get("text.speed"), speed)
+
+
+func test_a_file_that_cannot_be_read_is_kept_aside() -> void:
+	_write_file("[1, 2, 3]")
+	_restarted()
+	assert_push_warning("settings unreadable")
+	assert_eq(FileAccess.get_file_as_string(file_path + ".bad"), "[1, 2, 3]", "not a dictionary")
+	_write_file(JSON.stringify({"values": {}, "padding": "x".repeat(70000)}))
+	_restarted()
+	assert_push_warning("settings unreadable")
+	assert_gt(FileAccess.get_file_as_string(file_path + ".bad").length(), 65536, "too long")
+
+
+func test_a_readable_file_leaves_no_copy_behind() -> void:
+	settings.set_value("text.speed", 2)
+	settings.flush()
+	_restarted()
+	assert_false(FileAccess.file_exists(file_path + ".bad"))

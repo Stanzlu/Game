@@ -47,6 +47,7 @@ func _ready() -> void:
 	row.add_child(_verb)
 	visible = false
 	InputDevice.device_changed.connect(func(_kind: int) -> void: _refresh())
+	InputDevice.labels_changed.connect(_relabel)
 
 
 func show_for(target: Interactable) -> void:
@@ -78,6 +79,14 @@ func _refresh() -> void:
 		_tween.tween_property(_panel, ^"modulate:a", 1.0, FADE_IN_SECONDS)
 	else:
 		_panel.modulate.a = 1.0
+
+
+## The player rebound the key: the cap shows the new one at once, without popping in again.
+func _relabel() -> void:
+	if _target == null or not is_instance_valid(_target):
+		return
+	_key.text = InputDevice.label_for(&"interact")
+	_panel.reset_size()
 
 
 func _hide_now() -> void:

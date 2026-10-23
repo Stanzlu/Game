@@ -234,18 +234,35 @@ func _process(delta: float) -> void:
 		_advance()
 
 
-## Swallows presses right after the answers appeared (before the answer list sees them).
+## Swallows presses right after the answers appeared (before the answer list sees them). Later
+## the answer list confirms with `interact` alone (its next_action), so a press that is only
+## ui_accept (Enter, or Space once interact has moved to other keys) picks the focused answer here.
 func _input(event: InputEvent) -> void:
-	if not _open or not _responses.visible or _answer_guard_left <= 0.0:
+	if not _open or not _responses.visible:
 		return
-	if event.is_action_pressed(&"interact") or event.is_action_pressed(&"ui_accept"):
+	var accepted := event.is_action_pressed(&"ui_accept")
+	if not (accepted or event.is_action_pressed(&"interact")):
+		return
+	if _answer_guard_left > 0.0:
 		get_viewport().set_input_as_handled()
+	elif accepted and not event.is_action_pressed(&"interact"):
+		_pick_focused_answer()
+		get_viewport().set_input_as_handled()
+
+
+func _pick_focused_answer() -> void:
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused == null or not focused.has_meta(&"response") or focused.is_queued_for_deletion():
+		return
+	if not _responses.get_menu_items().has(focused):
+		return
+	_on_response_selected(focused.get_meta(&"response") as DialogueResponse)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _open:
 		return
-	# back (B, Backspace) also moves the text on, but never picks an answer; Esc stays the
+	# back (B, Backspace by default) also moves the text on, but never picks an answer; Esc stays the
 	# pause menu's
 	var back := event.is_action_pressed(&"cancel") and not event.is_action_pressed(&"menu")
 	if back and _responses.visible:

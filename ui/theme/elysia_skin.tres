@@ -100,6 +100,57 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bind_cell"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(0.2, 0.12, 0.3, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.62, 0.3, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bind_cell_active"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 0.86, 0.45, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.42, 0.12, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bind_cell_empty"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(0.2, 0.12, 0.3, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.62, 0.3, 0.5)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scroll"]
 content_margin_left = 0
 content_margin_top = 0
@@ -219,6 +270,18 @@ PromptKeyLabel/base_type = &"Label"
 PromptKeyLabel/colors/font_color = Color(0.3, 0.12, 0.05, 1)
 PromptText/base_type = &"Label"
 PromptText/colors/font_color = Color(1, 0.94, 0.75, 1)
+BindCell/base_type = &"PanelContainer"
+BindCell/styles/panel = SubResource("StyleBoxFlat_bind_cell")
+BindCellActive/base_type = &"PanelContainer"
+BindCellActive/styles/panel = SubResource("StyleBoxFlat_bind_cell_active")
+BindCellEmpty/base_type = &"PanelContainer"
+BindCellEmpty/styles/panel = SubResource("StyleBoxFlat_bind_cell_empty")
+BindCellLabel/base_type = &"Label"
+BindCellLabel/colors/font_color = Color(1, 0.96, 0.88, 1)
+BindCellActiveLabel/base_type = &"Label"
+BindCellActiveLabel/colors/font_color = Color(0.3, 0.12, 0.05, 1)
+BindFixed/base_type = &"Label"
+BindFixed/colors/font_color = Color(0.78, 0.7, 0.9, 1)
 HintLabel/base_type = &"SmallLabel"
 HintLabel/colors/font_color = Color(0.78, 0.7, 0.9, 1)
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scroll")

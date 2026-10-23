@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 22.10. · Build v0.7.0 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 23.10. · Build v0.8.0 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -27,11 +27,11 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.7.0“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.8.0“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac mit v0.7.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
+| J | Leistung auf dem Mac mit v0.8.0 unbekannt (30-fps-Bremse, Zoom 1,25× mit linearer Abtastung, 12 Lichter im Wald) | #42, #12, #18, #31, `PERFORMANCE.md` | Startmenü → Leistungstest, Bericht `benchmark.txt` schicken |
 | J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
-| J | **Tastenumbelegung als eigener PR nach dieser Runde:** Das Menü zum Umbelegen (Bible §50) mit eigenem ADR; `controls_menu`, `input_device` und `settings` werden dafür angefasst | #25, ADR-011, Owner-Entscheidung 22.10. | Auftrag zum PR, vor dem Playtest |
+| J | **Tastenbelegung am Mac, mit deutscher Tastatur und am Controller ausprobieren:** Stimmen die Beschriftungen der Tasten, kommt Fn+Löschen als Entf an, erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #75, #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #75 und #76 eintragen |
 | J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
 | J | Von Hand prüfen, was der Container nicht kann: Fenster-X speichert, Fokusverlust öffnet das Pause-Menü, Controller abziehen, PlayStation-Beschriftung, Rumble | #63, #64, #11 | Liste in KNOWN_ISSUES #63; Ergebnis dort eintragen |
 
@@ -44,7 +44,7 @@ im weiteren Spiel nichts verloren geht.
 | Zoom | 1,25× überall, im Haus 1,5× (Ausnahme Innenräume). | ADR-045, Nachtrag 22.10. |
 | Mischpixel | Unverändert bis zum Playtest; keine Option „Pixelraster exakt“, keine Vollbild-Rand-Option, solange niemand es nennt. | ADR-045, Nachtrag 22.10. |
 | Elysias erste Zeilen | Wärmer und ernster geschrieben; die unheimlich-aufrichtigen Sätze bleiben. | ADR-047 |
-| Tastenumbelegung | Eigener PR direkt nach dieser Runde (siehe oben). | ADR-011, Nachtrag 22.10. |
+| Tastenumbelegung | gebaut, ADR-048 (Seite „Tastenbelegung“ im Pause-Menü und unter Einstellungen). | ADR-048, ADR-011 und ADR-018, Nachträge |
 
 ## 2. Klärt der Playtest
 
@@ -124,7 +124,7 @@ Alles ist projekt-eigen erzeugt; Liste aller Dateien in [`PLACEHOLDERS.md`](PLAC
 | Anforderung | Stand | | Offen |
 |---|---|---|---|
 | Skalierbare Textgröße | „Große Schrift“ | P | feste Breiten (#40) |
-| Controller- und Tastatur-Umbelegung | Belegung im Spiel sichtbar („Steuerung anzeigen“, auch im Pause-Menü), Umbelegen nur per Datei | **J** | Menü zum Umbelegen als eigener PR nach der Polish-Runde 2 (#25, ADR-011) |
+| Controller- und Tastatur-Umbelegung | Menü „Tastenbelegung“ (Tastatur und Controller, Konflikte, Standard; ADR-048) | **J** | Beschriftung und Controller auf echter Hardware prüfen (#75, #76) |
 | Untertitel | alle Dialoge und Erzählzeilen; „Es klopft.“ als Zeile; „Geräusche als Text“ (Einstellung, #58; auch Katze und Schnurren) | | – |
 | Getrennte Lautstärken | sechs Regler | | – |
 | Dialoggeschwindigkeit, Auto-Advance | ja | | – |

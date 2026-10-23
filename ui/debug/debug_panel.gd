@@ -1,6 +1,6 @@
 class_name DebugPanel
 extends MenuLayer
-## Developer panel (F4, debug builds only): shows the world state and offers shortcuts to
+## Developer panel (F4 by default, debug builds only): shows the world state and offers shortcuts to
 ## test saving, loading, quests, relationships, items and the UI mode without playing there.
 ## Never part of release builds' behaviour: it frees itself outside debug builds.
 
