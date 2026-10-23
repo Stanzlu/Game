@@ -71,7 +71,18 @@ func test_german_key_names() -> void:
 	}
 	for code: int in names:
 		assert_eq(InputDevice.key_label(code as Key), names[code], "key %d" % code)
-	assert_false(InputDevice.key_label(KEY_META).is_empty())
+
+
+func test_a_layout_answer_that_is_not_a_printable_key_is_not_believed() -> void:
+	# AZERTY puts A where QWERTY has Q: the character on the cap wins
+	assert_eq(InputDevice.shown_code(KEY_Q, KEY_A), KEY_A)
+	assert_eq(InputDevice.shown_code(KEY_SEMICOLON, KEY_M), KEY_M)
+	# the layout has no answer (headless) or a wrong one (Xvfb: Comma -> keypad period)
+	assert_eq(InputDevice.shown_code(KEY_COMMA, KEY_NONE), KEY_COMMA)
+	assert_eq(InputDevice.shown_code(KEY_COMMA, KEY_KP_PERIOD), KEY_COMMA)
+	assert_eq(InputDevice.shown_code(KEY_COMMA, KEY_SPACE), KEY_COMMA)
+	assert_eq(InputDevice.shown_code(KEY_F5, KEY_F5), KEY_F5, "a key without a character")
+	assert_eq(InputDevice.key_label(KEY_COMMA), ",", "and the name is the character")
 
 
 func test_trigger_labels_by_style() -> void:

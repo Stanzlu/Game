@@ -197,11 +197,20 @@ static func key_label(physical: Key) -> String:
 	# Layout lookup needs a real display server (not available headless).
 	if DisplayServer.get_name() != "headless":
 		logical = DisplayServer.keyboard_get_keycode_from_physical(physical)
-	var shown := int(logical if logical != KEY_NONE else physical)
+	var shown := shown_code(physical, logical)
 	# printable keys by the character on the cap (";" and not "Semicolon")
 	if shown > KEY_SPACE and shown < KEY_SPECIAL:
 		return String.chr(shown).to_upper()
 	return OS.get_keycode_string(shown as Key)
+
+
+## The code a key is named after: the character the layout puts on it, if the layout says a
+## printable one. A driver can answer with a keypad or other special code for a printable key
+## (Comma comes back as the keypad's period under Xvfb): that is not believed, the physical
+## key is named instead.
+static func shown_code(physical: Key, logical: Key) -> int:
+	var printable := logical > KEY_SPACE and logical < KEY_SPECIAL
+	return int(logical if printable else physical)
 
 
 ## Keys with a German name of their own; "" for the rest.
@@ -213,8 +222,6 @@ static func _named_key(physical: Key) -> String:
 			return "Enter"
 		KEY_BACKSPACE:
 			return "Backspace"
-		KEY_META:
-			return str({"macOS": "Cmd", "Windows": "Win"}.get(OS.get_name(), "Super"))
 	if NAMED_KEYS.has(physical):
 		var translation_key: String = NAMED_KEYS[physical]
 		return tr_key(translation_key)
