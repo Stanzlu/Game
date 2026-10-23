@@ -1,6 +1,6 @@
 # Offene Punkte
 
-Stand 23.10. · Build v0.8.2 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
+Stand 23.10. · Build v0.8.3 · Sammelliste aller ungelösten Probleme und offenen Entscheidungen, damit
 im weiteren Spiel nichts verloren geht.
 
 **Herkunft der Punkte:**
@@ -27,9 +27,10 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Nächster Schritt |
 |---|---|---|---|
-| J | Release-Entwurf „Playtest v0.8.2“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0, v0.8.1) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
+| J | Release-Entwurf „Playtest v0.8.3“ veröffentlichen; ältere Entwürfe (v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0, v0.8.1, v0.8.2) löschen, falls noch vorhanden | ADR-044 | Projektinhaber prüft und veröffentlicht unter Releases |
 | J | Windows-Build wurde nie auf echter Hardware gestartet | #6 | ein Tester mit Windows, sonst vor dem Versand selbst starten |
-| J | Leistung auf dem Mac (M1 Pro, 120 Hz): Mit VSync an liefert das Spiel 36 bis 108 fps, ohne VSync schafft die Maschine 145 bis 474; in drei Läufen war mal nur die erste Szene (Elysia, 36 bis 37 fps), mal fast jede Szene betroffen. Der Leistungstest sagt jetzt „VSync bremst“ und bietet einen Knopf „Bildsynchronisierung ausschalten“. Die Auffrischung von VSync beim Start (0.8.1) half nicht und ist raus | #78, #79, #42, `PERFORMANCE.md` | Knopf oder Einstellungen → Anzeige → Bildsynchronisierung **aus**: läuft es ruhig? Dann wird „aus“ auf macOS der Standard (Entscheidung des Projektinhabers). Leistungstest mit v0.8.2 und `benchmark.txt` schicken |
+| J | Leistung auf dem Mac (M1 Pro, 120 Hz): Mit VSync an liefert das Spiel 36 bis 108 fps, ohne VSync schafft die Maschine 145 bis 474; in drei Läufen war mal nur die erste Szene (Elysia, 36 bis 37 fps), mal fast jede Szene betroffen. Godot hat dazu ein offenes, bestätigtes Problem im OpenGL-Pfad von macOS (Issue 79646). Der Leistungstest sagt „VSync bremst“ und bietet einen Knopf „Bildsynchronisierung ausschalten“; v0.8.3 schreibt zusätzlich gezeichnete Bilder, fps je Sekunde und Bildschirme in den Bericht | #78, #79, #42, `PERFORMANCE.md` | Knopf oder Einstellungen → Anzeige → Bildsynchronisierung **aus**: läuft es ruhig? Dann wird „aus“ auf macOS der Standard (Entscheidung des Projektinhabers). Leistungstest mit v0.8.3 und `benchmark.txt` schicken |
+| J | Möglicher Ausweg für den Mac: Godots ANGLE-Treiber (OpenGL über Metal, `rendering/gl_compatibility/driver.macos=opengl3_angle`) stellt VSync über Metal statt über Apples OpenGL ein. Der Export von Linux aus legt die ANGLE-Bibliotheken nicht bei (geprüft: `application/export_angle=1` ändert das Zip nicht); sie müssten aus dem offiziellen macOS-Editor kommen, signiert werden und brauchen ADR und Eintrag in `DEPENDENCIES.md` | `PERFORMANCE.md` (Recherche) | Erst entscheiden, wenn „VSync aus“ nicht reicht |
 | J | **Vollbild auf dem Mac prüfen:** Bei ganzzahliger Skalierung kann auf 1440×900 oder Retina 3024×1964 ein schwarzer Rand von 10 bis 15 % bleiben (rechnerisch, nicht gemessen) | #28, Owner-Entscheidung 22.10. | einmal im Vollbild spielen und den Bericht des Leistungstests mitschicken; nur bei bestätigten Rändern eine Option „Bild füllen“ bauen |
 | J | **Tastenbelegung am Mac, mit deutscher Tastatur und am Controller ausprobieren:** Stimmen die Beschriftungen der Tasten, kommt Fn+Löschen als Entf an, erfasst die Seite Trigger und Knöpfe, ohne dass etwas hängt? | #75, #76, ADR-048 | Seite „Tastenbelegung“ öffnen, Felder belegen, Ergebnis in KNOWN_ISSUES #75 und #76 eintragen |
 | J | Der Text der Mitwirkenden nennt keinen Autor („Idee, Geschichte und Umsetzung: das Projekt REAL.“) | `CREDITS_TEXT` in `ui.csv` | Namen eintragen, wenn gewünscht |
