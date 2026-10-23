@@ -246,6 +246,23 @@ static func apply_vsync(on: bool) -> void:
 	Engine.max_fps = 0 if on else (roundi(hz) if hz >= 30.0 else 60)
 
 
+## Switches VSync off for a moment and on again, once, at the start. Playtest v0.8.0 on a Mac with
+## a 145 Hz screen: the first scene of the performance test (Elysia) ran at 37 fps, a quarter
+## of the refresh rate, and everything after the test had switched VSync off and on again at
+## 145 (KNOWN_ISSUES #78). The same cycle before the first scene is the cheap guess that
+## this was the cause; the next test says. Only on macOS and with VSync on, else it does nothing.
+## The timer belongs to the tree, not to a node: VSync must come back even if `owner` is freed.
+static func restart_vsync(owner: Node, seconds := 0.3) -> void:
+	if OS.get_name() != "macOS" or DisplayServer.get_name() == "headless":
+		return
+	if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_DISABLED:
+		return
+	var tree := owner.get_tree()
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	await tree.create_timer(seconds, true, false, true).timeout
+	apply_vsync(Settings.get_bool("display.vsync"))
+
+
 # --- Key layout -------------------------------------------------------------------------
 
 
