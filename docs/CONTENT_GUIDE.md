@@ -112,6 +112,14 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - Nach jeder Kartenänderung neu backen: `.venv/bin/python tools/art/bake_ground.py content/maps/<karte>.txt`. Ein Test meldet, wenn die Texturgröße nicht mehr zur Karte passt; der Schritt „map stamps“ in `check.sh` meldet jede Karte, deren Malart, Schatten, `[meta]` (ohne `scatter`) oder Baker sich seit dem letzten Bake geändert hat (Stempel in `tools/art/map_stamps.json`, ADR-052). Reine Requisiten-Parameter ändern den Stempel nicht.
 - **Querprüfung** (`StoryLint`, Test `test_story_lint`): Türen und `SceneTravel.go` nennen eine eingetragene Szene und einen Marker `spawn_<name>`, der in deren Karte steht (Marker einmal je Karte); jeder Cue aus Karten, `Talk.present` und `cut.say` steht in seinem Dialog; jede Quest-Stufe nach der ersten hat einen Auslöser (`advance_quest("quest", "stufe")` mit Literalen oder Konstanten, oder eine Weltaktion der Karte); ein gelesenes Flag wird irgendwo gesetzt, ein gesetztes irgendwo gelesen (Ausnahmen mit Begründung in `StoryLint.WRITE_ONLY_FLAGS`; `beat.*` braucht keinen Leser); ein Skript mit eigenem Blitz (`flash`, `flicker`, `strobe`, `lightning` als Funktion oder Variable) liest `display.reduce_flashing`, eines mit eigenem Wackeln `display.screen_shake`. Flags, Quest-IDs und Cues daher als Literale oder Konstanten schreiben, nicht aus Variablen bauen.
 
+## Schreibwerkzeuge (ADR-053)
+
+- **Status einer Zeile:** `[#draft]` (Entwurf), `[#ok]` (eingefroren), `[#ph]` (Platzhalter, nur in Prototypen). Höchstens einer; unmarkierte Zeilen zählen als Entwurf. Eingefrorene Zeilen ändern sich nur mit Absicht.
+- **ID-Sperre** (`content/dialogue/ids.lock`, `tools/writing/id_lock.py`): neue Zeilen-IDs mit `--update` eintragen; verschwindet eine ID, schlägt `check.sh` fehl, bis sie wiederkommt oder mit `--retire <id> <Grund>` zurückgezogen ist. Eingefrorene Zeilen tragen einen Hash; nach einer gewollten Änderung `--refreeze <id>`.
+- **Vokabel-Lint** (`tools/writing/vocabulary.json`): keine Therapie-, Diagnose- oder Suchtsprache (Bible §3.2). Ein berechtigter Treffer steht mit Zeilen-ID, Begriff und Grund unter `exceptions`.
+- **Zahlen:** Zahlen im Story-Text werden ausgeschrieben (Dialoge, Journal, Gegenstandsbeschreibungen); Schilder und Größen sind Ausnahmen mit Grund.
+- `tools/writing/report.py` zeigt Zeilen und Wörter je Sprecher, den Stand je Datei und Cues, die nichts mehr startet.
+
 ## Szenen: Musik, Ambience, Licht
 
 - `GameScene`-Exports: `music` (`keep`, `silence`, `elysia`, `valley`, `forest`, `antreiber`), `ambience` (Loop oder `SoundscapeDef`) und `ambience_db`, `view_zoom` (Vorgabe 1,25; nur Innenräume bekommen 1,5, ADR-045).

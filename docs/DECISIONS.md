@@ -63,6 +63,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-050 | Arbeitsannahmen für Full Production |
 | ADR-051 | Unit-Tests mit fester Bildrate |
 | ADR-052 | Speicher-Politik, Kapitelmarken, Kartenstempel und Querprüfung (P6.2) |
+| ADR-053 | Schreibwerkzeuge: Status-Tags, ID-Sperre, Vokabel- und Zahlen-Lint (P6.3) |
 
 ---
 
@@ -682,3 +683,15 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Querprüfung:** `StoryLint` (`core/content/story_lint.gd`) prüft über Dateien hinweg: Türziele und Spawn-Marker, Cues aus Karten und Skripten (`Talk.present`, `cut.say`), Quest-Stufen ohne Auslöser, gelesene Flags ohne Setzer und gesetzte ohne Leser (Ausnahmen mit Begründung in `WRITE_ONLY_FLAGS`), doppelte Spawn-Marker, Beats und Kapitel, Blitz- und Wackeleffekte ohne Einstellungsabfrage. Je Regel ein roter Fixture in `test_story_lint`.
 - **Funde beim ersten Lauf:** Lampenflackern (`Decor`) und das weiße Aufblitzen der XP-Leiste ignorierten »Blitzeffekte reduzieren« (behoben); drei Flags nur für Tests und Autopilot (`house.mira_knocked`, `elysia.rift_crossed`, `encounter.antreiber_resolved`) stehen mit Begründung auf der Ausnahmeliste.
 - **Konsequenzen:** Jeder Akt, der ein Flag setzt, muss es auch lesen oder begründen: so gilt »keine Fake Choices« über Akte hinweg (Plan 5.7). Die Regeln lesen Quelltext und laufen nur im Projekt, nicht im Export. Muster, die sie nicht verstehen (Flags aus Variablen, Quest-IDs aus Variablen), zwingen zu Konstanten oder Literalen: das ist gewollt.
+
+## ADR-053 · Schreibwerkzeuge: Status-Tags, ID-Sperre, Vokabel- und Zahlen-Lint (P6.3)
+- **Status:** angenommen · 2026-10-23 (Abschnitt 9.5 des Produktionsplans)
+- **Kontext:** Der Validator prüft Struktur, nicht Stimme oder Ton (Plan 9.1). Bei rund 4.100 Zeilen-IDs in Full Production und einem einzigen Leser (ADR-049) muss jede mechanische Prüfung, die ein Mensch sonst von Hand täte, ein Werkzeug sein. Die Bible verbietet Therapiesprache, Diagnosen und Suchtbegriffe (§3.2) und Zahlen für Beziehungen und Facetten (§16).
+- **Entscheidung:** Werkzeuge in `tools/writing/` (nur Standardbibliothek, laufen in `check.sh` ohne Godot):
+  - **Status-Tags** `[#draft]` und `[#ok]` auf Zeilen (neben `[#ph]`). `[#ok]` heißt: eingefroren (Ablauf 9.4, Schritt 6). Höchstens ein Status je Zeile.
+  - **ID-Sperre** `content/dialogue/ids.lock` (`tools/writing/id_lock.py`): hält jede Zeilen-ID der Story-Dialoge (heute 444) und für eingefrorene Zeilen einen Hash von Art, Sprecher und Text. Fehler: eine gesperrte ID verschwindet (umbenannt oder gelöscht; Ausweg `--retire <id> <Grund>`), eine eingefrorene Zeile ändert sich oder verliert ihr `[#ok]` (Ausweg nach Durchsicht `--refreeze <id>`), eine zurückgezogene ID kehrt wieder. Hinweise (`note:`): ID noch nicht gesperrt, `[#ok]`-Zeile noch nicht eingefroren, ID in andere Datei gewandert. `--update` sperrt neue IDs, rührt aber nie einen vorhandenen Hash an.
+  - **Vokabel-Lint** (`tools/writing/vocabulary.json`): Begriffe aus Trauma, Therapie, Diagnose, Störungen, Psychologie, Depression, Sucht, Selbsthilfe-Jargon und Englisch; Gewöhnliches (»sucht«, »Störung«, »nüchtern«) trifft nicht. Treffer sind Hinweise im Entwurf und Fehler in `[#ok]`-Zeilen; berechtigte Treffer stehen mit Grund unter `exceptions`.
+  - **Zahlen-Lint:** Ziffern in Story-Text (Dialoge, Journal, Gegenstände) sind Hinweise bzw. Fehler; Zahlen werden ausgeschrieben, Schilder und Größen stehen als Ausnahme mit Grund (heute drei).
+  - **Bericht** (`tools/writing/report.py`, nicht in `check.sh`): Zeilen und Wörter je Sprecher, Entwurf/Frei/Platzhalter je Datei, Cues, die nichts mehr startet. »Gesetzt, aber nie gelesen« (Flags) prüft `StoryLint` (ADR-052).
+- **Messwerte des Slice** (für das Stilbuch, P6.4): 444 Zeilen, 3.828 Wörter, im Mittel 8,6 Wörter je Zeile; Erzählung 39 % der Zeilen, Mira 19 %, Antworten 15 %, Antreiber 10 %. Kein Treffer im Vokabel-Lint; Ziffern nur auf dem Wegweiser (»200 m«) und in der Schuhgröße.
+- **Konsequenzen:** Die Hinweise gelten als Arbeitsliste, nicht als Sperre, bis eine Zeile eingefroren ist; dann sind sie Fehler. Frei gegebene Zeilen lassen sich nur mit Absicht ändern (`--refreeze`). Der Writing-Pass (P6.5) setzt die Slice-Zeilen auf `[#ok]` und friert sie ein. Die Wortliste ist ein Netz mit Löchern, kein Urteil über Ton: Stimme und Takt prüfen weiter die Prüflinsen (Plan 9.4) und der Leser.
