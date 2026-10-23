@@ -37,6 +37,23 @@ func percentile(p: float) -> float:
 	return sorted[index]
 
 
+## Frames per second over the run, one value per full second: a slow scene that is slow
+## throughout looks different from one that recovers after a few seconds (a clock that ramps
+## up), and the average hides the difference.
+func timeline() -> PackedFloat32Array:
+	var result := PackedFloat32Array()
+	var elapsed := 0.0
+	var count := 0
+	for frame_ms: float in frames:
+		elapsed += frame_ms
+		count += 1
+		if elapsed >= 1000.0:
+			result.append(count * 1000.0 / elapsed)
+			elapsed = 0.0
+			count = 0
+	return result
+
+
 func summary() -> Dictionary:
 	var total := 0.0
 	var worst := 0.0

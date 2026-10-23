@@ -13,6 +13,12 @@ extends Node
 ## Elysia and the night forest from the look prototype, the valley, house and path of the slice.
 const SCENES: PackedStringArray = ["look_elysia", "tal", "haus", "weg", "look_wald"]
 const REPORT_NAME := "benchmark.txt"
+const VSYNC_NAMES := {
+	DisplayServer.VSYNC_DISABLED: "aus",
+	DisplayServer.VSYNC_ENABLED: "an",
+	DisplayServer.VSYNC_ADAPTIVE: "adaptiv",
+	DisplayServer.VSYNC_MAILBOX: "mailbox",
+}
 ## Movement pattern (action, seconds), repeated: scrolls the camera across the scene.
 const PATTERN := [[&"move_right", 1.6], [&"move_down", 1.0], [&"move_left", 1.6], [&"move_up", 1.0]]
 
@@ -234,6 +240,7 @@ func report() -> String:
 			)
 		)
 	)
+	lines.append_array(system_lines())
 	lines.append("")
 	lines.append(
 		(
@@ -272,6 +279,23 @@ func report() -> String:
 				)
 			)
 		)
+	lines.append("")
+	lines.append("Verlauf (fps je Sekunde, mit VSync | ohne VSync):")
+	for key in SCENES:
+		if _stats.has(key):
+			(
+				lines
+				. append(
+					(
+						"%-11s %s | %s"
+						% [
+							key.trim_prefix("look_"),
+							timeline_text(_stats[key].timeline()),
+							timeline_text(_raw_stats[key].timeline()),
+						]
+					)
+				)
+			)
 	if capped:
 		lines.append("")
 		lines.append(TranslationServer.translate("BENCH_CAPPED_HINT"))
@@ -279,6 +303,62 @@ func report() -> String:
 		lines.append("")
 		lines.append(TranslationServer.translate("BENCH_VSYNC_HINT"))
 	return "\n".join(lines)
+
+
+## What the machine is doing around the measurement, for telling the causes of a slow run
+## apart (playtest 23.10.: first scene at a quarter of the refresh rate on a Mac): every
+## screen with its refresh rate and which one holds the window, the VSync mode really set,
+## the frame cap, the renderer. (Godot 4 has no power state to ask for, and macOS Low Power
+## Mode, which throttles VSynced apps, shows only as a steady 30 fps.)
+static func system_lines() -> PackedStringArray:
+	var lines := PackedStringArray()
+	var count := DisplayServer.get_screen_count()
+	var screens := PackedStringArray()
+	for index in count:
+		var size := DisplayServer.screen_get_size(index)
+		(
+			screens
+			. append(
+				(
+					"%d: %dx%d @ %s Hz, Skalierung %s"
+					% [
+						index,
+						size.x,
+						size.y,
+						str(roundi(DisplayServer.screen_get_refresh_rate(index))),
+						str(snappedf(DisplayServer.screen_get_scale(index), 0.01)),
+					]
+				)
+			)
+		)
+	var window_screen := DisplayServer.window_get_current_screen()
+	lines.append("Bildschirme: %s · Fenster auf %d" % [" · ".join(screens), window_screen])
+	(
+		lines
+		. append(
+			(
+				"Grafik: %s (%s) · VSync-Modus %s · Bildratenbegrenzung %s · Physik %d/s"
+				% [
+					RenderingServer.get_current_rendering_driver_name(),
+					RenderingServer.get_current_rendering_method(),
+					VSYNC_NAMES.get(DisplayServer.window_get_vsync_mode(), "?"),
+					str(Engine.max_fps) if Engine.max_fps > 0 else "keine",
+					Engine.physics_ticks_per_second,
+				]
+			)
+		)
+	)
+	return lines
+
+
+## "36 35 37 ..." from FrameStats.timeline(), at most `limit` values.
+static func timeline_text(values: PackedFloat32Array, limit := 14) -> String:
+	if values.is_empty():
+		return "–"
+	var parts := PackedStringArray()
+	for index in mini(values.size(), limit):
+		parts.append("%.0f" % values[index])
+	return " ".join(parts) + (" …" if values.size() > limit else "")
 
 
 ## Where the report is written; `absolute` for showing it to the player.

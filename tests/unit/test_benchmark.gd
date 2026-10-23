@@ -124,3 +124,36 @@ func test_the_result_page_has_no_such_button_when_the_machine_is_just_slow() -> 
 	for button: Button in page.find_children("*", "Button", true, false):
 		assert_ne(button.text, TranslationServer.translate("BENCH_VSYNC_OFF"))
 	BenchmarkRunner.last_rows = []
+
+
+func test_the_timeline_shows_a_scene_that_recovers() -> void:
+	# 3 s at 36 fps (27.8 ms), then 2 s at 145 fps (6.9 ms): the average hides the change
+	var frames: Array = []
+	for i in 108:
+		frames.append(1000.0 / 36.0)
+	for i in 300:
+		frames.append(1000.0 / 145.0)
+	var timeline := _stats(frames).timeline()
+	assert_eq(timeline.size(), 5)
+	assert_almost_eq(timeline[0], 36.0, 1.0)
+	assert_almost_eq(timeline[2], 36.0, 1.0)
+	assert_almost_eq(timeline[4], 145.0, 2.0)
+	assert_eq(FrameStats.new().timeline().size(), 0, "no frames, no values")
+
+
+func test_the_report_names_the_screens_and_the_timeline() -> void:
+	var runner := BenchmarkRunner.new()
+	add_child_autofree(runner)
+	for key in BenchmarkRunner.SCENES:
+		runner._stats[key] = _stats([16.7, 16.7, 16.7])
+		runner._raw_stats[key] = _stats([4.0, 4.0, 4.0])
+	var text := runner.report()
+	assert_string_contains(text, "Bildschirme:")
+	assert_string_contains(text, "VSync-Modus")
+	assert_string_contains(text, "Verlauf (fps je Sekunde")
+	assert_string_contains(text, "elysia")
+	assert_eq(BenchmarkRunner.timeline_text(PackedFloat32Array()), "–")
+	assert_eq(BenchmarkRunner.timeline_text(PackedFloat32Array([36.4, 145.0, 144.6])), "36 145 145")
+	var long := PackedFloat32Array()
+	long.resize(20)
+	assert_string_ends_with(BenchmarkRunner.timeline_text(long, 3), "0 0 0 …")
