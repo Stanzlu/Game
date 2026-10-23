@@ -2,9 +2,13 @@ extends Node
 ## Debug-only input player for reproducible captures and checks.
 ## Start with: -- --autopilot=res://tools/autopilot/<script>.json
 ## Script format: [{"t": seconds, "press": ["action", ...], "release": [...], "tap": [...],
-## "log": "text"}]. "press"/"release" hold actions for polling code (movement); "tap" sends
-## real input events for menus and dialogues: pressed, released TAP_TICKS later, so the
-## press survives into a frame even at low capture frame rates. "teleport": [cx, cy] puts the
+## "key": [...], "pad": [...], "log": "text"}]. "press"/"release" hold actions for polling code
+## (movement); "tap" sends real input events for menus and dialogues: pressed, released TAP_TICKS
+## later, so the press survives into a frame even at low capture frame rates. "key": ["F", "Delete"]
+## taps real keys (names as Godot spells them, physical keys) and "pad": [0, 6] real gamepad
+## buttons (joypad button indices; 3 = Y does nothing in the world, 6 = Start): they pass the
+## input device tracking like a player's press, which flips the prompts, and the key layout
+## page captures them. "teleport": [cx, cy] puts the
 ## player on the centre of a map cell (captures of distant spots without long walks).
 ## "repeat": n with "every": seconds repeats an event. "dialogue": seconds clicks through
 ## any open conversation for that long (taps interact while a dialogue box is visible,
@@ -16,6 +20,9 @@ extends Node
 
 const TAP_TICKS := 8
 const DIALOGUE_TAP_TICKS := 24
+## Taps of real keys and buttons are kept under "key:F" / "pad:3" next to the action names.
+const KEY_PREFIX := "key:"
+const PAD_PREFIX := "pad:"
 
 var _events: Array = []
 var _index := 0
@@ -86,8 +93,11 @@ func _physics_process(_delta: float) -> void:
 		if event.has("meet"):
 			_meet(str(event["meet"]))
 		for action: String in event.get("tap", []):
-			_send(action, true)
-			_tapped[action] = _ticks + TAP_TICKS
+			_tap(action)
+		for key_name: String in event.get("key", []):
+			_tap(KEY_PREFIX + key_name)
+		for button: Variant in event.get("pad", []):
+			_tap(PAD_PREFIX + str(int(button)))
 		if event.has("give"):
 			WorldState.add_item(str(event["give"]), 1, false)
 		if event.has("flag"):
@@ -108,11 +118,39 @@ func _dialogue_open() -> bool:
 	return box != null and bool(box.get(&"visible"))
 
 
-func _send(action: String, pressed: bool) -> void:
+func _tap(token: String) -> void:
+	_send(token, true)
+	_tapped[token] = _ticks + TAP_TICKS
+
+
+func _send(token: String, pressed: bool) -> void:
+	var event := event_for(token, pressed)
+	if event != null:
+		Input.parse_input_event(event)
+
+
+## The event a tap token stands for: "key:F" a real key press, "pad:3" a real gamepad button, the
+## rest an action by name. Null (and an error in the log) for a key name Godot does not know.
+static func event_for(token: String, pressed: bool) -> InputEvent:
+	if token.begins_with(KEY_PREFIX):
+		var code := OS.find_keycode_from_string(token.trim_prefix(KEY_PREFIX))
+		if code == KEY_NONE:
+			Log.error(Log.Category.INPUT, "autopilot key unknown", {"key": token})
+			return null
+		var key := InputEventKey.new()
+		key.physical_keycode = code
+		key.keycode = code
+		key.pressed = pressed
+		return key
+	if token.begins_with(PAD_PREFIX):
+		var button := InputEventJoypadButton.new()
+		button.button_index = int(token.trim_prefix(PAD_PREFIX)) as JoyButton
+		button.pressed = pressed
+		return button
 	var event := InputEventAction.new()
-	event.action = action
+	event.action = token
 	event.pressed = pressed
-	Input.parse_input_event(event)
+	return event
 
 
 func _teleport(cell: Array) -> void:
