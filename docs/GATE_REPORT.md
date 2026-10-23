@@ -86,7 +86,7 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 |---|---|---|---|
 | Platzhalter-Grafik und -Ton verfälschen die Ä-Gates | hoch | hoch | Gate-Klassen M/Ä; Tester-Briefing in `PLAYTEST.md`; Art-Pass erst nach Validierung |
 | Slice kürzer als 45 Minuten | mittel | mittel | Zeit pro Abschnitt aus dem Log; gezielt vertiefen (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“) |
-| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel (Urteil „VSync bremst“ mit Knopf zum Ausschalten), Hinweis in `PLAYTEST.md`; Mac mit v0.8.0 und v0.8.1 gemessen (`PERFORMANCE.md`), Messung mit v0.8.3 offen |
+| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel (Urteil „VSync bremst“ mit Knopf zum Ausschalten), Hinweis in `PLAYTEST.md`; Mac mit v0.8.0 und v0.8.1 gemessen (`PERFORMANCE.md`), im Spiel läuft es gut, mit VSync an und aus gleich (Projektinhaber, 23.10.); Leistungstest mit v0.8.3 offen |
 | Einmalige Hänger beim ersten Laden einer Szene (Shader-Kompilierung) | hoch beim ersten Start | gering | danach im Shader-Cache; bei Bedarf Vorwärmen im Ladebildschirm (KNOWN_ISSUES #53) |
 | Unsignierte Builds schrecken Tester ab | mittel | gering | Schritt-für-Schritt-Anleitung; Signierung erst nach Budgetentscheidung (KNOWN_ISSUES #5) |
 | Texte sind Entwürfe (Ton, Humor, Miras Stimme) | mittel | hoch | Playtest-Fragen; Writing-Pass nach dem Gate (KNOWN_ISSUES #47) |
@@ -101,7 +101,7 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 
 | Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Letzter Stand (Messungen bis v0.8.1) |
 |---|---|---|
-| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.8.0 und v0.8.1 gemessen: Elysia 36 bis 60 fps, die übrigen Orte 58 bis 145 fps, ohne VSync 145 bis 474 (`PERFORMANCE.md`); mit v0.8.2 neu messen |
+| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.8.0 und v0.8.1 gemessen: Elysia 36 bis 60 fps, die übrigen Orte 58 bis 145 fps, ohne VSync 145 bis 474 (`PERFORMANCE.md`); im Spiel läuft es auf dem Mac gut, mit VSync an und aus gleich (Projektinhaber, 23.10.); Leistungstest mit v0.8.3 offen |
 | Frame-Zeit CPU | 95 % unter 16,6 ms | headless rund 7 ms pro Frame, langsamste 8–10 ms |
 | Container (Software-Rendering, kein Maßstab) | – | 38–48 fps in allen Szenen, 11–186 Draw Calls |
 | Erster Start einer Szene | ohne spürbaren Hänger | einmalig bis 255 ms (Shader-Kompilierung, Software-Rendering), danach max. 37–44 ms |
