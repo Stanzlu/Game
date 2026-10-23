@@ -27,7 +27,7 @@ const RIGHT_INSET := 4.0
 ## At least this much stays free between the name and what stands right of it.
 const NAME_GAP := 12.0
 const PULSE_SECONDS := 0.45
-const PULSE_LOW := 0.45
+const PULSE_LOW := 0.55
 const FLASH_SECONDS := 0.25
 const FLASH_COLOR := Color(1.7, 1.7, 1.7)
 const NUDGE_PIXELS := 2.0
@@ -221,19 +221,20 @@ func _set_cell(index: int, state: State, text: String) -> void:
 	_labels[index].theme_type_variation = label_type
 
 
-## The cell that waits for a key pulses (not for players who turned flashing off).
+## The cell that waits for a key pulses (not for players who turned flashing off). Only its
+## fill and frame do: the "…" in it keeps its full strength, or it would vanish at the low point.
 func _update_pulse() -> void:
 	if _pulse != null and _pulse.is_valid():
 		_pulse.kill()
 	for panel in _panels:
-		panel.modulate.a = 1.0
+		panel.self_modulate.a = 1.0
 	var at := _states.find(State.CAPTURING)
 	if at < 0 or Settings.get_bool("display.reduce_flashing"):
 		return
 	var panel := _panels[at]
 	_pulse = panel.create_tween().set_loops()
-	_pulse.tween_property(panel, ^"modulate:a", PULSE_LOW, PULSE_SECONDS)
-	_pulse.tween_property(panel, ^"modulate:a", 1.0, PULSE_SECONDS)
+	_pulse.tween_property(panel, ^"self_modulate:a", PULSE_LOW, PULSE_SECONDS)
+	_pulse.tween_property(panel, ^"self_modulate:a", 1.0, PULSE_SECONDS)
 
 
 # --- Input (private) ---------------------------------------------------------------------

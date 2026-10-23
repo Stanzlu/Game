@@ -228,6 +228,7 @@ func test_the_second_page_lists_what_the_rows_cannot_show() -> void:
 	assert_true(lines[0].begins_with("Enter") and lines[1].begins_with("Esc"), str(lines))
 	assert_true(lines[4].contains("E") and lines[4].contains("A"), "the skip keys: " + lines[4])
 	assert_eq(notes.list.buttons().size(), 1, "only Zurück takes the focus")
+	assert_eq(notes.hint.text, tr("BIND_MORE_HINT"), "the footer says that nothing changes here")
 	await _tap_action(&"cancel")
 	assert_false(notes.is_open(), "Esc closes the notes page ...")
 	assert_true(menu.is_open(), "... and nothing more")

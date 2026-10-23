@@ -12,6 +12,7 @@ func after_each() -> void:
 	Settings.apply_all()
 	Settings.set_value("display.screen_shake", true, false)
 	Settings.set_value("display.reduce_flashing", false, false)
+	Settings.set_value("text.large", false, false)
 	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
 	get_tree().paused = false
 
@@ -203,11 +204,18 @@ func test_a_refused_key_shows_a_message_and_keeps_capturing() -> void:
 		[&"journal", KB, Helpers.key(KEY_ENTER), tr("BIND_FIXED_KEY") % "Enter"],
 		[&"journal", KB, Helpers.key(KEY_PAGEUP), tr("BIND_FIXED_KEY") % "Bild auf"],
 		[&"journal", KB, Helpers.key(KEY_W), tr("BIND_RESERVED_FOR") % ["W", tr("CONTROLS_MOVE")]],
+		# Space and Tab are kept for two actions each: reserved, not fixed (Rennen may have them)
 		[
 			&"journal",
 			KB,
 			Helpers.key(KEY_SPACE),
-			tr("BIND_RESERVED_FOR") % ["Leertaste", _name(&"interact")]
+			tr("BIND_RESERVED_TWO") % ["Leertaste", _name(&"interact"), sprint]
+		],
+		[
+			&"journal",
+			KB,
+			Helpers.key(KEY_TAB),
+			tr("BIND_RESERVED_TWO") % ["Tab", _name(&"menu"), sprint]
 		],
 		[&"journal", KB, Helpers.key(KEY_CAPSLOCK), tr("BIND_INVALID")],
 		[&"journal", KB, Helpers.pad_button(JOY_BUTTON_B), tr("BIND_ONLY_KEY")],
@@ -349,6 +357,7 @@ func test_the_reset_asks_first_and_is_always_there() -> void:
 	assert_eq(question.list.buttons().find(get_viewport().gui_get_focus_owner()), 1, "safe answer")
 	question.list.buttons()[1].pressed.emit()
 	assert_true(Settings.bindings.is_overridden(), "Abbrechen keeps everything")
+	reset.grab_focus()
 	reset.pressed.emit()
 	question.list.buttons()[0].pressed.emit()
 	await wait_physics_frames(2)

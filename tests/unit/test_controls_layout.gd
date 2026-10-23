@@ -44,7 +44,7 @@ func _le(value: float, limit: float, text := "") -> void:
 	assert_true(value <= limit, "%s (%s should not be more than %s)" % [text, value, limit])
 
 
-func _panel_of(menu: ControlsMenu) -> Control:
+func _panel_of(menu: MenuLayer) -> Control:
 	return menu.title.get_parent().get_parent() as Control
 
 
@@ -220,6 +220,52 @@ func test_no_key_changes_the_size_of_the_page() -> void:
 	assert_eq(panel.size, before, "E to Pfeil rechts changed nothing either")
 
 
+## The names a cell must always have room for, spelled out here and not taken from the page.
+func test_the_longest_names_fit_a_cell_untrimmed() -> void:
+	var names: Array[String] = ["Pfeil rechts", "Leertaste", "Umschalt", "Backspace"]
+	for button: JoyButton in [JOY_BUTTON_X, JOY_BUTTON_Y]:
+		names.append(InputDevice.button_label(button, InputDevice.Style.PLAYSTATION, true))
+	assert_has(names, "Quadrat")
+	assert_has(names, "Dreieck")
+	for large: bool in [false, true]:
+		Settings.set_value("text.large", large, false)
+		var menu := await _open()
+		var row := menu.row_for(&"journal", KB)
+		var label: Label = row._labels[0]
+		var font := label.get_theme_font(&"font")
+		var size := label.get_theme_font_size(&"font_size")
+		var frame := (row._panels[0] as PanelContainer).get_theme_stylebox(&"panel")
+		var inside := row.cell_node(0).size.x - frame.get_minimum_size().x
+		for text in names:
+			var wide := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			_le(wide, inside, "%s fits the cell (large text %s)" % [text, large])
+		menu.close()
+
+
+func test_the_waiting_cell_pulses_its_fill_and_not_its_dots() -> void:
+	var menu := await _open()
+	Helpers.capture(menu, &"sprint", KB, 0)
+	var panel := menu.row_for(&"sprint", KB).cell_node(0).get_child(0) as PanelContainer
+	var label := panel.get_child(0) as Label
+	var lowest := 1.0
+	for i in 40:
+		await wait_physics_frames(2)
+		lowest = minf(lowest, panel.self_modulate.a)
+		assert_eq(panel.modulate.a, 1.0, "the cell as a whole stays")
+		assert_eq(label.modulate.a, 1.0, "the dots keep their strength")
+	assert_lt(lowest, 0.8, "the fill pulses")
+	assert_gte(lowest, BindingRow.PULSE_LOW - 0.01, "but not below its low point")
+	assert_gte(BindingRow.PULSE_LOW, 0.5, "dark dots stay readable on the paler fill")
+	menu._input(Helpers.key(KEY_ESCAPE))
+	assert_eq(panel.self_modulate.a, 1.0, "back to normal")
+	# players who turned flashing off get a steady cell
+	Settings.set_value("display.reduce_flashing", true, false)
+	Helpers.capture(menu, &"sprint", KB, 0)
+	await wait_seconds(0.6)
+	assert_eq(panel.self_modulate.a, 1.0)
+	menu._input(Helpers.key(KEY_ESCAPE))
+
+
 func test_the_footer_is_as_high_in_every_state() -> void:
 	for large: bool in [false, true]:
 		Settings.set_value("text.large", large, false)
@@ -274,6 +320,11 @@ func test_the_worst_questions_need_no_scrolling_at_large_text() -> void:
 	await wait_physics_frames(3)
 	var question := menu._confirm
 	assert_true(question.is_open())
+	assert_eq(
+		_panel_of(question).custom_minimum_size.x,
+		float(ControlsMenu.QUESTION_WIDTH),
+		"the questions of the page are wider than the narrow default"
+	)
 	_le(question.list.get_combined_minimum_size().y, cap, "swap question")
 	question.list.buttons()[1].pressed.emit()
 	await wait_physics_frames(2)

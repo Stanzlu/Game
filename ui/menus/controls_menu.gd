@@ -458,12 +458,15 @@ func _on_capture_click(click: InputEventMouseButton) -> void:
 		get_viewport().set_input_as_handled()
 
 
+## Whoever wants a message after the end of a capture says it afterwards: one that was on
+## (the last refusal) must not outlive the capture it was about.
 func _end_capture() -> void:
 	if capture == null:
 		return
 	capture.reset()
 	capture = null
 	set_process(false)
+	_end_message()
 	title.text = title_key
 	for node in _dimmed:
 		if is_instance_valid(node):
@@ -546,17 +549,30 @@ func _done_text(action: StringName, data: Dictionary) -> String:
 
 func _refusal_text(result: InputBindings.Result, action: StringName) -> String:
 	var label := InputDevice.data_label(result.data, true)
-	var reserved := tr("BIND_FIXED_KEY") % label
-	if not result.owners.is_empty():
-		reserved = tr("BIND_RESERVED_FOR") % [label, _owner_name(result.other)]
 	var texts := {
-		InputBindings.Code.RESERVED: reserved,
+		InputBindings.Code.RESERVED: _reserved_text(label, result.owners),
 		InputBindings.Code.STICK: tr("BIND_STICK"),
 		InputBindings.Code.TRIGGER: tr("BIND_TRIGGER") % _action_name(&"sprint"),
 		InputBindings.Code.WRONG_DEVICE: _wrong_device_text(),
 		InputBindings.Code.SAME_ACTION: tr("BIND_SAME_ACTION") % [_action_name(action), label],
 	}
 	return str(texts.get(result.code, tr("BIND_INVALID")))
+
+
+## Why a key cannot be taken: nobody may hold it (Enter, Esc, Page Up ...), walking holds it for
+## good, or it is kept for the one or two actions that may have it (Space, Tab): reserved, not
+## fixed, because the player can put it there.
+func _reserved_text(label: String, owners: Array[StringName]) -> String:
+	var names := PackedStringArray()
+	for holder in owners:
+		var named := _owner_name(holder)
+		if not names.has(named):
+			names.append(named)
+	if names.is_empty():
+		return tr("BIND_FIXED_KEY") % label
+	if names.size() == 1:
+		return tr("BIND_RESERVED_FOR") % [label, names[0]]
+	return tr("BIND_RESERVED_TWO") % [label, names[0], names[1]]
 
 
 ## The name of the action that owns a reserved key; the four walk actions are one.

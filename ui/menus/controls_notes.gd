@@ -7,7 +7,7 @@ extends ScrollPage
 
 func _ready() -> void:
 	title_key = "BIND_MORE_TITLE"
-	panel_width = 380
+	panel_width = 420
 	layer = 56
 	super()
 
@@ -29,5 +29,6 @@ func _build() -> void:
 	)
 	list.add_info(tr("BIND_PAD_WALK") % walk)
 	list.add_action("MENU_BACK", close)
-	hint.text = ""
+	# nothing here can be changed, and Up and Down scroll: the only cues that stay in view
+	hint.text = tr("BIND_MORE_HINT")
 	scroll_to_top()

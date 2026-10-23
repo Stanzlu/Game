@@ -277,6 +277,7 @@ BIND_LAST,»%s« braucht mindestens eine Taste.
 BIND_LAST_PAD,»%s« braucht mindestens einen Knopf.
 BIND_FIXED_KEY,%s ist fest belegt.
 BIND_RESERVED_FOR,%s gehört fest zu »%s«.
+BIND_RESERVED_TWO,%s ist für »%s« oder »%s« reserviert.
 BIND_INVALID,Diese Taste lässt sich nicht belegen.
 BIND_STICK,Die Sticks bleiben fürs Gehen und Blättern.
 BIND_TRIGGER,Trigger gehen nur bei »%s«.
@@ -290,8 +291,9 @@ BIND_ASK_TAKE,%s ist schon bei »%s«. Dort entfernen und hier verwenden?
 BIND_ASK_RESET_ALL,Tastatur und Controller auf Standard zurücksetzen?
 BIND_MORE_PAGE,Weitere Tasten
 BIND_MORE_TITLE,Weitere Tasten
+BIND_MORE_HINT,Hier lässt sich nichts ändern · Hoch/Runter blättert
 BIND_NOTE_ENTER,Enter bestätigt.
 BIND_NOTE_ESC,Esc öffnet die Pause und geht zurück.
 BIND_NOTE_START,Start öffnet die Pause.
 BIND_NOTE_MENUS,"In Menüs bewegen Pfeiltasten, WASD und das Steuerkreuz."
-BIND_PAD_WALK,Gehen mit dem Controller: %s (fest)
+BIND_PAD_WALK,Gehen mit dem Controller: %s
