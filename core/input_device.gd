@@ -61,6 +61,9 @@ var style := Style.XBOX
 
 
 func _ready() -> void:
+	# The pause menu, the journal and the debug panel pause the tree: without this the
+	# pointer, hidden by the Esc that opened them, would never see the mouse move again.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 
 

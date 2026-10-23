@@ -1,6 +1,6 @@
 # Phase 5: Playtest-Gate
 
-Stand 23.10. · Build **v0.8.1** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046, ADR-047, ADR-048.
+Stand 23.10. · Build **v0.8.2** · Bible §57 (Success Gates), Master-Prompt §47 und §48, ADR-044, ADR-045, ADR-046, ADR-047, ADR-048.
 
 Der Vertical Slice ist technisch fertig. Ab hier gilt: **STOP.** Kein Inhalt über den Slice hinaus,
 bis Playtest-Ergebnisse vorliegen (Bible §57, Master-Prompt §47). Dieses Dokument bündelt alles, was
@@ -8,7 +8,7 @@ das Gate braucht.
 
 | Gate-Artefakt (Master-Prompt §47) | Wo |
 |---|---|
-| Build | GitHub-Release „Playtest v0.8.1“ (Entwurf, siehe unten; ersetzt v0.5.0, v0.5.1, v0.6.0, v0.7.0 und v0.8.0) |
+| Build | GitHub-Release „Playtest v0.8.2“ (Entwurf, siehe unten; ersetzt v0.5.0, v0.5.1, v0.6.0, v0.7.0, v0.8.0 und v0.8.1) |
 | Testanleitung | [`PLAYTEST.md`](PLAYTEST.md) für alle Tester; Detailfragen für dich in [`PLAYTEST_PHASE4.md`](PLAYTEST_PHASE4.md) |
 | Bekannte Probleme | [`KNOWN_ISSUES.md`](KNOWN_ISSUES.md), Auszug unten |
 | Playtest-Fragen | [`PLAYTEST.md`](PLAYTEST.md), Abschnitt „Danach: Fragen“ (§48 und Gates) |
@@ -19,7 +19,7 @@ das Gate braucht.
 
 ## Build und Ablauf
 
-1. **Build:** Ein manueller CI-Lauf auf `main` mit „Release“ (oder ein Tag `v0.8.1`) lässt CI
+1. **Build:** Ein manueller CI-Lauf auf `main` mit „Release“ (oder ein Tag `v0.8.2`) lässt CI
    Windows, macOS und Linux bauen und einen **Release-Entwurf** anlegen. Dazu packt `tools/release.sh` je System ein Zip mit `LIESMICH.txt` und dem Ordner `Lizenzen`.
    Ein Entwurf ist nur für dich sichtbar. Du prüfst ihn und veröffentlichst ihn mit einem Klick.
    Erst dann kann jeder mit dem Link herunterladen; das Repository ist öffentlich.
@@ -86,7 +86,7 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 |---|---|---|---|
 | Platzhalter-Grafik und -Ton verfälschen die Ä-Gates | hoch | hoch | Gate-Klassen M/Ä; Tester-Briefing in `PLAYTEST.md`; Art-Pass erst nach Validierung |
 | Slice kürzer als 45 Minuten | mittel | mittel | Zeit pro Abschnitt aus dem Log; gezielt vertiefen (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“) |
-| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel, Hinweis in `PLAYTEST.md`; Messung mit v0.8.0 offen |
+| Bildrate auf schwacher oder gedrosselter Hardware (Mac im Stromsparmodus: 30 fps) | mittel | mittel | Einstellung VSync, Leistungstest im Spiel (Urteil „VSync bremst“ mit Knopf zum Ausschalten), Hinweis in `PLAYTEST.md`; Mac mit v0.8.0 und v0.8.1 gemessen (`PERFORMANCE.md`), Messung mit v0.8.2 offen |
 | Einmalige Hänger beim ersten Laden einer Szene (Shader-Kompilierung) | hoch beim ersten Start | gering | danach im Shader-Cache; bei Bedarf Vorwärmen im Ladebildschirm (KNOWN_ISSUES #53) |
 | Unsignierte Builds schrecken Tester ab | mittel | gering | Schritt-für-Schritt-Anleitung; Signierung erst nach Budgetentscheidung (KNOWN_ISSUES #5) |
 | Texte sind Entwürfe (Ton, Humor, Miras Stimme) | mittel | hoch | Playtest-Fragen; Writing-Pass nach dem Gate (KNOWN_ISSUES #47) |
@@ -99,9 +99,9 @@ eines, ist das ein Auftrag an Art und Ton (Art-Pass), nicht an die Struktur.
 
 ## Performance-Bericht
 
-| Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Letzter Stand (Messungen bis v0.6.0) |
+| Messgröße | Budget (Vorschlag, `PERFORMANCE.md`) | Letzter Stand (Messungen bis v0.8.1) |
 |---|---|---|
-| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.8.0 gemessen: Elysia 37 fps, alle anderen Orte 145 fps (`PERFORMANCE.md`); mit v0.8.1 neu messen |
+| Bildrate | stabil 60 fps | Zielrechner (Mac) zuletzt 30 fps durch Drosselung; mit v0.8.0 und v0.8.1 gemessen: Elysia 36 bis 60 fps, die übrigen Orte 58 bis 145 fps, ohne VSync 145 bis 474 (`PERFORMANCE.md`); mit v0.8.2 neu messen |
 | Frame-Zeit CPU | 95 % unter 16,6 ms | headless rund 7 ms pro Frame, langsamste 8–10 ms |
 | Container (Software-Rendering, kein Maßstab) | – | 38–48 fps in allen Szenen, 11–186 Draw Calls |
 | Erster Start einer Szene | ohne spürbaren Hänger | einmalig bis 255 ms (Shader-Kompilierung, Software-Rendering), danach max. 37–44 ms |

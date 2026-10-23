@@ -87,3 +87,40 @@ func test_timing_is_averaged_and_marked_missing_without_samples() -> void:
 
 func test_report_lands_in_the_profile_folder() -> void:
 	assert_string_starts_with(BenchmarkRunner.report_path(), RuntimeEnv.user_dir())
+
+
+func test_the_result_page_offers_to_turn_vsync_off_when_it_holds_the_game_back() -> void:
+	var held := {"avg_fps": 58.0, "p95_ms": 33.3}
+	BenchmarkRunner.last_rows = [{"scene": "tal", "stats": held, "raw": {"avg_fps": 474.0}}]
+	var page := BenchmarkResult.new()
+	page.refresh_hz = 120.0
+	add_child_autofree(page)
+	page.open()
+	await wait_process_frames(3)
+	var off: Button = null
+	for button: Button in page.find_children("*", "Button", true, false):
+		if button.text == TranslationServer.translate("BENCH_VSYNC_OFF"):
+			off = button
+	assert_not_null(off, "the remedy is one press away")
+	var focused := page.get_viewport().gui_get_focus_owner() as Button
+	assert_eq(
+		focused.text, TranslationServer.translate("OPTION_OK"), "the page opens on the safe answer"
+	)
+	assert_true(Settings.get_bool("display.vsync"))
+	off.pressed.emit()
+	assert_false(Settings.get_bool("display.vsync"))
+	Settings.set_value("display.vsync", true)
+	BenchmarkRunner.last_rows = []
+
+
+func test_the_result_page_has_no_such_button_when_the_machine_is_just_slow() -> void:
+	var slow := {"avg_fps": 40.0, "p95_ms": 30.0}
+	BenchmarkRunner.last_rows = [{"scene": "tal", "stats": slow, "raw": {"avg_fps": 70.0}}]
+	var page := BenchmarkResult.new()
+	page.refresh_hz = 120.0
+	add_child_autofree(page)
+	page.open()
+	await wait_process_frames(3)
+	for button: Button in page.find_children("*", "Button", true, false):
+		assert_ne(button.text, TranslationServer.translate("BENCH_VSYNC_OFF"))
+	BenchmarkRunner.last_rows = []

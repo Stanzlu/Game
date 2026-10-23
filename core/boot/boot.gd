@@ -78,7 +78,6 @@ func _ready() -> void:
 	Log.record(Log.Category.BOOT, "boot screen ready", info)
 	if not _first_boot_done:
 		_first_boot_done = true
-		SettingsService.restart_vsync(self)
 		Log.info(
 			Log.Category.CONTENT,
 			"content available",

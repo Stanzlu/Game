@@ -180,6 +180,7 @@ BENCH_CAPPED,auf 30 begrenzt
 BENCH_CAPPED_HINT,"Dein Rechner schafft deutlich mehr als 60 fps, aber die Bildsynchronisierung hält das Spiel bei 30. Unter macOS 26 passiert das im Stromsparmodus im Vollbild. Abhilfe: Stromsparmodus aus, Fenster statt Vollbild oder Einstellungen → Anzeige → Bildsynchronisierung aus."
 BENCH_VSYNC,VSync bremst
 BENCH_VSYNC_HINT,"Dein Rechner schafft deutlich mehr, aber die Bildsynchronisierung hält das Spiel unter der Bildwiederholrate des Bildschirms. Das ruckelt, obwohl nichts zu schwer ist. Abhilfe: Einstellungen → Anzeige → Bildsynchronisierung (VSync) ausschalten; das Spiel begrenzt die Bildrate dann selbst."
+BENCH_VSYNC_OFF,Bildsynchronisierung ausschalten
 BENCH_VERDICT,Urteil
 BENCH_SMOOTH,flüssig
 BENCH_MOSTLY,meist flüssig

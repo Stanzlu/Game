@@ -242,12 +242,3 @@ func test_a_readable_file_leaves_no_copy_behind() -> void:
 	settings.flush()
 	_restarted()
 	assert_false(FileAccess.file_exists(file_path + ".bad"))
-
-
-func test_restarting_vsync_at_the_start_changes_nothing_outside_macos() -> void:
-	# the cycle is for macOS (KNOWN_ISSUES #78); here it returns at once and leaves the mode alone
-	var before := DisplayServer.window_get_vsync_mode()
-	var fps := Engine.max_fps
-	await SettingsService.restart_vsync(self, 0.05)
-	assert_eq(DisplayServer.window_get_vsync_mode(), before)
-	assert_eq(Engine.max_fps, fps)

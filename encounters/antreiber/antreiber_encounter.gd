@@ -34,6 +34,9 @@ var model := AntreiberModel.new()
 var antreiber: AntreiberActor
 var flag: Node2D
 var goal_reached := false
+## The goal hovers ahead of the player and recedes while they walk (the encounter). The
+## performance test turns it off: its bot walks both ways and would drag the goal along.
+var goal_recedes := true
 var _ground: Node2D
 var _actors: Node2D
 var _segments: Dictionary = {}
@@ -110,11 +113,12 @@ func _physics_process(delta: float) -> void:
 		_check_goal()
 		return
 	player.speed_scale = model.speed_scale()
-	# the goal stays on screen however close the camera is (ADR-043: zoomed views)
-	var scale := float(view.view_size.x) / float(GameView.BASE_SIZE.x)
-	var ahead := clampf(model.goal_distance, FLAG_MIN_AHEAD * scale, FLAG_MAX_AHEAD * scale)
-	var flag_target := player.global_position.x + ahead
-	flag.global_position.x = lerpf(flag.global_position.x, flag_target, 1.0 - exp(-6.0 * delta))
+	if goal_recedes:
+		# the goal stays on screen however close the camera is (ADR-043: zoomed views)
+		var scale := float(view.view_size.x) / float(GameView.BASE_SIZE.x)
+		var ahead := clampf(model.goal_distance, FLAG_MIN_AHEAD * scale, FLAG_MAX_AHEAD * scale)
+		var flag_target := player.global_position.x + ahead
+		flag.global_position.x = lerpf(flag.global_position.x, flag_target, 1.0 - exp(-6.0 * delta))
 	antreiber.update_actor(player, model, delta)
 
 

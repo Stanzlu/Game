@@ -79,7 +79,9 @@ REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Wir
 ## Konventionen
 - Statisch typisiertes GDScript, `gdformat`-formatiert, `gdlint`-sauber. Tabs. Lambdas kopieren einfache Locals
   (bool, float, String): Zustand für `wait_until` und Signalhandler in Array oder Dictionary halten;
-  Testschleifen zählen Frames lokal, nie mit `get_tree().get_frame()`.
+  Testschleifen zählen Frames lokal, nie mit `get_tree().get_frame()`. Was sich in `_process` oder nach
+  `process_frame` aufbaut (Menü-Layout, `MenuCursor`), wartet der Test mit `wait_process_frames` ab: Unter Last laufen
+  mehrere Physik-Schritte in einem Bild, `wait_physics_frames` ist dort zu früh fertig.
 - Gameplay fragt nur Input-Actions ab, nie konkrete Tasten. Events mit `device = -1`.
 - Alle sichtbaren Texte über `tr()` bzw. Dialogdateien. Inhalte auf Deutsch.
 - Stabile IDs nach `docs/CONTENT_GUIDE.md`. Keine Logik über Anzeigenamen.

@@ -111,3 +111,24 @@ func test_plugging_a_pad_in_changes_nothing_until_it_is_used() -> void:
 	InputDevice.set_kind(InputDevice.Kind.KEYBOARD)
 	Input.joy_connection_changed.emit(0, true)
 	assert_eq(InputDevice.kind, InputDevice.Kind.KEYBOARD)
+
+
+## Playtest 23.10.: Esc opened the pause menu and the mouse pointer was gone. Keys hide it, and
+## only a mouse move shows it again; the pause menu pauses the tree, so the tracker has to go on
+## listening then.
+func test_it_keeps_listening_while_the_tree_is_paused() -> void:
+	assert_eq(InputDevice.process_mode, Node.PROCESS_MODE_ALWAYS)
+	get_tree().paused = true
+	var press := InputEventJoypadButton.new()
+	press.button_index = JOY_BUTTON_X
+	press.pressed = true
+	Input.parse_input_event(press)
+	await wait_process_frames(2)
+	var kind := InputDevice.kind
+	get_tree().paused = false
+	press = press.duplicate()
+	press.pressed = false
+	Input.parse_input_event(press)
+	# the release is buffered: let it arrive now, not after after_each reset the device
+	Input.flush_buffered_events()
+	assert_eq(kind, InputDevice.Kind.GAMEPAD, "an event during the pause is still seen")
