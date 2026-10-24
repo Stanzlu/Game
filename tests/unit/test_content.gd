@@ -9,6 +9,10 @@ const CSV_FILES: PackedStringArray = [
 	"res://content/locale/items.csv"
 ]
 const SLICE_DIALOGUES := "res://content/dialogue/slice/"
+## The story's dialogue folders: the slice and the acts after it (no [#ph] left in any of them).
+const STORY_DIALOGUES: PackedStringArray = [
+	"res://content/dialogue/slice/", "res://content/dialogue/akt1/"
+]
 const CODE_DIRS: PackedStringArray = [
 	"res://core", "res://entities", "res://world", "res://ui", "res://encounters"
 ]
@@ -79,7 +83,7 @@ func test_placeholder_tags_match_the_dialogue_kind() -> void:
 	# Vertical-slice dialogues (content/dialogue/slice) are the playtest text: no [#ph] left
 	# (docs/CONTENT_GUIDE.md).
 	for path in _files("res://content/dialogue", ["dialogue"]):
-		var slice := path.begins_with(SLICE_DIALOGUES)
+		var slice := _is_story(path)
 		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
 		for key: String in result.lines:
 			var line: Dictionary = result.lines[key]
@@ -100,7 +104,7 @@ func test_slice_speakers_are_known() -> void:
 	var voices: Dictionary = JSON.parse_string(
 		FileAccess.get_file_as_string("res://content/dialogue/voices.json")
 	)
-	for path in _files(SLICE_DIALOGUES.trim_suffix("/"), ["dialogue"]):
+	for path in _story_files():
 		var result := DMCompiler.compile_string(FileAccess.get_file_as_string(path), path)
 		for key: String in result.lines:
 			var line: Dictionary = result.lines[key]
@@ -111,6 +115,20 @@ func test_slice_speakers_are_known() -> void:
 				speaker.is_empty() or voices.has(speaker),
 				"%s:%d unknown speaker '%s'" % [path, int(key) + 1, speaker]
 			)
+
+
+func _is_story(path: String) -> bool:
+	for folder in STORY_DIALOGUES:
+		if path.begins_with(folder):
+			return true
+	return false
+
+
+func _story_files() -> PackedStringArray:
+	var found: PackedStringArray = []
+	for folder in STORY_DIALOGUES:
+		found.append_array(_files(folder.trim_suffix("/"), ["dialogue"]))
+	return found
 
 
 ## Compiled lines of one dialogue file by static ID.
@@ -170,7 +188,7 @@ func test_every_memory_has_a_journal_entry() -> void:
 	var keys := _csv_keys()
 	var regex := RegEx.create_from_string('add_memory\\(\\s*"([a-z_]+)"\\s*,\\s*"([a-z_]+)"')
 	var seen := 0
-	for path in _files("res://content/dialogue/slice", ["dialogue"]):
+	for path in _story_files():
 		for found in regex.search_all(FileAccess.get_file_as_string(path)):
 			seen += 1
 			var key := ("MEMORY_%s_%s" % [found.get_string(1), found.get_string(2)]).to_upper()

@@ -87,7 +87,14 @@ func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	assert_eq(s.house.curiosity_slots["shelf_1"], "curiosity_tiny_spoon")
 	assert_eq(s.quests.size(), 5)
 	for quest_id: String in s.quests:
-		assert_true(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage).is_final(), quest_id)
+		var stage := ContentDB.quest(quest_id).stage(s.quests[quest_id].stage)
+		assert_not_null(stage, "%s: the saved stage still exists" % quest_id)
+		if quest_id == "main_elysia_hero":
+			# Act I goes on after the chest (ADR-058): the old end is now the stage before the inn
+			assert_eq(stage.id, "celebrated")
+			assert_false(stage.is_final(), "the slice save reopens the hero's quest, the inn waits")
+		else:
+			assert_true(stage.is_final(), quest_id)
 	assert_eq(s.relationships["mira"].state, GameState.Relationship.State.FAMILIAR)
 	assert_eq(s.relationships["mira"].memories.size(), 12)
 	assert_eq(s.inventory.size(), 2)

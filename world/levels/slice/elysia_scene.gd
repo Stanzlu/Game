@@ -126,6 +126,13 @@ func _on_quest_changed(quest_id: String, stage: String) -> void:
 		_fountain_solves_itself()
 	elif quest_id == "side_elysia_butterflies" and stage == "done":
 		_start_loops_when_ready()
+	elif (
+		quest_id == "main_elysia_hero"
+		and stage == "celebrated"
+		and WorldState.has_flag("elysia.inn_met")
+	):
+		# the host was met before the chest was opened: nothing is left of the way to the inn
+		WorldState.advance_quest("main_elysia_hero", "inn")
 
 
 ## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.
