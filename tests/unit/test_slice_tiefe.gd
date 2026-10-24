@@ -77,17 +77,17 @@ func test_mira_remembers_the_day_at_her_fire() -> void:
 	WorldState.add_memory("mira", "said_hero")
 	WorldState.add_memory("mira", "asked_shelter")
 	var seen := await _play(TAL_DIALOGUE, "evening_first")
-	assert_true("Der Held von Elysia an meinem Feuer. Ich hätt's mir größer vorgestellt." in seen)
-	assert_true("Ans Feuer passen zwei." in seen, "her first no comes back, warmer")
+	assert_true(LineText.of("tal_eve_hero") in seen)
+	assert_true(LineText.of("tal_eve_tarp_2") in seen, "her first no comes back, warmer")
 
 
 func test_one_tells_her_what_one_actually_did() -> void:
 	WorldState.set_flag("valley.berries_eaten")
 	WorldState.set_flag("valley.wood_taken")
 	var answers := await _answers(TAL_DIALOGUE, "evening_day")
-	assert_true("Die erste Brombeere war sauer." in answers)
-	assert_true("Der Weg zum Schuppen wollte nicht aufhören." in answers)
-	assert_false("Die Blumen am Weg riechen nach Honig." in answers, "one sense, not a list")
+	assert_true(LineText.of("tal_eve_day_r1") in answers)
+	assert_true(LineText.of("tal_eve_day_r3") in answers)
+	assert_false(LineText.of("tal_eve_day_r2") in answers, "one sense, not a list")
 	assert_eq(answers.size(), 3, "berries, the path, silence")
 	await _play(TAL_DIALOGUE, "evening_day", "Schuppen")
 	assert_true(WorldState.has_memory("mira", "told_path"))
@@ -133,7 +133,7 @@ func test_the_puddle_shows_you_in_the_evening() -> void:
 	assert_not_null(_first(evening, "puddle"))
 	WorldState.set_flag("elysia.mirror_seen")
 	var seen := await _play(TAL_DIALOGUE, "puddle")
-	assert_true("Du hebst die Hand. Das Wasser hebt sie mit." in seen, "Elysia's water did not")
+	assert_true(LineText.of("tal_puddle_7") in seen, "Elysia's water did not")
 	assert_true(WorldState.has_flag("valley.reflection_seen"))
 
 
@@ -141,7 +141,7 @@ func test_the_stone_gets_a_place_on_the_shelf() -> void:
 	WorldState.add_item("item_stone", 1, false)
 	WorldState.add_item("curiosity_tiny_spoon", 1, false)
 	var answers := await _answers(HAUS_DIALOGUE, "shelf")
-	assert_true("Den Stein hineinlegen" in answers)
+	assert_true(LineText.of("haus_shelf_r3") in answers)
 	await _play(HAUS_DIALOGUE, "shelf", "Stein")
 	assert_eq(WorldState.curiosity_in("shelf_2"), "item_stone")
 	assert_false(WorldState.has_item("item_stone"))
@@ -163,12 +163,7 @@ func test_the_stone_gets_a_place_on_the_shelf() -> void:
 func test_the_cold_house_brings_back_the_soup_once() -> void:
 	WorldState.set_flag("elysia.soup_served")
 	var seen := await _play(HAUS_DIALOGUE, "bed")
-	assert_true(
-		(
-			"Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war."
-			in seen
-		)
-	)
+	assert_true(LineText.of("haus_bed_3") in seen)
 	WorldState.set_fire_lit(true)
 	seen = await _play(HAUS_DIALOGUE, "bed")
 	assert_eq(seen.size(), 1, "by the fire the thought does not come")
@@ -272,7 +267,7 @@ func test_the_cat_sleeps_on_the_antreiber() -> void:
 	WorldState.set_flag("house.antreiber_by_fire")
 	WorldState.set_flag("house.cat_fed")
 	var seen := await _play(HAUS_DIALOGUE, "antreiber_rest")
-	assert_true("Er bleibt sitzen. Er wagt nicht, sich zu bewegen." in seen, "Game Bible §28")
+	assert_true(LineText.of("haus_cat_antr_5") in seen, "Game Bible §28")
 
 
 func test_seated_npcs_stay_seated() -> void:

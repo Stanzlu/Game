@@ -180,7 +180,7 @@ func test_the_stones_teach_their_rule_to_whoever_looks() -> void:
 	var cell := scene.map.world_to_cell((spots[0] as Node2D).global_position)
 	assert_eq(cell, Vector2i(45, 18), "right next to the stones")
 	var seen := await _play("stones")
-	assert_true("Moos wächst nur auf dem, was liegen bleibt." in seen)
+	assert_true(LineText.of("tal_stones_2") in seen)
 	var fell := await _play("fell_in")
 	assert_true(fell[fell.size() - 1].contains("Die flachen daneben"), "falling teaches too")
 
@@ -197,7 +197,7 @@ func test_more_to_look_at_in_the_valley() -> void:
 
 func test_mira_says_her_name_once() -> void:
 	var seen := await _play("mira_first")
-	assert_true("Mira, übrigens. Falls du noch mal rüberrufen musst." in seen)
+	assert_true(LineText.of("tal_mira_24") in seen)
 
 
 func test_mira_notices_the_dry_wood() -> void:
@@ -206,24 +206,19 @@ func test_mira_notices_the_dry_wood() -> void:
 	for stage: String in ["house", "wood", "fire"]:
 		WorldState.advance_quest("main_valley_shelter", stage)
 	var seen := await _play("mira")
-	assert_eq(
-		seen, PackedStringArray(["Trockenes Holz. Hm. Dann mach Feuer, bevor es wieder nass ist."])
-	)
+	assert_eq(seen, PackedStringArray([LineText.of("tal_mira_again_9")]))
 
 
 func test_at_her_fire_mira_asks_after_the_answer_from_the_house() -> void:
 	WorldState.add_memory("mira", "said_hero")
 	WorldState.add_memory("mira", "said_elsewhere")
-	assert_eq((await _play("evening_elysia"))[0], "Dieses Woanders. Wie war's da?")
+	assert_eq((await _play("evening_elysia"))[0], LineText.of("tal_eve_ely_10"))
 	WorldState.new_game()
 	WorldState.add_memory("mira", "said_dont_know")
-	assert_eq(
-		(await _play("evening_elysia"))[0],
-		"Du weißt nicht mehr, wo du herkommst. Weißt du noch, wie es da war?"
-	)
+	assert_eq((await _play("evening_elysia"))[0], LineText.of("tal_eve_ely_11"))
 	WorldState.new_game()
 	WorldState.add_memory("mira", "said_elysia")
-	assert_eq((await _play("evening_elysia"))[0], "Dieses Elysia. Wie war's da?")
+	assert_eq((await _play("evening_elysia"))[0], LineText.of("tal_eve_ely_1"))
 
 
 ## Game Bible §56: Mira's "Zum Meer." is said with the mountains in full view, and the slice
@@ -265,4 +260,4 @@ func test_the_slice_ends_on_zum_meer() -> void:
 	assert_false("Zum Meer." in seen, "not before the look")
 	var answer := await _play("ending_sea")
 	assert_eq(answer, PackedStringArray(["Zum Meer."]), "then black (Game Bible §56)")
-	assert_true("Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus." in seen)
+	assert_true(LineText.of("tal_end_11") in seen)
