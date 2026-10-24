@@ -192,7 +192,7 @@ func test_the_plain_market_keeps_its_old_lines() -> void:
 # --- The hero's quest ---------------------------------------------------------------------------
 
 
-func test_the_toast_is_the_stage_feast_and_the_last_stage_for_now() -> void:
+func test_the_toast_is_the_stage_feast_and_starts_the_repetition() -> void:
 	WorldState.start_quest("main_elysia_hero")
 	for stage: String in ["celebrated", "market", "hall"]:
 		WorldState.advance_quest("main_elysia_hero", stage)
@@ -201,9 +201,13 @@ func test_the_toast_is_the_stage_feast_and_the_last_stage_for_now() -> void:
 	await _market()
 	await DialogueWalk.play(DIALOGUE, "festmaster", ["Glas heben"])
 	await wait_physics_frames(2)
-	assert_eq(WorldState.quest_stage("main_elysia_hero"), "feast")
-	assert_true(WorldState.is_quest_done("main_elysia_hero"), "for now, until the repetition")
+	assert_eq(
+		WorldState.quest_stage("main_elysia_hero"), "repeat", "the toast, then the repetition"
+	)
+	assert_true(WorldState.is_quest_done("main_elysia_hero"), "for now, until the child's trail")
+	assert_true(WorldState.has_flag("elysia.loops"))
 	assert_true(Beat.reached("feast"))
+	assert_true(Beat.reached("irritation"))
 
 
 func test_the_chest_catches_up_a_feast_that_came_before_it() -> void:
@@ -216,4 +220,4 @@ func test_the_chest_catches_up_a_feast_that_came_before_it() -> void:
 		WorldState.set_flag("elysia." + flag)
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await wait_physics_frames(2)
-	assert_eq(WorldState.quest_stage("main_elysia_hero"), "feast", "the town, the hall, the feast")
+	assert_eq(WorldState.quest_stage("main_elysia_hero"), "repeat", "the town, the hall, the feast")

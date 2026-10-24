@@ -5,24 +5,36 @@ extends Node
 ## scene adds it with `ElysiaDirector.attach(self)` and keeps only what is its own: what the
 ## repetition looks like on its map.
 ##
-## Stages are flags other scenes can read, e.g. to pick the third of three word-for-word
-## variants of a line (normal, loop 1, loop 2):
-##   elysia.loops_1   the music loop is half as long   (the chest is open, or 5 minutes of play)
-##   elysia.loops_2   a quarter as long                (the stone is taken, or 10 minutes)
-##   elysia.loops     the sentences repeat word for word (the quests are done, or 12 minutes)
+## Stages are flags other scenes can read. Dialogue picks its word-for-word variant by
+## `elysia.loops` alone (normal, then loop 1); the music stages are not text gates:
+##   elysia.loops_1   the music loop is half as long    (the market was entered, or 20 minutes)
+##   elysia.loops_2   a quarter as long                 (the stone is taken, or 40 minutes)
+##   elysia.loops     the sentences repeat word for word (the toast at the feast, or 60 minutes)
 ## The first two come from AudioDirectorService.ELYSIA_STAGES, which also picks the music file.
-## If nobody follows the child, the rift opens by the clock a little after the sentences start.
+## The toast (`elysia.feast_toast`, hero quest stage "repeat", ADR-062) starts the sentences in
+## whatever Elysia scene the hero is in; the times are only for someone who dawdles.
+## If nobody follows the child, the rift opens by the clock a good while after the sentences start.
 
 ## Emitted when the clock, not the player, opened the rift: the scene with the rift announces it.
 signal rift_opened
 
 const LOOPS_FLAG := "elysia.loops"
+const FEAST_FLAG := "elysia.feast_toast"
 const RIFT_FLAG := "elysia.rift_open"
-## Latest start of the sentences, and latest opening of the rift after they started.
-const LOOPS_AFTER := 720.0
-const RIFT_AFTER_LOOPS := 150.0
+## Latest start of the sentences, and latest opening of the rift after they started (seconds of
+## total play time). Act I runs 30 to 45 minutes and the child's trail comes after the feast: the
+## clock only catches someone who does not play on, so it waits an hour and then a quarter hour.
+const LOOPS_AFTER := 3600.0
+const RIFT_AFTER_LOOPS := 900.0
 
-var _loops_time := -1.0
+## A soft rumble and a short shake when the rift opens without the child (in any Elysia scene).
+const RIFT_OPENS_DB := -6.0
+
+## When the sentences began, in play time. It is kept across the scenes of one game (the wait for
+## the rift runs from the toast, not from the last change of scene) and belongs to one game state:
+## a load or a new game starts the wait again.
+static var _loops_time := -1.0
+static var _loops_state := 0
 
 
 ## The director of `scene` (added as its child), or the one it already has.
@@ -41,7 +53,7 @@ static func stage_flag(index: int) -> String:
 	return ["", "elysia.loops_1", "elysia.loops_2"][index]
 
 
-## How far the repetition has come: 0 (none), 1 and 2 (the music shrinks), 3 (the sentences).
+## The highest stage earned: 0 (none), 1 and 2 (the music shrinks), 3 (the sentences repeat).
 static func stage() -> int:
 	if WorldState.has_flag(LOOPS_FLAG):
 		return 3
@@ -53,16 +65,23 @@ static func stage() -> int:
 
 func _ready() -> void:
 	WorldState.flag_changed.connect(_on_flag_changed)
-	if WorldState.has_flag(LOOPS_FLAG):
+	if _loops_state != WorldState.state.get_instance_id():
+		_loops_state = WorldState.state.get_instance_id()
+		_loops_time = -1.0
+	if WorldState.has_flag(FEAST_FLAG):
+		# a save from the feast: the sentences begin if nothing started them yet
+		begin_loops()
+	if WorldState.has_flag(LOOPS_FLAG) and _loops_time < 0.0:
 		# the start of the loops is not saved: after a load the wait starts again
 		_loops_time = WorldState.state.playtime_seconds
 	_update_stages()
 
 
-## The sentences start repeating: the hero has had everything Elysia offers.
+## The sentences start repeating: the hero raised the glass at the feast.
 func begin_loops() -> void:
 	if not WorldState.has_flag(LOOPS_FLAG):
 		WorldState.set_flag(LOOPS_FLAG)
+		Beat.mark("irritation")
 
 
 func _process(_delta: float) -> void:
@@ -79,6 +98,7 @@ func _process(_delta: float) -> void:
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag(RIFT_FLAG)
 		rift_opened.emit()
+		_announce_rift()
 
 
 ## Sets the music stage flags that are earned by now (by flag or by play time).
@@ -91,6 +111,26 @@ func _update_stages() -> void:
 			WorldState.set_flag(stage_flag(index))
 
 
+## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
+## and its caption (whatever the captions setting says), so it is not a silent change on the map.
+## The scene may say where the rift stands (`_rift_position()`); in a scene without it the
+## caption has no side.
+func _announce_rift() -> void:
+	var scene := get_parent() as GameScene
+	if scene == null or scene.view == null or scene.hud == null:
+		return
+	scene.view.shake(1.0, 0.8)
+	AudioDirector.sfx("rift_touch", RIFT_OPENS_DB)
+	var at: Variant = scene.call(&"_rift_position") if scene.has_method(&"_rift_position") else null
+	scene.hud.show_caption("CAPTION_RIFT", at)
+
+
 func _on_flag_changed(id: String, value: bool) -> void:
-	if id == LOOPS_FLAG and value:
+	if id == FEAST_FLAG and value:
+		begin_loops()
+	elif id == LOOPS_FLAG and value:
+		_loops_state = WorldState.state.get_instance_id()
 		_loops_time = WorldState.state.playtime_seconds
+	elif id == RIFT_FLAG and value:
+		# found by the child or by the clock, in whichever scene the hero is
+		Beat.mark("rift_found")

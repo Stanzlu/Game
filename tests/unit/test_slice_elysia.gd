@@ -188,6 +188,8 @@ func test_elysia_quest_can_be_celebrated_early() -> void:
 	assert_true(WorldState.advance_quest("main_elysia_hero", "hall"))
 	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the feast comes next")
 	assert_true(WorldState.advance_quest("main_elysia_hero", "feast"))
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the repetition comes next")
+	assert_true(WorldState.advance_quest("main_elysia_hero", "repeat"))
 	assert_true(WorldState.is_quest_done("main_elysia_hero"))
 
 
@@ -212,7 +214,7 @@ func test_elysia_wakes_and_butterflies_escalate() -> void:
 	assert_eq(WorldState.quest_stage("side_elysia_butterflies"), "return")
 
 
-func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
+func test_without_the_feast_repetition_and_the_child_come_anyway() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
@@ -233,28 +235,30 @@ func _butterflies_done() -> void:
 	WorldState.advance_quest("side_elysia_butterflies", "done")
 
 
-func test_the_chest_on_the_way_does_not_cut_the_butterflies_short() -> void:
+func test_the_chest_and_the_butterflies_do_not_start_the_repetition_the_feast_does() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
 	WorldState.set_flag("elysia.chest_tree_opened")
-	await wait_physics_frames(2)
-	assert_false(WorldState.has_flag("elysia.loops"), "the miniquest comes first")
 	_butterflies_done()
 	await wait_physics_frames(2)
-	assert_true(WorldState.has_flag("elysia.loops"), "then Elysia starts repeating")
+	assert_false(WorldState.has_flag("elysia.loops"), "the garden is not all of Act I")
+	assert_false(Beat.reached("irritation"))
+	WorldState.set_flag("elysia.feast_toast")
+	await wait_physics_frames(2)
+	assert_true(WorldState.has_flag("elysia.loops"), "the toast at the feast starts the repeating")
 	assert_true(Beat.reached("irritation"))
 
 
-func test_chest_starts_the_loops_and_the_child_opens_the_rift() -> void:
+func test_the_toast_starts_the_loops_and_the_child_opens_the_rift() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
 	_butterflies_done()
 	await wait_physics_frames(2)
-	assert_false(WorldState.has_flag("elysia.loops"), "the chest is still closed")
+	assert_false(WorldState.has_flag("elysia.loops"), "the feast has not been")
 	assert_eq(get_tree().get_nodes_in_group(&"child_guide").size(), 0, "child comes later")
-	WorldState.set_flag("elysia.chest_tree_opened")
+	WorldState.set_flag("elysia.feast_toast")
 	await wait_physics_frames(2)
 	assert_true(WorldState.has_flag("elysia.loops"), "Elysia starts repeating")
 	var children := get_tree().get_nodes_in_group(&"child_guide")

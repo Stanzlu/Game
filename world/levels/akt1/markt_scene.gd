@@ -30,6 +30,9 @@ func _arrive_in_the_quest() -> void:
 	var stage := WorldState.quest_stage("main_elysia_hero")
 	if stage == "celebrated" or stage == "inn":
 		WorldState.advance_quest("main_elysia_hero", "market")
+	elif stage == "feast" and WorldState.has_flag("elysia.feast_toast"):
+		# a save from the feast (A6): the glass was raised, the repetition is on
+		WorldState.advance_quest("main_elysia_hero", "repeat")
 
 
 func _on_flag_changed(id: String, value: bool) -> void:
@@ -46,6 +49,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		"elysia.feast_toast":
 			Beat.mark("feast")
 			WorldState.advance_quest("main_elysia_hero", "feast")
+			# the director starts the sentences at the same toast (ElysiaDirector, ADR-062)
+			WorldState.advance_quest("main_elysia_hero", "repeat")
 
 
 ## The market stands in its feast state (the props of the feast follow the flag by themselves).

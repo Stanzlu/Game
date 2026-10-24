@@ -1,8 +1,9 @@
 class_name ElysiaScene
 extends LookScene
 ## Elysia in the vertical slice (beats 1 and 2, docs/PHASE4_PLAN.md): waking up and being
-## greeted, the butterfly miniquest with escalating rewards, the chest; then repetition,
-## the reflection that is missing, the stone, the child and the hidden rift.
+## greeted, the butterfly miniquest with escalating rewards, the chest; then, once the feast has
+## made Elysia repeat itself (A7): the reflection that is missing, the stone, the child and the
+## hidden rift.
 ## Story state lives in WorldState flags; this script only reacts to them.
 
 const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
@@ -10,11 +11,10 @@ const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
 const BUTTERFLY_XP: Array[int] = [100, 500, 2000]
 const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
 const BUTTERFLY_QUEST := "side_elysia_butterflies"
-## Repetition starts once the chest is open and the butterflies are back, whichever comes
-## last: the chest lies on the main path, and opening it on the way must not cut the
-## miniquest short. Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its
-## own (with it the child appears), and the rift opens a while later even if the child was
-## never followed.
+## Repetition starts at the feast (ElysiaDirector, ADR-062), not in the garden: the chest and
+## the butterflies are only part of what the hero has had by then. The clock fallbacks of the
+## director keep nobody stuck (the child appears with the repetition, and the rift opens a good
+## while later even if the child was never followed).
 ## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
 ## shrinks to nothing (Game Bible §8, §10).
 const FOUNTAIN_SOLVES_AFTER := 3.0
@@ -30,8 +30,6 @@ const WAKE_SIT_SECONDS := 1.2
 const WAKE_TURN_SECONDS := 0.4
 ## The cue of the greeter on the map (content/maps/elysia.txt, letters N and n).
 const GREETER_CUE := "favor"
-## The rift opening on its own is far away: a soft rumble and a little shake, so it is noticed.
-const RIFT_OPENS_DB := -6.0
 
 var director: ElysiaDirector
 
@@ -39,7 +37,6 @@ var director: ElysiaDirector
 func _ready() -> void:
 	super()
 	director = ElysiaDirector.attach(self)
-	director.rift_opened.connect(_announce_rift)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.objective_changed.connect(_on_objective_changed)
 	WorldState.quest_changed.connect(_on_quest_changed)
@@ -105,14 +102,6 @@ func _greeter() -> NpcWalker:
 	return nearest
 
 
-## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
-## and its caption (whatever the captions setting says), so it is not a silent change on the map.
-func _announce_rift() -> void:
-	view.shake(1.0, 0.8)
-	AudioDirector.sfx("rift_touch", RIFT_OPENS_DB)
-	hud.show_caption("CAPTION_RIFT", _rift_position())
-
-
 ## Where the rift stands on the map, or null.
 func _rift_position() -> Variant:
 	for placement: Dictionary in map.data.placements:
@@ -124,8 +113,6 @@ func _rift_position() -> Variant:
 func _on_quest_changed(quest_id: String, stage: String) -> void:
 	if quest_id == "side_elysia_fountain" and stage == "check":
 		_fountain_solves_itself()
-	elif quest_id == "side_elysia_butterflies" and stage == "done":
-		_start_loops_when_ready()
 	elif quest_id == "main_elysia_hero" and stage == "celebrated":
 		_catch_up_the_hero_quest()
 
@@ -141,18 +128,7 @@ func _catch_up_the_hero_quest() -> void:
 		WorldState.advance_quest("main_elysia_hero", "hall")
 	if WorldState.has_flag("elysia.feast_toast"):
 		WorldState.advance_quest("main_elysia_hero", "feast")
-
-
-## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.
-func _start_loops_when_ready() -> void:
-	if WorldState.has_flag("elysia.loops"):
-		return
-	if (
-		WorldState.has_flag("elysia.chest_tree_opened")
-		and WorldState.is_quest_done("side_elysia_butterflies")
-	):
-		Beat.mark("irritation")
-		director.begin_loops()
+		WorldState.advance_quest("main_elysia_hero", "repeat")
 
 
 ## Somebody else fixed it, for you, before you got there.
@@ -186,8 +162,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	if not value:
 		return
 	match id:
-		"elysia.chest_tree_opened":
-			_start_loops_when_ready()
 		"elysia.mirror_seen":
 			Beat.mark("mirror")
 		"elysia.stone_taken":
@@ -196,8 +170,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			Beat.mark("child")
 		"elysia.child_vanished":
 			_child_vanishes()
-		"elysia.rift_open":
-			Beat.mark("rift_found")
 
 
 ## The child fades out by itself (its map placement ends with elysia.child_vanished).

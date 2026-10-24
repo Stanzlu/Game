@@ -15,11 +15,11 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | market | A3 Markt und Straße | `markt` | `market_enter`, `market_board`, `market_bread`, `market_board_done`, `market_melody` | **gebaut (ADR-059)** |
 | hall | A5 Spiegelhalle | `spiegelhalle` | `hall_enter`, `hall_room_1`, `hall_room_2`, `hall_mirror`, `perception` | **gebaut (ADR-060)** |
 | feast | A6 Fest | `markt` (Festzustand) | `feast_enter`, `feast` | **gebaut (ADR-061)** |
-| repeat | A7 Wiederholung | alle Orte | | geplant |
+| repeat | A7 Wiederholung | alle Orte | `irritation` | **gebaut (ADR-062)** |
 | trail, rift | A8 Kind-Spur, A9 Stein, Samen, Riss | `gasthaus`, `markt`, `spiegelhalle`, `elysia` | | geplant |
 
 Raumschichtung (Plan 4.1): Zimmer (Gasthaus) – Mauer und Tor – Garten – Straße – Stadt (Markt) – Welt (Weltenbaum), unbeschriftet.
-Bis zu A7 beginnen die Schleifen noch mit Truhe und Schmetterlingen (Slice-Stand); A7 verlegt den Auslöser auf die Stufe `repeat`.
+Die Schleifen beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Stufe `repeat`, A7); die Musikstufen folgen `elysia.market_seen` und `elysia.stone_taken`, die Uhr fängt nur, wer nicht weiterspielt (20, 40 und 60 Minuten).
 
 ---
 
@@ -206,10 +206,52 @@ Die Schleifen (A7) beginnen bis dahin weiter am Slice-Auslöser.
 
 **Barrierefreiheit (§50).** Keine Zeit, keine Geschicklichkeit; die Gläser klingen als Text („Es klingt dreimal gleich.“); das Fest bringt keinen neuen Blitz und kein Wackeln des Bildes; die Girlanden wiegen sich wie alle Pflanzen leicht im Wind.
 
-**Endlichkeit (§52).** Das Hoch wird einmal gehoben und einmal bezahlt; die Festmeisterin hat danach zwei Zeilen im Wechsel. In A7 sagen alle dasselbe, wortgleich.
+**Endlichkeit (§52).** Das Hoch wird einmal gehoben und einmal bezahlt; die Festmeisterin hat danach eine feste Zeile (A7: der wortgleiche Gruß).
 
 **Gerechnet.** 35 neue Zeilen, 401 Wörter, rund drei Minuten Weg (geschätzt): nach `calibrate.py` rund 6 Minuten (Plan: 14). Akt I liegt damit nach A6 bei rund 29 statt 49 Minuten Plan; die Neuplanung (P6.13)
 entscheidet, ob A4 (Minispiel) oder mehr Erkundung die Lücke füllt.
 
 **Prüfungen.** `test_akt1_fest` (14 Tests, darunter „Level 48 ist sicher“ für beide Wege), `tools/autopilot/akt1_fest.json` (Schritt „segment“ in `check.sh`), `MapLint` (Zwillinge der Festgäste, Mittelachse), `StoryLint`.
+
+---
+
+## A7 Wiederholung
+
+**Stand:** gebaut. **Szene:** kein eigener Ort; die Schleifen sind ein Zustand aller Elysia-Szenen (`elysia`, `gasthaus`, `markt`, `spiegelhalle`), geregelt vom `ElysiaDirector`. **Dialog:** neun wortgleiche
+Zeilen in `markt.dialogue`, `gasthaus.dialogue` und `elysia.dialogue` (alle `[#draft]`).
+
+**Zweck.** Nach dem Hoch wiederholt sich Elysia (Bible §35, §56 Beat 2): dieselben Sätze, wortgleich, jedes Mal. Die Musik ist schon seit dem Markt kürzer geworden; jetzt wird auch das Reden eine Schleife. Das Kind
+(A8) zeigt sich erst jetzt. Nichts im Hauptweg hängt an einem Angebot (Bible §14): wer das Hoch auslässt, bleibt in Elysia, und die Uhr (eine Stunde) öffnet den Rückweg trotzdem.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Musik 1 | der Markt wird betreten (`elysia.market_seen`) oder 20 Minuten | die Musikschleife ist halb so lang | Flag `elysia.loops_1` |
+| Die Schleife beginnt | das Hoch (`elysia.feast_toast`) oder 60 Minuten Spielzeit | jede Rolle sagt nur noch einen Satz, jedes Mal denselben; das Kind erscheint | Flag `elysia.loops`, Beat `irritation`, Heldenstufe `repeat` |
+| Musik 2 | der Stein (`elysia.stone_taken`, A9) oder 40 Minuten | ein Viertel der Schleife | Flag `elysia.loops_2` |
+| Der Riss | das Kind folgt (A8, A9), sonst 15 Minuten nach dem Beginn der Sätze (die Wartezeit läuft über die Szenen hinweg) | der Riss öffnet sich; durch die Uhr mit Beben und Untertitel in jeder Elysia-Szene | `elysia.rift_open`, Beat `rift_found` |
+
+**Wortgleiche Zeilen** (Schleife 1, gewählt allein von `elysia.loops`; Schleife 2 mit `elysia.rift_open` bleibt für A9): Torwächter (`mk_gate_10`), Bäckerin (`mk_baker_8`), Schneiderin (`mk_tailor_9`), Blumenfrau
+(`mk_flower_6`), Händler (Begrüßung, `mk_shop_8`; der Laden bleibt offen), Festmeisterin (`mk_fest_9`, die eine Zeile nach dem Hoch: ihr Gruß, als wäre es das erste Mal), Gastwirt im Gasthaus (`gh_host_loop_1`, `gh_host_loop_2`), Gärtnerin, solange die Schmetterlinge
+frei sind (`el_gard_loop`). Jede Schleifenzeile ist eine, die die Person schon gesagt hat, Wort für Wort: bei fester Rede die erste (Torwächter: der Willkommensgruß, Festmeisterin: der Gruß des Festes, Händler, Gastwirt), bei Zufallsrede die erste der Reihe (Bäckerin, Schneiderin, Blumenfrau), bei der Gärtnerin ihre Wartezeile; ein Test prüft den Wortlaut gegen die jeweilige Zeile. Was die Person schuldet (der Laib, das Angebot der Gärtnerin, der
+Laden) steht in den Dialogen vor der Schleife und geht nicht verloren; die Gäste im Gasthaus und die Elysianer im Garten hatten sie schon.
+
+**Heldenquest.** Die Stufe `repeat` (vorläufig final) folgt auf `feast`; der Markt rückt beim Hoch von `feast` auf `repeat`, die Truhe trägt beide nach.
+
+**Figuren.** Keine neuen.
+
+**Humor-Ziel (3/10).** Je öfter sie es sagen, desto weniger ist es ein Witz: der Humor liegt in der Tonlage, nicht im Text (Bible §35: erst hübsch, dann zu vollkommen).
+
+**Gewicht (§45).** mittel: die Schleife ist die erste Beunruhigung, ohne dass jemand etwas Böses sagt.
+
+**Motive.** Wortgleiche Sätze (`npc-bewegung`), die Schleife der Musik (`loop-musik`), der Betäuber (der Gastwirt sagt, was er zuerst sagte).
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern; die Schleifen speichern über `elysia.loops`; ein Stand vom Hoch ohne Schleifen (Spielstand vor A7) beginnt sie beim Laden.
+
+**Barrierefreiheit (§50).** Kein Blitz, kein Wackeln: die Wiederholung ist Text und Musik. Die Musikstufen wechseln am Ende der Schleife (auf dem Taktschlag).
+
+**Endlichkeit (§52).** Die Schleife ist das Ende des Redens in Elysia: danach sagt niemand etwas Neues; was kommt, kommt vom Kind.
+
+**Gerechnet.** Neun Zeilen, rund 100 Wörter: zwei Minuten (Gespräche mit der Wiederholung). Akt I liegt damit nach A7 bei rund 31 statt 58 geplanten Minuten (A2 bis A7); A8 und A9 sind noch offen.
+
+**Prüfungen.** `test_akt1_wiederholung` (13 Tests), `test_elysia_director` (Hoch beginnt die Sätze, lange Uhr), `tools/autopilot/akt1_wiederholung.json` (Schritt „segment“ in `check.sh`), der Slice-Durchlauf (`slice_full.json` setzt das Hoch als Flag).
 

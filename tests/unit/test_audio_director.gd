@@ -102,10 +102,15 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	var never := func(_flag: String) -> bool: return false
 	var stone := func(flag: String) -> bool: return flag == "elysia.stone_taken"
 	assert_eq(AudioDirectorService.elysia_stage_for(0.0, never), 0)
+	var stages := AudioDirectorService.ELYSIA_STAGES
+	var half_at := float(stages[1]["after"])
+	var quarter_at := float(stages[2]["after"])
 	assert_eq(AudioDirectorService.elysia_stage_for(160.0, never), 0, "not yet after 160 s")
-	assert_eq(AudioDirectorService.elysia_stage_for(310.0, never), 1, "by play time: 5 min")
-	assert_eq(AudioDirectorService.elysia_stage_for(610.0, never), 2, "by play time: 10 min")
+	assert_eq(AudioDirectorService.elysia_stage_for(half_at + 10.0, never), 1, "by play time")
+	assert_eq(AudioDirectorService.elysia_stage_for(quarter_at + 10.0, never), 2, "by play time")
 	assert_eq(AudioDirectorService.elysia_stage_for(10.0, stone), 2, "by progress")
+	var loops := func(flag: String) -> bool: return flag == ElysiaDirector.LOOPS_FLAG
+	assert_eq(AudioDirectorService.elysia_stage_for(0.0, loops), 1, "the sentences repeat: shrunk")
 	for entry: Dictionary in AudioDirectorService.ELYSIA_STAGES:
 		var stream := (
 			load(AudioDirectorService.MUSIC_DIR + str(entry["file"])) as AudioStreamOggVorbis
@@ -114,7 +119,7 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	WorldState.new_game()
 	audio.play_music("elysia", 0.0)
 	assert_eq(audio.elysia_stage, 0)
-	WorldState.set_flag("elysia.chest_tree_opened")
+	WorldState.set_flag(str(stages[1]["flag"]))
 	audio._update_elysia_stage(5.0)
 	assert_eq(audio.elysia_stage, 0, "waits for the end of the loop")
 	audio._update_elysia_stage(0.03)

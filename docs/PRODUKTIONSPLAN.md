@@ -161,12 +161,11 @@ schwere Hauptquests hintereinander), Motive, Scheitern und Speichern, Barrierefr
 
 ### 4.6 Elysias Reizbogen
 
-Heute [V]: Die Schleifen beginnen, sobald Truhe und Schmetterlingsquest erledigt sind (`_start_loops_when_ready`);
-die Zeiten 720 s und 150 s in `elysia_scene.gd` und die Musikstufen nach 300 s und 600 s in
-`audio_director.gd` sind nur Rückfallwerte gegen Hängenbleiben. Für einen Akt von 100 Minuten heißt das [P]: die
-Auslöser auf die neuen Quests setzen, die Rückfallzeiten an die Länge anpassen, und Uhr und Stufenlogik in einen
-gemeinsamen Elysia-Regler verlegen, den alle Elysia-Szenen nutzen (heute läuft die Uhr nur in der Garten-Szene).
-Stufen-Flags `elysia.loops_1`, `_2`, `_3`. Größe S–M.
+**Stand (A7, ADR-062):** Die Schleifen beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Heldenquest-Stufe `repeat`);
+der Regler `ElysiaDirector` gilt für alle Elysia-Szenen. Die Musikstufen folgen dem Fortschritt (`elysia.market_seen`
+→ `elysia.loops_1`, `elysia.stone_taken` → `elysia.loops_2`); Uhr-Rückfälle gegen Hängenbleiben: Musikstufen nach 20 und
+40 Minuten, die Sätze nach 60 Minuten, der Riss 15 Minuten nach dem Beginn der Sätze. Wortgleiche Zeilen wählt allein
+`elysia.loops`. (Davor, im Slice: Truhe und Schmetterlinge als Auslöser, Rückfälle 720 s und 150 s.) Größe S–M.
 
 ## 5. Die sieben Akte
 
@@ -395,7 +394,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.8** | A2 Gasthaus · **gebaut** (ADR-058, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 9 Minuten, das Fest füllt die Lücke) | Smoke, Autopilot-Segment, Marken im Log | Lesefassung (rund 20 Min) |
 | **P6.9** | A3 Markt und Straße · **gebaut** (ADR-059, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 9 statt 14 Minuten, Halle und Fest füllen die Lücke) | wie P6.8, Leistungstest mit der Menge | Lesefassung, ein Leistungstest |
 | **P6.10** | A5 Spiegelhalle · **gebaut** (ADR-060, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten) | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
-| **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung (zwei PRs) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
+| **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung · **gebaut** (ADR-062; rund 2 statt 9 Minuten, die Schleifen sind Zustand, kein Ort) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
 | **P6.12** | A8 Kind-Spur, A9 Anschluss an den Riss | Akt-I-Durchlauf per Autopilot | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst | Plan aktualisiert | Rückmeldung |
 | **P6.14 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf | – | je Akt Lesefassungen und ein Durchlauf |

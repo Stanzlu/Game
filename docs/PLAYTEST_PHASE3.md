@@ -19,7 +19,7 @@ das geplante Ende des Slice („Schwarz. Titel.“).
 Startmenü → **Neues Spiel** (oder Prototypen → Elysia-Garten).
 
 1. Hör kurz zu: Elysia hat Musik. Perfekt, hell, sich wiederholend. Bleib ein paar Minuten: Der Loop
-   wird kürzer (nach der Truhe und nach dem Stein noch einmal). Fällt dir die Wiederholung auf?
+   wird kürzer (nach dem Betreten des Marktes und nach dem Stein noch einmal; im Prototypgarten nur nach dem Stein). Fällt dir die Wiederholung auf?
 2. Lauf zur Mitte vor den Weltenbaum: Der Garten ist genau spiegelsymmetrisch, die Pflanzen wiegen
    sich im Gleichtakt, Schmetterlinge und Libellen fliegen gespiegelt, die Koi kreisen gleichmäßig.
    Nur zwei Dinge haben keinen Zwilling. Findest du sie?

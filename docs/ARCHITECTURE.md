@@ -87,7 +87,7 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
 ### Vertical Slice (Phase 4, ADR-037)
 
 ```
-elysia  world/levels/slice/elysia.tscn   ElysiaScene: Erwachen, Schmetterlinge, Truhe, Wiederholung, Kind, Riss
+elysia  world/levels/slice/elysia.tscn   ElysiaScene: Erwachen, Schmetterlinge, Truhe; nach dem Fest: Wiederholung, Kind, Riss
 tal     world/levels/slice/tal.tscn      TalScene: Ankunft, Miras Nein, Trittsteine, Abend, Ziege, Schluss
 haus    world/levels/slice/haus.tscn     HausScene: kalter Kamin, Feuer, Miras Besuch, Katze
 weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum Schuppen (ADR-038)

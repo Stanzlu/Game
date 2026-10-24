@@ -85,7 +85,6 @@ func test_loot_cards_carry_the_items_line_of_text() -> void:
 func test_the_rift_opening_alone_is_noticed() -> void:
 	WorldState.set_flag("elysia.woke")
 	WorldState.set_flag("elysia.loops")
-	assert_eq(ElysiaDirector.RIFT_AFTER_LOOPS, 150.0)
 	WorldState.state.playtime_seconds = (
 		ElysiaDirector.LOOPS_AFTER + ElysiaDirector.RIFT_AFTER_LOOPS + 1.0
 	)

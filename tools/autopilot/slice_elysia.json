@@ -20,6 +20,7 @@
   {"t": 40.0, "teleport": [32, 24], "log": "chest"},
   {"t": 40.2, "press": ["move_up"]}, {"t": 40.25, "release": ["move_up"]},
   {"t": 40.6, "tap": ["interact"]},
+  {"t": 40.8, "flag": "elysia.feast_toast", "log": "the toast at the feast (Act I, A6): the repetition begins"},
   {"t": 47.0, "teleport": [32, 28], "log": "host"},
   {"t": 47.2, "press": ["move_down"]}, {"t": 47.25, "release": ["move_down"]},
   {"t": 47.6, "tap": ["interact"]},

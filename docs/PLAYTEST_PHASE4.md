@@ -27,8 +27,9 @@ Wer einzelne Orte ansehen will (ohne den Rest): `--start=elysia`, `--start=tal`,
 
 ## Wenn du feststeckst
 
-- **Elysia:** Sprich das Kind am Becken an und folge ihm. Wer nichts tut, dem öffnet sich der Riss nach
-  einiger Zeit von selbst (rechts unten am Inselrand, ein fernes Grollen kündigt es an).
+- **Elysia:** Das Kind zeigt sich erst, wenn Elysia sich zu wiederholen beginnt (nach dem Hoch auf dem Fest im Markt,
+  die Treppe liegt im Süden des Gartens). Sprich es am Becken an und folge ihm. Wer nichts tut, dem öffnet sich der Riss
+  nach langer Zeit von selbst (rechts unten am Inselrand, ein fernes Grollen kündigt es an).
 - **Bach:** Erst mit der Frau am Feuer sprechen. Die flachen, bemoosten Steine halten, die runden,
   nassen kippen. Weiter oben liegt ein umgestürzter Baum über dem Bach.
 - **Holz:** Der Zettel am Kamin. Der Pfad nach Westen öffnet sich erst danach.
@@ -117,7 +118,7 @@ dann sehe ich, wie lange jeder Teil gedauert hat, ohne dass du mitschreiben muss
 |-------------|-----------|
 | `elysia_start` | Erwachen |
 | `butterflies_caught` | alle drei Schmetterlinge |
-| `irritation` | Truhe geöffnet und Schmetterlinge zurück (in beliebiger Reihenfolge), Elysia wiederholt sich |
+| `irritation` | Hoch auf dem Fest gehoben (A7, ADR-062; im Slice davor: Truhe und Schmetterlinge), Elysia wiederholt sich |
 | `mirror`, `child` | Becken angesehen, Kind getroffen |
 | `stone`, `fountain` | Stein genommen, der stille Brunnen erledigt sich von selbst |
 | `rift_found` | der Riss öffnet sich |

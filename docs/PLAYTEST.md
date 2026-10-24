@@ -137,8 +137,10 @@ Nur lesen, wenn du feststeckst. Jeder Punkt verrät ein wenig.
 <details>
 <summary>Elysia: Wie geht es weiter?</summary>
 
-Sprich das Kind am Becken an und folge ihm. Wer nichts tut, dem öffnet sich nach einiger Zeit von selbst
-etwas am rechten unteren Inselrand; ein fernes Grollen kündigt es an.
+Das Kind zeigt sich erst, wenn sich Elysia zu wiederholen beginnt: nach dem Hoch auf dem Fest im Markt (Treppe im Süden
+des Gartens; erst in der Halle der Spiegel bemerken, was nicht passt, dann beginnt das Fest). Sprich es am Becken an und
+folge ihm. Wer nichts tut, dem öffnet sich nach langer Zeit von selbst etwas am rechten unteren Inselrand; ein fernes
+Grollen kündigt es an, wo immer man gerade steht.
 </details>
 
 <details>

@@ -1,4 +1,4 @@
-# Lesefassung A2: Das Gasthaus zum Immer
+# A2: Das Gasthaus zum Immer
 
 <!-- Erzeugt mit `python3 tools/writing/readable.py`. Nicht von Hand ändern: Änderungen gehören in die .dialogue-Dateien. -->
 
@@ -14,6 +14,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 *wenn* `elysia.inn_met nicht`
   - *→ weiter bei* `host_first`
+*sonst wenn* `elysia.loops`
+  - *→ weiter bei* `host_loop`
 *sonst wenn* `elysia.inn_fed nicht`
   - *→ weiter bei* `host_meal`
 *sonst wenn* `elysia.inn_slept`
@@ -22,7 +24,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *→ weiter bei* `host_upstairs`
 - *→ weiter bei* `host_room`
 
-### G2 · `host_first`
+### G2 · `host_loop`
+
+> The repetition (A7, ADR-062): the host says his first sentences again, word for word, whatever was offered.
+
+- **Gastwirt:** Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. `[#draft]`  <sub>gh_host_loop_1</sub>
+- **Gastwirt:** Das Gasthaus zum Immer. Wir haben geöffnet. Wir hatten immer geöffnet. `[#draft]`  <sub>gh_host_loop_2</sub>
+
+### G3 · `host_first`
 
 - **Gastwirt:** Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. `[#draft]`  <sub>gh_host_1</sub>
 - **Gastwirt:** Das Gasthaus zum Immer. Wir haben geöffnet. Wir hatten immer geöffnet. `[#draft]`  <sub>gh_host_2</sub>
@@ -35,7 +44,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **…**
   - **Gastwirt:** Ein stiller Gast. Ein Kenner. Die besten Gäste sagen nichts und essen alles. `[#draft]`  <sub>gh_host_5</sub>
 
-### G3 · `host_meal`
+### G4 · `host_meal`
 
 - **Gastwirt:** Setz dich, setz dich. Das Brot kommt gleich. Es ist schon da. `[#draft]`  <sub>gh_meal_1</sub>
 - *Auf dem Tisch steht ein Korb. Du hast niemanden kommen sehen.* `[#draft]`  <sub>gh_meal_2</sub>
@@ -48,7 +57,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **…**
   - **Gastwirt:** Sprachlos. Das sind sie alle. Ich nehm das als Lob. `[#draft]`  <sub>gh_meal_7</sub>
 
-### G4 · `host_room`
+### G5 · `host_room`
 
 > The second talk, and the most dangerous line of the Betäuber (Bible §14); free to refuse, asked again.
 
@@ -66,13 +75,13 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **…**
   - **Gastwirt:** Du überlegst. Ich warte. Ich hab Zeit. Wir haben hier alle Zeit. `[#draft]`  <sub>gh_room_7</sub>
 
-### G5 · `host_upstairs`
+### G6 · `host_upstairs`
 
 - **Gastwirt:** Dein Zimmer ist offen. Beide Türen. Such dir die aus, die dir besser gefällt. `[#draft]`  <sub>gh_up_1</sub>
 - **Gastwirt:** Das Bett ist schon warm. Das Kissen liegt in der Mitte, wie es soll. `[#draft]`  <sub>gh_up_2</sub>
 - **Gastwirt:** Falls du was brauchst, sag es einfach. Ich hab es schon gebracht. `[#draft]`  <sub>gh_up_3</sub>
 
-### G6 · `host_slept`
+### G7 · `host_slept`
 
 > The third talk, after the night (Bible §14: leaving must be the player's own act).
 
@@ -88,7 +97,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **…**
   - **Gastwirt:** Ein Schweigen zum Mitnehmen. Hier, ein Brot dazu. `[#draft]`  <sub>gh_slept_6</sub>
 
-### G7 · `guest`
+### G8 · `guest`
 
 *wenn* `elysia.loops`
   - **Elysianer:** Das Brot hier! Ich komme jeden Tag. Es ist jeden Tag das beste. `[#draft]`  <sub>gh_guest_loop</sub>
@@ -97,7 +106,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Elysianer:** Du setzt dich so schön. Ich würde mich auch gern so setzen. Ich übe. `[#draft]`  <sub>gh_guest_2</sub>
   - **Elysianer:** Der Wirt hat gesagt, du bleibst. Ich hab gesagt, natürlich bleibt er. `[#draft]`  <sub>gh_guest_3</sub>
 
-### G8 · `guestbook`
+### G9 · `guestbook`
 
 *wenn* `elysia.inn_book_signed`
   - *Das Gästebuch liegt offen. Unter deiner Zeile ist Platz für die nächste.* `[#draft]`  <sub>gh_book_3</sub>
@@ -109,7 +118,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Es ist nicht deine.* `[#draft]`  <sub>gh_book_2</sub>
   - *→ weiter bei* `guestbook_sign`
 
-### G9 · `guestbook_sign`
+### G10 · `guestbook_sign`
 
 *wenn* `side_elysia_guestbook`
   - ▸ **Dich noch einmal eintragen.**
@@ -117,28 +126,28 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - ▸ **Lieber nicht.**
     - *Du lässt die Feder, wo sie ist. Sie sieht nicht enttäuscht aus. Nichts hier sieht enttäuscht aus.* `[#draft]`  <sub>gh_book_5</sub>
 
-### G10 · `clock`
+### G11 · `clock`
 
 - *Eine Uhr an der Wand, ohne Zeiger und ohne Ziffern. Auf dem Zifferblatt steht in goldenen Buchstaben ein Wort. Jetzt.* `[#draft]`  <sub>gh_clock_1</sub>
 
-### G11 · `window`
+### G12 · `window`
 
 - *Durch das Fenster siehst du den Garten. Durch das gegenüber auch.* `[#draft]`  <sub>gh_window_1</sub>
 - *Du suchst den Unterschied. Es gibt keinen.* `[#draft]`  <sub>gh_window_2</sub>
 
-### G12 · `back_door`
+### G13 · `back_door`
 
 - *Zwei Türen hinter dem Tresen, ohne Schild, genau gleich. Beide sind zu. Dahinter ist nichts zu hören.* `[#draft]`  <sub>gh_back_1</sub>
 
-### G13 · `room_locked`
+### G14 · `room_locked`
 
 - *Die Tür ist zu. Sie sieht aus, als würde sie sich gleich für dich öffnen.* `[#draft]`  <sub>gh_door_1</sub>
 
-### G14 · `hearth`
+### G15 · `hearth`
 
 - *Das Feuer brennt, seit es das Haus gibt. Es hat noch nie Holz gebraucht.* `[#draft]`  <sub>gh_hearth_1</sub>
 
-### G15 · `bed`
+### G16 · `bed`
 
 *wenn* `elysia.inn_slept`
   - *Das Bett ist gemacht. Schon wieder.* `[#draft]`  <sub>gh_bed_6</sub>
@@ -150,7 +159,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - ▸ **Stehen bleiben.**
     - *Du bleibst stehen. Das Bett nimmt es nicht übel. Es hat Zeit.* `[#draft]`  <sub>gh_bed_3</sub>
 
-### G16 · `woke`
+### G17 · `woke`
 
 > After the night: the same waking as the first one (el_wake_0), and nobody finds that strange.
 
