@@ -177,6 +177,7 @@ segments=(
   "akt1_kind_spur_markt:markt:600:trail_hallway fragment.hallway"
   "akt1_kind_spur_gasthaus:gasthaus:600:trail_door fragment.closed_door"
   "akt1_kind_spur_spiegelhalle:spiegelhalle:600:trail_room fragment.empty_room"
+  "akt1_anschluss:elysia:2800:stone elysia.stone_taken child child_melody rift_found elysia.rift_open elysia.rift_crossed valley_arrival"
 )
 for segment in "${segments[@]}"; do
   IFS=: read -r name scene frames marks <<<"$segment"

@@ -9,6 +9,7 @@
   {"t": 6.2, "press": ["move_up"]},
   {"t": 6.25, "release": ["move_up"]},
   {"t": 6.6, "tap": ["interact"], "log": "open chest"},
+  {"t": 12.8, "flag": "elysia.loops", "log": "Elysia repeats itself: the stone lies there (A9)"},
   {"t": 13.0, "teleport": [41, 18], "log": "stone"},
   {"t": 13.2, "press": ["move_up"]},
   {"t": 13.25, "release": ["move_up"]},
