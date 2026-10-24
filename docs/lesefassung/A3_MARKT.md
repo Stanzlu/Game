@@ -12,6 +12,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M1 · `gatekeeper`
 
+*wenn* `elysia.loops und elysia.rift_open`
+  - **Torwächter:** Das Tor ist offen. Wie immer. `[#draft]`  <sub>mk_gate_11</sub>
 *wenn* `elysia.loops`
   - **Torwächter:** Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. `[#draft]`  <sub>mk_gate_10</sub>
 *wenn* `elysia.feast`
