@@ -307,15 +307,17 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(floor["elysia"] + floor["real"], 372)
 
     def test_a_log_is_read_and_fits_the_factor_back(self):
+        # a run of about Act I's length: the story text grows with every segment, and a log shorter
+        # than the reading alone would fit the clamp (factor 1) and not the run
         log = '[1s] INFO  WORLD_STATE: beat {"beat":"elysia_start","minute":0.0,"seconds":0}\n'
-        log += '[2s] INFO  WORLD_STATE: beat {"beat":"ending","minute":20.0,"seconds":1200}\n'
+        log += '[2s] INFO  WORLD_STATE: beat {"beat":"ending","minute":100.0,"seconds":6000}\n'
         beats = calibrate.parse_log(log)
-        self.assertEqual(beats, [("elysia_start", 0), ("ending", 1200)])
+        self.assertEqual(beats, [("elysia_start", 0), ("ending", 6000)])
         factor = calibrate.fit(beats, 1)
         text = calibrate.story_text()
         reading = sum(calibrate.reading_seconds(text[w][0], text[w][1], 0.025) for w in text)
         walk = calibrate.baseline()["elysia"] + calibrate.baseline()["real"]
-        self.assertAlmostEqual(factor * walk + reading, 1200, delta=1)
+        self.assertAlmostEqual(factor * walk + reading, 6000, delta=1)
 
     def test_a_log_without_beats_is_refused(self):
         with self.assertRaises(ValueError):

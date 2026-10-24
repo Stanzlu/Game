@@ -15,6 +15,7 @@ QUEST_MAIN_ELYSIA_HERO_BUTTERFLIES,"Die Gärtnerin hat dir eine Aufgabe anvertra
 QUEST_MAIN_ELYSIA_HERO_REWARD,"Ganz Elysia spricht von deiner Tat! Am Weltenbaum wartet deine Belohnung."
 QUEST_MAIN_ELYSIA_HERO_CELEBRATED,"Du bist der gefeiertste Held, den Elysia je hatte. Im Norden, hinter den Blumen, wartet das Gasthaus zum Immer. Man hat dir den besten Platz freigehalten."
 QUEST_MAIN_ELYSIA_HERO_INN,"Das Gasthaus zum Immer. Alle Plätze sind die besten, und deiner ist der beste davon."
+QUEST_MAIN_ELYSIA_HERO_MARKET,"Die Stadt Elysia hat einen Markt, einen Brunnen und eine Tafel für Aufgaben. Im Norden steht die Halle der Spiegel. Sie öffnet morgen."
 QUEST_SIDE_ELYSIA_GUESTBOOK_TITLE,Das Gästebuch
 QUEST_SIDE_ELYSIA_GUESTBOOK_SIGN,"Der Gastwirt bittet dich, dich ins Gästebuch einzutragen. Du stehst schon drin. Sicher ist sicher."
 QUEST_SIDE_ELYSIA_GUESTBOOK_DONE,"Du hast dich unter dich eingetragen. Das konnte nur dir gelingen."
@@ -81,3 +82,7 @@ MEMORY_MIRA_LEFT_SHELL,"Ich habe nicht nach der Muschel gefragt."
 MEMORY_MIRA_ASKED_WHERE_TO,"Sie geht morgen weiter. Zum Meer."
 MEMORY_MIRA_GUESSED_SEA,"Sie geht morgen weiter. Ich wusste es vorher. Zum Meer."
 MEMORY_MIRA_END_SILENCE,"Sie geht morgen weiter. Ich musste nicht fragen. Zum Meer."
+QUEST_SIDE_ELYSIA_BOARD_TITLE,Die Auftragstafel
+QUEST_SIDE_ELYSIA_BOARD_BREAD,"Auf der Tafel sucht jemand einen Helden. Das Brot für die Schneiderin wartet bei der Bäckerin."
+QUEST_SIDE_ELYSIA_BOARD_DELIVER,"Der Laib ist noch warm. Er soll zur Schneiderin."
+QUEST_SIDE_ELYSIA_BOARD_DONE,"Das Brot ist angekommen. Es war schon da. Der Lohn war schon abgezählt."

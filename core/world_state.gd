@@ -419,6 +419,25 @@ func add_xp(amount: int) -> int:
 	return gained
 
 
+func gold() -> int:
+	return state.elysia.gold
+
+
+## Pays `amount` gold if there is that much. Returns whether it was paid (gold is cosmetic, Game
+## Bible §10, but a shop still never pays out more than the hero has).
+func spend_gold(amount: int) -> bool:
+	if amount <= 0 or state.elysia.gold < amount:
+		Log.info(
+			Log.Category.WORLD_STATE, "spend refused", {"gold": state.elysia.gold, "amount": amount}
+		)
+		return false
+	var gold_before := state.elysia.gold
+	state.elysia.gold -= amount
+	Log.info(Log.Category.WORLD_STATE, "gold spent", {"gold": state.elysia.gold, "amount": amount})
+	progression_changed.emit(0, state.elysia.gold - gold_before, 0)
+	return true
+
+
 func add_gold(amount: int) -> void:
 	if amount <= 0:
 		return

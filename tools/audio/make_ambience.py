@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Elysia's ambience loop (ADR-017): the garden. The real world's sounds are layered at
-runtime from tools/audio/make_nature.py (ADR-034).
+"""Elysia's ambience loops (ADR-017): the garden and the fountain's water. The real world's sounds
+are layered at runtime from tools/audio/make_nature.py (ADR-034).
 
 Noise beds are synthesized in the frequency domain, so every loop is periodic and repeats
 without a seam. Events (drops, bird chirps) wrap around the loop end for the same reason.
@@ -94,6 +94,24 @@ def garden(seconds=16, seed=2):
     return out
 
 
+def fountain(seconds=8, seed=5):
+    """The market fountain (a prop loop, positional): a soft fall of water into the basin, a
+    steady plash and a few drops on an exact beat. Nothing about it is chance."""
+    rng = np.random.default_rng(seed)
+    n = RATE * seconds
+    fall = shaped_noise(n, rng, 500, 5200, tilt=-0.5) * 0.2
+    fall *= 0.8 + 0.2 * lfo(n, 8, 0.5)
+    hiss = shaped_noise(n, rng, 3500, 9000, tilt=-0.1) * 0.04
+    out = fall + hiss
+    for k in range(8):
+        dur = 0.09
+        t = np.arange(int(RATE * dur)) / RATE
+        freq = 900 + 140 * (k % 4)
+        drop = np.sin(2 * np.pi * freq * t * (1 + 1.5 * t)) * np.exp(-t * 38) * 0.07
+        add_wrapped(out, k * (n // 8) + RATE // 3, drop)
+    return out
+
+
 def write(name, signal):
     os.makedirs(OUT, exist_ok=True)
     signal = signal / (np.max(np.abs(signal)) + 1e-9) * 0.8
@@ -113,3 +131,4 @@ def write(name, signal):
 
 if __name__ == "__main__":
     write("garden_loop", garden())
+    write("water_loop", fountain())

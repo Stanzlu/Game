@@ -7,6 +7,13 @@
 	"Antreiber": "low",
 	"Gärtnerin": "elysia",
 	"Gastwirt": "warm",
+	"Torwächter": "low",
+	"Bäckerin": "warm",
+	"Schneiderin": "elysia",
+	"Händler": "warm",
+	"Blumenfrau": "warm",
+	"Dichter": "elysia",
+	"Musikerin": "elysia",
 	"Kind": "neutral",
 	"Ziege": "low"
 }

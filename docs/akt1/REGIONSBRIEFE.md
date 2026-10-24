@@ -12,7 +12,7 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 |---|---|---|---|---|
 | greet, butterflies, reward, celebrated | A1 Erwachen und Garten | `elysia` | `elysia_start` … `butterflies_caught` | vorhanden |
 | inn | A2 Gasthaus | `gasthaus` | `inn_enter`, `inn_fed`, `inn_room`, `inn_slept` | **gebaut (ADR-058)** |
-| market | A3 Markt und Straße | `markt` | | geplant |
+| market | A3 Markt und Straße | `markt` | `market_enter`, `market_board`, `market_bread`, `market_board_done`, `market_melody` | **gebaut (ADR-059)** |
 | hall | A5 Spiegelhalle | `spiegelhalle` | | geplant |
 | feast, repeat | A6 Fest, A7 Wiederholung | `markt` (Festzustand), alle Orte | | geplant |
 | trail, rift | A8 Kind-Spur, A9 Stein, Samen, Riss | `gasthaus`, `markt`, `spiegelhalle`, `elysia` | | geplant |
@@ -43,7 +43,7 @@ hinter dem Tresen, zwei Kamine, zwei Zimmer.
 | Kleinigkeiten | Fenster, Uhr, Türen hinter dem Tresen, Kamin | zwei Fenster zeigen denselben Garten; die Uhr hat nur ein Wort („Jetzt.“); zwei Türen, beide zu | keine Flags (Vorausdeutung auf A8: „Flur“, „geschlossene Tür“) |
 
 **Heldenquest.** Das erste Gespräch mit dem Gastwirt setzt die Stufe `inn` (wenn die Truhe schon offen ist, sonst setzt die Truhe sie, `ElysiaScene`); damit
-endet die Quest vorläufig („done“), bis A3 die Stufe `market` anhängt.
+geht die Quest zur Stufe `market` weiter (A3).
 
 **Figuren.** Gastwirt (`sheet_host_look`, Stimme `Gastwirt`), vier Gäste (`sheet_elysian_look`, sitzend, wortgleich: „Das Brot hier! Ich komme jeden
 Tag. Es ist jeden Tag das beste.“). Keine neue Figur.
@@ -71,3 +71,56 @@ Fest (A6), das den Gastwirt wieder braucht.
 
 **Prüfungen.** `test_akt1_gasthaus` (15 Tests), `tools/autopilot/akt1_gasthaus.json` (Schritt „segment“ in `check.sh`: alle Marken in der Reihenfolge), `MapLint`
 (Symmetrie, Erreichbarkeit), `StoryLint` (Flags, Cues, Türen).
+
+---
+
+## A3 Markt und Straße
+
+**Stand:** gebaut. **Szene:** `world/levels/akt1/markt.tscn` (`MarktScene`), Karte `content/maps/markt.txt` (61 × 36, spiegelsymmetrisch um Spalte 30, Zoom 1,25), Dialog
+`content/dialogue/akt1/markt.dialogue` (64 Zeilen, 10 Cues, alle `[#draft]`). **Zugang:** die Treppe am Südende des Gartens (Spalte 32, Reihen 34–35), Ankunft
+`spawn_garden`; zurück durch das Tor in der Südmauer (Zelle 30, 35) zum Treppenabsatz `spawn_markt`.
+
+**Zweck.** Die Stadt hinter dem Garten, die Ebene „Straße und Stadt“ der Raumschichtung (Plan 4.1). Sieben Rollen stehen zweimal da (Bible §9), und niemand
+hat etwas gegen etwas: der Markt gibt, was man nicht braucht, und verlangt dafür Gold, das nichts bedeutet. Die Halle der Spiegel steht im Norden an der Mittelachse
+mit verschlossenen Türen („geöffnet ab morgen“): die mechanische Herausforderung von Elysia (Wahrnehmung, A5) ist angekündigt, aber noch zu.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Betreten | Szene beginnt | der Platz, der Brunnen, zwei Torwächter am Tor; die Heldenquest rückt auf `market` | Beat `market_enter`, Flag `elysia.market_seen` |
+| Begrüßung | Gespräch mit dem Torwächter (`gatekeeper`) | „Das Tor steht offen. Es stand immer offen.“ Die Halle öffnet morgen; danach nur noch ein Satz | `elysia.market_greeted`, +150 XP |
+| Tafel | die Tafel (`board`) | drei Zettel (Nachmittag, Chor, „das Fest von gestern, das Fest von morgen“) und der Auftrag: Brot zur Schneiderin | Nebenquest `side_elysia_board`, Beat `market_board` |
+| Brot | die Bäckerin (`baker`) | der Laib ist fertig, „wenn jemand danach fragt“ | Gegenstand `item_loaf`, Stufe `deliver`, Beat `market_bread` |
+| Lohn | die Schneiderin (`tailor`) | sie hat das Brot gestern schon bekommen; der Lohn war abgezählt | Stufe `done`, +3.000 XP, +800 Gold, Beat `market_board_done` |
+| Händler | `merchant` | ein Kompliment (zehn Gold), der Glücksbringer (hundertfünfzig); „Ich schaue nur.“ steht immer da | `WorldState.spend_gold`, `item_compliment`, `item_trinket`, Flag `elysia.market_shop_seen` |
+| Melodie | die Musikerin (`musician`) | Zuhören gibt die perfekte Melodie, ohne Fehler | `melody.elysia_perfect`, +1.000 XP, Beat `market_melody` |
+| Brunnen | `fountain` | eine Münze (zehn Gold) in das Becken; der Wunsch geht in Erfüllung, bevor man fertig ist | `spend_gold` |
+| Kleinigkeiten | Dichter, Blumenfrau, Halle (`hall_door`) | Reime ohne Neues, Blumen ohne Preis, ein Schild, das schon lange dort steht | keine Flags |
+
+**Heldenquest.** Die Stufe `market` (vorläufig final) folgt auf `celebrated` und auf `inn`. Wer den Markt vor der Truhe besucht, bekommt sie von der Truhe nachgetragen
+(`ElysiaScene`: erst `inn`, dann `market`).
+
+**Figuren.** Sieben neue Rollen (`tools/art/make_character.py`: Torwächter, Bäckerin, Händler, Blumenfrau, Schneiderin, Dichter, Musikerin), Stimmen `Torwächter`, `Bäckerin`,
+`Händler`, `Blumenfrau`, `Schneiderin`, `Dichter`, `Musikerin`. Die Verkäufer stehen vor ihren Ständen, die Zwillinge in derselben Reihe, spiegelverkehrt.
+
+**Humor-Ziel (3/10).** Zusagen, die sich selbst erfüllen: das Brot, das schon da war; der Wunsch, der in Erfüllung geht, bevor man ihn zu Ende gedacht hat; der Dichter,
+dem nichts Neues einfällt und der das nicht für ein Problem hält. Gelacht wird über die Stadt, nie über den Gast.
+
+**Gewicht (§45).** leicht; die dunkelste Zeile ist das Fest, das „von gestern und von morgen“ ist.
+
+**Motive.** Spiegelung (alles zweimal), wortgleiche Sätze (`npc-bewegung`, `formulierungen`), die erste Melodie (`melodien`), Menschen ohne Nein (`kein-nein`); Vorausdeutung
+auf das Fest (A6) und die Wiederholung (A7) in der Tafel.
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern: der Auftrag kann liegen bleiben, jede Antwort lässt sich lassen, ohne Gold bleibt „Ich schaue nur.“ Jede Beat-Marke speichert.
+
+**Barrierefreiheit (§50).** Keine Zeit, kein Rätsel; Gold wird in Worten genannt, Antworten, die man nicht bezahlen kann, erscheinen nicht, statt grau zu stehen. Der Brunnen läuft als
+Ortsklang (`water_loop`, Bus Ambience).
+
+**Endlichkeit (§52).** Die Torwächter, die Bäckerin und die Schneiderin haben je drei Zeilen im Wechsel (`%`); die übrigen reden, bis sie es nicht mehr tun müssen; in den Schleifen von A7 sagen alle
+dasselbe (wortgleich).
+
+**Gerechnet.** 64 Zeilen, 702 Wörter, rund viereinhalb Minuten Weg (geschätzt, bis eine Aufnahme es misst): nach `calibrate.py` rund 9 Minuten bei normalem Tempo (Plan: 14). Der Rest ist
+die Halle (A5) und das Fest (A6).
+
+**Prüfungen.** `test_akt1_markt` (16 Tests), `tools/autopilot/akt1_markt.json` (Schritt „segment“ in `check.sh`: Beats und Begrüßung), `MapLint` (Symmetrie, Erreichbarkeit),
+`StoryLint` (Flags, Cues, Türen).
+

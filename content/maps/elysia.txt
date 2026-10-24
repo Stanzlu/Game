@@ -71,6 +71,9 @@ m = {"ground": ".", "marker": "spawn_inn"}
 ; die beiden Elysianer an der Nordterrasse gehen jetzt auf der Wiese (Reihe 2), die Mitte gehört dem Gasthaus
 V = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
 d = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
+; die Treppe nach Süden hinunter zum Markt (A3): wer unten ankommt, steht auf dem Absatz darüber (r)
+a = {"ground": "s", "prop": "res://world/props/door.tscn", "params": {"target": "markt", "spawn": "garden", "auto": true, "size": [3, 1]}}
+r = {"ground": ",", "marker": "spawn_markt"}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhh...~~hhhhhhhhhhhhhhhhhhhhhhhhh~~...hhhhhhhhhhhhhhh
@@ -105,9 +108,9 @@ hh....fffffff...~~~...........O,H,O...........~~~...fffffff....hh
 hh.....fRfgf....~~.T...R..o....,,,....o..R...T.~~....fgfRf..X..hh
 hh......^^^^^^..~~.............,,,.............~~..^^^^^^......hh
 hh...^^^^^^^^^^^vv^^^^^^^^..b..,,,.b...^^^^^^^^vv^^^^^^^^^^^...hh
-^^^^^^^^^^^^^^^^vv^^^^^^^^FFFFF.,.FFFFF^^^^^^^^vv^^^^^^^^^^^^^^^^
-^^^^^^^^%%%%%%^^vv^^^^^^^^^^^^^^^^^^^^^^^^^^^^^vv^^%%%%%%^^^^^^^^
-^^^^^%%%%%%%%%%%vv%%%%%%%%^^^^^^^^^^^^^%%%%%%%%vv%%%%%%%%%%%^^^^^
+^^^^^^^^^^^^^^^^vv^^^^^^^^FFFFF.r.FFFFF^^^^^^^^vv^^^^^^^^^^^^^^^^
+^^^^^^^^%%%%%%^^vv^^^^^^^^^^^^^sss^^^^^^^^^^^^^vv^^%%%%%%^^^^^^^^
+^^^^^%%%%%%%%%%%vv%%%%%%%%^^^^^sas^^^^^%%%%%%%%vv%%%%%%%%%%%^^^^^
 %%%%%%%%%%%%%%%%vv%%%%%%%%%^^^^^^^^^^^%%%%%%%%%vv%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%%%%%%%%%%%%%%vv%%%%%%%%%%%%%%%%

@@ -126,13 +126,17 @@ func _on_quest_changed(quest_id: String, stage: String) -> void:
 		_fountain_solves_itself()
 	elif quest_id == "side_elysia_butterflies" and stage == "done":
 		_start_loops_when_ready()
-	elif (
-		quest_id == "main_elysia_hero"
-		and stage == "celebrated"
-		and WorldState.has_flag("elysia.inn_met")
-	):
-		# the host was met before the chest was opened: nothing is left of the way to the inn
+	elif quest_id == "main_elysia_hero" and stage == "celebrated":
+		_catch_up_the_hero_quest()
+
+
+## The chest was the last thing in the way: the inn and the town, if they were visited before it,
+## now count, in the order of the quest.
+func _catch_up_the_hero_quest() -> void:
+	if WorldState.has_flag("elysia.inn_met"):
 		WorldState.advance_quest("main_elysia_hero", "inn")
+	if WorldState.has_flag("elysia.market_seen"):
+		WorldState.advance_quest("main_elysia_hero", "market")
 
 
 ## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.

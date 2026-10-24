@@ -170,13 +170,14 @@ func test_the_bed_asks_before_it_puts_anyone_to_sleep() -> void:
 # --- The hero's quest ----------------------------------------------------------------------
 
 
-func test_meeting_the_host_after_the_chest_completes_the_hero_quest() -> void:
+func test_meeting_the_host_after_the_chest_gives_the_hero_quest_its_stage_inn() -> void:
 	await _inn()
 	WorldState.start_quest("main_elysia_hero")
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	WorldState.set_flag("elysia.inn_met")
 	await wait_physics_frames(2)
-	assert_true(WorldState.is_quest_done("main_elysia_hero"))
+	assert_eq(WorldState.quest_stage("main_elysia_hero"), "inn", "the town is the next stage")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"))
 
 
 func test_opening_the_chest_after_the_visit_finds_the_stage_for_itself() -> void:
@@ -188,7 +189,7 @@ func test_opening_the_chest_after_the_visit_finds_the_stage_for_itself() -> void
 	WorldState.start_quest("main_elysia_hero")
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await wait_physics_frames(2)
-	assert_true(WorldState.is_quest_done("main_elysia_hero"), "the inn was already behind him")
+	assert_eq(WorldState.quest_stage("main_elysia_hero"), "inn", "the inn was already behind him")
 
 
 func test_the_door_in_the_garden_leads_here_and_the_way_back_exists() -> void:

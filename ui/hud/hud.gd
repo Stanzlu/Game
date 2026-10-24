@@ -486,7 +486,8 @@ func _on_progression(xp: int, gold: int, levels: int) -> void:
 		refresh()
 		return
 	_xp_bar.set_ratio(xp_ratio(s.elysia.xp), levels)
-	if gold > 0:
+	# spending (a shop) counts the purse down without a popup
+	if gold != 0:
 		_count_gold_to(s.elysia.gold)
 	if xp > 0:
 		_enqueue(func() -> void: _float_text("+%s XP" % format_number(xp), "xp"))
