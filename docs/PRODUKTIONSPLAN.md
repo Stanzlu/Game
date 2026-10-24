@@ -391,7 +391,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.4** | Stilbuch, Stimmenblätter, Motivbuch · **geschrieben** (ADR-054), wartet auf deine Lektüre | Prüfer `motifs.py` grün | Blätter lesen (rund 45 Min) |
 | **P6.5** | Writing-Pass auf den Slice, Tests auf IDs · **erledigt** (ADR-056); Lesefassung `docs/lesefassung/SLICE.md`, Einfrieren wartet auf dein „OK“ | `slice_full.json` grün | Lesefassung des Slice (rund 60 Min) |
 | **P6.6** | T4 Karten-Linter, T5 Elysia-Regler und Konventionen, T11 Kalibrierung · **erledigt** (ADR-055) | der Slice spielt sich unverändert | – |
-| **P6.7** | Grafik und Ton für Akt I: Props im Elysia-Stil für Gasthaus und Markt, OGG, Pixel-Format für kleine Bilder; Sample-Hörprobe nur nach Entscheidung 1 | Kontaktbogen, `check_levels.py` | Kontaktbogen (rund 15 Min) |
+| **P6.7** | **(Entscheidungen 1 und 2, OGG, kleine Bilder: erledigt, ADR-057; Props, Figuren und Klänge je Segment)** Grafik und Ton für Akt I: Props im Elysia-Stil für Gasthaus und Markt, OGG, Pixel-Format für kleine Bilder; Sample-Hörprobe nur nach Entscheidung 1 | Kontaktbogen, `check_levels.py` | Kontaktbogen (rund 15 Min) |
 | **P6.8** | A2 Gasthaus | Smoke, Autopilot-Segment, Marken im Log | Lesefassung (rund 20 Min) |
 | **P6.9** | A3 Markt und Straße | wie P6.8, Leistungstest mit der Menge | Lesefassung, ein Leistungstest |
 | **P6.10** | A5 Spiegelhalle | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
@@ -409,7 +409,7 @@ Kalendertagen, die meisten davon Vertiefung und Rückmeldung [V]. Akt I ist mit 
 
 ## 11. Entscheidungen für dich
 
-Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung.
+Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Stand 24.10.:** beide nach Empfehlung entschieden (ADR-057), nachdem der Projektinhaber den Plan mit „bau alles“ freigegeben hat; umkehrbar.
 
 **1. Budget und endgültiger Look und Klang**
 - Frage: Bleibt es für Full Production bei 0 €, und ist „erzeugt und von Hand nachbearbeitet“ damit der endgültige

@@ -122,7 +122,7 @@ Alles ist projekt-eigen erzeugt; Liste aller Dateien in [`PLACEHOLDERS.md`](PLAC
 | | Punkt | Quelle | Vorschlag |
 |---|---|---|---|
 | F | Figuren: Grundposen, Umschauen und Miras Arbeitspose, keine Anpassung | #16 | handgepixelte Spielfigur, Mira, Kind, Antreiber (ART_DIRECTION, nächste Schritte) |
-| F | Böden, Bäume, Haus, Requisiten sind prozedural | ADR-017 (vorläufig) | Art-Pass nach dem Gate; ADR-017 dann abschließen |
+| F | Böden, Bäume, Haus, Requisiten sind prozedural | ADR-017, ADR-057 | erledigt 24.10.: „erzeugt und kuratiert“ gilt, Abnahme je Region, Budgetfrage vor einer Veröffentlichung |
 | F | Key-Art und Startbilder aus Spiel-Sprites; Menü verdeckt den Weltenbaum | #35 | eigene Titelillustration |
 | F | Musik, Klänge, Naturklänge synthetisch | #10, #29, #34, #46 | Komposition, Sounddesign, Field Recordings (CC0 oder beauftragt) |
 | F | Texte Entwürfe | #47 | Writing-Pass, danach Lokalisierung (Englisch per CSV, ADR-002) |

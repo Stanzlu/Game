@@ -37,11 +37,12 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 - Look-Grafik ist prozedural (ADR-017, `docs/ART_DIRECTION.md`): `tools/art/make_sprites.py`, dann
   `tools/art/bake_ground.py <karte>` nach jeder Änderung an Look-Karten. Braucht `requirements-art.txt`. Der Bake schreibt
   einen Stempel (`tools/art/map_stamps.json`); `check.sh` meldet Karten, die nach einer Änderung nicht neu gebacken sind (ADR-052).
+- Kleine Bilder (16×16, Kuriositäten, Fragmente, Schilder) als Text in `tools/art/small/*.pix`; `tools/art/pixelgrid.py` schreibt die PNG und prüft Größe, Palette und Umriss (ADR-057).
 - Autopilot für reproduzierbare Aufnahmen: `tools/autopilot/*.json` (nur Debug; `tap` für Menüs/Dialoge).
 - Elysia ist spiegelsymmetrisch (`[meta] symmetry`, ADR-031); das Startbild heißt „Elysia“, bis ein Stand
   die Wirklichkeit erreicht, danach „Nach Elysia“ (ADR-030, ADR-035; REAL bleibt Projektname;
   `--title=elysia|real` für Aufnahmen).
-- Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops), `make_nature.py` (Wirklichkeit:
+- Klänge: `tools/audio/make_sfx.py` (Effekte), `make_music.py` (Loops als Ogg Vorbis über `encode.py`, braucht ffmpeg; WAV nur als Zwischenstand in `build/audio`, ADR-057), `make_nature.py` (Wirklichkeit:
   Soundscapes in `content/audio`, ADR-034), `make_ambience.py` (Elysias Garten); Titel: `tools/art/make_title.py`.
   UI-Schriften nur über Theme-Typen (ADR-026); Shader auf Requisiten nie mit `UV` als 0..1 (Atlas, ADR-028).
 - Zoom `view_zoom` überall 1,25×, scharf abgetastet (ADR-045); einzige Ausnahme sind Innenräume mit 1,5× in

@@ -67,6 +67,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-054 | Stilbuch, Stimmenblätter und Motivbuch (P6.4) |
 | ADR-055 | Karten-Linter, Elysia-Regler, Registerlisten und Kalibrierung (P6.6) |
 | ADR-056 | Writing-Pass auf den Slice, Lesefassung und Tests auf Zeilen-IDs (P6.5) |
+| ADR-057 | Entscheidungen 1 und 2 des Produktionsplans, Musik als Ogg Vorbis, kleine Bilder als Text (P6.7) |
 
 ---
 
@@ -735,4 +736,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Tests auf IDs:** `LineText.of("<id>")` (`tests/unit/line_text.gd`) liefert den Wortlaut aus den Dialogdateien; über 40 festgenagelte Stellen in acht Testdateien nennen jetzt die ID. Absichtlich im Wortlaut bleiben „Zum Meer.“ und „… Ja. Zum Meer.“ (Bible §56) und Zeilen, deren Text unter mehreren IDs vorkommt.
 - **Einfrieren steht aus:** Die Slice-Zeilen bleiben `[#draft]`/ungetaggt, bis der Projektinhaber die Lesefassung gesehen hat; `[#ok]` heißt „gelesen“ (ADR-053). Ein Satz in der Antwort genügt, dann friert `id_lock.py --update` sie ein.
 - **Konsequenzen:** Ein Texteingriff ändert nur die `.dialogue`-Datei; Tests und Motivbuch folgen den IDs. Wer eine Zeile umschreibt, die auf einem Blatt zitiert wird, ändert das Blatt im selben Pull Request (der Prüfer meldet es sonst).
+
+## ADR-057 · Entscheidungen 1 und 2 des Produktionsplans, Musik als Ogg Vorbis, kleine Bilder als Text (P6.7)
+- **Status:** angenommen · 2026-10-24 (der Projektinhaber schrieb am 24.10.: „Du hast mein go für alles, bau alles“; nach Abschnitt 11 des Plans gilt damit die Empfehlung, und sie bleibt umkehrbar)
+- **Kontext:** Plan 11 stellt zwei Weichen: Budget und endgültiger Look und Klang (Entscheidung 1), Länge von Akt I (Entscheidung 2). ADR-017 (Look-Pipeline) blieb dafür vorläufig. Die Musik als WAV macht 17,9 MB des Repos aus.
+- **Entscheidung:**
+  - **Entscheidung 1: 0 € bleibt, der Look heißt „erzeugt und kuratiert“.** Grafik und Klang entstehen weiter aus den Generatoren in `tools/art` und `tools/audio` (Paletten, Licht, Wind, Symmetrie, gemessene Lautheit), darüber eine dünne, von Hand geschriebene Datenschicht (Karten, Kataloge, `.pix`-Bilder). Das schließt ADR-017: **bewusste Abweichung** von Bible §36 („handgezeichnete Pixel-Art“) und §61 („keine Placeholder-Assets“), umkehrbar und vor einer Veröffentlichung neu zu stellen. `PLACEHOLDERS.md` führt ein Asset weiter als Platzhalter, bis der Projektinhaber die Region abgenommen hat; erst dann gilt es als endgültig. Instrumentenklänge aus Sample-Bibliotheken: nur CC0 und erst nach seiner Hörprobe (ich höre nicht); bis dahin bleibt die Musik synthetisch. Titel- und Schlüsselbild, 5–8 Schlüsselstücke der Musik und Porträts sind ohne Geld am schwächsten; die Budgetfrage kommt vor einer Veröffentlichung mit Gegenüberstellung nach Master-Prompt §51.
+  - **Entscheidung 2: Akt I wird in der geplanten Länge (rund 100 Minuten) gebaut** und nach dem Durchlauf in P6.12 entschieden: wirkt es zu lang, wird per ADR gekürzt, fehlt Elysia, kommt das Minispiel A4 dazu. Die Kalibrierung (ADR-055) zeigt, dass der Slice bei 21,5 Zeilen je Minute läuft, der Plan aber mit 6 rechnet; Akt I zieht seine Minuten also aus Spiel (Erkunden, Spiegelhalle, Händler, Fest), nicht aus mehr Text. Die Segmente werden gegen `docs/KALIBRIERUNG.md` gerechnet.
+  - **Musik als Ogg Vorbis:** `assets/generated/music/*.ogg` (Qualität 5, ffmpeg mit libvorbis) statt WAV; 17,9 MB wurden 1,4 MB. Die Generatoren rendern das WAV nach `build/audio/music/` (nicht im Repo, bitgleich zur früheren Fassung) und `tools/audio/encode.py` kodiert und prüft Länge und Naht der Schleife. Der Import setzt `loop=true`; Godot spielt die Schleife aus dem Decoder, nicht aus dem Dateirand. Ambience-Betten und Effekte bleiben WAV (klein, Lautheit mit `check_levels.py` gemessen).
+  - **Neue Entwicklungsabhängigkeit:** ffmpeg (nur zum Erzeugen und Messen von Audio, nicht im Spiel, nicht im Build; das Repo trägt nur die `.ogg`-Ergebnisse). Eintrag in `DEPENDENCIES.md`.
+  - **Kleine Bilder als Text:** `tools/art/pixelgrid.py` liest `.pix`-Dateien (Raster aus Zeichen, Schlüssel zur Palette, höchstens zwölf Farben, optional geschlossener Umriss) und schreibt die PNG; die Prüfung braucht nur die Standardbibliothek und läuft in `check.sh`. Gedacht für Kuriositäten, Fragmente, Schilder und Gegenstände (Plan 8).
+- **Verworfen:** Geld jetzt ausgeben, bevor Akt I steht (Stile ändern sich noch); WAV behalten (wächst linear mit jedem Akt); QOA oder ADPCM im Import (verlustbehaftet und größer als Vorbis bei Musik).
+- **Konsequenzen:** Ein neues Musikstück heißt `<name>_loop.ogg`; `AudioDirectorService.track_path` kennt nur noch OGG. Wer Musik ändert, braucht ffmpeg; ohne ffmpeg bricht der Generator mit einer klaren Meldung ab. Der Pegel-Check misst Musik nicht (nur Effekte, Schritte und Orte); Musikpausen und Elysias Stufen misst weiter `tools/audio/measure.sh`.
 

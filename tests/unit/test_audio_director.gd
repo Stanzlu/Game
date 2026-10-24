@@ -14,8 +14,8 @@ func before_each() -> void:
 func test_every_track_file_exists() -> void:
 	for track in AudioDirectorService.TRACKS:
 		assert_true(ResourceLoader.exists(AudioDirectorService.track_path(track)), track)
-		var stream := load(AudioDirectorService.track_path(track)) as AudioStreamWAV
-		assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s loops" % track)
+		var stream := load(AudioDirectorService.track_path(track)) as AudioStreamOggVorbis
+		assert_true(stream.loop, "%s loops" % track)
 
 
 func test_play_switches_and_same_track_keeps_playing() -> void:
@@ -107,8 +107,10 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	assert_eq(AudioDirectorService.elysia_stage_for(610.0, never), 2, "by play time: 10 min")
 	assert_eq(AudioDirectorService.elysia_stage_for(10.0, stone), 2, "by progress")
 	for entry: Dictionary in AudioDirectorService.ELYSIA_STAGES:
-		var stream := load(AudioDirectorService.MUSIC_DIR + str(entry["file"])) as AudioStreamWAV
-		assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s loops" % entry["file"])
+		var stream := (
+			load(AudioDirectorService.MUSIC_DIR + str(entry["file"])) as AudioStreamOggVorbis
+		)
+		assert_true(stream.loop, "%s loops" % entry["file"])
 	WorldState.new_game()
 	audio.play_music("elysia", 0.0)
 	assert_eq(audio.elysia_stage, 0)
@@ -119,7 +121,7 @@ func test_elysia_loop_shrinks_on_the_downbeat() -> void:
 	assert_eq(audio.elysia_stage, 1, "switches on the downbeat")
 	assert_almost_eq(audio._last_position, 0.03, 0.001, "goes on where the loop is, no repeat")
 	var playing := audio._music[audio._active_music].stream.resource_path
-	assert_true(playing.ends_with("elysia_half_loop.wav"), playing)
+	assert_true(playing.ends_with("elysia_half_loop.ogg"), playing)
 	WorldState.new_game()
 
 
