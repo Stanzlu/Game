@@ -1,0 +1,23 @@
+# Fragment leeres Zimmer (A8): ein Fenster, ein Boden, das Licht darauf
+name: fragment_empty_room
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a2640 m=#7c779a l=#b9b5d0 y=#fff0b0 w=#e8e4f4
+outline: o
+---
+................
+.oooooooooooooo.
+.ommmmmmmmmmmmo.
+.ommmyymmyymmmo.
+.ommmyymmyymmmo.
+.ommmyymmyymmmo.
+.ommmyymmyymmmo.
+.ommmyymmyymmmo.
+.ommmmmmmmmmmmo.
+.ommmmmmmmmmmmo.
+.ollllllllllllo.
+.olllwwwwwwlllo.
+.olllwwwwwwlllo.
+.olllwwwwwwlllo.
+.oooooooooooooo.
+................
