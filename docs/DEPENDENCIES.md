@@ -15,6 +15,7 @@ Nutzen, kann die Engine es selbst, Pflege, Lizenz, Lock-in, Performance, Build-K
 | Jersey 15 | Stand google/fonts, 2026-10-04 (SHA-256 `dbe00479…`) | github.com/google/fonts (`ofl/jersey15`, Soft Type) | OFL 1.1, ohne reservierten Namen | Titel und Belohnungen, 27 px (ADR-026) | `assets/fonts/jersey15/` |
 | numpy | 2.4.6 | PyPI | BSD-3-Clause | Rechnen in den Grafik- und Audio-Generatoren (ADR-017) und im Pegel-Check `tools/audio/check_levels.py` (Schritt „audio levels“ in `tools/check.sh`, ADR-047); nur Entwicklung, für `check.sh` optional | `requirements-art.txt` |
 | Pillow | 12.3.0 | PyPI | MIT-CMU (HPND) | PNG lesen und schreiben in den Generatoren (ADR-017), nur Entwicklung | `requirements-art.txt` |
+| ffmpeg | vom Betriebssystem (Paketquelle der Entwicklungsumgebung) | ffmpeg.org | LGPL/GPL je nach Build, nur als Werkzeug aufgerufen | Ogg-Vorbis-Kodierung der Musik und Dekodierung für `tools/audio` (ADR-057); nur Entwicklung, nicht im Spiel und nicht im Build, `tools/audio/measure.sh` nutzte es schon | `tools/audio/encode.py` |
 
 ## Hinweise
 - Addons sind **unverändert** übernommen. Anpassungen passieren über Projekteinstellungen oder eigene Wrapper, nicht im Addon-Code.
