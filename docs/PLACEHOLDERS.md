@@ -57,6 +57,10 @@ Alles aus eigenen Generatoren (Python mit numpy; Godot-Seite nur Daten), ohne fr
 | `assets/generated/characters/{baker,florist,tailor,merchant,musician,poet,gatekeeper}.png` | die sieben Rollen des Marktes (Laufbögen, 8 Richtungen) | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | Figurenentwurf von Hand |
 | `assets/generated/maps/markt_ground.png` | gebackener Boden des Marktes (Pflaster, Marmor, Mauer) | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalter Boden |
 | `assets/generated/audio/water_loop.wav` | Brunnenwasser (Ortsklang, Loop) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Sounddesign |
+| `assets/generated/props/elysia/hall_{shell,gate,mirror,front_open}.png`, `odd_leaf.png`, `odd_feather.png` (Akt I, A5) | Halle der Spiegel: Hülle mit Spiegelwänden und Türrahmen, Tor, großer Spiegel, Fassade mit offenen Türen, Blatt und Feder | projekt-eigen, programmatisch (`tools/art/akt1_props.py`) | projekt-eigen | handgepixelte Assets, Abnahme der Region |
+| `assets/generated/characters/keeper.png` | Hallenwächter (Laufbögen, 8 Richtungen) | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | Figurenentwurf von Hand |
+| `assets/generated/maps/spiegelhalle_ground.png` | gebackener Boden der Halle (Marmor) | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalter Boden |
+| `assets/generated/items/{item_loaf,item_trinket,curiosity_dry_leaf,curiosity_feather}.png` | Symbole für Brot, Glücksbringer, Blatt und Feder (16 × 16) | projekt-eigen, von Hand als Text (`tools/art/small/*.pix`, `pixelgrid.py`) | projekt-eigen | Symbole von Hand nachzeichnen |
 | `content/audio/haus_abend.tres` | neue Soundscape-Definition für das Haus am Abend (Daten aus vorhandenen Betten) | von Hand | projekt-eigen |
 | `content/audio/{tal_abend,tal_regentag,haus_feuer}.tres` | Pegel angepasst | von Hand | projekt-eigen |
 

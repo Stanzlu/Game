@@ -394,7 +394,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.7** | **(Entscheidungen 1 und 2, OGG, kleine Bilder: erledigt, ADR-057; Props, Figuren und Klänge je Segment)** Grafik und Ton für Akt I: Props im Elysia-Stil für Gasthaus und Markt, OGG, Pixel-Format für kleine Bilder; Sample-Hörprobe nur nach Entscheidung 1 | Kontaktbogen, `check_levels.py` | Kontaktbogen (rund 15 Min) |
 | **P6.8** | A2 Gasthaus · **gebaut** (ADR-058, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 9 Minuten, das Fest füllt die Lücke) | Smoke, Autopilot-Segment, Marken im Log | Lesefassung (rund 20 Min) |
 | **P6.9** | A3 Markt und Straße · **gebaut** (ADR-059, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 9 statt 14 Minuten, Halle und Fest füllen die Lücke) | wie P6.8, Leistungstest mit der Menge | Lesefassung, ein Leistungstest |
-| **P6.10** | A5 Spiegelhalle | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
+| **P6.10** | A5 Spiegelhalle · **gebaut** (ADR-060, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten) | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
 | **P6.11** | A6 Fest, A7 Wiederholung (zwei PRs) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
 | **P6.12** | A8 Kind-Spur, A9 Anschluss an den Riss | Akt-I-Durchlauf per Autopilot | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst | Plan aktualisiert | Rückmeldung |

@@ -82,6 +82,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Dichter:** Der Tag ist schön, der Himmel blau. Nein. Das war es schon. Das reicht doch auch. `[#draft]`  <sub>mk_poet_5</sub>
 - ▸ **…**
   - **Dichter:** Du bist sprachlos. Das ist das beste Reimwort, das es gibt. `[#draft]`  <sub>mk_poet_6</sub>
+- ▸ **Das hast du gestern auch gesagt.** *(wenn `perception`)*
+  - **Dichter:** Gestern? Gestern hat es sich auch gereimt. Das ist ja das Schöne. `[#draft]`  <sub>mk_poet_7</sub>
 
 ### M9 · `musician`
 
@@ -121,5 +123,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M12 · `hall_door`
 
-- *Die Türen der Halle der Spiegel sind verschlossen. Auf einem Schild steht in goldener Schrift, geöffnet ab morgen.* `[#draft]`  <sub>mk_hall_1</sub>
+*wenn* `elysia.hall_open`
+  - *Die Türen der Halle der Spiegel stehen offen. Dahinter ist es hell.* `[#draft]`  <sub>mk_hall_5</sub>
+- *Die Türen der Halle der Spiegel sind zu. Auf einem Schild steht in goldener Schrift, geöffnet ab morgen.* `[#draft]`  <sub>mk_hall_1</sub>
 - *Das Schild sieht aus, als stünde es schon sehr lange da.* `[#draft]`  <sub>mk_hall_2</sub>
+- ▸ **Gegen die Türen drücken.**
+  - *Die Türen geben nach. Sie waren nie abgeschlossen. Nur das Schild steht davor.* `[#draft]`  <sub>mk_hall_3</sub>
+- ▸ **Morgen wiederkommen.**
+  - *Du gehst. Morgen ist bald. Es ist hier immer bald.* `[#draft]`  <sub>mk_hall_4</sub>
