@@ -1,0 +1,110 @@
+# Die Halle der Spiegel, Akt I, Segment A5 (docs/akt1/REGIONSBRIEFE.md).
+# Drei Räume, in denen alles zweimal steht, fast. Die Aufgabe ist Wahrnehmung (Game Bible §16): bemerken, was nur auf einer
+# Seite liegt. Es gibt kein Scheitern; der Wächter hilft, so oft man fragt, in drei Stufen. Zeilen ohne Sprecher sind Erzählung.
+
+~ keeper
+if WorldState.has_flag("elysia.hall_mirror_seen")
+	Hallenwächter: Du hast es gesehen. Das ist selten. Es ist nicht schwer, es ist nur selten. [ID:sh_keeper_4] [#draft]
+	=> END
+elif not WorldState.has_flag("elysia.hall_met")
+	Hallenwächter: Willkommen in der Halle der Spiegel. Hier steht alles zweimal. [ID:sh_keeper_1] [#draft]
+	Hallenwächter: Links, rechts, genau gleich. Fast. [ID:sh_keeper_2] [#draft]
+	Hallenwächter: Ich stehe in der Mitte. Darum gibt es mich nur einmal. Das ist die einzige Ausnahme, die ich kenne. [ID:sh_keeper_3] [#draft]
+	do WorldState.set_flag("elysia.hall_met")
+else
+	Hallenwächter: Schau dich um. Ich habe Zeit. Die Halle hat sie auch. [ID:sh_keeper_5] [#draft]
+=> keeper_hints
+
+~ keeper_hints
+- Ein Hinweis, bitte. [ID:sh_keeper_r1] [#draft]
+	=> keeper_hint_1
+- Etwas genauer? [ID:sh_keeper_r2] [#draft]
+	=> keeper_hint_2
+- Sag es mir. [ID:sh_keeper_r3] [#draft]
+	=> keeper_hint_3
+- Ich schaue selbst. [ID:sh_keeper_r4] [#draft]
+	Hallenwächter: Gut. Schauen ist das Einzige, was hier verlangt wird. [ID:sh_keeper_6] [#draft]
+=> END
+
+~ keeper_hint_1
+if not WorldState.has_flag("elysia.hall_room_1")
+	Hallenwächter: Alles in diesem Raum hat auf der anderen Seite einen Zwilling. Such das, was keinen hat. [ID:sh_hint_1] [#draft]
+elif not WorldState.has_flag("elysia.hall_room_2")
+	Hallenwächter: Der nächste Raum ist größer und nicht anders. Wieder liegt etwas nur auf einer Seite. [ID:sh_hint_2] [#draft]
+else
+	Hallenwächter: Der letzte Raum hat nichts zu suchen. Er hat etwas zu zeigen. [ID:sh_hint_3] [#draft]
+=> keeper_hints
+
+~ keeper_hint_2
+if not WorldState.has_flag("elysia.hall_room_1")
+	Hallenwächter: Es liegt am Boden. Links, zwischen den beiden Säulen. [ID:sh_hint_4] [#draft]
+elif not WorldState.has_flag("elysia.hall_room_2")
+	Hallenwächter: Es liegt am Boden. Rechts, zwischen den beiden Säulen. [ID:sh_hint_5] [#draft]
+else
+	Hallenwächter: Geh bis ganz nach oben. Dort hängt ein Spiegel, und er ist groß. [ID:sh_hint_6] [#draft]
+=> keeper_hints
+
+~ keeper_hint_3
+if not WorldState.has_flag("elysia.hall_room_1")
+	Hallenwächter: Ein Blatt. Braun und trocken. Es ist das Einzige hier, das alt werden durfte. [ID:sh_hint_7] [#draft]
+elif not WorldState.has_flag("elysia.hall_room_2")
+	Hallenwächter: Eine Feder. Blaugrau. Die Halle hat keine Vögel, und trotzdem. [ID:sh_hint_8] [#draft]
+else
+	Hallenwächter: Stell dich vor den Spiegel und sieh hin. Mehr ist es nicht. [ID:sh_hint_9] [#draft]
+=> keeper_hints
+
+~ gate_shut
+Das Tor ist zu. Zwei Spiegel in einem Rahmen, beide zeigen dasselbe. [ID:sh_gate_1] [#draft]
+Es bleibt zu, bis dir etwas auffällt. [ID:sh_gate_2] [#draft]
+=> END
+
+~ leaf
+if WorldState.has_flag("elysia.hall_room_1")
+	Das Blatt liegt noch da. Du hast es dir schon angesehen. [ID:sh_leaf_5] [#draft]
+else
+	Ein Blatt liegt auf dem Marmor. Es ist braun, trocken, an den Rändern gewellt. [ID:sh_leaf_1] [#draft]
+	Auf der anderen Seite der Halle liegt keines. [ID:sh_leaf_2] [#draft]
+	Du hast es bemerkt. Weiter vorn macht das Tor ein Geräusch, das es noch nie gemacht hat. [ID:sh_leaf_3] [#draft]
+	do WorldState.set_flag("elysia.hall_room_1")
+	do WorldState.add_xp(1500)
+- Es aufheben. [ID:sh_leaf_r1] [#draft]
+	Es raschelt. In dieser Halle klingt sonst nichts, was nicht schon geklungen hat. [ID:sh_leaf_4] [#draft]
+	do WorldState.add_item("curiosity_dry_leaf")
+	do WorldState.set_flag("elysia.hall_leaf_taken")
+- Liegen lassen. [ID:sh_leaf_r2] [#draft]
+	Du lässt es, wo es liegt. Es liegt gut. [ID:sh_leaf_6] [#draft]
+=> END
+
+~ feather
+if WorldState.has_flag("elysia.hall_room_2")
+	Die Feder liegt noch da. Du hast sie dir schon angesehen. [ID:sh_feather_5] [#draft]
+else
+	Eine Feder liegt am Boden, blaugrau, am Rand zerzaust. Die Halle hat keine Vögel. [ID:sh_feather_1] [#draft]
+	Auf der anderen Seite liegt keine. [ID:sh_feather_2] [#draft]
+	Du hast es bemerkt. Weiter oben bewegt sich das Tor. [ID:sh_feather_3] [#draft]
+	do WorldState.set_flag("elysia.hall_room_2")
+	do WorldState.add_xp(2000)
+- Sie einstecken. [ID:sh_feather_r1] [#draft]
+	Sie wiegt nichts, und trotzdem merkst du es. [ID:sh_feather_4] [#draft]
+	do WorldState.add_item("curiosity_feather")
+	do WorldState.set_flag("elysia.hall_feather_taken")
+- Liegen lassen. [ID:sh_feather_r2] [#draft]
+	Du lässt sie, wo sie liegt. Sie liegt gut. [ID:sh_feather_6] [#draft]
+=> END
+
+~ mirror
+if WorldState.has_flag("elysia.hall_mirror_seen")
+	Der Spiegel zeigt die Halle, das Licht, den Staub in der Luft. Du weißt, wen er nicht zeigt. [ID:sh_mirror_6] [#draft]
+	=> END
+Der große Spiegel zeigt die Halle hinter dir. Die Säulen, beide Seiten, das Licht aus dem Nirgendwo. [ID:sh_mirror_1] [#draft]
+Du trittst näher. Er zeigt weiter die Halle. [ID:sh_mirror_2] [#draft]
+Dich zeigt er nicht. [ID:sh_mirror_3] [#draft]
+- Weiter hinsehen. [ID:sh_mirror_r1] [#draft]
+	Du siehst hin. Es fällt dir nicht schwer. Es fällt dir nur auf. [ID:sh_mirror_4] [#draft]
+	Das Becken im Garten hat dich auch nicht gezeigt. Du hast nicht hingesehen. [ID:sh_mirror_5] [#draft]
+	do WorldState.set_facet("perception")
+	do WorldState.add_xp(5000)
+	do WorldState.set_flag("elysia.hall_mirror_seen")
+- Wegsehen. [ID:sh_mirror_r2] [#draft]
+	Du siehst weg. Der Spiegel wartet. Er hat nichts anderes vor. [ID:sh_mirror_7] [#draft]
+=> END

@@ -171,6 +171,7 @@ echo "smoke ok"
 segments=(
   "akt1_gasthaus:gasthaus:2400:inn_enter inn_fed inn_room inn_slept elysia.inn_book_signed"
   "akt1_markt:markt:2500:market_enter market_board market_bread market_board_done market_melody elysia.market_greeted"
+  "akt1_spiegelhalle:spiegelhalle:1300:hall_enter hall_room_1 hall_room_2 hall_mirror perception elysia.hall_leaf_taken"
 )
 for segment in "${segments[@]}"; do
   IFS=: read -r name scene frames marks <<<"$segment"

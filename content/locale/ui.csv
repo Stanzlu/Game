@@ -212,6 +212,7 @@ PLACE_TAL,Das Tal
 PLACE_HAUS,Das Haus
 PLACE_GASTHAUS,Das Gasthaus zum Immer
 PLACE_MARKT,Der Markt
+PLACE_SPIEGELHALLE,Die Halle der Spiegel
 PLACE_WEG,Der Weg zum Schuppen
 END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text

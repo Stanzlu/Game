@@ -82,18 +82,44 @@ func test_the_garden_stairs_and_the_gate_belong_together() -> void:
 	assert_eq(doors, 1, "one way back, up the stairs")
 
 
-func test_the_hall_of_mirrors_is_shut_until_it_opens() -> void:
+func test_the_hall_of_mirrors_is_shut_until_somebody_pushes() -> void:
 	var scene := await _market()
 	assert_eq(_props_with_cue(scene, "hall_door").size(), 1)
-	WorldState.set_flag("elysia.hall_open")
+	assert_eq(_doors_to(scene, "spiegelhalle"), 0, "no way in while the doors are shut")
+	var seen := await DialogueWalk.play(DIALOGUE, "hall_door", ["drücken"])
+	assert_true(LineText.of("mk_hall_3") in seen, "they were never locked")
+	assert_true(WorldState.has_flag("elysia.hall_open"))
 	await wait_physics_frames(3)
-	assert_eq(_props_with_cue(scene, "hall_door").size(), 0, "the shut doors are gone")
+	assert_eq(_doors_to(scene, "spiegelhalle"), 1, "the way in stands open")
+	assert_eq(_props_with_cue(scene, "hall_door").size(), 1, "the front is still there, and open")
 	assert_true(Beat.reached("market_hall_open"))
 
 
-func test_the_hall_door_says_tomorrow() -> void:
-	var seen := await DialogueWalk.play(DIALOGUE, "hall_door")
-	assert_true(LineText.of("mk_hall_1") in seen)
+func test_waiting_for_tomorrow_opens_nothing() -> void:
+	var answers := await DialogueWalk.answers(DIALOGUE, "hall_door")
+	assert_eq(answers.size(), 2, "push or wait")
+	var seen := await DialogueWalk.play(DIALOGUE, "hall_door", ["wiederkommen"])
+	assert_true(LineText.of("mk_hall_1") in seen, "the sign says tomorrow")
+	assert_true(LineText.of("mk_hall_4") in seen)
+	assert_false(WorldState.has_flag("elysia.hall_open"))
+
+
+func test_the_poet_has_one_more_thing_to_say_to_the_perceptive() -> void:
+	var plain := await DialogueWalk.answers(DIALOGUE, "poet")
+	assert_eq(plain.size(), 3)
+	WorldState.set_facet("perception")
+	var answers := await DialogueWalk.answers(DIALOGUE, "poet")
+	assert_eq(answers.size(), 4, "he notices that it is yesterday's poem")
+	var seen := await DialogueWalk.play(DIALOGUE, "poet", ["gestern auch gesagt"])
+	assert_true(LineText.of("mk_poet_7") in seen)
+
+
+func _doors_to(scene: GameScene, target: String) -> int:
+	var count := 0
+	for node in scene.map.entities.get_children():
+		if not node.is_queued_for_deletion() and node.get(&"target") == target:
+			count += 1
+	return count
 
 
 # --- The gatekeeper ----------------------------------------------------------------------
@@ -225,7 +251,7 @@ func test_the_market_is_the_stage_after_the_chest() -> void:
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await _market()
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "market")
-	assert_true(WorldState.is_quest_done("main_elysia_hero"), "for now, until the hall opens")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the hall is the next stage")
 
 
 func test_the_market_follows_the_inn() -> void:
@@ -247,4 +273,3 @@ func test_a_visit_before_the_chest_leaves_the_quest_alone_and_the_chest_catches_
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await wait_physics_frames(2)
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "market", "the inn, then the town")
-	assert_true(WorldState.is_quest_done("main_elysia_hero"))

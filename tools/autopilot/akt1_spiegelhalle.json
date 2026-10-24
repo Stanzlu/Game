@@ -1,0 +1,19 @@
+[
+  {"t": 1.0, "flag": "elysia.woke", "log": "start in the vestibule"},
+  {"t": 1.4, "teleport": [7, 35], "log": "the dry leaf"},
+  {"t": 1.6, "press": ["move_up"]},
+  {"t": 1.65, "release": ["move_up"]},
+  {"t": 2.0, "tap": ["interact"]},
+  {"t": 2.6, "dialogue": 7.0},
+  {"t": 11.0, "teleport": [24, 22], "log": "the feather"},
+  {"t": 11.2, "press": ["move_up"]},
+  {"t": 11.25, "release": ["move_up"]},
+  {"t": 11.6, "tap": ["interact"]},
+  {"t": 12.2, "dialogue": 7.0},
+  {"t": 21.0, "teleport": [16, 7], "log": "the mirror"},
+  {"t": 21.2, "press": ["move_up"]},
+  {"t": 21.25, "release": ["move_up"]},
+  {"t": 21.6, "tap": ["interact"]},
+  {"t": 22.2, "dialogue": 8.0},
+  {"t": 31.0, "log": "segment finished"}
+]
