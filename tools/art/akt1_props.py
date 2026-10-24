@@ -23,6 +23,9 @@ SHEET = ramp("#b9b2d8", "#dcd7ef", "#f4f1fb", "#ffffff")
 BLANKET = ramp("#1f6a72", "#35959a", "#62c0b6", "#a8e6d2")
 PINK = ramp("#9e5288", "#cf7fae", "#ecaccb", "#fbd5e5")
 LEAF = ramp("#164a30", "#24703a", "#3f9a44", "#7cc653")
+GLASS = ramp("#4f7088", "#82a9bd", "#bcdbe8", "#e6f5fa", "#ffffff")
+DRY = ramp("#4a2a10", "#7a4a1c", "#a8742e", "#d0a050")
+FEATHER = ramp("#8a96b0", "#bcc6dc", "#e6ecf8", "#ffffff")
 
 PX = 16  # one map cell
 # Pixel columns inside the inn's shell (41 cells wide, symmetric about cell 20): everything on the left is mirrored.
@@ -473,9 +476,10 @@ def job_board(ms):
     return c
 
 
-def hall_front(ms):
+def hall_front(ms, open_=False):
     """The Halle der Spiegel from the square, thirteen cells wide: white marble, a row of columns, a pediment with
-    the sun and two tall golden doors, shut. 208 x 112; the door cell is at the bottom centre."""
+    the sun and two tall golden doors, shut (or, with `open_`, pushed wide on a light hall). 208 x 112; the door
+    cell is at the bottom centre."""
     st = pa.STYLES["elysia"]
     c = ms.Canvas(208, 112)
     cx = 104
@@ -500,14 +504,160 @@ def hall_front(ms):
         c.paint(col, st["marble"], 0.35 + 0.65 * c.cylinder(x, x + 12), dither=False)
         c.paint(c.rect(x - 2, 32, x + 14, 37), GOLD, 0.6, dither=False)
         c.paint(c.rect(x - 2, 98, x + 14, 103), st["marble"], 0.55, dither=False)
-    # two tall doors in the middle, shut, with a ring each
-    for dx in (cx - 17, cx + 1):
-        door = c.rect(dx, 44, dx + 16, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 8, 8))
-        c.paint(door, GOLD, 0.5, dither=False)
-        inner = c.rect(dx + 2, 46, dx + 14, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 6, 6))
-        c.paint(inner, TIMBER, np.where(((c.yy - 46) % 8) == 7, 0.25, 0.58), dither=False)
-    c.fill(c.ellipse(cx - 4, 76, 1.8, 1.8), GOLD[3])
-    c.fill(c.ellipse(cx + 4, 76, 1.8, 1.8), GOLD[3])
+    if open_:
+        # the doors pushed back to the sides: the hall behind them is light, a mirror glints at the far end
+        gap = c.rect(cx - 17, 44, cx + 17, 102) & ((c.yy >= 52) | c.ellipse(cx, 52, 17, 8))
+        c.paint(gap, FLOOR, 0.85 - 0.5 * (c.yy - 44) / 58, dither=False)
+        c.paint(c.rect(cx - 7, 56, cx + 7, 78) & gap, GLASS, 0.8, dither=False)
+        for dx, w in ((cx - 21, 4), (cx + 17, 4)):
+            c.paint(c.rect(dx, 46, dx + w, 102), GOLD, 0.55, dither=False)
+            c.paint(c.rect(dx + 1, 48, dx + w - 1, 102), TIMBER, 0.5, dither=False)
+    else:
+        # two tall doors in the middle, shut, with a ring each
+        for dx in (cx - 17, cx + 1):
+            door = c.rect(dx, 44, dx + 16, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 8, 8))
+            c.paint(door, GOLD, 0.5, dither=False)
+            inner = c.rect(dx + 2, 46, dx + 14, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 6, 6))
+            c.paint(inner, TIMBER, np.where(((c.yy - 46) % 8) == 7, 0.25, 0.58), dither=False)
+        c.fill(c.ellipse(cx - 4, 76, 1.8, 1.8), GOLD[3])
+        c.fill(c.ellipse(cx + 4, 76, 1.8, 1.8), GOLD[3])
+    c.outline(st["outline"])
+    return c
+
+
+# --- The hall of mirrors, inside (A5) ------------------------------------------------------------------
+# One map, 33 x 42 cells, symmetric about cell 16: the vestibule (rows 30-38), the gallery (rows 16-26) and the
+# mirror room (rows 6-12), each behind a north wall face three rows high; the gates stand in the faces of the
+# gallery and the vestibule (cells 15-17), the way out is the doorway in the bottom wall.
+HALL_AXIS = 16 * PX + 8
+HALL_W, HALL_H = 33 * PX, 42 * PX
+
+
+def _hall_cell(x, y):
+    return x * PX, y * PX
+
+
+def _mirror_panel(c, x0, y0, x1, y1):
+    """A tall mirror in a gold frame: pale glass with a slanting glint."""
+    c.paint(c.rect(x0, y0, x1, y1), GOLD, 0.6, dither=False)
+    glass = c.rect(x0 + 2, y0 + 2, x1 - 2, y1 - 2)
+    shade = 0.45 + 0.5 * (1 - (c.yy - y0) / max(y1 - y0, 1))
+    c.paint(glass, GLASS, shade, dither=True, contrast=1.4)
+    glint = glass & (np.abs((c.xx - x0) - (c.yy - y0) * 0.5 - (x1 - x0) * 0.35) < 1.6)
+    c.paint(glint, GLASS, 0.98, dither=False)
+
+
+def _hall_face(c, x0, y0, x1, y1, gap=None, mirrors=True):
+    """A north wall face from cell columns x0..x1 (inclusive) and rows y0..y1: plaster, cornice, skirting and,
+    between pilasters, tall mirrors; `gap` is the (first, last) cell column left open for a gate."""
+    px0, py0 = _hall_cell(x0, y0)
+    px1, py1 = _hall_cell(x1 + 1, y1 + 1)
+    _plaster(c, c.rect(px0, py0, px1, py1), py0, py1 - py0)
+    c.paint(c.rect(px0, py1 - 3, px1, py1), PLASTER, 0.25, dither=False)
+    _trim(c, px0, py0, px1, py0 + 3, 0.75)
+    _trim(c, px0, py1 - 5, px1, py1 - 3, 0.6)
+    if gap is not None:
+        gx0, _ = _hall_cell(gap[0], y0)
+        gx1, _ = _hall_cell(gap[1] + 1, y0)
+        # the doorway: a light passage with a gold arch (the gate hides it until it is open)
+        arch = c.rect(gx0 - 3, py0 + 4, gx1 + 3, py1) & ((c.yy >= py0 + 18) | c.ellipse((gx0 + gx1) / 2, py0 + 18, (gx1 - gx0) / 2 + 3, 14))
+        c.paint(arch, GOLD, 0.6, dither=False)
+        hole = c.rect(gx0, py0 + 6, gx1, py1) & ((c.yy >= py0 + 18) | c.ellipse((gx0 + gx1) / 2, py0 + 18, (gx1 - gx0) / 2, 12))
+        c.paint(hole, FLOOR, 0.9 - 0.4 * (c.yy - py0) / (py1 - py0), dither=False)
+    if mirrors:
+        panel_w, step = 18, 30
+        x = px0 + 8
+        while x + panel_w <= px1 - 6:
+            left, right = x, x + panel_w
+            clear = gap is None or right < _hall_cell(gap[0], y0)[0] - 6 or left > _hall_cell(gap[1] + 1, y0)[0] + 6
+            if clear:
+                _mirror_panel(c, left, py0 + 7, right, py1 - 8)
+            x += step
+
+
+def hall_shell(ms):
+    """The whole hall seen from above and the front: three north faces, the side walls and the bottom wall with
+    the doorway. The floor is baked from the map."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(HALL_W, HALL_H)
+    # the north faces: the mirror room (columns 8-24), the gallery (3-29) and the vestibule (3-29)
+    _hall_face(c, 8, 3, 24, 5, mirrors=False)
+    _hall_face(c, 3, 13, 29, 15, gap=(15, 17))
+    _hall_face(c, 3, 27, 29, 29, gap=(15, 17))
+    # the side walls of the three rooms
+    for col, y0, y1 in ((8, 6, 13), (24, 6, 13), (3, 16, 27), (29, 16, 27), (3, 30, 40), (29, 30, 40)):
+        x, py0 = _hall_cell(col, y0)
+        _, py1 = _hall_cell(col, y1)
+        c.paint(c.rect(x, py0, x + PX, py1), PLASTER, np.where(c.xx < x + 3, 0.85, 0.55), dither=False)
+        _trim(c, x, py0, x + PX, py0 + 2, 0.7)
+    # the bottom wall with the doorway in the middle (cells 15-17)
+    bx0, by0 = _hall_cell(3, 39)
+    bx1, by1 = _hall_cell(30, 41)
+    c.paint(c.rect(bx0, by0, bx1, by1), PLASTER, np.where(c.yy < by0 + 4, 0.35, 0.8), dither=False)
+    dx0, _ = _hall_cell(15, 39)
+    dx1, _ = _hall_cell(18, 39)
+    c.paint(c.rect(dx0 - 3, by0 - 2, dx1 + 3, by1), GOLD, 0.5, dither=False)
+    c.paint(c.rect(dx0, by0, dx1, by1), FLOOR, 0.55, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def hall_gate(ms):
+    """A gate of two mirrored leaves in the doorway of a north face: 48 x 48 (three cells, three rows), gold frame,
+    a tall mirror in each leaf, rings in the middle. It opens by disappearing (the flag of its room)."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(48, 48)
+    arch = c.rect(0, 4, 48, 48) & ((c.yy >= 18) | c.ellipse(24, 18, 24, 14))
+    c.paint(arch, GOLD, 0.55, dither=False)
+    for x0 in (3, 25):
+        leaf = c.rect(x0, 7, x0 + 20, 48) & ((c.yy >= 18) | c.ellipse(x0 + 10, 18, 10, 11))
+        c.paint(leaf, TIMBER, 0.55, dither=False)
+        panel = c.rect(x0 + 3, 12, x0 + 17, 44) & ((c.yy >= 20) | c.ellipse(x0 + 10, 20, 7, 8))
+        c.paint(panel, GLASS, 0.55 + 0.4 * (1 - (c.yy - 12) / 32), dither=True, contrast=1.4)
+        c.paint(panel & (np.abs((c.xx - x0) - (c.yy - 12) * 0.5 - 6) < 1.4), GLASS, 0.98, dither=False)
+    c.paint(c.rect(22, 7, 26, 48), GOLD, 0.7, dither=False)
+    c.fill(c.ellipse(20, 32, 1.6, 1.6), GOLD[3])
+    c.fill(c.ellipse(28, 32, 1.6, 1.6), GOLD[3])
+    c.outline(st["outline"])
+    return c
+
+
+def hall_mirror(ms):
+    """The great mirror of the last room: an oval in a gold frame, 48 x 48. It shows the hall behind the one who
+    stands before it, the columns, the light, the dust in the air; the glass is lit and empty in the middle."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(48, 48)
+    c.paint(c.ellipse(24, 24, 22, 23), GOLD, 0.35 + 0.6 * c.sphere(18, 14, 26, 26), dither=False)
+    glass = c.ellipse(24, 24, 18, 19)
+    c.paint(glass, GLASS, 0.5 + 0.45 * (1 - (c.yy - 5) / 38), dither=True, contrast=1.3)
+    # the hall in the glass: two columns and the floor line, faint
+    for cx in (12, 36):
+        c.paint(c.rect(cx - 2, 10, cx + 2, 38) & glass, GLASS, 0.9, dither=False)
+    c.paint(c.rect(0, 33, 48, 35) & glass, GLASS, 0.3, dither=False)
+    c.paint(glass & (np.abs((c.xx - 6) - (c.yy - 6) * 0.6 - 10) < 2), GLASS, 0.99, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def odd_leaf(ms):
+    """One dry leaf, brown and curled at the rim: the only thing in the hall that has changed."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(14, 10)
+    leaf = c.ellipse(7, 5, 6, 3.4)
+    c.paint(leaf, DRY, 0.45 + 0.5 * c.sphere(5, 3, 6, 4), dither=False)
+    c.paint(c.rect(1, 5, 12, 6) & leaf, DRY, 0.25, dither=False)
+    c.fill(c.rect(12, 5, 14, 6), DRY[1])
+    c.outline(st["outline"])
+    return c
+
+
+def odd_feather(ms):
+    """One feather, pale blue-grey, that a bird left on the marble."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(18, 8)
+    vane = c.ellipse(9, 4, 8, 2.6)
+    c.paint(vane, FEATHER, 0.55 + 0.4 * c.sphere(7, 3, 8, 3), dither=False)
+    c.paint(c.rect(0, 4, 18, 5), FEATHER, 0.2, dither=False)
     c.outline(st["outline"])
     return c
 
@@ -532,6 +682,12 @@ def build(ms):
         ms.save("elysia", "stall_" + kind, stall(ms, kind), (26, 38), shape={"rect": [48, 8], "offset": [0, -6]}, shadow=[24, 4])
     ms.save("elysia", "job_board", job_board(ms), (18, 44), shape={"rect": [30, 6], "offset": [0, -3]}, shadow=[14, 3])
     ms.save("elysia", "hall_front", hall_front(ms), (104, 104))
+    ms.save("elysia", "hall_front_open", hall_front(ms, open_=True), (104, 104))
+    ms.save("elysia", "hall_shell", hall_shell(ms), (HALL_AXIS, 8), flat=True)
+    ms.save("elysia", "hall_gate", hall_gate(ms), (24, 40), shape={"rect": [48, 16], "offset": [0, 0]})
+    ms.save("elysia", "hall_mirror", hall_mirror(ms), (24, 40))
+    ms.save("elysia", "odd_leaf", odd_leaf(ms), (7, 6), shadow=[6, 2])
+    ms.save("elysia", "odd_feather", odd_feather(ms), (9, 5), shadow=[8, 2])
 
 
 def preview(path):

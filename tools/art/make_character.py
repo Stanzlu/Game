@@ -154,6 +154,23 @@ DESIGNS = {
         "outfit": "jacket",
         "bag": "satchel",
     },
+    # The keeper of the hall of mirrors: silver hair, a long cape of mirror-teal; calm, he has looked at the
+    # same room for as long as the room has been there and can tell, in a glance, what does not match.
+    "keeper": {
+        "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
+        "hair": ramp("#6a6c80", "#9496aa", "#c4c6d6", "#e8eaf4", "#ffffff"),
+        "top": ramp("#1c4a58", "#2e7480", "#4ea4a8", "#8ad2c8"),
+        "inner": ramp("#e8e4f0", "#f4f0fa", "#ffffff", "#ffffff"),
+        "belt": ramp("#6a4c14", "#a87c22", "#dcb040", "#fbe48a"),
+        "pants": ramp("#243a46", "#38586a", "#58849a", "#88b4c6"),
+        "boots": ramp("#5a4214", "#94701e", "#c89c34", "#ecd070"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#f0a090"),
+        "outline": pa.hex_rgb("#16303a"),
+        "hair_style": "neat",
+        "outfit": "cape",
+        "bag": "none",
+    },
     # The poet: a long coat in night blue, tousled hair.
     "poet": {
         "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
