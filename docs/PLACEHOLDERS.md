@@ -53,6 +53,10 @@ Alles aus eigenen Generatoren (Python mit numpy; Godot-Seite nur Daten), ohne fr
 | `assets/generated/props/haus/shell.png` | Fensterglas zeigt den Regentag, Seitenwände zweistufig | `tools/art/slice_props.py` | projekt-eigen |
 | `assets/generated/props/elysia/inn_*.png`, `guest_book.png` (Akt I, A2) | Gasthaus zum Immer: Fassade, Hülle der Halle mit Fenstern, Regalen, Uhr und zwei Türen, Tresen, Tisch mit Hockern, Kamin (drei Bilder mit Leuchtebene), Bett, Zimmertür, Gästebuch auf dem Pult | projekt-eigen, programmatisch (`tools/art/akt1_props.py`) | projekt-eigen | handgepixelte Assets, Abnahme der Region |
 | `assets/generated/maps/gasthaus_ground.png` | gebackener Boden des Gasthauses (Pflaster, Dielen in den Zimmern) | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalter Boden |
+| `assets/generated/props/elysia/town_house_*.png`, `town_gate.png`, `stall_*.png`, `job_board.png`, `hall_front.png` (Akt I, A3) | Markt: drei Stadthäuser, Tor in der Südmauer, vier Stände, Auftragstafel, Fassade der Halle der Spiegel | projekt-eigen, programmatisch (`tools/art/akt1_props.py`) | projekt-eigen | handgepixelte Assets, Abnahme der Region |
+| `assets/generated/characters/{baker,florist,tailor,merchant,musician,poet,gatekeeper}.png` | die sieben Rollen des Marktes (Laufbögen, 8 Richtungen) | projekt-eigen, programmatisch (`tools/art/make_character.py`) | projekt-eigen | Figurenentwurf von Hand |
+| `assets/generated/maps/markt_ground.png` | gebackener Boden des Marktes (Pflaster, Marmor, Mauer) | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalter Boden |
+| `assets/generated/audio/water_loop.wav` | Brunnenwasser (Ortsklang, Loop) | projekt-eigen, synthetisch (`tools/audio/make_ambience.py`) | projekt-eigen | Sounddesign |
 | `content/audio/haus_abend.tres` | neue Soundscape-Definition für das Haus am Abend (Daten aus vorhandenen Betten) | von Hand | projekt-eigen |
 | `content/audio/{tal_abend,tal_regentag,haus_feuer}.tres` | Pegel angepasst | von Hand | projekt-eigen |
 

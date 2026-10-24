@@ -69,6 +69,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-056 | Writing-Pass auf den Slice, Lesefassung und Tests auf Zeilen-IDs (P6.5) |
 | ADR-057 | Entscheidungen 1 und 2 des Produktionsplans, Musik als Ogg Vorbis, kleine Bilder als Text (P6.7) |
 | ADR-058 | Akt I: Aufbau der Segmente, Segmentskripte und das Gasthaus (P6.8) |
+| ADR-059 | Akt I: der Markt von Elysia, Gold ausgeben und die Stufe „market“ (P6.9) |
 
 ---
 
@@ -763,3 +764,18 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Alte Spielstände:** Ein Slice-Stand (v0.8.4) hat die Heldenquest auf `celebrated`, früher final, jetzt die Stufe vor dem Gasthaus: er lädt ohne Reparatur und die Quest steht wieder offen (das eingefrorene Beispiel `v2_slice_end.json` bleibt unverändert, `test_save_policy` erwartet das neue Bild). Spielstände aus Slice-Builds müssen den Akt nicht überleben (ADR-050).
 - **Konsequenzen:** Jedes weitere Segment trägt Brief, Segmentskript und Marken-Eintrag in `check.sh` im selben Pull Request. Die Nordterrasse hat nun einen Zweck; die Elysianer, die dort gingen, gehen auf Reihe 2.
 
+
+## ADR-059 · Akt I: der Markt von Elysia, Gold ausgeben und die Stufe „market“ (P6.9)
+- **Status:** angenommen · 2026-10-24 (Plan 4.2, A3; „bau alles“ vom 24.10.)
+- **Kontext:** A3 ist die Stadt hinter dem Garten: ein Platz für Menschen, die zweimal dort stehen, eine Tafel, ein Händler, eine Melodie, die verschlossene Halle der Spiegel (A5). Es braucht dafür einen Weg aus dem Garten, ein erstes Mal Gold ausgeben und eine Stufe der Heldenquest.
+- **Entscheidung:**
+  - **Lage:** Die Treppe liegt am Südende des Gartens (Spalte 32, Zellen 31–33, Reihen 34–35, Auslöser in Reihe 35); sie führt auf den Markt (`markt`, 61 × 36, spiegelsymmetrisch um Spalte 30, Zoom 1,25, Ankunft `spawn_garden`; zurück nach `spawn_markt` am Treppenabsatz). Alle Fassaden schauen nach Süden, deshalb betritt man den Markt von Süden: Tor in der Südmauer, die Halle im Norden an der Mittelachse. Die Halle ist bis A5 zu (`unless elysia.hall_open`, ein Schild: „geöffnet ab morgen“).
+  - **Menschen:** sieben Rollen (Torwächter, Bäckerin, Händler, Blumenfrau, Schneiderin, Dichter, Musikerin) je zweimal, spiegelbildlich in derselben Reihe, mit eigenen Figurenbögen (`make_character.py`); die Verkäufer stehen vor ihrem Stand, damit man sie von Süden erreicht (Sprechradius 14 Pixel).
+  - **Heldenquest:** Stufe `market` hängt an `celebrated` und `inn` und ist vorläufig final. Der Markt setzt sie beim Betreten (`MarktScene`); wer den Markt vor der Truhe besucht, bekommt die Stufe von der Truhe nachgetragen (`ElysiaScene._catch_up_the_hero_quest`, erst `inn`, dann `market`).
+  - **Gold ausgeben:** `WorldState.gold()` und `spend_gold(n) -> bool` (nie mehr, als da ist; die Anzeige zählt hinunter, ohne Münzenflug). Gold ändert nichts, es kauft nur (Bible §10): ein Kompliment (zehn Gold, bestehender Gegenstand), den Glücksbringer (hundertfünfzig, neu, einmal), eine Münze in den Brunnen. Antworten, die man nicht bezahlen kann, erscheinen nicht; „Ich schaue nur.“ steht immer da.
+  - **Nebenquest „Die Auftragstafel“** (`side_elysia_board`): Brot von der Bäckerin zur Schneiderin tragen (Stufen `bread`, `deliver`, `done`), die es gestern schon hatte; der Lohn (3.000 XP, 800 Gold) war abgezählt. Der Auftrag lässt sich liegen lassen.
+  - **Erste Melodie:** die perfekte der Musikerin (`melody.elysia_perfect`, +1.000 XP): Zuhören reicht; sie ist die Vorarbeit für die Melodie des Kindes (A8, die zweite von zwei in Akt I).
+  - **Wasser:** `water_loop.wav` (Brunnen) fehlte seit dem Katalogeintrag des Brunnens; `make_ambience.py` erzeugt sie jetzt (acht Sekunden, ohne Zufall im Takt).
+- **Verworfen:** Verkäufer hinter dem Stand (von Süden nicht ansprechbar); ein Laden mit Preisliste und Menü (ein Händler mit zwei Waren und der Antwort „Ich schaue nur“ reicht für die Satire und bleibt im Dialog, Cut-First); einen Zähler für die Melodien zeigen (Bible §23).
+- **Alte Spielstände:** `inn` war in A2 final; jetzt führt es zu `market`. Ein Stand auf `inn` lädt ohne Reparatur und die Quest steht wieder offen, bis der Markt betreten ist (derselbe Weg wie bei `celebrated` in ADR-058).
+- **Konsequenzen:** A5 setzt `elysia.hall_open` und nimmt die Türen weg (der Markt zählt den Beat `market_hall_open`); A6 und A7 spielen auf derselben Karte (Fest- und Schleifenzustand per Flags). Das Verkaufen bleibt im Dialog, bis ein zweites Segment es braucht.

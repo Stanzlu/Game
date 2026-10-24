@@ -48,6 +48,14 @@
     {
      "type": "line",
      "ref": "el_child_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fountain_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_tailor_4"
     }
    ],
    "payoff": "Pfütze im Tal: zum ersten Mal ein Bild der Spielerin (`tal_puddle_2`, `tal_puddle_7`); Twist II (Elysia entstand aus einem Bedürfnis nach Schutz) liest die fehlende Spiegelung zurück.",
@@ -77,6 +85,18 @@
     {
      "type": "note",
      "ref": "Elysianer-Routen gespiegelt (ADR-031)"
+    },
+    {
+     "type": "line",
+     "ref": "mk_poet_2"
+    },
+    {
+     "type": "line",
+     "ref": "mk_gate_4"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fountain_1"
     }
    ],
    "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
@@ -127,6 +147,14 @@
     {
      "type": "flag",
      "ref": "elysia.asked_for_no"
+    },
+    {
+     "type": "line",
+     "ref": "mk_poet_5"
+    },
+    {
+     "type": "line",
+     "ref": "mk_shop_6"
     }
    ],
    "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`).",
@@ -349,6 +377,22 @@
     {
      "type": "line",
      "ref": "tal_south_sign_2"
+    },
+    {
+     "type": "line",
+     "ref": "mk_baker_3"
+    },
+    {
+     "type": "line",
+     "ref": "mk_baker_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_tailor_5"
+    },
+    {
+     "type": "line",
+     "ref": "mk_board_4"
     }
    ],
    "payoff": "„Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII)."
@@ -374,6 +418,18 @@
     {
      "type": "flag",
      "ref": "valley.shell_seen"
+    },
+    {
+     "type": "line",
+     "ref": "mk_music_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_music_2"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.elysia_perfect"
     }
    ],
    "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII)."
@@ -872,6 +928,26 @@
    "flag": "elysia.inn_book_signed",
    "axis": "Entscheidungen",
    "meaning": "Sie hat sich unter ihren Namen eingetragen (die Nebenquest „Das Gästebuch“)."
+  },
+  {
+   "flag": "elysia.market_seen",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Markt hinter der Treppe im Süden des Gartens betreten (Stufe „market“ der Heldenquest)."
+  },
+  {
+   "flag": "elysia.market_greeted",
+   "axis": "Fortschritt",
+   "meaning": "Der Torwächter hat sie in der Stadt willkommen geheißen; die Halle der Spiegel öffnet „morgen“ (A5)."
+  },
+  {
+   "flag": "elysia.market_shop_seen",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Stand des Händlers gesehen; er verkauft für Gold, was nichts ändert."
+  },
+  {
+   "flag": "melody.elysia_perfect",
+   "axis": "Elysia",
+   "meaning": "Die erste Melodie: die perfekte der Musikerin im Markt, ohne Fehler (Bible §31)."
   }
  ]
 }
