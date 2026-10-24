@@ -1,4 +1,4 @@
-# A3: Der Markt
+# A3 und A6: Der Markt
 
 <!-- Erzeugt mit `python3 tools/writing/readable.py`. Nicht von Hand ändern: Änderungen gehören in die .dialogue-Dateien. -->
 
@@ -12,6 +12,10 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M1 · `gatekeeper`
 
+*wenn* `elysia.feast`
+  - **Torwächter:** Heute feiern wir. Das Tor feiert mit. Es steht noch offener als sonst. `[#draft]`  <sub>mk_gate_7</sub>
+  - **Torwächter:** Geh nur zum Fest. Ich passe darauf auf, dass es stattfindet. `[#draft]`  <sub>mk_gate_8</sub>
+  - **Torwächter:** Das Fest ist vom Tor aus am schönsten. Man sieht es zweimal. `[#draft]`  <sub>mk_gate_9</sub>
 *wenn* `elysia.market_greeted nicht`
   - **Torwächter:** Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. `[#draft]`  <sub>mk_gate_1</sub>
   - **Torwächter:** Ich bin der Torwächter. Ich passe darauf auf, dass es offen bleibt. Es ist eine ruhige Arbeit. `[#draft]`  <sub>mk_gate_2</sub>
@@ -26,6 +30,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *wenn* `side_elysia_board und bread`
   - **Bäckerin:** Das Brot für die Schneiderin! Es ist fertig. Es ist immer fertig, wenn jemand danach fragt. `[#draft]`  <sub>mk_baker_1</sub>
   - *Du bekommst einen Laib. Er ist noch warm. Du wirst ihn tragen, und er bleibt es.* `[#draft]`  <sub>mk_baker_2</sub>
+*sonst wenn* `elysia.feast`
+  - **Bäckerin:** Für das Fest backe ich alles zweimal. Gegessen wird es trotzdem nur einmal. `[#draft]`  <sub>mk_baker_6</sub>
+  - **Bäckerin:** Heute gibt es Brot. Wie jeden Tag. Aber festlich. `[#draft]`  <sub>mk_baker_7</sub>
 *sonst*
   - **Bäckerin:** Frisch gebacken. Von gestern. `[#draft]`  <sub>mk_baker_3</sub>
   - **Bäckerin:** Mein Brot hat noch niemand zurückgebracht. Sie essen es auf. Alle. `[#draft]`  <sub>mk_baker_4</sub>
@@ -37,6 +44,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *→ weiter bei* `tailor_bread`
 *sonst wenn* `side_elysia_board und bread`
   - **Schneiderin:** Ich warte auf Brot. Ich warte gern. Das Warten sitzt mir wie angegossen. `[#draft]`  <sub>mk_tailor_1</sub>
+*sonst wenn* `elysia.feast`
+  - **Schneiderin:** Für das Fest habe ich allen dasselbe genäht. Es steht allen. `[#draft]`  <sub>mk_tailor_7</sub>
+  - **Schneiderin:** Ein Fest ist wie ein Anzug. Es passt, ohne dass man es anprobiert hat. `[#draft]`  <sub>mk_tailor_8</sub>
 *sonst*
   - **Schneiderin:** Ich nähe, was dir passt. Es passt immer. Ich messe nur zur Höflichkeit. `[#draft]`  <sub>mk_tailor_2</sub>
   - **Schneiderin:** Rot steht dir. Blau steht dir. Alles steht dir. Das ist das Schwierige an meiner Arbeit. `[#draft]`  <sub>mk_tailor_3</sub>
@@ -54,6 +64,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *sonst*
   - **Händler:** Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. `[#draft]`  <sub>mk_shop_1</sub>
   - **Händler:** Es kostet nicht viel. Es kostet nur Gold, und davon hast du reichlich. `[#draft]`  <sub>mk_shop_3</sub>
+*wenn* `elysia.feast`
+  - **Händler:** Und heute ist alles festlich. Zum selben Preis, aber festlich. `[#draft]`  <sub>mk_shop_7</sub>
 - *→ weiter bei* `merchant_wares`
 
 ### M6 · `merchant_wares`
@@ -67,6 +79,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M7 · `florist`
 
+*wenn* `elysia.feast`
+  - **Blumenfrau:** Heute binde ich Kränze. Für alle, für jeden dasselbe. `[#draft]`  <sub>mk_flower_4</sub>
+  - **Blumenfrau:** Ein Fest ohne Blumen ist ein Fest. Mit Blumen ist es meins. `[#draft]`  <sub>mk_flower_5</sub>
 - **Blumenfrau:** Nimm eine! Sie kosten nichts. Das ist der Preis. `[#draft]`  <sub>mk_flower_1</sub>
 - **Blumenfrau:** Ich binde jeden Morgen einen Strauß. Am Abend ist er noch frisch. Am nächsten Morgen auch. `[#draft]`  <sub>mk_flower_2</sub>
 - **Blumenfrau:** Meine Rosen duften nach Rosen. Ich habe lange geübt, dass sie nach nichts anderem duften. `[#draft]`  <sub>mk_flower_3</sub>
@@ -131,3 +146,51 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Die Türen geben nach. Sie waren nie abgeschlossen. Nur das Schild steht davor.* `[#draft]`  <sub>mk_hall_3</sub>
 - ▸ **Morgen wiederkommen.**
   - *Du gehst. Morgen ist bald. Es ist hier immer bald.* `[#draft]`  <sub>mk_hall_4</sub>
+
+### M13 · `host_feast`
+
+> Das Fest (A6): der Markt im Festzustand. Der Gastwirt lädt ein, die Festmeisterin hat ein Hoch; das Hoch bringt rund
+> elftausend Erfahrung für das Heben eines Glases (Bible §10: die Belohnung wächst, die Tat schrumpft).
+
+*wenn* `elysia.feast_toast`
+  *wenn* `elysia.feast_noticed`
+    - **Gastwirt:** Du hast es bemerkt. Das macht nichts. Hier darf man bemerken, so viel man will. `[#draft]`  <sub>mk_host_5</sub>
+  *sonst*
+    - **Gastwirt:** Na, wie ist das Fest? Es ist das beste. Es ist immer das beste. `[#draft]`  <sub>mk_host_4</sub>
+  - **Gastwirt:** Du musst heute nicht zurück. Das Fest hat keinen Abend. `[#draft]`  <sub>mk_host_6</sub>
+- **Gastwirt:** Da ist er! Der Held des Tages! Jedes Tages! Komm, komm zum Fest. Ein Platz ist frei. Es ist immer ein Platz frei. `[#draft]`  <sub>mk_host_1</sub>
+- **Gastwirt:** Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie hat jedes Mal ein Hoch. `[#draft]`  <sub>mk_host_2</sub>
+- ▸ **Ich komme.**
+  - **Gastwirt:** Wunderbar! Ich sag ihr Bescheid. Ich hab ihr schon Bescheid gesagt. `[#draft]`  <sub>mk_host_3</sub>
+- ▸ **Ich schau mich nur um.**
+  - **Gastwirt:** Schau nur, schau nur. Das Fest läuft von selbst. Es läuft schon immer. `[#draft]`  <sub>mk_host_7</sub>
+- ▸ **…**
+  - **Gastwirt:** Ein stiller Gast. Die besten Feste haben welche. `[#draft]`  <sub>mk_host_8</sub>
+
+### M14 · `festmaster`
+
+*wenn* `elysia.feast_toast`
+  - **Festmeisterin:** Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. `[#draft]`  <sub>mk_fest_9</sub>
+  - **Festmeisterin:** Zweiter Tag, dritter Tag, derselbe Tag. Heute ist der schönste. `[#draft]`  <sub>mk_fest_10</sub>
+*wenn* `elysia.feast_invited`
+  - **Festmeisterin:** Der Gastwirt hat dich angekündigt. Er ist sehr zuverlässig. Er sagt immer vorher, was ich nachher sage. `[#draft]`  <sub>mk_fest_1</sub>
+*sonst*
+  - **Festmeisterin:** Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. `[#draft]`  <sub>mk_fest_2</sub>
+- **Festmeisterin:** Es fehlt nur noch ein Hoch. Du musst dafür nichts tun. Du hebst das Glas, wir machen den Rest. `[#draft]`  <sub>mk_fest_3</sub>
+- ▸ **Das Glas heben.**
+  - *→ weiter bei* `festmaster_toast`
+- ▸ **Das ist dasselbe Fest wie gestern.** *(wenn `perception`)*
+  - **Festmeisterin:** Dasselbe? Nein. Gestern war es kleiner. Heute ist es größer. `[#draft]`  <sub>mk_fest_4</sub>
+  - *→ weiter bei* `festmaster_toast`
+- ▸ **Später.**
+  - **Festmeisterin:** Später ist gut. Später ist hier immer genau jetzt. `[#draft]`  <sub>mk_fest_5</sub>
+
+### M15 · `festmaster_toast`
+
+- *Du hebst das Glas. Ganz Elysia hebt seines, im selben Augenblick.* `[#draft]`  <sub>mk_fest_6</sub>
+- **Festmeisterin:** Auf den Helden! Auf den Helden! Auf den Helden! `[#draft]`  <sub>mk_fest_7</sub>
+- *Es klingt dreimal gleich. Die Gläser klingen es auch.* `[#draft]`  <sub>mk_fest_8</sub>
+
+### M16 · `feast_guest`
+
+- **Elysianer:** Auf den Helden! `[#draft]`  <sub>mk_guest_1</sub>

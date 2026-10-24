@@ -109,6 +109,14 @@
     {
      "type": "line",
      "ref": "mk_fountain_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_guest_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fest_7"
     }
    ],
    "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
@@ -167,6 +175,10 @@
     {
      "type": "line",
      "ref": "mk_shop_6"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fest_5"
     }
    ],
    "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`).",
@@ -353,6 +365,18 @@
     {
      "type": "flag",
      "ref": "elysia.inn_stayed"
+    },
+    {
+     "type": "line",
+     "ref": "mk_host_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_host_6"
+    },
+    {
+     "type": "line",
+     "ref": "mk_host_5"
     }
    ],
    "payoff": "Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`).",
@@ -425,6 +449,22 @@
     {
      "type": "line",
      "ref": "sh_gate_2"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fest_3"
+    },
+    {
+     "type": "line",
+     "ref": "mk_baker_7"
+    },
+    {
+     "type": "line",
+     "ref": "mk_tailor_7"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.feast_noticed"
     }
    ],
    "payoff": "„Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII)."
@@ -1020,6 +1060,26 @@
    "flag": "elysia.hall_mirror_seen",
    "axis": "Wahrnehmung",
    "meaning": "Sie hat im großen Spiegel bemerkt, dass er sie nicht zeigt (Facette „Wahrnehmung“)."
+  },
+  {
+   "flag": "elysia.feast",
+   "axis": "Fortschritt",
+   "meaning": "Der Markt steht im Festzustand: ganz Elysia feiert, dass sie die Halle bemerkt hat."
+  },
+  {
+   "flag": "elysia.feast_invited",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat die Einladung des Gastwirts zum Fest angenommen."
+  },
+  {
+   "flag": "elysia.feast_noticed",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat der Festmeisterin gesagt, dass es dasselbe Fest wie gestern ist; sie hat es bemerkt und gesagt."
+  },
+  {
+   "flag": "elysia.feast_toast",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher)."
   }
  ]
 }

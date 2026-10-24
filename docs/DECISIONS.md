@@ -71,6 +71,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-058 | Akt I: Aufbau der Segmente, Segmentskripte und das Gasthaus (P6.8) |
 | ADR-059 | Akt I: der Markt von Elysia, Gold ausgeben und die Stufe „market“ (P6.9) |
 | ADR-060 | Akt I: die Halle der Spiegel, Wahrnehmung als Aufgabe und die erste Facette (P6.10) |
+| ADR-061 | Akt I: das Fest, Erfahrung für ein Glas und Level 48 (P6.11, A6) |
 
 ---
 
@@ -795,3 +796,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Verworfen:** Eine Suche mit Zeitdruck oder Fehlern (Bible §49); ein Wahrnehmungs-Wert oder ein Hilfezähler (keine Zahlen, §16); Hinweise erst nach langem Suchen (zeitgesteuerte Hilfe zählt Wanduhrzeit); die Halle am Gasthaus zu öffnen („morgen“ als Nacht, die man annehmen muss).
 - **Alte Spielstände:** `market` war in A3 final und führt jetzt zu `hall`: ein Stand auf `market` lädt ohne Reparatur, die Quest steht wieder offen (wie bei ADR-058, ADR-059).
 - **Konsequenzen:** Jedes Tor, jede Facette und jede Aufgabe, die Wahrnehmung verlangt, braucht eine Hilfe in Worten. A6 (Fest) und A7 (Wiederholung) benutzen `perception` für die Antwort „Das hast du gestern auch gesagt.“.
+
+## ADR-061 · Akt I: das Fest, Erfahrung für ein Glas und Level 48 (P6.11, A6)
+- **Status:** angenommen · 2026-10-24 (Plan 4.2, A6; Bible §8, §10, §14; „bau alles“ vom 24.10.)
+- **Kontext:** Elysia belohnt mehr, je weniger man tut (Bible §10). Das Fest bringt rund 11.000 Erfahrung und macht Level 48 sicher, auch wenn alles Freiwillige ausgelassen wurde (Plan 4.4: Slice 22.600 + Fest 11.000; Level 48 ab 33.135 Erfahrung). Der Gastwirt ist das Gesicht des Betäubers (Bible §14): er lädt ein und hält nie fest.
+- **Entscheidung:**
+  - **Auslöser:** Das Fest ist ein Zustand des Marktes (ADR-037), kein neuer Ort: `elysia.feast` wird gesetzt, sobald die Halle bemerkt wurde (`elysia.hall_mirror_seen`) und der Markt betreten wird, vor dem Bau der Karte, damit die Requisiten nicht aufpoppen. Die Requisiten des Festes sind Karteneinträge mit `if: elysia.feast` (Girlanden, Tafeln, zwei Paare Gäste) und zwei Einzelfiguren auf der Mittelachse: der Gastwirt (Einladung) und die Festmeisterin (das Hoch).
+  - **Das Hoch:** Ein Glas zu heben ist die ganze Tat und zahlt 11.000 Erfahrung und 3.000 Gold einmalig; „Später“ ist eine freie Antwort. Der Fest-Zustand bleibt, die Festmeisterin hat danach zwei Zeilen im Wechsel.
+  - **Level 48:** Ein Test spielt Slice-Erfahrung (22.600) plus Hoch und verlangt Level 48; die Zahl 11.000 steht im Dialog und im Test, nicht in einer Konstante (Dialoge setzen Erfahrung wie bei allen Segmenten, ADR-058).
+  - **Einladung und Neue Möglichkeit:** Der Gastwirt lädt ein (frei abzulehnen, sagt der Festmeisterin Bescheid); mit der Facette Wahrnehmung gibt es bei der Festmeisterin die Antwort „Das ist dasselbe Fest wie gestern.“ (`elysia.feast_noticed`, der Gastwirt reagiert: „Hier darf man bemerken, so viel man will.“). Die Wiederholung zu bemerken ist damit zum zweiten Mal möglich (Dichter, Festmeisterin); A7 baut darauf.
+  - **Heldenquest:** Stufe `feast` hängt an `hall` und ist vorläufig final; die Truhe trägt sie nach.
+- **Verworfen:** Ein Fest als eigene Karte (der Markt ist schon da, ADR-037); ein Tanz oder ein Minispiel zum Hoch (Cut-First, A4 bleibt offen für P6.13); die Einladung als Pflicht (Bible §14: nichts im Hauptweg hängt an einem Angebot des Betäubers; das Fest läuft auch ohne Einladung).
+- **Alte Spielstände:** `hall` war in A5 final und führt jetzt zu `feast`: ein Stand auf `hall` lädt ohne Reparatur, die Quest steht wieder offen (wie bei ADR-058 bis ADR-060).
+- **Konsequenzen:** A7 verlegt den Auslöser der Schleifen hinter das Hoch (Stufe `repeat`). Akt I liegt nach A6 bei rund 29 statt 49 geplanten Minuten; die Neuplanung (P6.13) entscheidet über A4 und mehr Erkundung.
