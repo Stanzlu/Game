@@ -40,6 +40,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			_arrive_in_the_quest()
 		"elysia.inn_fed":
 			Beat.mark("inn_fed")
+		"fragment.closed_door":
+			Beat.mark("trail_door")
 		"elysia.inn_room":
 			Beat.mark("inn_room")
 		"elysia.inn_sleeping":

@@ -1,0 +1,31 @@
+# Die Spur des Kindes, Akt I, Segment A8 (docs/akt1/REGIONSBRIEFE.md).
+# Drei Bilder aus der Liste der Bible §15, unerklärt: ein Flur, eine geschlossene Tür, ein leeres Zimmer. Das Kind spricht
+# höchstens drei Wörter, antwortet auf nichts, lobt nicht, tröstet nicht, erklärt nicht (docs/writing/stimmen/kind.md).
+# Wer es nicht anspricht, verpasst nichts, was den Weg sperrt (§31). Zeilen ohne Sprecher sind Erzählung.
+
+~ child_hallway
+Das Kind steht im Gang vor dem Tor und schaut bis zum Ende. [ID:kd_hall_1] [#draft]
+Kind: Komm. [ID:kd_hall_2] [#draft]
+Ein Flur, länger als der Gang. Am Ende ist ein Licht, und es kommt nicht näher. [ID:kd_hall_3] [#draft]
+Du gehst ein Stück. Der Flur geht mit dir. [ID:kd_hall_4] [#draft]
+do WorldState.set_flag("fragment.hallway")
+do WorldState.advance_quest("main_elysia_trail", "trail")
+=> END
+
+~ child_door
+Das Kind steht vor der Tür hinter dem Tresen. Sie ist zu. [ID:kd_door_1] [#draft]
+Kind: Leise. [ID:kd_door_2] [#draft]
+Eine Tür, geschlossen. Du weißt nicht, was sie draußen hält und was drinnen. [ID:kd_door_3] [#draft]
+Du klopfst nicht. Das Kind auch nicht. [ID:kd_door_4] [#draft]
+do WorldState.set_flag("fragment.closed_door")
+do WorldState.advance_quest("main_elysia_trail", "trail")
+=> END
+
+~ child_room
+Das Kind steht vor dem großen Spiegel und schaut hinein. Im Spiegel steht ein Kind. [ID:kd_room_1] [#draft]
+Kind: Hier. [ID:kd_room_2] [#draft]
+Ein Zimmer. Ein Fenster, ein Boden, sonst nichts. Das Licht liegt da, als hätte es sich hingesetzt. [ID:kd_room_3] [#draft]
+Du bleibst, bis es still wird. [ID:kd_room_4] [#draft]
+do WorldState.set_flag("fragment.empty_room")
+do WorldState.advance_quest("main_elysia_trail", "trail")
+=> END

@@ -1,0 +1,23 @@
+# Fragment Flur (A8): ein Gang, der zu einem Licht führt, das nicht näher kommt
+name: fragment_hallway
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a2640 d=#4a4660 m=#7c779a l=#b9b5d0 y=#fff0b0
+outline: o
+---
+................
+.oooooooooooooo.
+.ommmmmmmmmmmmo.
+.omllllllllllmo.
+.omlmmmmmmmmlmo.
+.omlmllllllmlmo.
+.omlmlmmmmlmlmo.
+.omlmlmyymlmlmo.
+.omlmlmyymlmlmo.
+.omlmlmmmmlmlmo.
+.omlmllllllmlmo.
+.oddddddddddddo.
+.oddddddddddddo.
+.oddddddddddddo.
+.oooooooooooooo.
+................

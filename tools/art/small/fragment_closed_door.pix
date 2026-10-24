@@ -1,0 +1,23 @@
+# Fragment geschlossene Tür (A8): eine Tür, zu, mit Licht darunter
+name: fragment_closed_door
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a2640 d=#4a4660 m=#7c779a y=#fff0b0
+outline: o
+---
+................
+.oooooooooooooo.
+.ommmmmmmmmmmmo.
+.ommddddddddmmo.
+.ommddddddddmmo.
+.ommdmmmmmmdmmo.
+.ommdmmmmmmdmmo.
+.ommdmmmmmmdmmo.
+.ommddddddddmmo.
+.ommdddddyddmmo.
+.ommddddddddmmo.
+.ommddddddddmmo.
+.ommddddddddmmo.
+.ommddddddddmmo.
+.oooooooooooooo.
+................

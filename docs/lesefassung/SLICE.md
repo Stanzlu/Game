@@ -141,6 +141,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 *wenn* `elysia.child_met`
   - **Kind:** Hörst du das?  <sub>el_child_3</sub>
+  - *Es ist die Melodie, der du gefolgt bist. Du kannst sie jetzt.* `[#draft]`  <sub>el_child_4</sub>
 *sonst*
   - *Das Kind schaut ins Wasser. Aus dem Wasser schaut ein Kind zurück.*  <sub>el_child_1</sub>
   - **Kind:** …  <sub>el_child_2</sub>

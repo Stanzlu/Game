@@ -1,6 +1,6 @@
 ; Akt I, Segment A3: der Markt von Elysia (docs/akt1/REGIONSBRIEFE.md). Die Halle der Spiegel im Norden, vier Häuser, der
 ; Platz mit dem Brunnen, den Ständen und der Auftragstafel, im Süden die Mauer mit dem Tor. Spiegelsymmetrisch um Spalte 30
-; (Game Bible §9): alles steht zweimal, auch die, die hier arbeiten. Boden und Mauer bäckt tools/art/bake_ground.py.
+; (Game Bible §9): alles steht zweimal, auch die, die hier arbeiten, bis auf das Kind der Spur (A8), das nur einmal da ist. Boden und Mauer bäckt tools/art/bake_ground.py.
 [meta]
 style = "elysia"
 ground = "res://assets/generated/maps/markt_ground.png"
@@ -46,6 +46,8 @@ T = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 E = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "feast_guest", "face": "s", "if": "elysia.feast"}}
 K = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "host_feast", "face": "s", "if": "elysia.feast"}}
 L = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_festmaster_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "festmaster", "face": "s", "if": "elysia.feast"}}
+; die Spur des Kindes (A8): der Gang vor dem Südtor, wenn Elysia sich wiederholt; das Kind geht, sobald es gezeigt hat, was es zeigt
+C = {"ground": "c", "prop": "res://entities/npc/child_guide.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/akt1/kind.dialogue", "cue": "child_hallway", "glance": true, "if": "elysia.loops", "unless": "fragment.hallway"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -80,6 +82,6 @@ hhhhhhlcccccccccccccccYcccccccccccccccYccccccccccccccclhhhhhh
 hhhhhhhccccccccccccccccccccgcccccgcccccccccccccccccccchhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhccccchhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc1cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXccccCXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%ccacc%%%%%%%%%%%%%%%%%%%%%%%%%%%%

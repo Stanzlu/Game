@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+
+[sub_resource type="Resource" id="Resource_hum"]
+script = ExtResource("2_stage")
+id = "hum"
+next = PackedStringArray("trail", "rift")
+
+[sub_resource type="Resource" id="Resource_trail"]
+script = ExtResource("2_stage")
+id = "trail"
+next = PackedStringArray("rift")
+
+[sub_resource type="Resource" id="Resource_rift"]
+script = ExtResource("2_stage")
+id = "rift"
+outcome = "done"
+
+[resource]
+script = ExtResource("1_quest")
+id = "main_elysia_trail"
+kind = 0
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_hum"), SubResource("Resource_trail"), SubResource("Resource_rift")])
+draft = false

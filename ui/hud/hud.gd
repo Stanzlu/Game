@@ -32,6 +32,10 @@ const COINS_PER_GAIN := 7
 ## How long a loot card stays, with and without the item's one line of text.
 const LOOT_CARD_SECONDS := 2.6
 const LOOT_CARD_SECONDS_WITH_DESC := 3.4
+## A memory fragment: a picture of 16 px shown at 4x, held a little longer than a loot card.
+const FRAGMENT_DIR := "res://assets/generated/fragments/"
+const FRAGMENT_PICTURE_SIZE := 64.0
+const FRAGMENT_CARD_SECONDS := 3.6
 const LOOT_DESC_WIDTH := 190.0
 const XP_DB := -6.0
 const LOOT_DB := -2.0
@@ -88,6 +92,7 @@ func _ready() -> void:
 	WorldState.progression_changed.connect(_on_progression)
 	SaveSystem.saved.connect(func(_slot: String) -> void: _show_saved())
 	WorldState.item_received.connect(_on_item)
+	WorldState.flag_changed.connect(_on_collectible_flag)
 	WorldState.quest_changed.connect(func(_q: String, _s: String) -> void: _refresh_quest())
 	WorldState.ui_mode_changed.connect(func(_m: GameState.UiMode) -> void: refresh())
 	WorldState.state_replaced.connect(refresh)
@@ -510,6 +515,39 @@ func _on_item(item_id: String, amount: int) -> void:
 		_enqueue(func() -> void: _loot_card(def, amount))
 	else:
 		_quiet_line(def)
+
+
+## A memory fragment found (`fragment.<id>`, Game Bible §31): a small picture and one quiet line,
+## no sound, no name, no rarity, no count (§23). The words are the narration's.
+func _on_collectible_flag(id: String, value: bool) -> void:
+	if value and id.begins_with(Collection.FRAGMENT_PREFIX):
+		_enqueue(func() -> void: _fragment_card(id))
+
+
+func _fragment_card(id: String) -> void:
+	var path := FRAGMENT_DIR + "fragment_" + id.trim_prefix(Collection.FRAGMENT_PREFIX) + ".png"
+	var texture: Texture2D = load(path) as Texture2D if ResourceLoader.exists(path) else null
+	if texture == null:
+		Log.warn(Log.Category.UI, "fragment picture missing", {"path": path})
+		return
+	var card := PanelContainer.new()
+	card.theme_type_variation = &"DialoguePanel"
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override(&"separation", 2)
+	card.add_child(column)
+	var picture := TextureRect.new()
+	picture.texture = texture
+	picture.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.custom_minimum_size = Vector2(FRAGMENT_PICTURE_SIZE, FRAGMENT_PICTURE_SIZE)
+	picture.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	column.add_child(picture)
+	var line := Label.new()
+	line.theme_type_variation = &"MutedLabel"
+	line.text = tr("HUD_FRAGMENT")
+	line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(line)
+	_show_popup(card, FRAGMENT_CARD_SECONDS, 1.0)
 
 
 ## Popups appear one after another, not on top of each other.

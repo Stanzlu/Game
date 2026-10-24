@@ -1,0 +1,10 @@
+[
+  {"t": 1.0, "flag": "elysia.hall_mirror_seen", "log": "the hall was noticed"},
+  {"t": 1.1, "flag": "elysia.loops", "log": "Elysia repeats itself: the child is about"},
+  {"t": 1.8, "meet": "child_door", "log": "the child shows a picture"},
+  {"t": 2.0, "press": ["move_up"]},
+  {"t": 2.05, "release": ["move_up"]},
+  {"t": 2.5, "tap": ["interact"]},
+  {"t": 3.2, "dialogue": 8.0},
+  {"t": 14.0, "log": "segment finished"}
+]

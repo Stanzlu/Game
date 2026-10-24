@@ -41,6 +41,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	match id:
 		"melody.elysia_perfect":
 			Beat.mark("market_melody")
+		"fragment.hallway":
+			Beat.mark("trail_hallway")
 		"elysia.hall_open":
 			# pushed open at the doors (A5): the front shows the open doors by now
 			Beat.mark("market_hall_open")
