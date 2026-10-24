@@ -1,13 +1,13 @@
 extends GutTest
-## Act I, segment A6: the feast. Once the hall was noticed, the market stands in its feast state; the
-## host invites, the mistress of the feast has a toast, and raising a glass is worth about eleven
-## thousand experience: the reward grows while the deed shrinks (Game Bible §10), and with it level
-## 48 is certain whatever else was skipped.
+## Act I, segment A6: the feast. Once the hall was noticed, the market stands in its feast state;
+## the host invites, the mistress of the feast has a toast, and raising a glass is worth about
+## eleven thousand experience: the reward grows while the deed shrinks (Game Bible §10), and
+## with it level 48 is certain whatever else was skipped.
 
 const MARKT := preload("res://world/levels/akt1/markt.tscn")
 const ELYSIA := preload("res://world/levels/slice/elysia.tscn")
 const DIALOGUE := "res://content/dialogue/akt1/markt.dialogue"
-## What the slice guarantees (docs/PRODUKTIONSPLAN.md 4.4): the chest, three butterflies, the fountain.
+## What the slice guarantees (docs/PRODUKTIONSPLAN.md 4.4): chest, three butterflies, fountain.
 const SLICE_XP := 22600
 const FEAST_XP := 11000
 const FEAST_CUES: PackedStringArray = ["festmaster", "host_feast"]
