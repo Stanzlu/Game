@@ -70,6 +70,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-057 | Entscheidungen 1 und 2 des Produktionsplans, Musik als Ogg Vorbis, kleine Bilder als Text (P6.7) |
 | ADR-058 | Akt I: Aufbau der Segmente, Segmentskripte und das Gasthaus (P6.8) |
 | ADR-059 | Akt I: der Markt von Elysia, Gold ausgeben und die Stufe „market“ (P6.9) |
+| ADR-060 | Akt I: die Halle der Spiegel, Wahrnehmung als Aufgabe und die erste Facette (P6.10) |
 
 ---
 
@@ -778,4 +779,19 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Wasser:** `water_loop.wav` (Brunnen) fehlte seit dem Katalogeintrag des Brunnens; `make_ambience.py` erzeugt sie jetzt (acht Sekunden, ohne Zufall im Takt).
 - **Verworfen:** Verkäufer hinter dem Stand (von Süden nicht ansprechbar); ein Laden mit Preisliste und Menü (ein Händler mit zwei Waren und der Antwort „Ich schaue nur“ reicht für die Satire und bleibt im Dialog, Cut-First); einen Zähler für die Melodien zeigen (Bible §23).
 - **Alte Spielstände:** `inn` war in A2 final; jetzt führt es zu `market`. Ein Stand auf `inn` lädt ohne Reparatur und die Quest steht wieder offen, bis der Markt betreten ist (derselbe Weg wie bei `celebrated` in ADR-058).
-- **Konsequenzen:** A5 setzt `elysia.hall_open` und nimmt die Türen weg (der Markt zählt den Beat `market_hall_open`); A6 und A7 spielen auf derselben Karte (Fest- und Schleifenzustand per Flags). Das Verkaufen bleibt im Dialog, bis ein zweites Segment es braucht.
+- **Konsequenzen:** A5 setzt `elysia.hall_open` und nimmt die Türen weg (der Markt zählt den Beat `market_hall_open`; **teilweise ersetzt durch ADR-060**: die Türen öffnen sich, wenn man dagegen drückt, nicht erst in A5); A6 und A7 spielen auf derselben Karte (Fest- und Schleifenzustand per Flags). Das Verkaufen bleibt im Dialog, bis ein zweites Segment es braucht.
+
+## ADR-060 · Akt I: die Halle der Spiegel, Wahrnehmung als Aufgabe und die erste Facette (P6.10)
+- **Status:** angenommen · 2026-10-24 (Plan 4.2, A5; Bible §16, §59 Risiko 2; „bau alles“ vom 24.10.)
+- **Kontext:** Bible §59 verlangt eine mechanische Herausforderung je Region; in Elysia ist es die Wahrnehmung, alles andere bleibt mühelos. Elysia ist spiegelsymmetrisch (ADR-031), das heißt: ein Ding, das nur auf einer Seite liegt, ist in dieser Welt schon eine Aussage. Die Aufgabe darf nicht scheitern, nicht drängen und nicht von der Auffassungsgabe allein abhängen (Bible §49, §50).
+- **Entscheidung:**
+  - **Aufgabe:** Die Halle (`spiegelhalle`, 33 × 42, drei Räume übereinander, Zoom 1,5) steht voller Paare; im ersten und zweiten Raum liegt ein Gegenstand nur auf einer Seite (Blatt links, Feder rechts). Ihn anzusehen („bemerken“) öffnet das Tor zum nächsten Raum; im letzten Raum zeigt der große Spiegel die Halle und nicht die Spielfigur, wer hinsieht, bekommt die Facette `perception` (Wahrnehmung I: man darf sagen, was man bemerkt). Aufheben ist eine eigene, freie Entscheidung (Kuriosität für das Regal, `curiosity_dry_leaf`, `curiosity_feather`).
+  - **Hilfe:** Der Hallenwächter in der Vorhalle hilft in drei Stufen (Hinweis, genauer, die Antwort), für den Raum, in dem die Spielfigur steht, so oft man fragt; keine Strafe, kein Zähler. Ein Fehlversuch existiert nicht: der Spiegel lässt sich ansehen oder wegsehen, die Tore öffnen, wenn man hinsieht.
+  - **Karten-Regel:** Die Abweichung ist die Aufgabe, deshalb darf `MapLint` sie dulden: `SINGLE_CUES` kennt `leaf` und `feather` (zu den bisherigen Einzelstücken, ADR-031, ADR-055). Alles andere in der Halle bleibt paarweise geprüft.
+  - **Der Eingang** (ändert ADR-059): Die Türen der Halle am Markt sind nie abgeschlossen. Das Schild sagt „geöffnet ab morgen“; wer gegen die Türen drückt, öffnet sie (`elysia.hall_open`, die Fassade wechselt auf `hall_front_open`, der Eingang erscheint auf den Stufen). Das ist der erste Fall von Wahrnehmung: nachsehen statt glauben. „Morgen wiederkommen“ ist die Antwort daneben, frei und folgenlos. Damit hängt das Weiterkommen in Akt I nicht am Gasthaus (Bible §14: Aufbrechen ist die eigene Tat der Spielfigur).
+  - **Heldenquest:** Stufe `hall` hängt an `market` und ist vorläufig final; die Truhe trägt `inn`, `market` und `hall` nach (`ElysiaScene._catch_up_the_hero_quest`).
+  - **Neue Möglichkeit:** Der Dichter im Markt hat mit `perception` eine vierte Antwort (bedingte Antwort, die unbedingten bleiben). Weitere Stellen kommen mit A6 und A7 (die Wiederholung bemerken).
+  - **Kleine Bilder:** Symbole für Brot, Glücksbringer, Blatt und Feder als `.pix` (ADR-057), die ersten ihrer Art.
+- **Verworfen:** Eine Suche mit Zeitdruck oder Fehlern (Bible §49); ein Wahrnehmungs-Wert oder ein Hilfezähler (keine Zahlen, §16); Hinweise erst nach langem Suchen (zeitgesteuerte Hilfe zählt Wanduhrzeit); die Halle am Gasthaus zu öffnen („morgen“ als Nacht, die man annehmen muss).
+- **Alte Spielstände:** `market` war in A3 final und führt jetzt zu `hall`: ein Stand auf `market` lädt ohne Reparatur, die Quest steht wieder offen (wie bei ADR-058, ADR-059).
+- **Konsequenzen:** Jedes Tor, jede Facette und jede Aufgabe, die Wahrnehmung verlangt, braucht eine Hilfe in Worten. A6 (Fest) und A7 (Wiederholung) benutzen `perception` für die Antwort „Das hast du gestern auch gesagt.“.

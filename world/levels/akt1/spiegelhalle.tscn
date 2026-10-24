@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt1/spiegelhalle_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+[ext_resource type="AudioStream" path="res://assets/generated/audio/garden_loop.wav" id="3_amb"]
+
+[node name="Spiegelhalle" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/spiegelhalle.txt"
+view_zoom = 1.5
+player_sheet = ExtResource("2_sheet")
+motes = true
+ambience = ExtResource("3_amb")
+ambience_db = -22.0
+music = "elysia"
+saturation = 1.04
+contrast = 1.04
+brightness = -0.02
+tint = Color(0.98, 1.0, 1.02, 1)
+shadow_tint = Color(0.03, 0.02, 0.07, 1)
+vignette = 0.32
+bloom = 0.22

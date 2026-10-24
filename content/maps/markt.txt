@@ -16,8 +16,11 @@ M = {"atlas": [3, 0], "surface": "stone", "paint": "marble"}
 1 = {"ground": "c", "marker": "spawn_garden"}
 ; das Tor in der Südmauer: wer in den Durchgang tritt, geht die Treppe hinauf in den Garten
 a = {"ground": "c", "prop": "res://world/props/door.tscn", "params": {"target": "elysia", "spawn": "markt", "auto": true, "size": [5, 1]}}
-; die Halle der Spiegel (A5): bis dahin sind die Türen zu
-H = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_front", "cue": "hall_door", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 28, "unless": "elysia.hall_open"}}
+; die Halle der Spiegel (A5): die Türen sind zu, bis jemand dagegen drückt (elysia.hall_open); dann steht die Tür auf den Stufen offen
+H = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_front", "sprite_when": {"elysia.hall_open": "elysia/hall_front_open"}, "cue": "hall_door", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 28}}
+; hinein in die Halle der Spiegel, sobald ihre Türen offen stehen; zurück kommt man auf den Stufen davor heraus
+D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": "spiegelhalle", "spawn": "markt", "auto": true, "size": [3, 1], "sound": "door_open", "if": "elysia.hall_open"}}
+2 = {"ground": "c", "marker": "spawn_hall"}
 J = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/job_board", "cue": "board", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 24}}
 F = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fountain", "cue": "fountain", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 34}}
 u = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/town_house_bloom"}}
@@ -50,8 +53,8 @@ hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
 hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
 hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
 hhhhhhXXXuXXXhXXXvXXXhhhXXXXXXHXXXXXXhhhXXXvXXXhXXXuXXXhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhMMMMMMMMMhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhccccccccccccccccccccccccccccccccccccccccccccccchhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhMMMMDMMMMhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhccccccccccccccccccccccc2ccccccccccccccccccccccchhhhhhh
 hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
 hhhhhcccccccccccccccccccccccccJccccccccccccccccccccccccchhhhh
 hhhhccccccccocccccccqcccccccccccccccccccqcccccccocccccccchhhh

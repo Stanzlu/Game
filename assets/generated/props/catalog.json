@@ -222,6 +222,53 @@
    "res://assets/generated/props/elysia/hall_front.png"
   ]
  },
+ "elysia/hall_front_open": {
+  "anchor": [
+   104,
+   104
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/hall_front_open.png"
+  ]
+ },
+ "elysia/hall_gate": {
+  "anchor": [
+   24,
+   40
+  ],
+  "shape": {
+   "offset": [
+    0,
+    0
+   ],
+   "rect": [
+    48,
+    16
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/hall_gate.png"
+  ]
+ },
+ "elysia/hall_mirror": {
+  "anchor": [
+   24,
+   40
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/hall_mirror.png"
+  ]
+ },
+ "elysia/hall_shell": {
+  "anchor": [
+   264,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/elysia/hall_shell.png"
+  ]
+ },
  "elysia/inn_bar": {
   "anchor": [
    88,
@@ -461,6 +508,32 @@
    "res://assets/generated/props/elysia/lily_pad_0.png",
    "res://assets/generated/props/elysia/lily_pad_1.png",
    "res://assets/generated/props/elysia/lily_pad_2.png"
+  ]
+ },
+ "elysia/odd_feather": {
+  "anchor": [
+   9,
+   5
+  ],
+  "shadow": [
+   8,
+   2
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/odd_feather.png"
+  ]
+ },
+ "elysia/odd_leaf": {
+  "anchor": [
+   7,
+   6
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/odd_leaf.png"
   ]
  },
  "elysia/pebbles": {

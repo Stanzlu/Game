@@ -26,9 +26,10 @@ const INTERACTIVE_PROPS: PackedStringArray = [
 	"res://entities/npc/npc_walker.tscn",
 ]
 ## Props that stay without a twin in a symmetric map: the stone, the rift and the child
-## (ADR-031). The stone's picture is a pickup, its label a decor with the cue "stone".
+## (ADR-031), and in the hall of mirrors the leaf and the feather that lie on one side only
+## (ADR-060). The stone's picture is a pickup, its label a decor with the cue "stone".
 const SINGLE_PROPS: PackedStringArray = ["pickup.tscn", "rift.tscn", "child_guide.tscn"]
-const SINGLE_CUES: PackedStringArray = ["stone"]
+const SINGLE_CUES: PackedStringArray = ["stone", "leaf", "feather"]
 ## How far from a reachable cell a thing may stand and still be reached (cells; furniture
 ## in a wall is used from the floor in front of it).
 const REACH := 2

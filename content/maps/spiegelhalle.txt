@@ -1,0 +1,73 @@
+; Akt I, Segment A5: die Halle der Spiegel von innen (docs/akt1/REGIONSBRIEFE.md). Drei Räume übereinander: die Vorhalle (unten), die
+; Galerie, die Spiegelkammer (oben); spiegelsymmetrisch um Spalte 16. Wände, Spiegel und Türrahmen malt das Requisit elysia/hall_shell, den
+; Boden backt tools/art/bake_ground.py content/maps/spiegelhalle.txt. Alles steht zweimal, bis auf drei Dinge: den Wächter in der Mitte
+; und je einen Gegenstand, der nur auf einer Seite liegt (Blatt, Feder): sie zu bemerken ist die Aufgabe (Wahrnehmung, Bible §16).
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/spiegelhalle_ground.png"
+symmetry = 16
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+M = {"atlas": [3, 0], "surface": "stone", "paint": "marble"}
+@ = {"ground": "M", "marker": "player_spawn"}
+1 = {"ground": "M", "marker": "spawn_markt"}
+S = {"ground": "#", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_shell"}}
+; der Weg hinaus: die Tür ins Freie, auf die Stufen der Halle am Markt
+D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": "markt", "spawn": "hall", "auto": true, "size": [3, 1], "sound": "door_close"}}
+; die zwei Tore: sie bleiben zu, bis der Raum davor bemerkt hat, was nicht passt
+g = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_gate", "cue": "gate_shut", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 26, "unless": "elysia.hall_room_1"}}
+h = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_gate", "cue": "gate_shut", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 26, "unless": "elysia.hall_room_2"}}
+X = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_mirror", "cue": "mirror", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 30}}
+K = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_keeper_look.tres", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "cue": "keeper", "face": "s"}}
+I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar"}}
+l = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lantern"}}
+C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal"}}
+O = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/topiary"}}
+f = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/glow_flower"}}
+; was nur auf einer Seite liegt: ein trockenes Blatt links, eine Feder rechts (ohne Zwilling, MapLint.SINGLE_CUES)
+a = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/odd_leaf", "cue": "leaf", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 16, "unless": "elysia.hall_leaf_taken"}}
+b = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/odd_feather", "cue": "feather", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 16, "unless": "elysia.hall_feather_taken"}}
+[map]
+################S################
+#################################
+#################################
+########WWWWWWWWWWWWWWWWW########
+########WWWWWWWWWWWWWWWWW########
+########WWWWWWWWXWWWWWWWW########
+########WMMfMMMMMMMMMfMMW########
+########WMMMlMMMMMMMlMMMW########
+########WMIMMMMMMMMMMMIMW########
+########WMMMMMMMMMMMMMMMW########
+########WMMMMCMMMMMCMMMMW########
+########WMIMMMMMMMMMMMIMW########
+########WMMMMMMMMMMMMMMMW########
+###WWWWWWWWWWWWMMMWWWWWWWWWWWW###
+###WWWWWWWWWWWWMMMWWWWWWWWWWWW###
+###WWWWWWWWWWWWMhMWWWWWWWWWWWW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMMMMCMMMMMMMMMMMMMCMMMMMW###
+###WMMIMMMMMlMMMMMMMlMMMMMIMMW###
+###WMMMMMMMfMMMMMMMMMfMMMMMMMW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMMMMMOMMMMMMMMMMMOMbMMMMW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMIMMMMMMfMMMMMfMMMMMMIMMW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMMMfMMMMMMMMMMMMMMMfMMMMW###
+###WWWWWWWWWWWWMMMWWWWWWWWWWWW###
+###WWWWWWWWWWWWMMMWWWWWWWWWWWW###
+###WWWWWWWWWWWWMgMWWWWWWWWWWWW###
+###WMMMMMMMMMMMMMMMMMMMMMMMMMW###
+###WMMMMMlMMMMMMMMMMMMMlMMMMMW###
+###WMMIMMMMMfMMMMMMMfMMMMMIMMW###
+###WMMMMfMMMMMMMMMMMMMMMfMMMMW###
+###WMMMaMMMMMMMMKMMMMMMMMMMMMW###
+###WMMMMMMMOMMMMMMMMMOMMMMMMMW###
+###WMMIMMMMMMMMMMMMMMMMMMMIMMW###
+###WMMMMMMfMMMMM@MMMMMfMMMMMMW###
+###WMMMMMMMMMMMM1MMMMMMMMMMMMW###
+###WWWWWWWWWWWWMDMWWWWWWWWWWWW###
+###WWWWWWWWWWWWWWWWWWWWWWWWWWW###
+###WWWWWWWWWWWWWWWWWWWWWWWWWWW###

@@ -13,7 +13,7 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | greet, butterflies, reward, celebrated | A1 Erwachen und Garten | `elysia` | `elysia_start` … `butterflies_caught` | vorhanden |
 | inn | A2 Gasthaus | `gasthaus` | `inn_enter`, `inn_fed`, `inn_room`, `inn_slept` | **gebaut (ADR-058)** |
 | market | A3 Markt und Straße | `markt` | `market_enter`, `market_board`, `market_bread`, `market_board_done`, `market_melody` | **gebaut (ADR-059)** |
-| hall | A5 Spiegelhalle | `spiegelhalle` | | geplant |
+| hall | A5 Spiegelhalle | `spiegelhalle` | `hall_enter`, `hall_room_1`, `hall_room_2`, `hall_mirror`, `perception` | **gebaut (ADR-060)** |
 | feast, repeat | A6 Fest, A7 Wiederholung | `markt` (Festzustand), alle Orte | | geplant |
 | trail, rift | A8 Kind-Spur, A9 Stein, Samen, Riss | `gasthaus`, `markt`, `spiegelhalle`, `elysia` | | geplant |
 
@@ -82,7 +82,7 @@ Fest (A6), das den Gastwirt wieder braucht.
 
 **Zweck.** Die Stadt hinter dem Garten, die Ebene „Straße und Stadt“ der Raumschichtung (Plan 4.1). Sieben Rollen stehen zweimal da (Bible §9), und niemand
 hat etwas gegen etwas: der Markt gibt, was man nicht braucht, und verlangt dafür Gold, das nichts bedeutet. Die Halle der Spiegel steht im Norden an der Mittelachse
-mit verschlossenen Türen („geöffnet ab morgen“): die mechanische Herausforderung von Elysia (Wahrnehmung, A5) ist angekündigt, aber noch zu.
+und ist zu („geöffnet ab morgen“): die mechanische Herausforderung von Elysia (Wahrnehmung, A5) ist angekündigt; wer gegen die Türen drückt, sieht, dass sie nie abgeschlossen waren.
 
 | Beat | Auslöser | Was geschieht | Marke |
 |---|---|---|---|
@@ -94,7 +94,8 @@ mit verschlossenen Türen („geöffnet ab morgen“): die mechanische Herausfor
 | Händler | `merchant` | ein Kompliment (zehn Gold), der Glücksbringer (hundertfünfzig); „Ich schaue nur.“ steht immer da | `WorldState.spend_gold`, `item_compliment`, `item_trinket`, Flag `elysia.market_shop_seen` |
 | Melodie | die Musikerin (`musician`) | Zuhören gibt die perfekte Melodie, ohne Fehler | `melody.elysia_perfect`, +1.000 XP, Beat `market_melody` |
 | Brunnen | `fountain` | eine Münze (zehn Gold) in das Becken; der Wunsch geht in Erfüllung, bevor man fertig ist | `spend_gold` |
-| Kleinigkeiten | Dichter, Blumenfrau, Halle (`hall_door`) | Reime ohne Neues, Blumen ohne Preis, ein Schild, das schon lange dort steht | keine Flags |
+| Halle | die Türen (`hall_door`) | ein Schild „geöffnet ab morgen“; Drücken öffnet sie, sie waren nie abgeschlossen; „Morgen wiederkommen“ lässt sie zu | `elysia.hall_open`, Beat `market_hall_open`; die Fassade zeigt die offene Tür, der Eingang erscheint auf den Stufen |
+| Kleinigkeiten | Dichter, Blumenfrau | Reime ohne Neues, Blumen ohne Preis; mit der Facette „Wahrnehmung“ kann man dem Dichter sagen, dass es gestern schon da war | keine Flags |
 
 **Heldenquest.** Die Stufe `market` (vorläufig final) folgt auf `celebrated` und auf `inn`. Wer den Markt vor der Truhe besucht, bekommt sie von der Truhe nachgetragen
 (`ElysiaScene`: erst `inn`, dann `market`).
@@ -123,4 +124,50 @@ die Halle (A5) und das Fest (A6).
 
 **Prüfungen.** `test_akt1_markt` (16 Tests), `tools/autopilot/akt1_markt.json` (Schritt „segment“ in `check.sh`: Beats und Begrüßung), `MapLint` (Symmetrie, Erreichbarkeit),
 `StoryLint` (Flags, Cues, Türen).
+
+---
+
+## A5 Die Halle der Spiegel
+
+**Stand:** gebaut. **Szene:** `world/levels/akt1/spiegelhalle.tscn` (`SpiegelhalleScene`), Karte `content/maps/spiegelhalle.txt` (33 × 42, drei Räume übereinander,
+spiegelsymmetrisch um Spalte 16, Zoom 1,5), Dialog `content/dialogue/akt1/spiegelhalle.dialogue` (46 Zeilen, 8 Cues, alle `[#draft]`). **Zugang:** die Türen der Halle am Markt
+(Zelle 30, 13, erst nach `elysia.hall_open`), Ankunft `spawn_markt` in der Vorhalle; zurück auf die Stufen (`spawn_hall`).
+
+**Zweck.** Die mechanische Herausforderung von Elysia (Bible §59, Risiko 2): Wahrnehmung (Bible §16), „bemerken, was ist“. Alles in der Halle steht zweimal, links wie rechts, genau gleich;
+je ein Raum hat einen Gegenstand, der nur auf einer Seite liegt (ein trockenes Blatt links, eine Feder rechts). Wer ihn bemerkt, öffnet das Tor zum nächsten Raum; der letzte Raum hat einen Spiegel,
+der die Halle zeigt und nicht die Spielfigur. Die Aufgabe ist Sehen; es gibt kein Scheitern, keine Zeit, keinen Zähler.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Betreten | Szene beginnt | die Vorhalle: Säulen, Laternen, Kristalle, Pflanzen, jedes Ding zweimal; in der Mitte der Hallenwächter | Beat `hall_enter`, Flag `elysia.hall_seen`; die Heldenquest rückt auf `hall` |
+| Der Wächter | Gespräch (`keeper`) | „Ich stehe in der Mitte. Darum gibt es mich nur einmal. Das ist die einzige Ausnahme, die ich kenne.“ Hilfe in drei Stufen, so oft man fragt: ein Hinweis, genauer, die Antwort; für den Raum, in dem man steht (Vorhalle, Galerie, Spiegelkammer) | `elysia.hall_met` |
+| Raum 1 | das Blatt (`leaf`, links, zwischen den Säulen) | „Auf der anderen Seite der Halle liegt keines.“ Bemerken genügt; Aufheben macht es zur Kuriosität | `elysia.hall_room_1` (+1.500 XP, das Tor öffnet sich), Beat `hall_room_1`; `curiosity_dry_leaf`, `elysia.hall_leaf_taken` |
+| Raum 2 | die Feder (`feather`, rechts, zwischen den Säulen) | dasselbe für die Galerie: „Die Halle hat keine Vögel.“ | `elysia.hall_room_2` (+2.000 XP, das zweite Tor), Beat `hall_room_2`; `curiosity_feather`, `elysia.hall_feather_taken` |
+| Raum 3 | der große Spiegel (`mirror`) | „Dich zeigt er nicht.“ Weiter hinsehen schenkt die Facette; Wegsehen nimmt nichts, der Spiegel wartet | Facette `perception`, +5.000 XP, `elysia.hall_mirror_seen`, Beats `hall_mirror`, `perception` |
+| Die Tore | `gate_shut` | „Es bleibt zu, bis dir etwas auffällt.“ | keine Flags |
+
+**Neue Möglichkeit (Facette I, Bible §17).** Wahrnehmung I heißt in Akt I: Man darf sagen, was man bemerkt. Der Dichter im Markt hat eine vierte Antwort („Das hast du gestern auch gesagt.“), die nur mit der Facette
+erscheint; A6 und A7 bauen darauf, dass die Wiederholung bemerkt werden kann.
+
+**Heldenquest.** Die Stufe `hall` (vorläufig final) folgt auf `market`. Wer die Halle vor der Truhe betritt, bekommt die Stufen von der Truhe nachgetragen (`ElysiaScene`: `inn`, `market`, `hall`).
+
+**Figuren.** Der Hallenwächter (neu, `keeper`, Stimme `Hallenwächter`): silbernes Haar, ein langer Umhang in Spiegelblau; ruhig, hat Zeit, hilft, ohne zu entscheiden.
+
+**Humor-Ziel (2/10).** Ein Wächter, der jede Ausnahme verneint und selbst die einzige ist; ein Tor, das hört, was einem auffällt; ein Spiegel ohne Gast.
+
+**Gewicht (§45).** mittel: „Dich zeigt er nicht.“ ist die ernsteste Zeile von Akt I bisher, freundlich gesagt und ohne Erklärung (Vorausdeutung auf Twist II, Motiv `spiegelung`).
+
+**Motive.** Spiegelung (`sh_mirror_3`, `sh_mirror_5`; das Becken im Garten hat dich auch nicht gezeigt), perfekte Natur (das Blatt, die Feder: das Einzige, was altern oder fliegen durfte), wortgleiche Formulierungen
+(„Fast.“).
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern: Der Wächter nennt die Antwort, wenn man sie will; die Tore öffnen, wenn man hinsieht, nicht wenn man etwas richtig macht; Wegsehen am Spiegel nimmt nichts. Jede Beat-Marke speichert.
+
+**Barrierefreiheit (§50).** Die Aufgabe ist rein visuell, und der Wächter beschreibt sie in Worten (Hilfe in drei Stufen, jederzeit, unbegrenzt); die Antworten des Spiels hängen an der Dialogbox mit Textgröße, Tempo und
+Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln, die Untertitel „Geräusche als Text“ nennen es. Keine Zeit, kein Rätsel mit Fehlversuch.
+
+**Endlichkeit (§52).** Alles wiederholt sich nicht, es liegt einmal da: Blatt und Feder lassen sich mitnehmen, dann ist die Halle wieder so vollkommen wie vorher (in A7 wird sie es wortgleich).
+
+**Gerechnet.** 46 Zeilen, 449 Wörter, rund viereinhalb Minuten Weg (geschätzt): nach `calibrate.py` rund 8 Minuten (Plan: 12); wer lange sucht, braucht mehr, mit Wächter weniger.
+
+**Prüfungen.** `test_akt1_spiegelhalle` (13 Tests), `tools/autopilot/akt1_spiegelhalle.json` (Schritt „segment“ in `check.sh`), `MapLint` (Symmetrie, Erreichbarkeit; `SINGLE_CUES` kennt Blatt und Feder), `StoryLint`.
 

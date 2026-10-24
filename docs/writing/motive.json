@@ -56,6 +56,18 @@
     {
      "type": "line",
      "ref": "mk_tailor_4"
+    },
+    {
+     "type": "line",
+     "ref": "sh_mirror_3"
+    },
+    {
+     "type": "line",
+     "ref": "sh_mirror_5"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.hall_mirror_seen"
     }
    ],
    "payoff": "Pfütze im Tal: zum ersten Mal ein Bild der Spielerin (`tal_puddle_2`, `tal_puddle_7`); Twist II (Elysia entstand aus einem Bedürfnis nach Schutz) liest die fehlende Spiegelung zurück.",
@@ -197,6 +209,18 @@
     {
      "type": "flag",
      "ref": "elysia.flower_smelled"
+    },
+    {
+     "type": "line",
+     "ref": "sh_leaf_1"
+    },
+    {
+     "type": "line",
+     "ref": "sh_feather_1"
+    },
+    {
+     "type": "line",
+     "ref": "sh_hint_7"
     }
    ],
    "payoff": "Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`.",
@@ -393,6 +417,14 @@
     {
      "type": "line",
      "ref": "mk_board_4"
+    },
+    {
+     "type": "line",
+     "ref": "sh_keeper_2"
+    },
+    {
+     "type": "line",
+     "ref": "sh_gate_2"
     }
    ],
    "payoff": "„Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII)."
@@ -948,6 +980,46 @@
    "flag": "melody.elysia_perfect",
    "axis": "Elysia",
    "meaning": "Die erste Melodie: die perfekte der Musikerin im Markt, ohne Fehler (Bible §31)."
+  },
+  {
+   "flag": "elysia.hall_seen",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat die Halle der Spiegel betreten (Stufe „hall“ der Heldenquest)."
+  },
+  {
+   "flag": "elysia.hall_open",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat gegen die Türen der Halle gedrückt; sie waren nie abgeschlossen, nur das Schild stand davor."
+  },
+  {
+   "flag": "elysia.hall_met",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Hallenwächter gesprochen, der in der Mitte steht und darum nur einmal da ist."
+  },
+  {
+   "flag": "elysia.hall_room_1",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat das Blatt bemerkt, das nur links liegt; das erste Tor steht offen."
+  },
+  {
+   "flag": "elysia.hall_room_2",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die Feder bemerkt, die nur rechts liegt; das zweite Tor steht offen."
+  },
+  {
+   "flag": "elysia.hall_leaf_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das trockene Blatt eingesteckt (Kuriosität für das Regal im Haus)."
+  },
+  {
+   "flag": "elysia.hall_feather_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat die Feder eingesteckt (Kuriosität für das Regal im Haus)."
+  },
+  {
+   "flag": "elysia.hall_mirror_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im großen Spiegel bemerkt, dass er sie nicht zeigt (Facette „Wahrnehmung“)."
   }
  ]
 }

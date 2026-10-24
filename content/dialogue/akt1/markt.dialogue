@@ -86,6 +86,8 @@ Dichter: Der Tag ist schön, der Himmel blau, der Brunnen klar, die Luft ist lau
 	Dichter: Der Tag ist schön, der Himmel blau. Nein. Das war es schon. Das reicht doch auch. [ID:mk_poet_5] [#draft]
 - … [ID:mk_poet_r3] [#draft]
 	Dichter: Du bist sprachlos. Das ist das beste Reimwort, das es gibt. [ID:mk_poet_6] [#draft]
+- Das hast du gestern auch gesagt. [if WorldState.has_facet("perception") /] [ID:mk_poet_r4] [#draft]
+	Dichter: Gestern? Gestern hat es sich auch gereimt. Das ist ja das Schöne. [ID:mk_poet_7] [#draft]
 => END
 
 ~ musician
@@ -132,6 +134,14 @@ Der Brunnen plätschert. Das Wasser im Becken rechts ist dasselbe Wasser wie lin
 => END
 
 ~ hall_door
-Die Türen der Halle der Spiegel sind verschlossen. Auf einem Schild steht in goldener Schrift, geöffnet ab morgen. [ID:mk_hall_1] [#draft]
+if WorldState.has_flag("elysia.hall_open")
+	Die Türen der Halle der Spiegel stehen offen. Dahinter ist es hell. [ID:mk_hall_5] [#draft]
+	=> END
+Die Türen der Halle der Spiegel sind zu. Auf einem Schild steht in goldener Schrift, geöffnet ab morgen. [ID:mk_hall_1] [#draft]
 Das Schild sieht aus, als stünde es schon sehr lange da. [ID:mk_hall_2] [#draft]
+- Gegen die Türen drücken. [ID:mk_hall_r1] [#draft]
+	Die Türen geben nach. Sie waren nie abgeschlossen. Nur das Schild steht davor. [ID:mk_hall_3] [#draft]
+	do WorldState.set_flag("elysia.hall_open")
+- Morgen wiederkommen. [ID:mk_hall_r2] [#draft]
+	Du gehst. Morgen ist bald. Es ist hier immer bald. [ID:mk_hall_4] [#draft]
 => END

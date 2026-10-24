@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://qg8uaub0ijvh"
+path="res://.godot/imported/spiegelhalle.dialogue-0a39c50b60847fb0615f3c3c88a17e2d.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt1/spiegelhalle.dialogue"
+dest_files=["res://.godot/imported/spiegelhalle.dialogue-0a39c50b60847fb0615f3c3c88a17e2d.tres"]
+
+[params]
+
+defaults=true
