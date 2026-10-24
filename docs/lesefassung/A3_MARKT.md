@@ -12,6 +12,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M1 · `gatekeeper`
 
+*wenn* `elysia.loops`
+  - **Torwächter:** Das Tor ist offen. Wie immer. `[#draft]`  <sub>mk_gate_10</sub>
 *wenn* `elysia.feast`
   - **Torwächter:** Heute feiern wir. Das Tor feiert mit. Es steht noch offener als sonst. `[#draft]`  <sub>mk_gate_7</sub>
   - **Torwächter:** Geh nur zum Fest. Ich passe darauf auf, dass es stattfindet. `[#draft]`  <sub>mk_gate_8</sub>
@@ -30,6 +32,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *wenn* `side_elysia_board und bread`
   - **Bäckerin:** Das Brot für die Schneiderin! Es ist fertig. Es ist immer fertig, wenn jemand danach fragt. `[#draft]`  <sub>mk_baker_1</sub>
   - *Du bekommst einen Laib. Er ist noch warm. Du wirst ihn tragen, und er bleibt es.* `[#draft]`  <sub>mk_baker_2</sub>
+*sonst wenn* `elysia.loops`
+  - **Bäckerin:** Frisch gebacken. Von gestern. `[#draft]`  <sub>mk_baker_8</sub>
 *sonst wenn* `elysia.feast`
   - **Bäckerin:** Für das Fest backe ich alles zweimal. Gegessen wird es trotzdem nur einmal. `[#draft]`  <sub>mk_baker_6</sub>
   - **Bäckerin:** Heute gibt es Brot. Wie jeden Tag. Aber festlich. `[#draft]`  <sub>mk_baker_7</sub>
@@ -44,6 +48,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *→ weiter bei* `tailor_bread`
 *sonst wenn* `side_elysia_board und bread`
   - **Schneiderin:** Ich warte auf Brot. Ich warte gern. Das Warten sitzt mir wie angegossen. `[#draft]`  <sub>mk_tailor_1</sub>
+*sonst wenn* `elysia.loops`
+  - **Schneiderin:** Ich nähe, was dir passt. Es passt immer. Ich messe nur zur Höflichkeit. `[#draft]`  <sub>mk_tailor_9</sub>
 *sonst wenn* `elysia.feast`
   - **Schneiderin:** Für das Fest habe ich allen dasselbe genäht. Es steht allen. `[#draft]`  <sub>mk_tailor_7</sub>
   - **Schneiderin:** Ein Fest ist wie ein Anzug. Es passt, ohne dass man es anprobiert hat. `[#draft]`  <sub>mk_tailor_8</sub>
@@ -59,12 +65,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M5 · `merchant`
 
-*wenn* `elysia.market_shop_seen`
+*wenn* `elysia.loops`
+  - **Händler:** Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. `[#draft]`  <sub>mk_shop_8</sub>
+*sonst wenn* `elysia.market_shop_seen`
   - **Händler:** Na? Wieder da? Schau dir an, was da ist. Es ist immer da. `[#draft]`  <sub>mk_shop_2</sub>
 *sonst*
   - **Händler:** Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. `[#draft]`  <sub>mk_shop_1</sub>
   - **Händler:** Es kostet nicht viel. Es kostet nur Gold, und davon hast du reichlich. `[#draft]`  <sub>mk_shop_3</sub>
-*wenn* `elysia.feast`
+*wenn* `elysia.feast und elysia.loops nicht`
   - **Händler:** Und heute ist alles festlich. Zum selben Preis, aber festlich. `[#draft]`  <sub>mk_shop_7</sub>
 - *→ weiter bei* `merchant_wares`
 
@@ -79,6 +87,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M7 · `florist`
 
+*wenn* `elysia.loops`
+  - **Blumenfrau:** Nimm eine! Sie kosten nichts. Das ist der Preis. `[#draft]`  <sub>mk_flower_6</sub>
 *wenn* `elysia.feast`
   - **Blumenfrau:** Heute binde ich Kränze. Für alle, für jeden dasselbe. `[#draft]`  <sub>mk_flower_4</sub>
   - **Blumenfrau:** Ein Fest ohne Blumen ist ein Fest. Mit Blumen ist es meins. `[#draft]`  <sub>mk_flower_5</sub>
@@ -171,7 +181,6 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 *wenn* `elysia.feast_toast`
   - **Festmeisterin:** Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. `[#draft]`  <sub>mk_fest_9</sub>
-  - **Festmeisterin:** Zweiter Tag, dritter Tag, derselbe Tag. Heute ist der schönste. `[#draft]`  <sub>mk_fest_10</sub>
 *wenn* `elysia.feast_invited`
   - **Festmeisterin:** Der Gastwirt hat dich angekündigt. Er ist sehr zuverlässig. Er sagt immer vorher, was ich nachher sage. `[#draft]`  <sub>mk_fest_1</sub>
 *sonst*

@@ -72,6 +72,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-059 | Akt I: der Markt von Elysia, Gold ausgeben und die Stufe „market“ (P6.9) |
 | ADR-060 | Akt I: die Halle der Spiegel, Wahrnehmung als Aufgabe und die erste Facette (P6.10) |
 | ADR-061 | Akt I: das Fest, Erfahrung für ein Glas und Level 48 (P6.11, A6) |
+| ADR-062 | Akt I: die Wiederholung beginnt mit dem Hoch, Musikstufen nach Fortschritt, lange Uhr (P6.11, A7) |
 
 ---
 
@@ -321,6 +322,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Entscheidung:** `make_music.py` schneidet Elysias Musik auf 4 und 2 Takte. `AudioDirector` wechselt nach Spielzeit (150 s, 300 s) oder Fortschritt (Truhe geöffnet, Stein genommen) zur nächsten Stufe, immer erst am Loop-Ende, damit der Wechsel auf dem Taktanfang landet.
 - **Konsequenzen:** Die Stufe hängt am Spielstand (Spielzeit, Flags) und ist damit nach dem Laden dieselbe. Feinabstimmung der Schwellen im Playtest.
 - **Nachtrag 22.10. (ADR-047):** Die Zeitschwellen sind 300 und 600 s (vorher 150 und 300 s). Die Flags `elysia.chest_tree_opened` und `elysia.stone_taken` sind der eigentliche Auslöser; die Zeiten fangen nur ab, wer trödelt. Die Loops dauern 19, 10 und 5 s. Gemessen sieht man den Wechsel nur in einer Aufnahme mit Ton (Headless-Läufe rücken das Audio nicht vor).
+- **Nachtrag (ADR-062):** Die Stufen folgen jetzt dem Fortschritt: Stufe 1 mit `elysia.market_seen` (Markt betreten), Stufe 2 mit `elysia.stone_taken`; die Uhr fängt erst nach 20 und 40 Minuten. `elysia.chest_tree_opened` verkürzt die Musik nicht mehr.
 
 ## ADR-033 · Idle-Animationen und große Schrift überall
 - **Status:** angenommen · 2026-10-04
@@ -811,3 +813,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Verworfen:** Ein Fest als eigene Karte (der Markt ist schon da, ADR-037); ein Tanz oder ein Minispiel zum Hoch (Cut-First, A4 bleibt offen für P6.13); die Einladung als Pflicht (Bible §14: nichts im Hauptweg hängt an einem Angebot des Betäubers; das Fest läuft auch ohne Einladung).
 - **Alte Spielstände:** `hall` war in A5 final und führt jetzt zu `feast`: ein Stand auf `hall` lädt ohne Reparatur, die Quest steht wieder offen (wie bei ADR-058 bis ADR-060).
 - **Konsequenzen:** A7 verlegt den Auslöser der Schleifen hinter das Hoch (Stufe `repeat`). Akt I liegt nach A6 bei rund 29 statt 49 geplanten Minuten; die Neuplanung (P6.13) entscheidet über A4 und mehr Erkundung.
+
+## ADR-062 · Akt I: die Wiederholung beginnt mit dem Hoch, Musikstufen nach Fortschritt, lange Uhr (P6.11, A7)
+- **Status:** angenommen · 2026-10-24 (Plan 4.6, A7; Bible §35, §56 Beat 2; „bau alles“ vom 24.10.)
+- **Kontext:** Im Slice begannen die Schleifen, sobald Truhe und Schmetterlinge erledigt waren (`_start_loops_when_ready`), mit Rückfallzeiten von 12 und 2,5 Minuten und Musikstufen nach 5 und 10 Minuten. Akt I dauert nach A2 bis A6 aber 30 bis 45 Minuten: die Uhr hätte mitten im Gasthaus, auf dem Markt oder in der Halle die Sätze wiederholt und den Riss geöffnet, bevor das Fest begann. Eine Karte der Folgen (vier Leser über Code und Tests, Autopilot, Dialoge, Doku) zeigte, was am alten Auslöser hing.
+- **Entscheidung:**
+  - **Auslöser:** Das Hoch auf dem Fest (`elysia.feast_toast`) beginnt die Sätze (`elysia.loops`), in jeder Elysia-Szene, nicht nur im Garten: der `ElysiaDirector` reagiert auf das Flag (und beim Laden eines Standes vom Fest). `begin_loops()` markiert den Beat `irritation` einmal. Die Heldenquest bekommt die Stufe `repeat` (vorläufig final), der Markt rückt beim Hoch von `feast` auf `repeat`, die Truhe trägt beide nach. `ElysiaScene._start_loops_when_ready` entfällt.
+  - **Musikstufen:** `ELYSIA_STAGES` folgt dem Fortschritt: Stufe 1 mit `elysia.market_seen` (nach 1.200 s Spielzeit sonst), Stufe 2 mit `elysia.stone_taken` (nach 2.400 s sonst). Die Sätze allein sind schon Stufe 1 (`elysia.loops` impliziert mindestens Stufe 1; wichtig für Stände aus dem Slice).
+  - **Uhr:** `LOOPS_AFTER` 3.600 s (eine Stunde Spielzeit), `RIFT_AFTER_LOOPS` 900 s (eine Viertelstunde Zeit für die Spur des Kindes). Die Uhr fängt nur, wer nicht weiterspielt; ein Test verlangt, dass nach 45 Minuten Spielzeit noch nichts von selbst beginnt. Der Riss durch die Uhr wird nur im Garten angesagt (Beben, Untertitel), wie bisher.
+  - **Wortgleiche Zeilen:** Gewählt allein von `elysia.loops` (nicht von `loops_1`/`loops_2`, die nur die Musik sind). Schleife 1 für Torwächter, Bäckerin, Schneiderin, Blumenfrau, Händler (Begrüßung), Festmeisterin, Gastwirt im Gasthaus und die Gärtnerin, solange die Schmetterlinge frei sind; jede Zeile ist, was die Person zuerst gesagt hat, Wort für Wort. Zeilen, die etwas schulden (Laib, Quest-Angebot, Laden, Gästebuch-Einträge), stehen in den Dialogen vor der Schleife. Schleife 2 (mit `elysia.rift_open`, wie `el_loop_2` im Garten) bleibt für A9.
+  - **Slice-Durchlauf:** `slice_full.json` und `slice_elysia.json` setzen das Hoch als Flag nach der Truhe (die Reise durch Gasthaus bis Fest decken die Segmentskripte ab); die gemessene Grundzeit (`calibration_baseline.json`, 372 s) bleibt, der Beat `irritation` kommt in derselben Sekunde.
+- **Verworfen:** Die Schleifen an Truhe und Schmetterlinge zu lassen und nur die Uhr zu verlängern (die Truhe ist der erste Schritt von sechs, die Wiederholung käme vor Gasthaus und Markt); Schleifenzeilen in den Dialogen nach `loops_1`/`loops_2` zu wählen (die setzt der Direktor als Musikstufen, der Markt ist schon ein Besuch alt, wenn die ersten Sätze fallen); einen eigenen Ort für die Wiederholung (sie ist ein Zustand aller Orte, ADR-037).
+- **Alte Spielstände:** `feast` war in A6 final und führt jetzt zu `repeat`: ein Stand auf `feast` lädt ohne Reparatur, die Quest steht wieder offen; ein Stand mit gehobenem Glas, aber ohne Sätze (A6-Stand) beginnt die Schleife beim Laden. Slice-Stände mit Truhe und Schleife, aber ohne Markt, hören die Musik ab Stufe 1.
+- **Konsequenzen:** A8 baut die Spur des Kindes auf `elysia.loops`: das Kind erscheint hinter dem Hoch, nicht davor. Die Kalibrierung (`docs/KALIBRIERUNG.md`) beschreibt weiter den Slice-Durchlauf; Akt I braucht nach P6.12 eine eigene Messung.

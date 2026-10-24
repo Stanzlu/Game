@@ -117,6 +117,38 @@
     {
      "type": "line",
      "ref": "mk_fest_7"
+    },
+    {
+     "type": "line",
+     "ref": "mk_gate_10"
+    },
+    {
+     "type": "line",
+     "ref": "mk_baker_8"
+    },
+    {
+     "type": "line",
+     "ref": "mk_tailor_9"
+    },
+    {
+     "type": "line",
+     "ref": "mk_flower_6"
+    },
+    {
+     "type": "line",
+     "ref": "mk_shop_8"
+    },
+    {
+     "type": "line",
+     "ref": "gh_host_loop_1"
+    },
+    {
+     "type": "line",
+     "ref": "gh_host_loop_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_gard_loop"
     }
    ],
    "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
@@ -134,6 +166,10 @@
     {
      "type": "line",
      "ref": "el_loop_2"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.market_seen"
     }
    ],
    "payoff": "Im Finale erkennt die Spielerin, dass Fragmente des späteren Hauptthemas schon in Elysia vorhanden waren (§35)."
@@ -759,17 +795,17 @@
   {
    "flag": "elysia.loops_1",
    "axis": "Elysia",
-   "meaning": "Elysias Musik-Schleife ist nur noch halb so lang (Truhe offen oder fünf Minuten; ElysiaDirector)."
+   "meaning": "Elysias Musik-Schleife ist nur noch halb so lang (der Markt wurde betreten oder nach zwanzig Minuten; ElysiaDirector)."
   },
   {
    "flag": "elysia.loops_2",
    "axis": "Elysia",
-   "meaning": "Nur noch ein Viertel (Stein genommen oder zehn Minuten; ElysiaDirector)."
+   "meaning": "Nur noch ein Viertel (Stein genommen oder nach vierzig Minuten; ElysiaDirector)."
   },
   {
    "flag": "elysia.loops",
    "axis": "Elysia",
-   "meaning": "Die Schleife ist hörbar geworden (wiederholte Sätze)."
+   "meaning": "Die Sätze wiederholen sich wortgleich: ab dem Hoch auf dem Fest (oder nach einer Stunde Spielzeit); ElysiaDirector, Stufe „repeat“ der Heldenquest."
   },
   {
    "flag": "elysia.rift_open",

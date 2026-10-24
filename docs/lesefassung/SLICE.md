@@ -53,8 +53,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
     - **Gärtnerin:** Und am Weltenbaum wartet eine Truhe. Nur auf dich. Sie wartet schon ganz lange.  <sub>el_gard_ret_4</sub>
   - **Gärtnerin:** Ach, und der Brunnen am Becken. Er plätschert ein kleines bisschen zu leise. Schaust du nach?  <sub>el_gard_ret_6</sub>
 *sonst wenn* `side_elysia_butterflies`
-  - **Gärtnerin:** Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles.  <sub>el_gard_wait_1</sub>
-  - **Gärtnerin:** Sie fliegen über dem Garten. Immer im Kreis. Immer im selben.  <sub>el_gard_wait_2</sub>
+  *wenn* `elysia.loops`
+    - **Gärtnerin:** Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. `[#draft]`  <sub>el_gard_loop</sub>
+  *sonst*
+    - **Gärtnerin:** Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles.  <sub>el_gard_wait_1</sub>
+    - **Gärtnerin:** Sie fliegen über dem Garten. Immer im Kreis. Immer im selben.  <sub>el_gard_wait_2</sub>
 *sonst*
   - **Gärtnerin:** ‹Name›! Dem Himmel sei Dank. Oder dir. Eher dir.  <sub>el_gard_1</sub>
   - **Gärtnerin:** Meine drei goldenen Schmetterlinge sind entwischt. Sie fliegen immer dieselben Runden, weißt du. Nur jetzt eben woanders.  <sub>el_gard_2</sub>
