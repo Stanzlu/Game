@@ -68,6 +68,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-055 | Karten-Linter, Elysia-Regler, Registerlisten und Kalibrierung (P6.6) |
 | ADR-056 | Writing-Pass auf den Slice, Lesefassung und Tests auf Zeilen-IDs (P6.5) |
 | ADR-057 | Entscheidungen 1 und 2 des Produktionsplans, Musik als Ogg Vorbis, kleine Bilder als Text (P6.7) |
+| ADR-058 | Akt I: Aufbau der Segmente, Segmentskripte und das Gasthaus (P6.8) |
 
 ---
 
@@ -748,4 +749,17 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Kleine Bilder als Text:** `tools/art/pixelgrid.py` liest `.pix`-Dateien (Raster aus Zeichen, Schlüssel zur Palette, höchstens zwölf Farben, optional geschlossener Umriss) und schreibt die PNG; die Prüfung braucht nur die Standardbibliothek und läuft in `check.sh`. Gedacht für Kuriositäten, Fragmente, Schilder und Gegenstände (Plan 8).
 - **Verworfen:** Geld jetzt ausgeben, bevor Akt I steht (Stile ändern sich noch); WAV behalten (wächst linear mit jedem Akt); QOA oder ADPCM im Import (verlustbehaftet und größer als Vorbis bei Musik).
 - **Konsequenzen:** Ein neues Musikstück heißt `<name>_loop.ogg`; `AudioDirectorService.track_path` kennt nur noch OGG. Wer Musik ändert, braucht ffmpeg; ohne ffmpeg bricht der Generator mit einer klaren Meldung ab. Der Pegel-Check misst Musik nicht (nur Effekte, Schritte und Orte); Musikpausen und Elysias Stufen misst weiter `tools/audio/measure.sh`.
+
+## ADR-058 · Akt I: Aufbau der Segmente, Segmentskripte und das Gasthaus (P6.8)
+- **Status:** angenommen · 2026-10-24 (Plan 4, 10; „bau alles“ vom 24.10.)
+- **Kontext:** Akt I wächst von einem Ort auf fünf Segmente (Plan 4.2). Jedes braucht dieselben Dinge: Karte, Szene, Dialog, Quest, Tests, ein Skript, das es von Hand spielt, und einen Brief, der sagt, was es soll.
+- **Entscheidung:**
+  - **Ordner:** Szenen unter `world/levels/akt1/`, Dialoge unter `content/dialogue/akt1/` (Slice-Regeln: kein `[#ph]`, `[#draft]` bis zur Lesefassung, Test `test_content` prüft beide Ordner), Requisiten in `tools/art/akt1_props.py` (gleicher Katalog wie `slice_props.py`), Briefe in `docs/akt1/REGIONSBRIEFE.md` (Beat-Tabelle, Flags, Figuren, Humor, Gewicht, Motive, Scheitern und Speichern, Barrierefreiheit, Endlichkeit, gerechnete Minuten).
+  - **Heldenquest:** `main_elysia_hero` endet nicht mehr an der Truhe, sondern wächst je Segment um eine Stufe (Fluss in den Briefen). A2 hängt `inn` an. Die Schleifen beginnen bis A7 weiter am Slice-Auslöser; A7 verlegt ihn auf die Stufe `repeat`.
+  - **Segmentskripte:** `tools/autopilot/akt1_<segment>.json` spielt ein Segment von seiner Szene aus (`--start=<schlüssel>`); der Schritt „segment“ in `check.sh` verlangt je Segment seine Marken (Beats und Flags, Liste `segments` im Skript). Der Slice-Durchlauf bleibt unverändert.
+  - **A2:** das Gasthaus zum Immer steht in der Mitte der Nordterrasse des Gartens (Spalte 32, Zellen 28–36 mal 3–6 sind fest, die Tür in Zelle 32, 6); innen eine spiegelsymmetrische Halle mit zwei Zimmern. Der Gastwirt macht drei Angebote (Brot, Zimmer, Nacht), jedes frei abzulehnen. Neue Nebenquest „Das Gästebuch“ (2.000 XP, 500 Gold für nichts). Die Spielfigur schläft im Bett; die Szene blendet auf Weiß und zurück (derselbe Morgen).
+  - **Karten:** Innenräume des Akts sind `elysia`-Stil mit gebackenem Boden (`cobble`) und einer flachen Hülle (`inn_shell`) für Wände und Fenster, wie das Haus im Tal; Zoom 1,5 (ADR-045, Nachtrag); die Kamera bleibt in den Räumen (`view.bounds`).
+- **Verworfen:** ein eigener Ordner je Segment (die Orte sind wenige und wiederkehrend); die Segmentskripte in den Slice-Durchlauf zu schreiben (jede Änderung am Slice verschöbe alle Zeiten).
+- **Alte Spielstände:** Ein Slice-Stand (v0.8.4) hat die Heldenquest auf `celebrated`, früher final, jetzt die Stufe vor dem Gasthaus: er lädt ohne Reparatur und die Quest steht wieder offen (das eingefrorene Beispiel `v2_slice_end.json` bleibt unverändert, `test_save_policy` erwartet das neue Bild). Spielstände aus Slice-Builds müssen den Akt nicht überleben (ADR-050).
+- **Konsequenzen:** Jedes weitere Segment trägt Brief, Segmentskript und Marken-Eintrag in `check.sh` im selben Pull Request. Die Nordterrasse hat nun einen Zweck; die Elysianer, die dort gingen, gehen auf Reihe 2.
 

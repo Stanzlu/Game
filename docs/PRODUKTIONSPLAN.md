@@ -392,7 +392,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.5** | Writing-Pass auf den Slice, Tests auf IDs · **erledigt** (ADR-056); Lesefassung `docs/lesefassung/SLICE.md`, Einfrieren wartet auf dein „OK“ | `slice_full.json` grün | Lesefassung des Slice (rund 60 Min) |
 | **P6.6** | T4 Karten-Linter, T5 Elysia-Regler und Konventionen, T11 Kalibrierung · **erledigt** (ADR-055) | der Slice spielt sich unverändert | – |
 | **P6.7** | **(Entscheidungen 1 und 2, OGG, kleine Bilder: erledigt, ADR-057; Props, Figuren und Klänge je Segment)** Grafik und Ton für Akt I: Props im Elysia-Stil für Gasthaus und Markt, OGG, Pixel-Format für kleine Bilder; Sample-Hörprobe nur nach Entscheidung 1 | Kontaktbogen, `check_levels.py` | Kontaktbogen (rund 15 Min) |
-| **P6.8** | A2 Gasthaus | Smoke, Autopilot-Segment, Marken im Log | Lesefassung (rund 20 Min) |
+| **P6.8** | A2 Gasthaus · **gebaut** (ADR-058, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 9 Minuten, das Fest füllt die Lücke) | Smoke, Autopilot-Segment, Marken im Log | Lesefassung (rund 20 Min) |
 | **P6.9** | A3 Markt und Straße | wie P6.8, Leistungstest mit der Menge | Lesefassung, ein Leistungstest |
 | **P6.10** | A5 Spiegelhalle | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
 | **P6.11** | A6 Fest, A7 Wiederholung (zwei PRs) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
