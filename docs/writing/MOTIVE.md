@@ -96,7 +96,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `valley.ending` | Fortschritt | `tal.dialogue` | `tal_scene.gd` | Das Ende des Slice läuft („Zum Meer.“). |
 | `encounter.antreiber_resolved` | Beschützer | `antreiber_encounter.gd` | – | Der Weg des Antreibers ist durch Stehenbleiben aufgelöst. |
 | `house.fire_lit` | Haus | `haus_scene.gd` | `haus.txt`, `tal.txt`, `haus_scene.gd` | Das Feuer brennt. |
-| `house.rested` | Haus | `haus.dialogue` | `haus.dialogue`, `haus_scene.gd` | Am Feuer ausgeruht (Abend). |
+| `house.rested` | Haus | `haus.dialogue` | `haus_scene.gd` | Am Feuer ausgeruht (Abend). |
 | `house.spoon_found` | Haus | `haus.dialogue` | `haus.dialogue` | Den kleinen Löffel gefunden. |
 | `house.shelf_filled` | Haus | `haus.dialogue` | `haus.txt` | Der Löffel steht im Regal. |
 | `house.shelf_stone` | Haus | `haus.dialogue` | `haus.txt` | Der Stein liegt im Regal. |

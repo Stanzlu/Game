@@ -293,7 +293,7 @@ Ein Baum, der schief gewachsen ist. Irgendwann hat er sich nach dem Licht gestre
 # The stepping stones seen from the east bank: the rule is in the moss, for everyone who looks.
 ~ stones
 Steine im Bach. Auf den flachen wächst Moos, die runden glänzen nass. [ID:tal_stones_1]
-Moos wächst nur auf dem, was liegen bleibt. [ID:tal_stones_2]
+Auf den runden hält sich nichts. Nicht mal Moos. [ID:tal_stones_2]
 => END
 
 ~ rift_gone
@@ -349,7 +349,7 @@ Vielleicht weiß sie, wie man hier rüberkommt. [ID:tal_stream_2]
 => END
 
 ~ west_path_done
-Der Weg zum Schuppen. Das Holz hast du schon. Den Weg muss man nicht zweimal gehen. [ID:tal_west_3]
+Der Weg zum Schuppen. Das Holz hast du schon. Der Weg wird dich nicht vermissen. [ID:tal_west_3]
 => END
 
 ~ fell_in
