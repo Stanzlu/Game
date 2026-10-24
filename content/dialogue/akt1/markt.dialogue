@@ -4,6 +4,11 @@
 # Zeilen ohne Sprecher sind Erzählung. Preise stehen in Worten.
 
 ~ gatekeeper
+if WorldState.has_flag("elysia.feast")
+	% Torwächter: Heute feiern wir. Das Tor feiert mit. Es steht noch offener als sonst. [ID:mk_gate_7] [#draft]
+	% Torwächter: Geh nur zum Fest. Ich passe darauf auf, dass es stattfindet. [ID:mk_gate_8] [#draft]
+	% Torwächter: Das Fest ist vom Tor aus am schönsten. Man sieht es zweimal. [ID:mk_gate_9] [#draft]
+	=> END
 if not WorldState.has_flag("elysia.market_greeted")
 	Torwächter: Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. [ID:mk_gate_1] [#draft]
 	Torwächter: Ich bin der Torwächter. Ich passe darauf auf, dass es offen bleibt. Es ist eine ruhige Arbeit. [ID:mk_gate_2] [#draft]
@@ -22,6 +27,9 @@ if WorldState.quest_stage("side_elysia_board") == "bread"
 	Du bekommst einen Laib. Er ist noch warm. Du wirst ihn tragen, und er bleibt es. [ID:mk_baker_2] [#draft]
 	do WorldState.add_item("item_loaf")
 	do WorldState.advance_quest("side_elysia_board", "deliver")
+elif WorldState.has_flag("elysia.feast")
+	% Bäckerin: Für das Fest backe ich alles zweimal. Gegessen wird es trotzdem nur einmal. [ID:mk_baker_6] [#draft]
+	% Bäckerin: Heute gibt es Brot. Wie jeden Tag. Aber festlich. [ID:mk_baker_7] [#draft]
 else
 	% Bäckerin: Frisch gebacken. Von gestern. [ID:mk_baker_3] [#draft]
 	% Bäckerin: Mein Brot hat noch niemand zurückgebracht. Sie essen es auf. Alle. [ID:mk_baker_4] [#draft]
@@ -33,6 +41,9 @@ if WorldState.quest_stage("side_elysia_board") == "deliver" and WorldState.has_i
 	=> tailor_bread
 elif WorldState.quest_stage("side_elysia_board") == "bread"
 	Schneiderin: Ich warte auf Brot. Ich warte gern. Das Warten sitzt mir wie angegossen. [ID:mk_tailor_1] [#draft]
+elif WorldState.has_flag("elysia.feast")
+	% Schneiderin: Für das Fest habe ich allen dasselbe genäht. Es steht allen. [ID:mk_tailor_7] [#draft]
+	% Schneiderin: Ein Fest ist wie ein Anzug. Es passt, ohne dass man es anprobiert hat. [ID:mk_tailor_8] [#draft]
 else
 	% Schneiderin: Ich nähe, was dir passt. Es passt immer. Ich messe nur zur Höflichkeit. [ID:mk_tailor_2] [#draft]
 	% Schneiderin: Rot steht dir. Blau steht dir. Alles steht dir. Das ist das Schwierige an meiner Arbeit. [ID:mk_tailor_3] [#draft]
@@ -55,6 +66,8 @@ else
 	Händler: Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. [ID:mk_shop_1] [#draft]
 	Händler: Es kostet nicht viel. Es kostet nur Gold, und davon hast du reichlich. [ID:mk_shop_3] [#draft]
 	do WorldState.set_flag("elysia.market_shop_seen")
+if WorldState.has_flag("elysia.feast")
+	Händler: Und heute ist alles festlich. Zum selben Preis, aber festlich. [ID:mk_shop_7] [#draft]
 => merchant_wares
 
 ~ merchant_wares
@@ -71,6 +84,10 @@ else
 => END
 
 ~ florist
+if WorldState.has_flag("elysia.feast")
+	% Blumenfrau: Heute binde ich Kränze. Für alle, für jeden dasselbe. [ID:mk_flower_4] [#draft]
+	% Blumenfrau: Ein Fest ohne Blumen ist ein Fest. Mit Blumen ist es meins. [ID:mk_flower_5] [#draft]
+	=> END
 % Blumenfrau: Nimm eine! Sie kosten nichts. Das ist der Preis. [ID:mk_flower_1] [#draft]
 % Blumenfrau: Ich binde jeden Morgen einen Strauß. Am Abend ist er noch frisch. Am nächsten Morgen auch. [ID:mk_flower_2] [#draft]
 % Blumenfrau: Meine Rosen duften nach Rosen. Ich habe lange geübt, dass sie nach nichts anderem duften. [ID:mk_flower_3] [#draft]
@@ -144,4 +161,58 @@ Das Schild sieht aus, als stünde es schon sehr lange da. [ID:mk_hall_2] [#draft
 	do WorldState.set_flag("elysia.hall_open")
 - Morgen wiederkommen. [ID:mk_hall_r2] [#draft]
 	Du gehst. Morgen ist bald. Es ist hier immer bald. [ID:mk_hall_4] [#draft]
+=> END
+
+# Das Fest (A6): der Markt im Festzustand. Der Gastwirt lädt ein, die Festmeisterin hat ein Hoch; das Hoch bringt rund
+# elftausend Erfahrung für das Heben eines Glases (Bible §10: die Belohnung wächst, die Tat schrumpft).
+~ host_feast
+if WorldState.has_flag("elysia.feast_toast")
+	if WorldState.has_flag("elysia.feast_noticed")
+		Gastwirt: Du hast es bemerkt. Das macht nichts. Hier darf man bemerken, so viel man will. [ID:mk_host_5] [#draft]
+	else
+		Gastwirt: Na, wie ist das Fest? Es ist das beste. Es ist immer das beste. [ID:mk_host_4] [#draft]
+	Gastwirt: Du musst heute nicht zurück. Das Fest hat keinen Abend. [ID:mk_host_6] [#draft]
+	=> END
+Gastwirt: Da ist er! Der Held des Tages! Jedes Tages! Komm, komm zum Fest. Ein Platz ist frei. Es ist immer ein Platz frei. [ID:mk_host_1] [#draft]
+Gastwirt: Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie hat jedes Mal ein Hoch. [ID:mk_host_2] [#draft]
+- Ich komme. [ID:mk_host_r1] [#draft]
+	Gastwirt: Wunderbar! Ich sag ihr Bescheid. Ich hab ihr schon Bescheid gesagt. [ID:mk_host_3] [#draft]
+	do WorldState.set_flag("elysia.feast_invited")
+- Ich schau mich nur um. [ID:mk_host_r2] [#draft]
+	Gastwirt: Schau nur, schau nur. Das Fest läuft von selbst. Es läuft schon immer. [ID:mk_host_7] [#draft]
+- … [ID:mk_host_r3] [#draft]
+	Gastwirt: Ein stiller Gast. Die besten Feste haben welche. [ID:mk_host_8] [#draft]
+=> END
+
+~ festmaster
+if WorldState.has_flag("elysia.feast_toast")
+	% Festmeisterin: Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. [ID:mk_fest_9] [#draft]
+	% Festmeisterin: Zweiter Tag, dritter Tag, derselbe Tag. Heute ist der schönste. [ID:mk_fest_10] [#draft]
+	=> END
+if WorldState.has_flag("elysia.feast_invited")
+	Festmeisterin: Der Gastwirt hat dich angekündigt. Er ist sehr zuverlässig. Er sagt immer vorher, was ich nachher sage. [ID:mk_fest_1] [#draft]
+else
+	Festmeisterin: Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. [ID:mk_fest_2] [#draft]
+Festmeisterin: Es fehlt nur noch ein Hoch. Du musst dafür nichts tun. Du hebst das Glas, wir machen den Rest. [ID:mk_fest_3] [#draft]
+- Das Glas heben. [ID:mk_fest_r1] [#draft]
+	=> festmaster_toast
+- Das ist dasselbe Fest wie gestern. [if WorldState.has_facet("perception") /] [ID:mk_fest_r2] [#draft]
+	Festmeisterin: Dasselbe? Nein. Gestern war es kleiner. Heute ist es größer. [ID:mk_fest_4] [#draft]
+	do WorldState.set_flag("elysia.feast_noticed")
+	=> festmaster_toast
+- Später. [ID:mk_fest_r3] [#draft]
+	Festmeisterin: Später ist gut. Später ist hier immer genau jetzt. [ID:mk_fest_5] [#draft]
+=> END
+
+~ festmaster_toast
+Du hebst das Glas. Ganz Elysia hebt seines, im selben Augenblick. [ID:mk_fest_6] [#draft]
+Festmeisterin: Auf den Helden! Auf den Helden! Auf den Helden! [ID:mk_fest_7] [#draft]
+Es klingt dreimal gleich. Die Gläser klingen es auch. [ID:mk_fest_8] [#draft]
+do WorldState.add_xp(11000)
+do WorldState.add_gold(3000)
+do WorldState.set_flag("elysia.feast_toast")
+=> END
+
+~ feast_guest
+Elysianer: Auf den Helden! [ID:mk_guest_1] [#draft]
 => END

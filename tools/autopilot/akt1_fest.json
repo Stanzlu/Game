@@ -1,0 +1,20 @@
+[
+  {"t": 1.0, "flag": "elysia.hall_mirror_seen", "log": "the hall was noticed"},
+  {"t": 1.1, "flag": "elysia.feast", "log": "the market is in its feast state"},
+  {"t": 1.6, "meet": "host_feast", "log": "the host invites"},
+  {"t": 1.8, "press": ["move_up"]},
+  {"t": 1.85, "release": ["move_up"]},
+  {"t": 2.2, "tap": ["interact"]},
+  {"t": 2.8, "dialogue": 6.0},
+  {"t": 10.0, "meet": "festmaster", "log": "the toast"},
+  {"t": 10.2, "press": ["move_up"]},
+  {"t": 10.25, "release": ["move_up"]},
+  {"t": 10.6, "tap": ["interact"]},
+  {"t": 11.2, "dialogue": 8.0},
+  {"t": 20.0, "meet": "feast_guest", "log": "a guest"},
+  {"t": 20.2, "press": ["move_up"]},
+  {"t": 20.25, "release": ["move_up"]},
+  {"t": 20.6, "tap": ["interact"]},
+  {"t": 21.2, "dialogue": 4.0},
+  {"t": 27.0, "log": "segment finished"}
+]

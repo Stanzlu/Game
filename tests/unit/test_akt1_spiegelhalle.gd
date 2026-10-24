@@ -198,7 +198,7 @@ func test_the_hall_is_the_stage_after_the_market() -> void:
 	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the hall is still to come")
 	await _hall()
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "hall")
-	assert_true(WorldState.is_quest_done("main_elysia_hero"), "for now, until the feast")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the feast is the next stage")
 
 
 func test_a_visit_before_the_chest_is_caught_up_by_the_chest() -> void:
@@ -212,3 +212,4 @@ func test_a_visit_before_the_chest_is_caught_up_by_the_chest() -> void:
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await wait_physics_frames(2)
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "hall", "the town, then the hall")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"))
