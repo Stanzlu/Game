@@ -39,6 +39,13 @@ t = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 p = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_poet_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "poet", "face": "s"}}
 o = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_musician_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "musician", "face": "s"}}
 g = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_gatekeeper_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "gatekeeper", "face": "s"}}
+; das Fest (A6): sobald die Halle bemerkt wurde, steht der Markt im Festzustand (elysia.feast): Girlanden, Tafeln, Gäste, die Festmeisterin
+; am Brunnen und der Gastwirt, der einlädt. Alles steht auch hier zweimal, bis auf die beiden in der Mitte.
+Y = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/bunting", "if": "elysia.feast"}}
+T = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/feast_table", "if": "elysia.feast"}}
+E = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "feast_guest", "face": "s", "if": "elysia.feast"}}
+K = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "host_feast", "face": "s", "if": "elysia.feast"}}
+L = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_festmaster_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "festmaster", "face": "s", "if": "elysia.feast"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -54,22 +61,22 @@ hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
 hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
 hhhhhhXXXuXXXhXXXvXXXhhhXXXXXXHXXXXXXhhhXXXvXXXhXXXuXXXhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhMMMMDMMMMhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhccccccccccccccccccccccc2ccccccccccccccccccccccchhhhhhh
+hhhhhhhcccccccccYccccccccccccc2cccccccccccccYccccccccchhhhhhh
 hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
 hhhhhcccccccccccccccccccccccccJccccccccccccccccccccccccchhhhh
 hhhhccccccccocccccccqcccccccccccccccccccqcccccccocccccccchhhh
-hhhhccccccccccccccccBcccccccccccccccccccBcccccccccccccccchhhh
+hhhhccccccccccccccccBcccccccccLcccccccccBcccccccccccccccchhhh
 hhhhccccccccccccccccccccccpcccccccpcccccccccccccccccccccchhhh
 hhhhcccccccccccccccccccccccccMMMccccccccccccccccccccccccchhhh
 hhhhccccccccccccccccccccccccMMMMMcccccccccccccccccccccccchhhh
 hhhhccccccccccccwccccccccccMMMFMMMccccccccccwcccccccccccchhhh
-hhhhccccccccccccmcccccccccccMMMMMcccccccccccmcccccccccccchhhh
-hhhhcccccccccccccccccccccccccMMMccccccccccccccccccccccccchhhh
+hhhhccccccccccccmcccccccTcccMMMMMcccTcccccccmcccccccccccchhhh
+hhhhcccccccccccccccccEcccccccMMMcccccccEccccccccccccccccchhhh
 hhhhccccccccccccccccccccccncccccccncccccccccccccccccccccchhhh
-hhhhccccccccccccccccccccccccccccccccccccccccccccccccccccchhhh
+hhhhcccccccccccccccccccccEccccKccccEccccccccccccccccccccchhhh
 hhhhcccccckccccccccccczccccccc@ccccccczccccccccccckcccccchhhh
-hhhhhcccccfccccccccccctccccccccccccccctcccccccccccfccccchhhhh
-hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
+hhhhhcccccfccccccccccctcccTcccccccTccctcccccccccccfccccchhhhh
+hhhhhhlcccccccccccccccYcccccccccccccccYccccccccccccccclhhhhhh
 hhhhhhhccccccccccccccccccccgcccccgcccccccccccccccccccchhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhccccchhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc1cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
