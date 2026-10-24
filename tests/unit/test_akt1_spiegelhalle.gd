@@ -1,8 +1,8 @@
 extends GutTest
-## Act I, segment A5: the hall of mirrors. Three rooms in which everything stands twice, almost; the gate of
-## a room opens when the hero has noticed what lies on one side only (Perception, Game Bible §16), the
-## keeper helps as often as he is asked, the last room has a mirror that does not show the hero, and
-## nothing here can be failed.
+## Act I, segment A5: the hall of mirrors. Three rooms in which everything stands twice, almost;
+## the gate of a room opens when the hero has noticed what lies on one side only (Perception, Game
+## Bible §16), the keeper helps as often as he is asked, the last room has a mirror that does not
+## show the hero, and nothing here can be failed.
 
 const HALL := preload("res://world/levels/akt1/spiegelhalle.tscn")
 const MARKT := preload("res://world/levels/akt1/markt.tscn")

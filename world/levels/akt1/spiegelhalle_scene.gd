@@ -1,10 +1,10 @@
 class_name SpiegelhalleScene
 extends LookScene
-## The hall of mirrors from inside (Act I, segment A5, docs/akt1/REGIONSBRIEFE.md): three rooms in which
-## everything stands twice, almost. The gate of a room opens when the hero has noticed what lies on
-## one side only (Perception, Game Bible §16); the last room has a mirror that shows the hall and not
-## the hero. Story state lives in WorldState flags; this script only stages what the flags say: the
-## beats, the gates' sound and the hero's quest stage.
+## The hall of mirrors from inside (Act I, segment A5, docs/akt1/REGIONSBRIEFE.md): three rooms in
+## which everything stands twice, almost. The gate of a room opens when the hero has noticed what
+## lies on one side only (Perception, Game Bible §16); the last room has a mirror that shows the
+## hall and not the hero. Story state lives in WorldState flags; this script only stages what the
+## flags say: the beats, the gates' sound and the hero's quest stage.
 
 ## The rooms (cells): the camera stays inside, not over the void around them.
 const ROOMS := Rect2i(3, 3, 27, 39)
