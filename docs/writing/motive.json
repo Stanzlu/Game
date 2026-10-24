@@ -281,9 +281,29 @@
     {
      "type": "flag",
      "ref": "elysia.host_warned"
+    },
+    {
+     "type": "line",
+     "ref": "gh_room_3"
+    },
+    {
+     "type": "line",
+     "ref": "gh_slept_2"
+    },
+    {
+     "type": "line",
+     "ref": "gh_slept_4"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.inn_declined"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.inn_stayed"
     }
    ],
-   "payoff": "Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit.",
+   "payoff": "Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`).",
    "payoff_lines": [
     "haus_rest_7"
    ]
@@ -807,6 +827,51 @@
    "flag": "house.mira_left",
    "axis": "Mira",
    "meaning": "Mira ist wieder gegangen."
+  },
+  {
+   "flag": "elysia.inn_met",
+   "axis": "Fortschritt",
+   "meaning": "Die Spielerin hat den Gastwirt im Gasthaus zum Immer getroffen (Stufe „inn“ der Heldenquest)."
+  },
+  {
+   "flag": "elysia.inn_fed",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat das Brot gegessen, das schon da war."
+  },
+  {
+   "flag": "elysia.inn_room",
+   "axis": "Beschützer",
+   "meaning": "Sie hat das Zimmer angenommen; beide Türen stehen offen."
+  },
+  {
+   "flag": "elysia.inn_declined",
+   "axis": "Beschützer",
+   "meaning": "Sie hat das Zimmer abgelehnt („Ich muss weiter.“); der Gastwirt fragt freundlich noch einmal."
+  },
+  {
+   "flag": "elysia.inn_sleeping",
+   "axis": "Fortschritt",
+   "meaning": "Auslöser der Nacht im Bett (die Szene blendet auf Weiß und zurück); danach gelöscht."
+  },
+  {
+   "flag": "elysia.inn_slept",
+   "axis": "Beschützer",
+   "meaning": "Sie hat im Gasthaus geschlafen und denselben Morgen noch einmal erlebt."
+  },
+  {
+   "flag": "elysia.inn_stayed",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Gastwirt gesagt, dass sie noch bleibt (das dritte Angebot, angenommen)."
+  },
+  {
+   "flag": "elysia.inn_book_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im Gästebuch gesehen, dass ihr Name auf jeder Seite steht, in fremder Schrift."
+  },
+  {
+   "flag": "elysia.inn_book_signed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat sich unter ihren Namen eingetragen (die Nebenquest „Das Gästebuch“)."
   }
  ]
 }
