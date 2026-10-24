@@ -11,6 +11,7 @@ h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
 c = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
 M = {"atlas": [3, 0], "surface": "stone", "paint": "marble"}
 % = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+; Startpunkt für neues Spiel und Leistungstest: auf dem Platz, nicht vor dem Tor (der Leistungstest läuft nach unten und träte sonst durch das Tor)
 @ = {"ground": "c", "marker": "player_spawn"}
 1 = {"ground": "c", "marker": "spawn_garden"}
 ; das Tor in der Südmauer: wer in den Durchgang tritt, geht die Treppe hinauf in den Garten
@@ -63,11 +64,11 @@ hhhhccccccccccccmcccccccccccMMMMMcccccccccccmcccccccccccchhhh
 hhhhcccccccccccccccccccccccccMMMccccccccccccccccccccccccchhhh
 hhhhccccccccccccccccccccccncccccccncccccccccccccccccccccchhhh
 hhhhccccccccccccccccccccccccccccccccccccccccccccccccccccchhhh
-hhhhcccccckccccccccccczccccccccccccccczccccccccccckcccccchhhh
+hhhhcccccckccccccccccczccccccc@ccccccczccccccccccckcccccchhhh
 hhhhhcccccfccccccccccctccccccccccccccctcccccccccccfccccchhhhh
 hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
 hhhhhhhccccccccccccccccccccgcccccgcccccccccccccccccccchhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc@cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhccccchhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc1cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX

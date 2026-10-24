@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://lbl4f0dtsiek"
+path="res://.godot/imported/markt.dialogue-ce59da3e622c7c917a7afb39b7dec038.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt1/markt.dialogue"
+dest_files=["res://.godot/imported/markt.dialogue-ce59da3e622c7c917a7afb39b7dec038.tres"]
+
+[params]
+
+defaults=true

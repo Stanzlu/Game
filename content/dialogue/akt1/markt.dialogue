@@ -1,0 +1,137 @@
+# Der Markt von Elysia, Akt I, Segment A3 (docs/akt1/REGIONSBRIEFE.md).
+# Alle stehen zweimal da, links und rechts vom Brunnen, und sagen dasselbe, wortgleich (Game Bible §9).
+# Wer hier arbeitet, ist freundlich und nie fertig; die Tafel verteilt Aufgaben, die sich vor einem lösen.
+# Zeilen ohne Sprecher sind Erzählung. Preise stehen in Worten.
+
+~ gatekeeper
+if not WorldState.has_flag("elysia.market_greeted")
+	Torwächter: Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. [ID:mk_gate_1] [#draft]
+	Torwächter: Ich bin der Torwächter. Ich passe darauf auf, dass es offen bleibt. Es ist eine ruhige Arbeit. [ID:mk_gate_2] [#draft]
+	Torwächter: Der Markt liegt vor dir. Die Halle der Spiegel öffnet morgen. Morgen ist bald. [ID:mk_gate_3] [#draft]
+	do WorldState.set_flag("elysia.market_greeted")
+	do WorldState.add_xp(150)
+else
+	% Torwächter: Das Tor ist offen. Wie immer. [ID:mk_gate_4] [#draft]
+	% Torwächter: Zurück zum Garten geht es die Treppe hinauf. Du kennst sie. [ID:mk_gate_5] [#draft]
+	% Torwächter: Gutes Wetter heute. Heute ist hier jeden Tag gutes Wetter. [ID:mk_gate_6] [#draft]
+=> END
+
+~ baker
+if WorldState.quest_stage("side_elysia_board") == "bread"
+	Bäckerin: Das Brot für die Schneiderin! Es ist fertig. Es ist immer fertig, wenn jemand danach fragt. [ID:mk_baker_1] [#draft]
+	Du bekommst einen Laib. Er ist noch warm. Du wirst ihn tragen, und er bleibt es. [ID:mk_baker_2] [#draft]
+	do WorldState.add_item("item_loaf")
+	do WorldState.advance_quest("side_elysia_board", "deliver")
+else
+	% Bäckerin: Frisch gebacken. Von gestern. [ID:mk_baker_3] [#draft]
+	% Bäckerin: Mein Brot hat noch niemand zurückgebracht. Sie essen es auf. Alle. [ID:mk_baker_4] [#draft]
+	% Bäckerin: Der Teig geht von selbst auf. Ich schaue ihm nur zu. [ID:mk_baker_5] [#draft]
+=> END
+
+~ tailor
+if WorldState.quest_stage("side_elysia_board") == "deliver" and WorldState.has_item("item_loaf")
+	=> tailor_bread
+elif WorldState.quest_stage("side_elysia_board") == "bread"
+	Schneiderin: Ich warte auf Brot. Ich warte gern. Das Warten sitzt mir wie angegossen. [ID:mk_tailor_1] [#draft]
+else
+	% Schneiderin: Ich nähe, was dir passt. Es passt immer. Ich messe nur zur Höflichkeit. [ID:mk_tailor_2] [#draft]
+	% Schneiderin: Rot steht dir. Blau steht dir. Alles steht dir. Das ist das Schwierige an meiner Arbeit. [ID:mk_tailor_3] [#draft]
+	% Schneiderin: Zwei Ärmel, zwei Beine, zwei Taschen. Ich mache nie etwas allein. [ID:mk_tailor_4] [#draft]
+=> END
+
+~ tailor_bread
+Schneiderin: Mein Brot! Das habe ich gestern schon bekommen. Danke trotzdem. Zweimal schmeckt es besser. [ID:mk_tailor_5] [#draft]
+Schneiderin: Hier ist dein Lohn. Er war schon für dich abgezählt. [ID:mk_tailor_6] [#draft]
+do WorldState.remove_item("item_loaf")
+do WorldState.advance_quest("side_elysia_board", "done")
+do WorldState.add_xp(3000)
+do WorldState.add_gold(800)
+=> END
+
+~ merchant
+if WorldState.has_flag("elysia.market_shop_seen")
+	Händler: Na? Wieder da? Schau dir an, was da ist. Es ist immer da. [ID:mk_shop_2] [#draft]
+else
+	Händler: Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. [ID:mk_shop_1] [#draft]
+	Händler: Es kostet nicht viel. Es kostet nur Gold, und davon hast du reichlich. [ID:mk_shop_3] [#draft]
+	do WorldState.set_flag("elysia.market_shop_seen")
+=> merchant_wares
+
+~ merchant_wares
+- Ein Kompliment, zehn Gold. [if WorldState.gold() >= 10 and not WorldState.has_item("item_compliment") /] [ID:mk_shop_r1] [#draft]
+	Händler: Ein Kompliment! Das Schönste, was ich habe. Ich habe nur das eine, aber das ist sehr schön. [ID:mk_shop_4] [#draft]
+	do WorldState.spend_gold(10)
+	do WorldState.add_item("item_compliment")
+- Den Glücksbringer, hundertfünfzig Gold. [if WorldState.gold() >= 150 and not WorldState.has_item("item_trinket") /] [ID:mk_shop_r2] [#draft]
+	Händler: Der Glücksbringer! Er bringt Glück. Welches, steht nicht drauf. [ID:mk_shop_5] [#draft]
+	do WorldState.spend_gold(150)
+	do WorldState.add_item("item_trinket")
+- Ich schaue nur. [ID:mk_shop_r3] [#draft]
+	Händler: Schau nur, schau nur. Schauen ist bei mir umsonst. Alles andere auch, aber das sage ich nicht laut. [ID:mk_shop_6] [#draft]
+=> END
+
+~ florist
+% Blumenfrau: Nimm eine! Sie kosten nichts. Das ist der Preis. [ID:mk_flower_1] [#draft]
+% Blumenfrau: Ich binde jeden Morgen einen Strauß. Am Abend ist er noch frisch. Am nächsten Morgen auch. [ID:mk_flower_2] [#draft]
+% Blumenfrau: Meine Rosen duften nach Rosen. Ich habe lange geübt, dass sie nach nichts anderem duften. [ID:mk_flower_3] [#draft]
+=> END
+
+~ poet
+Dichter: Hör zu, ich habe es gerade fertig. [ID:mk_poet_1] [#draft]
+Dichter: Der Tag ist schön, der Himmel blau, der Brunnen klar, die Luft ist lau. [ID:mk_poet_2] [#draft]
+- Wunderbar. [ID:mk_poet_r1] [#draft]
+	Dichter: Nicht wahr? Morgen schreibe ich es noch einmal. Dann wird es noch besser. [ID:mk_poet_3] [#draft]
+- Gibt es auch eines über etwas anderes? [ID:mk_poet_r2] [#draft]
+	Dichter: Über etwas anderes? … [ID:mk_poet_4] [#draft]
+	Dichter: Der Tag ist schön, der Himmel blau. Nein. Das war es schon. Das reicht doch auch. [ID:mk_poet_5] [#draft]
+- … [ID:mk_poet_r3] [#draft]
+	Dichter: Du bist sprachlos. Das ist das beste Reimwort, das es gibt. [ID:mk_poet_6] [#draft]
+=> END
+
+~ musician
+if WorldState.has_flag("melody.elysia_perfect")
+	Musikerin: Gefällt sie dir noch? Ich spiele sie, bis du gehst. Und danach. [ID:mk_music_5] [#draft]
+	=> END
+Musikerin: Hör zu. Das ist die schönste Melodie der Stadt. Sie ist auch die einzige. [ID:mk_music_1] [#draft]
+Musikerin: Sie hat keine Fehler. Ich habe nachgezählt. Es sind keine da. [ID:mk_music_2] [#draft]
+- Zuhören. [ID:mk_music_r1] [#draft]
+	Du hörst zu. Sie geht auf, sie geht zu, sie geht wieder auf. Genau so, wie sie soll. [ID:mk_music_3] [#draft]
+	Musikerin: Siehst du? Perfekt. Ich bringe sie dir bei, wenn du willst. Du kannst sie schon. [ID:mk_music_4] [#draft]
+	do WorldState.set_flag("melody.elysia_perfect")
+	do WorldState.add_xp(1000)
+- Weitergehen. [ID:mk_music_r2] [#draft]
+	Musikerin: Sie spielt auch, wenn du gehst. [ID:mk_music_6] [#draft]
+- … [ID:mk_music_r3] [#draft]
+	Musikerin: Ein Kenner. Er hört mit dem ganzen Gesicht. [ID:mk_music_7] [#draft]
+=> END
+
+~ board
+if WorldState.is_quest_done("side_elysia_board")
+	Alle Zettel sind abgehakt. Darunter hängen neue, genau wie die alten. [ID:mk_board_8] [#draft]
+	=> END
+elif WorldState.is_quest_active("side_elysia_board")
+	Der Auftrag hängt noch. Brot, Bäckerin, Schneiderin. Der Rest ist Weg. [ID:mk_board_7] [#draft]
+	=> END
+Eine Tafel voller Zettel in schöner Schrift. [ID:mk_board_1] [#draft]
+Zu verschenken, ein Nachmittag. Einer von vielen. [ID:mk_board_2] [#draft]
+Der Chor probt heute Abend. Er probt jeden Abend. Er ist sehr gut. [ID:mk_board_3] [#draft]
+Hinweis, das Fest findet statt. Es ist das Fest von gestern. Es ist das Fest von morgen. [ID:mk_board_4] [#draft]
+Gesucht, ein Held. Aufgabe, Brot von der Bäckerin zur Schneiderin tragen. Lohn, Ruhm. Und mehr. [ID:mk_board_5] [#draft]
+- Den Auftrag annehmen. [ID:mk_board_r1] [#draft]
+	Du nimmst den Zettel ab. Er hängt sofort wieder da. [ID:mk_board_6] [#draft]
+	do WorldState.start_quest("side_elysia_board")
+- Später. [ID:mk_board_r2] [#draft]
+=> END
+
+~ fountain
+Der Brunnen plätschert. Das Wasser im Becken rechts ist dasselbe Wasser wie links. Es fließt nur in zwei Richtungen. [ID:mk_fountain_1] [#draft]
+- Eine Münze hineinwerfen, zehn Gold. [if WorldState.gold() >= 10 /] [ID:mk_fountain_r1] [#draft]
+	Die Münze sinkt. Du wünschst dir etwas. Es geht in Erfüllung, noch bevor du fertig bist. [ID:mk_fountain_2] [#draft]
+	do WorldState.spend_gold(10)
+- Weitergehen. [ID:mk_fountain_r2] [#draft]
+=> END
+
+~ hall_door
+Die Türen der Halle der Spiegel sind verschlossen. Auf einem Schild steht in goldener Schrift, geöffnet ab morgen. [ID:mk_hall_1] [#draft]
+Das Schild sieht aus, als stünde es schon sehr lange da. [ID:mk_hall_2] [#draft]
+=> END

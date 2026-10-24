@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt1/markt_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+[ext_resource type="AudioStream" path="res://assets/generated/audio/garden_loop.wav" id="3_amb"]
+
+[node name="Markt" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/markt.txt"
+player_sheet = ExtResource("2_sheet")
+cloud_shadows = 0.12
+sky_top = Color(0.4, 0.64, 0.9, 1)
+sky_bottom = Color(0.7, 0.85, 0.97, 1)
+sky_parallax = 0.0
+petals = true
+motes = true
+ambience = ExtResource("3_amb")
+ambience_db = -20.0
+music = "elysia"
+saturation = 1.06
+contrast = 1.03
+brightness = -0.02
+tint = Color(1.03, 1.0, 0.96, 1)
+shadow_tint = Color(0.03, 0.02, 0.07, 1)
+vignette = 0.28
+bloom = 0.15
