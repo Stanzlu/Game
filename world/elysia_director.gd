@@ -74,14 +74,18 @@ func _ready() -> void:
 	if WorldState.has_flag(LOOPS_FLAG) and _loops_time < 0.0:
 		# the start of the loops is not saved: after a load the wait starts again
 		_loops_time = WorldState.state.playtime_seconds
+		# a save from the repetition before the trail existed (A7): the hum begins now
+		WorldState.start_quest("main_elysia_trail")
 	_update_stages()
 
 
-## The sentences start repeating: the hero raised the glass at the feast.
+## The sentences start repeating: the hero raised the glass at the feast. Somewhere someone
+## hums, and with it the child's trail begins (main_elysia_trail, A8).
 func begin_loops() -> void:
 	if not WorldState.has_flag(LOOPS_FLAG):
 		WorldState.set_flag(LOOPS_FLAG)
 		Beat.mark("irritation")
+	WorldState.start_quest("main_elysia_trail")
 
 
 func _process(_delta: float) -> void:
@@ -134,3 +138,4 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	elif id == RIFT_FLAG and value:
 		# found by the child or by the clock, in whichever scene the hero is
 		Beat.mark("rift_found")
+		WorldState.advance_quest("main_elysia_trail", "rift")

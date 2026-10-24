@@ -168,6 +168,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			Beat.mark("stone")
 		"elysia.child_met":
 			Beat.mark("child")
+		"melody.child_hum":
+			Beat.mark("child_melody")
 		"elysia.child_vanished":
 			_child_vanishes()
 

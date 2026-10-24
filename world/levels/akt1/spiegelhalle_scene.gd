@@ -43,6 +43,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		"elysia.hall_room_2":
 			_gate_opens()
 			Beat.mark("hall_room_2")
+		"fragment.empty_room":
+			Beat.mark("trail_room")
 		"elysia.hall_mirror_seen":
 			Beat.mark("hall_mirror")
 			if WorldState.has_facet("perception"):
