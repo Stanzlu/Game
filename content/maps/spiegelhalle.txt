@@ -28,6 +28,8 @@ f = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; was nur auf einer Seite liegt: ein trockenes Blatt links, eine Feder rechts (ohne Zwilling, MapLint.SINGLE_CUES)
 a = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/odd_leaf", "cue": "leaf", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 16, "unless": "elysia.hall_leaf_taken"}}
 b = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/odd_feather", "cue": "feather", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 16, "unless": "elysia.hall_feather_taken"}}
+; die Spur des Kindes (A8): vor dem großen Spiegel, wenn Elysia sich wiederholt (Einzelstück: das Kind hat keinen Zwilling)
+c = {"ground": "M", "prop": "res://entities/npc/child_guide.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/akt1/kind.dialogue", "cue": "child_room", "glance": true, "if": "elysia.loops", "unless": "fragment.empty_room"}}
 [map]
 ################S################
 #################################
@@ -37,7 +39,7 @@ b = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ########WWWWWWWWXWWWWWWWW########
 ########WMMfMMMMMMMMMfMMW########
 ########WMMMlMMMMMMMlMMMW########
-########WMIMMMMMMMMMMMIMW########
+########WMIMMMcMMMMMMMIMW########
 ########WMMMMMMMMMMMMMMMW########
 ########WMMMMCMMMMMCMMMMW########
 ########WMIMMMMMMMMMMMIMW########

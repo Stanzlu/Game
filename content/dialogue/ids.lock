@@ -9,6 +9,7 @@ el_basin_again	slice/elysia.dialogue	-
 el_child_1	slice/elysia.dialogue	-
 el_child_2	slice/elysia.dialogue	-
 el_child_3	slice/elysia.dialogue	-
+el_child_4	slice/elysia.dialogue	-
 el_crystal_1	slice/elysia.dialogue	-
 el_favor_1	slice/elysia.dialogue	-
 el_favor_2	slice/elysia.dialogue	-
@@ -285,6 +286,18 @@ haus_table_4	slice/haus.dialogue	-
 haus_window_1	slice/haus.dialogue	-
 haus_window_2	slice/haus.dialogue	-
 haus_window_3	slice/haus.dialogue	-
+kd_door_1	akt1/kind.dialogue	-
+kd_door_2	akt1/kind.dialogue	-
+kd_door_3	akt1/kind.dialogue	-
+kd_door_4	akt1/kind.dialogue	-
+kd_hall_1	akt1/kind.dialogue	-
+kd_hall_2	akt1/kind.dialogue	-
+kd_hall_3	akt1/kind.dialogue	-
+kd_hall_4	akt1/kind.dialogue	-
+kd_room_1	akt1/kind.dialogue	-
+kd_room_2	akt1/kind.dialogue	-
+kd_room_3	akt1/kind.dialogue	-
+kd_room_4	akt1/kind.dialogue	-
 mk_baker_1	akt1/markt.dialogue	-
 mk_baker_2	akt1/markt.dialogue	-
 mk_baker_3	akt1/markt.dialogue	-

@@ -31,6 +31,8 @@ r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_bed", "cue": "bed", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 26}}
 ; die Tür zurück in den Garten (an der Nordseite der Wiese, Spalte 32)
 D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": "elysia", "spawn": "inn", "auto": true, "sound": "door_close"}}
+; die Spur des Kindes (A8): vor der Tür hinter dem Tresen, wenn Elysia sich wiederholt
+k = {"ground": "M", "prop": "res://entities/npc/child_guide.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/akt1/kind.dialogue", "cue": "child_door", "glance": true, "if": "elysia.loops", "unless": "fragment.closed_door"}}
 [map]
 #########################################
 #########################################
@@ -40,7 +42,7 @@ D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": 
 ######WWWWWWWWWWWWWWWWWWWWWWWWWWWWW######
 ######WWWWWWWWWWWWWWcWWWWWWWWWWWWWW######
 ######WWWWWWwWWWWWyWWWyWWWWWwWWWWWW######
-######WMMKMMMMMMMMMMhMMMMMMMMMMKMMW######
+######WMMKMMMMMMMkMMhMMMMMMMMMMKMMW######
 WWWWWWWMMMMMMMMMMMMMbMMMMMMMMMMMMMWWWWWWW
 WWWWWWWMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWWWW
 W_____WMMMMMMTEMMMMMMMMMMMeTMMMMMMW_____W

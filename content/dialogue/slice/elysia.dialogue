@@ -155,6 +155,8 @@ Elysianer: {{WorldState.player_name()}}! Kann ich irgendwas für dich tun? Irgen
 ~ child
 if WorldState.has_flag("elysia.child_met")
 	Kind: Hörst du das? [ID:el_child_3]
+	Es ist die Melodie, der du gefolgt bist. Du kannst sie jetzt. [ID:el_child_4] [#draft]
+	do WorldState.set_flag("melody.child_hum")
 	do WorldState.set_flag("elysia.child_vanished")
 else
 	Das Kind schaut ins Wasser. Aus dem Wasser schaut ein Kind zurück. [ID:el_child_1]
