@@ -1,0 +1,74 @@
+; Akt I, Segment A3: der Markt von Elysia (docs/akt1/REGIONSBRIEFE.md). Die Halle der Spiegel im Norden, vier Häuser, der
+; Platz mit dem Brunnen, den Ständen und der Auftragstafel, im Süden die Mauer mit dem Tor. Spiegelsymmetrisch um Spalte 30
+; (Game Bible §9): alles steht zweimal, auch die, die hier arbeiten. Boden und Mauer bäckt tools/art/bake_ground.py.
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/markt_ground.png"
+symmetry = 30
+[legend]
+X = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+c = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+M = {"atlas": [3, 0], "surface": "stone", "paint": "marble"}
+% = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+@ = {"ground": "c", "marker": "player_spawn"}
+1 = {"ground": "c", "marker": "spawn_garden"}
+; das Tor in der Südmauer: wer in den Durchgang tritt, geht die Treppe hinauf in den Garten
+a = {"ground": "c", "prop": "res://world/props/door.tscn", "params": {"target": "elysia", "spawn": "markt", "auto": true, "size": [5, 1]}}
+; die Halle der Spiegel (A5): bis dahin sind die Türen zu
+H = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_front", "cue": "hall_door", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 28, "unless": "elysia.hall_open"}}
+J = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/job_board", "cue": "board", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 24}}
+F = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/fountain", "cue": "fountain", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "radius": 34}}
+u = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/town_house_bloom"}}
+v = {"ground": "X", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/town_house_bread"}}
+q = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/stall_bread"}}
+w = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/stall_wares"}}
+k = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/stall_bloom"}}
+z = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/stall_cloth"}}
+l = {"ground": "c", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lantern"}}
+n = {"ground": "c", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
+; wer hier steht, hat einen Spiegelzwilling auf der anderen Seite des Platzes: gleiche Zeile, gleiche Haltung
+B = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_baker_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "baker", "face": "s"}}
+m = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_merchant_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "merchant", "face": "s"}}
+f = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_florist_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "florist", "face": "s"}}
+t = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tailor_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "tailor", "face": "s"}}
+p = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_poet_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "poet", "face": "s"}}
+o = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_musician_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "musician", "face": "s"}}
+g = {"ground": "c", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_gatekeeper_look.tres", "dialogue": "res://content/dialogue/akt1/markt.dialogue", "cue": "gatekeeper", "face": "s"}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhXXXXXXXXXXXXXhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhXXXXXXXXXXXXXhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
+hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
+hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
+hhhhhhXXXXXXXhXXXXXXXhhhXXXXXXXXXXXXXhhhXXXXXXXhXXXXXXXhhhhhh
+hhhhhhXXXuXXXhXXXvXXXhhhXXXXXXHXXXXXXhhhXXXvXXXhXXXuXXXhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhMMMMMMMMMhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhccccccccccccccccccccccccccccccccccccccccccccccchhhhhhh
+hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
+hhhhhcccccccccccccccccccccccccJccccccccccccccccccccccccchhhhh
+hhhhccccccccocccccccqcccccccccccccccccccqcccccccocccccccchhhh
+hhhhccccccccccccccccBcccccccccccccccccccBcccccccccccccccchhhh
+hhhhccccccccccccccccccccccpcccccccpcccccccccccccccccccccchhhh
+hhhhcccccccccccccccccccccccccMMMccccccccccccccccccccccccchhhh
+hhhhccccccccccccccccccccccccMMMMMcccccccccccccccccccccccchhhh
+hhhhccccccccccccwccccccccccMMMFMMMccccccccccwcccccccccccchhhh
+hhhhccccccccccccmcccccccccccMMMMMcccccccccccmcccccccccccchhhh
+hhhhcccccccccccccccccccccccccMMMccccccccccccccccccccccccchhhh
+hhhhccccccccccccccccccccccncccccccncccccccccccccccccccccchhhh
+hhhhccccccccccccccccccccccccccccccccccccccccccccccccccccchhhh
+hhhhcccccckccccccccccczccccccccccccccczccccccccccckcccccchhhh
+hhhhhcccccfccccccccccctccccccccccccccctcccccccccccfccccchhhhh
+hhhhhhlccccccccccccccccccccccccccccccccccccccccccccccclhhhhhh
+hhhhhhhccccccccccccccccccccgcccccgcccccccccccccccccccchhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc@cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhcc1cchhhhhhhhhhhhhhhhhhhhhhhhhhhh
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXcccccXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%ccacc%%%%%%%%%%%%%%%%%%%%%%%%%%%%
