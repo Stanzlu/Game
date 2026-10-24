@@ -53,8 +53,11 @@ elif WorldState.quest_stage("side_elysia_butterflies") == "return"
 	Gärtnerin: Ach, und der Brunnen am Becken. Er plätschert ein kleines bisschen zu leise. Schaust du nach? [ID:el_gard_ret_6]
 	do WorldState.start_quest("side_elysia_fountain")
 elif WorldState.is_quest_active("side_elysia_butterflies")
-	% Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_wait_1]
-	% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Immer im selben. [ID:el_gard_wait_2]
+	if WorldState.has_flag("elysia.loops")
+		Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_loop] [#draft]
+	else
+		% Gärtnerin: Hast du sie schon? Nein? Macht nichts. Du schaffst das. Du schaffst alles. [ID:el_gard_wait_1]
+		% Gärtnerin: Sie fliegen über dem Garten. Immer im Kreis. Immer im selben. [ID:el_gard_wait_2]
 else
 	Gärtnerin: {{WorldState.player_name()}}! Dem Himmel sei Dank. Oder dir. Eher dir. [ID:el_gard_1]
 	Gärtnerin: Meine drei goldenen Schmetterlinge sind entwischt. Sie fliegen immer dieselben Runden, weißt du. Nur jetzt eben woanders. [ID:el_gard_2]

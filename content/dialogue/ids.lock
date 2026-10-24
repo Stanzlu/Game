@@ -31,6 +31,7 @@ el_gard_4	slice/elysia.dialogue	-
 el_gard_5	slice/elysia.dialogue	-
 el_gard_done_1	slice/elysia.dialogue	-
 el_gard_done_2	slice/elysia.dialogue	-
+el_gard_loop	slice/elysia.dialogue	-
 el_gard_r1	slice/elysia.dialogue	-
 el_gard_r2	slice/elysia.dialogue	-
 el_gard_r3	slice/elysia.dialogue	-
@@ -118,6 +119,8 @@ gh_host_3	akt1/gasthaus.dialogue	-
 gh_host_4	akt1/gasthaus.dialogue	-
 gh_host_5	akt1/gasthaus.dialogue	-
 gh_host_6	akt1/gasthaus.dialogue	-
+gh_host_loop_1	akt1/gasthaus.dialogue	-
+gh_host_loop_2	akt1/gasthaus.dialogue	-
 gh_host_r1	akt1/gasthaus.dialogue	-
 gh_host_r2	akt1/gasthaus.dialogue	-
 gh_host_r3	akt1/gasthaus.dialogue	-
@@ -289,6 +292,7 @@ mk_baker_4	akt1/markt.dialogue	-
 mk_baker_5	akt1/markt.dialogue	-
 mk_baker_6	akt1/markt.dialogue	-
 mk_baker_7	akt1/markt.dialogue	-
+mk_baker_8	akt1/markt.dialogue	-
 mk_board_1	akt1/markt.dialogue	-
 mk_board_2	akt1/markt.dialogue	-
 mk_board_3	akt1/markt.dialogue	-
@@ -300,7 +304,6 @@ mk_board_8	akt1/markt.dialogue	-
 mk_board_r1	akt1/markt.dialogue	-
 mk_board_r2	akt1/markt.dialogue	-
 mk_fest_1	akt1/markt.dialogue	-
-mk_fest_10	akt1/markt.dialogue	-
 mk_fest_2	akt1/markt.dialogue	-
 mk_fest_3	akt1/markt.dialogue	-
 mk_fest_4	akt1/markt.dialogue	-
@@ -317,11 +320,13 @@ mk_flower_2	akt1/markt.dialogue	-
 mk_flower_3	akt1/markt.dialogue	-
 mk_flower_4	akt1/markt.dialogue	-
 mk_flower_5	akt1/markt.dialogue	-
+mk_flower_6	akt1/markt.dialogue	-
 mk_fountain_1	akt1/markt.dialogue	-
 mk_fountain_2	akt1/markt.dialogue	-
 mk_fountain_r1	akt1/markt.dialogue	-
 mk_fountain_r2	akt1/markt.dialogue	-
 mk_gate_1	akt1/markt.dialogue	-
+mk_gate_10	akt1/markt.dialogue	-
 mk_gate_2	akt1/markt.dialogue	-
 mk_gate_3	akt1/markt.dialogue	-
 mk_gate_4	akt1/markt.dialogue	-
@@ -377,6 +382,7 @@ mk_shop_4	akt1/markt.dialogue	-
 mk_shop_5	akt1/markt.dialogue	-
 mk_shop_6	akt1/markt.dialogue	-
 mk_shop_7	akt1/markt.dialogue	-
+mk_shop_8	akt1/markt.dialogue	-
 mk_shop_r1	akt1/markt.dialogue	-
 mk_shop_r2	akt1/markt.dialogue	-
 mk_shop_r3	akt1/markt.dialogue	-
@@ -388,6 +394,7 @@ mk_tailor_5	akt1/markt.dialogue	-
 mk_tailor_6	akt1/markt.dialogue	-
 mk_tailor_7	akt1/markt.dialogue	-
 mk_tailor_8	akt1/markt.dialogue	-
+mk_tailor_9	akt1/markt.dialogue	-
 sh_feather_1	akt1/spiegelhalle.dialogue	-
 sh_feather_2	akt1/spiegelhalle.dialogue	-
 sh_feather_3	akt1/spiegelhalle.dialogue	-
@@ -666,3 +673,4 @@ tal_wood_2	slice/tal.dialogue	-
 tal_wood_3	slice/tal.dialogue	-
 retired	gh_bar_1	der Tresen hat keine Zeile: der Wirt steht dahinter, die Zeile stand ihm im Weg
 retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen
+retired	mk_fest_10	A7: nach dem Hoch gibt es eine feste Zeile statt zweier wechselnder (die Schleife ist wortgleich)

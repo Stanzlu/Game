@@ -4,6 +4,9 @@
 # Zeilen ohne Sprecher sind Erzählung. Preise stehen in Worten.
 
 ~ gatekeeper
+if WorldState.has_flag("elysia.loops")
+	Torwächter: Das Tor ist offen. Wie immer. [ID:mk_gate_10] [#draft]
+	=> END
 if WorldState.has_flag("elysia.feast")
 	% Torwächter: Heute feiern wir. Das Tor feiert mit. Es steht noch offener als sonst. [ID:mk_gate_7] [#draft]
 	% Torwächter: Geh nur zum Fest. Ich passe darauf auf, dass es stattfindet. [ID:mk_gate_8] [#draft]
@@ -27,6 +30,8 @@ if WorldState.quest_stage("side_elysia_board") == "bread"
 	Du bekommst einen Laib. Er ist noch warm. Du wirst ihn tragen, und er bleibt es. [ID:mk_baker_2] [#draft]
 	do WorldState.add_item("item_loaf")
 	do WorldState.advance_quest("side_elysia_board", "deliver")
+elif WorldState.has_flag("elysia.loops")
+	Bäckerin: Frisch gebacken. Von gestern. [ID:mk_baker_8] [#draft]
 elif WorldState.has_flag("elysia.feast")
 	% Bäckerin: Für das Fest backe ich alles zweimal. Gegessen wird es trotzdem nur einmal. [ID:mk_baker_6] [#draft]
 	% Bäckerin: Heute gibt es Brot. Wie jeden Tag. Aber festlich. [ID:mk_baker_7] [#draft]
@@ -41,6 +46,8 @@ if WorldState.quest_stage("side_elysia_board") == "deliver" and WorldState.has_i
 	=> tailor_bread
 elif WorldState.quest_stage("side_elysia_board") == "bread"
 	Schneiderin: Ich warte auf Brot. Ich warte gern. Das Warten sitzt mir wie angegossen. [ID:mk_tailor_1] [#draft]
+elif WorldState.has_flag("elysia.loops")
+	Schneiderin: Ich nähe, was dir passt. Es passt immer. Ich messe nur zur Höflichkeit. [ID:mk_tailor_9] [#draft]
 elif WorldState.has_flag("elysia.feast")
 	% Schneiderin: Für das Fest habe ich allen dasselbe genäht. Es steht allen. [ID:mk_tailor_7] [#draft]
 	% Schneiderin: Ein Fest ist wie ein Anzug. Es passt, ohne dass man es anprobiert hat. [ID:mk_tailor_8] [#draft]
@@ -60,13 +67,15 @@ do WorldState.add_gold(800)
 => END
 
 ~ merchant
-if WorldState.has_flag("elysia.market_shop_seen")
+if WorldState.has_flag("elysia.loops")
+	Händler: Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. [ID:mk_shop_8] [#draft]
+elif WorldState.has_flag("elysia.market_shop_seen")
 	Händler: Na? Wieder da? Schau dir an, was da ist. Es ist immer da. [ID:mk_shop_2] [#draft]
 else
 	Händler: Kommt näher, kommt näher! Alles, was du brauchst, und noch ein bisschen mehr. [ID:mk_shop_1] [#draft]
 	Händler: Es kostet nicht viel. Es kostet nur Gold, und davon hast du reichlich. [ID:mk_shop_3] [#draft]
 	do WorldState.set_flag("elysia.market_shop_seen")
-if WorldState.has_flag("elysia.feast")
+if WorldState.has_flag("elysia.feast") and not WorldState.has_flag("elysia.loops")
 	Händler: Und heute ist alles festlich. Zum selben Preis, aber festlich. [ID:mk_shop_7] [#draft]
 => merchant_wares
 
@@ -84,6 +93,9 @@ if WorldState.has_flag("elysia.feast")
 => END
 
 ~ florist
+if WorldState.has_flag("elysia.loops")
+	Blumenfrau: Nimm eine! Sie kosten nichts. Das ist der Preis. [ID:mk_flower_6] [#draft]
+	=> END
 if WorldState.has_flag("elysia.feast")
 	% Blumenfrau: Heute binde ich Kränze. Für alle, für jeden dasselbe. [ID:mk_flower_4] [#draft]
 	% Blumenfrau: Ein Fest ohne Blumen ist ein Fest. Mit Blumen ist es meins. [ID:mk_flower_5] [#draft]
@@ -186,8 +198,7 @@ Gastwirt: Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie h
 
 ~ festmaster
 if WorldState.has_flag("elysia.feast_toast")
-	% Festmeisterin: Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. [ID:mk_fest_9] [#draft]
-	% Festmeisterin: Zweiter Tag, dritter Tag, derselbe Tag. Heute ist der schönste. [ID:mk_fest_10] [#draft]
+	Festmeisterin: Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. [ID:mk_fest_9] [#draft]
 	=> END
 if WorldState.has_flag("elysia.feast_invited")
 	Festmeisterin: Der Gastwirt hat dich angekündigt. Er ist sehr zuverlässig. Er sagt immer vorher, was ich nachher sage. [ID:mk_fest_1] [#draft]

@@ -32,9 +32,12 @@ func test_nothing_is_earned_at_the_start() -> void:
 	assert_false(WorldState.has_flag(ElysiaDirector.LOOPS_FLAG))
 
 
-func test_the_chest_and_the_stone_earn_the_music_stages() -> void:
+func test_the_market_and_the_stone_earn_the_music_stages() -> void:
 	ElysiaDirector.attach(_scene())
 	WorldState.set_flag("elysia.chest_tree_opened")
+	await wait_process_frames(2)
+	assert_eq(ElysiaDirector.stage(), 0, "the chest alone does not shrink the loop any more")
+	WorldState.set_flag("elysia.market_seen")
 	await wait_process_frames(2)
 	assert_true(WorldState.has_flag(ElysiaDirector.stage_flag(1)))
 	assert_false(WorldState.has_flag(ElysiaDirector.stage_flag(2)))
@@ -46,12 +49,13 @@ func test_the_chest_and_the_stone_earn_the_music_stages() -> void:
 
 func test_play_time_earns_them_for_someone_who_dawdles() -> void:
 	ElysiaDirector.attach(_scene())
-	WorldState.state.playtime_seconds = 310.0
+	var stages := AudioDirectorService.ELYSIA_STAGES
+	WorldState.state.playtime_seconds = float(stages[1]["after"]) + 10.0
 	await wait_process_frames(2)
-	assert_eq(ElysiaDirector.stage(), 1, "five minutes")
-	WorldState.state.playtime_seconds = 610.0
+	assert_eq(ElysiaDirector.stage(), 1, "twenty minutes")
+	WorldState.state.playtime_seconds = float(stages[2]["after"]) + 10.0
 	await wait_process_frames(2)
-	assert_eq(ElysiaDirector.stage(), 2, "ten minutes")
+	assert_eq(ElysiaDirector.stage(), 2, "forty minutes")
 
 
 func test_the_sentences_start_by_the_clock_in_any_elysia_scene() -> void:
@@ -76,11 +80,36 @@ func test_the_rift_opens_by_the_clock_and_says_so() -> void:
 
 
 func test_a_save_from_before_the_stage_flags_catches_up_on_load() -> void:
-	WorldState.set_flag("elysia.chest_tree_opened")
+	WorldState.set_flag("elysia.market_seen")
 	WorldState.set_flag("elysia.stone_taken")
 	ElysiaDirector.attach(_scene())
 	assert_true(WorldState.has_flag(ElysiaDirector.stage_flag(1)))
 	assert_true(WorldState.has_flag(ElysiaDirector.stage_flag(2)))
+
+
+func test_the_toast_starts_the_sentences_in_any_elysia_scene_and_the_beat_once() -> void:
+	ElysiaDirector.attach(_scene())
+	assert_false(Beat.reached("irritation"))
+	WorldState.set_flag(ElysiaDirector.FEAST_FLAG)
+	await wait_process_frames(2)
+	assert_true(WorldState.has_flag(ElysiaDirector.LOOPS_FLAG))
+	assert_eq(ElysiaDirector.stage(), 3)
+	assert_true(Beat.reached("irritation"))
+
+
+func test_a_save_from_the_feast_starts_the_sentences_on_load() -> void:
+	WorldState.set_flag(ElysiaDirector.FEAST_FLAG)
+	ElysiaDirector.attach(_scene())
+	assert_true(WorldState.has_flag(ElysiaDirector.LOOPS_FLAG))
+
+
+func test_the_clock_waits_longer_than_act_one_takes() -> void:
+	# Act I is 30 to 45 minutes (docs/akt1/REGIONSBRIEFE.md): nothing starts by the clock inside it
+	ElysiaDirector.attach(_scene())
+	WorldState.state.playtime_seconds = 45.0 * 60.0
+	await wait_process_frames(2)
+	assert_false(WorldState.has_flag(ElysiaDirector.LOOPS_FLAG), "not within Act I")
+	assert_lt(ElysiaDirector.stage(), 3)
 
 
 func test_beginning_the_loops_twice_changes_nothing() -> void:
