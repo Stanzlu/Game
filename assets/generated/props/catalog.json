@@ -213,6 +213,15 @@
    "res://assets/generated/props/elysia/guest_book.png"
   ]
  },
+ "elysia/hall_front": {
+  "anchor": [
+   104,
+   104
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/hall_front.png"
+  ]
+ },
  "elysia/inn_bar": {
   "anchor": [
    88,
@@ -383,6 +392,29 @@
    "res://assets/generated/props/elysia/islet_0.png",
    "res://assets/generated/props/elysia/islet_1.png",
    "res://assets/generated/props/elysia/islet_2.png"
+  ]
+ },
+ "elysia/job_board": {
+  "anchor": [
+   18,
+   44
+  ],
+  "shadow": [
+   14,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    30,
+    6
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/job_board.png"
   ]
  },
  "elysia/lantern": {
@@ -618,6 +650,98 @@
    "res://assets/generated/props/elysia/splash.png"
   ]
  },
+ "elysia/stall_bloom": {
+  "anchor": [
+   26,
+   38
+  ],
+  "shadow": [
+   24,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/stall_bloom.png"
+  ]
+ },
+ "elysia/stall_bread": {
+  "anchor": [
+   26,
+   38
+  ],
+  "shadow": [
+   24,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/stall_bread.png"
+  ]
+ },
+ "elysia/stall_cloth": {
+  "anchor": [
+   26,
+   38
+  ],
+  "shadow": [
+   24,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/stall_cloth.png"
+  ]
+ },
+ "elysia/stall_wares": {
+  "anchor": [
+   26,
+   38
+  ],
+  "shadow": [
+   24,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/stall_wares.png"
+  ]
+ },
  "elysia/topiary": {
   "anchor": [
    15,
@@ -637,6 +761,42 @@
   "textures": [
    "res://assets/generated/props/elysia/topiary_0.png",
    "res://assets/generated/props/elysia/topiary_1.png"
+  ]
+ },
+ "elysia/town_gate": {
+  "anchor": [
+   104,
+   86
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/town_gate.png"
+  ]
+ },
+ "elysia/town_house_bloom": {
+  "anchor": [
+   56,
+   76
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/town_house_bloom.png"
+  ]
+ },
+ "elysia/town_house_bread": {
+  "anchor": [
+   56,
+   76
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/town_house_bread.png"
+  ]
+ },
+ "elysia/town_house_cloth": {
+  "anchor": [
+   56,
+   76
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/town_house_cloth.png"
   ]
  },
  "elysia/tree": {

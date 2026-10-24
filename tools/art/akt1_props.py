@@ -307,6 +307,211 @@ def guest_book(ms):
     return c
 
 
+ROSE = ramp("#7a2a4a", "#b04a72", "#e07a9c", "#ffb4c8", "#ffe0ea")
+SUN = ramp("#c9822a", "#f2b44a", "#ffd97a", "#fff1b8", "#fffbe8")
+
+
+def _roof(c, x0, y0, x1, y1, colors, inset=0.9, rows=4):
+    """Staggered tiles seen from the front: lighter at the top, a dark line under each row, a hipped
+    front that gets narrower towards the ridge."""
+    cut = np.clip((y1 - 4 - c.yy) * inset, 0, (x1 - x0) / 2 - 6)
+    roof = c.rect(x0, y0, x1, y1) & (c.xx >= x0 + cut) & (c.xx < x1 - cut)
+    row = ((c.yy - y0) // rows).astype(int)
+    stagger = ((c.xx + (row % 2) * 3) // 6).astype(int)
+    shade = ((row * 7 + stagger * 13) % 5) / 5.0
+    v = 0.8 - 0.4 * (c.yy - y0) / max(y1 - y0, 1) + 0.1 * (shade - 0.5)
+    v = np.where(((c.yy - y0) % rows) == rows - 1, v - 0.28, v)
+    v = np.where((((c.xx + (row % 2) * 3) % 6) == 5), v - 0.2, v)
+    c.paint(roof, colors, v, contrast=2.0, dither=False)
+    return roof
+
+
+def _window(c, x, y, w, h, warm=True):
+    """A round-headed window with a gold frame and a cross of bars."""
+    frame = c.rect(x - 2, y - 2, x + w + 2, y + h + 2) & ((c.yy >= y + w / 2) | c.ellipse(x + w / 2, y + w / 2, w / 2 + 2, w / 2 + 2))
+    c.paint(frame, GOLD, 0.6, dither=False)
+    pane = c.rect(x, y, x + w, y + h) & ((c.yy >= y + w / 2) | c.ellipse(x + w / 2, y + w / 2, w / 2, w / 2))
+    c.paint(pane, WARM_GLASS, 0.5 + 0.5 * c.sphere(x + w * 0.35, y + h * 0.4, w * 1.1, h * 1.1), dither=True, contrast=2.2)
+    c.paint(c.rect(x + w // 2 - 1, y, x + w // 2 + 1, y + h), GOLD, 0.55, dither=False)
+    c.paint(c.rect(x, y + h // 2, x + w, y + h // 2 + 2), GOLD, 0.55, dither=False)
+
+
+def town_house(ms, kind):
+    """A house of the street, seven cells wide: white plaster, a tiled roof in the colour of its trade,
+    a shop window, a door, a sign on a bracket (bread, cloth or a flower). The twin on the other side
+    of the street is the same house."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(112, 84)
+    roof_colors = {"bread": GOLD, "cloth": ramp("#3a2058", "#5c3a86", "#8460b0", "#b090d8", "#dcc8f0"), "bloom": ROSE}[kind]
+    wall = c.rect(6, 36, 106, 80)
+    _plaster(c, wall, 36, 44)
+    for x in range(6, 106, 20):
+        c.paint(c.rect(x, 38, x + 1, 78), PLASTER, 0.45, dither=False)
+    c.paint(c.rect(4, 76, 108, 82), st["marble"], np.where(c.yy < 77, 0.85, 0.45), contrast=2.0, dither=False)
+    _roof(c, 0, 4, 112, 38, roof_colors)
+    _trim(c, 0, 36, 112, 39)
+    c.paint(c.rect(30, 2, 82, 6), GOLD, np.where(c.yy < 3, 0.85, 0.5), dither=False)
+    # an attic window and a shop window on each side of the door
+    _window(c, 48, 14, 16, 16)
+    for wx in (14, 82):
+        _window(c, wx, 50, 16, 20)
+        c.paint(c.rect(wx - 3, 70, wx + 19, 73), TIMBER, np.where(c.yy < 71, 0.75, 0.4), dither=False)
+    door = c.rect(47, 52, 65, 80) & ((c.yy >= 58) | c.ellipse(56, 58, 9, 6))
+    c.paint(door, GOLD, 0.55, dither=False)
+    inner = c.rect(49, 54, 63, 80) & ((c.yy >= 58) | c.ellipse(56, 58, 7, 4))
+    c.paint(inner, TIMBER, np.where(((c.xx - 49) % 5) == 4, 0.25, 0.6), dither=False)
+    c.fill(c.ellipse(60, 68, 1.5, 1.5), GOLD[3])
+    c.paint(c.rect(44, 79, 68, 82), st["marble"], 0.7, dither=False)
+    # the sign on its bracket, left of the door
+    c.paint(c.rect(70, 44, 88, 46), st["iron"] if "iron" in st else GOLD, 0.5, dither=False)
+    board = c.rect(72, 46, 86, 60)
+    c.paint(board, TIMBER, 0.65, dither=False)
+    c.paint(c.rect(72, 46, 86, 47), GOLD, 0.8, dither=False)
+    if kind == "bread":
+        c.paint(c.ellipse(79, 54, 5, 3.4), BREAD, 0.5 + 0.45 * c.sphere(77, 52, 6, 4), dither=False)
+        for sx in (76, 79, 82):
+            c.fill(c.rect(sx, 52, sx + 1, 55), BREAD[0])
+    elif kind == "cloth":
+        c.paint(c.rect(75, 49, 83, 58), ramp("#3a2058", "#5c3a86", "#8460b0", "#b090d8"), 0.55, dither=False)
+        c.paint(c.rect(75, 53, 83, 54), GOLD, 0.8, dither=False)
+    else:
+        c.paint(c.ellipse(79, 51, 3, 3), ROSE, 0.7, dither=False)
+        c.fill(c.ellipse(79, 51, 1, 1), SUN[3])
+        c.fill(c.rect(79, 54, 80, 59), LEAF[2])
+    c.outline(st["outline"])
+    return c
+
+
+def town_gate(ms):
+    """The gate in the town wall: two round towers with teal cones and, between them, a golden arch with a
+    sun on it; the passage is five cells wide (80 px) and 52 px high. 208 x 92, the passage's floor at y = 88."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(208, 92)
+    for x0 in (0, 144):
+        tower = c.rect(x0, 30, x0 + 64, 90)
+        _plaster(c, tower, 30, 60)
+        c.paint(tower & (c.xx < x0 + 8), PLASTER, 0.95, dither=False)
+        c.paint(tower & (c.xx >= x0 + 54), PLASTER, 0.3, dither=False)
+        _trim(c, x0, 30, x0 + 64, 33)
+        _trim(c, x0, 56, x0 + 64, 58, 0.6)
+        _roof(c, x0 - 3, 2, x0 + 67, 32, TILE, inset=0.8)
+        c.paint(c.ellipse(x0 + 32, 3, 3.5, 3.5), GOLD, 0.35 + 0.65 * c.sphere(x0 + 31, 2, 4, 4), dither=False)
+        _window(c, x0 + 24, 38, 16, 16)
+        c.paint(c.rect(x0, 84, x0 + 64, 92), st["marble"], np.where(c.yy < 85, 0.85, 0.45), contrast=2.0, dither=False)
+    # the arch over the passage
+    arch = c.rect(64, 20, 144, 40) & ((c.yy <= 24) | ((c.xx < 72) | (c.xx >= 136)) | ~c.ellipse(104, 46, 36, 24) | (c.yy <= 22))
+    span = c.rect(64, 22, 144, 38)
+    c.paint(span, PLASTER, 0.8 - 0.3 * (c.yy - 22) / 16, dither=False)
+    _trim(c, 64, 20, 144, 24, 0.85)
+    _trim(c, 64, 36, 144, 39, 0.55)
+    c.paint(c.ellipse(104, 26, 9, 9), SUN, 0.3 + 0.7 * c.sphere(101, 23, 10, 10), dither=False)
+    for k in range(8):
+        a = k * 0.785
+        c.fill(c.rect(int(104 + 12 * np.cos(a)), int(26 + 12 * np.sin(a)) , int(104 + 12 * np.cos(a)) + 2, int(26 + 12 * np.sin(a)) + 2) & span, GOLD[3])
+    c.outline(st["outline"])
+    return c
+
+
+def stall(ms, kind):
+    """A market stall, three cells wide: a counter, a striped awning (teal or rose), the wares of its trade."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(52, 46)
+    stripe = {"bread": TILE, "bloom": ROSE, "cloth": ramp("#3a2058", "#5c3a86", "#8460b0", "#b090d8", "#dcc8f0"), "wares": GOLD}[kind]
+    # counter
+    c.paint(c.rect(4, 30, 48, 44), PLASTER, np.where(c.xx % 11 < 1, 0.4, 0.75), dither=False)
+    _trim(c, 3, 28, 49, 31, 0.8)
+    _trim(c, 3, 42, 49, 45, 0.55)
+    # posts and awning
+    for px_ in (4, 47):
+        c.paint(c.rect(px_, 6, px_ + 2, 30), TIMBER, np.where(c.xx == px_, 0.8, 0.45), dither=False)
+    awning = c.rect(0, 4, 52, 16)
+    band = ((c.xx // 6).astype(int) % 2) == 0
+    c.paint(awning, stripe, np.where(band, 0.78, 0.3) - 0.12 * (c.yy - 4) / 12, contrast=1.8, dither=False)
+    c.paint(c.rect(0, 14, 52, 17), stripe, np.where(band, 0.5, 0.2), dither=False)
+    for k in range(9):  # the scalloped edge
+        c.paint(c.ellipse(3 + k * 6, 17, 3, 2.2) & (c.yy >= 16), stripe, 0.7 if k % 2 == 0 else 0.3, dither=False)
+    # wares on the counter
+    if kind == "bread":
+        for k, bx in enumerate((12, 21, 30, 39)):
+            c.paint(c.ellipse(bx, 26, 4.2, 2.6), BREAD, 0.5 + 0.45 * c.sphere(bx - 1, 25, 5, 3), dither=False)
+    elif kind == "bloom":
+        for k, bx in enumerate((11, 20, 29, 38)):
+            c.fill(c.rect(bx, 22, bx + 1, 27), LEAF[2])
+            c.paint(c.ellipse(bx, 21, 3, 3), ROSE if k % 2 == 0 else SHEET, 0.65, dither=False)
+            c.fill(c.ellipse(bx, 21, 1, 1), SUN[3])
+    elif kind == "cloth":
+        for k, bx in enumerate((10, 20, 30, 40)):
+            col = ramp("#3a2058", "#5c3a86", "#8460b0", "#b090d8") if k % 2 == 0 else ROSE
+            c.paint(c.rect(bx, 21, bx + 8, 28), col, 0.6, dither=False)
+            c.paint(c.rect(bx, 24, bx + 8, 25), GOLD, 0.8, dither=False)
+    else:  # wares of praise: golden cups and ribbons
+        for k, bx in enumerate((12, 25, 38)):
+            c.paint(c.rect(bx - 3, 23, bx + 4, 28), GOLD, 0.35 + 0.5 * (c.xx < bx), dither=False)
+            c.paint(c.ellipse(bx, 22, 4.5, 2), GOLD, 0.8, dither=False)
+            c.fill(c.rect(bx - 1, 18, bx + 1, 22), ROSE[2])
+    c.outline(st["outline"])
+    return c
+
+
+def job_board(ms):
+    """The job board: a wooden frame, three notes, one of them very large. 36 x 48."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(36, 48)
+    for px_ in (3, 31):
+        c.paint(c.rect(px_, 22, px_ + 3, 46), TIMBER, np.where(c.xx == px_, 0.8, 0.45), dither=False)
+    c.paint(c.rect(0, 2, 36, 32), TIMBER, 0.55, dither=False)
+    c.paint(c.rect(0, 2, 36, 4), GOLD, 0.85, dither=False)
+    c.paint(c.rect(2, 5, 34, 30), SHEET, 0.7, dither=False)
+    notes = [(4, 7, 11, 11), (13, 8, 24, 14), (22, 17, 32, 28), (5, 15, 17, 28)]
+    for k, (x0, y0, x1, y1) in enumerate(notes):
+        c.paint(c.rect(x0, y0, x1, y1), SHEET if k % 2 == 0 else SUN, 0.95, dither=False)
+        for yy in range(y0 + 2, y1 - 1, 3):
+            c.paint(c.rect(x0 + 1, yy, x1 - 1, yy + 1), TILE, 0.35, dither=False)
+        c.fill(c.ellipse(x0 + 2, y0 + 1, 1.2, 1.2), ROSE[1])
+    c.paint(c.rect(1, 30, 35, 33), TIMBER, 0.35, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def hall_front(ms):
+    """The Halle der Spiegel from the square, thirteen cells wide: white marble, a row of columns, a pediment with
+    the sun and two tall golden doors, shut. 208 x 112; the door cell is at the bottom centre."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(208, 112)
+    cx = 104
+    # the roof: a flat pediment with a gold sun
+    ped = c.rect(4, 4, 204, 30) & (c.yy >= 4 + np.abs(c.xx - cx) * 0.18)
+    c.paint(ped, PLASTER, 0.85 - 0.3 * (c.yy - 4) / 26, dither=False)
+    _trim(c, 0, 28, 208, 33, 0.85)
+    c.paint(c.ellipse(cx, 18, 11, 11), SUN, 0.3 + 0.7 * c.sphere(cx - 3, 15, 12, 12), dither=False)
+    for k in range(10):
+        a = k * 0.6283
+        x, y = int(cx + 16 * np.cos(a)), int(18 + 16 * np.sin(a) * 0.8)
+        c.fill(c.rect(x, y, x + 2, y + 2) & ped, GOLD[3])
+    # the wall behind the columns
+    wall = c.rect(8, 33, 200, 108)
+    _plaster(c, wall, 33, 75)
+    c.paint(c.rect(4, 100, 204, 110), st["marble"], np.where(c.yy < 101, 0.85, 0.45), contrast=2.0, dither=False)
+    c.paint(c.rect(10, 108, 198, 112), st["marble"], 0.6, dither=False)
+    # six columns
+    for k in range(6):
+        x = 14 + k * 34 if k < 3 else 208 - 14 - (5 - k) * 34 - 12
+        col = c.rect(x, 34, x + 12, 102)
+        c.paint(col, st["marble"], 0.35 + 0.65 * c.cylinder(x, x + 12), dither=False)
+        c.paint(c.rect(x - 2, 32, x + 14, 37), GOLD, 0.6, dither=False)
+        c.paint(c.rect(x - 2, 98, x + 14, 103), st["marble"], 0.55, dither=False)
+    # two tall doors in the middle, shut, with a ring each
+    for dx in (cx - 17, cx + 1):
+        door = c.rect(dx, 44, dx + 16, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 8, 8))
+        c.paint(door, GOLD, 0.5, dither=False)
+        inner = c.rect(dx + 2, 46, dx + 14, 102) & ((c.yy >= 52) | c.ellipse(dx + 8, 52, 6, 6))
+        c.paint(inner, TIMBER, np.where(((c.yy - 46) % 8) == 7, 0.25, 0.58), dither=False)
+    c.fill(c.ellipse(cx - 4, 76, 1.8, 1.8), GOLD[3])
+    c.fill(c.ellipse(cx + 4, 76, 1.8, 1.8), GOLD[3])
+    c.outline(st["outline"])
+    return c
+
+
 def build(ms):
     ms.save("elysia", "inn_front", inn_front(ms), (72, 54))
     ms.save("elysia", "inn_shell", inn_shell(ms), (AXIS_X, 8), flat=True,
@@ -320,6 +525,13 @@ def build(ms):
     ms.save("elysia", "inn_bed", inn_bed(ms), (16, 30), shape={"rect": [30, 32], "offset": [0, -14]})
     ms.save("elysia", "inn_door", inn_door(ms), (8, 24), shape={"rect": [16, 32], "offset": [0, -8]})
     ms.save("elysia", "guest_book", guest_book(ms), (10, 26), shape={"circle": 4, "offset": [0, -2]}, shadow=[8, 2])
+    for kind in ("bread", "cloth", "bloom"):
+        ms.save("elysia", "town_house_" + kind, town_house(ms, kind), (56, 76))
+    ms.save("elysia", "town_gate", town_gate(ms), (104, 86))
+    for kind in ("bread", "bloom", "cloth", "wares"):
+        ms.save("elysia", "stall_" + kind, stall(ms, kind), (26, 38), shape={"rect": [48, 8], "offset": [0, -6]}, shadow=[24, 4])
+    ms.save("elysia", "job_board", job_board(ms), (18, 44), shape={"rect": [30, 6], "offset": [0, -3]}, shadow=[14, 3])
+    ms.save("elysia", "hall_front", hall_front(ms), (104, 104))
 
 
 def preview(path):
@@ -327,8 +539,10 @@ def preview(path):
     import make_sprites as ms
     from PIL import Image
     items = [inn_front(ms), inn_bar(ms), inn_table(ms), inn_hearth(ms, 0)[0], inn_bed(ms), inn_door(ms), guest_book(ms)]
+    items += [town_house(ms, k) for k in ("bread", "cloth", "bloom")] + [town_gate(ms), hall_front(ms), job_board(ms)]
+    items += [stall(ms, k) for k in ("bread", "bloom", "cloth", "wares")]
     shell = inn_shell(ms)
-    sheet = Image.new("RGBA", (shell.w + 20, shell.h + 90 + 70), (110, 150, 120, 255))
+    sheet = Image.new("RGBA", (shell.w + 20, shell.h + 90 + 70 + 330), (110, 150, 120, 255))
     sheet.alpha_composite(Image.fromarray(shell.rgba().astype(np.uint8), "RGBA"), (10, 10))
     x = 10
     y = shell.h + 20
