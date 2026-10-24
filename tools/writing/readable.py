@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+"""Reading version of dialogue files (standard library only): the text as a script, for a human reader.
+
+Usage: python3 tools/writing/readable.py TITLE OUT.md [FILE.dialogue ...]
+Without files all story dialogue is written. The reading version is for the owner, who is the only
+reader (ADR-049): per cue a number (E3, T12) to answer with "OK", "ändern" or "raus", then the
+lines in the order the game plays them, with the conditions that pick them and the answers as
+branches. It shows no code except the conditions; what a line sets (flags, items, XP) is left out
+and lives in the consequence register (docs/writing/MOTIVE.md).
+"""
+import os
+import re
+import sys
+
+import dialogue
+
+CONDITION = re.compile(r"^(if|elif)\s+(.*)$")
+INLINE_CONDITION = re.compile(r"^(%\d*\s+)?\[(if|elif)\s+(.*?)\s*/\]\s*(.*)$")
+RESPONSE_CONDITION = re.compile(r"\s*\[if\s+(.*?)\s*/\]")
+TOKEN = re.compile(r"\{\{(.*?)\}\}")
+EFFECT = re.compile(r"\[/?(?:wave|rainbow|shake|wait|speed|next|pause|tremble)[^\]]*\]")
+PREFIX = {"elysia": "E", "tal": "T", "haus": "H", "antreiber": "A"}
+# The order in which the slice plays its places; other files follow by name.
+ORDER = ["elysia", "tal", "antreiber", "haus"]
+
+
+def person(expression):
+    """A value in the text ({{ }}) as a placeholder a reader understands."""
+    if "player_name" in expression:
+        return "‹Name›"
+    if "cat_name" in expression:
+        return "‹Katzenname›"
+    match = re.search(r'label_for\("(\w+)"\)', expression)
+    if match:
+        return "‹Taste: %s›" % match.group(1)
+    return "‹…›"
+
+
+def clean(text):
+    """The words of a line: no ID, status tag, effects or condition, values as placeholders."""
+    text = dialogue.ID_RE.sub("", text)
+    text = dialogue.TAG_RE.sub("", text)
+    text = TOKEN.sub(lambda m: person(m.group(1)), text)
+    text = EFFECT.sub("", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def condition_text(expression):
+    """A condition shortened to what a reader needs: the flag or memory it asks for."""
+    names = re.findall(r'"([a-z0-9_.]+)"', expression)
+    negated = " nicht" if re.search(r"\bnot\b|!=", expression) and names else ""
+    if names:
+        return "%s%s" % (" und ".join(names), negated)
+    return expression.replace("WorldState.", "")
+
+
+def render_file(path, prefix):
+    out = []
+    pending = []
+    cue_number = 0
+    stack = []  # (indent, label) of the open conditions
+    opened = False  # the comment above the first cue is the file's header: no reader's business
+    with open(path, encoding="utf-8") as f:
+        raw_lines = f.read().replace("\r", "").split("\n")
+    for raw in raw_lines:
+        stripped = raw.strip()
+        indent = len(raw) - len(raw.lstrip("\t"))
+        if not stripped:
+            continue
+        if stripped.startswith("#"):
+            pending.append(stripped.lstrip("# ").strip())
+            continue
+        if stripped.startswith("~ "):
+            cue_number += 1
+            if not opened:
+                pending = []
+                opened = True
+            name = stripped[2:].strip()
+            out += ["", "### %s%d · `%s`" % (prefix, cue_number, name), ""]
+            out += ["> " + note for note in pending]
+            if pending:
+                out.append("")
+            pending = []
+            stack = []
+            continue
+        pending = []
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        pad = "  " * max(indent - 0, 0)
+        match = CONDITION.match(stripped)
+        if match:
+            label = condition_text(match.group(2))
+            word = "wenn" if match.group(1) == "if" else "sonst wenn"
+            out.append("%s*%s* `%s`" % (pad, word, label))
+            stack.append((indent, label))
+            continue
+        if stripped == "else":
+            out.append("%s*sonst*" % pad)
+            stack.append((indent, "else"))
+            continue
+        if stripped.startswith(("do ", "do! ", "set ", "=>", "match", "when", "while", "using", "import")):
+            continue
+        inline = INLINE_CONDITION.match(stripped)
+        note = ""
+        if inline:
+            note = " *(wenn `%s`)*" % condition_text(inline.group(3))
+            stripped = inline.group(4)
+        else:
+            stripped = re.sub(r"^%\d*\s+", "", stripped)
+        if stripped.startswith("- "):
+            body = stripped[2:]
+            answer_condition = RESPONSE_CONDITION.search(body)
+            if answer_condition:
+                note = " *(wenn `%s`)*" % condition_text(answer_condition.group(1))
+                body = RESPONSE_CONDITION.sub("", body)
+            out.append("%s- ▸ **%s**%s" % (pad, clean(body), note))
+            continue
+        status = dialogue.TAG_RE.findall(stripped)
+        marker = " `[#%s]`" % status[0] if status else ""
+        identifier = dialogue.ID_RE.search(stripped)
+        tail = "  <sub>%s</sub>" % identifier.group(1) if identifier else ""
+        match = dialogue.SPEAKER_RE.match(stripped)
+        if match:
+            out.append("%s- **%s:** %s%s%s%s" % (pad, match.group(1), clean(match.group(2)), note, marker, tail))
+        else:
+            out.append("%s- *%s*%s%s%s" % (pad, clean(stripped), note, marker, tail))
+    return out
+
+
+def render(title, paths):
+    out = ["# " + title, "",
+           "<!-- Erzeugt mit `python3 tools/writing/readable.py`. Nicht von Hand ändern: Änderungen gehören in die .dialogue-Dateien. -->",
+           "",
+           "Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* ist Erzählung, "
+           "**fett** sprechen die Figuren, ▸ sind deine Antworten. Eingerückt steht, was nur unter einer "
+           "Bedingung oder nach einer Antwort kommt. Hinter jeder Zeile die ID in klein.", "",
+           "**So antwortest du:** je Szene (E3, T12 …) „OK“, „ändern: …“ oder „raus“. Was du nicht nennst, "
+           "gilt als OK.", ""]
+    for path in paths:
+        name = os.path.splitext(os.path.basename(path))[0].replace(".dialogue", "")
+        prefix = PREFIX.get(name, name[:1].upper())
+        out += ["", "## " + os.path.basename(path).replace(".dialogue", ""), ""]
+        out += render_file(path, prefix)
+    out.append("")
+    return "\n".join(out)
+
+
+def story_paths():
+    paths = [source.path for source in dialogue.sources(story_only=True)]
+    return sorted(paths, key=order_key)
+
+
+def order_key(path):
+    name = os.path.splitext(os.path.basename(path))[0]
+    return (ORDER.index(name) if name in ORDER else len(ORDER), path)
+
+
+def main(argv):
+    if len(argv) < 2:
+        print(__doc__)
+        return 2
+    title, target = argv[0], argv[1]
+    paths = [os.path.abspath(p) for p in argv[2:]] or story_paths()
+    with open(target, "w", encoding="utf-8", newline="\n") as f:
+        f.write(render(title, paths))
+    print("readable: wrote %s (%d files)" % (os.path.relpath(target, dialogue.ROOT), len(paths)))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

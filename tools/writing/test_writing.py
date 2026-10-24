@@ -8,6 +8,7 @@ import dialogue
 import id_lock
 import lint
 import motifs
+import readable
 import report
 import texts
 
@@ -324,6 +325,52 @@ class CalibrationTests(unittest.TestCase):
         rows = calibrate.per_beat([("fire", 900), ("not_a_beat", 5)])
         self.assertEqual([r[0] for r in rows], ["fire"])
         self.assertEqual(rows[0][1:], (900, calibrate.baseline()["beats"]["fire"]))
+
+
+class ReadableTests(unittest.TestCase):
+    def render(self, text):
+        handle, path = tempfile.mkstemp(suffix=".dialogue")
+        with os.fdopen(handle, "w", encoding="utf-8") as f:
+            f.write(text)
+        try:
+            return "\n".join(readable.render_file(path, "T"))
+        finally:
+            os.remove(path)
+
+    def test_cues_are_numbered_and_the_file_header_is_dropped(self):
+        out = self.render("# Entwicklernotiz\n\n~ start\nEin Hund. [ID:a_1]\n=> END\n\n# Die Szene.\n~ later\nEin Vogel. [ID:a_2]\n")
+        self.assertIn("### T1 · `start`", out)
+        self.assertIn("### T2 · `later`", out)
+        self.assertNotIn("Entwicklernotiz", out)
+        self.assertIn("> Die Szene.", out)
+
+    def test_speech_narration_answers_and_ids_are_shown(self):
+        out = self.render("~ start\nEin Hund. [ID:a_1]\nMira: Nein. [ID:a_2] [#draft]\n- Gut. [ID:a_r1]\n\tMira: Dann nicht. [ID:a_3]\n")
+        self.assertIn("- *Ein Hund.*  <sub>a_1</sub>", out)
+        self.assertIn("- **Mira:** Nein. `[#draft]`  <sub>a_2</sub>", out)
+        self.assertIn("- ▸ **Gut.**", out)
+        self.assertIn("  - **Mira:** Dann nicht.  <sub>a_3</sub>", out)
+
+    def test_conditions_are_shown_and_code_is_not(self):
+        out = self.render('~ start\nif WorldState.has_flag("a.b")\n\tMira: Ja. [ID:a_1]\n\tdo WorldState.set_flag("a.c")\nelse\n\tMira: Nein. [ID:a_2]\n=> END\n')
+        self.assertIn("*wenn* `a.b`", out)
+        self.assertIn("*sonst*", out)
+        self.assertNotIn("set_flag", out)
+        self.assertNotIn("=> END", out)
+
+    def test_inline_conditions_and_answers_with_a_condition(self):
+        out = self.render('~ start\n% [if WorldState.has_flag("a.b") /] Mira: Die Steine. [ID:a_1]\n- [if WorldState.has_flag("a.b") /] Doch. [ID:a_r1]\n')
+        self.assertIn("*(wenn `a.b`)*", out)
+        self.assertEqual(out.count("*(wenn `a.b`)*"), 2)
+
+    def test_values_and_effects_become_placeholders(self):
+        out = self.render('~ start\nMira: [wait=0.9]{{WorldState.player_name()}} und {{WorldState.cat_name()}}, {{InputDevice.label_for("sprint")}}. [ID:a_1]\n')
+        self.assertIn("‹Name› und ‹Katzenname›, ‹Taste: sprint›.", out)
+        self.assertNotIn("wait", out)
+
+    def test_the_slice_is_written_in_playing_order(self):
+        names = [os.path.basename(p) for p in readable.story_paths()]
+        self.assertEqual(names[:4], ["elysia.dialogue", "tal.dialogue", "antreiber.dialogue", "haus.dialogue"])
 
 
 class ProjectTests(unittest.TestCase):
