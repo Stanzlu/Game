@@ -2,6 +2,7 @@
 ; Galerie, die Spiegelkammer (oben); spiegelsymmetrisch um Spalte 16. Wände, Spiegel und Türrahmen malt das Requisit elysia/hall_shell, den
 ; Boden backt tools/art/bake_ground.py content/maps/spiegelhalle.txt. Alles steht zweimal, bis auf drei Dinge: den Wächter in der Mitte
 ; und je einen Gegenstand, der nur auf einer Seite liegt (Blatt, Feder): sie zu bemerken ist die Aufgabe (Wahrnehmung, Bible §16).
+; Dazu kommt das Kind der Spur (A8) vor dem großen Spiegel, ebenfalls nur einmal.
 [meta]
 style = "elysia"
 ground = "res://assets/generated/maps/spiegelhalle_ground.png"

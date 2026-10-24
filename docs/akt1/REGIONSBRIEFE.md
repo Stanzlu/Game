@@ -6,7 +6,7 @@ im Pull Request des Segments. Zeiten rechnet `tools/writing/calibrate.py` (`docs
 
 ## Der Fluss von Akt I
 
-Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Ort; die Schleifen (A7) beginnen erst nach dem Fest.
+Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Ort und endet vorläufig bei `repeat`; die Schleifen (A7) beginnen erst nach dem Fest. Die Spur des Kindes (A8) und der Riss (A9) sind eine eigene Quest, `main_elysia_trail`.
 
 | Stufe | Segment | Ort (Szenenschlüssel) | Beat | Stand |
 |---|---|---|---|---|
@@ -16,8 +16,8 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | hall | A5 Spiegelhalle | `spiegelhalle` | `hall_enter`, `hall_room_1`, `hall_room_2`, `hall_mirror`, `perception` | **gebaut (ADR-060)** |
 | feast | A6 Fest | `markt` (Festzustand) | `feast_enter`, `feast` | **gebaut (ADR-061)** |
 | repeat | A7 Wiederholung | alle Orte | `irritation` | **gebaut (ADR-062)** |
-| trail | A8 Kind-Spur | `markt`, `gasthaus`, `spiegelhalle`, `elysia` | `trail_hallway`, `trail_door`, `trail_room`, `child_melody` | **gebaut (ADR-063)** |
-| rift | A9 Stein, Samen, Riss | `elysia` | `rift_found` | geplant (der Riss öffnet sich schon, A9 passt den Anschluss an) |
+| – (eigene Quest `main_elysia_trail`: hum, trail, rift) | A8 Kind-Spur | `markt`, `gasthaus`, `spiegelhalle`, `elysia` | `trail_hallway`, `trail_door`, `trail_room`, `child_melody` | **gebaut (ADR-063)** |
+| – (Stufe `rift` der Spur) | A9 Stein, Samen, Riss | `elysia` | `rift_found` | geplant (der Riss öffnet sich schon, A9 passt den Anschluss an) |
 
 Raumschichtung (Plan 4.1): Zimmer (Gasthaus) – Mauer und Tor – Garten – Straße – Stadt (Markt) – Welt (Weltenbaum), unbeschriftet.
 Die Schleifen beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Stufe `repeat`, A7); die Musikstufen folgen `elysia.market_seen` und `elysia.stone_taken`, die Uhr fängt nur, wer nicht weiterspielt (20, 40 und 60 Minuten).
@@ -295,7 +295,7 @@ Sprecher „Kind“ spricht höchstens drei Wörter, antwortet nicht, lobt und t
 **Prüflinse Kind und Sensibilität (§15, §51).** Kein Täter, keine Tat, keine Ursache, keine Einordnung; Bilder aus der Liste der Bible, nicht erfunden; keine Zahl und kein „Sammeln“ (kein Zähler, kein Klang, keine Auszeichnung); das Kind zwingt nichts, bietet nichts an, belohnt nichts; wer wegsieht, verliert nichts.
 Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: das Haus wird nie erklärt).
 
-**Scheitern und Speichern (§49).** Es gibt kein Scheitern. Jedes Bild speichert mit seinem Flag und löst einen Autosave aus (`Beat.mark`); ein Stand aus der Schleife ohne Spur (A7-Stand) bekommt die Quest beim Laden.
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern. Jedes Bild speichert mit seinem Flag und löst einen Autosave aus (`Beat.mark`); ein Stand aus der Schleife ohne Spur (A7-Stand) bekommt die Quest beim Laden, und steht gleich auf `rift`, wenn der Riss schon offen ist.
 
 **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Karte ist Bild und Text (der Text allein trägt den Sinn, das Bild ist Zugabe); alle Zeilen laufen über die Dialogbox mit allen Tempo- und Auto-Einstellungen.
 
@@ -303,4 +303,4 @@ Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: 
 
 **Gerechnet.** Zwölf Zeilen plus eine, rund 110 Wörter; die Wege zwischen den drei Stationen sind der größte Teil: `calibrate.py --segment 110 13 5` (fünf Minuten reiner Weg zwischen Garten, Gasthaus, Markt und Halle) ergibt rund acht Minuten (bei einer Station weniger rund sechs). Gegen zwölf geplante ist das wenig, weil die Orte schon stehen und das Kind sie nur zeigt. Akt I liegt damit nach A8 bei rund 40 statt 70 geplanten Minuten (A2 bis A8); die Neuplanung (P6.13) entscheidet, ob A4 oder mehr Erkundung die Lücke schließt.
 
-**Prüfungen.** `test_akt1_kind_spur` (10 Tests: Stationen nur in der Schleife, einmal je Bild, drei Fragmente ohne Zähler, höchstens drei Wörter, Quest, Uhr ohne Bilder, Melodie, Karte), die drei Segmentskripte `tools/autopilot/akt1_kind_spur_{markt,gasthaus,spiegelhalle}.json` (Schritt „segment“ in `check.sh`, Marken `trail_*`), `test_writing`, `MapLint` (das Kind ist ein Einzelstück ohne Zwilling, wie der Stein).
+**Prüfungen.** `test_akt1_kind_spur` (11 Tests: Stationen nur in der Schleife, einmal je Bild, drei Fragmente ohne Zähler, höchstens drei Wörter, Quest, Uhr ohne Bilder, Melodie, Karte), die drei Segmentskripte `tools/autopilot/akt1_kind_spur_{markt,gasthaus,spiegelhalle}.json` (Schritt „segment“ in `check.sh`, Marken `trail_*`), `test_writing`, `MapLint` (das Kind ist ein Einzelstück ohne Zwilling, wie der Stein).

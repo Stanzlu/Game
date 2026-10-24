@@ -1,6 +1,6 @@
 ; Akt I, Segment A3: der Markt von Elysia (docs/akt1/REGIONSBRIEFE.md). Die Halle der Spiegel im Norden, vier Häuser, der
 ; Platz mit dem Brunnen, den Ständen und der Auftragstafel, im Süden die Mauer mit dem Tor. Spiegelsymmetrisch um Spalte 30
-; (Game Bible §9): alles steht zweimal, auch die, die hier arbeiten. Boden und Mauer bäckt tools/art/bake_ground.py.
+; (Game Bible §9): alles steht zweimal, auch die, die hier arbeiten, bis auf das Kind der Spur (A8), das nur einmal da ist. Boden und Mauer bäckt tools/art/bake_ground.py.
 [meta]
 style = "elysia"
 ground = "res://assets/generated/maps/markt_ground.png"

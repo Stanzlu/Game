@@ -1,5 +1,5 @@
 ; Akt I, Segment A2: das Gasthaus zum Immer von innen (docs/akt1/REGIONSBRIEFE.md). Halle und zwei Zimmer, spiegelsymmetrisch
-; um Spalte 20. Wände, Fenster, Regale und Uhr malt das Requisit elysia/inn_shell, den Boden backt
+; um Spalte 20 (bis auf das Kind der Spur, A8, das nur einmal da ist). Wände, Fenster, Regale und Uhr malt das Requisit elysia/inn_shell, den Boden backt
 ; tools/art/bake_ground.py content/maps/gasthaus.txt.
 [meta]
 style = "elysia"
