@@ -214,7 +214,7 @@ func test_elysia_wakes_and_butterflies_escalate() -> void:
 	assert_eq(WorldState.quest_stage("side_elysia_butterflies"), "return")
 
 
-func test_without_the_chest_repetition_and_the_child_come_anyway() -> void:
+func test_without_the_feast_repetition_and_the_child_come_anyway() -> void:
 	var scene: GameScene = ELYSIA.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)

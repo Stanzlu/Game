@@ -27,7 +27,14 @@ const RIFT_FLAG := "elysia.rift_open"
 const LOOPS_AFTER := 3600.0
 const RIFT_AFTER_LOOPS := 900.0
 
-var _loops_time := -1.0
+## A soft rumble and a short shake when the rift opens without the child (in any Elysia scene).
+const RIFT_OPENS_DB := -6.0
+
+## When the sentences began, in play time. It is kept across the scenes of one game (the wait for
+## the rift runs from the toast, not from the last change of scene) and belongs to one game state:
+## a load or a new game starts the wait again.
+static var _loops_time := -1.0
+static var _loops_state := 0
 
 
 ## The director of `scene` (added as its child), or the one it already has.
@@ -58,10 +65,13 @@ static func stage() -> int:
 
 func _ready() -> void:
 	WorldState.flag_changed.connect(_on_flag_changed)
+	if _loops_state != WorldState.state.get_instance_id():
+		_loops_state = WorldState.state.get_instance_id()
+		_loops_time = -1.0
 	if WorldState.has_flag(FEAST_FLAG):
 		# a save from the feast: the sentences begin if nothing started them yet
 		begin_loops()
-	if WorldState.has_flag(LOOPS_FLAG):
+	if WorldState.has_flag(LOOPS_FLAG) and _loops_time < 0.0:
 		# the start of the loops is not saved: after a load the wait starts again
 		_loops_time = WorldState.state.playtime_seconds
 	_update_stages()
@@ -88,6 +98,7 @@ func _process(_delta: float) -> void:
 		Log.info(Log.Category.WORLD_STATE, "rift opens without the child")
 		WorldState.set_flag(RIFT_FLAG)
 		rift_opened.emit()
+		_announce_rift()
 
 
 ## Sets the music stage flags that are earned by now (by flag or by play time).
@@ -100,8 +111,26 @@ func _update_stages() -> void:
 			WorldState.set_flag(stage_flag(index))
 
 
+## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
+## and its caption (whatever the captions setting says), so it is not a silent change on the map.
+## The scene may say where the rift stands (`_rift_position()`); in a scene without it the
+## caption has no side.
+func _announce_rift() -> void:
+	var scene := get_parent() as GameScene
+	if scene == null or scene.view == null or scene.hud == null:
+		return
+	scene.view.shake(1.0, 0.8)
+	AudioDirector.sfx("rift_touch", RIFT_OPENS_DB)
+	var at: Variant = scene.call(&"_rift_position") if scene.has_method(&"_rift_position") else null
+	scene.hud.show_caption("CAPTION_RIFT", at)
+
+
 func _on_flag_changed(id: String, value: bool) -> void:
 	if id == FEAST_FLAG and value:
 		begin_loops()
 	elif id == LOOPS_FLAG and value:
+		_loops_state = WorldState.state.get_instance_id()
 		_loops_time = WorldState.state.playtime_seconds
+	elif id == RIFT_FLAG and value:
+		# found by the child or by the clock, in whichever scene the hero is
+		Beat.mark("rift_found")

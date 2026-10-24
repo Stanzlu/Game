@@ -1,8 +1,9 @@
 class_name ElysiaScene
 extends LookScene
 ## Elysia in the vertical slice (beats 1 and 2, docs/PHASE4_PLAN.md): waking up and being
-## greeted, the butterfly miniquest with escalating rewards, the chest; then repetition,
-## the reflection that is missing, the stone, the child and the hidden rift.
+## greeted, the butterfly miniquest with escalating rewards, the chest; then, once the feast has
+## made Elysia repeat itself (A7): the reflection that is missing, the stone, the child and the
+## hidden rift.
 ## Story state lives in WorldState flags; this script only reacts to them.
 
 const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
@@ -29,8 +30,6 @@ const WAKE_SIT_SECONDS := 1.2
 const WAKE_TURN_SECONDS := 0.4
 ## The cue of the greeter on the map (content/maps/elysia.txt, letters N and n).
 const GREETER_CUE := "favor"
-## The rift opening on its own is far away: a soft rumble and a little shake, so it is noticed.
-const RIFT_OPENS_DB := -6.0
 
 var director: ElysiaDirector
 
@@ -38,7 +37,6 @@ var director: ElysiaDirector
 func _ready() -> void:
 	super()
 	director = ElysiaDirector.attach(self)
-	director.rift_opened.connect(_announce_rift)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.objective_changed.connect(_on_objective_changed)
 	WorldState.quest_changed.connect(_on_quest_changed)
@@ -102,14 +100,6 @@ func _greeter() -> NpcWalker:
 		):
 			nearest = walker
 	return nearest
-
-
-## Nobody followed the child: the rift opens in its corner all the same. A rumble, a short shake
-## and its caption (whatever the captions setting says), so it is not a silent change on the map.
-func _announce_rift() -> void:
-	view.shake(1.0, 0.8)
-	AudioDirector.sfx("rift_touch", RIFT_OPENS_DB)
-	hud.show_caption("CAPTION_RIFT", _rift_position())
 
 
 ## Where the rift stands on the map, or null.
@@ -180,8 +170,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			Beat.mark("child")
 		"elysia.child_vanished":
 			_child_vanishes()
-		"elysia.rift_open":
-			Beat.mark("rift_found")
 
 
 ## The child fades out by itself (its map placement ends with elysia.child_vanished).

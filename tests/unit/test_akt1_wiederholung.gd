@@ -8,13 +8,14 @@ const MARKT := preload("res://world/levels/akt1/markt.tscn")
 const MARKT_DIALOGUE := "res://content/dialogue/akt1/markt.dialogue"
 const INN_DIALOGUE := "res://content/dialogue/akt1/gasthaus.dialogue"
 const GARDEN_DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
-## cue -> [loop line, the line it repeats]: the loop text is the first thing the person ever says.
+## cue -> [loop line, the line it repeats]: the first thing the person ever says (for those who
+## pick at random: the first line of their pool).
 const REPEATS := {
-	"gatekeeper": ["mk_gate_10", "mk_gate_4"],
+	"gatekeeper": ["mk_gate_10", "mk_gate_1"],
 	"baker": ["mk_baker_8", "mk_baker_3"],
 	"tailor": ["mk_tailor_9", "mk_tailor_2"],
 	"florist": ["mk_flower_6", "mk_flower_1"],
-	"festmaster": ["mk_fest_9", "mk_fest_9"],
+	"festmaster": ["mk_fest_9", "mk_fest_2"],
 }
 
 
@@ -133,6 +134,9 @@ func test_entering_the_market_shrinks_the_loop_once() -> void:
 
 
 func test_the_toast_in_the_market_starts_the_sentences_there_and_then() -> void:
+	WorldState.start_quest("main_elysia_hero")
+	for stage: String in ["celebrated", "market", "hall"]:
+		WorldState.advance_quest("main_elysia_hero", stage)
 	WorldState.set_flag("elysia.hall_mirror_seen")
 	var scene: MarktScene = MARKT.instantiate()
 	add_child_autofree(scene)
@@ -142,12 +146,7 @@ func test_the_toast_in_the_market_starts_the_sentences_there_and_then() -> void:
 	await wait_physics_frames(2)
 	assert_true(WorldState.has_flag("elysia.loops"))
 	assert_eq(ElysiaDirector.stage(), 3)
-	assert_true(
-		(
-			WorldState.is_quest_done("main_elysia_hero")
-			or not WorldState.is_quest_started("main_elysia_hero")
-		)
-	)
+	assert_eq(WorldState.quest_stage("main_elysia_hero"), "repeat")
 
 
 func test_the_fallback_times_are_longer_than_act_one_and_in_order() -> void:
@@ -156,3 +155,36 @@ func test_the_fallback_times_are_longer_than_act_one_and_in_order() -> void:
 	assert_gt(float(stages[2]["after"]), float(stages[1]["after"]))
 	assert_gt(ElysiaDirector.LOOPS_AFTER, float(stages[2]["after"]), "the sentences come last")
 	assert_gte(ElysiaDirector.RIFT_AFTER_LOOPS, 10.0 * 60.0, "time to follow the child")
+
+
+func test_a_save_from_the_feast_moves_the_hero_quest_on_when_the_market_is_entered() -> void:
+	WorldState.start_quest("main_elysia_hero")
+	for stage: String in ["celebrated", "market", "hall", "feast"]:
+		WorldState.advance_quest("main_elysia_hero", stage)
+	WorldState.set_flag("elysia.feast_toast")
+	var scene: MarktScene = MARKT.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	assert_eq(WorldState.quest_stage("main_elysia_hero"), "repeat")
+	assert_true(WorldState.has_flag("elysia.loops"), "and the sentences began on load")
+
+
+func test_the_wait_for_the_rift_runs_from_the_toast_across_scenes() -> void:
+	# the rift opens a quarter hour after the sentences began, not a quarter hour after the last door
+	var first := ElysiaDirector.attach(Node.new())
+	add_child_autofree(first.get_parent())
+	WorldState.state.playtime_seconds = 1000.0
+	WorldState.set_flag(ElysiaDirector.FEAST_FLAG)
+	await wait_process_frames(2)
+	assert_true(WorldState.has_flag(ElysiaDirector.LOOPS_FLAG))
+	WorldState.state.playtime_seconds = 1000.0 + ElysiaDirector.RIFT_AFTER_LOOPS - 100.0
+	var second := ElysiaDirector.attach(Node.new())
+	add_child_autofree(second.get_parent())
+	await wait_process_frames(2)
+	assert_false(WorldState.has_flag(ElysiaDirector.RIFT_FLAG), "not yet")
+	WorldState.state.playtime_seconds = 1000.0 + ElysiaDirector.RIFT_AFTER_LOOPS + 1.0
+	await wait_process_frames(2)
+	assert_true(
+		WorldState.has_flag(ElysiaDirector.RIFT_FLAG), "from the toast, not from the new scene"
+	)
+	assert_true(Beat.reached("rift_found"), "and the beat is marked wherever the hero is")

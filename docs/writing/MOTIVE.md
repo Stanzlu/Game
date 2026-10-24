@@ -133,4 +133,4 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.feast` | Fortschritt | `markt_scene.gd` | `markt.dialogue`, `markt.txt`, `markt_scene.gd` | Der Markt steht im Festzustand: ganz Elysia feiert, dass sie die Halle bemerkt hat. |
 | `elysia.feast_invited` | Entscheidungen | `markt.dialogue` | `markt.dialogue` | Sie hat die Einladung des Gastwirts zum Fest angenommen. |
 | `elysia.feast_noticed` | Wahrnehmung | `markt.dialogue` | `markt.dialogue` | Sie hat der Festmeisterin gesagt, dass es dasselbe Fest wie gestern ist; sie hat es bemerkt und gesagt. |
-| `elysia.feast_toast` | Fortschritt | `markt.dialogue` | `markt.dialogue`, `elysia_scene.gd` | Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher). |
+| `elysia.feast_toast` | Fortschritt | `markt.dialogue` | `markt.dialogue`, `markt_scene.gd`, `elysia_scene.gd` | Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher). |

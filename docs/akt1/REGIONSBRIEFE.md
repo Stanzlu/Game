@@ -206,7 +206,7 @@ Die Schleifen (A7) beginnen bis dahin weiter am Slice-Auslöser.
 
 **Barrierefreiheit (§50).** Keine Zeit, keine Geschicklichkeit; die Gläser klingen als Text („Es klingt dreimal gleich.“); das Fest bringt keinen neuen Blitz und kein Wackeln des Bildes; die Girlanden wiegen sich wie alle Pflanzen leicht im Wind.
 
-**Endlichkeit (§52).** Das Hoch wird einmal gehoben und einmal bezahlt; die Festmeisterin hat danach zwei Zeilen im Wechsel. In A7 sagen alle dasselbe, wortgleich.
+**Endlichkeit (§52).** Das Hoch wird einmal gehoben und einmal bezahlt; die Festmeisterin hat danach eine feste Zeile (A7: der wortgleiche Gruß).
 
 **Gerechnet.** 35 neue Zeilen, 401 Wörter, rund drei Minuten Weg (geschätzt): nach `calibrate.py` rund 6 Minuten (Plan: 14). Akt I liegt damit nach A6 bei rund 29 statt 49 Minuten Plan; die Neuplanung (P6.13)
 entscheidet, ob A4 (Minispiel) oder mehr Erkundung die Lücke füllt.
@@ -228,11 +228,11 @@ Zeilen in `markt.dialogue`, `gasthaus.dialogue` und `elysia.dialogue` (alle `[#d
 | Musik 1 | der Markt wird betreten (`elysia.market_seen`) oder 20 Minuten | die Musikschleife ist halb so lang | Flag `elysia.loops_1` |
 | Die Schleife beginnt | das Hoch (`elysia.feast_toast`) oder 60 Minuten Spielzeit | jede Rolle sagt nur noch einen Satz, jedes Mal denselben; das Kind erscheint | Flag `elysia.loops`, Beat `irritation`, Heldenstufe `repeat` |
 | Musik 2 | der Stein (`elysia.stone_taken`, A9) oder 40 Minuten | ein Viertel der Schleife | Flag `elysia.loops_2` |
-| Der Riss | das Kind folgt (A8, A9), sonst 15 Minuten nach dem Beginn der Sätze | der Riss öffnet sich | `elysia.rift_open` |
+| Der Riss | das Kind folgt (A8, A9), sonst 15 Minuten nach dem Beginn der Sätze (die Wartezeit läuft über die Szenen hinweg) | der Riss öffnet sich; durch die Uhr mit Beben und Untertitel in jeder Elysia-Szene | `elysia.rift_open`, Beat `rift_found` |
 
 **Wortgleiche Zeilen** (Schleife 1, gewählt allein von `elysia.loops`; Schleife 2 mit `elysia.rift_open` bleibt für A9): Torwächter (`mk_gate_10`), Bäckerin (`mk_baker_8`), Schneiderin (`mk_tailor_9`), Blumenfrau
-(`mk_flower_6`), Händler (Begrüßung, `mk_shop_8`; der Laden bleibt offen), Festmeisterin (`mk_fest_9`, die eine Zeile nach dem Hoch), Gastwirt im Gasthaus (`gh_host_loop_1`, `gh_host_loop_2`), Gärtnerin, solange die Schmetterlinge
-frei sind (`el_gard_loop`). Jede Schleifenzeile ist, was die Person am Anfang gesagt hat, Wort für Wort (ein Test prüft den Wortlaut gegen die erste Zeile). Was die Person schuldet (der Laib, das Angebot der Gärtnerin, der
+(`mk_flower_6`), Händler (Begrüßung, `mk_shop_8`; der Laden bleibt offen), Festmeisterin (`mk_fest_9`, die eine Zeile nach dem Hoch: ihr Gruß, als wäre es das erste Mal), Gastwirt im Gasthaus (`gh_host_loop_1`, `gh_host_loop_2`), Gärtnerin, solange die Schmetterlinge
+frei sind (`el_gard_loop`). Jede Schleifenzeile ist eine, die die Person schon gesagt hat, Wort für Wort: bei fester Rede die erste (Torwächter: der Willkommensgruß, Festmeisterin: der Gruß des Festes, Händler, Gastwirt), bei Zufallsrede die erste der Reihe (Bäckerin, Schneiderin, Blumenfrau), bei der Gärtnerin ihre Wartezeile; ein Test prüft den Wortlaut gegen die jeweilige Zeile. Was die Person schuldet (der Laib, das Angebot der Gärtnerin, der
 Laden) steht in den Dialogen vor der Schleife und geht nicht verloren; die Gäste im Gasthaus und die Elysianer im Garten hatten sie schon.
 
 **Heldenquest.** Die Stufe `repeat` (vorläufig final) folgt auf `feast`; der Markt rückt beim Hoch von `feast` auf `repeat`, die Truhe trägt beide nach.
@@ -253,5 +253,5 @@ Laden) steht in den Dialogen vor der Schleife und geht nicht verloren; die Gäst
 
 **Gerechnet.** Neun Zeilen, rund 100 Wörter: zwei Minuten (Gespräche mit der Wiederholung). Akt I liegt damit nach A7 bei rund 31 statt 58 geplanten Minuten (A2 bis A7); A8 und A9 sind noch offen.
 
-**Prüfungen.** `test_akt1_wiederholung` (11 Tests), `test_elysia_director` (Hoch beginnt die Sätze, lange Uhr), `tools/autopilot/akt1_wiederholung.json` (Schritt „segment“ in `check.sh`), der Slice-Durchlauf (`slice_full.json` setzt das Hoch als Flag).
+**Prüfungen.** `test_akt1_wiederholung` (13 Tests), `test_elysia_director` (Hoch beginnt die Sätze, lange Uhr), `tools/autopilot/akt1_wiederholung.json` (Schritt „segment“ in `check.sh`), der Slice-Durchlauf (`slice_full.json` setzt das Hoch als Flag).
 

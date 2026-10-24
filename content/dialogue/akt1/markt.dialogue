@@ -5,7 +5,7 @@
 
 ~ gatekeeper
 if WorldState.has_flag("elysia.loops")
-	Torwächter: Das Tor ist offen. Wie immer. [ID:mk_gate_10] [#draft]
+	Torwächter: Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. [ID:mk_gate_10] [#draft]
 	=> END
 if WorldState.has_flag("elysia.feast")
 	% Torwächter: Heute feiern wir. Das Tor feiert mit. Es steht noch offener als sonst. [ID:mk_gate_7] [#draft]
@@ -198,7 +198,7 @@ Gastwirt: Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie h
 
 ~ festmaster
 if WorldState.has_flag("elysia.feast_toast")
-	Festmeisterin: Das Fest geht weiter. Es geht immer weiter. Das ist das Schöne am Fest. [ID:mk_fest_9] [#draft]
+	Festmeisterin: Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. [ID:mk_fest_9] [#draft]
 	=> END
 if WorldState.has_flag("elysia.feast_invited")
 	Festmeisterin: Der Gastwirt hat dich angekündigt. Er ist sehr zuverlässig. Er sagt immer vorher, was ich nachher sage. [ID:mk_fest_1] [#draft]
