@@ -62,16 +62,25 @@ j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": 
 ; Die Zeile zum Stein, solange er liegt: unsichtbar, eine Zelle westlich auf dem Marmor (S).
 S = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "stone", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 14, "unless": "elysia.stone_taken"}}
 X = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "tal", "spawn": "rift", "if": "elysia.rift_open"}}
+; Akt I, A2: das Gasthaus zum Immer steht in der Mitte der Nordterrasse (Spalte 32). Die Zellen unter der Fassade (i) sind fest, die Fassade
+; sitzt auf der Zelle der Tür (J), die Tür zum Hineingehen davor (l), dahinter der Ankunftspunkt aus dem Gasthaus (m).
+i = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+J = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_front"}}
+l = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "gasthaus", "spawn": "door", "prompt": "INTERACT_ENTER"}}
+m = {"ground": ".", "marker": "spawn_inn"}
+; die beiden Elysianer an der Nordterrasse gehen jetzt auf der Wiese (Reihe 2), die Mitte gehört dem Gasthaus
+V = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
+d = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhh...~~hhhhhhhhhhhhhhhhhhhhhhhhh~~...hhhhhhhhhhhhhhh
-hh.......hhh......~~.........................~~......hhh.......hh
-hh.....f.K.....U..~~..,.g.3...........3.g.,..~~..U.....K.f.....hh
-hh..fffffff...,,,,qq,,,,E..P.........P..e,,,,qq,,,,...fffffff..hh
-hh.fTfffffff,,,,,,QQq,,...................,,qQQ,,,,,,fffffffTf.hh
-hh..ffgffff.,,,....~Y.......................Y~....,,,.ffffgff..hh
-hh.....f..A,,,..o...~~.....................~~...o..,,,A..f.....hh
-hh....^^^^^,,.......~~....^^^^^...^^^^^....~~.......,,^^^^^....hh
+hh.......hhh......~~....V...............d....~~......hhh.......hh
+hh.....f.K.....U..~~..,.g.3.iiiiiiiii.3.g.,..~~..U.....K.f.....hh
+hh..fffffff...,,,,qq,,,,,..PiiiiiiiiiP..,,,,,qq,,,,...fffffff..hh
+hh.fTfffffff,,,,,,QQq,,.....iiiiiiiii.....,,qQQ,,,,,,fffffffTf.hh
+hh..ffgffff.,,,....~Y.......iiiiJiiii.......Y~....,,,.ffffgff..hh
+hh.....f..A,,,..o...~~.........,l,.........~~...o..,,,A..f.....hh
+hh....^^^^^,,.......~~....^^^^^.m.^^^^^....~~.......,,^^^^^....hh
 hh^^^^^^^^^sss^^^^^^^vv^^^^^^^^^^^^^^^^^^^vv^^^^^^^sss^^^^^^^^^hh
 hh^^^^^^^^^sss^^^^^^^vv^^^^^^^^^^^^^^^^^^^vv^^^^^^^sss^^^^^^^^^hh
 hh...................~x......MMMMMMM......x~...................hh

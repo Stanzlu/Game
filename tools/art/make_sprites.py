@@ -18,6 +18,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pixelart as pa  # noqa: E402
+import akt1_props  # noqa: E402
 import slice_props  # noqa: E402
 from pixelart import ramp  # noqa: E402
 
@@ -1499,6 +1500,7 @@ def build():
     pa.save_rgba(os.path.join(OUT, "fx", "fog.png"), fog_bank(300))
     particles()
     slice_props.build(sys.modules[__name__])
+    akt1_props.build(sys.modules[__name__])
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
     for style in ("elysia", "tal", "wald", "haus"):
