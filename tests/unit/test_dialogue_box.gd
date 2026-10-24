@@ -178,7 +178,7 @@ func test_only_what_the_player_has_is_offered() -> void:
 	var texts: Array[String] = []
 	for item: Button in box._responses.get_menu_items():
 		texts.append(item.text)
-	assert_eq(texts, ["Den Stein hineinlegen", "Nichts hineinlegen"] as Array[String])
+	assert_eq(texts, [LineText.of("haus_shelf_r3"), LineText.of("haus_shelf_r2")] as Array[String])
 	assert_eq(_on_screen().size(), 2, "the spoon is not there in grey")
 
 
@@ -195,7 +195,7 @@ func test_the_evening_story_offers_only_what_happened() -> void:
 	WorldState.set_flag("valley.berries_eaten")
 	items = await _answers_shown("evening_day", tal)
 	assert_eq(items.size(), 2)
-	assert_eq((items[0] as Button).text, "Die erste Brombeere war sauer.")
+	assert_eq((items[0] as Button).text, LineText.of("tal_eve_day_r1"))
 
 
 func test_the_cursor_stands_on_the_first_answer() -> void:

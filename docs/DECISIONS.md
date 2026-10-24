@@ -66,6 +66,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-053 | Schreibwerkzeuge: Status-Tags, ID-Sperre, Vokabel- und Zahlen-Lint (P6.3) |
 | ADR-054 | Stilbuch, Stimmenblätter und Motivbuch (P6.4) |
 | ADR-055 | Karten-Linter, Elysia-Regler, Registerlisten und Kalibrierung (P6.6) |
+| ADR-056 | Writing-Pass auf den Slice, Lesefassung und Tests auf Zeilen-IDs (P6.5) |
 
 ---
 
@@ -721,3 +722,17 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
   - **Kalibrierung** `tools/writing/calibrate.py` mit `calibration_baseline.json` (Beat-Zeiten des Autopiloten): Spielzeit aus Zeichen mal Textgeschwindigkeit plus Weg mal Umweg; Beschreibung und Zahlen in `docs/KALIBRIERUNG.md`.
 - **Funde beim ersten Lauf:** Keine ausgelieferte Karte musste sich ändern: was zunächst als Fund erschien, waren Annahmen, die der Linter jetzt kennt (Trittsteine über den Bach, Möbel in der Wand, Stein, Riss und Kind in Elysia, Wegstücke ohne eigenen Spawn). Das Modell ergibt für den Slice 20,6 Minuten bei normalem Tempo und 21,5 Zeilen je Minute; der Plan rechnet für Akt I mit 6 (Abschnitt 4.2 und 9.6) und muss in P6.12 entscheiden, ob Akt I seine rund 100 Minuten aus mehr Text oder aus mehr Spiel zieht.
 - **Konsequenzen:** Jede neue Szene braucht `player_spawn` oder ist ausdrücklich Skriptkarte; Elysia-Szenen hängen den Regler an und schreiben keine eigene Uhr; Sammelstücke gehen über `Collection`. Wo der Linter eine Sperre nicht kennt (Bäume, Wände), prüft sie weiter der Autopilot-Durchlauf. Das Modell der Spielzeit ist eine Rechnung mit drei Annahmen, bis ein echter Durchlauf sie festlegt.
+
+## ADR-056 · Writing-Pass auf den Slice, Lesefassung und Tests auf Zeilen-IDs (P6.5)
+- **Status:** angenommen · 2026-10-24 (Abschnitt 9.2 des Produktionsplans; der Projektinhaber hat den Plan am 24.10. mit „bau alles“ freigegeben, die Lektüre der Blätter bleibt als Durchsicht offen)
+- **Kontext:** Der Slice-Text war ein ungeprüfter Entwurf (ADR-036). Der Writing-Pass misst ihn am Stilbuch (ADR-054) und räumt auf, was der Plan nennt. Tests, die den Wortlaut festnagelten, verhinderten jede Textänderung.
+- **Entscheidung:**
+  - **Gestrichen:** `haus_rest_5` (tote Zeile, KNOWN_ISSUES #74); die ID ist in `ids.lock` zurückgezogen.
+  - **Geändert**, weil sie als Weisheit statt als Ding klangen („keine ständigen Weisheiten“, STIL.md): `tal_stones_2` („Auf den runden hält sich nichts. Nicht mal Moos.“) und `tal_west_3` („Der Weg wird dich nicht vermissen.“). Der Rest des Slice entspricht dem Stilbuch; Zeilen, die als Goldzeile auf einem Stimmenblatt stehen (z. B. `tal_mira_19`), bleiben, auch wo ein Ausdruck zweimal vorkommt („läuft nicht weg“: bei Mira trocken, beim Antreiber mit „Trotzdem.“ sein Tick).
+  - **Belassen, mit Begründung:** `el_wake_8` (der Tastenhinweis in Elysias Ton: „Helden rennen.“ ist der Köder, der Antreiber später verwertet) und `el_loop_2` (Elysia nennt den Riss „nichts Wichtiges“; der Hinweis ist die Täuschung). Der Name erscheint zweimal (`haus_mira_36` probiert ihn aus, `tal_end_12` sagt ihn zum Abschied): das ist gewollt, die zweite Stelle ist die Auflösung. Miras Ansprache des Antreibers (KNOWN_ISSUES #49): sie bleibt aus; die Erzählzeile `haus_mira_29` lässt offen, ob sie ihn sieht, und das ist die Lesart von ADR-042.
+  - **Nicht angefasst:** das erste „Nein.“ und „Zum Meer.“ (Bible §56).
+  - **Lesefassung** (`tools/writing/readable.py`): der Text als Skript in Spielreihenfolge, je Szene eine Nummer (E1, T12 …), Bedingungen sichtbar, Code nicht. `docs/lesefassung/SLICE.md` ist der Stand dieses Pull Requests; jedes Segment bekommt seine eigene Datei, nur das Delta. Zum Antworten genügt „OK“, „ändern: …“ oder „raus“ je Nummer.
+  - **Tests auf IDs:** `LineText.of("<id>")` (`tests/unit/line_text.gd`) liefert den Wortlaut aus den Dialogdateien; über 40 festgenagelte Stellen in acht Testdateien nennen jetzt die ID. Absichtlich im Wortlaut bleiben „Zum Meer.“ und „… Ja. Zum Meer.“ (Bible §56) und Zeilen, deren Text unter mehreren IDs vorkommt.
+- **Einfrieren steht aus:** Die Slice-Zeilen bleiben `[#draft]`/ungetaggt, bis der Projektinhaber die Lesefassung gesehen hat; `[#ok]` heißt „gelesen“ (ADR-053). Ein Satz in der Antwort genügt, dann friert `id_lock.py --update` sie ein.
+- **Konsequenzen:** Ein Texteingriff ändert nur die `.dialogue`-Datei; Tests und Motivbuch folgen den IDs. Wer eine Zeile umschreibt, die auf einem Blatt zitiert wird, ändert das Blatt im selben Pull Request (der Prüfer meldet es sonst).
+

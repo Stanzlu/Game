@@ -46,6 +46,7 @@ Platzhalter bzw. Entwürfe. Testanleitung für Tester: [`docs/PLAYTEST.md`](docs
 | `python3 tools/writing/calibrate.py` | Spielzeit des Slice bei jedem Tempo; `--segment WÖRTER ZEILEN WEG_MIN` für ein geplantes Segment (`docs/KALIBRIERUNG.md`) |
 | `python3 tools/writing/lint.py` | Story-Text: Vokabel- und Zahlen-Lint, Status-Tags, ID-Sperre (Schritt „writing lint“ in `check.sh`) |
 | `python3 tools/writing/motifs.py` | Motivbuch und Konsequenzen-Register (`docs/writing/`): Zitate und Flags prüfen, `--write` erzeugt `MOTIVE.md` |
+| `python3 tools/writing/readable.py TITEL AUS.md [Datei]` | Lesefassung: der Dialogtext als Skript in Spielreihenfolge mit Szenennummern (`docs/lesefassung/`) |
 | `python3 tools/writing/report.py` | Zeilen und Wörter je Sprecher, Entwurfsstand je Datei, ungenutzte Cues |
 | `python3 tools/writing/id_lock.py --update` | neue Zeilen-IDs sperren (`--retire`, `--refreeze` siehe Kopf des Skripts) |
 | `python3 tools/art/layout_slice_maps.py tal --write` | Layout der Slice-Karten (`tal`, `antreiber_tal`, `antreiber_tal_bench`) |

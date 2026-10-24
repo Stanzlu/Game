@@ -71,14 +71,14 @@ func test_the_antreiber_has_a_shadow_and_reads_slowly() -> void:
 	await wait_physics_frames(3)
 	assert_not_null(scene.antreiber.get_node_or_null("Shadow"), "standing on the ground")
 	assert_eq(AntreiberActor.bark_seconds("Gut."), AntreiberActor.BARK_SECONDS)
-	var long_line := "Ich bin nicht außer Atem. Ich atme nur schneller, um Zeit zu sparen."
+	var long_line := LineText.of("sl_antr_tired_4")
 	assert_gt(AntreiberActor.bark_seconds(long_line), 4.5, "long lines stay longer")
 
 
 func test_the_second_sign_is_like_the_first() -> void:
 	var first := await _sign()
-	assert_eq(first, "Ein Wegweiser. »Schuppen 200 m«.")
-	assert_eq(await _sign(), "Noch ein Wegweiser. »Schuppen 200 m«. Wie der letzte.")
+	assert_eq(first, LineText.of("sl_antr_sign_1"))
+	assert_eq(await _sign(), LineText.of("sl_antr_sign_2"))
 
 
 func _sign() -> String:

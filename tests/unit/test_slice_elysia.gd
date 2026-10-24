@@ -294,20 +294,14 @@ func test_the_missing_reflection_cannot_be_skipped() -> void:
 	WorldState.advance_quest("side_elysia_fountain", "done")
 	assert_eq(
 		await _first_line("basin"),
-		"Das Wasser im Becken ist klar und vollkommen still.",
+		LineText.of("el_basin_1"),
 		"the mirror first, even with the fountain fixed"
 	)
 	assert_true(WorldState.has_flag("elysia.mirror_seen"))
 	assert_true((await _first_line("basin")).begins_with("Das Becken plätschert."))
-	assert_eq(await _first_line("basin"), "Das Wasser ist still wie Glas. Es zeigt alles.")
+	assert_eq(await _first_line("basin"), LineText.of("el_basin_again"))
 
 
 func test_the_first_sniff_is_the_first() -> void:
-	assert_eq(
-		await _first_line("flower"),
-		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
-	)
-	assert_ne(
-		await _first_line("flower"),
-		"Eine Blume, so schön, dass es fast wehtut. Du riechst daran. Sie riecht nach nichts."
-	)
+	assert_eq(await _first_line("flower"), LineText.of("el_flower_1"))
+	assert_ne(await _first_line("flower"), LineText.of("el_flower_1"))

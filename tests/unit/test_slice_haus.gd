@@ -430,28 +430,26 @@ func test_the_shelf_counts_its_free_spaces() -> void:
 	WorldState.add_item("item_stone", 1, false)
 	var seen := await _play("shelf", "Nichts")
 	assert_true("Zwei Fächer sind ganz leer" in seen[0])
-	assert_true("Beide gerade groß genug für etwas Kleines." in seen, "both are free")
-	assert_true("Du behältst den Stein. Das Fach kann warten." in seen, "no spoon joke")
+	assert_true(LineText.of("haus_shelf_8") in seen, "both are free")
+	assert_true(LineText.of("haus_shelf_10") in seen, "no spoon joke")
 	seen = await _play("shelf", "Stein")
 	assert_eq(WorldState.curiosity_in("shelf_2"), "item_stone")
 	seen = await _play("shelf")
-	assert_eq(
-		seen[0], "Im Regal liegt der Stein. Er glänzt nicht. Er liegt einfach gut da.", "alone"
-	)
+	assert_eq(seen[0], LineText.of("haus_shelf_9"), "alone")
 	WorldState.add_item("curiosity_tiny_spoon", 1, false)
 	seen = await _play("shelf", "Nichts")
-	assert_true("Ein Fach ist noch frei, gerade groß genug für etwas Kleines." in seen)
-	assert_true("Du behältst den Löffel. Für sehr kleine Suppen, vielleicht." in seen)
+	assert_true(LineText.of("haus_shelf_2") in seen)
+	assert_true(LineText.of("haus_shelf_4") in seen)
 
 
 func test_mira_disagrees_about_her_fish() -> void:
 	var seen := await _play("mira_visit", "beste Fisch")
-	assert_true("Nein. Der war zu lang im Feuer." in seen, "Game Bible §56: Mira widerspricht")
+	assert_true(LineText.of("haus_mira_31") in seen, "Game Bible §56: Mira widerspricht")
 	assert_true(WorldState.has_memory("mira", "praised_fish"))
 	assert_ne(tr("MEMORY_MIRA_PRAISED_FISH"), "MEMORY_MIRA_PRAISED_FISH", "in the journal")
 	WorldState.new_game()
 	seen = await _play("mira_visit", "…")
-	assert_true("Ihr esst. Der Regen trommelt aufs Dach." in seen)
+	assert_true(LineText.of("haus_mira_34") in seen)
 	assert_true(WorldState.has_memory("mira", "ate_quietly"))
 
 
@@ -472,7 +470,4 @@ func test_mira_finds_a_free_place_next_to_the_antreiber() -> void:
 func test_the_bucket_by_the_fire() -> void:
 	assert_eq((await _play("bucket")).size(), 1)
 	WorldState.set_fire_lit(true)
-	assert_eq(
-		await _play("bucket"),
-		PackedStringArray(["Es tropft in den Eimer. Plink. Lange nichts. Plink."])
-	)
+	assert_eq(await _play("bucket"), PackedStringArray([LineText.of("haus_bucket_2")]))

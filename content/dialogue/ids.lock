@@ -189,7 +189,6 @@ haus_rest_1	slice/haus.dialogue	-
 haus_rest_2	slice/haus.dialogue	-
 haus_rest_3	slice/haus.dialogue	-
 haus_rest_4	slice/haus.dialogue	-
-haus_rest_5	slice/haus.dialogue	-
 haus_rest_6	slice/haus.dialogue	-
 haus_rest_7	slice/haus.dialogue	-
 haus_rest_8	slice/haus.dialogue	-
@@ -444,3 +443,4 @@ tal_west_3	slice/tal.dialogue	-
 tal_wood_1	slice/tal.dialogue	-
 tal_wood_2	slice/tal.dialogue	-
 tal_wood_3	slice/tal.dialogue	-
+retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen

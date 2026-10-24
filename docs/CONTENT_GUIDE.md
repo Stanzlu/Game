@@ -124,6 +124,8 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - **Vokabel-Lint** (`tools/writing/vocabulary.json`): keine Therapie-, Diagnose- oder Suchtsprache (Bible §3.2). Ein berechtigter Treffer steht mit Zeilen-ID, Begriff und Grund unter `exceptions`.
 - **Zahlen:** Zahlen im Story-Text werden ausgeschrieben (Dialoge, Journal, Gegenstandsbeschreibungen); Schilder und Größen sind Ausnahmen mit Grund.
 - **Schreiben gegen die Blätter:** `docs/writing/STIL.md` (Stil und „Nie“-Liste), `docs/writing/stimmen/<figur>.md` (Funktion, Signatur, Goldzeilen), `docs/writing/MOTIVE.md` (Motive und Konsequenzen-Register, erzeugt aus `motive.json` mit `tools/writing/motifs.py --write`). Zitate mit `` `id` „Text“ `` auf diesen Seiten prüft der Check gegen den Spieltext.
+- **Lesefassung** (`tools/writing/readable.py`, ADR-056): zu jedem Segment erzeugt ein Pull Request `docs/lesefassung/<segment>.md`; der Projektinhaber antwortet je Szenennummer mit „OK“, „ändern: …“ oder „raus“. Danach `[#ok]` setzen und `id_lock.py --update`.
+- **Tests nennen IDs, nicht Wortlaut:** `LineText.of("<id>")` (`tests/unit/line_text.gd`); nur Bible-Wortlaut („Zum Meer.“) bleibt als Text.
 - `tools/writing/report.py` zeigt Zeilen und Wörter je Sprecher, den Stand je Datei und Cues, die nichts mehr startet.
 
 ## Szenen: Musik, Ambience, Licht

@@ -58,7 +58,8 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   `tools/writing/id_lock.py --update` sperren, eine ID nie still umbenennen: `--retire`). `note:`-Zeilen abarbeiten, eingefrorene
   (`[#ok]`) Zeilen nur mit `--refreeze` ändern. Statistik: `tools/writing/report.py`. Geschrieben wird gegen `docs/writing/`
   (`STIL.md`, Blatt der Figur in `stimmen/`, `MOTIVE.md` mit dem Konsequenzen-Register); `tools/writing/motifs.py` prüft
-  Zitate und Flags, ein neues Story-Flag gehört in `docs/writing/motive.json` (dann `motifs.py --write`).
+  Zitate und Flags, ein neues Story-Flag gehört in `docs/writing/motive.json` (dann `motifs.py --write`). Tests nennen Zeilen über
+  `LineText.of("<id>")`, nie über den Wortlaut; die Lesefassung eines Segments erzeugt `tools/writing/readable.py` (ADR-056).
 - Vertical Slice: Orte `elysia`, `tal`, `haus`, `weg` (`world/levels/slice/`, ADR-037). Geschichte nur über
   WorldState (Flags, Quests, Haus); Karten-Requisiten reagieren mit `if`/`unless`/`sprite_when`, Szenen-Skripte
   inszenieren nur. Slice-Dialoge in `content/dialogue/slice/` ohne `[#ph]` (ADR-036), Erzählzeilen ohne

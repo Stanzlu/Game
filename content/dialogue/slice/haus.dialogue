@@ -134,23 +134,21 @@ Er bleibt sitzen. Er wagt nicht, sich zu bewegen. [ID:haus_cat_antr_5]
 => END
 
 ~ fire_rest
-if WorldState.has_flag("house.rested")
-	Du sitzt wieder am Feuer. Es hat nicht gewartet, aber es ist noch da. [ID:haus_rest_5]
+# Told once: the scene skips the cue when house.rested is set (the cue sets it).
+Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
+if WorldState.day_preset() == "abend"
+	Draußen ist es still geworden. Der Regen ist vorbei. [ID:haus_rest_6]
 else
-	Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
-	if WorldState.day_preset() == "abend"
-		Draußen ist es still geworden. Der Regen ist vorbei. [ID:haus_rest_6]
-	else
-		Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
-	if WorldState.has_flag("elysia.host_warned")
-		Du musst heute nirgends mehr hin, hat der Wirt gesagt. Heute musstest du ziemlich weit. [ID:haus_rest_7]
-	if WorldState.has_item("item_stone") and not WorldState.has_flag("elysia.stone_taken")
-		In deiner Tasche ein Stein. Grau, glatt. Du kannst dich nicht erinnern, ihn aufgehoben zu haben. [ID:haus_rest_8]
-	elif WorldState.has_item("item_stone")
-		Der Stein in deiner Tasche ist warm geworden. [ID:haus_rest_3]
-	if WorldState.has_item("item_seed")
-		In der anderen Tasche der Samen. Du weißt nicht, seit wann er da ist. [ID:haus_rest_4]
-	do WorldState.set_flag("house.rested")
+	Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]
+if WorldState.has_flag("elysia.host_warned")
+	Du musst heute nirgends mehr hin, hat der Wirt gesagt. Heute musstest du ziemlich weit. [ID:haus_rest_7]
+if WorldState.has_item("item_stone") and not WorldState.has_flag("elysia.stone_taken")
+	In deiner Tasche ein Stein. Grau, glatt. Du kannst dich nicht erinnern, ihn aufgehoben zu haben. [ID:haus_rest_8]
+elif WorldState.has_item("item_stone")
+	Der Stein in deiner Tasche ist warm geworden. [ID:haus_rest_3]
+if WorldState.has_item("item_seed")
+	In der anderen Tasche der Samen. Du weißt nicht, seit wann er da ist. [ID:haus_rest_4]
+do WorldState.set_flag("house.rested")
 => END
 
 ~ antreiber_fire
