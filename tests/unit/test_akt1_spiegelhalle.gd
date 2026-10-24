@@ -126,6 +126,14 @@ func test_noticing_the_feather_opens_the_second_gate() -> void:
 	assert_true(Beat.reached("hall_room_2"))
 
 
+func test_the_gate_opening_is_written_out_too() -> void:
+	assert_true(ContentValidator.has_translation("CAPTION_GATE"))
+	var scene := await _hall()
+	WorldState.set_flag("elysia.hall_room_1")
+	await wait_physics_frames(2)
+	assert_eq(scene.hud._caption.text, tr("CAPTION_GATE"), "whatever the captions setting says")
+
+
 func test_a_shut_gate_says_what_it_waits_for() -> void:
 	var seen := await DialogueWalk.play(DIALOGUE, "gate_shut")
 	assert_true(LineText.of("sh_gate_2") in seen)
@@ -198,7 +206,7 @@ func test_the_hall_is_the_stage_after_the_market() -> void:
 	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the hall is still to come")
 	await _hall()
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "hall")
-	assert_true(WorldState.is_quest_done("main_elysia_hero"), "for now, until the feast")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the feast is the next stage")
 
 
 func test_a_visit_before_the_chest_is_caught_up_by_the_chest() -> void:
@@ -212,3 +220,4 @@ func test_a_visit_before_the_chest_is_caught_up_by_the_chest() -> void:
 	WorldState.advance_quest("main_elysia_hero", "celebrated")
 	await wait_physics_frames(2)
 	assert_eq(WorldState.quest_stage("main_elysia_hero"), "hall", "the town, then the hall")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"))

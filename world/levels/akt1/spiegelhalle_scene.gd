@@ -52,4 +52,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 ## The room noticed what did not match: its gate swings open.
 func _gate_opens() -> void:
 	AudioDirector.sfx("door_open", GATE_DB)
+	# written out whatever the captions setting says: the gate is the answer to what was noticed
+	hud.show_caption("CAPTION_GATE")
 	view.shake(0.6, 0.4)

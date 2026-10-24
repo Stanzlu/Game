@@ -14,7 +14,8 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | inn | A2 Gasthaus | `gasthaus` | `inn_enter`, `inn_fed`, `inn_room`, `inn_slept` | **gebaut (ADR-058)** |
 | market | A3 Markt und Straße | `markt` | `market_enter`, `market_board`, `market_bread`, `market_board_done`, `market_melody` | **gebaut (ADR-059)** |
 | hall | A5 Spiegelhalle | `spiegelhalle` | `hall_enter`, `hall_room_1`, `hall_room_2`, `hall_mirror`, `perception` | **gebaut (ADR-060)** |
-| feast, repeat | A6 Fest, A7 Wiederholung | `markt` (Festzustand), alle Orte | | geplant |
+| feast | A6 Fest | `markt` (Festzustand) | `feast_enter`, `feast` | **gebaut (ADR-061)** |
+| repeat | A7 Wiederholung | alle Orte | | geplant |
 | trail, rift | A8 Kind-Spur, A9 Stein, Samen, Riss | `gasthaus`, `markt`, `spiegelhalle`, `elysia` | | geplant |
 
 Raumschichtung (Plan 4.1): Zimmer (Gasthaus) – Mauer und Tor – Garten – Straße – Stadt (Markt) – Welt (Weltenbaum), unbeschriftet.
@@ -163,11 +164,52 @@ erscheint; A6 und A7 bauen darauf, dass die Wiederholung bemerkt werden kann.
 **Scheitern und Speichern (§49).** Es gibt kein Scheitern: Der Wächter nennt die Antwort, wenn man sie will; die Tore öffnen, wenn man hinsieht, nicht wenn man etwas richtig macht; Wegsehen am Spiegel nimmt nichts. Jede Beat-Marke speichert.
 
 **Barrierefreiheit (§50).** Die Aufgabe ist rein visuell, und der Wächter beschreibt sie in Worten (Hilfe in drei Stufen, jederzeit, unbegrenzt); die Antworten des Spiels hängen an der Dialogbox mit Textgröße, Tempo und
-Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln, die Untertitel „Geräusche als Text“ nennen es. Keine Zeit, kein Rätsel mit Fehlversuch.
+Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln (Bildschirmwackeln folgt der Einstellung), und der Untertitel „Ein Tor öffnet sich.“ steht immer da. Keine Zeit, kein Rätsel mit Fehlversuch.
 
 **Endlichkeit (§52).** Alles wiederholt sich nicht, es liegt einmal da: Blatt und Feder lassen sich mitnehmen, dann ist die Halle wieder so vollkommen wie vorher (in A7 wird sie es wortgleich).
 
 **Gerechnet.** 46 Zeilen, 449 Wörter, rund viereinhalb Minuten Weg (geschätzt): nach `calibrate.py` rund 8 Minuten (Plan: 12); wer lange sucht, braucht mehr, mit Wächter weniger.
 
 **Prüfungen.** `test_akt1_spiegelhalle` (13 Tests), `tools/autopilot/akt1_spiegelhalle.json` (Schritt „segment“ in `check.sh`), `MapLint` (Symmetrie, Erreichbarkeit; `SINGLE_CUES` kennt Blatt und Feder), `StoryLint`.
+
+---
+
+## A6 Das Fest
+
+**Stand:** gebaut. **Szene:** dieselbe wie A3 (`markt.tscn`, `MarktScene`), im Festzustand; Karte `content/maps/markt.txt` (Requisiten mit `if: elysia.feast`), Dialog `content/dialogue/akt1/markt.dialogue`
+(35 neue Zeilen, 3 neue Cues `host_feast`, `festmaster`, `feast_guest`, Festvarianten der fünf Rollen mit freien Zeilen, alle `[#draft]`). **Zugang:** kein eigener Ort: wer die Halle der Spiegel bemerkt hat
+(`elysia.hall_mirror_seen`), findet den Markt beim nächsten Betreten im Festzustand (`elysia.feast`, gesetzt vor dem Bau der Karte).
+
+**Zweck.** Elysia belohnt das Bemerken: Es feiert es. Die Belohnung wächst (rund 11.000 Erfahrung, 3.000 Gold), die Tat schrumpft (ein Glas heben; Bible §10, §8), und mit dem Hoch ist Level 48 sicher, auch wenn
+alles Freiwillige ausgelassen wurde (Slice 22.600 + Fest 11.000 = 33.600, Level 48 ab 33.135); wer auch den Garten ausgelassen hat, bekommt vom Hoch nach den 11.000 genau das Fehlende bis Level 48 dazu (`WorldState.ensure_level`). Der Gastwirt lädt ein (der Betäuber, Bible §14), freundlich und nie verbindlich.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Festzustand | Markt betreten nach `hall_mirror_seen` | Girlanden, Tafeln mit Speisen, Gäste (zwei Paare), die Festmeisterin am Brunnen, der Gastwirt vor dem Brunnen | Flag `elysia.feast`, Beat `feast_enter` |
+| Einladung | der Gastwirt (`host_feast`) | „Da ist er! Der Held des Tages! Jedes Tages!“ Annehmen sagt der Festmeisterin Bescheid (er hat es schon getan); Umschauen und Schweigen sind Antworten | `elysia.feast_invited` |
+| Das Hoch | die Festmeisterin (`festmaster`) | „Du hebst das Glas, wir machen den Rest.“ Glas heben, später, oder (mit Wahrnehmung) „Das ist dasselbe Fest wie gestern.“ | `elysia.feast_toast`, +11.000 XP (und bis Level 48 aufgefüllt), +3.000 Gold, Beat `feast`; mit Wahrnehmung zusätzlich `elysia.feast_noticed` |
+| Nach dem Hoch | der Gastwirt | „Du musst heute nicht zurück. Das Fest hat keinen Abend.“; hat die Spielfigur es bemerkt: „Das macht nichts. Hier darf man bemerken, so viel man will.“ | keine Flags |
+| Festvarianten | Torwächter, Bäckerin, Schneiderin, Blumenfrau, Händler | je zwei bis drei freie Zeilen im Festzustand; die Gäste sagen alle dasselbe („Auf den Helden!“) | keine Flags |
+
+**Heldenquest.** Die Stufe `feast` (vorläufig final) folgt auf `hall`; die Truhe trägt sie nach, wenn das Hoch vor der Truhe gehoben wurde (`ElysiaScene`: `inn`, `market`, `hall`, `feast`).
+Die Schleifen (A7) beginnen bis dahin weiter am Slice-Auslöser.
+
+**Figuren.** Die Festmeisterin (neu, `festmaster`, Stimme `Festmeisterin`): magentafarbene Jacke, hoher Zopf. Der Gastwirt, die Elysianer-Gäste und die fünf Rollen des Marktes kehren zurück.
+
+**Humor-Ziel (3/10).** Eine Festmeisterin, die das Hoch schon vorher kennt („Er sagt immer vorher, was ich nachher sage.“); ein Fest, das größer ist als gestern, weil es gestern kleiner war; Gäste, die alle dasselbe rufen.
+
+**Gewicht (§45).** leicht; die dunkelste Zeile ist die des Gastwirts („Das Fest hat keinen Abend.“), freundlich gesagt, wie alle Angebote des Betäubers.
+
+**Motive.** Der Betäuber (`betaeuber`, Wiederholung seiner Sätze), wortgleiche Sätze (`npc-bewegung`, `formulierungen`), Wahrnehmung (die vierte Antwort); die Wiederholung wird in A7 zur Aufgabe.
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern: das Hoch lässt sich vertagen („Später“), ohne Einladung, ohne Folgen. Das Hoch speichert über den Beat `feast`.
+
+**Barrierefreiheit (§50).** Keine Zeit, keine Geschicklichkeit; die Gläser klingen als Text („Es klingt dreimal gleich.“); das Fest bringt keinen neuen Blitz und kein Wackeln des Bildes; die Girlanden wiegen sich wie alle Pflanzen leicht im Wind.
+
+**Endlichkeit (§52).** Das Hoch wird einmal gehoben und einmal bezahlt; die Festmeisterin hat danach zwei Zeilen im Wechsel. In A7 sagen alle dasselbe, wortgleich.
+
+**Gerechnet.** 35 neue Zeilen, 401 Wörter, rund drei Minuten Weg (geschätzt): nach `calibrate.py` rund 6 Minuten (Plan: 14). Akt I liegt damit nach A6 bei rund 29 statt 49 Minuten Plan; die Neuplanung (P6.13)
+entscheidet, ob A4 (Minispiel) oder mehr Erkundung die Lücke füllt.
+
+**Prüfungen.** `test_akt1_fest` (14 Tests, darunter „Level 48 ist sicher“ für beide Wege), `tools/autopilot/akt1_fest.json` (Schritt „segment“ in `check.sh`), `MapLint` (Zwillinge der Festgäste, Mittelachse), `StoryLint`.
 

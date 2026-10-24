@@ -186,6 +186,8 @@ func test_elysia_quest_can_be_celebrated_early() -> void:
 	assert_true(WorldState.advance_quest("main_elysia_hero", "market"))
 	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the hall comes next")
 	assert_true(WorldState.advance_quest("main_elysia_hero", "hall"))
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the feast comes next")
+	assert_true(WorldState.advance_quest("main_elysia_hero", "feast"))
 	assert_true(WorldState.is_quest_done("main_elysia_hero"))
 
 

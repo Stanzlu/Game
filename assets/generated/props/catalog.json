@@ -8,6 +8,16 @@
    "res://assets/generated/props/elysia/bench.png"
   ]
  },
+ "elysia/bunting": {
+  "anchor": [
+   48,
+   20
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/elysia/bunting.png"
+  ]
+ },
  "elysia/bush": {
   "anchor": [
    13,

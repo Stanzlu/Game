@@ -662,6 +662,27 @@ def odd_feather(ms):
     return c
 
 
+def bunting(ms):
+    """A string of small flags for the feast, 96 x 24 (six cells): it sags in the middle, the flags hang from it
+    in the gold, teal and rose of Elysia, a little ball of light at each end."""
+    st = pa.STYLES["elysia"]
+    c = ms.Canvas(96, 24)
+    colors = [GOLD, TILE, PINK, BLANKET]
+    xs = np.arange(96)
+    sag = (3 + 9 * (1 - ((xs - 47.5) / 47.5) ** 2)).astype(int)  # the string's drop at each column (higher in the middle)
+    for x in range(96):
+        y = 2 + int(sag[x] - 3)
+        c.fill(c.rect(x, y, x + 1, y + 1), GOLD[2])
+    for k, x in enumerate(range(6, 92, 8)):
+        y = 2 + int(sag[x] - 3)
+        flag = c.rect(x - 2, y + 1, x + 3, y + 7) & (c.yy < y + 7 - np.abs(c.xx - x) * 1.4)
+        c.paint(flag, colors[k % 4], 0.8 - 0.1 * (c.yy - y) / 6, dither=False)
+    for x in (2, 93):
+        c.fill(c.ellipse(x, 4, 2.2, 2.2), GOLD[4])
+    c.outline(st["outline"])
+    return c
+
+
 def build(ms):
     ms.save("elysia", "inn_front", inn_front(ms), (72, 54))
     ms.save("elysia", "inn_shell", inn_shell(ms), (AXIS_X, 8), flat=True,
@@ -688,6 +709,7 @@ def build(ms):
     ms.save("elysia", "hall_mirror", hall_mirror(ms), (24, 40))
     ms.save("elysia", "odd_leaf", odd_leaf(ms), (7, 6), shadow=[6, 2])
     ms.save("elysia", "odd_feather", odd_feather(ms), (9, 5), shadow=[8, 2])
+    ms.save("elysia", "bunting", bunting(ms), (48, 20), sway=1.0)
 
 
 def preview(path):

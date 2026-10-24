@@ -171,6 +171,23 @@ DESIGNS = {
         "outfit": "cape",
         "bag": "none",
     },
+    # The mistress of the feast: a magenta jacket with gold, a high ponytail; she has never been
+    # anywhere but at the start of the feast, which has no end.
+    "festmaster": {
+        "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),
+        "hair": ramp("#5a1a3a", "#8e2a5e", "#c64a8a", "#ee8cba", "#fcc8de"),
+        "top": ramp("#6a1a52", "#a82a82", "#dc52b0", "#f8a0d8"),
+        "inner": ramp("#a89060", "#d8c088", "#f4e6b0", "#fffbe0"),
+        "belt": ramp("#6a4c14", "#a87c22", "#dcb040", "#fbe48a"),
+        "pants": ramp("#3a1a46", "#5e2a74", "#8a4ea8", "#b88cd0"),
+        "boots": ramp("#5a4214", "#94701e", "#c89c34", "#ecd070"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#f0a090"),
+        "outline": pa.hex_rgb("#3a1a3a"),
+        "hair_style": "ponytail",
+        "outfit": "jacket",
+        "bag": "none",
+    },
     # The poet: a long coat in night blue, tousled hair.
     "poet": {
         "skin": ramp("#8a5048", "#c8846a", "#eeb894", "#ffe0c4"),

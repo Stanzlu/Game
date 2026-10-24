@@ -130,8 +130,8 @@ func _on_quest_changed(quest_id: String, stage: String) -> void:
 		_catch_up_the_hero_quest()
 
 
-## The chest was the last thing in the way: the inn, the town and the hall, if they were visited
-## before it, now count, in the order of the quest.
+## The chest was the last thing in the way: the inn, the town, the hall and the feast, if they were
+## visited before it, now count, in the order of the quest.
 func _catch_up_the_hero_quest() -> void:
 	if WorldState.has_flag("elysia.inn_met"):
 		WorldState.advance_quest("main_elysia_hero", "inn")
@@ -139,6 +139,8 @@ func _catch_up_the_hero_quest() -> void:
 		WorldState.advance_quest("main_elysia_hero", "market")
 	if WorldState.has_flag("elysia.hall_seen"):
 		WorldState.advance_quest("main_elysia_hero", "hall")
+	if WorldState.has_flag("elysia.feast_toast"):
+		WorldState.advance_quest("main_elysia_hero", "feast")
 
 
 ## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.
