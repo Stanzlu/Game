@@ -358,6 +358,11 @@ class ReadableTests(unittest.TestCase):
         self.assertNotIn("set_flag", out)
         self.assertNotIn("=> END", out)
 
+    def test_jumps_between_cues_are_shown_and_the_end_is_not(self):
+        out = self.render("~ start\nif WorldState.has_flag(\"a.b\")\n\t=> later\n=> END\n\n~ later\nEin Vogel. [ID:a_1]\n")
+        self.assertIn("*→ weiter bei* `later`", out)
+        self.assertNotIn("END", out)
+
     def test_inline_conditions_and_answers_with_a_condition(self):
         out = self.render('~ start\n% [if WorldState.has_flag("a.b") /] Mira: Die Steine. [ID:a_1]\n- [if WorldState.has_flag("a.b") /] Doch. [ID:a_r1]\n')
         self.assertIn("*(wenn `a.b`)*", out)

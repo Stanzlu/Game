@@ -165,6 +165,39 @@ fi
 grep -o '"beat":"[a-z_]*"' "$smoke_log" | cut -d'"' -f4 | paste -sd' ' -
 echo "smoke ok"
 
+# The segments of Act I (docs/akt1/REGIONSBRIEFE.md): each plays its own script from its own scene
+# on a fresh profile and has to reach its marks. "script:scene:frames:mark mark ..."; a mark is a
+# beat (the log line "beat":"<id>") or, with a dot in it, a flag that was set ("flag":"<id>","value":true).
+segments=(
+  "akt1_gasthaus:gasthaus:2400:inn_enter inn_fed inn_room inn_slept elysia.inn_book_signed"
+)
+for segment in "${segments[@]}"; do
+  IFS=: read -r name scene frames marks <<<"$segment"
+  step "smoke: segment $name (autopilot)"
+  rm -rf "$user_root/profiles/segment_check"
+  smoke_log="$(mktemp)"
+  tools/godot.sh --headless --fixed-fps 30 --quit-after "$frames" -- --profile=segment_check --text=instant \
+    --start="$scene" --autopilot="res://tools/autopilot/$name.json" >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
+  rm -rf "$user_root/profiles/segment_check"
+  if has_errors "$smoke_log"; then
+    grep -E "$ERROR_PATTERN" "$smoke_log" | grep -vE "$IGNORE_PATTERN"
+    echo "check: segment $name reported errors" >&2
+    exit 1
+  fi
+  for mark in $marks; do
+    case "$mark" in
+      *.*) pattern="\"flag\":\"$mark\",\"value\":true" ;;
+      *) pattern="\"beat\":\"$mark\"" ;;
+    esac
+    if ! grep -q "$pattern" "$smoke_log"; then
+      grep -E "beat|WARN|ERROR|autopilot" "$smoke_log" | tail -30
+      echo "check: segment $name never reached '$mark'" >&2
+      exit 1
+    fi
+  done
+  echo "segment ok: $marks"
+done
+
 step "unit tests (GUT)"
 # Fixed frame rate: game time runs as fast as the machine can step it (a day of waits in the story
 # tests takes seconds, not minutes). GUT_FIXED_FPS=0 runs in real time, e.g. to hunt a timing bug.
