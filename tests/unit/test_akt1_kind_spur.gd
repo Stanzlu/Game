@@ -138,6 +138,15 @@ func test_a_save_from_the_repetition_before_the_trail_gets_its_quest() -> void:
 	assert_eq(WorldState.quest_stage("main_elysia_trail"), "hum")
 
 
+func test_a_save_from_after_the_rift_has_nothing_left_to_follow() -> void:
+	# the autosave of rift_found (A7) holds the repetition and the open rift, but no trail
+	WorldState.set_flag("elysia.loops")
+	WorldState.set_flag("elysia.rift_open")
+	ElysiaDirector.attach(await _scene(MARKT))
+	assert_eq(WorldState.quest_stage("main_elysia_trail"), "rift", "no hum that never ends")
+	assert_true(WorldState.is_quest_done("main_elysia_trail"))
+
+
 # --- The melody and the card ---------------------------------------------------------------
 
 

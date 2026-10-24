@@ -75,7 +75,7 @@ func _ready() -> void:
 		# the start of the loops is not saved: after a load the wait starts again
 		_loops_time = WorldState.state.playtime_seconds
 		# a save from the repetition before the trail existed (A7): the hum begins now
-		WorldState.start_quest("main_elysia_trail")
+		_start_trail()
 	_update_stages()
 
 
@@ -85,7 +85,15 @@ func begin_loops() -> void:
 	if not WorldState.has_flag(LOOPS_FLAG):
 		WorldState.set_flag(LOOPS_FLAG)
 		Beat.mark("irritation")
+	_start_trail()
+
+
+## The hum starts the child's trail (a no-op if it started before). A save from after the rift
+## opened (A7) has nothing left to follow: its trail ends at once, as it would have.
+func _start_trail() -> void:
 	WorldState.start_quest("main_elysia_trail")
+	if WorldState.has_flag(RIFT_FLAG) and not WorldState.is_quest_done("main_elysia_trail"):
+		WorldState.advance_quest("main_elysia_trail", "rift")
 
 
 func _process(_delta: float) -> void:

@@ -526,7 +526,7 @@ func _on_collectible_flag(id: String, value: bool) -> void:
 
 func _fragment_card(id: String) -> void:
 	var path := FRAGMENT_DIR + "fragment_" + id.trim_prefix(Collection.FRAGMENT_PREFIX) + ".png"
-	var texture := load(path) as Texture2D
+	var texture: Texture2D = load(path) as Texture2D if ResourceLoader.exists(path) else null
 	if texture == null:
 		Log.warn(Log.Category.UI, "fragment picture missing", {"path": path})
 		return
