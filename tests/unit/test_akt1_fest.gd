@@ -94,6 +94,7 @@ func test_the_host_invites_and_the_invitation_is_free_to_refuse() -> void:
 
 func test_the_toast_pays_eleven_thousand_for_lifting_a_glass() -> void:
 	WorldState.start_quest("main_elysia_hero")
+	WorldState.add_xp(SLICE_XP)
 	var xp: int = WorldState.state.elysia.xp
 	var gold: int = WorldState.state.elysia.gold
 	var seen := await DialogueWalk.play(DIALOGUE, "festmaster", ["Glas heben"])
@@ -122,6 +123,29 @@ func test_level_forty_eight_is_certain_after_the_feast() -> void:
 	assert_lt(WorldState.elysia_level(), 48, "the slice alone is not enough")
 	await DialogueWalk.play(DIALOGUE, "festmaster", ["Glas heben"])
 	assert_gte(WorldState.elysia_level(), 48, "with the toast it is")
+
+
+func test_the_toast_fills_up_to_level_forty_eight_for_a_hero_who_skipped_the_garden() -> void:
+	# market, hall and feast need nothing of the garden: the hall's own rewards are all there is
+	WorldState.add_xp(1500 + 2000 + 5000)
+	assert_lt(WorldState.elysia_level(), 48)
+	await DialogueWalk.play(DIALOGUE, "festmaster", ["Glas heben"])
+	assert_eq(WorldState.elysia_level(), 48, "the toast pays what is missing, and no level more")
+	assert_eq(WorldState.state.elysia.xp, GameState.xp_for_level(48), "to the very XP of level 48")
+
+
+func test_ensure_level_pays_the_difference_once_and_never_takes_away() -> void:
+	assert_eq(GameState.level_for_xp(GameState.xp_for_level(48)), 48)
+	assert_eq(
+		GameState.level_for_xp(GameState.xp_for_level(48) - 1), 47, "xp_for_level is the least"
+	)
+	var gained := WorldState.ensure_level(10)
+	assert_eq(gained, 9)
+	assert_eq(WorldState.ensure_level(10), 0, "already there: nothing")
+	WorldState.add_xp(100000)
+	var xp: int = WorldState.state.elysia.xp
+	assert_eq(WorldState.ensure_level(10), 0)
+	assert_eq(WorldState.state.elysia.xp, xp, "a hero above the level keeps every point")
 
 
 func test_the_perceptive_may_say_it_is_the_same_feast_and_he_notes_it() -> void:

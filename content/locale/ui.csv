@@ -226,6 +226,7 @@ CAPTION_BIRD,Ein Vogel singt.
 CAPTION_FIRE,Das Feuer knistert.
 CAPTION_CAT,Die Katze miaut.
 CAPTION_PURR,Die Katze schnurrt.
+CAPTION_GATE,Ein Tor öffnet sich.
 SETTINGS_SHOW_CONTROLS,Tastenbelegung
 CONTROLS_TITLE,Tastenbelegung
 CONTROLS_MOVE,Gehen

@@ -164,7 +164,7 @@ erscheint; A6 und A7 bauen darauf, dass die Wiederholung bemerkt werden kann.
 **Scheitern und Speichern (§49).** Es gibt kein Scheitern: Der Wächter nennt die Antwort, wenn man sie will; die Tore öffnen, wenn man hinsieht, nicht wenn man etwas richtig macht; Wegsehen am Spiegel nimmt nichts. Jede Beat-Marke speichert.
 
 **Barrierefreiheit (§50).** Die Aufgabe ist rein visuell, und der Wächter beschreibt sie in Worten (Hilfe in drei Stufen, jederzeit, unbegrenzt); die Antworten des Spiels hängen an der Dialogbox mit Textgröße, Tempo und
-Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln, die Untertitel „Geräusche als Text“ nennen es. Keine Zeit, kein Rätsel mit Fehlversuch.
+Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln (Bildschirmwackeln folgt der Einstellung), und der Untertitel „Ein Tor öffnet sich.“ steht immer da. Keine Zeit, kein Rätsel mit Fehlversuch.
 
 **Endlichkeit (§52).** Alles wiederholt sich nicht, es liegt einmal da: Blatt und Feder lassen sich mitnehmen, dann ist die Halle wieder so vollkommen wie vorher (in A7 wird sie es wortgleich).
 
@@ -181,13 +181,13 @@ Automatik der Einstellungen. Das Tor öffnet sich mit Klang und kurzem Wackeln, 
 (`elysia.hall_mirror_seen`), findet den Markt beim nächsten Betreten im Festzustand (`elysia.feast`, gesetzt vor dem Bau der Karte).
 
 **Zweck.** Elysia belohnt das Bemerken: Es feiert es. Die Belohnung wächst (rund 11.000 Erfahrung, 3.000 Gold), die Tat schrumpft (ein Glas heben; Bible §10, §8), und mit dem Hoch ist Level 48 sicher, auch wenn
-alles Freiwillige ausgelassen wurde (Slice 22.600 + Fest 11.000 = 33.600, Level 48 ab 33.135). Der Gastwirt lädt ein (der Betäuber, Bible §14), freundlich und nie verbindlich.
+alles Freiwillige ausgelassen wurde (Slice 22.600 + Fest 11.000 = 33.600, Level 48 ab 33.135); wer auch den Garten ausgelassen hat, bekommt vom Hoch nach den 11.000 genau das Fehlende bis Level 48 dazu (`WorldState.ensure_level`). Der Gastwirt lädt ein (der Betäuber, Bible §14), freundlich und nie verbindlich.
 
 | Beat | Auslöser | Was geschieht | Marke |
 |---|---|---|---|
 | Festzustand | Markt betreten nach `hall_mirror_seen` | Girlanden, Tafeln mit Speisen, Gäste (zwei Paare), die Festmeisterin am Brunnen, der Gastwirt vor dem Brunnen | Flag `elysia.feast`, Beat `feast_enter` |
 | Einladung | der Gastwirt (`host_feast`) | „Da ist er! Der Held des Tages! Jedes Tages!“ Annehmen sagt der Festmeisterin Bescheid (er hat es schon getan); Umschauen und Schweigen sind Antworten | `elysia.feast_invited` |
-| Das Hoch | die Festmeisterin (`festmaster`) | „Du hebst das Glas, wir machen den Rest.“ Glas heben, später, oder (mit Wahrnehmung) „Das ist dasselbe Fest wie gestern.“ | `elysia.feast_toast`, +11.000 XP, +3.000 Gold, Beat `feast`; mit Wahrnehmung zusätzlich `elysia.feast_noticed` |
+| Das Hoch | die Festmeisterin (`festmaster`) | „Du hebst das Glas, wir machen den Rest.“ Glas heben, später, oder (mit Wahrnehmung) „Das ist dasselbe Fest wie gestern.“ | `elysia.feast_toast`, +11.000 XP (und bis Level 48 aufgefüllt), +3.000 Gold, Beat `feast`; mit Wahrnehmung zusätzlich `elysia.feast_noticed` |
 | Nach dem Hoch | der Gastwirt | „Du musst heute nicht zurück. Das Fest hat keinen Abend.“; hat die Spielfigur es bemerkt: „Das macht nichts. Hier darf man bemerken, so viel man will.“ | keine Flags |
 | Festvarianten | Torwächter, Bäckerin, Schneiderin, Blumenfrau, Händler | je zwei bis drei freie Zeilen im Festzustand; die Gäste sagen alle dasselbe („Auf den Helden!“) | keine Flags |
 
@@ -211,5 +211,5 @@ Die Schleifen (A7) beginnen bis dahin weiter am Slice-Auslöser.
 **Gerechnet.** 35 neue Zeilen, 401 Wörter, rund drei Minuten Weg (geschätzt): nach `calibrate.py` rund 6 Minuten (Plan: 14). Akt I liegt damit nach A6 bei rund 29 statt 49 Minuten Plan; die Neuplanung (P6.13)
 entscheidet, ob A4 (Minispiel) oder mehr Erkundung die Lücke füllt.
 
-**Prüfungen.** `test_akt1_fest` (12 Tests, darunter „Level 48 ist sicher“), `tools/autopilot/akt1_fest.json` (Schritt „segment“ in `check.sh`), `MapLint` (Zwillinge der Festgäste, Mittelachse), `StoryLint`.
+**Prüfungen.** `test_akt1_fest` (14 Tests, darunter „Level 48 ist sicher“ für beide Wege), `tools/autopilot/akt1_fest.json` (Schritt „segment“ in `check.sh`), `MapLint` (Zwillinge der Festgäste, Mittelachse), `StoryLint`.
 

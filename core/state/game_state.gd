@@ -94,6 +94,11 @@ static func level_for_xp(xp: int) -> int:
 	return 1 + int(sqrt(maxf(xp, 0) / 15.0))
 
 
+## The least experience that makes `level` (the inverse of level_for_xp).
+static func xp_for_level(level: int) -> int:
+	return 15 * (level - 1) * (level - 1)
+
+
 static func relationship_name(state: Relationship.State) -> String:
 	return str(Relationship.State.keys()[state]).to_lower()
 

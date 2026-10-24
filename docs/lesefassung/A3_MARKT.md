@@ -94,7 +94,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Dichter:** Nicht wahr? Morgen schreibe ich es noch einmal. Dann wird es noch besser. `[#draft]`  <sub>mk_poet_3</sub>
 - ▸ **Gibt es auch eines über etwas anderes?**
   - **Dichter:** Über etwas anderes? … `[#draft]`  <sub>mk_poet_4</sub>
-  - **Dichter:** Der Tag ist schön, der Himmel blau. Nein. Das war es schon. Das reicht doch auch. `[#draft]`  <sub>mk_poet_5</sub>
+  - **Dichter:** Der Tag ist schön, der Himmel blau. Das war es schon. Das reicht doch auch. `[#draft]`  <sub>mk_poet_5</sub>
 - ▸ **…**
   - **Dichter:** Du bist sprachlos. Das ist das beste Reimwort, das es gibt. `[#draft]`  <sub>mk_poet_6</sub>
 - ▸ **Das hast du gestern auch gesagt.** *(wenn `perception`)*
@@ -180,7 +180,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **Das Glas heben.**
   - *→ weiter bei* `festmaster_toast`
 - ▸ **Das ist dasselbe Fest wie gestern.** *(wenn `perception`)*
-  - **Festmeisterin:** Dasselbe? Nein. Gestern war es kleiner. Heute ist es größer. `[#draft]`  <sub>mk_fest_4</sub>
+  - **Festmeisterin:** Dasselbe? Gestern war es kleiner. Heute ist es größer. `[#draft]`  <sub>mk_fest_4</sub>
   - *→ weiter bei* `festmaster_toast`
 - ▸ **Später.**
   - **Festmeisterin:** Später ist gut. Später ist hier immer genau jetzt. `[#draft]`  <sub>mk_fest_5</sub>
@@ -189,7 +189,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 - *Du hebst das Glas. Ganz Elysia hebt seines, im selben Augenblick.* `[#draft]`  <sub>mk_fest_6</sub>
 - **Festmeisterin:** Auf den Helden! Auf den Helden! Auf den Helden! `[#draft]`  <sub>mk_fest_7</sub>
-- *Es klingt dreimal gleich. Die Gläser klingen es auch.* `[#draft]`  <sub>mk_fest_8</sub>
+- *Es klingt dreimal gleich. Die Gläser klingen mit.* `[#draft]`  <sub>mk_fest_8</sub>
 
 ### M16 · `feast_guest`
 

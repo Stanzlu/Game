@@ -126,6 +126,14 @@ func test_noticing_the_feather_opens_the_second_gate() -> void:
 	assert_true(Beat.reached("hall_room_2"))
 
 
+func test_the_gate_opening_is_written_out_too() -> void:
+	assert_true(ContentValidator.has_translation("CAPTION_GATE"))
+	var scene := await _hall()
+	WorldState.set_flag("elysia.hall_room_1")
+	await wait_physics_frames(2)
+	assert_eq(scene.hud._caption.text, tr("CAPTION_GATE"), "whatever the captions setting says")
+
+
 func test_a_shut_gate_says_what_it_waits_for() -> void:
 	var seen := await DialogueWalk.play(DIALOGUE, "gate_shut")
 	assert_true(LineText.of("sh_gate_2") in seen)

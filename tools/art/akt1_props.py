@@ -671,10 +671,10 @@ def bunting(ms):
     xs = np.arange(96)
     sag = (3 + 9 * (1 - ((xs - 47.5) / 47.5) ** 2)).astype(int)  # the string's drop at each column (higher in the middle)
     for x in range(96):
-        y = 2 + 9 - int(sag[x] - 3)
+        y = 2 + int(sag[x] - 3)
         c.fill(c.rect(x, y, x + 1, y + 1), GOLD[2])
     for k, x in enumerate(range(6, 92, 8)):
-        y = 2 + 9 - int(sag[x] - 3)
+        y = 2 + int(sag[x] - 3)
         flag = c.rect(x - 2, y + 1, x + 3, y + 7) & (c.yy < y + 7 - np.abs(c.xx - x) * 1.4)
         c.paint(flag, colors[k % 4], 0.8 - 0.1 * (c.yy - y) / 6, dither=False)
     for x in (2, 93):

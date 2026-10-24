@@ -75,11 +75,16 @@ def load_catalog():
 
 
 def shadow_cells(rows, symbols, catalog):
-    """Decor placements whose catalog entry asks for a ground shadow: (y, x, shadow) in pixels."""
+    """Decor placements whose catalog entry asks for a ground shadow: (y, x, shadow) in pixels. A prop that
+    is only there under a story condition ("if"/"unless", the feast tables, the leaf) casts none: a baked
+    shadow would stay under nothing."""
     found = []
     for y, row in enumerate(rows):
         for x, c in enumerate(row):
-            sprite = symbols[c].get("params", {}).get("sprite")
+            params = symbols[c].get("params", {})
+            if "if" in params or "unless" in params:
+                continue
+            sprite = params.get("sprite")
             entry = catalog.get(sprite, {}) if sprite else {}
             if "shadow" in entry:
                 found.append((y * T + T // 2, x * T + T // 2, entry["shadow"]))

@@ -100,7 +100,7 @@ Dichter: Der Tag ist schön, der Himmel blau, der Brunnen klar, die Luft ist lau
 	Dichter: Nicht wahr? Morgen schreibe ich es noch einmal. Dann wird es noch besser. [ID:mk_poet_3] [#draft]
 - Gibt es auch eines über etwas anderes? [ID:mk_poet_r2] [#draft]
 	Dichter: Über etwas anderes? … [ID:mk_poet_4] [#draft]
-	Dichter: Der Tag ist schön, der Himmel blau. Nein. Das war es schon. Das reicht doch auch. [ID:mk_poet_5] [#draft]
+	Dichter: Der Tag ist schön, der Himmel blau. Das war es schon. Das reicht doch auch. [ID:mk_poet_5] [#draft]
 - … [ID:mk_poet_r3] [#draft]
 	Dichter: Du bist sprachlos. Das ist das beste Reimwort, das es gibt. [ID:mk_poet_6] [#draft]
 - Das hast du gestern auch gesagt. [if WorldState.has_facet("perception") /] [ID:mk_poet_r4] [#draft]
@@ -197,7 +197,7 @@ Festmeisterin: Es fehlt nur noch ein Hoch. Du musst dafür nichts tun. Du hebst 
 - Das Glas heben. [ID:mk_fest_r1] [#draft]
 	=> festmaster_toast
 - Das ist dasselbe Fest wie gestern. [if WorldState.has_facet("perception") /] [ID:mk_fest_r2] [#draft]
-	Festmeisterin: Dasselbe? Nein. Gestern war es kleiner. Heute ist es größer. [ID:mk_fest_4] [#draft]
+	Festmeisterin: Dasselbe? Gestern war es kleiner. Heute ist es größer. [ID:mk_fest_4] [#draft]
 	do WorldState.set_flag("elysia.feast_noticed")
 	=> festmaster_toast
 - Später. [ID:mk_fest_r3] [#draft]
@@ -207,8 +207,9 @@ Festmeisterin: Es fehlt nur noch ein Hoch. Du musst dafür nichts tun. Du hebst 
 ~ festmaster_toast
 Du hebst das Glas. Ganz Elysia hebt seines, im selben Augenblick. [ID:mk_fest_6] [#draft]
 Festmeisterin: Auf den Helden! Auf den Helden! Auf den Helden! [ID:mk_fest_7] [#draft]
-Es klingt dreimal gleich. Die Gläser klingen es auch. [ID:mk_fest_8] [#draft]
+Es klingt dreimal gleich. Die Gläser klingen mit. [ID:mk_fest_8] [#draft]
 do WorldState.add_xp(11000)
+do WorldState.ensure_level(48)
 do WorldState.add_gold(3000)
 do WorldState.set_flag("elysia.feast_toast")
 => END

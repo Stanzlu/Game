@@ -419,6 +419,12 @@ func add_xp(amount: int) -> int:
 	return gained
 
 
+## Adds what is missing to be at least `level` (Elysia's rewards are cosmetic, Game Bible §10; a
+## reward that promises a level pays the difference). Returns the number of levels gained.
+func ensure_level(level: int) -> int:
+	return add_xp(GameState.xp_for_level(level) - state.elysia.xp)
+
+
 func gold() -> int:
 	return state.elysia.gold
 
