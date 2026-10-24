@@ -7,8 +7,9 @@ with human timing and a darker mode; the forest hides it in bells; the Antreiber
 
 Every loop is seamless: notes that run past the end wrap to the start, and filtering and
 reverb are circular (frequency domain); drones that span the whole loop wrap their release
-over their attack in phase. Writes 16-bit stereo WAVs (44.1 kHz) to assets/generated/music/
-plus .import files with looping enabled (Godot compresses them to QOA on import).
+over their attack in phase. Renders 16-bit stereo WAVs (44.1 kHz) into build/audio/music/
+and encodes them with ffmpeg (Ogg Vorbis, quality 5) to assets/generated/music/, plus .import
+files with looping enabled (ADR-057: OGG instead of WAV in the repo, 17.9 MB became about 2 MB).
 
 Usage: .venv/bin/python tools/audio/make_music.py [--only elysia]
 """
@@ -18,27 +19,25 @@ import wave
 
 import numpy as np
 
+import encode
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "assets", "generated", "music")
+SCRATCH = os.path.join(ROOT, "build", "audio", "music")
 RATE = 44100
 
 IMPORT = """[remap]
 
-importer="wav"
-type="AudioStreamWAV"
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
 
 [params]
 
-force/8_bit=false
-force/mono=false
-force/max_rate=false
-force/max_rate_hz=44100
-edit/trim=false
-edit/normalize=false
-edit/loop_mode=2
-edit/loop_begin=0
-edit/loop_end=-1
-compress/mode=2
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4
 """
 
 # Motif as (scale degree, length in eighths): 3 5 6 5 | 3 2
@@ -255,18 +254,24 @@ def finish(track, name, reverb=0.3, rev_seconds=2.8, peak=0.82):
 
 def write(name, stereo):
     os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, name + ".wav")
+    os.makedirs(SCRATCH, exist_ok=True)
+    wav = os.path.join(SCRATCH, name + ".wav")
     data = (np.clip(stereo.T, -1, 1) * 32767).astype("<i2")
-    with wave.open(path, "wb") as w:
+    with wave.open(wav, "wb") as w:
         w.setnchannels(2)
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes(data.tobytes())
+    path = os.path.join(OUT, name + ".ogg")
+    encode.to_ogg(wav, path)
+    problems = encode.verify_loop(wav, path)
+    if problems:
+        raise SystemExit("%s: %s" % (name, "; ".join(problems)))
     # keep Godot's existing .import (it holds the uid); only new files get the template
     if not os.path.exists(path + ".import"):
         with open(path + ".import", "w") as f:
             f.write(IMPORT)
-    print(f"{path}: {stereo.shape[1] / RATE:.1f} s")
+    print(f"{path}: {stereo.shape[1] / RATE:.1f} s, {os.path.getsize(path) / 1024:.0f} KiB")
 
 
 # --- Tracks -----------------------------------------------------------------------------

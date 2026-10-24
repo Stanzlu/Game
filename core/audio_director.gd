@@ -43,9 +43,9 @@ const REWARD_DUCK_SECONDS := 1.2
 ## the end of the loop, so it lands on the downbeat. The flags are the real trigger: the times
 ## only catch someone who dawdles (5 and 10 minutes), the loops are 19, 10 and 5 seconds.
 const ELYSIA_STAGES: Array[Dictionary] = [
-	{"file": "elysia_loop.wav", "after": 0.0, "flag": ""},
-	{"file": "elysia_half_loop.wav", "after": 300.0, "flag": "elysia.chest_tree_opened"},
-	{"file": "elysia_quarter_loop.wav", "after": 600.0, "flag": "elysia.stone_taken"},
+	{"file": "elysia_loop.ogg", "after": 0.0, "flag": ""},
+	{"file": "elysia_half_loop.ogg", "after": 300.0, "flag": "elysia.chest_tree_opened"},
+	{"file": "elysia_quarter_loop.ogg", "after": 600.0, "flag": "elysia.stone_taken"},
 ]
 ## Tracks that rest between rounds, so a short loop does not repeat for an hour: after
 ## `loops` (min, max) loops the music fades out over the last `fade_out` seconds of a loop,
@@ -148,7 +148,7 @@ func _make_player(player_name: String, bus: StringName) -> AudioStreamPlayer:
 
 
 static func track_path(track: String) -> String:
-	return MUSIC_DIR + track + "_loop.wav"
+	return MUSIC_DIR + track + "_loop.ogg"
 
 
 ## The Elysia stage the game has earned: by play time or by the flags of the stages.
