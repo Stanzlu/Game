@@ -20,7 +20,7 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | **Hausmotive** | §26, §46 | `haus_table_1`, `haus_table_2`, `haus_bucket_1`, `haus_fire_9`, `haus_shelf_1`, `house.spoon_found`, `house.shelf_filled` | Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste. |
 | **Der Betäuber (Gastwirt)** | §14, §46 | `el_host_3`, `el_host_11`, `haus_rest_7`, `elysia.soup_served`, `elysia.host_warned`, `gh_room_3`, `gh_slept_2`, `gh_slept_4`, `elysia.inn_declined`, `elysia.inn_stayed`, `mk_host_1`, `mk_host_6`, `mk_host_5` | Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`). |
 | **Wiederkehrende Formulierungen** | §46 | `el_host_3`, `haus_rest_7`, `tal_mira_8`, `tal_eve_tarp_1`, `tal_eve_tarp_2`, `haus_mira_8`, `tal_mira_again_1`, `tal_end_5`, `tal_south_sign_2`, `mk_baker_3`, `mk_baker_1`, `mk_tailor_5`, `mk_board_4`, `sh_keeper_2`, `sh_gate_2`, `mk_fest_3`, `mk_baker_7`, `mk_tailor_7`, `elysia.feast_noticed` | „Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII). |
-| **Fragmente späterer Melodien** | §31, §46 | `el_child_3`, `tal_shell_1`, `tal_eve_shell_2`, `valley.shell_seen`, `mk_music_1`, `mk_music_2`, `melody.elysia_perfect` | Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). |
+| **Fragmente späterer Melodien** | §31, §46 | `el_child_3`, `tal_shell_1`, `tal_eve_shell_2`, `valley.shell_seen`, `mk_music_1`, `mk_music_2`, `melody.elysia_perfect`, `melody.child_hum` | Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). |
 
 ## Laufende Gags (Bible §33)
 
@@ -40,9 +40,9 @@ Fragmente, keine Ursache, keine Diagnose, keine Tätergeschichte. Jedes Fragment
 
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
-| **Lied und Summen** | §15 | `el_child_3`, `elysia.child_met` | Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente. |
+| **Lied und Summen** | §15 | `el_child_3`, `elysia.child_met`, `el_child_4`, `melody.child_hum` | Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente. |
 | **Warten und Verschwinden** | §15 | `el_child_1`, `el_child_2`, `elysia.child_vanished` | Akt III: ein Echo im Wald; Akt VI: ein Blick in Elysia. |
-| **Flur, Tür, Hand, Verstecken, leeres Zimmer, ursprüngliches Haus** | §15 | noch nicht | Noch nicht im Slice. Akt V: sechs Fragmente und die zentrale Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). |
+| **Flur, Tür, Hand, Verstecken, leeres Zimmer, ursprüngliches Haus** | §15 | `kd_hall_3`, `kd_door_3`, `kd_room_3`, `fragment.hallway`, `fragment.closed_door`, `fragment.empty_room` | Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). |
 
 ## Konsequenzen-Register
 
@@ -71,7 +71,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.host_warned` | Beschützer | `elysia.dialogue` | `haus.dialogue` | Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen. |
 | `elysia.loops_1` | Elysia | – | – | Elysias Musik-Schleife ist nur noch halb so lang (der Markt wurde betreten oder nach zwanzig Minuten; ElysiaDirector). |
 | `elysia.loops_2` | Elysia | – | – | Nur noch ein Viertel (Stein genommen oder nach vierzig Minuten; ElysiaDirector). |
-| `elysia.loops` | Elysia | `elysia.txt` | `gasthaus.dialogue`, `markt.dialogue`, `elysia.dialogue`, `elysia.txt` | Die Sätze wiederholen sich wortgleich: ab dem Hoch auf dem Fest (oder nach einer Stunde Spielzeit); ElysiaDirector, Stufe „repeat“ der Heldenquest. |
+| `elysia.loops` | Elysia | `elysia.txt` | `gasthaus.dialogue`, `markt.dialogue`, `elysia.dialogue`, `elysia.txt`, `gasthaus.txt`, `markt.txt`, `spiegelhalle.txt` | Die Sätze wiederholen sich wortgleich: ab dem Hoch auf dem Fest (oder nach einer Stunde Spielzeit); ElysiaDirector, Stufe „repeat“ der Heldenquest. |
 | `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
@@ -134,3 +134,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.feast_invited` | Entscheidungen | `markt.dialogue` | `markt.dialogue` | Sie hat die Einladung des Gastwirts zum Fest angenommen. |
 | `elysia.feast_noticed` | Wahrnehmung | `markt.dialogue` | `markt.dialogue` | Sie hat der Festmeisterin gesagt, dass es dasselbe Fest wie gestern ist; sie hat es bemerkt und gesagt. |
 | `elysia.feast_toast` | Fortschritt | `markt.dialogue` | `markt.dialogue`, `markt_scene.gd`, `elysia_scene.gd` | Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher). |
+| `fragment.hallway` | Kind | `kind.dialogue` | `markt.txt` | Sie ist dem Kind auf dem Markt gefolgt und hat den Flur gesehen (Fragment 1 von 6, Bible §15). |
+| `fragment.closed_door` | Kind | `kind.dialogue` | `gasthaus.txt` | Sie ist dem Kind im Gasthaus gefolgt und hat die geschlossene Tür gesehen (Fragment 2 von 6). |
+| `fragment.empty_room` | Kind | `kind.dialogue` | `spiegelhalle.txt` | Sie ist dem Kind in der Halle der Spiegel gefolgt und hat das leere Zimmer gesehen (Fragment 3 von 6). |
+| `melody.child_hum` | Musik | `elysia.dialogue` | – | Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes. |

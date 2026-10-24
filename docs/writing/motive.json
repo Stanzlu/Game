@@ -538,6 +538,10 @@
     {
      "type": "flag",
      "ref": "melody.elysia_perfect"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.child_hum"
     }
    ],
    "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII)."
@@ -662,9 +666,17 @@
     {
      "type": "flag",
      "ref": "elysia.child_met"
+    },
+    {
+     "type": "line",
+     "ref": "el_child_4"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.child_hum"
     }
    ],
-   "payoff": "Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente."
+   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente."
   },
   {
    "id": "kind-warten",
@@ -692,8 +704,33 @@
    "kind": "kind",
    "title": "Flur, Tür, Hand, Verstecken, leeres Zimmer, ursprüngliches Haus",
    "bible": "§15",
-   "appears": [],
-   "payoff": "Noch nicht im Slice. Akt V: sechs Fragmente und die zentrale Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51)."
+   "appears": [
+    {
+     "type": "line",
+     "ref": "kd_hall_3"
+    },
+    {
+     "type": "line",
+     "ref": "kd_door_3"
+    },
+    {
+     "type": "line",
+     "ref": "kd_room_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.hallway"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.closed_door"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.empty_room"
+    }
+   ],
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51)."
   }
  ],
  "register": [
@@ -1116,6 +1153,26 @@
    "flag": "elysia.feast_toast",
    "axis": "Fortschritt",
    "meaning": "Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher)."
+  },
+  {
+   "flag": "fragment.hallway",
+   "axis": "Kind",
+   "meaning": "Sie ist dem Kind auf dem Markt gefolgt und hat den Flur gesehen (Fragment 1 von 6, Bible §15)."
+  },
+  {
+   "flag": "fragment.closed_door",
+   "axis": "Kind",
+   "meaning": "Sie ist dem Kind im Gasthaus gefolgt und hat die geschlossene Tür gesehen (Fragment 2 von 6)."
+  },
+  {
+   "flag": "fragment.empty_room",
+   "axis": "Kind",
+   "meaning": "Sie ist dem Kind in der Halle der Spiegel gefolgt und hat das leere Zimmer gesehen (Fragment 3 von 6)."
+  },
+  {
+   "flag": "melody.child_hum",
+   "axis": "Musik",
+   "meaning": "Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes."
   }
  ]
 }

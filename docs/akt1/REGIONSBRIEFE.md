@@ -16,7 +16,8 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | hall | A5 Spiegelhalle | `spiegelhalle` | `hall_enter`, `hall_room_1`, `hall_room_2`, `hall_mirror`, `perception` | **gebaut (ADR-060)** |
 | feast | A6 Fest | `markt` (Festzustand) | `feast_enter`, `feast` | **gebaut (ADR-061)** |
 | repeat | A7 Wiederholung | alle Orte | `irritation` | **gebaut (ADR-062)** |
-| trail, rift | A8 Kind-Spur, A9 Stein, Samen, Riss | `gasthaus`, `markt`, `spiegelhalle`, `elysia` | | geplant |
+| trail | A8 Kind-Spur | `markt`, `gasthaus`, `spiegelhalle`, `elysia` | `trail_hallway`, `trail_door`, `trail_room`, `child_melody` | **gebaut (ADR-063)** |
+| rift | A9 Stein, Samen, Riss | `elysia` | `rift_found` | geplant (der Riss öffnet sich schon, A9 passt den Anschluss an) |
 
 Raumschichtung (Plan 4.1): Zimmer (Gasthaus) – Mauer und Tor – Garten – Straße – Stadt (Markt) – Welt (Weltenbaum), unbeschriftet.
 Die Schleifen beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Stufe `repeat`, A7); die Musikstufen folgen `elysia.market_seen` und `elysia.stone_taken`, die Uhr fängt nur, wer nicht weiterspielt (20, 40 und 60 Minuten).
@@ -255,3 +256,51 @@ Laden) steht in den Dialogen vor der Schleife und geht nicht verloren; die Gäst
 
 **Prüfungen.** `test_akt1_wiederholung` (13 Tests), `test_elysia_director` (Hoch beginnt die Sätze, lange Uhr), `tools/autopilot/akt1_wiederholung.json` (Schritt „segment“ in `check.sh`), der Slice-Durchlauf (`slice_full.json` setzt das Hoch als Flag).
 
+---
+
+## A8 Kind-Spur
+
+**Stand:** gebaut. **Szenen:** kein eigener Ort; drei Stationen in vorhandenen Karten (`markt`, `gasthaus`, `spiegelhalle`) und die Melodie im Garten (`elysia`). **Dialog:** `content/dialogue/akt1/kind.dialogue`
+(drei Cues, zwölf Zeilen, alle `[#draft]`) und eine Zeile mehr im Kind-Gespräch des Gartens (`el_child_4`). **Karte:** je ein Einzelstück (`child_guide.tscn`, `if: elysia.loops`, `unless: fragment.<bild>`): `markt` Zelle (32, 33), `gasthaus` (17, 8), `spiegelhalle` (14, 8).
+
+**Zweck.** Nach dem Hoch wiederholt sich Elysia; das Kind ist der Einzige, der sich nicht wiederholt (Bible §15). Es zeigt drei Bilder aus der Liste der Bible, ohne ein Wort der Erklärung: einen Flur, eine geschlossene Tür, ein leeres Zimmer.
+Die Bilder sind Fragmente des Hauses, das der Spielerin später gehört (Bible §38); hier sind es Eindrücke, keine Ursache, keine Diagnose, keine Tat. Hand, Verstecken und das ursprüngliche Haus bleiben Akt V.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Das Summen | das Hoch (`elysia.loops`, A7) | irgendwo summt jemand; das Tagebuch führt „Das Summen“ | Quest `main_elysia_trail`, Stufe `hum` |
+| Der Flur | das Kind im Gang vor dem Südtor des Marktes ansprechen | „Komm.“ – ein Flur, länger als der Gang; das Kind geht | Flag `fragment.hallway`, Beat `trail_hallway`, Stufe `trail` |
+| Die Tür | das Kind hinter dem Tresen im Gasthaus ansprechen | „Leise.“ – eine geschlossene Tür; das Kind geht | Flag `fragment.closed_door`, Beat `trail_door`, Stufe `trail` |
+| Das Zimmer | das Kind vor dem großen Spiegel der Halle ansprechen | „Hier.“ – ein leeres Zimmer; das Kind geht | Flag `fragment.empty_room`, Beat `trail_room`, Stufe `trail` |
+| Die Melodie | der letzte Satz des Kindes im Garten (`elysia.child_met`, Slice) | „Es ist die Melodie, der du gefolgt bist. Du kannst sie jetzt.“ | Flag `melody.child_hum`, Beat `child_melody` |
+| Der Riss | das Kind verschwindet im Garten, sonst die Uhr (A7) | der Riss öffnet sich | `elysia.rift_open`, Beat `rift_found`, Stufe `rift` (final) |
+
+**Fragmentkarte.** Jedes Bild erscheint als leise Karte oben im Bild: das Bild in 64 Pixeln, darunter „Etwas fällt dir ein.“ (3,6 Sekunden Spielzeit, kein Klang, kein Zähler, keine Seltenheit; der Hud hört auf Flags mit dem Präfix `fragment.`).
+Die Bilder liegen als Text in `tools/art/small/fragment_*.pix` und werden von `pixelgrid.py` geprüft (Größe, Palette, Umriss; ADR-057).
+
+**Reihenfolge.** Die drei Stationen sind unabhängig und jede freiwillig (Bible §14, §31): kein Bild sperrt etwas, der Riss wartet auf keines (die Uhr aus A7 und das Verschwinden des Kindes im Garten öffnen ihn). Wer einem Kind folgt, hat danach einen Satz zum Erinnern;
+wer nicht, verpasst nur das Bild. Jede Station gibt es nur, solange sich Elysia wiederholt (`elysia.loops`), und nur einmal (`unless fragment.<bild>`).
+
+**Heldenquest und Spur.** Die Heldenquest `main_elysia_hero` bleibt auf `repeat` stehen. Die Spur ist eine eigene Hauptquest `main_elysia_trail`: `hum` → (`trail` →) `rift`; `rift` ist final. Sie beginnt mit der Schleife (`begin_loops`, und beim Laden eines Standes aus der Schleife vor A8), `trail` kommt mit dem ersten Bild, `rift` mit dem Riss.
+
+**Figuren.** Das Kind (`child_guide.tscn`, Blattdatei `sheet_child_look.tres`; es schaut den Spieler an, wenn er nahe ist, und geht, sobald es gezeigt hat, was es zeigt).
+Sprecher „Kind“ spricht höchstens drei Wörter, antwortet nicht, lobt und tröstet nicht (`docs/writing/stimmen/kind.md`).
+
+**Humor-Ziel (0/10).** Keiner. Die Lage ist leise; die Wärme kommt aus der Ruhe der Erzählzeilen („Du klopfst nicht. Das Kind auch nicht.“).
+
+**Gewicht (§45).** mittel bis schwer: drei Bilder mit Schweigen darin, jedes kurz. Eine Station dauert unter einer Minute; zwischen ihnen liegen Orte voller Wiederholung, nicht voller Last.
+
+**Motive.** Das Kind und seine Fragmente (`kind-fragmente`: Flur, Tür, leeres Zimmer), das Summen (`kind-lied`, `melodien`: die zweite Melodie des Aktes), Spiegelung (das Kind steht vor dem Spiegel, im Spiegel steht ein Kind: das Bild ist zugleich Vorausdeutung auf Akt V).
+
+**Prüflinse Kind und Sensibilität (§15, §51).** Kein Täter, keine Tat, keine Ursache, keine Einordnung; Bilder aus der Liste der Bible, nicht erfunden; keine Zahl und kein „Sammeln“ (kein Zähler, kein Klang, keine Auszeichnung); das Kind zwingt nichts, bietet nichts an, belohnt nichts; wer wegsieht, verliert nichts.
+Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: das Haus wird nie erklärt).
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern. Jedes Bild speichert mit seinem Flag und löst einen Autosave aus (`Beat.mark`); ein Stand aus der Schleife ohne Spur (A7-Stand) bekommt die Quest beim Laden.
+
+**Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Karte ist Bild und Text (der Text allein trägt den Sinn, das Bild ist Zugabe); alle Zeilen laufen über die Dialogbox mit allen Tempo- und Auto-Einstellungen.
+
+**Endlichkeit (§52).** Drei Bilder, je einmal; danach steht das Kind nicht mehr da. Das Summen bleibt eine Melodie, keine Quelle.
+
+**Gerechnet.** Zwölf Zeilen plus eine, rund 110 Wörter; die Wege zwischen den drei Stationen sind der größte Teil: `calibrate.py --segment 110 13 5` (fünf Minuten reiner Weg zwischen Garten, Gasthaus, Markt und Halle) ergibt rund acht Minuten (bei einer Station weniger rund sechs). Gegen zwölf geplante ist das wenig, weil die Orte schon stehen und das Kind sie nur zeigt. Akt I liegt damit nach A8 bei rund 40 statt 70 geplanten Minuten (A2 bis A8); die Neuplanung (P6.13) entscheidet, ob A4 oder mehr Erkundung die Lücke schließt.
+
+**Prüfungen.** `test_akt1_kind_spur` (10 Tests: Stationen nur in der Schleife, einmal je Bild, drei Fragmente ohne Zähler, höchstens drei Wörter, Quest, Uhr ohne Bilder, Melodie, Karte), die drei Segmentskripte `tools/autopilot/akt1_kind_spur_{markt,gasthaus,spiegelhalle}.json` (Schritt „segment“ in `check.sh`, Marken `trail_*`), `test_writing`, `MapLint` (das Kind ist ein Einzelstück ohne Zwilling, wie der Stein).
