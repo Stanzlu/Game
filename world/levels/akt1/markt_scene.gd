@@ -46,6 +46,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		"elysia.feast_toast":
 			Beat.mark("feast")
 			WorldState.advance_quest("main_elysia_hero", "feast")
+			# the director starts the sentences at the same toast (ElysiaDirector, ADR-062)
+			WorldState.advance_quest("main_elysia_hero", "repeat")
 
 
 ## The market stands in its feast state (the props of the feast follow the flag by themselves).

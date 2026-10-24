@@ -10,11 +10,10 @@ const DIALOGUE := "res://content/dialogue/slice/elysia.dialogue"
 const BUTTERFLY_XP: Array[int] = [100, 500, 2000]
 const BUTTERFLY_OBJECTIVES: PackedStringArray = ["first", "second", "third"]
 const BUTTERFLY_QUEST := "side_elysia_butterflies"
-## Repetition starts once the chest is open and the butterflies are back, whichever comes
-## last: the chest lies on the main path, and opening it on the way must not cut the
-## miniquest short. Fallbacks (seconds of play) so nobody gets stuck: repetition starts on its
-## own (with it the child appears), and the rift opens a while later even if the child was
-## never followed.
+## Repetition starts at the feast (ElysiaDirector, ADR-062), not in the garden: the chest and
+## the butterflies are only part of what the hero has had by then. The clock fallbacks of the
+## director keep nobody stuck (the child appears with the repetition, and the rift opens a good
+## while later even if the child was never followed).
 ## The second task solves itself on the way there (ADR-042): the reward escalates, the deed
 ## shrinks to nothing (Game Bible §8, §10).
 const FOUNTAIN_SOLVES_AFTER := 3.0
@@ -124,8 +123,6 @@ func _rift_position() -> Variant:
 func _on_quest_changed(quest_id: String, stage: String) -> void:
 	if quest_id == "side_elysia_fountain" and stage == "check":
 		_fountain_solves_itself()
-	elif quest_id == "side_elysia_butterflies" and stage == "done":
-		_start_loops_when_ready()
 	elif quest_id == "main_elysia_hero" and stage == "celebrated":
 		_catch_up_the_hero_quest()
 
@@ -141,18 +138,7 @@ func _catch_up_the_hero_quest() -> void:
 		WorldState.advance_quest("main_elysia_hero", "hall")
 	if WorldState.has_flag("elysia.feast_toast"):
 		WorldState.advance_quest("main_elysia_hero", "feast")
-
-
-## The hero has had everything Elysia offers (the chest, the miniquest): it starts repeating.
-func _start_loops_when_ready() -> void:
-	if WorldState.has_flag("elysia.loops"):
-		return
-	if (
-		WorldState.has_flag("elysia.chest_tree_opened")
-		and WorldState.is_quest_done("side_elysia_butterflies")
-	):
-		Beat.mark("irritation")
-		director.begin_loops()
+		WorldState.advance_quest("main_elysia_hero", "repeat")
 
 
 ## Somebody else fixed it, for you, before you got there.
@@ -186,8 +172,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	if not value:
 		return
 	match id:
-		"elysia.chest_tree_opened":
-			_start_loops_when_ready()
 		"elysia.mirror_seen":
 			Beat.mark("mirror")
 		"elysia.stone_taken":

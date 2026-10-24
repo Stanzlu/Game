@@ -40,12 +40,13 @@ const REWARD_DUCK_SECONDS := 1.2
 ## Elysia's loop shrinks the longer the player stays and the further they get (Game Bible
 ## §35 "Loops werden zunehmend wahrnehmbar"): the same music cut to 8, 4 and 2 bars.
 ## A stage starts after `after` seconds of play or once `flag` is set; the switch waits for
-## the end of the loop, so it lands on the downbeat. The flags are the real trigger: the times
-## only catch someone who dawdles (5 and 10 minutes), the loops are 19, 10 and 5 seconds.
+## the end of the loop, so it lands on the downbeat. The flags are the real trigger (the market
+## was entered, the stone is taken): the times only catch someone who skips the progress (20 and
+## 40 minutes, ADR-062), the loops are 19, 10 and 5 seconds.
 const ELYSIA_STAGES: Array[Dictionary] = [
 	{"file": "elysia_loop.ogg", "after": 0.0, "flag": ""},
-	{"file": "elysia_half_loop.ogg", "after": 300.0, "flag": "elysia.chest_tree_opened"},
-	{"file": "elysia_quarter_loop.ogg", "after": 600.0, "flag": "elysia.stone_taken"},
+	{"file": "elysia_half_loop.ogg", "after": 1200.0, "flag": "elysia.market_seen"},
+	{"file": "elysia_quarter_loop.ogg", "after": 2400.0, "flag": "elysia.stone_taken"},
 ]
 ## Tracks that rest between rounds, so a short loop does not repeat for an hour: after
 ## `loops` (min, max) loops the music fades out over the last `fade_out` seconds of a loop,
@@ -164,6 +165,9 @@ static func elysia_stage_for(playtime: float, has_flag: Callable) -> int:
 			or (i > 0 and bool(has_flag.call(ElysiaDirector.stage_flag(i))))
 		):
 			stage = i
+	# the sentences repeat: the music has shrunk at least once (a save from before the stages)
+	if stage < 1 and bool(has_flag.call(ElysiaDirector.LOOPS_FLAG)):
+		stage = 1
 	return stage
 
 
