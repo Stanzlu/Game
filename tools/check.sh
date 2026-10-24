@@ -174,6 +174,9 @@ segments=(
   "akt1_spiegelhalle:spiegelhalle:1300:hall_enter hall_room_1 hall_room_2 hall_mirror perception elysia.hall_leaf_taken"
   "akt1_fest:markt:1100:feast_enter feast elysia.feast_invited elysia.feast_toast elysia.loops"
   "akt1_wiederholung:markt:900:feast irritation elysia.loops elysia.loops_1"
+  "akt1_kind_spur_markt:markt:600:trail_hallway fragment.hallway"
+  "akt1_kind_spur_gasthaus:gasthaus:600:trail_door fragment.closed_door"
+  "akt1_kind_spur_spiegelhalle:spiegelhalle:600:trail_room fragment.empty_room"
 )
 for segment in "${segments[@]}"; do
   IFS=: read -r name scene frames marks <<<"$segment"
