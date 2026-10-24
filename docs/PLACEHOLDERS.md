@@ -51,6 +51,8 @@ Alles aus eigenen Generatoren (Python mit numpy; Godot-Seite nur Daten), ohne fr
 | `assets/generated/maps/{tal,antreiber_tal,antreiber_tal_bench,look_tal,look_wald}_ground.png` | neu gebacken: ruhigere Wiesen und Wege, Trampelpfad (Elysia bitgleich) | `tools/art/bake_ground.py`, `layout_slice_maps.py` | projekt-eigen |
 | `assets/generated/props/fx/raindrop.png` | 1×5 → 1×8 px | `tools/art/make_sprites.py` | projekt-eigen |
 | `assets/generated/props/haus/shell.png` | Fensterglas zeigt den Regentag, Seitenwände zweistufig | `tools/art/slice_props.py` | projekt-eigen |
+| `assets/generated/props/elysia/inn_*.png`, `guest_book.png` (Akt I, A2) | Gasthaus zum Immer: Fassade, Hülle der Halle mit Fenstern, Regalen, Uhr und zwei Türen, Tresen, Tisch mit Hockern, Kamin (drei Bilder mit Leuchtebene), Bett, Zimmertür, Gästebuch auf dem Pult | projekt-eigen, programmatisch (`tools/art/akt1_props.py`) | projekt-eigen | handgepixelte Assets, Abnahme der Region |
+| `assets/generated/maps/gasthaus_ground.png` | gebackener Boden des Gasthauses (Pflaster, Dielen in den Zimmern) | projekt-eigen, programmatisch (`tools/art/bake_ground.py`) | projekt-eigen | handgemalter Boden |
 | `content/audio/haus_abend.tres` | neue Soundscape-Definition für das Haus am Abend (Daten aus vorhandenen Betten) | von Hand | projekt-eigen |
 | `content/audio/{tal_abend,tal_regentag,haus_feuer}.tres` | Pegel angepasst | von Hand | projekt-eigen |
 

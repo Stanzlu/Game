@@ -18,7 +18,7 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | **Der Stein** | §46 | `el_stone_1`, `elysia.stone_taken`, `haus_rest_8`, `haus_shelf_6` | Der Stein liegt im Regal (`haus_shelf_9`) und bleibt ein Hausmotiv; seine Herkunft bleibt offen. |
 | **Der Samen** | §30, §46 | `haus_rest_4` | Akt V: der Garten (Plan 5.4). Der Samen hat im Slice keinen Flag; die Spielfigur trägt ihn schon. |
 | **Hausmotive** | §26, §46 | `haus_table_1`, `haus_table_2`, `haus_bucket_1`, `haus_fire_9`, `haus_shelf_1`, `house.spoon_found`, `house.shelf_filled` | Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste. |
-| **Der Betäuber (Gastwirt)** | §14, §46 | `el_host_3`, `el_host_11`, `haus_rest_7`, `elysia.soup_served`, `elysia.host_warned` | Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit. |
+| **Der Betäuber (Gastwirt)** | §14, §46 | `el_host_3`, `el_host_11`, `haus_rest_7`, `elysia.soup_served`, `elysia.host_warned`, `gh_room_3`, `gh_slept_2`, `gh_slept_4`, `elysia.inn_declined`, `elysia.inn_stayed` | Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`). |
 | **Wiederkehrende Formulierungen** | §46 | `el_host_3`, `haus_rest_7`, `tal_mira_8`, `tal_eve_tarp_1`, `tal_eve_tarp_2`, `haus_mira_8`, `tal_mira_again_1`, `tal_end_5`, `tal_south_sign_2` | „Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII). |
 | **Fragmente späterer Melodien** | §31, §46 | `el_child_3`, `tal_shell_1`, `tal_eve_shell_2`, `valley.shell_seen` | Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). |
 
@@ -71,7 +71,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.host_warned` | Beschützer | `elysia.dialogue` | `haus.dialogue` | Der Gastwirt wurde auf „Nirgends mehr hin“ angesprochen. |
 | `elysia.loops_1` | Elysia | – | – | Elysias Musik-Schleife ist nur noch halb so lang (Truhe offen oder fünf Minuten; ElysiaDirector). |
 | `elysia.loops_2` | Elysia | – | – | Nur noch ein Viertel (Stein genommen oder zehn Minuten; ElysiaDirector). |
-| `elysia.loops` | Elysia | `elysia.txt` | `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
+| `elysia.loops` | Elysia | `elysia.txt` | `gasthaus.dialogue`, `elysia.dialogue`, `elysia.txt`, `elysia_scene.gd` | Die Schleife ist hörbar geworden (wiederholte Sätze). |
 | `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
@@ -109,3 +109,12 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `house.mira_seated` | Mira | `haus_scene.gd` | `haus.txt` | Mira sitzt am Feuer. |
 | `house.mira_visited` | Mira | `haus.dialogue` | `tal.dialogue`, `haus.txt`, `tal.txt`, `haus_scene.gd`, `tal_scene.gd` | Mira war zu Besuch. |
 | `house.mira_left` | Mira | `haus_scene.gd` | `haus.txt` | Mira ist wieder gegangen. |
+| `elysia.inn_met` | Fortschritt | `gasthaus.dialogue` | `gasthaus.dialogue`, `elysia_scene.gd` | Die Spielerin hat den Gastwirt im Gasthaus zum Immer getroffen (Stufe „inn“ der Heldenquest). |
+| `elysia.inn_fed` | Fortschritt | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat das Brot gegessen, das schon da war. |
+| `elysia.inn_room` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue`, `gasthaus.txt` | Sie hat das Zimmer angenommen; beide Türen stehen offen. |
+| `elysia.inn_declined` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat das Zimmer abgelehnt („Ich muss weiter.“); der Gastwirt fragt freundlich noch einmal. |
+| `elysia.inn_sleeping` | Fortschritt | `gasthaus.dialogue`, `gasthaus_scene.gd` | `gasthaus_scene.gd` | Auslöser der Nacht im Bett (die Szene blendet auf Weiß und zurück); danach gelöscht. |
+| `elysia.inn_slept` | Beschützer | `gasthaus_scene.gd` | `gasthaus.dialogue` | Sie hat im Gasthaus geschlafen und denselben Morgen noch einmal erlebt. |
+| `elysia.inn_stayed` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat dem Gastwirt gesagt, dass sie noch bleibt (das dritte Angebot, angenommen). |
+| `elysia.inn_book_seen` | Wahrnehmung | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat im Gästebuch gesehen, dass ihr Name auf jeder Seite steht, in fremder Schrift. |
+| `elysia.inn_book_signed` | Entscheidungen | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat sich unter ihren Namen eingetragen (die Nebenquest „Das Gästebuch“). |

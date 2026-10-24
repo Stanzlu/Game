@@ -1,0 +1,58 @@
+; Akt I, Segment A2: das Gasthaus zum Immer von innen (docs/akt1/REGIONSBRIEFE.md). Halle und zwei Zimmer, spiegelsymmetrisch
+; um Spalte 20. Wände, Fenster, Regale und Uhr malt das Requisit elysia/inn_shell, den Boden backt
+; tools/art/bake_ground.py content/maps/gasthaus.txt.
+[meta]
+style = "elysia"
+ground = "res://assets/generated/maps/gasthaus_ground.png"
+symmetry = 20
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+M = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "M", "marker": "player_spawn"}
+1 = {"ground": "M", "marker": "spawn_door"}
+; die Hülle (Wände, Fenster, Regale, Uhr) liegt unter allem; der Boden wird aus der Karte gebacken (tools/art/bake_ground.py)
+S = {"ground": "#", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_shell"}}
+; der Gastwirt hinter dem Tresen; der Tresen ist eine Kante, kein Möbelstück zum Ansehen
+h = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "host", "face": "s"}}
+b = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_bar"}}
+; Elysia ist auch hier spiegelsymmetrisch um Spalte 20 (Game Bible §9): jedes Ding steht zweimal
+w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 22}}
+y = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "back_door", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 20}}
+c = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "clock", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 22}}
+K = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_hearth", "cue": "hearth", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 24}}
+T = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_table"}}
+E = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "w"}}
+e = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "e"}}
+L = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/guest_book", "cue": "guestbook", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 20}}
+; die Zimmer: ihre Türen gehen auf, wenn der Gastwirt es sagt (elysia.inn_room)
+r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_door", "cue": "room_locked", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 22, "unless": "elysia.inn_room"}}
+B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_bed", "cue": "bed", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 26}}
+; die Tür zurück in den Garten (an der Nordseite der Wiese, Spalte 32)
+D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": "elysia", "spawn": "inn", "auto": true, "sound": "door_close"}}
+[map]
+#########################################
+#########################################
+#########################################
+#########################################
+####################S####################
+######WWWWWWWWWWWWWWWWWWWWWWWWWWWWW######
+######WWWWWWWWWWWWWWcWWWWWWWWWWWWWW######
+######WWWWWWwWWWWWyWWWyWWWWWwWWWWWW######
+######WMMKMMMMMMMMMMhMMMMMMMMMMKMMW######
+WWWWWWWMMMMMMMMMMMMMbMMMMMMMMMMMMMWWWWWWW
+WWWWWWWMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWWWW
+W_____WMMMMMMTEMMMMMMMMMMMeTMMMMMMW_____W
+W______MMMMMMMMMMMMMMMMMMMMMMMMMMM______W
+W__B__rMMMMMMMMMMMMMMMMMMMMMMMMMMMr__B__W
+W_____WMMMMMMTEMMMMMMMMMMMeTMMMMMMW_____W
+WWWWWWWMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWWWW
+######WMMMMMMMMMMLMM@MMLMMMMMMMMMMW######
+######WMMMMMMMMMMMMM1MMMMMMMMMMMMMW######
+######WWWWWWWWWWWWWWDWWWWWWWWWWWWWW######
+#########################################
+#########################################
+#########################################
+#########################################
+#########################################

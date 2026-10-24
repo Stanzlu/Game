@@ -175,8 +175,12 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### T1 · `mira`
 
 *wenn* `side_valley_goat`
+  - *→ weiter bei* `mira_end_again`
 *sonst wenn* `house.mira_visited`
+  - *→ weiter bei* `mira_evening`
 *sonst wenn* `valley.mira_met`
+  - *→ weiter bei* `mira_again`
+- *→ weiter bei* `mira_first`
 
 ### T2 · `mira_first`
 
@@ -260,8 +264,12 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### T5 · `ending`
 
 - *Das Feuer knackt. Der Regen hat aufgehört. Irgendwo tropft es noch von den Bäumen.*  <sub>tal_end_1</sub>
+- *→ dazwischen* `evening_first`
+- *→ dazwischen* `evening_day`
 - *Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus.*  <sub>tal_end_11</sub>
+- *→ dazwischen* `evening_elysia`
 *wenn* `valley.shell_seen`
+  - *→ dazwischen* `evening_shell`
 *wenn* `mira und said_name`
   - **Mira:** ‹Name›.  <sub>tal_end_12</sub>
 - **Mira:** Morgen gehe ich weiter.  <sub>tal_end_2</sub>
@@ -769,6 +777,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### H14 · `antreiber_rest`
 
 *wenn* `house.cat_fed`
+  - *→ weiter bei* `cat_antreiber`
 - *Der Antreiber sitzt am Feuer und sieht aus, als würde er gleich aufspringen. Er springt nicht.*  <sub>haus_antr_8</sub>
 - **Antreiber:** Ich sitz nur kurz.  <sub>haus_antr_9</sub>
 

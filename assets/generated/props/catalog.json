@@ -193,6 +193,187 @@
    "res://assets/generated/props/elysia/grass_tuft_4.png"
   ]
  },
+ "elysia/guest_book": {
+  "anchor": [
+   10,
+   26
+  ],
+  "shadow": [
+   8,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/guest_book.png"
+  ]
+ },
+ "elysia/inn_bar": {
+  "anchor": [
+   88,
+   16
+  ],
+  "shadow": [
+   84,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    176,
+    6
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/inn_bar.png"
+  ]
+ },
+ "elysia/inn_bed": {
+  "anchor": [
+   16,
+   30
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -14
+   ],
+   "rect": [
+    30,
+    32
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/inn_bed.png"
+  ]
+ },
+ "elysia/inn_door": {
+  "anchor": [
+   8,
+   24
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -8
+   ],
+   "rect": [
+    16,
+    32
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/inn_door.png"
+  ]
+ },
+ "elysia/inn_front": {
+  "anchor": [
+   72,
+   54
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/inn_front.png"
+  ]
+ },
+ "elysia/inn_hearth": {
+  "anchor": [
+   24,
+   40
+  ],
+  "emissive": [
+   "res://assets/generated/props/elysia/inn_hearth_emit_0.png",
+   "res://assets/generated/props/elysia/inn_hearth_emit_1.png",
+   "res://assets/generated/props/elysia/inn_hearth_emit_2.png"
+  ],
+  "flicker": true,
+  "lights": [
+   {
+    "color": "#ffb060",
+    "energy": 1.1,
+    "offset": [
+     0,
+     -10
+    ],
+    "range": 110
+   }
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    44,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/inn_hearth_0.png",
+   "res://assets/generated/props/elysia/inn_hearth_1.png",
+   "res://assets/generated/props/elysia/inn_hearth_2.png"
+  ]
+ },
+ "elysia/inn_shell": {
+  "anchor": [
+   328,
+   8
+  ],
+  "flat": true,
+  "lights": [
+   {
+    "color": "#ffd890",
+    "energy": 0.5,
+    "offset": [
+     -128,
+     36
+    ],
+    "range": 120
+   },
+   {
+    "color": "#ffd890",
+    "energy": 0.5,
+    "offset": [
+     128,
+     36
+    ],
+    "range": 120
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/elysia/inn_shell.png"
+  ]
+ },
+ "elysia/inn_table": {
+  "anchor": [
+   20,
+   28
+  ],
+  "shadow": [
+   16,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    30,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/elysia/inn_table.png"
+  ]
+ },
  "elysia/islet": {
   "anchor": [
    0,

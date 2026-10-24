@@ -95,6 +95,9 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   `tools/art/map_overview.py content/maps/<karte>.txt` zeichnet sie). Elysia-Szenen hängen `ElysiaDirector.attach(self)` an (Uhr und Stufen-Flags
   `elysia.loops_1`/`_2`/`loops`), Sammelstücke gehen über `Collection`, Szenenlisten für Smoke und Leistungstest stehen in
   `SceneRegistry.SMOKE`/`BENCHMARK`. Dauer eines Segments rechnet `tools/writing/calibrate.py` (`docs/KALIBRIERUNG.md`).
+- Akt I (ADR-058, `docs/akt1/REGIONSBRIEFE.md`): Szenen in `world/levels/akt1/`, Dialoge in `content/dialogue/akt1/` (`[#draft]`, kein `[#ph]`), Requisiten in `tools/art/akt1_props.py`. Jedes Segment trägt einen Brief, ein Segmentskript
+  `tools/autopilot/akt1_<segment>.json` und seine Marken in der Liste `segments` von `tools/check.sh` (Beats und Flags, die der Lauf erreichen muss). Die Heldenquest `main_elysia_hero`
+  wächst je Segment um eine Stufe. Tests spielen Dialoge mit `DialogueWalk` (`tests/unit/dialogue_walk.gd`) und nennen Zeilen über `LineText.of(id)`.
 - `tools/art/layout_slice_maps.py tal --write` löscht Handänderungen in `content/maps/tal.txt` (Buchstabe `6`,
   `unless` von `t`): vorher vergleichen.
 

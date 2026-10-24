@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cx4ph0rvpc425"
+path="res://.godot/imported/gasthaus.dialogue-325f8ee0799f4c50b4f11b589d5dd658.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt1/gasthaus.dialogue"
+dest_files=["res://.godot/imported/gasthaus.dialogue-325f8ee0799f4c50b4f11b589d5dd658.tres"]
+
+[params]
+
+defaults=true

@@ -1,0 +1,163 @@
+# Das Gasthaus zum Immer, Akt I, Segment A2 (docs/akt1/REGIONSBRIEFE.md).
+# Der Gastwirt ist das Gesicht des Betäubers (Game Bible §14): warm, lustig, nie ein Schurke. Er bietet an
+# und hält nie fest; jedes Angebot lässt sich ablehnen und kommt beim nächsten Mal freundlich wieder.
+# Seine gefährlichste Zeile steht im zweiten Gespräch: „Du musst heute nicht zurück.“ Zeilen ohne Sprecher
+# sind Erzählung. Die Gäste sagen alle dasselbe, wortgleich.
+
+~ host
+if not WorldState.has_flag("elysia.inn_met")
+	=> host_first
+elif not WorldState.has_flag("elysia.inn_fed")
+	=> host_meal
+elif WorldState.has_flag("elysia.inn_slept")
+	=> host_slept
+elif WorldState.has_flag("elysia.inn_room")
+	=> host_upstairs
+=> host_room
+
+~ host_first
+do WorldState.set_flag("elysia.inn_met")
+Gastwirt: Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. [ID:gh_host_1] [#draft]
+Gastwirt: Das Gasthaus zum Immer. Wir haben geöffnet. Wir hatten immer geöffnet. [ID:gh_host_2] [#draft]
+Gastwirt: Ich hab dir den besten Platz freigehalten. Hier sind alle Plätze die besten. [ID:gh_host_3] [#draft]
+Gastwirt: Und trag dich ins Buch ein, ja? Du stehst schon drin. Aber sicher ist sicher. [ID:gh_host_6] [#draft]
+do WorldState.start_quest("side_elysia_guestbook")
+- Danke. Ich setz mich gern. [ID:gh_host_r1] [#draft]
+	=> host_meal
+- Ich schau mich nur um. [ID:gh_host_r2] [#draft]
+	Gastwirt: Schau nur, schau nur. Schau, so viel du willst. Es sieht immer gleich gut aus. [ID:gh_host_4] [#draft]
+- … [ID:gh_host_r3] [#draft]
+	Gastwirt: Ein stiller Gast. Ein Kenner. Die besten Gäste sagen nichts und essen alles. [ID:gh_host_5] [#draft]
+=> END
+
+~ host_meal
+Gastwirt: Setz dich, setz dich. Das Brot kommt gleich. Es ist schon da. [ID:gh_meal_1] [#draft]
+Auf dem Tisch steht ein Korb. Du hast niemanden kommen sehen. [ID:gh_meal_2] [#draft]
+Das Brot ist warm, die Kruste knackt, wie sie knacken soll. Es schmeckt, wie Brot schmeckt, wenn man an Brot denkt. [ID:gh_meal_3] [#draft]
+Gastwirt: Na? Na? Wie schmeckt es? [ID:gh_meal_4] [#draft]
+- Fantastisch. [ID:gh_meal_r1] [#draft]
+	Gastwirt: Sag ich doch! Das Rezept ist von gestern. Gestern war es von vorgestern. [ID:gh_meal_5] [#draft]
+- Nach … Brot. [ID:gh_meal_r2] [#draft]
+	Gastwirt: Nach Brot! Ha! Der war gut. Nach Brot. [ID:gh_meal_6] [#draft]
+- … [ID:gh_meal_r3] [#draft]
+	Gastwirt: Sprachlos. Das sind sie alle. Ich nehm das als Lob. [ID:gh_meal_7] [#draft]
+do WorldState.add_xp(300)
+do WorldState.set_flag("elysia.inn_fed")
+=> END
+
+# The second talk, and the most dangerous line of the Betäuber (Bible §14); free to refuse, asked again.
+~ host_room
+if WorldState.has_flag("elysia.inn_declined")
+	Gastwirt: Das Zimmer, das Zimmer! Es fragt schon nach dir. Es fragt nicht. Es freut sich nur. [ID:gh_room_8] [#draft]
+else
+	Gastwirt: Dein Zimmer ist fertig. Links. Oder rechts. Beide sind deins, sie sind genau gleich. [ID:gh_room_1] [#draft]
+	Gastwirt: Frisch bezogen. Frisch bezogen ist es hier immer. [ID:gh_room_2] [#draft]
+Gastwirt: Du musst heute nicht zurück. [ID:gh_room_3] [#draft]
+- Danke. Ich seh es mir an. [ID:gh_room_r1] [#draft]
+	Gastwirt: Geh nur, geh nur. Die Türen gehen für dich auf. Sie haben schon geübt. [ID:gh_room_4] [#draft]
+	do WorldState.set_flag("elysia.inn_room")
+	do WorldState.add_xp(200)
+- Ich muss weiter. [ID:gh_room_r2] [#draft]
+	Gastwirt: Musst du? Wirklich? [ID:gh_room_5] [#draft]
+	Gastwirt: Das Zimmer bleibt, wo es ist. Es wartet gern. Es hat nichts anderes vor. [ID:gh_room_6] [#draft]
+	do WorldState.set_flag("elysia.inn_declined")
+- … [ID:gh_room_r3] [#draft]
+	Gastwirt: Du überlegst. Ich warte. Ich hab Zeit. Wir haben hier alle Zeit. [ID:gh_room_7] [#draft]
+=> END
+
+~ host_upstairs
+% Gastwirt: Dein Zimmer ist offen. Beide Türen. Such dir die aus, die dir besser gefällt. [ID:gh_up_1] [#draft]
+% Gastwirt: Das Bett ist schon warm. Das Kissen liegt in der Mitte, wie es soll. [ID:gh_up_2] [#draft]
+% Gastwirt: Falls du was brauchst, sag es einfach. Ich hab es schon gebracht. [ID:gh_up_3] [#draft]
+=> END
+
+# The third talk, after the night (Bible §14: leaving must be the player's own act).
+~ host_slept
+if WorldState.has_flag("elysia.inn_stayed")
+	Gastwirt: Du bist ja noch da! Das freut mich jedes Mal wieder. [ID:gh_slept_5] [#draft]
+else
+	Gastwirt: Gut geschlafen? Natürlich hast du. [ID:gh_slept_1] [#draft]
+	Gastwirt: Du kannst für immer bleiben. Das sag ich jedem. Ich sag es sehr gern. [ID:gh_slept_2] [#draft]
+- Ich bleib noch ein bisschen. [ID:gh_slept_r1] [#draft]
+	Gastwirt: Natürlich! Ein bisschen ist hier immer ein bisschen länger. [ID:gh_slept_3] [#draft]
+	do WorldState.set_flag("elysia.inn_stayed")
+- Ich geh gleich. [ID:gh_slept_r2] [#draft]
+	Gastwirt: Sicher, sicher. Geh nur. Ich halte dir den Platz frei. Er ist ja nie besetzt. [ID:gh_slept_4] [#draft]
+- … [ID:gh_slept_r3] [#draft]
+	Gastwirt: Ein Schweigen zum Mitnehmen. Hier, ein Brot dazu. [ID:gh_slept_6] [#draft]
+=> END
+
+~ guest
+if WorldState.has_flag("elysia.loops")
+	Elysianer: Das Brot hier! Ich komme jeden Tag. Es ist jeden Tag das beste. [ID:gh_guest_loop] [#draft]
+else
+	% Elysianer: Das Brot hier! Ich komme jeden Tag. Es ist jeden Tag das beste. [ID:gh_guest_1] [#draft]
+	% Elysianer: Du setzt dich so schön. Ich würde mich auch gern so setzen. Ich übe. [ID:gh_guest_2] [#draft]
+	% Elysianer: Der Wirt hat gesagt, du bleibst. Ich hab gesagt, natürlich bleibt er. [ID:gh_guest_3] [#draft]
+	do WorldState.add_xp(100)
+=> END
+
+~ guestbook
+if WorldState.has_flag("elysia.inn_book_signed")
+	Das Gästebuch liegt offen. Unter deiner Zeile ist Platz für die nächste. [ID:gh_book_3] [#draft]
+elif WorldState.has_flag("elysia.inn_book_seen")
+	Dein Name steht auf jeder Seite. Die letzte Zeile ist noch frei. [ID:gh_book_6] [#draft]
+	=> guestbook_sign
+else
+	Das Gästebuch liegt aufgeschlagen auf einem Pult. Auf jeder Seite steht dein Name, von oben bis unten, in schöner Schrift. [ID:gh_book_1] [#draft]
+	Es ist nicht deine. [ID:gh_book_2] [#draft]
+	do WorldState.set_flag("elysia.inn_book_seen")
+	=> guestbook_sign
+=> END
+
+~ guestbook_sign
+if WorldState.is_quest_active("side_elysia_guestbook")
+	- Dich noch einmal eintragen. [ID:gh_book_r1] [#draft]
+		Du schreibst deinen Namen unter deinen Namen. Die Feder kratzt nicht. [ID:gh_book_4] [#draft]
+		do WorldState.set_flag("elysia.inn_book_signed")
+		do WorldState.advance_quest("side_elysia_guestbook", "done")
+		do WorldState.add_xp(2000)
+		do WorldState.add_gold(500)
+	- Lieber nicht. [ID:gh_book_r2] [#draft]
+		Du lässt die Feder, wo sie ist. Sie sieht nicht enttäuscht aus. Nichts hier sieht enttäuscht aus. [ID:gh_book_5] [#draft]
+=> END
+
+~ clock
+Eine Uhr an der Wand, ohne Zeiger und ohne Ziffern. Auf dem Zifferblatt steht in goldenen Buchstaben ein Wort. Jetzt. [ID:gh_clock_1] [#draft]
+=> END
+
+~ window
+Durch das Fenster siehst du den Garten. Durch das gegenüber auch. [ID:gh_window_1] [#draft]
+Du suchst den Unterschied. Es gibt keinen. [ID:gh_window_2] [#draft]
+=> END
+
+~ back_door
+Zwei Türen hinter dem Tresen, ohne Schild, genau gleich. Beide sind zu. Dahinter ist nichts zu hören. [ID:gh_back_1] [#draft]
+=> END
+
+~ room_locked
+Die Tür ist zu. Sie sieht aus, als würde sie sich gleich für dich öffnen. [ID:gh_door_1] [#draft]
+=> END
+
+~ hearth
+Das Feuer brennt, seit es das Haus gibt. Es hat noch nie Holz gebraucht. [ID:gh_hearth_1] [#draft]
+=> END
+
+~ bed
+if WorldState.has_flag("elysia.inn_slept")
+	% Das Bett ist gemacht. Schon wieder. [ID:gh_bed_6] [#draft]
+	% Die Decke ist glatt, das Kissen liegt in der Mitte. Es hat auf dich gewartet. [ID:gh_bed_7] [#draft]
+else
+	Ein Bett. Frisch bezogen, die Decke glatt, das Kissen genau in der Mitte. [ID:gh_bed_1] [#draft]
+	- Dich hinlegen. [ID:gh_bed_r1] [#draft]
+		Du legst dich hin. Die Decke ist warm, bevor du sie berührst. [ID:gh_bed_2] [#draft]
+		do WorldState.set_flag("elysia.inn_sleeping")
+	- Stehen bleiben. [ID:gh_bed_r2] [#draft]
+		Du bleibst stehen. Das Bett nimmt es nicht übel. Es hat Zeit. [ID:gh_bed_3] [#draft]
+=> END
+
+# After the night: the same waking as the first one (el_wake_0), and nobody finds that strange.
+~ woke
+Licht. Warm, von überall. Du hast die Augen gerade erst aufgemacht. [ID:gh_woke_1] [#draft]
+Es ist derselbe Morgen. [ID:gh_woke_2] [#draft]
+=> END

@@ -180,6 +180,8 @@ func test_autopilot_unrolls_repeated_events() -> void:
 func test_elysia_quest_can_be_celebrated_early() -> void:
 	WorldState.start_quest("main_elysia_hero")
 	assert_true(WorldState.advance_quest("main_elysia_hero", "celebrated"), "chest before quest")
+	assert_false(WorldState.is_quest_done("main_elysia_hero"), "the inn comes next")
+	assert_true(WorldState.advance_quest("main_elysia_hero", "inn"))
 	assert_true(WorldState.is_quest_done("main_elysia_hero"))
 
 

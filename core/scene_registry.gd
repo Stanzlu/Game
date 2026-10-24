@@ -8,6 +8,7 @@ const SCENES := {
 	"elysia": "res://world/levels/slice/elysia.tscn",
 	"tal": "res://world/levels/slice/tal.tscn",
 	"haus": "res://world/levels/slice/haus.tscn",
+	"gasthaus": "res://world/levels/akt1/gasthaus.tscn",
 	"weg": "res://encounters/antreiber/slice_antreiber.tscn",
 	"sandbox": "res://world/levels/sandbox.tscn",
 	"antreiber": "res://encounters/antreiber/antreiber_encounter.tscn",
@@ -27,14 +28,19 @@ const SMOKE: PackedStringArray = [
 	"look_tal",
 	"look_wald",
 	"elysia",
+	"gasthaus",
 	"tal",
 	"haus",
 	"weg",
 ]
-const BENCHMARK: PackedStringArray = ["look_elysia", "tal", "haus", "weg", "look_wald"]
+const BENCHMARK: PackedStringArray = ["look_elysia", "tal", "haus", "gasthaus", "weg", "look_wald"]
 
 ## UI mode a scene starts in when it is opened from the prototype menu (new game).
-const START_MODES := {"look_elysia": GameState.UiMode.ELYSIA, "elysia": GameState.UiMode.ELYSIA}
+const START_MODES := {
+	"look_elysia": GameState.UiMode.ELYSIA,
+	"elysia": GameState.UiMode.ELYSIA,
+	"gasthaus": GameState.UiMode.ELYSIA,
+}
 
 ## Renamed scenes: old key -> current key. Saves, doors, `--start=` and the start menu accept the
 ## old key; saves are rewritten to the new one on load. Empty until the first rename; tests fill

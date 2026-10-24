@@ -98,6 +98,12 @@ def render_file(path, prefix):
             out.append("%s*sonst*" % pad)
             stack.append((indent, "else"))
             continue
+        jump = re.match(r"^=>(<?)\s*([A-Za-z0-9_]+)", stripped)
+        if jump:
+            if jump.group(2) != "END":
+                what = "dazwischen" if jump.group(1) else "weiter bei"
+                out.append("%s- *→ %s* `%s`" % (pad, what, jump.group(2)))
+            continue
         if stripped.startswith(("do ", "do! ", "set ", "=>", "match", "when", "while", "using", "import")):
             continue
         inline = INLINE_CONDITION.match(stripped)
