@@ -42,6 +42,8 @@ bar_beats=4
 
 # Motif as (scale degree, length in eighths): 3 5 6 5 | 3 2
 MOTIF = [(3, 1), (5, 1), (6, 2), (5, 1), (3, 1), (2, 2)]
+# The answer that comes home: 2 3 5 | 3 2 1 (the valley piano plays it four bars after the motif)
+ANSWER = [(2, 1), (3, 1), (5, 2), (3, 1), (2, 1), (1, 3)]
 MAJOR = [0, 2, 4, 5, 7, 9, 11]
 DORIAN = [0, 2, 3, 5, 7, 9, 10]
 
@@ -340,8 +342,7 @@ def valley():
             tr.add(beat0, soft_bass(midi_hz(notes[0] - 12), tr.beat * 6), gain=0.5)
     # the motif on a soft piano, slow and slightly late, like someone playing it for
     # themselves (ADR-041); four bars later an answer that comes home (2-3-5-3-2-1)
-    answer = [(2, 1), (3, 1), (5, 2), (3, 1), (2, 1), (1, 3)]
-    for start, phrase, vel in ((8.0, MOTIF, 0.62), (24.0, answer, 0.55)):
+    for start, phrase, vel in ((8.0, MOTIF, 0.62), (24.0, ANSWER, 0.55)):
         pos = start
         for deg, eighths in phrase:
             jitter = rng.normal(0.04, 0.03) / tr.beat
