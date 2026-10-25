@@ -110,46 +110,6 @@ neue IDs werden gesperrt (`id_lock.py --update`), neue Flags stehen vor dem Text
 **Zweck.** Akt II hat die Facette Grenzen (Bible §16–17: das Nein als Antwort) und die Wahrnehmung aus Akt I in der Wirklichkeit zu belegen. Heute setzt der Slice `boundaries` am Ende des Abends, und kein Dialog fragt nach ihr; `perception` wird nur in Akt I gelesen.
 B2 gibt Grenzen eine frühere Quelle (eine Antwort an den Antreiber am Feuer oder an eine kleine Bitte von Mira) und zwei Leser, jeweils neben einer unbedingten Antwort; jedes Nein hat eine wahrnehmbare Folge und bestraft nie (§16, §24, §51).
 Mira hat einen trockenen, sachlichen Moment, in dem sie unfair ist, und tröstet nicht. Die Wahrnehmung bekommt zwei bis drei **zusätzliche** freiwillige Einzelheiten, die nur mit der Facette zu sehen sind, an neuen Stellen (am Bachlauf in B3, im Haus); die vorhandenen Funde (Moosregel, Stiefelabdruck, die Muschel mit dem Riss) bleiben für alle unverändert, denn an der Muschel hängen `valley.shell_seen`, `Zum Meer?` und `tal_end_8`.
-Hilfen zum Abrufen als Journaleintrag; der Richter nutzt die Stimmart `neutral`; für Mira höchstens sechs neue Erinnerungsvarianten; die Katze „ab II“ statt „ab III“ im Plan (sie liegt schon im Slice auf dem Antreiber);
-neue IDs werden gesperrt (`id_lock.py --update`), neue Flags stehen vor dem Text in `motive.json`.
-
-## Risiken und Kürzungen
-
-- **Das Ende hängt an allem:** die Prüfung in `check.sh`, der Schutz gegen doppeltes Enden, das Startmenü und der eingefrorene Stand gehen davon aus, dass der Slice das Spiel beendet. Darum bleibt das Ende (O1).
-- **Ton:** der Richter kann nach einem Sturz wie Beschämen klingen (§51); Werte können wie ein Quiz wirken; kein schwerer Moment direkt hinter dem anderen (§45); Mira darf nicht zur Mentorin oder zur Trösterin werden.
-- **Grenzen ohne Leser:** die Facette `boundaries` wird nur am Ende des Abends gesetzt und von nichts gelesen. B2 gibt ihr eine frühere Quelle und zwei Leser; ein Test verlangt zu jedem gesetzten Facetten-Literal einen Leser (StoryLint prüft Facetten nicht).
-- **Karten der Klasse M:** jede Zelländerung färbt rund 17 % der Pixel neu, darum landet das Layout in einem Pull Request; die Zahl verschiedener Zeichen je Karte ist begrenzt (das Tal braucht 66; ob und wo die Grenze liegt, klärt V1, bevor der Generator der Karte ein Layout schreibt); die Ladezeit bei Klasse M ist nur hochgerechnet (V1 misst), und Software-GL sagt nichts über den Mac.
-- **StoryLint:** gesetzte Flags brauchen einen Leser; Antworten mit Bedingung brauchen daneben eine unbedingte Antwort.
-- **Prozess:** der Slice-Text ist ungefroren, die Stimmenblätter sind ungelesen; die Stolpersteine in `check.sh` sind ungesperrte IDs, Flags ohne Eintrag in `motive.json` und goldene Zeilen, die nicht mehr passen.
-
-**Cut-First für Akt II:** 1. B3b (nie in der Basis), 2. B4 (Richter) auf ein bis zwei Cues verkleinern oder streichen, 3. Kuriositäten von 6 auf 4, 4. die zweite Nebenquest (die Ziege bleibt), 5. Nebenvarianten von Mira.
-**Nie streichen:** Miras Ankunft und das Feuer, der UI-Verlust, das Haus, der Antreiber mit seiner Hilfe, die Rückkehr der Musik, Ziege und Kartoffel, der getragene Samen.
-
----
-
-## B1 Ankunft
-
-**Stand:** geplant. **Szene:** `tal` (in `tal_scene.gd` nach der Marke `valley_arrival`). **Dialog:** neue Datei `content/dialogue/akt2/ankunft.dialogue` (ein Cue `arrival_echo`, `[#draft]`, kein `[#ph]`).
-
-**Zweck.** Der Riss ist überschritten, das Tal ist da. Akt I hat dem Spielstand Entscheidungen mitgegeben (der Gastwirt, das Fest, die Halle, die Fragmente); in der Wirklichkeit liest bisher kaum eine davon eine Zeile (`MOTIVE.md`). B1 gibt zwei bis vier davon ein Echo: kurze bedingte Erzählzeilen, jede an ein Ding im Tal gebunden
-(der kalte Kamin, der Bach, der Boden). Kein Rückblick, keine Erklärung; wer nichts davon getan hat, hört nichts anderes.
-
-| Beat | Auslöser | Was geschieht | Marke |
-|---|---|---|---|
-| Ankunft | `valley_arrival` (vorhanden) | unverändert | Beat `valley_arrival` |
-| Das Echo | die ersten Schritte nach dem Aufprall | zwei bis vier Erzählzeilen, die Flags aus Akt I lesen (z. B. `elysia.inn_stayed`, `elysia.feast_noticed`, `elysia.hall_mirror_seen`, `fragment.*`); eine Windböe als einziges Wetter (die vorhandenen Windblätter) | Beat `arrival_echo`; keine neuen Flags |
-
-**Figuren.** Keine. **Humor-Ziel (3/10).** Leise: ein Ding sagt, was Elysia nie sagte. **Gewicht (§45).** leicht. **Motive.** Elysia gegen Wirklichkeit, Wiederholung (das Tal wiederholt nichts). Die „Gelesen in“-Listen in `MOTIVE.md` und `motive.json` wachsen.
-**Scheitern und Speichern (§49).** Kein Scheitern; die Marke löst einen Autosave aus. **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Böe ist Bild und Ton. **Endlichkeit (§52).** Einmal. **Gerechnet.** rund 15 Zeilen, 150 Wörter: `calibrate.py --segment 150 15 1` gibt rund 2 Minuten.
-**Prüfungen.** `tests/unit/test_akt2_ankunft.gd` (Zeilen über `LineText.of(id)`), `tools/autopilot/akt2_ankunft.json` (Szene `tal`) mit Eintrag in `segments`.
-
-## B2 Nein und Blick
-
-**Stand:** geplant. **Szenen:** `tal`, `haus`. **Dialog:** neue Datei `content/dialogue/akt2/nein.dialogue`.
-
-**Zweck.** Akt II hat die Facette Grenzen (Bible §16–17: das Nein als Antwort) und die Wahrnehmung aus Akt I in der Wirklichkeit zu belegen. Heute setzt der Slice `boundaries` am Ende des Abends, und kein Dialog fragt nach ihr; `perception` wird nur in Akt I gelesen.
-B2 gibt Grenzen eine frühere Quelle (eine Antwort an den Antreiber am Feuer oder an eine kleine Bitte von Mira) und zwei Leser, jeweils neben einer unbedingten Antwort; jedes Nein hat eine wahrnehmbare Folge und bestraft nie (§16, §24, §51).
-Mira hat einen trockenen, sachlichen Moment, in dem sie unfair ist, und tröstet nicht. Die Wahrnehmung bekommt zwei bis drei freiwillige Einzelheiten der Wirklichkeit, die nur mit der Facette zu sehen sind (die Moosregel, der Stiefelabdruck, der Riss in der Muschel).
 Hilfen zum Abrufen (Bachlauf, Weg des Antreibers) stehen als Journaltext, ohne neue Oberfläche (Plan 6).
 
 | Beat | Auslöser | Was geschieht | Marke |
