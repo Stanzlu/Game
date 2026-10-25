@@ -49,7 +49,7 @@ def main():
         print("baked %s in %.0f s, %.0f MB peak, ground png %.1f MB" % ((name,) + baked[name]), file=sys.stderr)
     seconds, _, _ = run(["tools/godot.sh", "--headless", "--import"])
     print("imported in %.0f s" % seconds, file=sys.stderr)
-    print("| Karte | Zellen | Zeichen | Bake (s) | Bake (MB) | PNG (MB) | Parse (ms) | Aufbau (ms) | Knoten | Speicher (MB) | Prozess (µs/Bild) |")
+    print("| Karte | Zellen | Kacheln | Bake (s) | Bake (MB) | PNG (MB) | Parse (ms) | Aufbau (ms) | Knoten | Speicher (MB) | Prozess (µs/Bild) |")
     print("|---|---|---|---|---|---|---|---|---|---|---|")
     for nx, ny in sizes:
         name = "tal_%dx%d" % (nx, ny)

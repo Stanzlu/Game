@@ -36,7 +36,7 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 | Segment | Inhalt | Ort | Neue Zeilen | Pull Requests | Stand |
 |---|---|---|---|---|---|
 | V0 | Brief, Kapitelmarke `act1`, eingefrorener Stand `v2_akt1_end.json`, ADR-067 | – | 0 | 1 | **gebaut** |
-| V1 | T6 Großkarten-Spike und T7 (nur der kleine Teil) | – | 0 | 1 | geplant |
+| V1 | T6 Großkarten-Spike und T7 (nur der kleine Teil) | – | 0 | 1 | **gebaut** (ADR-068, `docs/PERFORMANCE.md`: Klasse M bis 120 × 70) |
 | B1 | Ankunft: die Wirklichkeit antwortet auf Elysia | `tal` | 15 | 1 | geplant |
 | B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 25 | 1 | geplant |
 | B3 | Bachlauf: die erste Karte der Klasse M, Nebenquest, Kuriositäten, Nebel | `bachlauf` (neu) | 62 | 1 | geplant |

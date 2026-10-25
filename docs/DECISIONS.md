@@ -78,6 +78,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-065 | Autopilot v2 und der Akt-I-Durchlauf: gemessen statt geschätzt (P6.12c, T8) |
 | ADR-066 | Neuplanung nach Akt I: Minuten sind Modell, geplant wird in Zeilen und Pull Requests (P6.13) |
 | ADR-067 | Akt II: Aufbau, Voreinstellungen und Kapitelmarke `act1` (P6.14, V0) |
+| ADR-068 | Karten der Klasse M: der Großkarten-Spike und seine Grenzen (P6.14, V1, T6) |
 
 ---
 
@@ -902,3 +903,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Verworfen:** Ein Ende von Akt II im Wald (rührt an ADR-030, Startmenü und die Prüfung in `check.sh`); der Richter als Bild oder Effekt (Stimmart und Audio-Pipeline, §51); die Werte als Test (ADR-042); Schema 3 ohne Anlass (additive Felder reichen); den Baker für Klasse L schon jetzt umzubauen (kommt mit Akt IV).
 - **Alte Spielstände:** Neue Marke und neuer eingefrorener Stand, kein Schema ändert sich. Stände, die den Riss vor dieser Änderung überschritten haben, tragen `chapter.act1` nicht.
 - **Konsequenzen:** Jedes Segment von Akt II meldet seine Messwerte im Brief (Zeilen, Wörter, Cues, Requisiten, Tests, Commits) und bekommt ein Segmentskript mit Marken in `check.sh`; B7 spielt Akt II ganz (`akt2_full.json`). Die Fragen von Plan 11 (7) liegen bei dir; ohne Antwort gelten die Voreinstellungen.
+
+## ADR-068 · Karten der Klasse M: der Großkarten-Spike und seine Grenzen (P6.14, V1, T6)
+- **Status:** angenommen · 2026-10-25 (Plan T6, T7; ADR-055, ADR-067)
+- **Kontext:** Akt II baut die erste Karte der Klasse M (15 bis 30 Minuten), das Tal ist mit 68 × 38 Zellen die größte Karte. Plan T6 verlangte zuerst zu prüfen, ob Zeichen außerhalb von ASCII durch beide Parser gehen, und dann eine synthetische große Karte zu messen; T7 den Baker lokal zu machen. Offen war, wo die Grenze der Klasse M liegt und ob das Kartenformat (ADR-013) ein Format v2 braucht.
+- **Entscheidung:**
+  - **Kartenformat v2 entfällt.** Symbole außerhalb von ASCII (Grundebene, höhere Ebenen) laufen durch `MapData` und `tools/art/mapfile.py`; ein gemeinsames Beispiel (`tests/fixtures/maps/unicode_symbols.txt`) wird von beiden gelesen (`test_map_data`, `tools/art/test_mapfile.py`). Leerzeichen können kein Symbol sein (beide Parser schneiden sie ab). Die Zahl der Symbole begrenzt nur die Legende; die behauptete Grenze von 93 Zeichen im Brief von Akt II war nirgends belegt und gilt nicht.
+  - **Obergrenze der Klasse M: 120 × 70 Zellen** (8.400). Gemessen an gekachelten Tal-Karten (`tools/perf/map_spike.py`, Tabelle in `docs/PERFORMANCE.md`): Aufbau rund 90 ms plus 55 µs je Zelle, also rund 550 ms bei 8.400 Zellen (Container, ein Kern), 1,5 s bei 204 × 114; Knoten und Speicher wachsen linear und bleiben weit unter dem Budget (13.000 Knoten, 96 MB bei 204 × 114). Das Budget „Szenenwechsel unter 0,5 s“ hält eine Karte bis rund 6.500 Zellen ein; darüber deckt die Überblendung den Aufbau. Klasse L (Akt IV) braucht Aufbau in Blöcken; das ist der große Teil von T7 und kommt mit der ersten solchen Karte.
+  - **Baker:** Zeit und Speicher wachsen linear mit der Fläche (20 s und 155 MB je Megapixel); jede Zelländerung färbt rund 17 % der Pixel neu. **Regel:** Das Layout einer Karte der Klasse M landet in einem Pull Request, danach ändern spätere Pull Requests nur Requisiten und Dialog; gebackene Bilder werden beim Einfrieren der Region committet.
+  - **Werkzeug:** `tools/art/tile_map.py` (Karte kacheln), `tools/perf/spike_bake.py` (backen ohne Stempel: `bake_ground.py` bleibt unberührt, weil jede Änderung an ihm, `pixelart.py` oder `mapfile.py` alle Stempel veraltet), `tools/perf/map_spike.py` und `map_spike.gd` (messen); die Ausgabe liegt in `spike_tmp/` (Godot importiert sie, Git hält sie nicht).
+- **Verworfen:** Ein Kartenformat v2 mit `[objects]` (nichts verlangt es); ein Flag `--no-stamp` im Baker (er würde alle Stempel veralten); den Baker für Klasse L schon jetzt umzubauen (Akt IV); die Bildrate aus dem Container zu schließen (kein Grafikprozessor).
+- **Offen:** Die Bildrate einer Karte der Klasse M auf dem Mac ist nicht gemessen und blockiert Akt II nicht; ein Leistungstest an der synthetischen Karte (`spike_tmp/tal_2x2.txt`) wäre der Weg.
+- **Konsequenzen:** B3 (Bachlauf) baut die Karte bis 120 × 70 mit einem Generator (`tools/art/layout_akt2_maps.py`) und einem Pull Request für das Layout; jeder weitere Gewinn an Größe braucht einen Nachweis nach diesem Maß.
+
