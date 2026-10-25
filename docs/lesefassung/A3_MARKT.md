@@ -181,6 +181,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M14 · `festmaster`
 
+*wenn* `elysia.feast_toast und elysia.rift_open`
+  - **Festmeisterin:** Auf den Helden! Auf den Helden! Auf den Helden! `[#draft]`  <sub>mk_fest_11</sub>
 *wenn* `elysia.feast_toast`
   - **Festmeisterin:** Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. `[#draft]`  <sub>mk_fest_9</sub>
 *wenn* `elysia.feast_invited`

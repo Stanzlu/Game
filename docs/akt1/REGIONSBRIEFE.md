@@ -309,7 +309,7 @@ Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: 
 
 ## A9 Stein, Samen, Riss
 
-**Stand:** gebaut. **Szene:** kein neuer Ort; der Garten (`elysia`, die Zellen am Becken und am Inselrand) und zwei Sätze der Schleife 2 (`markt`, `gasthaus`). **Dialog:** zwei neue Zeilen (`el_wake_seed` in `slice/elysia.dialogue`, `mk_gate_11` in `akt1/markt.dialogue`), eine Änderung nur der Reihenfolge (`gasthaus.dialogue`, `host_loop`); alle `[#draft]`. **Karte:** `elysia.txt` (Stein und Zeile zum Stein mit `if: elysia.loops`).
+**Stand:** gebaut. **Szene:** kein neuer Ort; der Garten (`elysia`, die Zellen am Becken und am Inselrand) und zwei Sätze der Schleife 2 (`markt`, `gasthaus`). **Dialog:** drei neue Zeilen (`el_wake_seed` in `slice/elysia.dialogue`, `mk_gate_11` und `mk_fest_11` in `akt1/markt.dialogue`), eine Bedingung an `host_loop` (`gasthaus.dialogue`: die erste Zeile entfällt, sobald `elysia.rift_open`); alle `[#draft]`. **Karte:** `elysia.txt` (Stein und Zeile zum Stein mit `if: elysia.loops`).
 
 **Zweck.** Der Anschluss macht aus den drei Stücken des Slice (Stein, Kind, Riss; Bible §11, §30, §56) die Folge, die Akt I braucht: erst die Wiederholung, dann der Stein, dann das Kind, dann der Riss. Nichts davon ist neu gebaut; A9 ordnet es und füllt zwei Lücken: der Samen hat in Elysia keine Stimme, und die Schleife 2 (Plan 4.4: „normal, Schleife 1, Schleife 2“) hat bisher nur die Zeile im Garten.
 
@@ -319,13 +319,14 @@ Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: 
 | Der Stein | die Wiederholung beginnt (`elysia.loops`) | am Becken liegt der Stein, daneben die Zeile „Ein Stein. Grau. Das Einzige hier, das nicht glänzt.“; er liegt neben der Stelle, an der das Kind steht | Flag `elysia.stone_taken`, Beat `stone`, Musikstufe 2 (`elysia.loops_2`) |
 | Das Kind | der Stein oder nicht (A8) | das Kind führt zum Inselrand | `elysia.child_met`, `elysia.child_vanished`, Beat `child`, `child_melody` |
 | Der Riss | das Kind verschwindet oder die Uhr (A7) | der Riss öffnet sich; wer ihn berührt, geht hinüber und nimmt Stein und Samen mit, sonst nichts | `elysia.rift_open`, Beat `rift_found`, `elysia.rift_crossed`, Beat `valley_arrival` |
-| Schleife 2 | der Riss ist offen (`elysia.loops` und `elysia.rift_open`) | der Torwächter sagt nur noch „Das Tor ist offen. Wie immer.“; der Gastwirt nur noch den zweiten seiner beiden Sätze | Zeilen `mk_gate_11`, `gh_host_loop_2` |
+| Schleife 2 | der Riss ist offen (`elysia.loops` und `elysia.rift_open`) | der Torwächter sagt nur noch „Das Tor ist offen. Wie immer.“; die Festmeisterin nur noch ihr dreifaches Hoch; der Gastwirt nur noch den zweiten seiner beiden Sätze | Zeilen `mk_gate_11`, `mk_fest_11`, `gh_host_loop_2` |
 
 **Der Stein erst nach dem Hoch.** Im Slice lag der Stein von Anfang an am Becken, und wer ihn früh nahm, verkürzte die Musik, bevor irgendjemand sich wiederholte. Bible §56 ordnet: Wiederholung, fehlende Spiegelung, Stein, Kind, Riss. Der Stein liegt darum erst, wenn sich Elysia wiederholt (Flag `elysia.loops` an seiner Karteneinfügung und an der Zeile zum Stein). Ein Stand, der ihn früher genommen hat, behält ihn.
 
 **Der Samen ohne Mechanik.** Der Samen ist nach Bible §30 vor der ersten Erinnerung an Elysia da. Elysia bekommt dafür einen Satz, keine Handlung: sie hält ihn für ihren. Das Haus widerspricht später, ohne zu erklären (`haus_rest_4`: „Du weißt nicht, seit wann er da ist.“). Kein Flag, kein Beet, kein Pflanzen (ADR-042, Bible §29: der Garten wächst in Akt V).
 
-**Schleife 2.** Nach ADR-064: Schleife 2 ist ein ganzer, kürzerer Satz, den die Person schon gesagt hat, wortgleich; die Sätze schrumpfen mit der Musik (19, 10, 5 Sekunden). Wer keinen kürzeren ganzen Satz hat (die Bäckerin, die Blumenfrau, der Händler, die Gärtnerin, die Gäste), bleibt bei Schleife 1. Die Zeile im Garten (`el_loop_2`, „Ganz unten rechts … Bleib lieber hier bei uns.“) bleibt die Ausnahme: sie weist auf den Riss.
+**Schleife 2.** Nach ADR-064: Schleife 2 ist ein ganzer Satz, den die Person schon gesagt hat, wortgleich, und höchstens halb so lang wie ihr Satz der Schleife 1; die Sätze schrumpfen mit der Musik (19, 10, 5 Sekunden). Das trifft drei Personen: den Torwächter (`mk_gate_11`, 6 statt 12 Wörter, ein Satz seiner Reihe), die Festmeisterin (`mk_fest_11`, ihr Hoch: 9 statt 20 Wörter) und den Gastwirt im Gasthaus (nur der zweite seiner beiden Sätze, `gh_host_loop_2`, 11 statt 26 Wörter).
+Alle anderen haben keinen halb so langen Satz und bleiben bei Schleife 1: die Bäckerin (4 Wörter, schon die kürzeste), die Blumenfrau (9, die kürzeste), die Schneiderin (13 gegen 10), der Händler (13 gegen 9), die Gärtnerin (13 gegen 10), die Gäste (13 gegen 12) und der Gastwirt im Garten (`el_host_loop_1` bis `3`, jede ist schon kurz). Die Zeile im Garten (`el_loop_2`, „Ganz unten rechts … Bleib lieber hier bei uns.“) bleibt die Ausnahme: sie weist auf den Riss.
 
 **Der Übergang.** Beim Überschreiten bleibt nur, was die Bible nennt: der Stein und der Samen (`RiftSequence.KEEP`). Blatt und Feder aus der Halle bleiben in Elysia zurück: die Bible (§11) nennt nur Stein und Samen. (Die Gegenstände zeigen keinen Zähler; die Beschreibungen versprechen kein Regal.)
 
@@ -343,8 +344,8 @@ Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: 
 
 **Barrierefreiheit (§50).** Keine neue Zeitnot; der Stein ist ein gewöhnliches Aufnehmen mit Beutekarte und Text; die Schleife 2 ist Text.
 
-**Endlichkeit (§52).** Ein Stein, ein Samen, ein Riss; Schleife 2 gibt es nur dort, wo ein kürzerer Satz da ist.
+**Endlichkeit (§52).** Ein Stein, ein Samen, ein Riss; Schleife 2 gibt es nur dort, wo ein halb so langer Satz da ist.
 
-**Gerechnet.** Zwei neue Zeilen, 20 Wörter; `calibrate.py --segment 20 2 2` ergibt rund drei Minuten bei zwei Minuten Weg, davon liegt der Weg zum Riss schon im Slice: neu kommt rund eine Minute dazu. Akt I liegt damit (A2 bis A9) bei rund 42 statt 75 geplanten Minuten; P6.13 misst und entscheidet über A4 und mehr Erkundung.
+**Gerechnet.** Drei neue Zeilen, 29 Wörter; `calibrate.py --segment 29 3 2` ergibt rund drei Minuten bei zwei Minuten Weg, davon liegt der Weg zum Riss schon im Slice: neu kommt rund eine Minute dazu. Akt I liegt damit (A2 bis A9) bei rund 42 statt 75 geplanten Minuten; P6.13 misst und entscheidet über A4 und mehr Erkundung.
 
-**Prüfungen.** `test_akt1_anschluss` (11 Tests: kein Stein vor der Schleife, Stein und Zeile mit der Schleife auf der Zelle (41, 17), Musikstufe 2 durch den Stein, früh genommener Stein bleibt genommen, Samen-Zeile mit und ohne Samen, Schleife 2 für Torwächter und Gastwirt, nichts vor der Schleife, Übergang behält Stein und Samen), das Segmentskript `tools/autopilot/akt1_anschluss.json` (Schritt „segment“ in `check.sh`: Erwachen, Hoch, Stein, Kind, Riss, Tal), `test_elysia_and_rift`, `test_slice_saves`.
+**Prüfungen.** `test_akt1_anschluss` (13 Tests: kein Stein vor der Schleife, Stein und Zeile mit der Schleife auf der Zelle (41, 17), Musikstufe 2 durch den Stein, früh genommener Stein bleibt genommen, Samen-Zeile mit und ohne Samen, Schleife 2 für Torwächter, Festmeisterin und Gastwirt und ihre Länge, nichts vor der Schleife, Übergang lässt Blatt und Feder zurück), das Segmentskript `tools/autopilot/akt1_anschluss.json` (Schritt „segment“ in `check.sh`: Erwachen, Hoch, Stein, Kind, Riss, Tal), `test_elysia_and_rift`, `test_slice_saves`.
