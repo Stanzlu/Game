@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://c8pcb5t7y5omc"
+path="res://.godot/imported/feuer.dialogue-314936893da67b36db824c96109d37ec.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt2/feuer.dialogue"
+dest_files=["res://.godot/imported/feuer.dialogue-314936893da67b36db824c96109d37ec.tres"]
+
+[params]
+
+defaults=true
