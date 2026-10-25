@@ -159,7 +159,7 @@ Beide meiden das Kind (O5: keine Bilder des Kindes im Haus vor Akt V) und erklä
 
 ## B3 Bachlauf
 
-**Stand:** gebaut. **Szenen:** `bachlauf` (neu: `world/levels/akt2/bachlauf.tscn`, `BachlaufScene`; die erste Karte der Klasse M), `tal` (Zugang und Rückweg). **Dialog:** neue Datei `content/dialogue/akt2/bachlauf.dialogue` (13 Cues, 44 Zeilen `bl_*`, `[#draft]`, kein `[#ph]`) und eine Zeile in `haus.dialogue` (`haus_window_4`, die Einladung). **Quest:** `side_valley_trap` „Die Reuse“ (`hook`, `float`, `weir`, `done`). Dazu drei Kuriositäten, zwei Fragmente und ein Fund nur mit der Facette Wahrnehmung.
+**Stand:** gebaut. **Szenen:** `bachlauf` (neu: `world/levels/akt2/bachlauf.tscn`, `BachlaufScene`; die erste Karte der Klasse M), `tal` (Zugang und Rückweg). **Dialog:** neue Datei `content/dialogue/akt2/bachlauf.dialogue` (12 Cues, 44 Zeilen `bl_*`, `[#draft]`, kein `[#ph]`) und eine Zeile in `haus.dialogue` (`haus_window_4`, die Einladung). **Quest:** `side_valley_trap` „Die Reuse“ (`hook`, `float`, `weir`, `done`). Dazu drei Kuriositäten, zwei Fragmente und ein Fund nur mit der Facette Wahrnehmung.
 
 **Zweck.** Abends, nach Miras Besuch, geht ein Pfad am Bach nach Süden (O6). Das Tal war bisher die einzige Karte der Wirklichkeit und halb so groß wie ein Platz zum Verlaufen; der Bachlauf muss zeigen, dass eine große Karte ohne Marker trägt (Plan 6: „ein leises Mittel, festgelegt im Brief der ersten M-Karte“) und dass alles, was auf ihr liegt, wie in der Wirklichkeit einen Grund hat, nur nicht den, den man vermutet (Bible §12: „weniger kontrollierbar, nicht schlechter“). Gewicht „leicht“ nach dem mittleren B2 (§45). Nichts hier hängt an der Hauptgeschichte: der Abend endet auch, wenn die Spielerin nie hinunterging (O1).
 
