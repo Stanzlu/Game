@@ -19,6 +19,6 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *sonst wenn* `elysia.inn_declined`
   - *Unter der Plane brennt ein Feuer. Niemand fragt ein zweites Mal.* `[#draft]`  <sub>ank_fire_2</sub>
 *wenn* `elysia.feast_noticed`
-  - *Auf der Pfütze am Weg gehen Ringe auf. Keiner gleicht dem davor.* `[#draft]`  <sub>ank_rings_1</sub>
+  - *In den Pfützen am Weg gehen Ringe auf. Keiner gleicht dem davor.* `[#draft]`  <sub>ank_rings_1</sub>
 *wenn* `melody.child_hum`
   - *Der Regen auf dem Laub klingt einen Atemzug lang wie ein Summen. Dann ist es wieder Regen.* `[#draft]`  <sub>ank_hum_1</sub>

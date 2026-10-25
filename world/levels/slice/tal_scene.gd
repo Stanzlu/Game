@@ -81,7 +81,7 @@ func _arrival_echo() -> void:
 		# only the way over the rift is answered: a valley entered any other way has no Act I behind it
 		if step < ECHO_JUMP and Chapter.reached("act1"):
 			walked += step
-	while dialogue_box.is_open() or player.is_locked():
+	while _echo_waits():
 		await tree.physics_frame
 		if not is_inside_tree() or WorldState.has_flag("valley.mira_met"):
 			return
@@ -93,6 +93,18 @@ func _arrival_echo() -> void:
 	await cut.say(ARRIVAL_DIALOGUE, "arrival_echo")
 	cut.end()
 	Beat.mark("arrival_echo")
+
+
+## True while nothing may start: a line is up, a menu is open, the player is held, or the picture
+## still comes back from the black of the rift (the player may walk before it has).
+func _echo_waits() -> bool:
+	return (
+		dialogue_box.is_open()
+		or player.is_locked()
+		or MenuLayer.any_open(get_tree())
+		or ScreenFade.is_covered()
+		or ScreenFade.is_fading()
+	)
 
 
 ## True while a soundscape plays and its wind is down (-1 without one: nothing to wait for).

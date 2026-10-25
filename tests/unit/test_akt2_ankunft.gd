@@ -18,6 +18,8 @@ func before_each() -> void:
 func after_each() -> void:
 	Input.action_release(&"move_down")
 	Input.action_release(&"move_up")
+	SceneTravel.pending_spawn = ""
+	SceneTravel.arrival_fade = -1.0
 	Input.action_release(&"interact")
 	Settings.set_value("text.auto_advance", false, false)
 	WorldState.new_game()
@@ -25,20 +27,26 @@ func after_each() -> void:
 	get_tree().paused = false
 
 
-## The valley as the rift leaves it: Act I reached, nobody met yet.
-func _arrive() -> TalScene:
-	WorldState.set_flag(Chapter.flag_for("act1"))
+## The valley where the rift lets the player out (spawn_rift, north-east of Mira's camp).
+func _valley() -> TalScene:
+	SceneTravel.pending_spawn = "rift"
 	var scene: TalScene = TAL.instantiate()
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
 	return scene
 
 
+## The valley as the rift leaves it: Act I reached, nobody met yet.
+func _arrive() -> TalScene:
+	WorldState.set_flag(Chapter.flag_for("act1"))
+	return await _valley()
+
+
 func _cutscenes() -> int:
 	return get_tree().get_nodes_in_group(&"cutscene").size()
 
 
-## Walks south from the arrival: open meadow, nothing to interact with on the way.
+## Walks south from the arrival (about three cells in 40 frames): meadow, nothing to interact with.
 func _walk(frames: int, action := &"move_down") -> void:
 	Input.action_press(action)
 	await wait_physics_frames(frames)
@@ -137,7 +145,7 @@ func test_the_first_steps_call_up_the_echo_once() -> void:
 	assert_false(scene.dialogue_box.is_open(), "nothing before the first steps")
 	assert_false(Beat.reached("arrival_echo"))
 	var before := WorldState.state.flags.duplicate()
-	await _walk(60)
+	await _walk(40)
 	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 12.0)
 	assert_true(scene.dialogue_box.is_open(), "the lines come up")
 	assert_eq(_cutscenes(), 1, "as a scene of its own: the player stands")
@@ -150,6 +158,22 @@ func test_the_first_steps_call_up_the_echo_once() -> void:
 		if not before.has(flag):
 			added.append(flag)
 	assert_eq(added, ["beat.arrival_echo"], "the echo sets no flag of its own")
+
+
+func test_the_echo_waits_for_the_picture_to_come_back() -> void:
+	# the rift fades the valley in over several seconds, and the player may walk at once
+	SceneTravel.arrival_fade = 3.0
+	await _arrive()
+	await _walk(40)
+	var seen := {"up": false, "dark": false}
+	var watch := func() -> bool:
+		if _cutscenes() == 1 and not seen["up"]:
+			seen["up"] = true
+			seen["dark"] = ScreenFade.is_covered() or ScreenFade.is_fading()
+		return seen["up"]
+	await wait_until(watch, 12.0)
+	assert_true(seen["up"], "the echo comes")
+	assert_false(seen["dark"], "but not into the black")
 
 
 func test_a_teleport_is_no_step() -> void:
@@ -169,10 +193,8 @@ func test_standing_still_calls_up_nothing() -> void:
 
 func test_there_is_no_echo_without_the_rift_behind() -> void:
 	# a valley entered any other way (a debug start, an old save) has no Act I to answer
-	var scene: TalScene = TAL.instantiate()
-	add_child_autofree(scene)
-	await wait_physics_frames(3)
-	await _walk(60)
+	await _valley()
+	await _walk(40)
 	await wait_seconds(1.0)
 	assert_eq(_cutscenes(), 0)
 	assert_false(Beat.reached("arrival_echo"))
@@ -180,13 +202,11 @@ func test_there_is_no_echo_without_the_rift_behind() -> void:
 
 func test_the_echo_follows_the_rift_even_when_the_valley_was_already_open() -> void:
 	# the scene stands first and Act I is reached after (a segment script, a late autosave)
-	var scene: TalScene = TAL.instantiate()
-	add_child_autofree(scene)
-	await wait_physics_frames(3)
-	await _walk(60)
+	var scene := await _valley()
+	await _walk(40)
 	assert_eq(_cutscenes(), 0, "no rift behind yet")
 	WorldState.set_flag(Chapter.flag_for("act1"))
-	await _walk(60, &"move_up")
+	await _walk(40, &"move_up")
 	await wait_until(func() -> bool: return _cutscenes() == 1, 12.0)
 	assert_eq(_cutscenes(), 1)
 
@@ -194,7 +214,7 @@ func test_the_echo_follows_the_rift_even_when_the_valley_was_already_open() -> v
 func test_the_echo_gives_way_when_mira_is_met_first() -> void:
 	var scene := await _arrive()
 	WorldState.set_flag("valley.mira_met")
-	await _walk(60)
+	await _walk(40)
 	await wait_seconds(1.0)
 	assert_eq(_cutscenes(), 0)
 	assert_false(Beat.reached("arrival_echo"))
@@ -204,7 +224,7 @@ func test_the_echo_gives_way_when_mira_is_met_first() -> void:
 func test_the_echo_does_not_come_back_once_it_has_played() -> void:
 	Beat.mark("arrival_echo")
 	var scene := await _arrive()
-	await _walk(60)
+	await _walk(40)
 	await wait_seconds(1.0)
 	assert_eq(_cutscenes(), 0)
 	assert_false(scene.dialogue_box.is_open())
@@ -216,14 +236,15 @@ func test_the_echo_waits_for_a_conversation_that_is_open() -> void:
 	scene.dialogue_box.present(MIRA, "fell_in")
 	await wait_physics_frames(3)
 	assert_true(scene.dialogue_box.is_open())
-	await _walk(60)
+	await _walk(40)
 	await wait_seconds(0.5)
 	assert_eq(_cutscenes(), 0, "the echo does not stack on a conversation")
-	# the taps stop with the conversation: the echo that follows is not clicked through
+	# the taps stop with the conversation: the echo that follows is not clicked through. They are
+	# ui_accept, for the player is free here and an interact would examine what lies ahead.
 	for i in 12:
 		if not (scene.dialogue_box.is_open() and scene.dialogue_box.cue == "fell_in"):
 			break
-		await _tap(&"interact")
+		await _tap(&"ui_accept")
 	var echo_up := func() -> bool:
 		return scene.dialogue_box.is_open() and scene.dialogue_box.cue == "arrival_echo"
 	await wait_until(echo_up, 12.0)
