@@ -1,0 +1,15 @@
+; Zeichen außerhalb von ASCII als Kartensymbole (T6, ADR-068): Kleinbuchstabe mit Umlaut (ö), Währungszeichen (€), ein
+; chinesisches Zeichen (日), ein griechischer Großbuchstabe (Ω) und ein Zeichen oberhalb der Grundebene (😀). Python
+; (tools/art/mapfile.py) und GDScript (MapData) lesen diese eine Datei und müssen dasselbe sehen: fünf Zellen breit,
+; vier Zeilen hoch, zwei Marker, drei Kacheln (ö, €, 日).
+[legend]
+ö = {"atlas": [0, 0], "surface": "grass"}
+€ = {"atlas": [2, 0], "surface": "dirt"}
+日 = {"atlas": [4, 0], "surface": "stone", "solid": true}
+😀 = {"ground": "ö", "marker": "player_spawn"}
+Ω = {"ground": "€", "marker": "spawn_other"}
+[map]
+日日日日日
+日ö😀€日
+日€Ωö日
+日日日日日

@@ -13,6 +13,9 @@ __pycache__/
 # Local captures (screenshots, videos)
 captures/
 
+# Synthetic maps of the large-map spike (tools/perf/map_spike.py); Godot imports them, git does not keep them
+spike_tmp/
+
 # OS / editor noise
 .DS_Store
 Thumbs.db
