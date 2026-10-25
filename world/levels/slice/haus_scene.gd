@@ -225,9 +225,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	elif id == "house.prints_seen" and value:
 		Beat.mark("act2_blick")
 	elif id == "house.rested" and value:
-		# the first time the fire holds and someone stays; the autosave comes when the box closes,
-		# before the Antreiber's visit sets its block (a mark after the cue itself would not)
-		Beat.mark("act2_safe")
+		_first_safe_moment()
 	elif id == "melody.house_hum" and value:
 		AudioDirector.sfx("house_hum", -2.0, 1.0)
 	elif id == "value.freedom" and value:
@@ -235,6 +233,13 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		_glare()
 	elif id == "value.calm" and value:
 		_evening_falls()
+
+
+## The first time the fire holds and someone stays (Act II, act2_safe): the rest by the fire, or
+## Mira's visit if nobody sat down before. The autosave of the mark comes when the box closes,
+## before the Antreiber's visit sets its block (a mark after the cue itself would not).
+func _first_safe_moment() -> void:
+	Beat.mark("act2_safe")
 
 
 ## The cat gets a name, if the player wants one (Game Bible §28).
@@ -397,8 +402,8 @@ func _mira_visits() -> void:
 		while not _quiet():
 			await get_tree().process_frame
 	# Mira knocks after mira_after in any case: if nobody sat down, her staying is the first safe
-	# moment (house.rested marks act2_safe; the rest by the fire sets it earlier)
-	WorldState.set_flag("house.rested")
+	# moment (house.rested stays the rest by the fire's own, so that cue can still be told later)
+	_first_safe_moment()
 	var cut := Cutscene.begin(self)
 	AudioDirector.sfx("door_knock")
 	await cut.wait(0.9)

@@ -58,11 +58,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *wenn* `house.spoon_found`
   - *Der Tisch wackelt. Unter einem Bein klemmt ein gefaltetes Stück Papier, das nicht hilft.*  <sub>haus_table_3</sub>
   - *Ein Becher, den niemand abgewaschen hat. Seit dem Frühjahr nicht.*  <sub>haus_table_4</sub>
+  *wenn* `value.closeness`
+    - *Am Tisch steht nur noch ein Hocker. Der andere hat es warm.* `[#draft]`  <sub>haus_table_5</sub>
 *sonst*
-  - *Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel.*  <sub>haus_table_1</sub>
+  *wenn* `value.closeness`
+    - *Ein Tisch, ein Hocker, ein Becher. Der zweite Hocker hat es warm. In der Schublade liegt ein Löffel.* `[#draft]`  <sub>haus_table_6</sub>
+  *sonst*
+    - *Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel.*  <sub>haus_table_1</sub>
   - *Ein sehr kleiner Löffel. Du nimmst ihn mit, ohne genau zu wissen, warum.*  <sub>haus_table_2</sub>
-*wenn* `value.closeness`
-  - *Am Tisch steht nur noch ein Hocker. Der andere hat es warm.* `[#draft]`  <sub>haus_table_5</sub>
 
 ### H5 · `bucket`
 

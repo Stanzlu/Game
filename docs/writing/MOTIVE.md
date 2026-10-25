@@ -22,7 +22,7 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | **Wiederkehrende Formulierungen** | §46 | `el_host_3`, `haus_rest_7`, `tal_mira_8`, `tal_eve_tarp_1`, `tal_eve_tarp_2`, `haus_mira_8`, `tal_mira_again_1`, `tal_end_5`, `tal_south_sign_2`, `mk_baker_3`, `mk_baker_1`, `mk_tailor_5`, `mk_board_4`, `sh_keeper_2`, `sh_gate_2`, `mk_fest_3`, `mk_baker_7`, `mk_tailor_7`, `elysia.feast_noticed` | „Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII). |
 | **Fragmente späterer Melodien** | §31, §46 | `el_child_3`, `tal_shell_1`, `tal_eve_shell_2`, `valley.shell_seen`, `mk_music_1`, `mk_music_2`, `melody.elysia_perfect`, `melody.child_hum` | Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). |
 | **Spuren der Welt und der Vergangenheit** | §31 | `bl_hook_2`, `bl_table_4`, `bl_bed_4`, `bl_knot_2`, `haus_herbs_4`, `fragment.bank_table`, `fragment.dry_bed`, `fragment.beam_herbs` | Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. |
-| **Die Werte am Feuer** | §18 | `feu_3`, `feu_5`, `feu_7`, `value.freedom`, `value.closeness`, `value.calm` | Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6). |
+| **Die Werte am Feuer** | §18 | `feu_3`, `feu_5`, `feu_7`, `value.freedom`, `value.closeness`, `value.calm` | Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6). |
 
 ## Laufende Gags (Bible §33)
 
@@ -98,7 +98,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `valley.ending` | Fortschritt | `tal.dialogue` | `tal_scene.gd` | Das Ende des Slice läuft („Zum Meer.“). |
 | `encounter.antreiber_resolved` | Beschützer | `antreiber_encounter.gd` | – | Der Weg des Antreibers ist durch Stehenbleiben aufgelöst. |
 | `house.fire_lit` | Haus | `haus_scene.gd` | `haus.txt`, `tal.txt`, `haus_scene.gd` | Das Feuer brennt. |
-| `house.rested` | Haus | `haus.dialogue`, `haus_scene.gd` | `haus_scene.gd` | Am Feuer ausgeruht (Abend). |
+| `house.rested` | Haus | `haus.dialogue` | `haus_scene.gd` | Am Feuer ausgeruht (Abend). |
 | `house.spoon_found` | Haus | `haus.dialogue` | `haus.dialogue` | Den kleinen Löffel gefunden. |
 | `house.shelf_filled` | Haus | `haus.dialogue` | `haus.txt` | Der Löffel steht im Regal. |
 | `house.shelf_stone` | Haus | `haus.dialogue` | `haus.txt` | Der Stein liegt im Regal. |

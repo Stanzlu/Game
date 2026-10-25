@@ -699,10 +699,11 @@
      "ref": "value.calm"
     }
    ],
-   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
+   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
    "payoff_lines": [
     "haus_fire_10",
     "haus_table_5",
+    "haus_table_6",
     "haus_bucket_3"
    ]
   },

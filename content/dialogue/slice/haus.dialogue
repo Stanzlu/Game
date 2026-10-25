@@ -30,13 +30,16 @@ else
 if WorldState.has_flag("house.spoon_found")
 	% Der Tisch wackelt. Unter einem Bein klemmt ein gefaltetes Stück Papier, das nicht hilft. [ID:haus_table_3]
 	% Ein Becher, den niemand abgewaschen hat. Seit dem Frühjahr nicht. [ID:haus_table_4]
+	if WorldState.has_flag("value.closeness")
+		Am Tisch steht nur noch ein Hocker. Der andere hat es warm. [ID:haus_table_5] [#draft]
 else
-	Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel. [ID:haus_table_1]
+	if WorldState.has_flag("value.closeness")
+		Ein Tisch, ein Hocker, ein Becher. Der zweite Hocker hat es warm. In der Schublade liegt ein Löffel. [ID:haus_table_6] [#draft]
+	else
+		Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel. [ID:haus_table_1]
 	Ein sehr kleiner Löffel. Du nimmst ihn mit, ohne genau zu wissen, warum. [ID:haus_table_2]
 	do WorldState.add_item("curiosity_tiny_spoon")
 	do WorldState.set_flag("house.spoon_found")
-if WorldState.has_flag("value.closeness")
-	Am Tisch steht nur noch ein Hocker. Der andere hat es warm. [ID:haus_table_5] [#draft]
 => END
 
 ~ shelf

@@ -1,13 +1,13 @@
 # Das Kind
 
 **Beleg im Slice:** 2 Zeilen (`el_child_3`, `el_child_2`) und das Bild am Becken (`el_child_1`). Mehr Goldzeilen
-entstehen in Akt II (das Lied im Haus: hörbar, kein Fragment, Erzählung ohne das Kind).
+entstehen später (Akt V); in Akt II ist das Lied im Haus hörbar, kein Fragment, Erzählung ohne das Kind.
 
 ## Funktion
 
 Das Kind steht für keine festgelegte Ursache, keine Diagnose, keine Tätergeschichte (Bible §15). Rückblenden bleiben
-Fragmente: ein Flur, eine geschlossene Tür, eine Hand, ein Lied, Warten, Verstecken, ein leeres Zimmer, das ursprüngliche
-Haus. Die zentrale Szene (Akt V) ist, dass der Erwachsene bleibt und höchstens sagt: „Ich bin da.“
+Fragmente: ein Flur, eine geschlossene Tür, eine Hand, Verstecken, ein leeres Zimmer, das ursprüngliche Haus (die sechs
+Bilder des Kindes). Das Lied ist eine Melodie, Warten ein Echo; beides ist kein Fragment (Plan 5.5, ADR-067 Nachtrag). Die zentrale Szene (Akt V) ist, dass der Erwachsene bleibt und höchstens sagt: „Ich bin da.“
 
 ## Signatur
 

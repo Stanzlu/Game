@@ -9,22 +9,27 @@ extends GutTest
 const FEUER := "res://content/dialogue/akt2/feuer.dialogue"
 const HAUS := "res://content/dialogue/slice/haus.dialogue"
 const BACH := "res://content/dialogue/akt2/bachlauf.dialogue"
-## The four answers of the choice by the fire, each with the flag it sets ("" for the silence).
+## The four answers of the choice by the fire (their IDs), each with the flag it sets ("" for the
+## silence).
 const DEEDS: Array = [
-	["Spalt", "value.freedom"],
-	["Hocker", "value.closeness"],
-	["zusehen", "value.calm"],
-	["…", ""],
+	["feu_r1", "value.freedom"],
+	["feu_r2", "value.closeness"],
+	["feu_r3", "value.calm"],
+	["feu_r4", ""],
 ]
-## The lines the room answers with: the cue, the line, the flag that shows it (and the fire).
+const VALUES: PackedStringArray = ["value.freedom", "value.closeness", "value.calm"]
+## The lines the room answers with: the cue, the line, the flag that shows it, and what else the
+## cue's other branch needs (the table has two, for the first look and for a look after the spoon).
 const READERS: Array = [
-	["fireplace", "haus_fire_10", "value.freedom"],
-	["table", "haus_table_5", "value.closeness"],
-	["bucket", "haus_bucket_3", "value.calm"],
+	["fireplace", "haus_fire_10", "value.freedom", ""],
+	["table", "haus_table_6", "value.closeness", ""],
+	["table", "haus_table_5", "value.closeness", "house.spoon_found"],
+	["bucket", "haus_bucket_3", "value.calm", ""],
 ]
 const OWN_LINES: PackedStringArray = [
 	"haus_fire_10",
 	"haus_table_5",
+	"haus_table_6",
 	"haus_bucket_3",
 	"haus_herbs_1",
 	"haus_herbs_2",
@@ -73,7 +78,7 @@ func test_the_choice_has_four_answers_and_the_silence_is_the_last() -> void:
 	var answers := await DialogueWalk.answers(FEUER, "fire_values")
 	assert_eq(answers.size(), 4)
 	for i in DEEDS.size():
-		assert_true(str(DEEDS[i][0]) in answers[i], "answer %d: %s" % [i, DEEDS[i][0]])
+		assert_eq(answers[i], LineText.of(DEEDS[i][0]), "answer %d" % i)
 	assert_eq(answers[3], "…")
 
 
@@ -89,16 +94,17 @@ func test_the_answers_are_the_same_whatever_has_happened() -> void:
 func test_each_answer_sets_its_own_value_and_nothing_else() -> void:
 	for deed: Array in DEEDS:
 		WorldState.new_game()
-		await DialogueWalk.play(FEUER, "fire_values", PackedStringArray([deed[0]]))
+		await DialogueWalk.play(FEUER, "fire_values", PackedStringArray([LineText.of(deed[0])]))
 		var expected := PackedStringArray([deed[1]]) if deed[1] != "" else PackedStringArray()
 		assert_eq(_values(), expected, "after: %s" % deed[0])
 
 
-func test_each_answer_has_a_different_consequence_in_the_room() -> void:
+func test_no_two_answers_end_in_the_same_lines() -> void:
 	var seen_lines := {}
 	for deed: Array in DEEDS:
 		WorldState.new_game()
-		var seen := await DialogueWalk.play(FEUER, "fire_values", PackedStringArray([deed[0]]))
+		var picks := PackedStringArray([LineText.of(deed[0])])
+		var seen := await DialogueWalk.play(FEUER, "fire_values", picks)
 		assert_true(seen.size() >= 3, "the question and what happens")
 		for text: String in seen.slice(2):
 			assert_false(seen_lines.has(text), "no two answers say the same: %s" % text)
@@ -106,7 +112,9 @@ func test_each_answer_has_a_different_consequence_in_the_room() -> void:
 
 
 func test_the_silence_says_only_that_nothing_was_done() -> void:
-	var seen := await DialogueWalk.play(FEUER, "fire_values", PackedStringArray(["…"]))
+	var seen := await DialogueWalk.play(
+		FEUER, "fire_values", PackedStringArray([LineText.of("feu_r4")])
+	)
 	assert_eq(seen.size(), 3, "the two lines of the question and one of its own")
 	assert_true(_has(seen, "feu_9"))
 	assert_true(_values().is_empty())
@@ -115,29 +123,50 @@ func test_the_silence_says_only_that_nothing_was_done() -> void:
 # --- What the room says afterwards --------------------------------------------------------------
 
 
-func test_every_value_shows_in_a_place_of_its_own_and_only_with_it() -> void:
+func _room(reader: Array, flags: PackedStringArray) -> PackedStringArray:
+	## The cue of this reader in a room with the fire burning, the extra flag and these flags set.
+	WorldState.new_game()
 	WorldState.set_fire_lit(true)
+	if reader[3] != "":
+		WorldState.set_flag(reader[3])
+	for flag: String in flags:
+		WorldState.set_flag(flag)
+	return await DialogueWalk.play(HAUS, reader[0])
+
+
+func test_every_value_shows_in_a_place_of_its_own_and_only_with_it() -> void:
 	for reader: Array in READERS:
 		assert_false(
-			_has(await DialogueWalk.play(HAUS, reader[0]), reader[1]), "%s before" % reader[1]
+			_has(await _room(reader, PackedStringArray()), reader[1]), "%s before" % reader[1]
 		)
-		WorldState.set_flag(reader[2])
 		assert_true(
-			_has(await DialogueWalk.play(HAUS, reader[0]), reader[1]),
+			_has(await _room(reader, PackedStringArray([reader[2]])), reader[1]),
 			"%s with %s" % [reader[1], reader[2]]
 		)
-		WorldState.new_game()
-		WorldState.set_fire_lit(true)
+		# and not with any other value
+		for other: String in VALUES:
+			if other != reader[2]:
+				var seen := await _room(reader, PackedStringArray([other]))
+				assert_false(_has(seen, reader[1]), "%s with only %s" % [reader[1], other])
 
 
 func test_the_values_do_not_replace_each_other() -> void:
 	# all three at once: every place of the house shows its own line, none takes another's
-	WorldState.set_fire_lit(true)
 	for reader: Array in READERS:
-		WorldState.set_flag(reader[2])
-	for reader: Array in READERS:
-		assert_true(_has(await DialogueWalk.play(HAUS, reader[0]), reader[1]), reader[1])
-	assert_eq(_values().size(), 3)
+		assert_true(_has(await _room(reader, VALUES), reader[1]), reader[1])
+
+
+func test_the_table_keeps_its_count_whatever_the_first_look_finds() -> void:
+	# a table with one stool is never first described with two (the spoon's first look)
+	var first := await _room(READERS[1], PackedStringArray(["value.closeness"]))
+	assert_false(_has(first, "haus_table_1"), "no 'zwei Hocker' once one stands by the fire")
+	assert_true(_has(first, "haus_table_2"), "and the spoon is still found")
+	assert_false(_has(first, "haus_table_5"))
+	var later := await _room(READERS[2], PackedStringArray(["value.closeness"]))
+	assert_false(_has(later, "haus_table_6"))
+	WorldState.new_game()
+	var plain := await DialogueWalk.play(HAUS, "table")
+	assert_true(_has(plain, "haus_table_1"), "with both stools the old line stays")
 
 
 func test_the_fire_shows_the_draught_only_while_it_burns() -> void:
