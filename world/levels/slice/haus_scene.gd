@@ -396,6 +396,9 @@ func _mira_visits() -> void:
 		await NodeTimer.after(self, AFTER_LOAD_CALM)
 		while not _quiet():
 			await get_tree().process_frame
+	# Mira knocks after mira_after in any case: if nobody sat down, her staying is the first safe
+	# moment (house.rested marks act2_safe; the rest by the fire sets it earlier)
+	WorldState.set_flag("house.rested")
 	var cut := Cutscene.begin(self)
 	AudioDirector.sfx("door_knock")
 	await cut.wait(0.9)
