@@ -29,7 +29,7 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
 - In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
-- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`. Zeitfenster
+- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`; nie in einer Schleife auf `get_tree().physics_frame` oder `process_frame` warten (die Koroutine überlebt den Knoten, `check.sh` meldet „instance is gone“): eine Phase in `_physics_process` führen. Zeitfenster
   im Spiel zählen Spielzeit (`delta`), nie die Wanduhr (`Time.get_ticks_*`): Autopilot-Läufe sind schneller.
 - Rückfragen über `ConfirmMenu` (sichere Antwort vorausgewählt); Klänge mit Erzählwert brauchen einen Eintrag
   in `AudioDirector.CAPTIONS` („Geräusche als Text“, ADR-046).
