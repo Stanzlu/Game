@@ -36,19 +36,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
     - *Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war.*  <sub>haus_bed_3</sub>
     - *Dann ist der Moment vorbei. Das Bett ist immer noch kalt.*  <sub>haus_bed_4</sub>
 *wenn* `perception`
-  - *An einer Ecke der Decke ist ein Stück gestopft. Das Garn ist rot, die Decke grau.*  <sub>haus_bed_6</sub>
+  - *Die Decke ist aus Quadraten genäht. Eins davon ist neuer als die anderen, der Faden dicker.*  <sub>haus_bed_6</sub>
 
-### H8 · `haus_prints`
-
-> Nur wer genau hinsieht, findet diese Stelle (die Szene setzt house.looks_closely aus der Facette Wahrnehmung).
-
-*wenn* `house.prints_seen`
-  - *Die Abdrücke im Staub laufen noch ans Fenster und zurück.*  <sub>haus_prints_3</sub>
-*sonst*
-  - *Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen.*  <sub>haus_prints_1</sub>
-  - *Sie laufen ans Fenster und wieder zurück, mehrmals.*  <sub>haus_prints_2</sub>
-
-### H15 · `antreiber_rest`
+### H14 · `antreiber_rest`
 
 *wenn* `house.cat_fed`
   - *→ weiter bei* `cat_antreiber`
@@ -57,7 +47,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Antreiber:** Das Dach hat Zeit. Steht auf der Liste. Ganz unten. *(wenn `house.antreiber_refused`)*  <sub>haus_antr_10</sub>
 - *Der Antreiber sitzt am Feuer und zählt nichts mehr an den Fingern.* *(wenn `house.antreiber_refused`)*  <sub>haus_antr_11</sub>
 
-### H19 · `mira_visit`
+### H18 · `mira_visit`
 
 - *Mira sitzt am Feuer, nass bis auf die Haut. Sie trägt nur einen Stiefel.*  <sub>haus_mira_1</sub>
 - **Mira:** Ich hab den Rauch gesehen.  <sub>haus_mira_2</sub>
@@ -128,6 +118,16 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Mira:** Ich hab ein Brett über die Brücke gelegt. Damit ich zurückkomme. Und du auch, falls.  <sub>haus_mira_25</sub>
 - **Mira:** Den Rest vom Fisch kannst du der Katze geben. Die sitzt schon die ganze Zeit am Fenster.  <sub>haus_mira_26</sub>
 
+### H19 · `haus_prints`
+
+> Nur wer genau hinsieht, findet diese Stelle (die Szene setzt house.looks_closely aus der Facette Wahrnehmung).
+
+*wenn* `house.prints_seen`
+  - *Die Abdrücke im Staub laufen noch ans Fenster und zurück.*  <sub>haus_prints_3</sub>
+*sonst*
+  - *Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen.*  <sub>haus_prints_1</sub>
+  - *Sie laufen ans Fenster und wieder zurück, mehrmals.*  <sub>haus_prints_2</sub>
+
 ## tal
 
 
@@ -158,6 +158,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 *wenn* `mira und kept_origin`
   - *Mira schaut ins Feuer. Nach Elysia fragt sie nicht.*  <sub>tal_eve_ely_12</sub>
+  - *→ Ende des Szenenstücks*
 *wenn* `mira und said_elsewhere`
   - **Mira:** Dieses Woanders. Wie war's da?  <sub>tal_eve_ely_10</sub>
 *sonst wenn* `mira und said_dont_know`

@@ -38,7 +38,7 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 | V0 | Brief, Kapitelmarke `act1`, eingefrorener Stand `v2_akt1_end.json`, ADR-067 | – | 0 | 1 | **gebaut** |
 | V1 | T6 Großkarten-Spike und T7 (nur der kleine Teil) | – | 0 | 1 | **gebaut** (ADR-068, `docs/PERFORMANCE.md`: Klasse M bis 120 × 70, Aufbau rund 0,5 s) |
 | B1 | Ankunft: die Wirklichkeit antwortet auf Elysia | `tal` | 6 (geplant 15) | 1 | **gebaut** (6 Zeilen, 0,5 Modellminuten) |
-| B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 23 (geplant 25) | 1 | **gebaut** (23 Zeilen, 2,2 Modellminuten) |
+| B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 23 (geplant 25) | 1 | **gebaut** (23 Zeilen, 2,1 Modellminuten) |
 | B3 | Bachlauf: die erste Karte der Klasse M, Nebenquest, Kuriositäten, Nebel | `bachlauf` (neu) | 62 | 1 | geplant |
 | B4 | Richter: eine Stimme nach dem zweiten Sturz | `tal` | 12 | 1 | geplant (Cut-First-Platz 2) |
 | B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 30 | 1 | geplant |
@@ -77,7 +77,7 @@ neue IDs werden gesperrt (`id_lock.py --update`), neue Flags stehen vor dem Text
 
 - **Das Ende hängt an allem:** die Prüfung in `check.sh`, der Schutz gegen doppeltes Enden, das Startmenü und der eingefrorene Stand gehen davon aus, dass der Slice das Spiel beendet. Darum bleibt das Ende (O1).
 - **Ton:** der Richter kann nach einem Sturz wie Beschämen klingen (§51); Werte können wie ein Quiz wirken; kein schwerer Moment direkt hinter dem anderen (§45); Mira darf nicht zur Mentorin oder zur Trösterin werden.
-- **Grenzen ohne Leser:** die Facette `boundaries` wird nur am Ende des Abends gesetzt und von nichts gelesen. B2 gibt ihr eine frühere Quelle und zwei Leser; ein Test verlangt zu jedem gesetzten Facetten-Literal einen Leser (StoryLint prüft Facetten nicht).
+- **Grenzen ohne Leser:** die Facette `boundaries` wird nur am Ende des Abends gesetzt und von nichts gelesen. B2 gibt ihr eine frühere Quelle und zwei Leser; `StoryLint.facet_problems` verlangt zu jeder gesetzten Facette einen Leser und zu jeder gelesenen einen Setzer (B2).
 - **Karten der Klasse M:** jede Zelländerung färbt rund 17 % der Pixel neu, darum landet das Layout in einem Pull Request; die Zahl verschiedener Zeichen je Karte ist nur durch die Legende begrenzt (das Tal braucht 66; V1, ADR-068); der Aufbau der Klasse M ist gemessen (120 × 70: rund 0,5 s, V1), das Zeichnen nicht, und der Container sagt nichts über den Mac.
 - **StoryLint:** gesetzte Flags brauchen einen Leser; Antworten mit Bedingung brauchen daneben eine unbedingte Antwort.
 - **Prozess:** der Slice-Text ist ungefroren, die Stimmenblätter sind ungelesen; die Stolpersteine in `check.sh` sind ungesperrte IDs, Flags ohne Eintrag in `motive.json` und goldene Zeilen, die nicht mehr passen.
@@ -131,9 +131,9 @@ Mira ist einmal trocken unfair und tröstet nicht. Die Wahrnehmung bekommt zusä
 | „Morgen.“ | „Das ist ein Termin.“, geht nachsehen, ob das Dach noch da ist | er geht hinaus, ohne das „Ja! Los!“ des Aufstehens; kein Nein, keine Facette | Flag `house.antreiber_postponed` |
 | „…“ | wartet und zählt etwas an den Fingern ab | das Sitzen entscheidet wie bisher: sitzen bleiben setzt ihn dazu, aufstehen schickt ihn mit „Ja! Los!“ hinaus | – |
 
-Er fragt nicht, warum; er lobt nicht; er ruft nicht (kein „!“ im Sitzen). Sein Zweitens, das ausfällt, greift `sl_antr_start_3` („Erstens gehen. Zweitens schneller gehen.“) auf: seine Liste verliert etwas, er wird nicht besiegt. Die Folgen sind am Antreiber und an seinem Platz zu sehen, nicht an Mira: sie ist beim Besuch dieselbe wie sonst. Der Besuch bleibt überspringbar (kommt Mira nach 40 Sekunden, ohne dass die Spielerin sitzt, entfällt er), und die späte Quelle am Ende des Abends (`tal_eve_ely_r3`, „Gut.“) bleibt unverändert; wer den Antreiber nie verneint, kann `boundaries` dort weiter bekommen.
+Er fragt nicht, warum; er lobt nicht; er ruft nicht (kein „!“ im Sitzen). Sein Zweitens, das ausfällt, greift `sl_antr_start_3` („Erstens gehen. Zweitens schneller gehen.“) auf: seine Liste verliert etwas, er wird nicht besiegt. Die Folgen sind am Antreiber und an seinem Platz zu sehen, nicht an Mira: sie ist beim Besuch dieselbe wie sonst. Der Besuch bleibt überspringbar (kommt Mira nach 40 Sekunden, ohne dass die Spielerin sitzt, entfällt er), und die späte Quelle am Ende des Abends (die Antwort `tal_eve_ely_r3`, Miras „Gut.“ `tal_eve_ely_7`) bleibt unverändert; wer den Antreiber nie verneint, kann `boundaries` dort weiter bekommen.
 
-**Zwei Leser.** Beide sind Antworten mit `[if WorldState.has_facet("boundaries") /]` hinter den unbedingten Antworten der Gruppe; wer die Facette nicht hat, sieht die Gruppe wie vorher.
+**Zwei Leser.** Beide sind Antworten mit `[if WorldState.has_facet("boundaries") /]` neben den unbedingten Antworten der Gruppe (das Schweigen „…“ bleibt die letzte); wer die Facette nicht hat, sieht die Gruppe wie vorher.
 
 | Wo | Antwort | Mira / Folge |
 |---|---|---|
@@ -146,14 +146,14 @@ Beide Erinnerungen haben einen Satz im Journal (`MEMORY_MIRA_KEPT_ORIGIN`, `MEMO
 
 **Der Blick.** Zwei zusätzliche Funde im Haus, beide nur mit der Facette `perception`; der dritte kommt mit dem Bachlauf (B3).
 - **Abdrücke im Staub.** Ein neuer Punkt im Raum (`p`, Zelle 22 / 10, ohne Sprite, Boden `_`, kein neues Backen), den die Karte nur zeigt, wenn `house.looks_closely` gesetzt ist; die Szene setzt ihn aus der Facette. „Klein, rund, vier Zehen. Sie laufen ans Fenster und wieder zurück, mehrmals.“ Beim Ansehen: `house.prints_seen`, Beat `act2_blick`. Hängt an nichts.
-- **Die gestopfte Decke** am Bett: ein Satz mehr im vorhandenen Cue `bed`. „Das Garn ist rot, die Decke grau.“
+- **Die Decke am Bett:** ein Satz mehr im vorhandenen Cue `bed` (haus_bed_6): „Die Decke ist aus Quadraten genäht. Eins davon ist neuer als die anderen, der Faden dicker.“ Sie knüpft an den Flickenteppich im Bild an (vier Farben).
 Beide meiden das Kind (O5: keine Bilder des Kindes im Haus vor Akt V) und erklären nichts.
 
 **Hilfe zum Abrufen.** Die Stufe `wood` von `main_valley_shelter` trägt jetzt: „Der Weg soll lang sein. Länger, wenn man es eilig hat.“ Es nennt die Lösung nicht und steht für jede Spielerin im Journal; die Hilfe zum Bachlauf folgt mit B3.
 
 **Figuren.** Der Antreiber (seine Antwort), Mira (der unfaire Moment, zwei Antworten). **Humor-Ziel (3/10).** Trockenes, nicht Komisches: ein Zweitens, das ausfällt; ein Kamin, der schlecht zieht, während der Rauch steigt. **Gewicht (§45).** mittel. **Motive.** Grenzen (Aufgabe ablehnen, Gespräch beenden: Bible §16, Stufe I und II; Stufe III, „Nähe“, gehört in Akt IV), Wahrnehmung, Miras Würde, der Antreiber optimiert Freizeit.
-**Scheitern und Speichern (§49).** Kein Scheitern; ein Nein wird nie bestraft; `act2_nein` und `act2_blick` lösen Autosaves aus (der Besuch bleibt beim Speichern gesperrt, `act2_nein` wartet bis zu seinem Ende). **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; Funde sind Text, die Hilfe steht im Journal. **Endlichkeit (§52).** Jede Frage und jeder Fund einmal; nichts wird zweimal gefragt.
-**Gerechnet.** 23 Zeilen, rund 190 Wörter, `calibrate.py --segment 190 23 1`: rund 2,2 Minuten. Geplant waren 25.
+**Scheitern und Speichern (§49).** Kein Scheitern; ein Nein wird nie bestraft; `act2_nein` und `act2_blick` lösen Autosaves aus; `act2_nein` wird erst nach dem Besuch gesetzt (ein Beat im Besuch hielte einen Autosave vor, den das Verlassen der Szene halb schriebe: verneint, aber noch nicht sitzend). **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; Funde sind Text, die Hilfe steht im Journal. **Endlichkeit (§52).** Jede Frage und jeder Fund einmal; nichts wird zweimal gefragt.
+**Gerechnet.** 23 Zeilen, 163 Wörter, `calibrate.py --segment 163 23 1`: rund 2,1 Minuten. Geplant waren 25.
 **Ohne Rückfrage entschieden.** Die Quelle ist der Antreiber, nicht Mira (der Plan nannte beides; Mira macht im Slice nirgends eine Bitte, ihre Fragen nehmen schon jetzt ein Schweigen an, und der Antreiber hat die Bitte schon); der erste Leser ist eine Frage von Mira, keine Bitte. Ein abgeleitetes Flag `house.looks_closely` statt einer Facette in der Karte (Karten kennen nur Flags; ein `if_facet` hätte den Baker, `map_view.gd` und `mapfile.py` berührt, und jede Änderung an `mapfile.py` macht alle Stempel ungültig). Der Besuch des Antreibers zeigt jetzt eine Antwortgruppe: Tests, die ihn mit Auto-Weiter durchspielen, antworten mit „…“ (`BoxAnswers`).
 **Prüfungen.** `tests/unit/test_akt2_nein.gd` (15 Tests: die Antworten und ihre Folgen, die zwei Leser mit und ohne Facette, der Abend, Mira, die Funde, das Journal; Hilfsmittel `DialogueWalk.groups`) und `test_akt2_nein_szene.gd` (8 Tests: jede Antwort in der echten Szene, „die Antwort entscheidet, nicht der Körper“, Mira kommt wie immer, der Punkt nur mit der Facette, kein Muss), `StoryLint.facet_problems` mit Fixtures, `tools/autopilot/akt2_nein.json` mit Eintrag in `segments` (`act2_nein`, `act2_blick`, `house.antreiber_refused`, `house.antreiber_by_fire`, `house.mira_visited`, `house.prints_seen`; das Skript setzt `house.looks_closely` selbst, denn der Autopilot kennt kein `facet`). `slice_full.json` nimmt die erste Antwort („Heute nicht.“) und setzt sich wie bisher; sein Fenster für Feuer, Antreiber und Besuch wurde nicht verändert.
 

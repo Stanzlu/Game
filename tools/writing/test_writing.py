@@ -365,6 +365,37 @@ class ReadableTests(unittest.TestCase):
         self.assertIn("*→ weiter bei* `later`", out)
         self.assertNotIn("END", out)
 
+    def test_an_end_inside_a_condition_is_shown_and_the_last_one_is_not(self):
+        out = self.render('~ start\nif WorldState.has_flag("a.b")\n\tMira: Ja. [ID:a_1]\n\t=> END\nMira: Sonst. [ID:a_2]\n=> END\n')
+        self.assertEqual(out.count("Ende des Szenenstücks"), 1)
+
+    def test_a_cue_filter_keeps_the_numbers_of_the_whole_file_and_drops_the_rest(self):
+        text = "# Kopf\n\n# Zwei Worte.\n~ eins\nMira: A. [ID:a_1]\n\n~ zwei\nMira: B. [ID:a_2]\n\n~ drei\nMira: C. [ID:a_3]\n"
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, "x.dialogue")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(text)
+            out = "\n".join(readable.render_file(path, "T", {"drei"}))
+        self.assertIn("T3 · `drei`", out)
+        self.assertIn("a_3", out)
+        self.assertNotIn("a_1", out)
+        self.assertNotIn("a_2", out)
+        self.assertNotIn("Kopf", out)
+
+    def test_a_cue_filter_with_a_misspelt_cue_stops_the_run(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, "x.dialogue")
+            with open(path, "w", encoding="utf-8") as f:
+                f.write("~ eins\nMira: A. [ID:a_1]\n")
+            with self.assertRaises(SystemExit):
+                readable.render_file(path, "T", {"einz"})
+
+    def test_a_plain_path_stays_a_path_and_a_filtered_one_becomes_a_pair(self):
+        self.assertTrue(isinstance(readable.with_cues("a/b.dialogue"), str))
+        path, cues = readable.with_cues("a/b.dialogue#x,y")
+        self.assertTrue(path.endswith("b.dialogue"))
+        self.assertEqual(cues, {"x", "y"})
+
     def test_inline_conditions_and_answers_with_a_condition(self):
         out = self.render('~ start\n% [if WorldState.has_flag("a.b") /] Mira: Die Steine. [ID:a_1]\n- [if WorldState.has_flag("a.b") /] Doch. [ID:a_r1]\n')
         self.assertIn("*(wenn `a.b`)*", out)
