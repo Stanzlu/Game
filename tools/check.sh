@@ -178,6 +178,7 @@ segments=(
   "akt1_kind_spur_gasthaus:gasthaus:600:trail_door fragment.closed_door"
   "akt1_kind_spur_spiegelhalle:spiegelhalle:600:trail_room fragment.empty_room"
   "akt1_anschluss:elysia:2800:stone elysia.stone_taken child child_melody rift_found elysia.rift_open elysia.rift_crossed valley_arrival"
+  "akt2_ankunft:tal:1500:valley_arrival chapter.act1 arrival_echo"
   "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
 )
 for segment in "${segments[@]}"; do
@@ -214,9 +215,18 @@ gut_fps="${GUT_FIXED_FPS:-60}"
 gut_args=()
 [ "$gut_fps" != "0" ] && gut_args+=(--fixed-fps "$gut_fps")
 gut_xml="$(mktemp)"
-tools/godot.sh --headless "${gut_args[@]}" -s addons/gut/gut_cmdln.gd -gjunit_xml_file="$gut_xml" -gexit
+gut_log="$(mktemp)"
+tools/godot.sh --headless "${gut_args[@]}" -s addons/gut/gut_cmdln.gd -gjunit_xml_file="$gut_xml" -gexit 2>&1 | tee "$gut_log"
 python3 tools/gut_times.py "$gut_xml" 5 || true
 rm -f "$gut_xml"
+# A coroutine that waits on a signal of the tree (get_tree().physics_frame) outlives its node when the
+# scene goes: the engine logs "instance is gone" at the next frame. GUT fails only the test that runs at
+# that moment, so a green run can hide it; the log is searched as well.
+if grep -E "after await, but (class instance|script) is gone" "$gut_log"; then
+  echo "check: a coroutine outlived its node (await on the tree's signals; see CLAUDE.md)" >&2
+  exit 1
+fi
+rm -f "$gut_log"
 
 echo
 echo "check: all green"

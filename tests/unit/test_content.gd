@@ -11,7 +11,9 @@ const CSV_FILES: PackedStringArray = [
 const SLICE_DIALOGUES := "res://content/dialogue/slice/"
 ## The story's dialogue folders: the slice and the acts after it (no [#ph] left in any of them).
 const STORY_DIALOGUES: PackedStringArray = [
-	"res://content/dialogue/slice/", "res://content/dialogue/akt1/"
+	"res://content/dialogue/slice/",
+	"res://content/dialogue/akt1/",
+	"res://content/dialogue/akt2/",
 ]
 const CODE_DIRS: PackedStringArray = [
 	"res://core", "res://entities", "res://world", "res://ui", "res://encounters"

@@ -29,7 +29,7 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   (Elysia/Real folgt `WorldState.ui_mode`), Übergänge mit `ScreenFade`. Renderer: Compatibility (ADR-022).
 - Weltknoten fragen den `Input`-Singleton ab; UI liegt in CanvasLayern und nutzt `_unhandled_input`.
 - In `_process` bewegte Knoten: `physics_interpolation_mode = OFF`.
-- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`. Zeitfenster
+- Wartezeiten in Knoten mit `await NodeTimer.after(self, s)`, nicht `get_tree().create_timer()`; nie in einer Schleife auf `get_tree().physics_frame` oder `process_frame` warten (die Koroutine überlebt den Knoten, `check.sh` meldet „instance is gone“): eine Phase in `_physics_process` führen. Zeitfenster
   im Spiel zählen Spielzeit (`delta`), nie die Wanduhr (`Time.get_ticks_*`): Autopilot-Läufe sind schneller.
 - Rückfragen über `ConfirmMenu` (sichere Antwort vorausgewählt); Klänge mit Erzählwert brauchen einen Eintrag
   in `AudioDirector.CAPTIONS` („Geräusche als Text“, ADR-046).
@@ -99,7 +99,7 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
   `tools/autopilot/akt1_<segment>.json` und seine Marken in der Liste `segments` von `tools/check.sh` (Beats und Flags, die der Lauf erreichen muss). Die Heldenquest `main_elysia_hero`
   wächst je Segment um eine Stufe; die Schleifen (`elysia.loops`) beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Stufe `repeat`, A7), wortgleiche Zeilen wählt allein `elysia.loops`, Schleife 2 (`elysia.rift_open`) gibt es nur für Torwächter, Festmeisterin und Gastwirt (ADR-064); der Stein liegt erst mit der Schleife. Tests spielen Dialoge mit `DialogueWalk` (`tests/unit/dialogue_walk.gd`) und nennen Zeilen über `LineText.of(id)`.
 - Große Karten (ADR-068): Klasse M bis 120 × 70 Zellen (Aufbau rund 0,5 s); `tools/perf/map_spike.py` misst gekachelte Tal-Karten (`tools/art/tile_map.py`, Ausgabe in `spike_tmp/`, nicht versioniert); Symbole dürfen außerhalb von ASCII liegen, aber nie ein Leerzeichen sein (auch kein Unicode-Leerzeichen). Das Layout einer Karte landet in einem Pull Request.
-- Akt II (ADR-067, `docs/akt2/REGIONSBRIEFE.md`): Segmente V0 bis B7 mit Brief, Segmentskript und Marken wie in Akt I; Kapitelmarken `act1` (am Riss) und `act2`; Skript je Akt `tools/autopilot/akt<N>_full.json`.
+- Akt II (ADR-067, `docs/akt2/REGIONSBRIEFE.md`): Segmente V0 bis B7 mit Brief, Segmentskript und Marken wie in Akt I; Kapitelmarken `act1` (am Riss) und `act2`; Skript je Akt `tools/autopilot/akt<N>_full.json`. Dialoge in `content/dialogue/akt2/` (`[#draft]`, kein `[#ph]`); jede neue Datei steht in der POT-Liste der `project.godot`, ein neuer Ordner in `STORY_DIALOGUES` (`test_content`); Szenen-Skripte starten Erzählzeilen mit `Cutscene.begin`/`say` und markieren danach den Beat.
 - `tools/art/layout_slice_maps.py tal --write` löscht Handänderungen in `content/maps/tal.txt` (Buchstabe `6`,
   `unless` von `t`): vorher vergleichen.
 

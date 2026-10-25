@@ -7,7 +7,11 @@ extends LookScene
 ## Back from the shed with the wood, the Antreiber walks behind the player for a stretch,
 ## slower than before and without a word, and then sits down by the path (ADR-042).
 
+## The arrival echo (B1) goes from the first steps over the wait for the wind to the lines.
+enum EchoPhase { OFF, STEPS, GUST, SAYING }
+
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
+const ARRIVAL_DIALOGUE := "res://content/dialogue/akt2/ankunft.dialogue"
 const MAIN_MENU := "res://core/boot/boot.tscn"
 ## Cells west of this column are the house side of the stream.
 const STREAM_COLUMN := 38
@@ -26,10 +30,22 @@ const FOLLOW_UNTIL_COLUMN := 13
 const MOUNTAIN_PAN_SECONDS := 4.0
 const MOUNTAIN_HOLD_SECONDS := 2.5
 const SEA_HOLD_SECONDS := 2.5
+## The first steps that call up the arrival echo (B1): this far on foot, in cells. A jump of
+## more than ECHO_JUMP pixels between two physics frames is a teleport and no step.
+const ECHO_STEPS := 2.0
+const ECHO_JUMP := 8.0
+## A gust is waited for this long (play time) before the echo goes on without one.
+const ECHO_GUST_SECONDS := 4.0
+const ECHO_GUST_MIN := 0.5
 
 var _follower: AntreiberActor
 var _follow_time := 0.0
 var _mountain_tween: Tween
+var _echo := EchoPhase.OFF
+var _echo_walked := 0.0
+var _echo_last := Vector2.ZERO
+var _echo_waited := 0.0
+var _echo_cut: Cutscene
 
 
 func _ready() -> void:
@@ -42,6 +58,9 @@ func _ready() -> void:
 	if not WorldState.has_flag("valley.arrived"):
 		WorldState.set_flag("valley.arrived")
 		Beat.mark("valley_arrival")
+	if not Beat.reached("arrival_echo") and not WorldState.has_flag("valley.mira_met"):
+		_echo = EchoPhase.STEPS
+		_echo_last = player.global_position
 	if WorldState.has_flag("house.mira_visited"):
 		Beat.mark("evening")
 	if (
@@ -53,6 +72,58 @@ func _ready() -> void:
 	# scene): the ending plays again instead of leaving the slice unfinishable
 	if WorldState.has_flag("valley.ending") and not Chapter.reached("slice"):
 		_play_ending.call_deferred()
+
+
+## B1: after the first steps a gust goes through the wet leaves (the real world's wind, which the
+## leaves and the soundscape follow), and the valley says what Elysia never said (ARRIVAL_DIALOGUE).
+## It plays once, a teleport is no step, and it gives way when Mira is met first. A phase of the
+## physics step and no coroutine on the tree's signals: a scene that is freed while it waits (a
+## door, the end of a test) leaves nothing behind that wakes up without it.
+func _echo_step(delta: float) -> void:
+	match _echo:
+		EchoPhase.STEPS:
+			if WorldState.has_flag("valley.mira_met"):
+				_echo = EchoPhase.OFF
+				return
+			var step := player.global_position.distance_to(_echo_last)
+			_echo_last = player.global_position
+			# only the way over the rift is answered: a valley entered any other way has no Act I
+			# behind it
+			if step < ECHO_JUMP and Chapter.reached("act1"):
+				_echo_walked += step
+			if _echo_walked >= ECHO_STEPS * map.data.tile_size and not _echo_waits():
+				_echo_cut = Cutscene.begin(self)
+				_echo = EchoPhase.GUST
+		EchoPhase.GUST:
+			_echo_waited += delta
+			if not _calm() or _echo_waited >= ECHO_GUST_SECONDS:
+				_echo = EchoPhase.SAYING
+				_arrival_echo.call_deferred()
+
+
+func _arrival_echo() -> void:
+	await _echo_cut.say(ARRIVAL_DIALOGUE, "arrival_echo")
+	_echo_cut.end()
+	_echo = EchoPhase.OFF
+	Beat.mark("arrival_echo")
+
+
+## True while nothing may start: a line is up, a menu is open, the player is held, or the picture
+## still comes back from the black of the rift (the player may walk before it has).
+func _echo_waits() -> bool:
+	return (
+		dialogue_box.is_open()
+		or player.is_locked()
+		or MenuLayer.any_open(get_tree())
+		or ScreenFade.is_covered()
+		or ScreenFade.is_fading()
+	)
+
+
+## True while a soundscape plays and its wind is down (-1 without one: nothing to wait for).
+func _calm() -> bool:
+	var gust := AudioDirector.wind_gust()
+	return gust >= 0.0 and gust < ECHO_GUST_MIN
 
 
 func _process(delta: float) -> void:
@@ -92,8 +163,12 @@ func _antreiber_sits() -> void:
 	actor.queue_free()
 
 
-func _physics_process(_delta: float) -> void:
-	if player == null or WorldState.has_flag("valley.crossed"):
+func _physics_process(delta: float) -> void:
+	if player == null:
+		return
+	if _echo != EchoPhase.OFF:
+		_echo_step(delta)
+	if WorldState.has_flag("valley.crossed"):
 		return
 	if player.global_position.x < STREAM_COLUMN * map.data.tile_size:
 		WorldState.set_flag("valley.crossed")

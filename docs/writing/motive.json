@@ -91,14 +91,6 @@
      "ref": "el_praise_1"
     },
     {
-     "type": "flag",
-     "ref": "elysia.loops"
-    },
-    {
-     "type": "note",
-     "ref": "Elysianer-Routen gespiegelt (ADR-031)"
-    },
-    {
      "type": "line",
      "ref": "mk_poet_2"
     },
@@ -157,6 +149,18 @@
     {
      "type": "line",
      "ref": "el_gard_loop"
+    },
+    {
+     "type": "line",
+     "ref": "ank_rings_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.loops"
+    },
+    {
+     "type": "note",
+     "ref": "Elysianer-Routen gespiegelt (ADR-031)"
     }
    ],
    "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
@@ -209,10 +213,6 @@
      "ref": "el_favor_r3"
     },
     {
-     "type": "flag",
-     "ref": "elysia.asked_for_no"
-    },
-    {
      "type": "line",
      "ref": "mk_poet_5"
     },
@@ -223,6 +223,18 @@
     {
      "type": "line",
      "ref": "mk_fest_5"
+    },
+    {
+     "type": "line",
+     "ref": "ank_fire_1"
+    },
+    {
+     "type": "line",
+     "ref": "ank_fire_2"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.asked_for_no"
     }
    ],
    "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`).",
@@ -263,10 +275,6 @@
      "ref": "el_feast_1"
     },
     {
-     "type": "flag",
-     "ref": "elysia.flower_smelled"
-    },
-    {
      "type": "line",
      "ref": "sh_leaf_1"
     },
@@ -277,6 +285,14 @@
     {
      "type": "line",
      "ref": "sh_hint_7"
+    },
+    {
+     "type": "line",
+     "ref": "ank_ground_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.flower_smelled"
     }
    ],
    "payoff": "Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`.",
@@ -676,12 +692,16 @@
      "ref": "el_child_3"
     },
     {
-     "type": "flag",
-     "ref": "elysia.child_met"
+     "type": "line",
+     "ref": "el_child_4"
     },
     {
      "type": "line",
-     "ref": "el_child_4"
+     "ref": "ank_hum_1"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.child_met"
     },
     {
      "type": "flag",

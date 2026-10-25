@@ -58,8 +58,8 @@ def baseline():
 
 
 def slice_sources():
-    """The story dialogue of the Vertical Slice: everything but the segments of Act I (akt1/)."""
-    return [s for s in dialogue.sources(story_only=True) if "/akt1/" not in s.path.replace(os.sep, "/")]
+    """The story dialogue of the Vertical Slice: everything but the segments of the acts (akt1/, akt2/, ...)."""
+    return [s for s in dialogue.sources(story_only=True) if not re.search(r"/akt\d+/", s.path.replace(os.sep, "/"))]
 
 
 def akt1_sources():

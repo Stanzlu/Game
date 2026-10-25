@@ -1,5 +1,11 @@
 # Locked line IDs of the story dialogue: id <TAB> file <TAB> hash of the frozen text ('-' = draft).
 # tools/writing/id_lock.py checks and updates it; do not edit by hand.
+ank_fire_1	akt2/ankunft.dialogue	-
+ank_fire_2	akt2/ankunft.dialogue	-
+ank_ground_1	akt2/ankunft.dialogue	-
+ank_gust_1	akt2/ankunft.dialogue	-
+ank_hum_1	akt2/ankunft.dialogue	-
+ank_rings_1	akt2/ankunft.dialogue	-
 el_basin_1	slice/elysia.dialogue	-
 el_basin_2	slice/elysia.dialogue	-
 el_basin_3	slice/elysia.dialogue	-
