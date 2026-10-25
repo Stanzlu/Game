@@ -100,8 +100,8 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   Aufblende), die Figur sitzt (`Player.sit_on`) und steht auf, die Begrüßerin (Cue `favor`) dreht sich zu
   ihr, `Hud.hold_back()` und `Hud.reveal_elysia()` bauen Level, XP und Gold nacheinander auf. Geladene
   Stände (`elysia.woke`) überspringen es.
-- Ende (`TalScene._play_ending`): Cue `ending`, Kamera-Schwenk zu den Bergen (`MOUNTAIN_PAN_SECONDS` 4,0 s),
-  Halt (2,5 s), Cue `ending_sea`, Halt (2,5 s), Kapitelmarke `chapter.slice` (`Chapter.mark`) und Speichern, Abblende (2,5 s),
+- Ende (`TalScene._play_ending`): Cue `ending` (darin Miras Lesung der Wahl vom Feuer, `evening_values`), Kamera-Schwenk zu den Bergen (`MOUNTAIN_PAN_SECONDS` 4,0 s),
+  Halt (2,5 s), Cue `ending_sea`, Halt (2,5 s), Kapitelmarken `chapter.act2` und `chapter.slice` (`Chapter.mark`, ein Block mit dem Speichern), Abblende (2,5 s),
   `TitleCard.play(self, "")` (nur das Logo, ohne Zeile; Bible §56), zurück ins Startmenü.
 - `Cutscene.in_dialogue` ist der Vertrag mit `MenuLayer.can_pause`. `GuestWalker`
   (`world/levels/slice/guest_walker.gd`) ist ein Besucher, den ein Szenen-Skript von Hand führt (`appear`,

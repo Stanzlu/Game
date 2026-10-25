@@ -39,6 +39,8 @@ const WRITE_ONLY_FLAGS := {
 	"encounter.antreiber_resolved": "reserve: the way's outcome, read by the consequence register",
 	"chapter.act1":
 	"chapter mark of Act I (ADR-067): the save slots and the return in Act VI will read it",
+	"chapter.act2":
+	"chapter mark of Act II (ADR-067): the save slots and the return in Act VI will read it",
 }
 
 static var _const_regex := RegEx.create_from_string(

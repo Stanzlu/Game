@@ -1,0 +1,12 @@
+[
+  {"relative": true},
+  {"log": "Act II, B6: the evening at Mira's fire, her reading of the value, the end of the act", "t": 0.5},
+  {"flag": "chapter.act1", "t": 0.1},
+  {"flag": "house.mira_visited", "log": "the visit is over: Mira sits at her fire (a run from here has no Act I)", "t": 0.1},
+  {"flag": "value.calm", "log": "the choice by the fire was to watch it until dark", "t": 0.1},
+  {"flag": "valley.mountains_seen", "t": 0.1},
+  {"flag": "valley.ending", "log": "the boot is back: the evening begins", "t": 1.5},
+  {"wait_for": {"beat": "ending"}, "timeout": 20, "log": "the ending", "t": 0.1},
+  {"wait_for": {"flag": "chapter.act2"}, "timeout": 120, "log": "Act II is over, and the slice with it", "t": 0.1},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]
