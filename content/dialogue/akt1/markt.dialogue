@@ -4,6 +4,10 @@
 # Zeilen ohne Sprecher sind Erzählung. Preise stehen in Worten.
 
 ~ gatekeeper
+# Loop 2 (A9): once the rift is open, an earlier sentence of his again, a shorter one, word for word.
+if WorldState.has_flag("elysia.loops") and WorldState.has_flag("elysia.rift_open")
+	Torwächter: Das Tor ist offen. Wie immer. [ID:mk_gate_11] [#draft]
+	=> END
 if WorldState.has_flag("elysia.loops")
 	Torwächter: Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. [ID:mk_gate_10] [#draft]
 	=> END
@@ -197,6 +201,10 @@ Gastwirt: Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie h
 => END
 
 ~ festmaster
+# Loop 2 (A9): once the rift is open, only her toast is left of everything she said, three times.
+if WorldState.has_flag("elysia.feast_toast") and WorldState.has_flag("elysia.rift_open")
+	Festmeisterin: Auf den Helden! Auf den Helden! Auf den Helden! [ID:mk_fest_11] [#draft]
+	=> END
 if WorldState.has_flag("elysia.feast_toast")
 	Festmeisterin: Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. [ID:mk_fest_9] [#draft]
 	=> END

@@ -21,6 +21,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Elysianer:** Hallo! Was für ein Hallo. So warm. So entschlossen.  <sub>el_wake_5</sub>
 - ▸ **…**
   - **Elysianer:** Ganz der Held. Wortkarg und geheimnisvoll. Wir lieben das.  <sub>el_wake_6</sub>
+*wenn* `item_seed`
+  - **Elysianer:** Und einen Samen hast du dabei! Aus unserem Garten, natürlich. Du denkst an alles. `[#draft]`  <sub>el_wake_seed</sub>
 - **Elysianer:** Die Gärtnerin sucht dich, drüben bei den Blumen. Sie hat ein Problem, und ich glaube, du kannst ihr helfen. Du kannst das.  <sub>el_wake_7</sub>
 - **Elysianer:** Und wenn's eilig ist, hilft ‹Taste: sprint›. Helden rennen.  <sub>el_wake_8</sub>
 

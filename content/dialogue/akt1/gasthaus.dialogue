@@ -19,7 +19,9 @@ elif WorldState.has_flag("elysia.inn_room")
 
 # The repetition (A7, ADR-062): the host says his first sentences again, word for word, whatever was offered.
 ~ host_loop
-Gastwirt: Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. [ID:gh_host_loop_1] [#draft]
+# Loop 2 (A9): once the rift is open, the first of the two sentences is already gone.
+if not WorldState.has_flag("elysia.rift_open")
+	Gastwirt: Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. [ID:gh_host_loop_1] [#draft]
 Gastwirt: Das Gasthaus zum Immer. Wir haben geöffnet. Wir hatten immer geöffnet. [ID:gh_host_loop_2] [#draft]
 => END
 

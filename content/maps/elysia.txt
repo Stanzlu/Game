@@ -56,11 +56,11 @@ G = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 e = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
 q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_n"}}
 Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_s"}}
-; Truhe am Weltenbaum (Belohnung der Heldenquest), Stein am Becken (Seltenheit: —), Riss am Inselrand.
+; Truhe am Weltenbaum (Belohnung der Heldenquest), Stein am Becken (Seltenheit: —; er liegt erst, wenn sich Elysia wiederholt, A9), Riss am Inselrand.
 Z = {"ground": "M", "prop": "res://world/props/chest.tscn", "params": {"flag": "elysia.chest_tree_opened", "actions": [{"item": "item_fame"}, {"gold": 4200}, {"xp": 10000}, {"quest": "main_elysia_hero", "stage": "celebrated", "start": true}]}}
-j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_stone", "flag": "elysia.stone_taken"}}
+j = {"ground": ".", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_stone", "flag": "elysia.stone_taken", "if": "elysia.loops"}}
 ; Die Zeile zum Stein, solange er liegt: unsichtbar, eine Zelle westlich auf dem Marmor (S).
-S = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "stone", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 14, "unless": "elysia.stone_taken"}}
+S = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "stone", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 14, "if": "elysia.loops", "unless": "elysia.stone_taken"}}
 X = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "tal", "spawn": "rift", "if": "elysia.rift_open"}}
 ; Akt I, A2: das Gasthaus zum Immer steht in der Mitte der Nordterrasse (Spalte 32). Die Zellen unter der Fassade (i) sind fest, die Fassade
 ; sitzt auf der Zelle der Tür (J), die Tür zum Hineingehen davor (l), dahinter der Ankunftspunkt aus dem Gasthaus (m).

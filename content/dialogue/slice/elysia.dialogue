@@ -11,6 +11,8 @@ Elysianer: Alle freuen sich so, dass du wach bist. Der ganze Garten hat auf dich
 	Elysianer: Hallo! Was für ein Hallo. So warm. So entschlossen. [ID:el_wake_5]
 - … [ID:el_wake_r3]
 	Elysianer: Ganz der Held. Wortkarg und geheimnisvoll. Wir lieben das. [ID:el_wake_6]
+if WorldState.has_item("item_seed")
+	Elysianer: Und einen Samen hast du dabei! Aus unserem Garten, natürlich. Du denkst an alles. [ID:el_wake_seed] [#draft]
 Elysianer: Die Gärtnerin sucht dich, drüben bei den Blumen. Sie hat ein Problem, und ich glaube, du kannst ihr helfen. Du kannst das. [ID:el_wake_7]
 Elysianer: Und wenn's eilig ist, hilft {{InputDevice.label_for("sprint")}}. Helden rennen. [ID:el_wake_8]
 do WorldState.start_quest("main_elysia_hero")

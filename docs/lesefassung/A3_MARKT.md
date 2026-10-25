@@ -12,6 +12,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M1 · `gatekeeper`
 
+*wenn* `elysia.loops und elysia.rift_open`
+  - **Torwächter:** Das Tor ist offen. Wie immer. `[#draft]`  <sub>mk_gate_11</sub>
 *wenn* `elysia.loops`
   - **Torwächter:** Willkommen in der Stadt! Das Tor steht offen. Es stand immer offen. `[#draft]`  <sub>mk_gate_10</sub>
 *wenn* `elysia.feast`
@@ -179,6 +181,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### M14 · `festmaster`
 
+*wenn* `elysia.feast_toast und elysia.rift_open`
+  - **Festmeisterin:** Auf den Helden! Auf den Helden! Auf den Helden! `[#draft]`  <sub>mk_fest_11</sub>
 *wenn* `elysia.feast_toast`
   - **Festmeisterin:** Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. `[#draft]`  <sub>mk_fest_9</sub>
 *wenn* `elysia.feast_invited`

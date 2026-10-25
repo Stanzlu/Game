@@ -11,12 +11,12 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
 | **Fehlende Spiegelung** | §46 | `el_basin_1`, `el_basin_2`, `el_basin_4`, `el_basin_5`, `elysia.mirror_seen`, `el_child_1`, `mk_fountain_1`, `mk_tailor_4`, `sh_mirror_3`, `sh_mirror_5`, `elysia.hall_mirror_seen` | Pfütze im Tal: zum ersten Mal ein Bild der Spielerin (`tal_puddle_2`, `tal_puddle_7`); Twist II (Elysia entstand aus einem Bedürfnis nach Schutz) liest die fehlende Spiegelung zurück. |
-| **Identische Bewegungen und Sätze** | §46 | `el_loop_1`, `el_praise_1`, `elysia.loops`, Elysianer-Routen gespiegelt (ADR-031), `mk_poet_2`, `mk_gate_4`, `mk_fountain_1`, `mk_guest_1`, `mk_fest_7`, `mk_gate_10`, `mk_baker_8`, `mk_tailor_9`, `mk_flower_6`, `mk_shop_8`, `gh_host_loop_1`, `gh_host_loop_2`, `el_gard_loop` | Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife. |
+| **Identische Bewegungen und Sätze** | §46 | `el_loop_1`, `el_praise_1`, `elysia.loops`, Elysianer-Routen gespiegelt (ADR-031), `mk_poet_2`, `mk_gate_4`, `mk_fountain_1`, `mk_guest_1`, `mk_fest_7`, `mk_gate_10`, `mk_gate_11`, `mk_fest_11`, `mk_baker_8`, `mk_tailor_9`, `mk_flower_6`, `mk_shop_8`, `gh_host_loop_1`, `gh_host_loop_2`, `el_gard_loop` | Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife. |
 | **Schnell loopende Musik** | §35, §46 | Elysia-Loop wird mit jedem Besuch kürzer (Musik-Arc), `el_loop_2`, `elysia.market_seen` | Im Finale erkennt die Spielerin, dass Fragmente des späteren Hauptthemas schon in Elysia vorhanden waren (§35). |
 | **Menschen ohne echte Ablehnung** | §46 | `el_favor_2`, `el_favor_3`, `el_favor_5`, `el_favor_6`, `el_favor_r3`, `elysia.asked_for_no`, `mk_poet_5`, `mk_shop_6`, `mk_fest_5` | Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`). |
 | **Perfekte Natur** | §46 | `el_flower_1`, `el_flower_2`, `el_tree_1`, `el_tree_2`, `el_pillar_1`, `el_feast_1`, `elysia.flower_smelled`, `sh_leaf_1`, `sh_feather_1`, `sh_hint_7` | Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`. |
 | **Der Stein** | §46 | `el_stone_1`, `elysia.stone_taken`, `haus_rest_8`, `haus_shelf_6` | Der Stein liegt im Regal (`haus_shelf_9`) und bleibt ein Hausmotiv; seine Herkunft bleibt offen. |
-| **Der Samen** | §30, §46 | `haus_rest_4` | Akt V: der Garten (Plan 5.4). Der Samen hat im Slice keinen Flag; die Spielfigur trägt ihn schon. |
+| **Der Samen** | §30, §46 | `el_wake_seed`, `haus_rest_4` | Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`). |
 | **Hausmotive** | §26, §46 | `haus_table_1`, `haus_table_2`, `haus_bucket_1`, `haus_fire_9`, `haus_shelf_1`, `house.spoon_found`, `house.shelf_filled` | Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste. |
 | **Der Betäuber (Gastwirt)** | §14, §46 | `el_host_3`, `el_host_11`, `haus_rest_7`, `elysia.soup_served`, `elysia.host_warned`, `gh_room_3`, `gh_slept_2`, `gh_slept_4`, `elysia.inn_declined`, `elysia.inn_stayed`, `mk_host_1`, `mk_host_6`, `mk_host_5` | Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`). |
 | **Wiederkehrende Formulierungen** | §46 | `el_host_3`, `haus_rest_7`, `tal_mira_8`, `tal_eve_tarp_1`, `tal_eve_tarp_2`, `haus_mira_8`, `tal_mira_again_1`, `tal_end_5`, `tal_south_sign_2`, `mk_baker_3`, `mk_baker_1`, `mk_tailor_5`, `mk_board_4`, `sh_keeper_2`, `sh_gate_2`, `mk_fest_3`, `mk_baker_7`, `mk_tailor_7`, `elysia.feast_noticed` | „Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII). |
@@ -64,7 +64,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.mirror_seen` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue`, `tal.dialogue` | Das fehlende Spiegelbild bemerkt. |
 | `elysia.child_met` | Kind | `elysia.dialogue`, `elysia.txt` | `elysia.dialogue`, `elysia.txt` | Das Kind getroffen. |
 | `elysia.child_vanished` | Kind | `elysia.dialogue`, `elysia.txt` | `elysia.txt` | Das Kind ist wieder verschwunden. |
-| `elysia.stone_taken` | Gegenstände | `elysia.txt`, `look_elysia.txt`, `audio_director.gd` | `haus.dialogue`, `elysia.txt` | Den Stein mitgenommen. |
+| `elysia.stone_taken` | Gegenstände | `elysia.txt`, `look_elysia.txt`, `audio_director.gd` | `haus.dialogue`, `elysia.txt` | Den Stein mitgenommen (er liegt erst, wenn sich Elysia wiederholt, A9). |
 | `elysia.crystal_touched` | Wahrnehmung | `elysia.dialogue` | `elysia.dialogue` | Den Kristall berührt. |
 | `elysia.soup_served` | Beschützer | `elysia.dialogue` | `elysia.dialogue`, `haus.dialogue` | Der Gastwirt hat die Suppe serviert (Betäuber). |
 | `elysia.soup_tasteless` | Beschützer | `elysia.dialogue` | `tal.dialogue` | Die Spielerin hat gemerkt, dass die Suppe nach nichts schmeckt. |
@@ -72,7 +72,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.loops_1` | Elysia | – | – | Elysias Musik-Schleife ist nur noch halb so lang (der Markt wurde betreten oder nach zwanzig Minuten; ElysiaDirector). |
 | `elysia.loops_2` | Elysia | – | – | Nur noch ein Viertel (Stein genommen oder nach vierzig Minuten; ElysiaDirector). |
 | `elysia.loops` | Elysia | `elysia.txt` | `gasthaus.dialogue`, `markt.dialogue`, `elysia.dialogue`, `elysia.txt`, `gasthaus.txt`, `markt.txt`, `spiegelhalle.txt` | Die Sätze wiederholen sich wortgleich: ab dem Hoch auf dem Fest (oder nach einer Stunde Spielzeit); ElysiaDirector, Stufe „repeat“ der Heldenquest. |
-| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
+| `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `gasthaus.dialogue`, `markt.dialogue`, `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
 | `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `tal.dialogue`, `tal.txt`, `world_state.gd` | Mira kennengelernt (noch als „Die Frau“). |
@@ -127,8 +127,8 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.hall_met` | Fortschritt | `spiegelhalle.dialogue` | `spiegelhalle.dialogue` | Sie hat den Hallenwächter gesprochen, der in der Mitte steht und darum nur einmal da ist. |
 | `elysia.hall_room_1` | Wahrnehmung | `spiegelhalle.dialogue` | `spiegelhalle.dialogue`, `spiegelhalle.txt` | Sie hat das Blatt bemerkt, das nur links liegt; das erste Tor steht offen. |
 | `elysia.hall_room_2` | Wahrnehmung | `spiegelhalle.dialogue` | `spiegelhalle.dialogue`, `spiegelhalle.txt` | Sie hat die Feder bemerkt, die nur rechts liegt; das zweite Tor steht offen. |
-| `elysia.hall_leaf_taken` | Gegenstände | `spiegelhalle.dialogue` | `spiegelhalle.txt` | Sie hat das trockene Blatt eingesteckt (Kuriosität für das Regal im Haus). |
-| `elysia.hall_feather_taken` | Gegenstände | `spiegelhalle.dialogue` | `spiegelhalle.txt` | Sie hat die Feder eingesteckt (Kuriosität für das Regal im Haus). |
+| `elysia.hall_leaf_taken` | Gegenstände | `spiegelhalle.dialogue` | `spiegelhalle.txt` | Sie hat das trockene Blatt eingesteckt (eine Kuriosität; sie bleibt beim Übergang in Elysia, ADR-064). |
+| `elysia.hall_feather_taken` | Gegenstände | `spiegelhalle.dialogue` | `spiegelhalle.txt` | Sie hat die Feder eingesteckt (eine Kuriosität; sie bleibt beim Übergang in Elysia, ADR-064). |
 | `elysia.hall_mirror_seen` | Wahrnehmung | `spiegelhalle.dialogue` | `spiegelhalle.dialogue`, `markt_scene.gd` | Sie hat im großen Spiegel bemerkt, dass er sie nicht zeigt (Facette „Wahrnehmung“). |
 | `elysia.feast` | Fortschritt | `markt_scene.gd` | `markt.dialogue`, `markt.txt`, `markt_scene.gd` | Der Markt steht im Festzustand: ganz Elysia feiert, dass sie die Halle bemerkt hat. |
 | `elysia.feast_invited` | Entscheidungen | `markt.dialogue` | `markt.dialogue` | Sie hat die Einladung des Gastwirts zum Fest angenommen. |

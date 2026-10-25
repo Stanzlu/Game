@@ -17,7 +17,7 @@ Die Heldenquest `main_elysia_hero` wächst mit den Segmenten um eine Stufe je Or
 | feast | A6 Fest | `markt` (Festzustand) | `feast_enter`, `feast` | **gebaut (ADR-061)** |
 | repeat | A7 Wiederholung | alle Orte | `irritation` | **gebaut (ADR-062)** |
 | – (eigene Quest `main_elysia_trail`: hum, trail, rift) | A8 Kind-Spur | `markt`, `gasthaus`, `spiegelhalle`, `elysia` | `trail_hallway`, `trail_door`, `trail_room`, `child_melody` | **gebaut (ADR-063)** |
-| – (Stufe `rift` der Spur) | A9 Stein, Samen, Riss | `elysia` | `rift_found` | geplant (der Riss öffnet sich schon, A9 passt den Anschluss an) |
+| – (Stufe `rift` der Spur) | A9 Stein, Samen, Riss | `elysia` (und die Schleife 2 im Markt und im Gasthaus) | `stone`, `rift_found` | **gebaut (ADR-064)** |
 
 Raumschichtung (Plan 4.1): Zimmer (Gasthaus) – Mauer und Tor – Garten – Straße – Stadt (Markt) – Welt (Weltenbaum), unbeschriftet.
 Die Schleifen beginnen mit dem Hoch auf dem Fest (`elysia.feast_toast`, Stufe `repeat`, A7); die Musikstufen folgen `elysia.market_seen` und `elysia.stone_taken`, die Uhr fängt nur, wer nicht weiterspielt (20, 40 und 60 Minuten).
@@ -228,10 +228,10 @@ Zeilen in `markt.dialogue`, `gasthaus.dialogue` und `elysia.dialogue` (alle `[#d
 |---|---|---|---|
 | Musik 1 | der Markt wird betreten (`elysia.market_seen`) oder 20 Minuten | die Musikschleife ist halb so lang | Flag `elysia.loops_1` |
 | Die Schleife beginnt | das Hoch (`elysia.feast_toast`) oder 60 Minuten Spielzeit | jede Rolle sagt nur noch einen Satz, jedes Mal denselben; das Kind erscheint | Flag `elysia.loops`, Beat `irritation`, Heldenstufe `repeat` |
-| Musik 2 | der Stein (`elysia.stone_taken`, A9) oder 40 Minuten | ein Viertel der Schleife | Flag `elysia.loops_2` |
+| Musik 2 | der Stein (`elysia.stone_taken`; er liegt erst nach dem Hoch, A9) oder 40 Minuten | ein Viertel der Schleife | Flag `elysia.loops_2` |
 | Der Riss | das Kind folgt (A8, A9), sonst 15 Minuten nach dem Beginn der Sätze (die Wartezeit läuft über die Szenen hinweg) | der Riss öffnet sich; durch die Uhr mit Beben und Untertitel in jeder Elysia-Szene | `elysia.rift_open`, Beat `rift_found` |
 
-**Wortgleiche Zeilen** (Schleife 1, gewählt allein von `elysia.loops`; Schleife 2 mit `elysia.rift_open` bleibt für A9): Torwächter (`mk_gate_10`), Bäckerin (`mk_baker_8`), Schneiderin (`mk_tailor_9`), Blumenfrau
+**Wortgleiche Zeilen** (Schleife 1, gewählt allein von `elysia.loops`; Schleife 2 mit `elysia.rift_open` kommt in A9 für den Torwächter und den Gastwirt): Torwächter (`mk_gate_10`), Bäckerin (`mk_baker_8`), Schneiderin (`mk_tailor_9`), Blumenfrau
 (`mk_flower_6`), Händler (Begrüßung, `mk_shop_8`; der Laden bleibt offen), Festmeisterin (`mk_fest_9`, die eine Zeile nach dem Hoch: ihr Gruß, als wäre es das erste Mal), Gastwirt im Gasthaus (`gh_host_loop_1`, `gh_host_loop_2`), Gärtnerin, solange die Schmetterlinge
 frei sind (`el_gard_loop`). Jede Schleifenzeile ist eine, die die Person schon gesagt hat, Wort für Wort: bei fester Rede die erste (Torwächter: der Willkommensgruß, Festmeisterin: der Gruß des Festes, Händler, Gastwirt), bei Zufallsrede die erste der Reihe (Bäckerin, Schneiderin, Blumenfrau), bei der Gärtnerin ihre Wartezeile; ein Test prüft den Wortlaut gegen die jeweilige Zeile. Was die Person schuldet (der Laib, das Angebot der Gärtnerin, der
 Laden) steht in den Dialogen vor der Schleife und geht nicht verloren; die Gäste im Gasthaus und die Elysianer im Garten hatten sie schon.
@@ -304,3 +304,48 @@ Die Karte sagt „Etwas fällt dir ein.“, nicht „Erinnerung“ (Bible §38: 
 **Gerechnet.** Zwölf Zeilen plus eine, rund 110 Wörter; die Wege zwischen den drei Stationen sind der größte Teil: `calibrate.py --segment 110 13 5` (fünf Minuten reiner Weg zwischen Garten, Gasthaus, Markt und Halle) ergibt rund acht Minuten (bei einer Station weniger rund sechs). Gegen zwölf geplante ist das wenig, weil die Orte schon stehen und das Kind sie nur zeigt. Akt I liegt damit nach A8 bei rund 40 statt 70 geplanten Minuten (A2 bis A8); die Neuplanung (P6.13) entscheidet, ob A4 oder mehr Erkundung die Lücke schließt.
 
 **Prüfungen.** `test_akt1_kind_spur` (11 Tests: Stationen nur in der Schleife, einmal je Bild, drei Fragmente ohne Zähler, höchstens drei Wörter, Quest, Uhr ohne Bilder, Melodie, Karte), die drei Segmentskripte `tools/autopilot/akt1_kind_spur_{markt,gasthaus,spiegelhalle}.json` (Schritt „segment“ in `check.sh`, Marken `trail_*`), `test_writing`, `MapLint` (das Kind ist ein Einzelstück ohne Zwilling, wie der Stein).
+
+---
+
+## A9 Stein, Samen, Riss
+
+**Stand:** gebaut. **Szene:** kein neuer Ort; der Garten (`elysia`, die Zellen am Becken und am Inselrand) und zwei Sätze der Schleife 2 (`markt`, `gasthaus`). **Dialog:** drei neue Zeilen (`el_wake_seed` in `slice/elysia.dialogue`, `mk_gate_11` und `mk_fest_11` in `akt1/markt.dialogue`), eine Bedingung an `host_loop` (`gasthaus.dialogue`: die erste Zeile entfällt, sobald `elysia.rift_open`); alle `[#draft]`. **Karte:** `elysia.txt` (Stein und Zeile zum Stein mit `if: elysia.loops`).
+
+**Zweck.** Der Anschluss macht aus den drei Stücken des Slice (Stein, Kind, Riss; Bible §11, §30, §56) die Folge, die Akt I braucht: erst die Wiederholung, dann der Stein, dann das Kind, dann der Riss. Nichts davon ist neu gebaut; A9 ordnet es und füllt zwei Lücken: der Samen hat in Elysia keine Stimme, und die Schleife 2 (Plan 4.4: „normal, Schleife 1, Schleife 2“) hat bisher nur die Zeile im Garten.
+
+| Beat | Auslöser | Was geschieht | Marke |
+|---|---|---|---|
+| Der Samen | das Erwachen (Slice, A1) | der Samen ist schon im Gepäck; der Elysianer nimmt ihn für Elysia in Anspruch: „Aus unserem Garten, natürlich.“ | Zeile `el_wake_seed`, nur mit `item_seed`; kein Flag |
+| Der Stein | die Wiederholung beginnt (`elysia.loops`) | am Becken liegt der Stein, daneben die Zeile „Ein Stein. Grau. Das Einzige hier, das nicht glänzt.“; er liegt neben der Stelle, an der das Kind steht | Flag `elysia.stone_taken`, Beat `stone`, Musikstufe 2 (`elysia.loops_2`) |
+| Das Kind | der Stein oder nicht (A8) | das Kind führt zum Inselrand | `elysia.child_met`, `elysia.child_vanished`, Beat `child`, `child_melody` |
+| Der Riss | das Kind verschwindet oder die Uhr (A7) | der Riss öffnet sich; wer ihn berührt, geht hinüber und nimmt Stein und Samen mit, sonst nichts | `elysia.rift_open`, Beat `rift_found`, `elysia.rift_crossed`, Beat `valley_arrival` |
+| Schleife 2 | der Riss ist offen (`elysia.loops` und `elysia.rift_open`) | der Torwächter sagt nur noch „Das Tor ist offen. Wie immer.“; die Festmeisterin nur noch ihr dreifaches Hoch; der Gastwirt nur noch den zweiten seiner beiden Sätze | Zeilen `mk_gate_11`, `mk_fest_11`, `gh_host_loop_2` |
+
+**Der Stein erst nach dem Hoch.** Im Slice lag der Stein von Anfang an am Becken, und wer ihn früh nahm, verkürzte die Musik, bevor irgendjemand sich wiederholte. Bible §56 ordnet: Wiederholung, fehlende Spiegelung, Stein, Kind, Riss. Der Stein liegt darum erst, wenn sich Elysia wiederholt (Flag `elysia.loops` an seiner Karteneinfügung und an der Zeile zum Stein). Ein Stand, der ihn früher genommen hat, behält ihn.
+
+**Der Samen ohne Mechanik.** Der Samen ist nach Bible §30 vor der ersten Erinnerung an Elysia da. Elysia bekommt dafür einen Satz, keine Handlung: sie hält ihn für ihren. Das Haus widerspricht später, ohne zu erklären (`haus_rest_4`: „Du weißt nicht, seit wann er da ist.“). Kein Flag, kein Beet, kein Pflanzen (ADR-042, Bible §29: der Garten wächst in Akt V).
+
+**Schleife 2.** Nach ADR-064: Schleife 2 ist ein ganzer Satz, den die Person schon gesagt hat, wortgleich, und höchstens halb so lang wie ihr Satz der Schleife 1; die Sätze schrumpfen mit der Musik (19, 10, 5 Sekunden). Das trifft drei Personen: den Torwächter (`mk_gate_11`, 6 statt 12 Wörter, ein Satz seiner Reihe), die Festmeisterin (`mk_fest_11`, ihr Hoch: 9 statt 20 Wörter) und den Gastwirt im Gasthaus (nur der zweite seiner beiden Sätze, `gh_host_loop_2`, 11 statt 26 Wörter).
+Alle anderen haben keinen halb so langen Satz und bleiben bei Schleife 1: die Bäckerin (4 Wörter, schon die kürzeste), die Blumenfrau (9, die kürzeste), die Schneiderin (13 gegen 10), der Händler (13 gegen 9), die Gärtnerin (13 gegen 10), die Gäste (13 gegen 12) und der Gastwirt im Garten (`el_host_loop_1` bis `3`, jede ist schon kurz). Die Zeile im Garten (`el_loop_2`, „Ganz unten rechts … Bleib lieber hier bei uns.“) bleibt die Ausnahme: sie weist auf den Riss.
+
+**Der Übergang.** Beim Überschreiten bleibt nur, was die Bible nennt: der Stein und der Samen (`RiftSequence.KEEP`). Blatt und Feder aus der Halle bleiben in Elysia zurück: die Bible (§11) nennt nur Stein und Samen. (Die Gegenstände zeigen keinen Zähler; die Beschreibungen versprechen kein Regal.)
+
+**Heldenquest.** Unverändert: `repeat` ist die letzte Stufe von `main_elysia_hero`; die Spur (`main_elysia_trail`) endet am Riss.
+
+**Figuren.** Keine neuen.
+
+**Humor-Ziel (2/10).** Der Anspruch auf den Samen („Du denkst an alles.“) und das Tor, das „wie immer“ offen ist, während etwas am Rand aufgeht.
+
+**Gewicht (§45).** leicht bis mittel: der Stein und der Samen sind die ersten Dinge, die nicht zu Elysia gehören, und niemand sagt es.
+
+**Motive.** `stein`, `samen` (die erste Erwähnung ist falsch: Elysia nennt ihn den ihren), Wiederholung in Schritten (`loop-musik`, `npc-bewegung`), das Kind (`kind-lied`).
+
+**Scheitern und Speichern (§49).** Es gibt kein Scheitern. Der Stein speichert mit `elysia.stone_taken` und löst einen Autosave aus; der Samen braucht keinen Stand; ein Stand mit früh genommenem Stein lädt ohne Reparatur.
+
+**Barrierefreiheit (§50).** Keine neue Zeitnot; der Stein ist ein gewöhnliches Aufnehmen mit Beutekarte und Text; die Schleife 2 ist Text.
+
+**Endlichkeit (§52).** Ein Stein, ein Samen, ein Riss; Schleife 2 gibt es nur dort, wo ein halb so langer Satz da ist.
+
+**Gerechnet.** Drei neue Zeilen, 29 Wörter; `calibrate.py --segment 29 3 2` ergibt rund drei Minuten bei zwei Minuten Weg, davon liegt der Weg zum Riss schon im Slice: neu kommt rund eine Minute dazu. Akt I liegt damit (A2 bis A9) bei rund 42 statt 75 geplanten Minuten; P6.13 misst und entscheidet über A4 und mehr Erkundung.
+
+**Prüfungen.** `test_akt1_anschluss` (13 Tests: kein Stein vor der Schleife, Stein und Zeile mit der Schleife auf der Zelle (41, 17), Musikstufe 2 durch den Stein, früh genommener Stein bleibt genommen, Samen-Zeile mit und ohne Samen, Schleife 2 für Torwächter, Festmeisterin und Gastwirt und ihre Länge, nichts vor der Schleife, Übergang lässt Blatt und Feder zurück), das Segmentskript `tools/autopilot/akt1_anschluss.json` (Schritt „segment“ in `check.sh`: Erwachen, Hoch, Stein, Kind, Riss, Tal), `test_elysia_and_rift`, `test_slice_saves`.

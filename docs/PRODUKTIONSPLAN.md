@@ -142,7 +142,7 @@ Keine Bible-Abweichung, sondern Lesart oder Arbeitsregel. Du kannst jede kippen.
 - **Gastwirt** [P]: drei Begegnungen mit steigendem „Du musst heute nicht zurück“, jedes Mal frei abzulehnen; nie
   ein Schurke (§14). Das bereitet das freiwillige Aufstehen in Akt VI vor.
 - **Neue Rollen** [P]: Händler, Festmeisterin, drei benannte Elysianer-Typen mit Beruf, ein Hallenwächter. Jeder
-  Typ in drei wortgleichen Varianten (normal, Schleife 1, Schleife 2); das trägt das Unbehagen.
+  Typ in drei wortgleichen Varianten (normal, Schleife 1, Schleife 2); das trägt das Unbehagen. **Stand A9 (ADR-064):** Schleife 2 gibt es nur dort, wo ein halb so langer, schon gesagter Satz da ist (Torwächter, Festmeisterin, Gastwirt); die übrigen bleiben bei Schleife 1.
 - **Hauptquests** [P]: `main_elysia_hero` von 4 auf rund 8 Stufen, dazu die Kind-Spur mit rund 4 Stufen; jede gegen
   §47 geprüft.
 - **Mini-Quests** [P]: 5 mit steigender Belohnung bei sinkender Leistung; Truhe und Fest dazu; eine echte, komische
@@ -395,7 +395,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.9** | A3 Markt und Straße · **gebaut** (ADR-059, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 9 statt 14 Minuten, Halle und Fest füllen die Lücke) | wie P6.8, Leistungstest mit der Menge | Lesefassung, ein Leistungstest |
 | **P6.10** | A5 Spiegelhalle · **gebaut** (ADR-060, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten) | wie P6.8, Hilfe abrufbar | Lesefassung, kurz spielen |
 | **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung · **gebaut** (ADR-062; rund 2 statt 9 Minuten, die Schleifen sind Zustand, kein Ort) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
-| **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss | Akt-I-Durchlauf per Autopilot | **Akt I spielen (rund 100 Min)** |
+| **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss · **gebaut** (ADR-064; Stein nach dem Hoch, Samen-Zeile, Schleife 2 für Torwächter, Festmeisterin und Gastwirt; rund 1 statt 5 Minuten neu) | Akt-I-Durchlauf per Autopilot | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst | Plan aktualisiert | Rückmeldung |
 | **P6.14 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf | – | je Akt Lesefassungen und ein Durchlauf |
 

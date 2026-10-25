@@ -91,6 +91,7 @@ el_wake_8	slice/elysia.dialogue	-
 el_wake_r1	slice/elysia.dialogue	-
 el_wake_r2	slice/elysia.dialogue	-
 el_wake_r3	slice/elysia.dialogue	-
+el_wake_seed	slice/elysia.dialogue	-
 gh_back_1	akt1/gasthaus.dialogue	-
 gh_bed_1	akt1/gasthaus.dialogue	-
 gh_bed_2	akt1/gasthaus.dialogue	-
@@ -317,6 +318,7 @@ mk_board_8	akt1/markt.dialogue	-
 mk_board_r1	akt1/markt.dialogue	-
 mk_board_r2	akt1/markt.dialogue	-
 mk_fest_1	akt1/markt.dialogue	-
+mk_fest_11	akt1/markt.dialogue	-
 mk_fest_2	akt1/markt.dialogue	-
 mk_fest_3	akt1/markt.dialogue	-
 mk_fest_4	akt1/markt.dialogue	-
@@ -340,6 +342,7 @@ mk_fountain_r1	akt1/markt.dialogue	-
 mk_fountain_r2	akt1/markt.dialogue	-
 mk_gate_1	akt1/markt.dialogue	-
 mk_gate_10	akt1/markt.dialogue	-
+mk_gate_11	akt1/markt.dialogue	-
 mk_gate_2	akt1/markt.dialogue	-
 mk_gate_3	akt1/markt.dialogue	-
 mk_gate_4	akt1/markt.dialogue	-

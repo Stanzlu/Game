@@ -124,6 +124,14 @@
     },
     {
      "type": "line",
+     "ref": "mk_gate_11"
+    },
+    {
+     "type": "line",
+     "ref": "mk_fest_11"
+    },
+    {
+     "type": "line",
      "ref": "mk_baker_8"
     },
     {
@@ -314,10 +322,14 @@
    "appears": [
     {
      "type": "line",
+     "ref": "el_wake_seed"
+    },
+    {
+     "type": "line",
      "ref": "haus_rest_4"
     }
    ],
-   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat im Slice keinen Flag; die Spielfigur trägt ihn schon."
+   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`)."
   },
   {
    "id": "hausmotive",
@@ -807,7 +819,7 @@
   {
    "flag": "elysia.stone_taken",
    "axis": "Gegenstände",
-   "meaning": "Den Stein mitgenommen."
+   "meaning": "Den Stein mitgenommen (er liegt erst, wenn sich Elysia wiederholt, A9)."
   },
   {
    "flag": "elysia.crystal_touched",
@@ -1122,12 +1134,12 @@
   {
    "flag": "elysia.hall_leaf_taken",
    "axis": "Gegenstände",
-   "meaning": "Sie hat das trockene Blatt eingesteckt (Kuriosität für das Regal im Haus)."
+   "meaning": "Sie hat das trockene Blatt eingesteckt (eine Kuriosität; sie bleibt beim Übergang in Elysia, ADR-064)."
   },
   {
    "flag": "elysia.hall_feather_taken",
    "axis": "Gegenstände",
-   "meaning": "Sie hat die Feder eingesteckt (Kuriosität für das Regal im Haus)."
+   "meaning": "Sie hat die Feder eingesteckt (eine Kuriosität; sie bleibt beim Übergang in Elysia, ADR-064)."
   },
   {
    "flag": "elysia.hall_mirror_seen",

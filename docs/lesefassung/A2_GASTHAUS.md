@@ -28,7 +28,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 > The repetition (A7, ADR-062): the host says his first sentences again, word for word, whatever was offered.
 
-- **Gastwirt:** Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. `[#draft]`  <sub>gh_host_loop_1</sub>
+*wenn* `elysia.rift_open nicht`
+  - **Gastwirt:** Da ist er ja! Komm rein, komm rein. Die Tür macht sich von selbst zu. `[#draft]`  <sub>gh_host_loop_1</sub>
 - **Gastwirt:** Das Gasthaus zum Immer. Wir haben geöffnet. Wir hatten immer geöffnet. `[#draft]`  <sub>gh_host_loop_2</sub>
 
 ### G3 · `host_first`
