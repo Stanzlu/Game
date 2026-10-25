@@ -114,6 +114,7 @@ else
 Das Feuer knackt. Der Regen hat aufgehört. Irgendwo tropft es noch von den Bäumen. [ID:tal_end_1]
 =>< evening_first
 =>< evening_day
+=>< evening_values
 Ein Scheit bricht in der Glut zusammen. Funken steigen auf und gehen aus. [ID:tal_end_11]
 =>< evening_elysia
 if WorldState.has_flag("valley.shell_seen")
@@ -198,6 +199,33 @@ Mira: Erzähl was. Irgendwas. Das Feuer brennt noch eine Weile. [ID:tal_eve_day_
 	Mira: Ich hab heute zwei Löcher im Netz geflickt. Und ein neues gefunden. [ID:tal_eve_day_11]
 	Mira: Das ist ungefähr jeder Tag. [ID:tal_eve_day_12]
 	do WorldState.add_memory("mira", "day_silence")
+=> END
+
+# Akt II, B6: Mira liest, was über das Wasser trägt, nicht die Werte (Bible §18). Die Wahl am Feuer fällt erst, wenn
+# sie das Haus verlassen hat; was sie weiß, hat sie von ihrem Platz aus gesehen oder gehört: die Tür (Auge), das Fenster
+# über die Zeit (Auge), ein Poltern (Ohr). Eine Lesung je Abend, in der Reihenfolge Tür, Fenster, Poltern (keine
+# Rangfolge der Werte, nur die der Spur); das Schweigen und jeder Stand ohne Wert sehen ihren Rauch. Keine Antwort, kein Urteil.
+~ evening_values
+Mira schaut über den Bach. Das Haus liegt drüben im letzten Licht. [ID:tal_eve_val_1] [#draft]
+if WorldState.has_flag("value.freedom")
+	Mira: Deine Tür ging vorhin auf. [ID:tal_eve_val_2] [#draft]
+	Mira: Nicht ganz. [ID:tal_eve_val_3] [#draft]
+	Mira: Bei mir fehlt die Tür ganz. [ID:tal_eve_val_4] [#draft]
+	do WorldState.add_memory("mira", "saw_door_ajar")
+elif WorldState.has_flag("value.calm")
+	Das Fenster ist die hellste Stelle im Tal. [ID:tal_eve_val_5] [#draft]
+	Mira: Da hat sich lange nichts bewegt. [ID:tal_eve_val_6] [#draft]
+	Mira: Zweimal hab ich geschaut, ob das Haus noch steht. [ID:tal_eve_val_7] [#draft]
+	Mira: Es stand. [ID:tal_eve_val_8] [#draft]
+	do WorldState.add_memory("mira", "checked_house")
+elif WorldState.has_flag("value.closeness")
+	Mira legt den Kopf schief, als höre sie es noch einmal. [ID:tal_eve_val_9] [#draft]
+	Mira: Bei dir hat heute etwas gepoltert. Möbel, nehme ich an. [ID:tal_eve_val_10] [#draft]
+	Mira: Die Ziege hätte es nicht bei einem Mal gelassen. [ID:tal_eve_val_11] [#draft]
+	do WorldState.add_memory("mira", "heard_furniture")
+else
+	Mira: Dein Rauch steht gerade. Wie vorhin. [ID:tal_eve_val_12] [#draft]
+Dann knotet sie weiter. [ID:tal_eve_val_13] [#draft]
 => END
 
 ~ evening_elysia

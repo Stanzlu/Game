@@ -181,6 +181,7 @@ segments=(
   "akt2_ankunft:tal:1500:valley_arrival chapter.act1 arrival_echo"
   "akt2_nein:haus:4500:act2_nein act2_blick house.antreiber_refused house.antreiber_by_fire house.mira_visited house.prints_seen"
   "akt2_feuer:haus:2400:act2_safe act2_werte melody.house_hum value.freedom house.mira_left fragment.beam_herbs"
+  "akt2_abend:tal:2400:ending chapter.act2 chapter.slice value.calm"
   "akt2_bachlauf:bachlauf:4500:bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken valley.goat_prints_seen valley.view_back_seen"
   "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
 )

@@ -699,12 +699,16 @@
      "ref": "value.calm"
     }
    ],
-   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
+   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend am Lagerfeuer, als Spur über das Wasser und nie als Wert (`tal_eve_val_2` bis `tal_eve_val_12`), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
    "payoff_lines": [
     "haus_fire_10",
     "haus_table_5",
     "haus_table_6",
-    "haus_bucket_3"
+    "haus_bucket_3",
+    "tal_eve_val_3",
+    "tal_eve_val_7",
+    "tal_eve_val_10",
+    "tal_eve_val_12"
    ]
   },
   {
@@ -1445,17 +1449,17 @@
   {
    "flag": "value.freedom",
    "axis": "Entscheidungen",
-   "meaning": "Am Feuer hat sie die Tür einen Spalt offen gelassen (Wert, Bible §18, Akt II, B5): die Tür und das Feuer im Haus zeigen es; Mira liest es am Abend (B6, geplant)."
+   "meaning": "Am Feuer hat sie die Tür einen Spalt offen gelassen (Wert, Bible §18, Akt II, B5): die Tür und das Feuer im Haus zeigen es; Mira hat vom Lagerfeuer aus die Tür aufgehen sehen (Akt II, B6; Erinnerung `saw_door_ajar`)."
   },
   {
    "flag": "value.closeness",
    "axis": "Entscheidungen",
-   "meaning": "Am Feuer hat sie den zweiten Hocker zu sich gestellt (Wert, Bible §18, Akt II, B5): der Tisch hat einen Hocker weniger, einer steht am Feuer; Mira liest es am Abend (B6, geplant)."
+   "meaning": "Am Feuer hat sie den zweiten Hocker zu sich gestellt (Wert, Bible §18, Akt II, B5): der Tisch hat einen Hocker weniger, einer steht am Feuer; Mira hat am Abend ein Poltern gehört und auf Möbel getippt (Akt II, B6; Erinnerung `heard_furniture`)."
   },
   {
    "flag": "value.calm",
    "axis": "Entscheidungen",
-   "meaning": "Am Feuer hat sie zugesehen, bis es dunkel wurde (Wert, Bible §18, Akt II, B5): der Abend fällt, der Regen ist vorbei; Mira liest es am Abend (B6, geplant). Das Schweigen setzt keinen Wert."
+   "meaning": "Am Feuer hat sie zugesehen, bis es dunkel wurde (Wert, Bible §18, Akt II, B5): der Abend fällt, der Regen ist vorbei; Mira hat zweimal nachgesehen, ob das Haus noch steht (Akt II, B6; Erinnerung `checked_house`). Das Schweigen setzt keinen Wert und bekommt in B6 den geraden Rauch."
   },
   {
    "flag": "valley.goat_prints_seen",

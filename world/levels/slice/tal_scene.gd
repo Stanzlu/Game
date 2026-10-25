@@ -254,6 +254,8 @@ func _play_ending() -> void:
 	await cut.wait(MOUNTAIN_HOLD_SECONDS)
 	await cut.say(DIALOGUE, "ending_sea")
 	await cut.wait(SEA_HOLD_SECONDS)
+	# Act II is over with the slice's ending (ADR-067, O1): both marks and the save below are one block
+	Chapter.mark("act2")
 	Chapter.mark("slice")
 	# the save remembers the ending (the start menu shows the Real title from now on)
 	SaveSystem.unblock(cut.key)
