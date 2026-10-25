@@ -72,6 +72,27 @@ func test_every_frozen_example_still_loads_without_repairs() -> void:
 			assert_true(warning.begins_with("migrated"), "%s: repaired: %s" % [file_name, warning])
 
 
+func test_the_frozen_v2_end_of_act_one_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt1_full.json, frozen at the arrival in the valley (ADR-067)
+	var result := SaveCodec.decode(_fixture("v2_akt1_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "tal")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL)
+	assert_true(Chapter.in_flags(s.flags, "act1"), "Act I is marked as reached")
+	assert_false(Chapter.in_flags(s.flags, "slice"), "and the slice is not finished by it")
+	assert_true(s.flags["elysia.rift_crossed"])
+	assert_gte(s.elysia.xp, GameState.xp_for_level(48), "level 48 is certain by the feast")
+	assert_eq(s.inventory.keys(), ["item_seed", "item_stone"], "only the stone and the seed cross")
+	assert_true(s.facets.has("perception"))
+	assert_eq(s.quests["main_elysia_hero"].stage, "repeat")
+	assert_eq(s.quests["main_elysia_trail"].stage, "rift")
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+
+
 func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	var result := SaveCodec.decode(_fixture("v2_slice_end.json"))
 	assert_true(result.ok, result.error)

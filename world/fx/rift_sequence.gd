@@ -84,6 +84,8 @@ func run() -> void:
 
 func _cross_over() -> void:
 	WorldState.set_flag("elysia.rift_crossed")
+	# Act I is over for good: the chapter mark that the slots and the return in Act VI will read
+	Chapter.mark("act1")
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
 	WorldState.reduce_inventory_to(KEEP)
 	for item in KEEP:
