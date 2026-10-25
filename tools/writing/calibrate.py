@@ -2,6 +2,9 @@
 """Play-time model (standard library only): minutes from words, text speed and the way.
 
 Usage: python3 tools/writing/calibrate.py                    the Slice at every text speed
+       python3 tools/writing/calibrate.py --akt1             Act I at every text speed (its own baseline)
+       python3 tools/writing/calibrate.py --record-akt1 run.log   write the baseline of Act I from an
+                                                     autopilot run (tools/autopilot/akt1_full.json)
        python3 tools/writing/calibrate.py --log run.log      fit the model to a real run (beat lines)
        python3 tools/writing/calibrate.py --segment WORDS LINES WALK_MINUTES   a planned segment
 The model has three parts:
@@ -23,6 +26,11 @@ import dialogue
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BASELINE = os.path.join(HERE, "calibration_baseline.json")
+BASELINE_AKT1 = os.path.join(HERE, "calibration_akt1.json")
+## Pixels a second of the walking pace (entities/player/movement_tuning.gd): the autopilot teleports
+## where a player walks, so the pixels it skipped are turned back into seconds.
+WALK_SPEED = 84.0
+FINISHED_RE = re.compile(r"autopilot finished (\{.*\})")
 SETTINGS = os.path.join(dialogue.ROOT, "core", "settings.gd")
 SPEED_NAMES = ["langsam", "normal", "schnell", "sofort"]
 SEEN_SHARE = 0.6
@@ -48,10 +56,67 @@ def baseline():
     return {"elysia": elysia, "real": data["end_seconds"] - elysia, "beats": beats}
 
 
+def slice_sources():
+    """The story dialogue of the Vertical Slice: everything but the segments of Act I (akt1/)."""
+    return [s for s in dialogue.sources(story_only=True) if "/akt1/" not in s.path.replace(os.sep, "/")]
+
+
+def akt1_sources():
+    """The story dialogue of Act I: the segments (akt1/) and Elysia's garden (the Slice's elysia.dialogue)."""
+    found = []
+    for source in dialogue.sources(story_only=True):
+        path = source.path.replace(os.sep, "/")
+        if "/akt1/" in path or os.path.basename(path).startswith("elysia"):
+            found.append(source)
+    return found
+
+
+def akt1_baseline():
+    """The autopilot's Act I run: seconds, seconds with a conversation open, clicks, skipped pixels."""
+    with open(BASELINE_AKT1, encoding="utf-8") as f:
+        data = json.load(f)
+    way = data["seconds"] - data["dialogue_seconds"] + data["route_px"] / WALK_SPEED
+    return {"way": way, "data": data}
+
+
+def akt1_estimate(speed_index, wander=WANDER, seen=SEEN_SHARE, pause=ADVANCE_PAUSE):
+    """Minutes of Act I: its own way (the autopilot's run) plus reading all its story text."""
+    floor = akt1_baseline()
+    text = story_text(akt1_sources())
+    lines = text["elysia"][0] + text["real"][0]
+    characters = text["elysia"][1] + text["real"][1]
+    return estimate(floor["way"], lines, characters, text_speeds()[speed_index], wander, seen, pause), lines
+
+
+def record_akt1(log_path):
+    """Writes calibration_akt1.json from the log of tools/autopilot/akt1_full.json."""
+    with open(log_path, encoding="utf-8", errors="replace") as f:
+        text = f.read()
+    match = FINISHED_RE.search(text)
+    if match is None:
+        raise ValueError("the log has no 'autopilot finished' line (did the run reach its end?)")
+    numbers = json.loads(match.group(1))
+    beats = [{"beat": name, "seconds": seconds} for name, seconds in parse_log(text)]
+    data = {
+        "_comment": "The Act I run of the autopilot (tools/autopilot/akt1_full.json, instant text, fixed 30 fps): "
+                    "seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the "
+                    "straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt1.",
+        "seconds": numbers["seconds"],
+        "dialogue_seconds": numbers["dialogue_s"],
+        "clicks": numbers["clicks"],
+        "route_px": numbers["route_px"],
+        "beats": beats,
+    }
+    with open(BASELINE_AKT1, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=1, ensure_ascii=False)
+        f.write("\n")
+    return data
+
+
 def story_text(sources=None):
     """(lines, characters) of the story dialogue per world: elysia.dialogue, the rest is real."""
     totals = {"elysia": [0, 0], "real": [0, 0]}
-    for source in sources if sources is not None else dialogue.sources(story_only=True):
+    for source in sources if sources is not None else slice_sources():
         world = "elysia" if os.path.basename(source.path).startswith("elysia") else "real"
         for line in source.lines:
             totals[world][0] += 1
@@ -111,6 +176,30 @@ def main(argv):
         for index, name in enumerate(SPEED_NAMES[:3]):
             minutes = estimate(walk * 60.0, lines, words * 6.5, text_speeds()[index])
             print("%-8s %5.1f min (%d Zeilen, %d Wörter, Weg %.1f min)" % (name, minutes, lines, words, walk))
+        return 0
+    if "--record-akt1" in argv:
+        data = record_akt1(argv[argv.index("--record-akt1") + 1])
+        print("Act I: %d s of play, %d s in conversations, %d clicks, %d px of teleports; %d beats"
+              % (data["seconds"], data["dialogue_seconds"], data["clicks"], data["route_px"], len(data["beats"])))
+        return 0
+    if "--akt1" in argv:
+        floor = akt1_baseline()
+        text = story_text(akt1_sources())
+        lines = text["elysia"][0] + text["real"][0]
+        print("Akt I: %d Zeilen, Weg ohne Lesen %.1f min (Autopilot %d s ohne Gespräche + %d px zu Fuß), "
+              "angenommen: gesehen %.0f %%, Pause %.1f s, Umweg x%.1f"
+              % (lines, floor["way"] / 60.0, floor["data"]["seconds"] - floor["data"]["dialogue_seconds"],
+                 floor["data"]["route_px"], SEEN_SHARE * 100, ADVANCE_PAUSE, WANDER))
+        print("Der Autopilot nahm den ersten Weg in jedem Gespräch und sah %d Zeilen (%.0f %% der Zeilen)"
+              % (floor["data"]["clicks"], 100.0 * floor["data"]["clicks"] / lines))
+        print("%-10s %8s" % ("Tempo", "Akt I"))
+        for index, name in enumerate(SPEED_NAMES[:3]):
+            minutes, _ = akt1_estimate(index)
+            print("%-10s %7.1f min" % (name, minutes))
+        upper, _ = akt1_estimate(0, wander=2.5, seen=1.0, pause=2.0)
+        print("%-10s %7.1f min (langsam, alle Zeilen gesehen, Pause 2 s, Umweg x2,5: wer alles liest und sich verläuft)"
+              % ("Obergrenze", upper))
+        print("Dichte: %.1f Zeilen je Minute (Plan 9.6 rechnet mit 6)" % (lines / akt1_estimate(1)[0]))
         return 0
     speed_index = 1
     if "--log" in argv:

@@ -37,10 +37,35 @@ aus **Spiel** zieht (Erkunden, Minispiel, Dungeon, Händler) und nicht aus Text:
 Die Entscheidung gehört in P6.12 (Akt-I-Durchlauf), wenn die Segmente gebaut sind und gemessen werden können; bis dahin
 bleiben „Akt I rund 100 Minuten“ und „6 Zeilen je Minute“ Annahmen [P].
 
+## Akt I nach dem Lauf des Autopiloten (P6.12c, ADR-065)
+
+`tools/autopilot/akt1_full.json` spielt Akt I vom Erwachen bis zur Ankunft im Tal mit echten Türen und echtem Fortschritt
+(`check.sh` spielt ihn bei jedem Lauf). Das Log gibt den Weg: 139 Sekunden Spielzeit, davon 55 mit offenem Gespräch,
+106 geklickte Zeilen und 4.800 Pixel Luftlinie, die der Autopilot springt statt geht (zu 84 Pixeln je Sekunde zurückgerechnet).
+Akt I hat 333 Zeilen (Segmente und Garten).
+
+| Tempo | Akt I |
+|---|---|
+| langsam | 15,9 min |
+| normal | 12,3 min |
+| schnell | 9,9 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 30,6 min |
+
+`python3 tools/writing/calibrate.py --akt1` zeigt die Tabelle, `--record-akt1 <Log>` schreibt `calibration_akt1.json` neu
+(nach einem neuen Segment den Lauf wiederholen). Dazu drei Befunde:
+
+- **Der Plan rechnet mit 100 Minuten für Akt I, das Modell mit 12 bis 31.** Die Briefe summieren rund 42 Minuten, aber ihre Wege
+  (6 bis 9 Minuten je Segment) sind geschätzt, nicht gemessen. Die Lücke zu 100 Minuten ist größer als jede Annahme des Modells; es
+  ersetzt keinen Playtest (Bible §61). Dein Durchlauf (P6.12) legt Anteil, Pause und Umweg fest und entscheidet, ob Akt I mehr Inhalt
+  braucht (A4, Erkunden) oder kürzer bleibt.
+- **Der Autopilot sieht 32 % der Zeilen.** Er nimmt in jedem Gespräch die erste Antwort und sucht nichts Freiwilliges; das Modell nimmt 60 %.
+- **Die Textdichte liegt bei 27 Zeilen je Minute** (Plan 9.6: 6). Wie beim Slice trägt der Text allein keine 100 Minuten.
+
 ## Benutzen
 
 ```
 python3 tools/writing/calibrate.py                                   den Slice bei jedem Tempo
+python3 tools/writing/calibrate.py --akt1                            Akt I bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf anpassen
 ```
