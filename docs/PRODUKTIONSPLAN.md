@@ -228,7 +228,7 @@ Alle Tabellen hier sind Entwurf [P]; jeder Akt bekommt vor seinem Bau einen Regi
 
 Kochen, Schlafen und Kleidung (§26) [P]: Schlafen beendet den Tag (vorhanden als Abend), Kleidung trägt das
 Erscheinungsbild (Abschnitt 3), Kochen erst, wenn der Gefällige es braucht (Akt IV). Die Katze: erscheint (II),
-gefüttert (II–III), schläft auf dem Antreiber (ab III).
+gefüttert (II–III), schläft auf dem Antreiber (ab II; im Slice vorhanden).
 
 ### 5.5 Sammelstücke
 
@@ -397,7 +397,8 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung · **gebaut** (ADR-062; rund 2 statt 9 Minuten, die Schleifen sind Zustand, kein Ort) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
 | **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss · **gebaut** (ADR-064; Stein nach dem Hoch, Samen-Zeile, Schleife 2 für Torwächter, Festmeisterin und Gastwirt; rund 1 statt 5 Minuten neu) | Akt-I-Durchlauf per Autopilot · **gebaut** (ADR-065, `akt1_full.json`: 141 s, Modell 14 bis 33 min gegen 100 geplant) | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst · **erledigt** (Abschnitt 10.1, ADR-066): Minuten bleiben Modell, geplant wird in Zeilen und Pull Requests, die Länge entscheidet dein Durchlauf | Plan aktualisiert | Rückmeldung (Fragen in Abschnitt 11) |
-| **P6.14 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge II bis VII, Segmente wie in Akt I | – | je Akt Lesefassungen und ein Durchlauf |
+| **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 162 neue Zeilen, im Modell rund 23 Minuten gegen 90); V1 T6/T7 klein, B1 bis B7 | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` | Fragen 7 (Voreinstellungen), Lesefassungen |
+| **P6.15 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge II bis VII, Segmente wie in Akt I | – | je Akt Lesefassungen und ein Durchlauf |
 
 **Abnahmeregel:** Ein Prüfpaket je Phase, höchstens 10 Fragen. Was unbeantwortet bleibt, setze ich nach meiner
 Empfehlung um und markiere es als „vorläufig“; es bleibt umkehrbar.
@@ -514,6 +515,10 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Sta
 **5. Mehr Elysia?** A4 (Minispiel, 5 Minuten) oder mehr Erkunden (T6). **Empfehlung:** erst nach deinem Durchlauf; A4 bleibt Cut-First-Platz 1.
 
 **6. Nachspiel:** Wie lang soll es sein? Es gibt keine Zahl in Bible und Plan. **Empfehlung:** kompakt, rund 10 Minuten, wenn es so weit ist.
+
+**7. Akt II: Voreinstellungen** (Stand 25.10., ADR-067; Tabelle im Brief `docs/akt2/REGIONSBRIEFE.md`)
+- Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: das Ende des Slice bleibt der Schluss von Akt II; der Richter nur als Text ab dem zweiten Sturz; Werte als konkrete Wahlen am Feuer; eine Karte der Klasse M; das Lied im Haus ist hörbar und kein Fragment; die neue Karte liegt südlich am Bach; kein Schema 3; Blatt und Feder bleiben in Elysia; dein „OK“ auf die Lesefassung des Slice als Einfrieren.
+- **Empfehlung:** die Voreinstellungen; sag, welche du anders willst.
 
 ## 12. Risiken
 
