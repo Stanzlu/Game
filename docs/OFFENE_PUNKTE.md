@@ -59,9 +59,9 @@ im weiteren Spiel nichts verloren geht.
 
 | | Punkt | Quelle | Entscheidung danach |
 |---|---|---|---|
-| P | Spielzeit vermutlich unter 45 Minuten | #43, `GATE_REPORT.md` | Median unter 35 Minuten: vertiefen (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“) |
+| P | Spielzeit vermutlich unter 45 Minuten | #43, `GATE_REPORT.md` | Median unter 35 Minuten: vertiefen (`PHASE4_PLAN.md`, „Vertiefen, falls zu kurz“) Stand 25.10.: Modell 20,7 Minuten für den Slice (`calibrate.py`), noch kein Mensch gemessen (ADR-065, Plan 10.1) |
 | P | Texte sind Entwürfe: Ton, Humor, Miras Stimme ungeprüft | #47, ADR-036 | Writing-Pass mit den Zeilen, die Tester zitieren oder stören |
-| P | Wirkt Elysia anfangs wirklich attraktiv? | Bible Risiko 9, Pre-Review #2 | Elysia im Slice dauert nur 10–18 Minuten, die Bible will 30–60; Elysia-Dichte erhöhen |
+| P | Wirkt Elysia anfangs wirklich attraktiv? | Bible Risiko 9, Pre-Review #2 | Elysia im Slice dauert nur 10–18 Minuten, die Bible will 30–60; Elysia-Dichte erhöhen Stand 25.10.: Akt I gebaut, im Modell rund 14 Minuten (11,5 bis 17,5, Obergrenze 33) gegen 105 geplant; die Entscheidung über mehr Elysia (A4, Erkunden) liegt bei deinem Durchlauf (Plan 11, Fragen 3 und 5, ADR-066) |
 | P | Antreiber: Werte (Wegwachstum, Ermüdung, 3 s Stillstand) sind vorläufig | ADR-015 | justieren nach Frage 7 |
 | P | Mira spricht den Antreiber im Haus nie an | #49 | so lassen oder eine offene Erzählzeile |
 | P | Frösche bei Stille werden nicht erklärt | #50 | so lassen, wenn sie entdeckt werden |

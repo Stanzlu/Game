@@ -76,6 +76,7 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 | ADR-063 | Akt I: die Spur des Kindes, drei Fragmente und die Melodie (P6.12, A8) |
 | ADR-064 | Akt I: Stein nach dem Hoch, der Samen in Elysia, Schleife 2 in Schritten (P6.12, A9) |
 | ADR-065 | Autopilot v2 und der Akt-I-Durchlauf: gemessen statt geschätzt (P6.12c, T8) |
+| ADR-066 | Neuplanung nach Akt I: Minuten sind Modell, geplant wird in Zeilen und Pull Requests (P6.13) |
 
 ---
 
@@ -875,3 +876,16 @@ Zum Nachschlagen: Nur den ADR lesen, der zur Aufgabe passt (die Datei ist groß)
 - **Messwerte (25.10.):** 141 Sekunden Spielzeit, davon 55 mit offenem Gespräch, 110 Klicks, 10.016 Pixel Luftlinie (jeder Sprung, jede Tür und jeder Weg vom Ankunftspunkt, zu 88 Pixeln je Sekunde, dem Tempo „direkt“, zurückgerechnet); Akt I hat 333 Zeilen. Das Modell ergibt rund 14 Minuten bei normalem Tempo (11 bis 18 je nach Tempo), 33 Minuten als Obergrenze (alles gesehen, langsam, Umweg ×2,5). Der Autopilot sieht 33 % der Zeilen, weil er die erste Antwort nimmt und nichts Freiwilliges sucht. Die Briefe haben zusammen rund 42 Minuten gerechnet, aber mit geschätzten Wegen (2 bis 5 Minuten je Segment, mit dem Lesen 6 bis 9); der Plan spricht von 100.
 - **Verworfen:** Ein Autopilot, der Wege findet und läuft (das Wegfinden gehört nicht in ein Testwerkzeug; die Sprünge zählen als Luftlinie); Wartezeiten in Wanduhrsekunden (ADR-051: Spielzeit); die Skripte der Segmente durch den Durchlauf zu ersetzen (sie prüfen je ein Segment schnell und mit Flags für den Anfang); ein Start aus dem Spielstand und `goto_marker` (kein Skript braucht sie, solange `use` Zellen kennt; nachrüsten, wenn ein Akt es braucht).
 - **Konsequenzen:** P6.13 rechnet mit diesen Zahlen. Die Lücke zwischen Modell (rund 14 bis 33 Minuten) und Plan (100 Minuten) ist die erste Entscheidung des Projektinhabers nach seinem Durchlauf; bis dahin sind beide Zahlen Annahmen [P]. Jeder spätere Akt bekommt sein Skript in derselben Form.
+
+## ADR-066 · Neuplanung nach Akt I: Minuten sind Modell, geplant wird in Zeilen und Pull Requests (P6.13)
+- **Status:** angenommen, vorläufig · 2026-10-25 (Plan 10.1; „bau alles“ vom 24.10.; ADR-057, ADR-065)
+- **Kontext:** Akt I ist gebaut und gemessen (ADR-065): 333 Zeilen, Modell rund 14 Minuten (11,5 bis 17,5, Obergrenze 33) gegen 105 geplante; der Slice liegt im Modell bei 20,7 gegen 45–60. Die Planmenge für alle Akte (4.100 Zeilen, 6 Zeilen je Minute) ergäbe im Modell rund 170 statt 660 Minuten; 660 Minuten allein aus Text brauchten rund 15.900 Zeilen. Die Spielzeit der Bible (10–12 Stunden, Akt-Längen „ca.“) ist von dir geschrieben; eine Änderung wäre eine Abweichung und braucht deine Antwort und einen ADR (`CLAUDE.md`). Ein Durchlauf von dir fehlt (ADR-049), das Modell ist nicht gegen einen Menschen geprüft.
+- **Entscheidung:**
+  - Der Plan baut weiter nach Abschnitt 5, Akt II bis VII, mit den Mengen der Bible (§48) und ohne Streichung und ohne Änderung der Länge.
+  - Minuten gelten als Modell mit benannten Annahmen (Anteil 60 %, Pause 1,2 s, Umweg ×1,6). Berichtet und budgetiert wird in Zeilen, Wörtern, Cues, Karten, Requisiten, Tests und Pull Requests; jeder Regions-Brief nennt die Modellminuten neben der geplanten Zahl. Die „6 Zeilen je Minute“ sind kein Planungswert mehr; gemessen sind 24 je Modellminute.
+  - Das Pull-Request-Budget der Akte II bis VII folgt den zwei gemessenen Sorten von Segmenten (62 Zeilen je Pull Request mit Karten, Requisiten und Figuren, 15 mit Zustand und Anschluss): rund 55 bis 98 Segment-Pull-Requests plus rund einen Pull Request Vorarbeit je Akt.
+  - Die Länge entscheidet dein Durchlauf von Akt I (Beat-Log, `calibrate.py --log`); bis dahin wird nichts gestreckt und nichts gekürzt. A4 wird nicht ungefragt gebaut (es füllt rund 1 % der Lücke).
+  - Jeder Akt bekommt `tools/autopilot/akt<N>_full.json` und einen Eintrag in `check.sh`; jedes Segment meldet seine Messwerte im Brief.
+- **Verworfen:** Die Länge der Bible still zu kürzen (Abweichung ohne dich); 16.000 Zeilen zu schreiben, um 660 Minuten allein mit Text zu füllen (verfehlt „höheres Niveau statt Menge“); die Lücke mit Gehen zu strecken (kein Spaziergangssimulator, §59); die Modellkonstanten nach Gefühl zu drehen, bis 105 Minuten herauskommen (keine zulässige Einstellung tut es: Umweg ×24 bis ×29).
+- **Offen (Fragen 3 bis 6 in Plan 11):** gefühlte Länge von Akt I, Länge oder Menge als Ziel, mehr Elysia (A4, Erkunden), Länge des Nachspiels. Ohne Antwort gilt die Empfehlung; jede Antwort ist umkehrbar.
+- **Konsequenzen:** Vor der ersten M-Karte (Akt II) T6 und T7; ein Zustandsmodell (T9, Schema 3) mit dem Akt, der es braucht; jeder Brief führt Messzeilen. Die Ziele „Slice 45–60 Minuten“ und „Akt I rund 100 Minuten“ stehen als unbelegt in `OFFENE_PUNKTE.md`.
