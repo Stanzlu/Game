@@ -1,7 +1,7 @@
 # CLAUDE.md – Arbeitsregeln für REAL
 
-REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Der 45–60-minütige Vertical Slice
-steht; das Playtest-Gate hat der Projektinhaber am 23.10. ohne Tester abgenommen (ADR-049). Jetzt läuft die
+REAL ist ein narratives Pixel-Art-RPG in Godot 4.7.2 (typisiertes GDScript). Der Vertical Slice (Ziel 45–60 Minuten, im
+Modell rund 21, ADR-065) steht; das Playtest-Gate hat der Projektinhaber am 23.10. ohne Tester abgenommen (ADR-049). Jetzt läuft die
 Vorproduktion für Full Production (`docs/PRODUKTIONSPLAN.md`): Inhalt entsteht nur nach dem Plan, in kleinen
 Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Weichenstellungen gelten weiter.
 
