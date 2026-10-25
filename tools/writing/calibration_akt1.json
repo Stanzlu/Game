@@ -1,0 +1,125 @@
+{
+ "_comment": "The Act I run of the autopilot (tools/autopilot/akt1_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt1.",
+ "seconds": 141,
+ "dialogue_seconds": 55,
+ "clicks": 110,
+ "route_px": 10016,
+ "beats": [
+  {
+   "beat": "elysia_start",
+   "seconds": 0
+  },
+  {
+   "beat": "butterflies_caught",
+   "seconds": 15
+  },
+  {
+   "beat": "fountain",
+   "seconds": 24
+  },
+  {
+   "beat": "inn_enter",
+   "seconds": 25
+  },
+  {
+   "beat": "inn_fed",
+   "seconds": 31
+  },
+  {
+   "beat": "inn_room",
+   "seconds": 34
+  },
+  {
+   "beat": "inn_slept",
+   "seconds": 42
+  },
+  {
+   "beat": "market_enter",
+   "seconds": 46
+  },
+  {
+   "beat": "market_board",
+   "seconds": 52
+  },
+  {
+   "beat": "market_bread",
+   "seconds": 54
+  },
+  {
+   "beat": "market_board_done",
+   "seconds": 56
+  },
+  {
+   "beat": "market_melody",
+   "seconds": 61
+  },
+  {
+   "beat": "market_hall_open",
+   "seconds": 68
+  },
+  {
+   "beat": "hall_enter",
+   "seconds": 69
+  },
+  {
+   "beat": "hall_room_1",
+   "seconds": 71
+  },
+  {
+   "beat": "hall_room_2",
+   "seconds": 75
+  },
+  {
+   "beat": "hall_mirror",
+   "seconds": 79
+  },
+  {
+   "beat": "perception",
+   "seconds": 79
+  },
+  {
+   "beat": "feast_enter",
+   "seconds": 79
+  },
+  {
+   "beat": "irritation",
+   "seconds": 85
+  },
+  {
+   "beat": "feast",
+   "seconds": 85
+  },
+  {
+   "beat": "trail_hallway",
+   "seconds": 90
+  },
+  {
+   "beat": "trail_door",
+   "seconds": 94
+  },
+  {
+   "beat": "trail_room",
+   "seconds": 101
+  },
+  {
+   "beat": "stone",
+   "seconds": 103
+  },
+  {
+   "beat": "child",
+   "seconds": 107
+  },
+  {
+   "beat": "child_melody",
+   "seconds": 130
+  },
+  {
+   "beat": "rift_found",
+   "seconds": 132
+  },
+  {
+   "beat": "valley_arrival",
+   "seconds": 139
+  }
+ ]
+}
