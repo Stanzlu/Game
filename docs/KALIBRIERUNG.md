@@ -68,7 +68,8 @@ Akt I hat 333 Zeilen (Segmente und Garten).
 python3 tools/writing/calibrate.py                                   den Slice bei jedem Tempo
 python3 tools/writing/calibrate.py --akt1                            Akt I bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
-python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf anpassen
+python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.

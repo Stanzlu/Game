@@ -5,7 +5,8 @@ Usage: python3 tools/writing/calibrate.py                    the Slice at every 
        python3 tools/writing/calibrate.py --akt1             Act I at every text speed (its own baseline)
        python3 tools/writing/calibrate.py --record-akt1 run.log   write the baseline of Act I from an
                                                      autopilot run (tools/autopilot/akt1_full.json)
-       python3 tools/writing/calibrate.py --log run.log      fit the model to a real run (beat lines)
+       python3 tools/writing/calibrate.py --log run.log      fit the model to a real run of the Slice (beat lines)
+       python3 tools/writing/calibrate.py --akt1 --log run.log   the same for a human run of Act I
        python3 tools/writing/calibrate.py --segment WORDS LINES WALK_MINUTES   a planned segment
 The model has three parts:
     reading  seen characters x seconds per character (the text speed of core/settings.gd) plus a
@@ -165,6 +166,23 @@ def fit(beats, speed_index, seen=SEEN_SHARE, pause=ADVANCE_PAUSE):
     return max((actual - reading) / walk, 1.0)
 
 
+def fit_akt1(beats, speed_index, seen=SEEN_SHARE, pause=ADVANCE_PAUSE):
+    """The wander factor that makes the model match a human run of Act I (seconds at its last beat)."""
+    if not beats:
+        raise ValueError("the log has no beat lines")
+    text = story_text(akt1_sources())
+    speed = text_speeds()[speed_index]
+    reading = sum(reading_seconds(text[w][0], text[w][1], speed, seen, pause) for w in text)
+    return max((beats[-1][1] - reading) / akt1_baseline()["way"], 1.0)
+
+
+def per_beat_akt1(beats):
+    """Real seconds against the autopilot's run of Act I for each beat they share."""
+    with open(BASELINE_AKT1, encoding="utf-8") as f:
+        floor = {b["beat"]: b["seconds"] for b in json.load(f)["beats"]}
+    return [(name, seconds, floor[name]) for name, seconds in beats if name in floor and floor[name] > 0]
+
+
 def per_beat(beats):
     """Real seconds against the autopilot's for each beat the run shares with the baseline."""
     floor = baseline()["beats"]
@@ -184,7 +202,7 @@ def main(argv):
         print("Act I: %d s of play, %d s in conversations, %d clicks, %d px of teleports; %d beats"
               % (data["seconds"], data["dialogue_seconds"], data["clicks"], data["route_px"], len(data["beats"])))
         return 0
-    if "--akt1" in argv:
+    if "--akt1" in argv and "--log" not in argv:
         floor = akt1_baseline()
         text = story_text(akt1_sources())
         lines = text["elysia"][0] + text["real"][0]
@@ -207,11 +225,13 @@ def main(argv):
     if "--log" in argv:
         with open(argv[argv.index("--log") + 1], encoding="utf-8", errors="replace") as f:
             beats = parse_log(f.read())
-        factor = fit(beats, speed_index)
-        print("run: %d beats, %.1f min at the last one" % (len(beats), beats[-1][1] / 60.0))
+        act_one = "--akt1" in argv
+        factor = fit_akt1(beats, speed_index) if act_one else fit(beats, speed_index)
+        print("run: %d beats, %.1f min at the last one%s" % (len(beats), beats[-1][1] / 60.0,
+              " (Akt I)" if act_one else " (Slice)"))
         print("fitted wander factor %.2f (assumed %.2f); put it in WANDER" % (factor, WANDER))
         print("%-18s %8s %10s %6s" % ("beat", "real s", "autopilot", "ratio"))
-        for name, real, floor in per_beat(beats):
+        for name, real, floor in (per_beat_akt1(beats) if act_one else per_beat(beats)):
             print("%-18s %8d %10d %6.1f" % (name, real, floor, real / floor))
         return 0
     text = story_text()
