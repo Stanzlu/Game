@@ -7,6 +7,10 @@ extends LookScene
 ## Sitting by the fire, the Antreiber comes in and finds something to do (ADR-042). Staying
 ## seated a moment is the answer, as on the way to the shed: then he sits down too, and
 ## later the cat sleeps on him. The cat gets a name if the player wants (Game Bible §28).
+## The first safe moment (act2_safe) is the rest by the fire; whoever can hum the child's tune
+## hears the song once, for a breath, when it has come (B5); and when Mira has gone, there is a
+## small thing left to do by the fire (three deeds and a silence, each its own value, Game Bible
+## §18): the answer sets a value.<id> flag, and the room answers in its own way.
 ## Mira's visit is staged in the room, not in the dark: the door opens, she comes in, sits
 ## down by the fire, and later gets up and goes (a GuestWalker; the map's seated Mira takes
 ## her place while she talks).
@@ -14,6 +18,11 @@ extends LookScene
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
 ## The answer to the Antreiber's ideas at the fire (Act II, B2).
 const NEIN_DIALOGUE := "res://content/dialogue/akt2/nein.dialogue"
+## The song in the house and the deeds by the fire (Act II, B5).
+const FEUER_DIALOGUE := "res://content/dialogue/akt2/feuer.dialogue"
+## A breath of quiet before the song, and how long the window takes to turn to evening.
+const SONG_PAUSE := 1.0
+const EVENING_FALLS_SECONDS := 4.0
 const COLD_TINT := Color(0.5, 0.56, 0.68)
 ## Once the fire burns, the room is lit by it: a dim warm base, and the fireplace's own
 ## flickering light gives the falloff (a bright flat tint made the corners as light as the
@@ -127,10 +136,25 @@ func _rest_by_the_fire() -> void:
 	_mira_coming = true
 	if not WorldState.has_flag("house.rested"):
 		await Talk.present(self, DIALOGUE, "fire_rest", player)
+	await _sing()
 	if _antreiber_pending():
 		await _antreiber_visit()
 	await NodeTimer.after(self, 2.0)
 	_mira_visits()
+
+
+## The song in the house (B5), once, for whoever can hum the tune from Elysia's garden: after the
+## quiet by the fire, or, if there was none, after Mira has gone. The flag comes with the first line
+## and the scene plays the sound with it; the way the player got here does not matter.
+func _sing(cut: Cutscene = null) -> void:
+	if not WorldState.has_flag("melody.child_hum") or Collection.has_melody("house_hum"):
+		return
+	if cut == null:
+		await NodeTimer.after(self, SONG_PAUSE)
+		await Talk.present(self, FEUER_DIALOGUE, "house_hum", player)
+	else:
+		await cut.wait(SONG_PAUSE)
+		await cut.say(FEUER_DIALOGUE, "house_hum")
 
 
 ## The Antreiber's visit cannot be saved half way: a save would load into a room where he
@@ -200,6 +224,22 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		SoundBank.play_at(map.entities, "cat_meow", map.cell_to_world(CAT_CELL))
 	elif id == "house.prints_seen" and value:
 		Beat.mark("act2_blick")
+	elif id == "house.rested" and value:
+		_first_safe_moment()
+	elif id == "melody.house_hum" and value:
+		AudioDirector.sfx("house_hum", -2.0, 1.0)
+	elif id == "value.freedom" and value:
+		AudioDirector.sfx("door_open")
+		_glare()
+	elif id == "value.calm" and value:
+		_evening_falls()
+
+
+## The first time the fire holds and someone stays (Act II, act2_safe): the rest by the fire, or
+## Mira's visit if nobody sat down before. The autosave of the mark comes when the box closes,
+## before the Antreiber's visit sets its block (a mark after the cue itself would not).
+func _first_safe_moment() -> void:
+	Beat.mark("act2_safe")
 
 
 ## The cat gets a name, if the player wants one (Game Bible §28).
@@ -300,6 +340,18 @@ func _add_night_surround() -> void:
 	view.world_root.add_child(night)
 
 
+## Watching the fire until it gets dark: the rain is over, the window turns from grey to the
+## low evening sun, and the room's sounds follow (the house has no DayLight of its own; the
+## stored time of day is what the Bachlauf and the valley go on from).
+func _evening_falls() -> void:
+	WorldState.set_day_preset("abend")
+	_window_energy = WINDOW_ENERGY_EVENING
+	var tween := create_tween().set_parallel()
+	tween.tween_property(_window_light, ^"color", WINDOW_LIGHT_EVENING, EVENING_FALLS_SECONDS)
+	tween.tween_property(_window_light, ^"energy", _window_energy, EVENING_FALLS_SECONDS)
+	AudioDirector.set_ambience(_ambience(true), ambience_db, EVENING_FALLS_SECONDS)
+
+
 ## The door lets the outside in: the window light swells for a moment.
 func _glare() -> void:
 	var tween := create_tween()
@@ -349,6 +401,9 @@ func _mira_visits() -> void:
 		await NodeTimer.after(self, AFTER_LOAD_CALM)
 		while not _quiet():
 			await get_tree().process_frame
+	# Mira knocks after mira_after in any case: if nobody sat down, her staying is the first safe
+	# moment (house.rested stays the rest by the fire's own, so that cue can still be told later)
+	_first_safe_moment()
 	var cut := Cutscene.begin(self)
 	AudioDirector.sfx("door_knock")
 	await cut.wait(0.9)
@@ -359,7 +414,11 @@ func _mira_visits() -> void:
 	await cut.say(DIALOGUE, "mira_visit")
 	await cut.wait(1.0)
 	await _mira_goes(cut)
+	await _sing(cut)
+	await cut.say(FEUER_DIALOGUE, "fire_values")
 	cut.end()
+	# marked once the visit is over, as act2_nein: the autosave of a mark inside it waits for the end
+	Beat.mark("act2_werte")
 
 
 ## The door opens, Mira steps in out of the rain, goes round the rug to the fire and sits.

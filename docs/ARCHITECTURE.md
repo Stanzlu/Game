@@ -206,7 +206,7 @@ Untermenü `PrototypeMenu`.
 **HUD (`ui/hud/hud.gd`):** Elysia mit `XpBar`, hochzählendem Gold mit fliegenden Münzen, Level-up
 (Strahlen, Funken, Aufblitzen), Beute-Karte mit Icon (`ItemDef.icon()`) und `fancy_text.gdshader`;
 Real mit einer leisen Zeile. Für beide: Ortsname beim Betreten (`show_area`) und „Gespeichert“. Flags mit dem Präfix `fragment.` zeigen eine leise Bildkarte
-(`_fragment_card`: 64-Pixel-Bild aus `assets/generated/fragments`, „Etwas fällt dir ein.“, kein Klang, kein Zähler; A8, ADR-063).
+(`_fragment_card`: 64-Pixel-Bild aus `assets/generated/fragments`, „Etwas fällt dir ein.“, kein Klang, kein Zähler; A8, ADR-063). In der Wirklichkeit liegt das Popup im unsichtbaren Elysia-Teil: die Erzählzeilen tragen das Fragment. Von den 24 Fragmenten sind sechs Bilder des Kindes und 18 Spuren der Welt (ADR-067 Nachtrag); `Collection.fragments()` zählt beide.
 
 **Look-Prototyp (ADR-017, `docs/ART_DIRECTION.md`):** `LookScene` (`world/levels/look_scene.gd`) erweitert
 `GameScene` um Atmosphäre. Ebenen in der Welt: Himmel `SkyLayer` (z −20) → gebackener Boden mit

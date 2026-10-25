@@ -7,6 +7,8 @@ if WorldState.is_fire_lit()
 	% Das Feuer brennt. Manchmal knackt es, wenn das Harz aufplatzt. [ID:haus_fire_1]
 	% Wärme. Erst an den Händen, dann überall. [ID:haus_fire_2]
 	% Du legst nichts nach. Es brennt auch so. [ID:haus_fire_3]
+	if WorldState.has_flag("value.freedom")
+		Aus dem Türspalt zieht es. Das Feuer neigt sich ihm zu. [ID:haus_fire_10] [#draft]
 elif WorldState.has_item("item_dry_wood")
 	Du schichtest das Holz in den Kamin, die Rinde nach unten, wie man es irgendwann mal gelernt hat. [ID:haus_fire_4]
 	Ein Streichholz. Noch eins. Dann fängt die Rinde. [ID:haus_fire_5]
@@ -28,8 +30,13 @@ else
 if WorldState.has_flag("house.spoon_found")
 	% Der Tisch wackelt. Unter einem Bein klemmt ein gefaltetes Stück Papier, das nicht hilft. [ID:haus_table_3]
 	% Ein Becher, den niemand abgewaschen hat. Seit dem Frühjahr nicht. [ID:haus_table_4]
+	if WorldState.has_flag("value.closeness")
+		Am Tisch steht nur noch ein Hocker. Der andere hat es warm. [ID:haus_table_5] [#draft]
 else
-	Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel. [ID:haus_table_1]
+	if WorldState.has_flag("value.closeness")
+		Ein Tisch, ein Hocker, ein Becher. Der zweite Hocker hat es warm. In der Schublade liegt ein Löffel. [ID:haus_table_6] [#draft]
+	else
+		Ein Tisch, zwei Hocker, ein Becher. In der Schublade liegt ein Löffel. [ID:haus_table_1]
 	Ein sehr kleiner Löffel. Du nimmst ihn mit, ohne genau zu wissen, warum. [ID:haus_table_2]
 	do WorldState.add_item("curiosity_tiny_spoon")
 	do WorldState.set_flag("house.spoon_found")
@@ -86,6 +93,8 @@ if WorldState.is_fire_lit()
 	Es tropft in den Eimer. Plink. Lange nichts. Plink. [ID:haus_bucket_2]
 else
 	Ein Eimer unter einer undichten Stelle im Dach. Halb voll. Jemand hat ihn hingestellt, bevor er gegangen ist. [ID:haus_bucket_1]
+if WorldState.has_flag("value.calm")
+	Der Regen ist vorbei. Der Eimer hat es noch nicht gehört. [ID:haus_bucket_3] [#draft]
 => END
 
 ~ window
@@ -291,4 +300,18 @@ else
 	Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen. [ID:haus_prints_1]
 	Sie laufen ans Fenster und wieder zurück, mehrmals. [ID:haus_prints_2]
 	do WorldState.set_flag("house.prints_seen")
+=> END
+
+# Das dritte Fragment von Akt II (B5): eine Spur der Welt, kein Bild des Kindes (Brief O5). Die Kräuter hängen
+# schon in der Hülle des Raums unter dem Balken; der Punkt an der Wand gibt ihnen den Duft, sobald das Feuer brennt.
+# Nichts wird erklärt: nicht, wer sie band, nicht, warum sie hängen blieben.
+~ herbs
+if WorldState.has_flag("fragment.beam_herbs")
+	Die Bündel unter dem Balken. Sie riechen nach Staub und ein wenig nach mehr. [ID:haus_herbs_5] [#draft]
+else
+	Unter dem Balken hängen Bündel an Fäden, ein grünes und ein violettes. Die Kräuter sind steif geworden wie Papier. [ID:haus_herbs_1] [#draft]
+	Seit das Feuer brennt, steigt etwas von ihnen auf. Du hältst die Nase an das grüne. [ID:haus_herbs_2] [#draft]
+	Erst Staub, dann etwas Bitteres, dann etwas Warmes darunter. Wer sie gebunden hat, wusste, wie viel in eine Suppe gehört. [ID:haus_herbs_3] [#draft]
+	Für einen Atemzug riecht es grün und warm, als hinge der Sommer noch am Balken. Dann riecht es nach Rauch. [ID:haus_herbs_4] [#draft]
+	do WorldState.set_flag("fragment.beam_herbs")
 => END

@@ -1,0 +1,34 @@
+# Feuer, Akt II, Segment B5 (docs/akt2/REGIONSBRIEFE.md). Zwei Cues, beide ohne Sprecher: Erzählung, ohne Doppelpunkt.
+# `house_hum` ist das Lied im Haus: für alle, die das Summen aus Elysias Garten können (melody.child_hum), kommt es einmal
+# nach dem Kamin-Moment, für einen Atemzug, ohne Kind und ohne Quelle (der Zug im Kamin klingt wie ein Summen, das zu Ende
+# kommt). Es ist die eine Melodie von Akt II, kein Fragment (O5). Das Flag steht vor der Zeile: die Szene spielt den Klang
+# mit ihr.
+# `fire_values` ist die Wahl der Werte (Bible §18, Vorgabe O3): nach Miras Abgang, am Feuer, drei Handgriffe und ein
+# Schweigen. Kein Wertwort im Text, keine Frage, kein Urteil; jede Antwort setzt nur ihr eigenes Flag value.<id> (zuerst, damit
+# die Szene mit der Zeile reagiert) und hat eine eigene Folge im Haus, die ein anderer Cue später wieder zeigt. Das Schweigen
+# setzt nichts. Mira liest die Werte erst im Tal (B6).
+
+~ house_hum
+do WorldState.set_flag("melody.house_hum")
+Im Kamin zieht es. Der Zug klingt wie ein Summen, das einen Satz zu Ende bringt. [ID:feu_hum_1] [#draft]
+Dann knackt ein Scheit. [ID:feu_hum_2] [#draft]
+=> END
+
+~ fire_values
+Die Tür ist zu, und das Feuer hält. [ID:feu_1] [#draft]
+Für eine Kleinigkeit ist noch Zeit. [ID:feu_2] [#draft]
+- Die Tür einen Spalt offen lassen [ID:feu_r1] [#draft]
+	do WorldState.set_flag("value.freedom")
+	Du schiebst die Tür eine Hand breit auf. Es zieht. [ID:feu_3] [#draft]
+	Das Feuer legt sich schräg, dem Spalt zu. Dann steht es wieder. [ID:feu_4] [#draft]
+- Den zweiten Hocker ans Feuer stellen [ID:feu_r2] [#draft]
+	do WorldState.set_flag("value.closeness")
+	Du trägst den zweiten Hocker vom Tisch ans Feuer. [ID:feu_5] [#draft]
+	Er wackelt hier weniger. Am Tisch fehlt er nicht. [ID:feu_6] [#draft]
+- Dem Feuer zusehen, bis es dunkel wird [ID:feu_r3] [#draft]
+	do WorldState.set_flag("value.calm")
+	Das Licht im Fenster wird gelb, dann dünn. [ID:feu_7] [#draft]
+	Der Regen hat aufgehört. Im Eimer tropft es noch eine Weile weiter. [ID:feu_8] [#draft]
+- … [ID:feu_r4] [#draft]
+	Du lässt alles, wie es ist. [ID:feu_9] [#draft]
+=> END

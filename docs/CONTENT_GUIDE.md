@@ -6,7 +6,7 @@ Regeln für alles, was Spielerinnen und Spieler lesen, hören oder anklicken. Ve
 ## IDs
 
 - Stabile IDs in `snake_case`, nie Anzeigenamen in Logik: `mira`, `tess`, `antreiber`, `item_stone`, `curiosity_tiny_spoon`.
-- Story-Flags mit Namensraum: `elysia.mirror_noticed`, `valley.mira_first_no`, `house.fire_lit`. Bereiche bisher: `elysia`, `valley`, `forest`, `house`, `encounter`, `sandbox` (nur Prototyp).
+- Story-Flags mit Namensraum: `elysia.mirror_noticed`, `valley.mira_first_no`, `house.fire_lit`. Bereiche bisher: `elysia`, `valley`, `forest`, `house`, `encounter`, `sandbox` (nur Prototyp). Dazu `value.<id>` für die Werte der Spielerin (Bible §18; Akt II: `freedom`, `closeness`, `calm`; eine Wahl und ihr Leser stehen in verschiedenen Cues).
 - Figuren mit Beziehung: `mira`, `tess`, `orin`, `lio`. Erinnerungen und Orte in `snake_case` (`door_silence`, `valley_bridge`).
 - Jede Erinnerung, die das Tagebuch zeigen soll, bekommt einen Satz in `content/locale/journal.csv`
   unter `MEMORY_<FIGUR>_<ERINNERUNG>` (z. B. `MEMORY_MIRA_ASKED_SHELTER`): Ich-Form, trocken, was
@@ -113,7 +113,7 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 - **Querprüfung** (`StoryLint`, Test `test_story_lint`): Türen und `SceneTravel.go` nennen eine eingetragene Szene und einen Marker `spawn_<name>`, der in deren Karte steht (Marker einmal je Karte); jeder Cue aus Karten, `Talk.present` und `cut.say` steht in seinem Dialog; jede Quest-Stufe nach der ersten hat einen Auslöser (`advance_quest("quest", "stufe")` mit Literalen oder Konstanten, oder eine Weltaktion der Karte); ein gelesenes Flag wird irgendwo gesetzt, ein gesetztes irgendwo gelesen (Ausnahmen mit Begründung in `StoryLint.WRITE_ONLY_FLAGS`; `beat.*` braucht keinen Leser); ein Skript mit eigenem Blitz (`flash`, `flicker`, `strobe`, `lightning` als Funktion oder Variable) liest `display.reduce_flashing`, eines mit eigenem Wackeln `display.screen_shake`. Flags, Quest-IDs und Cues daher als Literale oder Konstanten schreiben, nicht aus Variablen bauen.
 
 - **Kartenprüfung** (`MapLint`, Test `test_map_lint`, ADR-055): eine Szenenkarte hat `player_spawn`; Türen, Fundstücke, Truhen, Hebel, Schilder, Falter, Figuren und der Riss stehen auf begehbaren Zellen und sind vom Spawn aus erreichbar (Trittsteine zählen als Boden, Möbel in der Wand werden von vorn benutzt); eine Karte mit `[meta] symmetry` ist um ihre Mittelspalte gespiegelt (Stein, Riss und Kind ohne Zwilling). Eine Karte, die nur ein Skript füttert, braucht keinen Spawn. Neue Einzelstücke in einer Spiegelkarte tragen sich in `MapLint.SINGLE_PROPS`/`SINGLE_CUES` ein.
-- **Sammelstücke** (`Collection`): Fragmente `fragment.<id>`, Melodien `melody.<id>`, Kuriositäten `curiosity_<name>`; IDs snake_case und stabil. Die Facette der Wahrnehmung heißt `perception`.
+- **Sammelstücke** (`Collection`): Fragmente `fragment.<id>` (sechs Bilder des Kindes, 18 Spuren der Welt), Melodien `melody.<id>`, Kuriositäten `curiosity_<name>`; IDs snake_case und stabil. Die Facette der Wahrnehmung heißt `perception`.
 - **Elysia über mehrere Szenen:** `ElysiaDirector.attach(self)` statt eigener Uhr; Stufen als Flags `elysia.loops_1`, `elysia.loops_2`, `elysia.loops`.
 - **Dauer rechnen** statt schätzen: `python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN` (`docs/KALIBRIERUNG.md`).
 

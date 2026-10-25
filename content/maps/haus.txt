@@ -12,7 +12,7 @@ _ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
 1 = {"ground": "_", "marker": "spawn_door"}
 S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/shell"}}
 K = {"ground": "_", "prop": "res://world/props/fireplace.tscn"}
-T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/table", "cue": "table", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 18}}
+T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/table", "sprite_when": {"value.closeness": "haus/table_one"}, "cue": "table", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 18}}
 b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bed", "cue": "bed", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
 R = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/shelf", "sprite_when": {"house.shelf_both": "haus/shelf_spoon_stone", "house.shelf_filled": "haus/shelf_spoon", "house.shelf_stone": "haus/shelf_stone"}, "cue": "shelf", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
 r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/rug", "sit": {"face": "n"}}}
@@ -31,6 +31,9 @@ z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "mira", "glance": true, "sit": true, "face": "e", "if": "house.mira_seated", "unless": "house.mira_left"}}
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "house", "auto": true, "sound": "door_close"}}
 Q = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 1], "cue": "stay", "dialogue": "res://content/dialogue/slice/haus.dialogue", "if": "house.fire_lit", "unless": "house.mira_visited"}}
+; B5: die Kräuter unter dem Balken (ein Punkt an der Wand, ohne Sprite: das Bild hängt schon in der Hülle) und der zweite Hocker am Feuer
+h = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "herbs", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20, "if": "house.fire_lit"}}
+s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/stool", "if": "value.closeness"}}
 [map]
 ########################################
 ########################################
@@ -40,11 +43,11 @@ Q = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size":
 ############SWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
-############WWWWWWWRWWcwWWWW############
+############WWWWWWWRWWcwWhWW############
 ############W___K__________W############
 ############W__M__ak__p____W############
 ############W____rz______b_W############
-############W_______T______W############
+############W___s___T______W############
 ############W______@_______W############
 ############W_u____1_______W############
 ############W______Q_______W############

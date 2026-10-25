@@ -613,8 +613,9 @@ def fireplace(ms, lit, frame=0):
     return c, e
 
 
-def table(ms):
-    """A rough table with a drawer and two stools; a cup nobody washed."""
+def table(ms, stools=(0, 37)):
+    """A rough table with a drawer and two stools; a cup nobody washed. `stools` are the pixel
+    columns of the stools drawn (B5: one of them stands by the fire after a deed)."""
     rng = np.random.default_rng(55)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(44, 30)
@@ -626,7 +627,7 @@ def table(ms):
     c.paint(c.rect(18, 14, 26, 17), LOGS, 0.4, dither=False)  # drawer
     c.fill(c.rect(21, 15, 23, 16), np.array([140, 120, 80], np.float32))
     c.paint(c.ellipse(29, 8, 2.4, 1.6), ramp("#5a5650", "#8a857a", "#b8b2a4"), 0.6, dither=False)  # cup
-    for sx in (0, 37):  # stools
+    for sx in stools:  # stools
         c.paint(c.ellipse(sx + 3.5, 21, 3.6, 2.2), LOGS, 0.6, dither=False)
         c.paint(c.rect(sx + 1, 22, sx + 2, 28), LOGS, 0.3, dither=False)
         c.paint(c.rect(sx + 5, 22, sx + 6, 28), LOGS, 0.3, dither=False)

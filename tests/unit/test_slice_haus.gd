@@ -143,7 +143,9 @@ func test_mira_comes_in_sits_down_and_goes_in_the_room() -> void:
 	await wait_physics_frames(3)
 	assert_eq(_guests(scene).size(), 0, "the guest is gone")
 	assert_null(_mira(scene), "and so is her seat")
-	await wait_until(func() -> bool: return not scene.player.is_locked(), 5.0)
+	# when she is gone the fire has one more small thing to ask (B5): the first answer, and then free
+	var free := func() -> bool: return not scene.player.is_locked()
+	await _answer_until(scene, free, 30.0)
 	assert_false(scene.player.is_locked(), "the player is free again")
 
 

@@ -151,8 +151,10 @@ Keine Bible-Abweichung, sondern Lesart oder Arbeitsregel. Du kannst jede kippen.
 - **Folgen** [P]: Antworten in Elysia wirken später in der Wirklichkeit (Flags wie `elysia.asked_for_no`); sie
   gehen ins Konsequenzen-Register (Abschnitt 5.7).
 - **Fragmente und Melodien** [P]: drei Fragmente aus den Bildern von §15 (Flur, geschlossene Tür, leeres Zimmer),
-  zwei Melodien (Summen des Kindes, die „perfekte“ Elysia-Fassung des Motivs). Die restlichen Bilder (Lied, Warten,
-  Verstecken, ursprüngliches Haus) bleiben für Akt V.
+  zwei Melodien (Summen des Kindes, die „perfekte“ Elysia-Fassung des Motivs). Hand, Verstecken und das
+  ursprüngliche Haus bleiben für Akt V und bilden mit den dreien die sechs Bilder der zentralen Szene. Das Lied ist
+  die Melodie des Kindes (in II im Haus hörbar, kein Fragment, O5), Warten kehrt als Echo (III) und als Blick (VI)
+  wieder, auch das kein Fragment. Die Fragmente der übrigen Akte sind Spuren der Welt (5.5).
 
 ### 4.5 Segment-Regeln
 
@@ -207,9 +209,9 @@ Alle Tabellen hier sind Entwurf [P]; jeder Akt bekommt vor seinem Bau einen Regi
 - **Laufende Gags** (§33) [P]: Ziege (II, IV, Nachspiel: Rathaus), Kartoffel (`item_potato` existiert; II, V,
   Nachspiel: Belohnung), Ente (IV mit Orin, Nachspiel), Antreiber-Freizeit (III, VI, Nachspiel), Richter (II, IV, VI).
   Jeder Gag hat im Motivbuch Auftritte und Auflösung.
-- **Das Kind** (§15) [P]: I Kind-Spur und Summen; II das Lied im Haus; III ein Echo im Wald; IV kein Auftritt; V die
-  zentrale Szene „Ich bin da.“ mit sechs Fragmenten; VI ein Blick in Elysia; VII im Finale. Prüflinse §15/§51 für
-  jedes Fragment.
+- **Das Kind** (§15) [P]: I Kind-Spur und Summen; II das Lied im Haus (hörbar, kein Fragment); III ein Echo im Wald;
+  IV kein Auftritt; V die zentrale Szene „Ich bin da.“ mit den sechs Bildern des Kindes; VI ein Blick in Elysia; VII im
+  Finale. Prüflinse §15/§51 für jedes Fragment, auch für die Spuren der Welt.
 - **Facetten** (§16–17) [P]: je Akt eine Hauptfacette mit einer neuen Möglichkeit, nie als Zahl: I Wahrnehmung
   (verborgene Details sehen), II Grenzen (das Nein als Antwort, vorhanden), III Fürsorge, IV Verbindung und
   Integrität, V Vertrauen und Mut, VI Lebendigkeit, VII alle zusammen beim Navigieren. Werte (§18) wählt der Spieler
@@ -238,6 +240,13 @@ gefüttert (II–III), schläft auf dem Antreiber (ab II; im Slice vorhanden).
 | Kuriositäten | 0 | 6 | 6 | 10 | 5 | 3 | 4 | 2 | 36 |
 | Fragmente | 3 | 3 | 3 | 3 | 6 | 3 | 3 | – | 24 |
 | Melodien | 2 | 1 | 1 | 3 | 1 | 1 | 3 | – | 12 |
+
+**Zu den Fragmenten** (Bible §31: „Vertiefen Vergangenheit und Welt“): Von den 24 sind sechs Bilder des Kindes (§15):
+Akt I Flur, geschlossene Tür, leeres Zimmer; Akt V Hand, Verstecken, ursprüngliches Haus, zusammen die zentrale Szene
+„Ich bin da.“. Die übrigen 18 (II, III, IV, VI, VII je drei, V drei neben den drei Bildern des Kindes) sind Spuren der
+Welt und der Vergangenheit: ein Ding oder ein Ort, der gedient hat, ohne einen Grund zu nennen; kein Kind, keine
+Figur, keine Ursache, nie eines der acht Bilder (ADR-067, O5). Akt II: Uferbrett, trockene Rinne, Kräuterbündel im Haus.
+`Collection.fragments()` zählt beide Arten; die zentrale Szene liest die sechs Kind-Flags einzeln.
 
 ### 5.6 Ende und Nachspiel
 
@@ -397,7 +406,7 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung · **gebaut** (ADR-062; rund 2 statt 9 Minuten, die Schleifen sind Zustand, kein Ort) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
 | **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss · **gebaut** (ADR-064; Stein nach dem Hoch, Samen-Zeile, Schleife 2 für Torwächter, Festmeisterin und Gastwirt; rund 1 statt 5 Minuten neu) | Akt-I-Durchlauf per Autopilot · **gebaut** (ADR-065, `akt1_full.json`: 141 s, Modell 14 bis 33 min gegen 100 geplant) | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst · **erledigt** (Abschnitt 10.1, ADR-066): Minuten bleiben Modell, geplant wird in Zeilen und Pull Requests, die Länge entscheidet dein Durchlauf | Plan aktualisiert | Rückmeldung (Fragen in Abschnitt 11) |
-| **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 136 neue Zeilen (geplant 162, B1 baut 6 statt 15, B2 23 statt 25, B3 47 statt 62), im Modell rund 27 Minuten gegen 90); V1 T6/T7 klein · **gebaut** (ADR-068), B1 Ankunft · **gebaut** (6 Zeilen), B2 Nein und Blick · **gebaut** (23 Zeilen), B3 Bachlauf · **gebaut** (47 Zeilen statt 62, die erste Karte der Klasse M, 84 × 66; Quest „Die Reuse“, drei Kuriositäten, zwei Fragmente), B4 bis B7 | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` | Fragen 7 (Voreinstellungen), Lesefassungen |
+| **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 130 neue Zeilen (geplant 162, B1 baut 6 statt 15, B2 23 statt 25, B3 47 statt 62, B5 24 statt 30), im Modell rund 28 Minuten gegen 90); V1 T6/T7 klein · **gebaut** (ADR-068), B1 Ankunft · **gebaut** (6 Zeilen), B2 Nein und Blick · **gebaut** (23 Zeilen), B3 Bachlauf · **gebaut** (47 Zeilen statt 62, die erste Karte der Klasse M, 84 × 66; Quest „Die Reuse“, drei Kuriositäten, zwei Fragmente), B5 Feuer · **gebaut** (24 Zeilen statt 30: Werte am Feuer als drei Handgriffe und ein Schweigen, das Lied im Haus hörbar ohne Fragment, das dritte Fragment, Beat `act2_safe`), B4, B6, B7 | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` | Fragen 7 (Voreinstellungen), Lesefassungen |
 | **P6.15 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge II bis VII, Segmente wie in Akt I | – | je Akt Lesefassungen und ein Durchlauf |
 
 **Abnahmeregel:** Ein Prüfpaket je Phase, höchstens 10 Fragen. Was unbeantwortet bleibt, setze ich nach meiner
@@ -517,7 +526,7 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Sta
 **6. Nachspiel:** Wie lang soll es sein? Es gibt keine Zahl in Bible und Plan. **Empfehlung:** kompakt, rund 10 Minuten, wenn es so weit ist.
 
 **7. Akt II: Voreinstellungen** (Stand 25.10., ADR-067; Tabelle O1 bis O9 im Brief `docs/akt2/REGIONSBRIEFE.md`)
-- Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: O1 das Ende des Slice bleibt der Schluss von Akt II; O2 der Richter nur als Text ab dem zweiten Sturz; O3 Werte als konkrete Wahlen am Feuer; O4 eine Karte der Klasse M; O5 das Lied im Haus ist hörbar und kein Fragment; O6 die neue Karte liegt südlich am Bach; O7 dein „OK“ auf die Lesefassung des Slice als Einfrieren; O8 Blatt und Feder bleiben in Elysia; O9 die Fragen 3 bis 6 gelten weiter (nach Abschnitt 5 bauen, keine Länge ändern).
+- Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: O1 das Ende des Slice bleibt der Schluss von Akt II; O2 der Richter nur als Text ab dem zweiten Sturz; O3 Werte als konkrete Wahlen am Feuer; O4 eine Karte der Klasse M; O5 das Lied im Haus ist hörbar und kein Fragment (und von den 24 Fragmenten sind sechs Bilder des Kindes, 18 Spuren der Welt, siehe 5.5); O6 die neue Karte liegt südlich am Bach; O7 dein „OK“ auf die Lesefassung des Slice als Einfrieren; O8 Blatt und Feder bleiben in Elysia; O9 die Fragen 3 bis 6 gelten weiter (nach Abschnitt 5 bauen, keine Länge ändern).
 - **Empfehlung:** die Voreinstellungen; sag, welche du anders willst.
 
 ## 12. Risiken

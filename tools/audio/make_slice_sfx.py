@@ -18,7 +18,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from make_music import DORIAN, MOTIF, degree, midi_hz  # noqa: E402
+from make_music import ANSWER, DORIAN, MOTIF, degree, midi_hz  # noqa: E402
 from make_sfx import (RATE, at, bandpass, env, highpass, knock, lowpass, mix, noise, preview,  # noqa: E402
                       reverb, secs, sine, write)
 import make_nature  # noqa: E402
@@ -317,15 +317,14 @@ def drover_call(rng, variant):
 # --- The child ----------------------------------------------------------------------------
 
 
-def child_hum(rng):
+def child_hum(rng, phrase=MOTIF, unit=0.48, space=None):
     """The child in Elysia humming to itself, mouth closed: the motif that the valley loop and
     Mira's fire play later (Game Bible §35, §46), in the same D dorian. Unlike everything in
     Elysia it is not quite in time and not quite in tune."""
-    unit = 0.48
     t0 = 0.2
     times = [0.0]
     pitches = []
-    for deg, eighths in MOTIF:
+    for deg, eighths in phrase:
         f = midi_hz(degree(62, DORIAN, deg)) * rng.uniform(0.99, 1.01)
         length = eighths * unit * rng.uniform(0.9, 1.18)
         times += [t0, t0 + length - 0.07]
@@ -346,16 +345,17 @@ def child_hum(rng):
     texture = voiced(f0, total, rng, [(0.0, hum), (1.0, hum)], (5.0, 0.007), 0.05)
     sig = body * 0.7 + texture / (np.max(np.abs(texture)) + 1e-9) * 0.3
     # a little louder on the long notes, the breath fading at the end
-    swell = 0.8 + 0.2 * np.interp(t, times, [0.0] + [0.0, 1.0] * len(MOTIF) + [0.0])
+    swell = 0.8 + 0.2 * np.interp(t, times, [0.0] + [0.0, 1.0] * len(phrase) + [0.0])
     shape = np.minimum(1.0, t / 0.15) * np.clip((total - t) / 0.5, 0, 1)
-    return outdoors(lowpass(sig * swell * shape, 1800), 0.14)
+    out = lowpass(sig * swell * shape, 1800)
+    return outdoors(out, 0.14) if space is None else space(out)
 
 
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
-          "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "cat": -17.0, "purr": -20.0,
+          "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
           "cloth": -18.0, "bird": -16.0, "bark": -17.0}
 LOOPS = set()
 
@@ -379,6 +379,9 @@ def build(only=None):
     hum_rng = np.random.default_rng(31)
     for i in range(2):
         sounds["child_hum_%d" % i] = (child_hum(hum_rng), "child_hum")
+    # the song in the house (Act II, B5): its own stream again
+    home_rng = np.random.default_rng(43)
+    sounds["house_hum_0"] = (child_hum(home_rng, ANSWER, 0.30, lambda x: room(x, 0.25, 0.45)), "house_hum")
     # frogs get their own random stream too (ADR-042)
     frog_rng = np.random.default_rng(37)
     for i in range(2):

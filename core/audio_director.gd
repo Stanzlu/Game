@@ -64,6 +64,7 @@ const CAPTIONS := {
 	"goat_bleat": "CAPTION_GOAT",
 	"goat_munch": "CAPTION_GOAT_MUNCH",
 	"child_hum": "CAPTION_HUM",
+	"house_hum": "CAPTION_HUM",
 	"rift_hum": "CAPTION_RIFT",
 	"stone_wobble": "CAPTION_WOBBLE",
 	"bird": "CAPTION_BIRD",
