@@ -1,7 +1,7 @@
 # Das Kind
 
 **Beleg im Slice:** 2 Zeilen (`el_child_3`, `el_child_2`) und das Bild am Becken (`el_child_1`). Mehr Goldzeilen
-entstehen in Akt II (das Lied im Haus).
+entstehen in Akt II (das Lied im Haus: hörbar, kein Fragment, Erzählung ohne das Kind).
 
 ## Funktion
 
@@ -19,9 +19,9 @@ Haus. Die zentrale Szene (Akt V) ist, dass der Erwachsene bleibt und höchstens 
 
 ## Verlauf
 
-I Spur und Summen (Becken, Spiegelung) → II das Lied im Haus → III ein Echo im Wald → IV kein Auftritt → V die zentrale
-Szene mit sechs Fragmenten → VI ein Blick in Elysia → VII im Finale (Plan 5.3). Jedes Fragment geht durch die
-Prüflinse Kind und Sensibilität (§15, §51).
+I Spur und Summen (Becken, Spiegelung) → II das Lied im Haus (hörbar, kein Fragment) → III ein Echo im Wald → IV kein
+Auftritt → V die zentrale Szene mit den sechs Bildern des Kindes → VI ein Blick in Elysia → VII im Finale (Plan 5.3).
+Jedes Fragment, auch eine Spur der Welt, geht durch die Prüflinse Kind und Sensibilität (§15, §51).
 
 ## Goldzeilen
 

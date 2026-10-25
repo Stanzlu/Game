@@ -20,14 +20,14 @@ Die Wirklichkeits-Hälfte des Slice ist Akt II im Rohbau: **354 Zeilen** (`tal.d
 | Abend am Feuer, Mira-Besuch, Ende „Zum Meer.“ | vorhanden | `tal`, `haus` |
 | Ziege und Kartoffel | vorhanden | `tal` |
 | Wetter | drei Voreinstellungen (Regentag, Abend, Nacht) | `DayLight` |
-| „Erste Sicherheit“ (Bible §37; der Plan nennt sie nicht): das erste Mal, dass das Feuer hält und jemand bleibt | vorhanden als Szene `fire_rest`, ohne eigene Marke; B5 gibt ihr den Beat `act2_safe` | `haus` |
+| „Erste Sicherheit“ (Bible §37; der Plan nennt sie nicht): das erste Mal, dass das Feuer hält und jemand bleibt | vorhanden als Szene `fire_rest`; seit B5 mit dem Beat `act2_safe` | `haus` |
 | Wahrnehmung in der Wirklichkeit | **dünn**: die Funde des Tals (Moosregel, Stiefelabdruck, Muschel mit Riss) sehen alle, die Facette wird nur in Akt I gelesen; die Muschel hängt an `tal_end_8` | `tal` |
 | Grenzen als echte Möglichkeit (das Nein als Antwort) | **dünn**: gesetzt am Ende des Abends, kein Leser | `tal.dialogue` |
 | Richter | **fehlt** (Stimmenblatt ohne Beleg) | – |
-| Werte beim ersten Abend am Feuer (Bible §18) | **fehlt** | – |
-| Lied des Kindes im Haus (`melody.child_hum` wird nur im Tal gelesen, von B1 in `ank_hum_1`; im Haus nirgends) | **fehlt** | – |
+| Werte beim ersten Abend am Feuer (Bible §18) | **fehlte**; seit B5 gebaut: drei Handgriffe und ein Schweigen, `value.freedom`, `value.closeness`, `value.calm` | `haus` |
+| Lied des Kindes im Haus (`melody.child_hum` wird nur im Tal gelesen, von B1 in `ank_hum_1`; im Haus nirgends) | **fehlte**; seit B5 gebaut: der Zug im Kamin singt die Antwortphrase, `melody.house_hum` | `haus` |
 | Karte der Klasse M (Plan: Tal plus 1–2) | **fehlte**; seit B3 gebaut: `bachlauf` (84 × 66) | `bachlauf` |
-| Sammelstücke: Nebenquests 1 von 2, Kuriositäten 1 von 6, Fragmente 0 von 3, Melodien 0 von 1 | teilweise; B3 bringt die zweite Nebenquest, drei Kuriositäten (4 von 6) und zwei Fragmente (2 von 3) | – |
+| Sammelstücke: Nebenquests 1 von 2, Kuriositäten 1 von 6, Fragmente 0 von 3, Melodien 0 von 1 | teilweise; B3 bringt die zweite Nebenquest, drei Kuriositäten (4 von 6) und zwei Fragmente (2 von 3), B5 das dritte Fragment (3 von 3) und die Melodie (1 von 1) | – |
 
 Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`), die Szenenschlüssel `tal`, `haus`, `weg`, `tal_mira_7/8`, `tal_end_5/8/10` („Nein.“, „Zum Meer.“), `tal_fell_1` bis `5`, die Flags `valley.*`, `house.*`, `elysia.*`, `slice_full.json`, die Prüfung „vertical slice finished“ und das eingefrorene `v2_slice_end.json`. `tools/art/layout_slice_maps.py tal --write` ersetzt nur den `[map]`-Block von `tal.txt`; seit B3 deckt der Generator alle Platzierungen des Tals ab (`tools/art/test_layout_slice.py` vergleicht), Änderungen der Legende bleiben von Hand, danach neu backen.
 
@@ -41,12 +41,12 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 | B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 23 (geplant 25) | 1 | **gebaut** (23 Zeilen, 2,1 Modellminuten) |
 | B3 | Bachlauf: die erste Karte der Klasse M, Nebenquest, Kuriositäten, Nebel | `bachlauf` (neu) | 47 (geplant 62) | 1 | **gebaut** (47 Zeilen, 6,2 Modellminuten) |
 | B4 | Richter: eine Stimme nach dem zweiten Sturz | `tal` | 12 | 1 | geplant (Cut-First-Platz 2) |
-| B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 30 | 1 | geplant |
+| B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 23 (geplant 30) | 1 | **gebaut** (23 Zeilen, 1,5 Modellminuten) |
 | B6 | Abend und Anschluss: Mira liest die Werte, Kapitelmarke `act2` | `tal` | 18 | 1 | geplant |
 | B7 | Durchlauf: `akt2_full.json`, Lesefassung, Messung | – | 0 | 1 | geplant |
-| **Summe** | | | **136** (geplant 162) | **9** | |
+| **Summe** | | | **129** (geplant 162) | **9** | |
 
-**Budget.** 354 vorhandene plus 136 neue Zeilen sind 490 von den im Plan abgeleiteten 557 (88 %); im Modell rund 27 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu die gebauten Segmente mit ihrem Weg, 0,5 + 2,1 + 6,2, und die geplanten 60 Zeilen / 24) gegen 90 geplante. Die Lücke von rund 63 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
+**Budget.** 354 vorhandene plus 129 neue Zeilen sind 483 von den im Plan abgeleiteten 557 (87 %); im Modell rund 28 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu die gebauten Segmente mit ihrem Weg, 0,5 + 2,1 + 6,2 + 1,5, und die geplanten 30 Zeilen / 24) gegen 90 geplante. Die Lücke von rund 63 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
 Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 14 neue Tests je Segment. Mit einer zweiten Karte (B3b) wären es 552 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
 
 **Reihenfolge.** V0, V1, B1, B2, B3, B5, B6, B4 (nach B6, damit der Abend zuerst steht), B7. B1 und B2 können vor V1 gebaut werden, wenn der Leistungstest auf dem Mac auf sich warten lässt.
@@ -63,7 +63,7 @@ Wo die Quellen sich widersprechen oder eine Weiche offen ist, gilt die Voreinste
 | O2 | Ton und Auslöser des Richters | Nur Text unter dem Sprecher „Stimme“, im Aktenton, über Dinge, nie über die Spielerin; Auslöser ist der **zweite** Sturz in den Bach (nicht der erste: `tal_fell_*` bleibt kalt und komisch), nie nahe Mira, ihrem Nein oder dem Rennen. Wer nie zweimal fällt, trifft ihn nicht; Akt IV führt ihn ohnehin selbst ein. Bible §51 und `STIL.md` sind die Leitplanken. |
 | O3 | Form der Werte (Bible §18) | Drei bis vier konkrete Wahlmöglichkeiten am Feuer, je ein Wert, kein Test, keine Zahl (ADR-042 verwarf den Persönlichkeitstest); jede Wahl hat eine andere Folge. |
 | O4 | Eine oder zwei Karten der Klasse M? | Eine (`bachlauf`). Die zweite (B3b) erst nach deinem Durchlauf und einem Leistungstest auf dem Mac. |
-| O5 | Fragmente und das Lied | Das Lied im Haus ist hörbar und kein Fragment; die drei Fragmente von Akt II sind Spuren der Welt und der Vergangenheit, keine Bilder des Kindes (Plan 4.4: die Bilder des Hauses bleiben Akt V). `MOTIVE.md` und Plan 5.5 werden in B5 angeglichen. |
+| O5 | Fragmente und das Lied | Das Lied im Haus ist hörbar und kein Fragment; die drei Fragmente von Akt II sind Spuren der Welt und der Vergangenheit, keine Bilder des Kindes (Plan 4.4: die Bilder des Hauses bleiben Akt V). `MOTIVE.md` und Plan 5.5 sind seit B5 angeglichen (24 Fragmente = 6 Bilder des Kindes + 18 Spuren der Welt, ADR-067 Nachtrag). |
 | O6 | Richtung der neuen Karte | Südlich am Bach entlang, abends nach dem Besuch von Mira. |
 | O7 | Einfrieren des Slice-Textes | Dein „OK“ auf `docs/lesefassung/SLICE.md`; kein Hindernis, aber neue Zeilen zitieren noch ungefrorenen Text. |
 | O8 | Blatt und Feder aus Akt I | Bleiben in Elysia (ADR-064): nur Stein und Samen kommen über den Riss. |
@@ -105,7 +105,7 @@ neue IDs werden gesperrt (`id_lock.py --update`), neue Flags stehen vor dem Text
 | `ank_fire_1` | `elysia.inn_stayed` | das Feuer unter der Plane | niemand ruft, dass du bleiben kannst |
 | `ank_fire_2` | `elysia.inn_declined` (und nicht `inn_stayed`) | dasselbe Feuer | niemand fragt ein zweites Mal |
 | `ank_rings_1` | `elysia.feast_noticed` | die Pfützen am Weg | kein Ring gleicht dem davor (das Tal wiederholt nichts) |
-| `ank_hum_1` | `melody.child_hum` | der Regen auf dem Laub | ein Summen für einen Atemzug, dann Regen (B5 gibt dem Lied sein Haus) |
+| `ank_hum_1` | `melody.child_hum` | der Regen auf dem Laub | ein Summen für einen Atemzug, dann Regen (das Lied im Haus: seit B5, Abschnitt „B5 Feuer“) |
 
 **Regeln der Szene.** Die Schritte zählen nur zu Fuß: ein Sprung von mehr als 8 Pixeln zwischen zwei Physikbildern (Teleport des Autopiloten) ist kein Schritt, und Stehen löst nichts aus; wer Mira vorher anspricht (`valley.mira_met`), hört das Echo nie. Die Phasen laufen im `_physics_process` der Szene (Schritte, Böe, Zeilen), nicht als Koroutine auf `physics_frame`: eine Szene, die währenddessen freigegeben wird, lässt nichts zurück, das ohne sie aufwacht. Ein offenes Gespräch, ein offenes Menü und das Einblenden des Bildes halten es zurück (die Spielerin darf schon laufen, während der Riss die Welt noch aus dem Schwarz holt: kein Text ins Dunkel), es stapelt sich nie auf eines. Die Spielerin landet bei `spawn_rift` (58, 9) im Nordosten; Plane und Feuer (53, 17) kommen auf dem Weg nach Süden ins Bild, die Pfützen liegen am Weg. Es läuft nur, wenn Akt I erreicht ist (`Chapter.reached("act1")`, vom Riss gesetzt): ein Tal, das auf anderem Weg betreten wird (Debug-Start, alter Stand), hat nichts zu beantworten.
 Die Böe ist keine neue Wettervoreinstellung, sondern der vorhandene Wind des Tals (`AudioDirector.wind_gust()`, die Windblätter folgen ihm): Bild und Ton sind schon da, der Cue wartet nur auf einen Stoß. Ohne Klangkulisse gibt es nichts zu erwarten und der Cue beginnt sofort.
@@ -207,6 +207,50 @@ Mit dem Löffel sind das **vier von sechs Kuriositäten** (die Cut-First-Untergr
 **Prüfungen.** `tests/unit/test_akt2_bachlauf.gd` (14 Tests: Quest, Reihenfolge, Antworten, Kuriositäten, Fragmente, Ziege, Einladung, jede ID gegen die Verbote), `test_akt2_bachlauf_szene.gd` (11 Tests: die große Karte mit Nebel und Bach, Hörweite aller Fundstellen, Ankunft, der Punkt nur mit der Facette, Float und Reuse nacheinander, die Beats, die Reuse lösen, genommene Dinge, die Tür zurück zu Fuß, gleiches Bild live und geladen), `test_akt2_bachlauf_tal.gd` (4 Tests: der Blocker hält wirklich zurück, die Tür zu Fuß, Rückweg und Beat, kein Beat ohne den Rückweg), `tools/art/test_layout_akt2.py` (9 Tests) und `test_layout_slice.py` (1 Test), `StoryLint` (neue Flags haben Leser), `tools/autopilot/akt2_bachlauf.json` mit Eintrag in `segments` (alle sieben Beats, beide Fragmente, beide genommenen Dinge, Hufabdrücke und Blick zurück als Flags); der Smoke läuft über `SMOKE` und `BENCHMARK`.
 **Gemessen.** Der Aufbau der Karte dauert im Container rund 0,4 Sekunden (Log: `open scene` bis `scene ready`; 129 Platzierungen, 2.154 gestreute Dinge, 9 Emitter), also wie in ADR-068 für die Klasse M. `bachlauf` steht in `SMOKE` und `BENCHMARK` (der Leistungstest läuft die Karte mit ab); die Bildrate auf dem Mac ist weiter ungemessen (`docs/PERFORMANCE.md`, ADR-068 „Offen“; gemessen werden soll jetzt an `bachlauf`, nicht an der synthetischen Karte).
 
+## B5 Feuer
+
+Kein neuer Ort: das Haus (`haus`, 40 × 24) bekommt drei Dinge, die zusammengehören, weil sie dieselbe Stille brauchen: das Lied im Kamin, eine kleine Wahl am Feuer und ein Duft unter dem Balken. Die Wahl ist die der Werte (Bible §18, O3): nicht gefragt, sondern getan.
+
+| Beat | Wo und wann | Wie | Marke |
+|---|---|---|---|
+| Erste Sicherheit | am Feuer, sitzend, nach dem Ausruhen (`fire_rest`, vorhanden) | `house.rested` markiert den Beat; kommt Mira, bevor jemand sitzt (`mira_after`), zählt ihr Bleiben, die Szene setzt das Flag dann selbst | Beat `act2_safe` |
+| Das Lied | gleich danach, vor dem Antreiber und Mira; ohne Ausruhen nach Miras Abgang | Cue `house_hum` (2 Zeilen), dazu der Klang `house_hum_0` (3,9 s) und die Untertitelzeile `CAPTION_HUM`; nur für Spielerinnen mit `melody.child_hum`, einmal | Flag `melody.house_hum` |
+| Die Wahl | am Feuer, wenn Mira gegangen ist (`fire_values`, in der Zwischensequenz nach `_mira_goes`) | zwei Erzählzeilen, vier Antworten, je ein bis zwei Zeilen Folge | Flags `value.freedom`, `value.closeness`, `value.calm`; Beat `act2_werte` nach dem Besuch |
+| Die Antwort des Raumes | Kamin, Tisch, Eimer, Tür | je eine Zeile mehr in drei vorhandenen Cues (`haus_fire_10`, `haus_table_5`, `haus_bucket_3`), das Bild und das Licht ändern sich | – |
+| Die Kräuter | Nordwand, Zelle 25 / 8, nur wenn das Feuer brennt | Cue `herbs` (5 Zeilen), ein Punkt ohne Sprite: die Bündel hängen schon in der Hülle des Raums | Flag `fragment.beam_herbs` |
+
+**Das Lied.** Der Zug im Kamin klingt wie ein Summen, das einen Satz zu Ende bringt: die Antwortphrase des Talthemas (`make_music.ANSWER`, dieselben Töne wie in `valley_loop.ogg`, nur gesummt: dieselbe geschlossene Stimme wie beim Kind, kürzere Töne, im Raum gehallt). Es ist die eine Melodie von Akt II (Plan 5.5), hörbar und kein Fragment (O5): kein Bild, kein Kind, keine Quelle, kein Flag `fragment.*`. Wer das Summen aus Elysias Garten nicht kann, hört nichts und verliert nichts (`Collection.has_melody("house_hum")` hält die Szene auch nach dem Laden still). Der Klang gehört zur Gruppe `house_hum` (−20 LUFS, Aufruf −2 dB), nicht zu den Effekten des Kindes: leiser, hohler.
+
+**Die Wahl.** Nach Miras Abgang, im ruhigsten Augenblick des Besuchs: „Die Tür ist zu, und das Feuer hält. Für eine Kleinigkeit ist noch Zeit.“ Vier Antworten, keine ist besser, keine ist ein Test, keine Zahl und kein Wertwort steht im Text:
+
+| Antwort | Flag | Folge sofort | Antwort des Raumes später |
+|---|---|---|---|
+| „Die Tür einen Spalt offen lassen“ | `value.freedom` | die Tür geht auf, das Fensterlicht schwillt an (der vorhandene Türglanz), das Feuer legt sich schräg | am Kamin: „Aus dem Türspalt zieht es. Das Feuer neigt sich ihm zu.“ (`haus_fire_10`) |
+| „Den zweiten Hocker ans Feuer stellen“ | `value.closeness` | ein zweiter Hocker steht am Feuer (neues Requisit `haus/stool`) | der Tisch zeigt nur noch einen Hocker (`haus/table_one`); am Tisch: „Am Tisch steht nur noch ein Hocker. Der andere hat es warm.“ (`haus_table_5`) |
+| „Dem Feuer zusehen, bis es dunkel wird“ | `value.calm` | das Fenster wird gelb, dann dünn: die Voreinstellung „Abend“ (`WorldState.set_day_preset`), das Licht im Fenster wechselt in vier Sekunden, der Raumklang wechselt zum Abend | am Eimer: „Der Regen ist vorbei. Der Eimer hat es noch nicht gehört.“ (`haus_bucket_3`) |
+| „…“ | keines | „Du lässt alles, wie es ist.“ | nichts; das Schweigen ist eine Antwort, kein Fehlen einer Antwort |
+
+Die Antworten stehen in jedem Spiel gleich da (kein Leser hinter einer Facette, kein früherer Wert verschließt eine). Jede Folge ist ein Ding, das sich ändert, nie ein Urteil; die Zeile der Antwort und die Zeile des Raumes stehen in verschiedenen Cues, damit die Wahl nicht ihr eigener Leser ist (ContentValidator und StoryLint). **Mira liest die Werte erst am Abend im Tal (B6)**: vier Erinnerungsvarianten waren für B5 und B6 übrig, B5 verbraucht keine. Akt IV und VII lesen sie wieder (Plan 5.3).
+
+**Das Fragment.** Die dritte Spur der Welt in Akt II (Plan 5.5, ADR-067 Nachtrag), kein Bild des Kindes:
+
+| Fund | Wo | Wie | Marke |
+|---|---|---|---|
+| Kräuterbündel unter dem Balken | Zelle 25 / 8, Nordwand, wirkt erst mit Feuer (`if: house.fire_lit`) | „Seit das Feuer brennt, steigt etwas von ihnen auf.“ Staub, Bitteres, Warmes; „Wer sie gebunden hat, wusste, wie viel in eine Suppe gehört.“; für einen Atemzug riecht es grün und warm, dann nach Rauch. Wiederholung: eine kürzere Zeile | Flag `fragment.beam_herbs`, Bild `fragment_beam_herbs.png` (16 × 16) |
+
+Prüflinse Kind und Sensibilität (Bible §15, §51) für die Spur im Haus: (1) kein Kind, keine Figur, kein Name, kein Gesicht, höchstens „wer sie gebunden hat“; (2) keine Ursache, kein Grund, warum jemand ging, nichts Vermisstes, kein Abschied; (3) keines der acht Bilder (Flur, Tür, Hand, Lied, Warten, Verstecken, leeres Zimmer, ursprüngliches Haus) und keine Raumschicht: ein Ding im Haus, nie das Haus selbst; die Hülle wurde mit „someone meant to come back“ gemalt, der Text sagt das nie; (4) keine Deutung, kein Trost, kein Gefühl durch Aussage; (5) kein Zähler, kein Journal, freiwillig, nichts hängt daran; (6) nicht hinter der Facette; (7) der Test liest jede ID der Datei und der neuen Hauszeilen gegen die Verbotsliste. Das HUD zeigt in der Wirklichkeit keine Fragmentkarte; die Zeilen tragen das Fragment.
+
+**Fragmente insgesamt.** Mit diesem sind es drei von drei in Akt II. Von den 24 Fragmenten sind sechs Bilder des Kindes (Akt I und V), 18 Spuren der Welt (Plan 5.5, ADR-067 Nachtrag): `Collection.fragments()` zählt beide Arten; wer die zentrale Szene in Akt V auslöst, liest die sechs Kind-Flags einzeln, nie die Zahl.
+
+**Die Karte.** `haus.txt` bekommt zwei Legendenzeichen: `h` (der Punkt an der Nordwand, Boden `W`, ohne Sprite) und `s` (der Hocker am Feuer, Zelle 16 / 12, nur mit `value.closeness`); der Tisch `T` trägt `sprite_when` auf `haus/table_one`. Beide Requisiten sind bedingt oder ohne Sprite: der Bake-Stempel bleibt unverändert, kein neues Backen. Neue Sprites: `haus/stool`, `haus/table_one` (aus `slice_props.table(stools=(0,))`; `tools/art/akt2_props.py`).
+
+**Figuren.** Keine; Mira ist gegangen. **Humor-Ziel (3/10).** Trocken: ein Hocker, der am Feuer weniger wackelt; ein Eimer, der es noch nicht gehört hat; Kräuter, die wissen, wie viel in eine Suppe gehört. **Gewicht (§45).** leicht bis mittel (das Schweigen ist erlaubt). **Motive.** Das Kind (Lied und Summen: das Lied im Haus), Spuren der Welt, Perfekte Natur (dieselbe Geste riecht in der Wirklichkeit nach etwas), Hausmotive, neu `werte-am-feuer`. `motive.json` führt vier neue Flags (`value.*`, `melody.house_hum`, `fragment.beam_herbs`), Lesart A der Fragmente und das neue Motiv; `motifs.py` kennt jetzt das Präfix `value`.
+**Scheitern und Speichern (§49).** Kein Scheitern, kein Verfehlen; die Wahl liegt in der Zwischensequenz (Speichern gesperrt wie für Mira), `act2_werte` wird erst nach dem Besuch gesetzt (wie `act2_nein`); `act2_safe` löst den Autosave aus, sobald die Box geschlossen ist, vor dem Besuch des Antreibers. **Barrierefreiheit (§50).** Das Lied hat einen Untertitel („Jemand summt eine Melodie.“); der Türglanz ist der vorhandene, langsam schwellende Lichtwechsel; keine Zeitgrenze; die Folgen sind Text und Bild zugleich. **Endlichkeit (§52).** Die Wahl wird einmal gestellt; Lied und Kräuter einmal, danach eine Wiederholungszeile oder Stille.
+**Gerechnet.** 23 Zeilen (15 in `feuer.dialogue`, 8 im Haus), 243 Wörter, `calibrate.py --segment 243 23 0.5`: rund 1,5 Minuten (ein halbes für den Weg). Geplant waren 30 Zeilen.
+**Ohne Rückfrage entschieden.** Die Wahl steht nach Miras Abgang und nicht beim ersten Sitzen: davor sprechen der Antreiber und Mira, und die Werte sollen etwas sein, was die Spielerin allein tut; Mira kann sie so am Abend lesen. Drei Handgriffe statt einer Frage, weil jede Folge dann ein Ding im Raum ist (ADR-042 verwarf den Test). Das Lied ist eine Antwortphrase aus dem Talthema, kein neues Motiv (Plan 5.5: eine Melodie in Akt II), und steht in einer eigenen Gruppe in `check_levels.py`. Die Fragmentzählung ist Lesart A (ADR-067 Nachtrag; umkehrbar, Plan 11, Frage 7). Die Szene setzt `house.rested` selbst, wenn Mira kommt, bevor jemand sitzt: sonst bekäme nur ein Spieler, der sich hinsetzt, die erste Sicherheit. Ein weiteres Flag `value.*` kommt nicht dazu: drei Werte und das Schweigen reichen für B6.
+**Prüfungen.** `tests/unit/test_akt2_feuer.gd` (16 Tests: die vier Antworten, jede setzt nur ihr Flag, andere Folgen, das Schweigen, jede Zeile des Raumes mit und ohne Flag, alle drei zusammen, das Lied als Melodie ohne Fragment, Klang und Untertitel, die Kräuter einmal, drei Fragmente mit drei Bildern, reine Erzählung, Verbotsliste) und `test_akt2_feuer_szene.gd` (15 Tests: `act2_safe`, auch wenn Mira zuerst kommt, das Lied nach dem Ausruhen und vor Mira, ohne Summen kein Lied, einmal, jede Wahl in der echten Szene mit Türglanz, Hocker und Tisch, Abend, das Schweigen, nur einmal gefragt, die Kräuter nur mit Feuer), `StoryLint` (`value.*` hat Leser in drei Cues), `tools/autopilot/akt2_feuer.json` mit Eintrag in `segments` (`act2_safe`, `act2_werte`, `melody.house_hum`, `value.freedom`, `house.mira_left`, `fragment.beam_herbs`). `test_slice_haus` wartet nach Miras Abgang auf die Wahl.
+**Gemessen.** `house_hum_0.wav`: 3,9 s, −20 LUFS (Gruppe `house_hum`), Spitze −8,5 dB; `check_levels.py` meldet die Klasse „song in the house“ ohne Hinweis. Der Bake-Stempel von `haus` ist unverändert (`map_stamp.py`). Die Segmentlänge im Autopilot beträgt rund 41 Sekunden vom Feuer bis zu den Kräutern.
+
 ---
 
-*B4 bis B7 bekommen ihren Brief in dem Pull Request, der sie baut.*
+*B4, B6 und B7 bekommen ihren Brief in dem Pull Request, der sie baut.*

@@ -14,7 +14,7 @@
   {
    "kind": "kind",
    "title": "Das Kind (Bible §15)",
-   "intro": "Fragmente, keine Ursache, keine Diagnose, keine Tätergeschichte. Jedes Fragment geht durch die Prüflinse Kind und Sensibilität."
+   "intro": "Die sechs Bilder des Kindes (Flur, Tür, leeres Zimmer in Akt I; Hand, Verstecken, ursprüngliches Haus in Akt V): Fragmente, keine Ursache, keine Diagnose, keine Tätergeschichte. Das Lied ist eine Melodie, Warten ein Echo, beides kein Fragment. Jedes Fragment, auch eine Spur der Welt, geht durch die Prüflinse Kind und Sensibilität."
   }
  ],
  "register_intro": "Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Beziehungen, Haus, Garten, Besucher, Beschützer, Musik, Gegenstände, Samen, Mira, Entscheidungen; dazu Fortschritt, Wahrnehmung, Elysia, Kind, Gag). Das Ende liest die Achsen, nie eine Zahl. Neue Flags tragen sich hier ein, sonst meldet der Prüfer sie. Flags nur für Fortschritt haben keinen Bezug zum Ende.",
@@ -331,11 +331,12 @@
      "ref": "elysia.flower_smelled"
     }
    ],
-   "payoff": "Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`.",
+   "payoff": "Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`, `haus_herbs_3`.",
    "payoff_lines": [
     "tal_flower_2",
     "tal_flower_4",
-    "tal_berry_2"
+    "tal_berry_2",
+    "haus_herbs_3"
    ]
   },
   {
@@ -420,6 +421,10 @@
     {
      "type": "line",
      "ref": "haus_bed_6"
+    },
+    {
+     "type": "line",
+     "ref": "haus_herbs_1"
     },
     {
      "type": "flag",
@@ -645,15 +650,61 @@
      "ref": "bl_knot_2"
     },
     {
+     "type": "line",
+     "ref": "haus_herbs_4"
+    },
+    {
      "type": "flag",
      "ref": "fragment.bank_table"
     },
     {
      "type": "flag",
      "ref": "fragment.dry_bed"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.beam_herbs"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne (Akt II). Die Fragmente des Kindes (Bible §15) bleiben davon getrennt."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt."
+  },
+  {
+   "id": "werte-am-feuer",
+   "kind": "vorausdeutung",
+   "title": "Die Werte am Feuer",
+   "bible": "§18",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "feu_3"
+    },
+    {
+     "type": "line",
+     "ref": "feu_5"
+    },
+    {
+     "type": "line",
+     "ref": "feu_7"
+    },
+    {
+     "type": "flag",
+     "ref": "value.freedom"
+    },
+    {
+     "type": "flag",
+     "ref": "value.closeness"
+    },
+    {
+     "type": "flag",
+     "ref": "value.calm"
+    }
+   ],
+   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_bucket_3`), Mira liest es am Abend (B6, geplant), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
+   "payoff_lines": [
+    "haus_fire_10",
+    "haus_table_5",
+    "haus_bucket_3"
+   ]
   },
   {
    "id": "ziege",
@@ -817,7 +868,7 @@
      "ref": "melody.child_hum"
     }
    ],
-   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente."
+   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus, hörbar und kein Fragment (`melody.house_hum`, Brief O5); Akt V: das Summen trägt die zentrale Szene, ohne ein Fragment zu sein."
   },
   {
    "id": "kind-warten",
@@ -871,7 +922,7 @@
      "ref": "fragment.empty_room"
     }
    ],
-   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51)."
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide."
   }
  ],
  "register": [
@@ -1379,6 +1430,31 @@
    "flag": "fragment.dry_bed",
    "axis": "Wahrnehmung",
    "meaning": "Sie hat die trockene Rinne neben dem Bach gesehen, die Kiesel alle gleich gedreht (Spur der Welt, Akt II, B3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "fragment.beam_herbs",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat an den Kräuterbündeln unter dem Balken gerochen: für einen Atemzug riecht es nach Sommer (Spur der Welt, Akt II, B5; kein Bild des Kindes)."
+  },
+  {
+   "flag": "melody.house_hum",
+   "axis": "Musik",
+   "meaning": "Sie hat im Haus das Summen des Kindes im Zug des Kamins wiedererkannt: die eine Melodie von Akt II, hörbar, kein Fragment (B5; nur mit melody.child_hum)."
+  },
+  {
+   "flag": "value.freedom",
+   "axis": "Entscheidungen",
+   "meaning": "Am Feuer hat sie die Tür einen Spalt offen gelassen (Wert, Bible §18, Akt II, B5): die Tür und das Feuer im Haus zeigen es; Mira liest es am Abend (B6, geplant)."
+  },
+  {
+   "flag": "value.closeness",
+   "axis": "Entscheidungen",
+   "meaning": "Am Feuer hat sie den zweiten Hocker zu sich gestellt (Wert, Bible §18, Akt II, B5): der Tisch hat einen Hocker weniger, einer steht am Feuer; Mira liest es am Abend (B6, geplant)."
+  },
+  {
+   "flag": "value.calm",
+   "axis": "Entscheidungen",
+   "meaning": "Am Feuer hat sie zugesehen, bis es dunkel wurde (Wert, Bible §18, Akt II, B5): der Abend fällt, der Regen ist vorbei; Mira liest es am Abend (B6, geplant). Das Schweigen setzt keinen Wert."
   },
   {
    "flag": "valley.goat_prints_seen",
