@@ -94,6 +94,11 @@ e = {"ground": "p", "prop": "res://world/props/decor.tscn", "params": {"cue": "p
 t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_west", "sit": true, "face": "w", "if": "valley.antreiber_rests", "unless": ["house.antreiber_by_fire", "house.antreiber_left"]}}
 ; hat er das Haus verlassen, steht er stattdessen am Holzstapel (6) und beschäftigt sich mit Dingen, die schon erledigt sind
 6 = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "antreiber_busy", "face": "e", "if": "house.antreiber_left"}}
+; Akt II (B3): hinter der Hecke geht der Pfad am Bach nach Süden weiter, zum Bachlauf. Bis Mira da war, hält einen der
+; aufgeweichte Boden zurück (9); danach führt die Tür (8) hinunter, und man kommt bei 7 wieder an.
+7 = {"ground": ".", "marker": "spawn_bach"}
+9 = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "bach_wait", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "unless": "house.mira_visited"}}
+8 = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "bachlauf", "spawn": "tal", "auto": true, "size": [3, 1], "if": "house.mira_visited"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhh^^^hhhhhhhhhh
@@ -128,8 +133,8 @@ hhh.....T..,...............................x~~...C..^^^^^.........hh
 hhh..P...|,,.....R....T............T........~~............P.......hh
 hhh.......P........C....P........P..........~~~.....P.............hh
 hhhh........................................~~~...................hh
-hhhh........................................~~~...................hh
+hhhh......................................7.~~~...................hh
 hhhhh.................................hh....~~~..................hhh
-hhhhhhhh...........hhhhhhhhh.....hhhhhhhhhhh~~~.......hhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhh...........hhhhhhhhh.....hhhhhhhh,9,~~~.......hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,~~~hhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,8,~~~~hhhhhhhhhhhhhhhhhhhh
