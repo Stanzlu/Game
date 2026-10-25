@@ -78,7 +78,7 @@ else
 		Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war. [ID:haus_bed_3]
 		Dann ist der Moment vorbei. Das Bett ist immer noch kalt. [ID:haus_bed_4]
 if WorldState.has_facet("perception")
-	An einer Ecke der Decke ist ein Stück gestopft. Das Garn ist rot, die Decke grau. [ID:haus_bed_6]
+	Die Decke ist aus Quadraten genäht. Eins davon ist neuer als die anderen, der Faden dicker. [ID:haus_bed_6]
 => END
 
 ~ bucket
@@ -118,16 +118,6 @@ elif WorldState.has_item("item_fish")
 	do WorldState.set_flag("house.cat_fed")
 else
 	Draußen auf dem Fensterbrett sitzt eine Katze und schaut herein. Nicht zu dir. Zum Feuer. [ID:haus_cat_1]
-=> END
-
-# Nur wer genau hinsieht, findet diese Stelle (die Szene setzt house.looks_closely aus der Facette Wahrnehmung).
-~ haus_prints
-if WorldState.has_flag("house.prints_seen")
-	Die Abdrücke im Staub laufen noch ans Fenster und zurück. [ID:haus_prints_3]
-else
-	Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen. [ID:haus_prints_1]
-	Sie laufen ans Fenster und wieder zurück, mehrmals. [ID:haus_prints_2]
-	do WorldState.set_flag("house.prints_seen")
 => END
 
 ~ cat_named
@@ -290,4 +280,14 @@ do WorldState.add_item("item_fish")
 do WorldState.set_flag("valley.bridge_fixed")
 do WorldState.set_relationship("mira", "familiar")
 do WorldState.set_flag("house.mira_visited")
+=> END
+
+# Nur wer genau hinsieht, findet diese Stelle (die Szene setzt house.looks_closely aus der Facette Wahrnehmung).
+~ haus_prints
+if WorldState.has_flag("house.prints_seen")
+	Die Abdrücke im Staub laufen noch ans Fenster und zurück. [ID:haus_prints_3]
+else
+	Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen. [ID:haus_prints_1]
+	Sie laufen ans Fenster und wieder zurück, mehrmals. [ID:haus_prints_2]
+	do WorldState.set_flag("house.prints_seen")
 => END

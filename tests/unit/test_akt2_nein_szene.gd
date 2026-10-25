@@ -60,9 +60,9 @@ func test_heute_nicht_makes_him_sit_and_opens_the_facet() -> void:
 	assert_true(WorldState.has_flag("house.antreiber_by_fire"))
 	assert_true(WorldState.has_flag("house.antreiber_refused"))
 	assert_true(WorldState.has_facet("boundaries"))
-	assert_true(Beat.reached("act2_nein"))
 	assert_false(WorldState.has_flag("house.antreiber_left"))
 	await wait_physics_frames(3)
+	assert_true(Beat.reached("act2_nein"), "marked when the visit is over")
 	assert_not_null(_first(scene, "antreiber_rest"), "he stays by the fire")
 
 
@@ -141,13 +141,14 @@ func test_with_the_facet_the_room_has_the_spot_and_it_is_seen_once() -> void:
 
 
 func test_the_spot_is_no_prerequisite_for_anything() -> void:
-	# nothing in the story waits for the prints: not the fire, not Mira, not the cat
-	for flag: String in ["house.fire_lit", "house.mira_visited", "house.cat_fed"]:
-		assert_ne(flag, "house.prints_seen")
-	var scene: HausScene = HAUS.instantiate()
-	add_child_autofree(scene)
-	await wait_physics_frames(3)
-	WorldState.add_item("item_dry_wood", 1, false)
-	WorldState.set_fire_lit(true)
-	await wait_physics_frames(2)
-	assert_true(WorldState.has_flag("house.fire_lit"), "the fire needs no look")
+	# with the facet and the spot in the room, the fire, the Antreiber and Mira come without a look
+	WorldState.set_facet("perception")
+	var scene := await _visit()
+	assert_not_null(_first(scene, PRINTS_CUE), "the spot is there")
+	var visited := func() -> bool:
+		BoxAnswers.pick(scene.dialogue_box)
+		return WorldState.has_flag("house.mira_knocked")
+	await wait_until(visited, 120.0)
+	assert_true(WorldState.has_flag("house.fire_lit"))
+	assert_true(WorldState.has_flag("house.mira_knocked"), "Mira comes")
+	assert_false(WorldState.has_flag("house.prints_seen"), "and the prints were never looked at")

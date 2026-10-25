@@ -139,6 +139,10 @@ func _antreiber_visit() -> void:
 	SaveSystem.block(ANTREIBER_BLOCK)
 	await _antreiber_comes()
 	SaveSystem.unblock(ANTREIBER_BLOCK)
+	# marked once the visit is over: a mark inside it would queue an autosave that the scene's
+	# exit flushes half way (refused, but not yet sitting)
+	if WorldState.has_flag("house.antreiber_refused"):
+		Beat.mark("act2_nein")
 
 
 ## He followed the player home and has ideas, and the player may answer (nein.dialogue): "Heute
@@ -194,8 +198,6 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	elif id == "house.cat_fed" and value:
 		# she comes in through the window and curls up at the fire
 		SoundBank.play_at(map.entities, "cat_meow", map.cell_to_world(CAT_CELL))
-	elif id == "house.antreiber_refused" and value:
-		Beat.mark("act2_nein")
 	elif id == "house.prints_seen" and value:
 		Beat.mark("act2_blick")
 
