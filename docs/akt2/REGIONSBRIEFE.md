@@ -38,16 +38,16 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 | V0 | Brief, Kapitelmarke `act1`, eingefrorener Stand `v2_akt1_end.json`, ADR-067 | – | 0 | 1 | **gebaut** |
 | V1 | T6 Großkarten-Spike und T7 (nur der kleine Teil) | – | 0 | 1 | **gebaut** (ADR-068, `docs/PERFORMANCE.md`: Klasse M bis 120 × 70, Aufbau rund 0,5 s) |
 | B1 | Ankunft: die Wirklichkeit antwortet auf Elysia | `tal` | 6 (geplant 15) | 1 | **gebaut** (6 Zeilen, 0,5 Modellminuten) |
-| B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 25 | 1 | geplant |
+| B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 23 (geplant 25) | 1 | **gebaut** (23 Zeilen, 2,2 Modellminuten) |
 | B3 | Bachlauf: die erste Karte der Klasse M, Nebenquest, Kuriositäten, Nebel | `bachlauf` (neu) | 62 | 1 | geplant |
 | B4 | Richter: eine Stimme nach dem zweiten Sturz | `tal` | 12 | 1 | geplant (Cut-First-Platz 2) |
 | B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 30 | 1 | geplant |
 | B6 | Abend und Anschluss: Mira liest die Werte, Kapitelmarke `act2` | `tal` | 18 | 1 | geplant |
 | B7 | Durchlauf: `akt2_full.json`, Lesefassung, Messung | – | 0 | 1 | geplant |
-| **Summe** | | | **153** (geplant 162) | **9** | |
+| **Summe** | | | **151** (geplant 162) | **9** | |
 
-**Budget.** 354 vorhandene plus 153 neue Zeilen sind 507 von den im Plan abgeleiteten 557 (91 %); im Modell rund 22 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu 153 / 24) gegen 90 geplante. Die Lücke von rund 68 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
-Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 14 neue Tests je Segment. Mit einer zweiten Karte (B3b) wären es 569 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
+**Budget.** 354 vorhandene plus 151 neue Zeilen sind 505 von den im Plan abgeleiteten 557 (91 %); im Modell rund 22 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu 151 / 24) gegen 90 geplante. Die Lücke von rund 68 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
+Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 14 neue Tests je Segment. Mit einer zweiten Karte (B3b) wären es 567 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
 
 **Reihenfolge.** V0, V1, B1, B2, B3, B5, B6, B4 (nach B6, damit der Abend zuerst steht), B7. B1 und B2 können vor V1 gebaut werden, wenn der Leistungstest auf dem Mac auf sich warten lässt.
 
@@ -117,22 +117,45 @@ Die Böe ist keine neue Wettervoreinstellung, sondern der vorhandene Wind des Ta
 
 ## B2 Nein und Blick
 
-**Stand:** geplant. **Szenen:** `tal`, `haus`. **Dialog:** neue Datei `content/dialogue/akt2/nein.dialogue`.
+**Stand:** gebaut. **Szenen:** `haus` (der Antreiber am Feuer, Miras Besuch, die Funde), `tal` (der Abend). **Dialog:** neue Datei `content/dialogue/akt2/nein.dialogue` (Cue `antreiber_ask`, 8 Zeilen, `[#draft]`) und 15 Zeilen in `haus.dialogue` und `tal.dialogue` (ohne Tag wie die Dateien).
 
-**Zweck.** Akt II hat die Facette Grenzen (Bible §16–17: das Nein als Antwort) und die Wahrnehmung aus Akt I in der Wirklichkeit zu belegen. Heute setzt der Slice `boundaries` am Ende des Abends, und kein Dialog fragt nach ihr; `perception` wird nur in Akt I gelesen.
-B2 gibt Grenzen eine frühere Quelle (eine Antwort an den Antreiber am Feuer oder an eine kleine Bitte von Mira) und zwei Leser, jeweils neben einer unbedingten Antwort; jedes Nein hat eine wahrnehmbare Folge und bestraft nie (§16, §24, §51).
-Mira hat einen trockenen, sachlichen Moment, in dem sie unfair ist, und tröstet nicht. Die Wahrnehmung bekommt zwei bis drei **zusätzliche** freiwillige Einzelheiten, die nur mit der Facette zu sehen sind, an neuen Stellen (am Bachlauf in B3, im Haus); die vorhandenen Funde (Moosregel, Stiefelabdruck, die Muschel mit dem Riss) bleiben für alle unverändert, denn an der Muschel hängen `valley.shell_seen`, `Zum Meer?` und `tal_end_8`.
-Hilfen zum Abrufen (Bachlauf, Weg des Antreibers) stehen als Journaltext, ohne neue Oberfläche (Plan 6).
+**Zweck.** Akt II hat die Facette Grenzen (Bible §16–17: das Nein als Antwort) und die Wahrnehmung aus Akt I in der Wirklichkeit zu belegen. Der Slice setzte `boundaries` nur am Ende des Abends, und kein Dialog fragte nach ihr; `perception` wurde nur in Akt I gelesen.
+B2 gibt Grenzen eine frühere Quelle (die Antwort an den Antreiber am Feuer) und zwei Leser, jeweils neben Antworten, die immer gelten; jedes Nein hat eine wahrnehmbare Folge und bestraft nie (§16, §24, §51).
+Mira ist einmal trocken unfair und tröstet nicht. Die Wahrnehmung bekommt zusätzliche freiwillige Einzelheiten, die nur mit der Facette zu sehen sind; die vorhandenen Funde (Moosregel, Stiefelabdruck, die Muschel mit dem Riss) bleiben für alle unverändert, denn an der Muschel hängen `valley.shell_seen`, `Zum Meer?` und `tal_end_8`.
 
-| Beat | Auslöser | Was geschieht | Marke |
+**Das Nein am Feuer.** Der Antreiber sagt seine beiden Sätze (`haus_antr_1`, `haus_antr_2`: Holz für morgen, das Dach) und wartet; dann folgt `antreiber_ask` mit drei Antworten. Alle drei sind immer da, keine ist bedingt.
+
+| Antwort | Was er tut | Folge | Marke |
 |---|---|---|---|
-| Das frühere Nein | die Bitte am Feuer | Grenzen kommt früher als am Ende des Abends; das Nein wird angenommen und hat eine Folge | Facette `boundaries` (Quelle verschoben oder verdoppelt), Beat `act2_nein` |
-| Zwei Leser | spätere Gespräche | eine Antwort mehr, wenn die Facette da ist | keine neuen Flags |
-| Der Blick | neue Stellen am Bach und im Haus | zwei bis drei zusätzliche Funde nur mit `perception`, nie als Voraussetzung für etwas | Beat `act2_blick` |
+| „Heute nicht.“ | wiederholt es, als notiere er es; hebt einen Finger für ein Zweitens, es kommt keins | er setzt sich (auch wenn die Spielerin aufsteht: die Antwort entscheidet, nicht der Körper); er bleibt am Feuer, die Katze legt sich später auf ihn; am Feuer sagt er „Das Dach hat Zeit. Steht auf der Liste. Ganz unten.“ oder zählt nichts mehr an den Fingern | Facette `boundaries`, Flag `house.antreiber_refused`, Beat `act2_nein` |
+| „Morgen.“ | „Das ist ein Termin.“, geht nachsehen, ob das Dach noch da ist | er geht hinaus, ohne das „Ja! Los!“ des Aufstehens; kein Nein, keine Facette | Flag `house.antreiber_postponed` |
+| „…“ | wartet und zählt etwas an den Fingern ab | das Sitzen entscheidet wie bisher: sitzen bleiben setzt ihn dazu, aufstehen schickt ihn mit „Ja! Los!“ hinaus | – |
 
-**Figuren.** Mira (ihr unfairer Moment, ohne Trost), der Antreiber (die Bitte am Feuer). **Humor-Ziel (3/10).** Trockenes, nicht Komisches. **Gewicht (§45).** mittel. **Motive.** Grenzen, Wahrnehmung, Miras Würde.
-**Scheitern und Speichern (§49).** Kein Scheitern; ein Nein wird nie bestraft, die Marken lösen Autosaves aus. **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Funde sind Text und Bild, die Hilfen stehen im Journal. **Endlichkeit (§52).** Jede Bitte und jeder Fund einmal. **Gerechnet.** rund 25 Zeilen, 260 Wörter: `calibrate.py --segment 260 25 2` gibt rund 4 Minuten.
-**Prüfungen.** `tests/unit/test_akt2_nein.gd` und ein Test, der zu jedem `set_facet`-Literal einen Leser verlangt, `tools/autopilot/akt2_nein.json` mit Eintrag in `segments`.
+Er fragt nicht, warum; er lobt nicht; er ruft nicht (kein „!“ im Sitzen). Sein Zweitens, das ausfällt, greift `sl_antr_start_3` („Erstens gehen. Zweitens schneller gehen.“) auf: seine Liste verliert etwas, er wird nicht besiegt. Die Folgen sind am Antreiber und an seinem Platz zu sehen, nicht an Mira: sie ist beim Besuch dieselbe wie sonst. Der Besuch bleibt überspringbar (kommt Mira nach 40 Sekunden, ohne dass die Spielerin sitzt, entfällt er), und die späte Quelle am Ende des Abends (`tal_eve_ely_r3`, „Gut.“) bleibt unverändert; wer den Antreiber nie verneint, kann `boundaries` dort weiter bekommen.
+
+**Zwei Leser.** Beide sind Antworten mit `[if WorldState.has_facet("boundaries") /]` hinter den unbedingten Antworten der Gruppe; wer die Facette nicht hat, sieht die Gruppe wie vorher.
+
+| Wo | Antwort | Mira / Folge |
+|---|---|---|
+| Besuch, „Wo kommst du eigentlich her?“ (`haus.dialogue`) | „Das sag ich nicht.“ | „Dann kommst du von hier.“ „Das spart Weg.“ Erinnerung `kept_origin`; am Abend fragt sie nicht nach Elysia: `evening_elysia` sagt nur „Mira schaut ins Feuer. Nach Elysia fragt sie nicht.“ (sie fragt nie zweimal, `tal_eve_ely_8`) |
+| Abend, „Erzähl was. Irgendwas.“ (`tal.dialogue`, `evening_day`) | „Heute nicht mehr.“ | Mira zieht das Netz näher ans Feuer, das nasse Garn dampft; sie erzählt nichts dazu (die Antwort „…“ hat dagegen ihre eigene Wendung mit den Löchern im Netz). Erinnerung `kept_day` |
+
+Beide Erinnerungen haben einen Satz im Journal (`MEMORY_MIRA_KEPT_ORIGIN`, `MEMORY_MIRA_KEPT_DAY`); damit sind zwei der sechs neuen Erinnerungsvarianten für Mira in Akt II verbraucht. Ein neuer Lint (`StoryLint.facet_problems`) verlangt zu jeder gesetzten Facette einen Leser und zu jeder gelesenen einen Setzer; ein Test fordert für `boundaries` mindestens zwei Leser.
+
+**Miras unfairer Moment.** Im Besuch, nach dem Fisch und vor der Ziege, ohne Antwortgruppe und ohne Verbindung zum Nein: „Dein Kamin zieht schlecht.“ Der Rauch steigt gerade nach oben, sie wedelt ihn trotzdem weg („Meiner raucht nie.“). Sie nimmt nichts zurück, entschuldigt sich nicht, und die Erzählung kommentiert nichts. Er steht für alle gleich da, mit und ohne Facette, und nie nach einem Sturz in den Bach (O2).
+
+**Der Blick.** Zwei zusätzliche Funde im Haus, beide nur mit der Facette `perception`; der dritte kommt mit dem Bachlauf (B3).
+- **Abdrücke im Staub.** Ein neuer Punkt im Raum (`p`, Zelle 22 / 10, ohne Sprite, Boden `_`, kein neues Backen), den die Karte nur zeigt, wenn `house.looks_closely` gesetzt ist; die Szene setzt ihn aus der Facette. „Klein, rund, vier Zehen. Sie laufen ans Fenster und wieder zurück, mehrmals.“ Beim Ansehen: `house.prints_seen`, Beat `act2_blick`. Hängt an nichts.
+- **Die gestopfte Decke** am Bett: ein Satz mehr im vorhandenen Cue `bed`. „Das Garn ist rot, die Decke grau.“
+Beide meiden das Kind (O5: keine Bilder des Kindes im Haus vor Akt V) und erklären nichts.
+
+**Hilfe zum Abrufen.** Die Stufe `wood` von `main_valley_shelter` trägt jetzt: „Der Weg soll lang sein. Länger, wenn man es eilig hat.“ Es nennt die Lösung nicht und steht für jede Spielerin im Journal; die Hilfe zum Bachlauf folgt mit B3.
+
+**Figuren.** Der Antreiber (seine Antwort), Mira (der unfaire Moment, zwei Antworten). **Humor-Ziel (3/10).** Trockenes, nicht Komisches: ein Zweitens, das ausfällt; ein Kamin, der schlecht zieht, während der Rauch steigt. **Gewicht (§45).** mittel. **Motive.** Grenzen (Aufgabe ablehnen, Gespräch beenden: Bible §16, Stufe I und II; Stufe III, „Nähe“, gehört in Akt IV), Wahrnehmung, Miras Würde, der Antreiber optimiert Freizeit.
+**Scheitern und Speichern (§49).** Kein Scheitern; ein Nein wird nie bestraft; `act2_nein` und `act2_blick` lösen Autosaves aus (der Besuch bleibt beim Speichern gesperrt, `act2_nein` wartet bis zu seinem Ende). **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; Funde sind Text, die Hilfe steht im Journal. **Endlichkeit (§52).** Jede Frage und jeder Fund einmal; nichts wird zweimal gefragt.
+**Gerechnet.** 23 Zeilen, rund 190 Wörter, `calibrate.py --segment 190 23 1`: rund 2,2 Minuten. Geplant waren 25.
+**Ohne Rückfrage entschieden.** Die Quelle ist der Antreiber, nicht Mira (der Plan nannte beides; Mira macht im Slice nirgends eine Bitte, ihre Fragen nehmen schon jetzt ein Schweigen an, und der Antreiber hat die Bitte schon); der erste Leser ist eine Frage von Mira, keine Bitte. Ein abgeleitetes Flag `house.looks_closely` statt einer Facette in der Karte (Karten kennen nur Flags; ein `if_facet` hätte den Baker, `map_view.gd` und `mapfile.py` berührt, und jede Änderung an `mapfile.py` macht alle Stempel ungültig). Der Besuch des Antreibers zeigt jetzt eine Antwortgruppe: Tests, die ihn mit Auto-Weiter durchspielen, antworten mit „…“ (`BoxAnswers`).
+**Prüfungen.** `tests/unit/test_akt2_nein.gd` (15 Tests: die Antworten und ihre Folgen, die zwei Leser mit und ohne Facette, der Abend, Mira, die Funde, das Journal; Hilfsmittel `DialogueWalk.groups`) und `test_akt2_nein_szene.gd` (8 Tests: jede Antwort in der echten Szene, „die Antwort entscheidet, nicht der Körper“, Mira kommt wie immer, der Punkt nur mit der Facette, kein Muss), `StoryLint.facet_problems` mit Fixtures, `tools/autopilot/akt2_nein.json` mit Eintrag in `segments` (`act2_nein`, `act2_blick`, `house.antreiber_refused`, `house.antreiber_by_fire`, `house.mira_visited`, `house.prints_seen`; das Skript setzt `house.looks_closely` selbst, denn der Autopilot kennt kein `facet`). `slice_full.json` nimmt die erste Antwort („Heute nicht.“) und setzt sich wie bisher; sein Fenster für Feuer, Antreiber und Besuch wurde nicht verändert.
 
 ---
 
