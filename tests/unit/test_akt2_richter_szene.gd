@@ -52,6 +52,7 @@ func _fall(scene: TalScene, lines: Array[String]) -> void:
 		started["fell"] = started["fell"] or STONE._falling
 		return started["fell"] and not STONE._falling and not box.is_open()
 	await wait_until(over, 60.0)
+	assert_true(started["fell"] and not STONE._falling, "the fall ran to its end")
 	await wait_physics_frames(3)
 
 
@@ -100,15 +101,24 @@ func test_a_game_that_fell_twice_before_never_meets_it() -> void:
 	var scene := await _tal()
 	var lines: Array[String] = []
 	await _fall(scene, lines)
+	assert_true(LineText.of("tal_fell_3") in lines or LineText.of("tal_fell_4") in lines, "it fell")
 	assert_false(_heard(lines))
 	assert_false(Beat.reached("act2_richter"))
 
 
-func test_the_voice_is_bound_to_the_stones_and_to_nothing_else() -> void:
-	# one site for the mark and one for the cue: the stone, after its own box (no scene, no Mira)
+func test_the_voice_is_bound_to_the_stones_and_the_mark_comes_after_its_box() -> void:
+	# one site for the mark and one for the cue: the stone, after its own box (no scene, no Mira),
+	# and saving is blocked for the whole of the fall, so no save holds the second fall without it
 	var source := FileAccess.get_file_as_string("res://world/props/stepping_stone.gd")
 	assert_eq(source.count('Beat.mark("act2_richter")'), 1)
 	assert_eq(source.count('"judge"'), 1)
+	var block := source.find('SaveSystem.block(&"fall")')
 	var fell := source.find('"fell_in"')
 	var judge := source.find('"judge"')
-	assert_gt(judge, fell, "after the fall's own cue")
+	var mark := source.find('Beat.mark("act2_richter")')
+	var unblock := source.find('SaveSystem.unblock(&"fall")')
+	assert_true(block > 0 and block < fell, "blocked before the fall's own cue")
+	assert_true(
+		judge > fell and mark > judge, "after the fall's own cue, and the mark after the voice"
+	)
+	assert_gt(unblock, mark, "and released after the mark, so the autosave holds all of it")

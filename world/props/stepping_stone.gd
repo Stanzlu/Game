@@ -86,6 +86,9 @@ func _on_body_entered(body: Node2D) -> void:
 ## The player goes into the stream and climbs out on the bank they came from.
 func _fall(player: Player, heading: Vector2) -> void:
 	player.lock(&"fall")
+	# no save holds valley.fell_twice without the voice that belongs to it (a window closed in the
+	# middle of the fall); the block ends with the fall, and its autosave holds the whole of it
+	SaveSystem.block(&"fall")
 	await NodeTimer.after(self, TIP_SECONDS)
 	var fell_before := WorldState.has_flag("valley.fell_in")
 	var second := fell_before and not WorldState.has_flag("valley.fell_twice")
@@ -114,10 +117,12 @@ func _fall(player: Player, heading: Vector2) -> void:
 		# comes after the box, so its autosave holds the whole of it
 		await Talk.present(self, JUDGE_DIALOGUE, "judge", player)
 		Beat.mark("act2_richter")
+	SaveSystem.unblock(&"fall")
 
 
 func _exit_tree() -> void:
 	_falling = false
+	SaveSystem.unblock(&"fall")
 
 
 ## The marker on the bank the player came from: walking east they came from the west.

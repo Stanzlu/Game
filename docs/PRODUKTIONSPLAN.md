@@ -526,7 +526,7 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Sta
 **6. Nachspiel:** Wie lang soll es sein? Es gibt keine Zahl in Bible und Plan. **Empfehlung:** kompakt, rund 10 Minuten, wenn es so weit ist.
 
 **7. Akt II: Voreinstellungen** (Stand 25.10., ADR-067; Tabelle O1 bis O9 im Brief `docs/akt2/REGIONSBRIEFE.md`)
-- Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: O1 das Ende des Slice bleibt der Schluss von Akt II; O2 der Richter nur als Text ab dem zweiten Sturz; O3 Werte als konkrete Wahlen am Feuer; O4 eine Karte der Klasse M; O5 das Lied im Haus ist hörbar und kein Fragment (und von den 24 Fragmenten sind sechs Bilder des Kindes, 18 Spuren der Welt, siehe 5.5); O6 die neue Karte liegt südlich am Bach; O7 dein „OK“ auf die Lesefassung des Slice als Einfrieren; O8 Blatt und Feder bleiben in Elysia; O9 die Fragen 3 bis 6 gelten weiter (nach Abschnitt 5 bauen, keine Länge ändern).
+- Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: O1 das Ende des Slice bleibt der Schluss von Akt II; O2 der Richter nur als Text ab dem zweiten Sturz (gebaut in B4: nur über Dinge, die Landung am Ostufer neben Mira zählt nicht als „nahe“); O3 Werte als konkrete Wahlen am Feuer; O4 eine Karte der Klasse M; O5 das Lied im Haus ist hörbar und kein Fragment (und von den 24 Fragmenten sind sechs Bilder des Kindes, 18 Spuren der Welt, siehe 5.5); O6 die neue Karte liegt südlich am Bach; O7 dein „OK“ auf die Lesefassung des Slice als Einfrieren; O8 Blatt und Feder bleiben in Elysia; O9 die Fragen 3 bis 6 gelten weiter (nach Abschnitt 5 bauen, keine Länge ändern).
 - **Empfehlung:** die Voreinstellungen; sag, welche du anders willst.
 
 ## 12. Risiken

@@ -16,7 +16,7 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | [Gastwirt](gastwirt.md) | 17 | Gesicht des Betäubers |
 | [Kind](kind.md) | 2 | nur Fragment; wächst mit Akt II |
 | [Spielfigur](spielfigur.md) | 67 | die Antworten, nicht eine Person |
-| [Richter](richter.md) | 8 | Akt II (B4): „Stimme“ nach dem zweiten Sturz, nur über Dinge |
+| [Richter](richter.md) | 6 | Akt II (B4): „Stimme“ nach dem zweiten Sturz, nur über Dinge (dazu zwei Erzählzeilen) |
 
 ## Ohne Beleg (aus der Bible, Annahmen; „Probezeilen“ sind Entwürfe, nicht im Spiel)
 
