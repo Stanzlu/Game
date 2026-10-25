@@ -14,6 +14,7 @@ import subprocess
 import sys
 import time
 
+RUNS = 3
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SPIKE = os.path.join(ROOT, "spike_tmp")
 
@@ -32,31 +33,45 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--source", default="content/maps/tal.txt")
     ap.add_argument("--sizes", default="1x1,2x1,2x2,3x3")
+    ap.add_argument("--measure-only", action="store_true", help="reuse the maps and bakes of the last run")
     args = ap.parse_args()
     os.makedirs(SPIKE, exist_ok=True)
     sizes = [tuple(int(n) for n in s.split("x")) for s in args.sizes.split(",")]
+    cache = os.path.join(SPIKE, "bake.json")
     baked = {}
-    for nx, ny in sizes:
-        name = "tal_%dx%d" % (nx, ny)
-        out = os.path.join("spike_tmp", name + ".txt")
-        run([sys.executable, "tools/art/tile_map.py", args.source, str(nx), str(ny), out])
-        seconds, output = run([sys.executable, "tools/perf/spike_bake.py", out])
-        peak = int(output.split("peak_kb=")[-1].split()[0])
-        png = os.path.getsize(os.path.join(SPIKE, name + "_ground.png"))
-        baked[name] = (seconds, peak / 1024.0, png / 1048576.0)
-        print("baked %s in %.0f s, %.0f MB peak, ground png %.1f MB" % ((name,) + baked[name]), file=sys.stderr)
+    if args.measure_only:
+        with open(cache, encoding="utf-8") as f:
+            baked = {k: tuple(v) for k, v in json.load(f).items()}
+    else:
+        for nx, ny in sizes:
+            name = "tal_%dx%d" % (nx, ny)
+            out = os.path.join("spike_tmp", name + ".txt")
+            run([sys.executable, "tools/art/tile_map.py", args.source, str(nx), str(ny), out])
+            seconds, output = run([sys.executable, "tools/perf/spike_bake.py", out])
+            peak = int(output.split("peak_kb=")[-1].split()[0])
+            png = os.path.getsize(os.path.join(SPIKE, name + "_ground.png"))
+            baked[name] = (seconds, peak / 1024.0, png / 1048576.0)
+            print("baked %s in %.0f s, %.0f MB peak, ground png %.1f MB" % ((name,) + baked[name]), file=sys.stderr)
+        with open(cache, "w", encoding="utf-8") as f:
+            json.dump(baked, f)
     seconds, _ = run(["tools/godot.sh", "--headless", "--import"])
     print("imported in %.0f s" % seconds, file=sys.stderr)
     print("| Karte | Zellen | Kacheln | Bake (s) | Bake (MB) | PNG (MB) | Parse (ms) | Aufbau (ms) | Knoten | Speicher (MB) | Prozess (µs/Bild) |")
     print("|---|---|---|---|---|---|---|---|---|---|---|")
     for nx, ny in sizes:
         name = "tal_%dx%d" % (nx, ny)
-        _, output = run(["tools/godot.sh", "--headless", "--quit-after", "2000", "res://tools/perf/map_spike.tscn",
-                         "--", "--profile=spike", "--map=res://spike_tmp/%s.txt" % name])
-        line = [l for l in output.splitlines() if l.startswith("SPIKE ")]
-        if not line:
-            sys.exit("no result for %s:\n%s" % (name, output))
-        r = json.loads(line[-1][len("SPIKE "):])
+        results = []
+        for _ in range(RUNS):
+            _, output = run(["tools/godot.sh", "--headless", "--quit-after", "3000", "res://tools/perf/map_spike.tscn",
+                             "--", "--profile=spike", "--map=res://spike_tmp/%s.txt" % name])
+            line = [l for l in output.splitlines() if l.startswith("SPIKE ")]
+            if not line:
+                sys.exit("no result for %s:\n%s" % (name, output))
+            results.append(json.loads(line[-1][len("SPIKE "):]))
+        # a container is noisy: the best of the runs is the cost of the map, the rest is the neighbours
+        r = dict(results[0])
+        for key in ("parse_ms", "build_ms", "process_us", "process_p95_us"):
+            r[key] = min(x[key] for x in results)
         b = baked[name]
         print("| %s | %d × %d | %d | %.0f | %.0f | %.1f | %s | %s | %d | %s | %d |" % (
             name, r["cells"][0], r["cells"][1], r["symbols"], b[0], b[1], b[2],

@@ -241,22 +241,24 @@ Der Projektinhaber: Maus, Bild und VSync laufen gut, und es fühlt sich gleich a
 
 ## Karten der Klasse M: der Großkarten-Spike (T6, 25.10., ADR-068)
 
-Akt II baut die erste Karte der Klasse M (Plan 5.1: 15 bis 30 Minuten, größer als das Tal mit 68 × 38). Bevor sie entsteht, misst `tools/perf/map_spike.py` an synthetischen Karten, was Größe kostet:
-das Tal wird gekachelt (`tools/art/tile_map.py`), gebacken (`tools/perf/spike_bake.py`, ohne Stempel) und in einem `MapView` gebaut (`tools/perf/map_spike.gd`, headless, nur Prozessorlast; die Bilder liegen in `spike_tmp/`, das Git nicht behält).
-Gemessen im Cloud-Container, ein Kern, Software-Rendering; die Werte sind Vergleichswerte untereinander, keine Zeiten eines Spielrechners.
+Akt II baut die erste Karte der Klasse M (Plan 5.1: 15 bis 30 Minuten, größer als das Tal mit 68 × 38, der größten Karte der Geschichte). Bevor sie entsteht, misst `tools/perf/map_spike.py` an synthetischen Karten, was Größe kostet:
+das Tal wird gekachelt (`tools/art/tile_map.py`), gebacken (`tools/perf/spike_bake.py`, ohne Stempel) und in einem `MapView` gebaut (`tools/perf/map_spike.gd`, headless; die Bilder liegen in `spike_tmp/`, das Git nicht behält).
+Gemessen im Cloud-Container, ein Kern; **headless wird nichts gezeichnet**, die Werte sind Prozessorlast und Vergleichswerte untereinander, keine Zeiten eines Spielrechners. Aufbau und Prozesszeit sind das Beste aus drei Läufen (ein Container ist unruhig, die Läufe streuen um bis zu 25 %).
 
 | Karte | Zellen | Kacheln | Bake (s) | Bake (MB) | PNG (MB) | Parse (ms) | Aufbau (ms) | Knoten | Speicher (MB) | Prozess (µs/Bild) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| tal_1x1 | 68 × 38 | 15 | 13 | 145 | 0,4 | 2,9 | 210 | 1.447 | 13,7 | 6.854 |
-| tal_2x1 | 136 × 38 | 15 | 26 | 253 | 0,9 | 5,0 | 325 | 2.761 | 23,9 | 7.109 |
-| tal_2x2 | 136 × 76 | 15 | 47 | 475 | 1,8 | 9,1 | 616 | 5.688 | 44,4 | 7.116 |
-| tal_3x3 | 204 × 114 | 15 | 117 | 921 | 4,1 | 30,5 | 1.517 | 12.923 | 95,7 | 7.484 |
+| tal_1x1 | 68 × 38 | 15 | 12 | 146 | 0,4 | 3,0 | 205 | 1.447 | 13,7 | 640 |
+| tal_2x1 | 136 × 38 | 15 | 26 | 254 | 0,9 | 4,7 | 351 | 2.761 | 23,9 | 51 |
+| tal_2x2 | 136 × 76 | 15 | 49 | 475 | 1,8 | 8,2 | 661 | 5.688 | 44,4 | 118 |
+| tal_3x3 | 204 × 114 | 15 | 120 | 922 | 4,1 | 16,3 | 1.175 | 12.923 | 95,7 | 1.085 |
 
-- **Aufbau** wächst mit der Zellenzahl: rund 90 ms fest plus rund 55 µs je Zelle (mit der Dichte der Streu und Requisiten des Tals). Das Tal braucht 210 ms, eine Karte von 120 × 70 (8.400 Zellen) rund 550 ms, 204 × 114 rund 1,5 s. Das Budget „Szenenwechsel unter 0,5 s“ (oben, Vorschlag) hält eine Karte bis rund 6.500 Zellen ein; darüber verdeckt der Übergang (Überblendung) den Aufbau, bei Klasse L reicht das nicht mehr (Streu und Requisiten in Blöcken, Akt IV).
-- **Parse** ist unkritisch (30 ms bei 23.000 Zellen). **Knoten und Speicher** wachsen linear (13.000 Knoten, 96 MB bei 204 × 114) und liegen weit unter den 500 MB des Budgets.
-- **Prozess je Bild** bleibt bei 7 ms flach (die Last im leeren Szenenbaum; die Karte ändert sie nicht): die Kosten liegen im Aufbau und im Zeichnen, nicht in der Logik. **Das Zeichnen ist nicht gemessen** (kein GPU im Container); dafür bräuchte es einen Leistungstest auf dem Mac, siehe offene Punkte.
-- **Baker:** Zeit und Speicher wachsen linear mit der Fläche, rund 20 s und 155 MB je Megapixel (Karte × 16). Eine Karte von 120 × 70 braucht rund 40 s und 450 MB, 200 × 120 rund 105 s und 900 MB. Jede Zelländerung färbt rund 17 % der Pixel neu (`tools/art/bake_ground.py`), die PNG-Datei der Klasse M wiegt rund 1,5 MB: darum landet das Layout einer Karte in **einem** Pull Request, und ihre Bakes werden erst beim Einfrieren der Region committet (Plan T7).
-- **Kartenformat:** Zeichen außerhalb von ASCII (Grundebene, höhere Ebenen) laufen durch beide Parser (`tests/fixtures/maps/unicode_symbols.txt`, `test_map_data`, `tools/art/test_mapfile.py`); Leerzeichen können kein Symbol sein. Ein Kartenformat v2 wird nicht gebraucht; die Zahl der Symbole begrenzt nur die Legende (das Tal braucht 66).
+(„Kacheln“ ist die Zahl der Bodenarten der Legende; das Tal malt sie mit 66 verschiedenen Zeichen.)
 
-**Obergrenze der Klasse M:** 120 × 70 Zellen (8.400), rund 550 ms Aufbau im Container; was größer wird, braucht Nachweis (Aufbau in Blöcken). **Offen:** Bildrate auf dem Mac an einer 136 × 76-Karte (liegt in `spike_tmp/` nach `map_spike.py`); sie fehlt, bis jemand sie misst, und blockiert Akt II nicht.
+- **Aufbau:** rund 85 ms fest plus 47 µs je Zelle (angepasst an die erste und letzte Zeile, die mittleren liegen bis 15 % darüber), mit der Streu und den Requisiten des Tals. Das Tal braucht 205 ms; eine Karte von 120 × 70 (8.400 Zellen) rechnerisch 480 ms, zwischen den Zeilen 2 und 3 gelesen 545 ms: **rund 0,5 s**. Das Budget „Szenenwechsel unter 0,5 s“ (oben, Vorschlag) hält also bis rund 8.000 bis 9.000 Zellen; darüber deckt die Überblendung den Aufbau, und bei Klasse L (204 × 114: 1,2 s) reicht das nicht mehr (Streu und Requisiten in Blöcken, Akt IV).
+- **Parse** ist unkritisch (16 ms bei 23.000 Zellen). **Knoten und Speicher** wachsen linear (13.000 Knoten, 96 MB bei 204 × 114) und liegen weit unter den 500 MB des Budgets.
+- **Prozess- und Physikzeit je Bild** liegen bei jeder Größe unter 1,1 ms (Median nach 40 Bildern Einschwingen) und wachsen nicht erkennbar mit der Fläche. **Das Zeichnen ist nicht gemessen** (kein Grafikprozessor im Container); dafür bräuchte es einen Leistungstest auf dem Mac, siehe offene Punkte.
+- **Baker:** Zeit rund 20 s je Megapixel (Karte × 16 Pixel je Seite, also Zellen × 256), Spitzenspeicher rund 50 MB plus 147 MB je Megapixel. Eine Karte von 120 × 70 (2,15 MP) braucht rund 42 s und 365 MB, 200 × 120 (6,14 MP) rund 123 s und 950 MB. Die PNG-Datei wiegt rund 0,7 MB je Megapixel (Klasse M: rund 1,5 MB).
+- **Wie viel ein Zellwechsel neu malt**, am Tal gemessen (Gras → Weg an drei Stellen, Hecke → Weg, Hecke → Pfütze): Boden, Weg und Wasser ändern nur ihre Umgebung (37 Pixel von 660.000); Hecken und Klippen zeichnet der Baker aus einem durchlaufenden Zufallsstrom, und eine Änderung färbt dann 18 bis 59 % des Bildes anders. Darum landet das Layout einer Karte in **einem** Pull Request, und ihre Bakes werden erst beim Einfrieren der Region committet (Plan T7).
+- **Kartenformat:** Symbole außerhalb von ASCII (Grundebene, höhere Ebenen) laufen durch beide Parser (`tests/fixtures/maps/unicode_symbols.txt`, `test_map_data`, `tools/art/test_mapfile.py`). Nicht erlaubt sind Leerzeichen jeder Art: ASCII-Leerzeichen und Tabulatoren schneiden beide Parser ab, Unicode-Leerzeichen (U+00A0, U+2003, U+3000 und weitere) schneidet nur Python ab, darum lehnt `MapData` sie als Symbol ab. Ein Kartenformat v2 wird nicht gebraucht; die Zahl der Symbole begrenzt nur die Legende.
 
+**Obergrenze der Klasse M:** 120 × 70 Zellen (8.400), aus den Messwerten abgeleitet: rund 0,5 s Aufbau im Container, am Rand des Budgets; was größer wird, braucht Nachweis (Aufbau in Blöcken). **Offen:** Die Bildrate auf dem Mac an einer 136 × 76-Karte (`spike_tmp/tal_2x2.txt` nach einem Lauf von `map_spike.py`) ist nicht gemessen und blockiert Akt II nicht.

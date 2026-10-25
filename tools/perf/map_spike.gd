@@ -5,7 +5,9 @@ extends Node
 ## A scene and not a -s script: the autoloads the map needs are not there when a script compiles.
 ## A measuring tool: it reads the wall clock, as the game and its tests never do.
 
-const FRAMES := 120
+## Frames measured after WARMUP frames in which the scene settles (textures, first draws).
+const WARMUP := 40
+const FRAMES := 160
 
 var _map := ""
 
@@ -38,13 +40,17 @@ func _run() -> void:
 	var memory := (Performance.get_monitor(Performance.MEMORY_STATIC) - memory_before) / 1048576.0
 	# the engine's own time of the frame's process and physics steps; a wall clock around the loop
 	# would measure the pause headless mode puts between frames (about 7 ms), not the scene
-	var process_s := 0.0
-	for i in FRAMES:
+	var samples: Array[float] = []
+	for i in WARMUP + FRAMES:
 		await get_tree().process_frame
-		process_s += (
-			Performance.get_monitor(Performance.TIME_PROCESS)
-			+ Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
-		)
+		if i >= WARMUP:
+			samples.append(
+				(
+					Performance.get_monitor(Performance.TIME_PROCESS)
+					+ Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
+				)
+			)
+	samples.sort()
 	var result := {
 		"map": _map,
 		"ok": ok,
@@ -55,7 +61,8 @@ func _run() -> void:
 		"build_ms": snappedf(build_us / 1000.0, 0.1),
 		"nodes": nodes,
 		"static_mb": snappedf(memory, 0.1),
-		"process_us": int(process_s / float(FRAMES) * 1000000.0),
+		"process_us": int(samples[samples.size() / 2] * 1000000.0),
+		"process_p95_us": int(samples[int(samples.size() * 0.95)] * 1000000.0),
 	}
 	print("SPIKE ", JSON.stringify(result))
 	get_tree().quit(0 if ok else 1)
