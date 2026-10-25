@@ -37,16 +37,16 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 |---|---|---|---|---|---|
 | V0 | Brief, Kapitelmarke `act1`, eingefrorener Stand `v2_akt1_end.json`, ADR-067 | – | 0 | 1 | **gebaut** |
 | V1 | T6 Großkarten-Spike und T7 (nur der kleine Teil) | – | 0 | 1 | **gebaut** (ADR-068, `docs/PERFORMANCE.md`: Klasse M bis 120 × 70, Aufbau rund 0,5 s) |
-| B1 | Ankunft: die Wirklichkeit antwortet auf Elysia | `tal` | 15 | 1 | geplant |
+| B1 | Ankunft: die Wirklichkeit antwortet auf Elysia | `tal` | 6 (geplant 15) | 1 | **gebaut** (6 Zeilen, 0,5 Modellminuten) |
 | B2 | Nein und Blick: Grenzen als echte Möglichkeit, Wahrnehmung in der Wirklichkeit | `tal`, `haus` | 25 | 1 | geplant |
 | B3 | Bachlauf: die erste Karte der Klasse M, Nebenquest, Kuriositäten, Nebel | `bachlauf` (neu) | 62 | 1 | geplant |
 | B4 | Richter: eine Stimme nach dem zweiten Sturz | `tal` | 12 | 1 | geplant (Cut-First-Platz 2) |
 | B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 30 | 1 | geplant |
 | B6 | Abend und Anschluss: Mira liest die Werte, Kapitelmarke `act2` | `tal` | 18 | 1 | geplant |
 | B7 | Durchlauf: `akt2_full.json`, Lesefassung, Messung | – | 0 | 1 | geplant |
-| **Summe** | | | **162** | **9** | |
+| **Summe** | | | **153** (geplant 162) | **9** | |
 
-**Budget.** 354 vorhandene plus 162 neue Zeilen sind 516 von den im Plan abgeleiteten 557 (93 %); im Modell rund 23 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu 162 / 24) gegen 90 geplante. Die Lücke von rund 67 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
+**Budget.** 354 vorhandene plus 153 neue Zeilen sind 507 von den im Plan abgeleiteten 557 (91 %); im Modell rund 23 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu 153 / 24) gegen 90 geplante. Die Lücke von rund 67 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
 Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 14 neue Tests je Segment. Mit einer zweiten Karte (B3b) wären es 578 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
 
 **Reihenfolge.** V0, V1, B1, B2, B3, B5, B6, B4 (nach B6, damit der Abend zuerst steht), B7. B1 und B2 können vor V1 gebaut werden, wenn der Leistungstest auf dem Mac auf sich warten lässt.
@@ -89,19 +89,31 @@ neue IDs werden gesperrt (`id_lock.py --update`), neue Flags stehen vor dem Text
 
 ## B1 Ankunft
 
-**Stand:** geplant. **Szene:** `tal` (in `tal_scene.gd` nach der Marke `valley_arrival`). **Dialog:** neue Datei `content/dialogue/akt2/ankunft.dialogue` (ein Cue `arrival_echo`, `[#draft]`, kein `[#ph]`).
+**Stand:** gebaut. **Szene:** `tal` (`tal_scene.gd`, `_arrival_echo`). **Dialog:** `content/dialogue/akt2/ankunft.dialogue` (ein Cue `arrival_echo`, sechs Zeilen `ank_*`, `[#draft]`, kein `[#ph]`).
 
-**Zweck.** Der Riss ist überschritten, das Tal ist da. Akt I hat dem Spielstand Entscheidungen mitgegeben (der Gastwirt, das Fest, die Halle, die Fragmente); in der Wirklichkeit liest bisher kaum eine davon eine Zeile (`MOTIVE.md`). B1 gibt zwei bis vier davon ein Echo: kurze bedingte Erzählzeilen, jede an ein Ding im Tal gebunden
-(der kalte Kamin, der Bach, der Boden). Kein Rückblick, keine Erklärung; wer nichts davon getan hat, hört nichts anderes.
+**Zweck.** Der Riss ist überschritten, das Tal ist da. Akt I hat dem Spielstand Entscheidungen mitgegeben (der Gastwirt, das Fest, das Kind); in der Wirklichkeit las bisher kaum eine davon eine Zeile (`MOTIVE.md`). B1 gibt drei davon ein Echo: kurze bedingte Erzählzeilen, jede an ein Ding gebunden, das schon im Bild steht
+(das Feuer unter der Plane, die Pfütze am Weg, das Laub). Kein Rückblick, keine Erklärung; wer nichts davon getan hat, hört nur die Böe und den Boden.
 
 | Beat | Auslöser | Was geschieht | Marke |
 |---|---|---|---|
 | Ankunft | `valley_arrival` (vorhanden) | unverändert | Beat `valley_arrival` |
-| Das Echo | die ersten Schritte nach dem Aufprall | zwei bis vier Erzählzeilen, die Flags aus Akt I lesen (z. B. `elysia.inn_stayed`, `elysia.feast_noticed`, `elysia.hall_mirror_seen`, `fragment.*`); eine Windböe als einziges Wetter (die vorhandenen Windblätter) | Beat `arrival_echo`; keine neuen Flags |
+| Das Echo | die ersten zwei Zellen zu Fuß, nur mit `chapter.act1` | die Spielerin bleibt stehen, bis der Wind des Tals stößt (höchstens vier Sekunden Spielzeit), dann `arrival_echo`: Böe, Boden, dazu je Flag eine Zeile | Beat `arrival_echo` (nach dem Cue, Autosave); keine neuen Flags |
 
-**Figuren.** Keine. **Humor-Ziel (3/10).** Leise: ein Ding sagt, was Elysia nie sagte. **Gewicht (§45).** leicht. **Motive.** Elysia gegen Wirklichkeit, Wiederholung (das Tal wiederholt nichts). Die „Gelesen in“-Listen in `MOTIVE.md` und `motive.json` wachsen.
-**Scheitern und Speichern (§49).** Kein Scheitern; die Marke löst einen Autosave aus. **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Böe ist Bild und Ton. **Endlichkeit (§52).** Einmal. **Gerechnet.** rund 15 Zeilen, 150 Wörter: `calibrate.py --segment 150 15 1` gibt rund 2 Minuten.
-**Prüfungen.** `tests/unit/test_akt2_ankunft.gd` (Zeilen über `LineText.of(id)`), `tools/autopilot/akt2_ankunft.json` (Szene `tal`) mit Eintrag in `segments`.
+| Zeile | Bedingung | Ding im Bild | Was Elysia nie sagte |
+|---|---|---|---|
+| `ank_gust_1`, `ank_ground_1` | immer | Laub, Boden unter den Füßen | der Boden behält den Abdruck |
+| `ank_fire_1` | `elysia.inn_stayed` | das Feuer unter der Plane | niemand ruft, dass du bleiben kannst |
+| `ank_fire_2` | `elysia.inn_declined` (und nicht `inn_stayed`) | dasselbe Feuer | niemand fragt ein zweites Mal |
+| `ank_rings_1` | `elysia.feast_noticed` | die Pfütze am Weg | kein Ring gleicht dem davor (das Tal wiederholt nichts) |
+| `ank_hum_1` | `melody.child_hum` | der Regen auf dem Laub | ein Summen für einen Atemzug, dann Regen (B5 gibt dem Lied sein Haus) |
+
+**Regeln der Szene.** Die Schritte zählen nur zu Fuß: ein Sprung von mehr als 8 Pixeln zwischen zwei Physikbildern (Teleport des Autopiloten) ist kein Schritt, und Stehen löst nichts aus; wer Mira vorher anspricht (`valley.mira_met`), hört das Echo nie. Ein offenes Gespräch hält es zurück, es stapelt sich nie auf eines. Es läuft nur, wenn Akt I erreicht ist (`Chapter.reached("act1")`, vom Riss gesetzt): ein Tal, das auf anderem Weg betreten wird (Debug-Start, alter Stand), hat nichts zu beantworten.
+Die Böe ist keine neue Wettervoreinstellung, sondern der vorhandene Wind des Tals (`AudioDirector.wind_gust()`, die Windblätter folgen ihm): Bild und Ton sind schon da, der Cue wartet nur auf einen Stoß. Ohne Klangkulisse gibt es nichts zu erwarten und der Cue beginnt sofort.
+
+**Figuren.** Keine. **Humor-Ziel (3/10).** Leise: ein Ding sagt, was Elysia nie sagte. **Gewicht (§45).** leicht. **Motive.** Elysia gegen Wirklichkeit, Wiederholung (das Tal wiederholt nichts), Menschen ohne echte Ablehnung (am Feuer fragt niemand ein zweites Mal), Perfekte Natur (der Boden behält den Abdruck), Lied und Summen. `MOTIVE.md` und `motive.json` führen die sechs Zeilen.
+**Scheitern und Speichern (§49).** Kein Scheitern; die Marke löst einen Autosave aus, davor ist das Speichern gesperrt (Szene `Cutscene`). **Barrierefreiheit (§50).** Kein Blitz, kein Wackeln; die Böe ist Bild und Ton, der Text trägt sie allein. **Endlichkeit (§52).** Einmal. **Gerechnet.** sechs Zeilen, 70 Wörter, `calibrate.py --segment 70 6 0.2`: rund 0,5 Minuten.
+**Geplant waren 15 Zeilen**; gebaut sind 6, weil drei Echos mit je einer Zeile reichen und eine vierte Zeile ohne Ding im Bild gegen „Ding vor Gedanke“ (`STIL.md`) liefe. Die Reserve von 9 Zeilen bleibt im Budget des Akts.
+**Prüfungen.** `tests/unit/test_akt2_ankunft.gd` (16 Tests: Zeilen über `LineText.of(id)`, die Szene mit Schritten, Teleport, Mira, Einmaligkeit, offenem Gespräch), `tools/autopilot/akt2_ankunft.json` mit Eintrag in `segments` (`valley_arrival`, `chapter.act1`, `arrival_echo`). `slice_full.json` bleibt unverändert: der Lauf geht nach der Ankunft nur über Sprünge und trifft Mira zuerst.
 
 ## B2 Nein und Blick
 

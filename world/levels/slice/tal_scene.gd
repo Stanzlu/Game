@@ -8,6 +8,7 @@ extends LookScene
 ## slower than before and without a word, and then sits down by the path (ADR-042).
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
+const ARRIVAL_DIALOGUE := "res://content/dialogue/akt2/ankunft.dialogue"
 const MAIN_MENU := "res://core/boot/boot.tscn"
 ## Cells west of this column are the house side of the stream.
 const STREAM_COLUMN := 38
@@ -26,6 +27,13 @@ const FOLLOW_UNTIL_COLUMN := 13
 const MOUNTAIN_PAN_SECONDS := 4.0
 const MOUNTAIN_HOLD_SECONDS := 2.5
 const SEA_HOLD_SECONDS := 2.5
+## The first steps that call up the arrival echo (B1): this far on foot, in cells. A jump of
+## more than ECHO_JUMP pixels between two physics frames is a teleport and no step.
+const ECHO_STEPS := 2.0
+const ECHO_JUMP := 8.0
+## A gust is waited for this long (play time) before the echo goes on without one.
+const ECHO_GUST_SECONDS := 4.0
+const ECHO_GUST_MIN := 0.5
 
 var _follower: AntreiberActor
 var _follow_time := 0.0
@@ -42,6 +50,8 @@ func _ready() -> void:
 	if not WorldState.has_flag("valley.arrived"):
 		WorldState.set_flag("valley.arrived")
 		Beat.mark("valley_arrival")
+	if not Beat.reached("arrival_echo") and not WorldState.has_flag("valley.mira_met"):
+		_arrival_echo.call_deferred()
 	if WorldState.has_flag("house.mira_visited"):
 		Beat.mark("evening")
 	if (
@@ -53,6 +63,42 @@ func _ready() -> void:
 	# scene): the ending plays again instead of leaving the slice unfinishable
 	if WorldState.has_flag("valley.ending") and not Chapter.reached("slice"):
 		_play_ending.call_deferred()
+
+
+## B1: after the first steps a gust goes through the wet leaves (the real world's wind, which the
+## leaves and the soundscape follow), and the valley says what Elysia never said (ARRIVAL_DIALOGUE).
+## It plays once, a teleport is no step, and it gives way when Mira is met first.
+func _arrival_echo() -> void:
+	var tree := get_tree()
+	var walked := 0.0
+	var last := player.global_position
+	while walked < ECHO_STEPS * map.data.tile_size:
+		await tree.physics_frame
+		if not is_inside_tree() or WorldState.has_flag("valley.mira_met"):
+			return
+		var step := player.global_position.distance_to(last)
+		last = player.global_position
+		# only the way over the rift is answered: a valley entered any other way has no Act I behind it
+		if step < ECHO_JUMP and Chapter.reached("act1"):
+			walked += step
+	while dialogue_box.is_open() or player.is_locked():
+		await tree.physics_frame
+		if not is_inside_tree() or WorldState.has_flag("valley.mira_met"):
+			return
+	var cut := Cutscene.begin(self)
+	var waited := 0.0
+	while _calm() and waited < ECHO_GUST_SECONDS:
+		await tree.physics_frame
+		waited += get_physics_process_delta_time()
+	await cut.say(ARRIVAL_DIALOGUE, "arrival_echo")
+	cut.end()
+	Beat.mark("arrival_echo")
+
+
+## True while a soundscape plays and its wind is down (-1 without one: nothing to wait for).
+func _calm() -> bool:
+	var gust := AudioDirector.wind_gust()
+	return gust >= 0.0 and gust < ECHO_GUST_MIN
 
 
 func _process(delta: float) -> void:

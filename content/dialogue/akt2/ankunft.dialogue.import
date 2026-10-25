@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bcv23454vglgv"
+path="res://.godot/imported/ankunft.dialogue-29076c058dff86ee5ec15bc0bb99234b.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt2/ankunft.dialogue"
+dest_files=["res://.godot/imported/ankunft.dialogue-29076c058dff86ee5ec15bc0bb99234b.tres"]
+
+[params]
+
+defaults=true

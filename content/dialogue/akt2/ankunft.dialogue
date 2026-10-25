@@ -1,0 +1,18 @@
+# Die Ankunft im Tal, Akt II, Segment B1 (docs/akt2/REGIONSBRIEFE.md).
+# Die ersten Schritte nach dem Riss: eine Böe im nassen Laub und ein Boden, der den Abdruck behält. Dazu, je nach Akt I,
+# bis zu drei Dinge, die sagen, was Elysia nie gesagt hat: am Feuer ruft niemand, dass du bleiben kannst, auf der Pfütze
+# wiederholt sich kein Ring, der Regen summt einen Atemzug lang. Kein Rückblick, keine Erklärung, keine Figur.
+# Wer in Elysia nichts davon getan hat, hört die Böe und den Boden und sonst nichts. Zeilen ohne Sprecher sind Erzählung.
+
+~ arrival_echo
+Eine Böe fährt durch das nasse Laub und ist wieder weg. [ID:ank_gust_1] [#draft]
+Der Boden gibt unter deinen Füßen nach und behält den Abdruck. [ID:ank_ground_1] [#draft]
+if WorldState.has_flag("elysia.inn_stayed")
+	Unter der Plane brennt ein Feuer. Niemand ruft, dass du bleiben kannst. [ID:ank_fire_1] [#draft]
+elif WorldState.has_flag("elysia.inn_declined")
+	Unter der Plane brennt ein Feuer. Niemand fragt ein zweites Mal. [ID:ank_fire_2] [#draft]
+if WorldState.has_flag("elysia.feast_noticed")
+	Auf der Pfütze am Weg gehen Ringe auf. Keiner gleicht dem davor. [ID:ank_rings_1] [#draft]
+if WorldState.has_flag("melody.child_hum")
+	Der Regen auf dem Laub klingt einen Atemzug lang wie ein Summen. Dann ist es wieder Regen. [ID:ank_hum_1] [#draft]
+=> END

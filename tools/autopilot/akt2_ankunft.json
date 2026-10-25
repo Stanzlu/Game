@@ -1,0 +1,12 @@
+[
+  {"relative": true},
+  {"log": "Act II, B1: the valley after the rift (Act I behind, three choices in the save)", "t": 0.5},
+  {"flag": "chapter.act1", "t": 0.2},
+  {"flag": "elysia.inn_stayed", "t": 0.1},
+  {"flag": "elysia.feast_noticed", "t": 0.1},
+  {"flag": "melody.child_hum", "t": 0.1},
+  {"press": ["move_down"], "log": "the first steps", "t": 1.0},
+  {"release": ["move_down"], "t": 0.8},
+  {"wait_for": {"beat": "arrival_echo"}, "timeout": 40, "log": "the gust and what the valley says", "t": 0.1},
+  {"log": "segment finished (nobody met yet)", "quit": true, "t": 0.5}
+]

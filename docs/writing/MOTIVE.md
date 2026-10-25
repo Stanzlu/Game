@@ -11,10 +11,10 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
 | **Fehlende Spiegelung** | §46 | `el_basin_1`, `el_basin_2`, `el_basin_4`, `el_basin_5`, `elysia.mirror_seen`, `el_child_1`, `mk_fountain_1`, `mk_tailor_4`, `sh_mirror_3`, `sh_mirror_5`, `elysia.hall_mirror_seen` | Pfütze im Tal: zum ersten Mal ein Bild der Spielerin (`tal_puddle_2`, `tal_puddle_7`); Twist II (Elysia entstand aus einem Bedürfnis nach Schutz) liest die fehlende Spiegelung zurück. |
-| **Identische Bewegungen und Sätze** | §46 | `el_loop_1`, `el_praise_1`, `elysia.loops`, Elysianer-Routen gespiegelt (ADR-031), `mk_poet_2`, `mk_gate_4`, `mk_fountain_1`, `mk_guest_1`, `mk_fest_7`, `mk_gate_10`, `mk_gate_11`, `mk_fest_11`, `mk_baker_8`, `mk_tailor_9`, `mk_flower_6`, `mk_shop_8`, `gh_host_loop_1`, `gh_host_loop_2`, `el_gard_loop` | Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife. |
+| **Identische Bewegungen und Sätze** | §46 | `el_loop_1`, `el_praise_1`, `mk_poet_2`, `mk_gate_4`, `mk_fountain_1`, `mk_guest_1`, `mk_fest_7`, `mk_gate_10`, `mk_gate_11`, `mk_fest_11`, `mk_baker_8`, `mk_tailor_9`, `mk_flower_6`, `mk_shop_8`, `gh_host_loop_1`, `gh_host_loop_2`, `el_gard_loop`, `ank_rings_1`, `elysia.loops`, Elysianer-Routen gespiegelt (ADR-031) | Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife. |
 | **Schnell loopende Musik** | §35, §46 | Elysia-Loop wird mit jedem Besuch kürzer (Musik-Arc), `el_loop_2`, `elysia.market_seen` | Im Finale erkennt die Spielerin, dass Fragmente des späteren Hauptthemas schon in Elysia vorhanden waren (§35). |
-| **Menschen ohne echte Ablehnung** | §46 | `el_favor_2`, `el_favor_3`, `el_favor_5`, `el_favor_6`, `el_favor_r3`, `elysia.asked_for_no`, `mk_poet_5`, `mk_shop_6`, `mk_fest_5` | Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`). |
-| **Perfekte Natur** | §46 | `el_flower_1`, `el_flower_2`, `el_tree_1`, `el_tree_2`, `el_pillar_1`, `el_feast_1`, `elysia.flower_smelled`, `sh_leaf_1`, `sh_feather_1`, `sh_hint_7` | Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`. |
+| **Menschen ohne echte Ablehnung** | §46 | `el_favor_2`, `el_favor_3`, `el_favor_5`, `el_favor_6`, `el_favor_r3`, `mk_poet_5`, `mk_shop_6`, `mk_fest_5`, `ank_fire_1`, `ank_fire_2`, `elysia.asked_for_no` | Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`). |
+| **Perfekte Natur** | §46 | `el_flower_1`, `el_flower_2`, `el_tree_1`, `el_tree_2`, `el_pillar_1`, `el_feast_1`, `sh_leaf_1`, `sh_feather_1`, `sh_hint_7`, `ank_ground_1`, `elysia.flower_smelled` | Dieselbe Geste in der Wirklichkeit riecht nach etwas: `tal_flower_2`, `tal_flower_4`, `tal_berry_2`. |
 | **Der Stein** | §46 | `el_stone_1`, `elysia.stone_taken`, `haus_rest_8`, `haus_shelf_6` | Der Stein liegt im Regal (`haus_shelf_9`) und bleibt ein Hausmotiv; seine Herkunft bleibt offen. |
 | **Der Samen** | §30, §46 | `el_wake_seed`, `haus_rest_4` | Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`). |
 | **Hausmotive** | §26, §46 | `haus_table_1`, `haus_table_2`, `haus_bucket_1`, `haus_fire_9`, `haus_shelf_1`, `house.spoon_found`, `house.shelf_filled` | Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste. |
@@ -40,7 +40,7 @@ Fragmente, keine Ursache, keine Diagnose, keine Tätergeschichte. Jedes Fragment
 
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
-| **Lied und Summen** | §15 | `el_child_3`, `elysia.child_met`, `el_child_4`, `melody.child_hum` | Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente. |
+| **Lied und Summen** | §15 | `el_child_3`, `el_child_4`, `ank_hum_1`, `elysia.child_met`, `melody.child_hum` | Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus; Akt V: eines der sechs Fragmente. |
 | **Warten und Verschwinden** | §15 | `el_child_1`, `el_child_2`, `elysia.child_vanished` | Akt III: ein Echo im Wald; Akt VI: ein Blick in Elysia. |
 | **Flur, Tür, Hand, Verstecken, leeres Zimmer, ursprüngliches Haus** | §15 | `kd_hall_3`, `kd_door_3`, `kd_room_3`, `fragment.hallway`, `fragment.closed_door`, `fragment.empty_room` | Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). |
 
@@ -75,7 +75,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.rift_open` | Fortschritt | `elysia_scene.gd` | `gasthaus.dialogue`, `markt.dialogue`, `elysia.dialogue`, `elysia.txt` | Der Riss ist offen. |
 | `elysia.rift_crossed` | Fortschritt | `rift_sequence.gd` | – | Die Spielerin ist in die Wirklichkeit übergetreten. |
 | `valley.arrived` | Fortschritt | `tal_scene.gd` | `tal_scene.gd` | Im Tal angekommen. |
-| `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `tal.dialogue`, `tal.txt`, `world_state.gd` | Mira kennengelernt (noch als „Die Frau“). |
+| `valley.mira_met` | Mira | `tal.dialogue`, `mira_prototype.dialogue` | `tal.dialogue`, `tal.txt`, `world_state.gd`, `tal_scene.gd` | Mira kennengelernt (noch als „Die Frau“). |
 | `valley.mountains_seen` | Fortschritt | `tal.dialogue` | `tal_scene.gd` | Die Berge gesehen. |
 | `valley.reflection_seen` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | Das eigene Spiegelbild in der Pfütze gesehen. |
 | `valley.shell_seen` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | Die Muschel an Miras Plane gesehen. |
@@ -112,10 +112,10 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.inn_met` | Fortschritt | `gasthaus.dialogue` | `gasthaus.dialogue`, `elysia_scene.gd` | Die Spielerin hat den Gastwirt im Gasthaus zum Immer getroffen (Stufe „inn“ der Heldenquest). |
 | `elysia.inn_fed` | Fortschritt | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat das Brot gegessen, das schon da war. |
 | `elysia.inn_room` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue`, `gasthaus.txt` | Sie hat das Zimmer angenommen; beide Türen stehen offen. |
-| `elysia.inn_declined` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat das Zimmer abgelehnt („Ich muss weiter.“); der Gastwirt fragt freundlich noch einmal. |
+| `elysia.inn_declined` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue`, `ankunft.dialogue` | Sie hat das Zimmer abgelehnt („Ich muss weiter.“); der Gastwirt fragt freundlich noch einmal. |
 | `elysia.inn_sleeping` | Fortschritt | `gasthaus.dialogue`, `gasthaus_scene.gd` | `gasthaus_scene.gd` | Auslöser der Nacht im Bett (die Szene blendet auf Weiß und zurück); danach gelöscht. |
 | `elysia.inn_slept` | Beschützer | `gasthaus_scene.gd` | `gasthaus.dialogue` | Sie hat im Gasthaus geschlafen und denselben Morgen noch einmal erlebt. |
-| `elysia.inn_stayed` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat dem Gastwirt gesagt, dass sie noch bleibt (das dritte Angebot, angenommen). |
+| `elysia.inn_stayed` | Beschützer | `gasthaus.dialogue` | `gasthaus.dialogue`, `ankunft.dialogue` | Sie hat dem Gastwirt gesagt, dass sie noch bleibt (das dritte Angebot, angenommen). |
 | `elysia.inn_book_seen` | Wahrnehmung | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat im Gästebuch gesehen, dass ihr Name auf jeder Seite steht, in fremder Schrift. |
 | `elysia.inn_book_signed` | Entscheidungen | `gasthaus.dialogue` | `gasthaus.dialogue` | Sie hat sich unter ihren Namen eingetragen (die Nebenquest „Das Gästebuch“). |
 | `elysia.market_seen` | Fortschritt | `audio_director.gd`, `markt_scene.gd` | `elysia_scene.gd` | Sie hat den Markt hinter der Treppe im Süden des Gartens betreten (Stufe „market“ der Heldenquest). |
@@ -132,9 +132,9 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `elysia.hall_mirror_seen` | Wahrnehmung | `spiegelhalle.dialogue` | `spiegelhalle.dialogue`, `markt_scene.gd` | Sie hat im großen Spiegel bemerkt, dass er sie nicht zeigt (Facette „Wahrnehmung“). |
 | `elysia.feast` | Fortschritt | `markt_scene.gd` | `markt.dialogue`, `markt.txt`, `markt_scene.gd` | Der Markt steht im Festzustand: ganz Elysia feiert, dass sie die Halle bemerkt hat. |
 | `elysia.feast_invited` | Entscheidungen | `markt.dialogue` | `markt.dialogue` | Sie hat die Einladung des Gastwirts zum Fest angenommen. |
-| `elysia.feast_noticed` | Wahrnehmung | `markt.dialogue` | `markt.dialogue` | Sie hat der Festmeisterin gesagt, dass es dasselbe Fest wie gestern ist; sie hat es bemerkt und gesagt. |
+| `elysia.feast_noticed` | Wahrnehmung | `markt.dialogue` | `markt.dialogue`, `ankunft.dialogue` | Sie hat der Festmeisterin gesagt, dass es dasselbe Fest wie gestern ist; sie hat es bemerkt und gesagt. |
 | `elysia.feast_toast` | Fortschritt | `markt.dialogue` | `markt.dialogue`, `markt_scene.gd`, `elysia_scene.gd` | Sie hat das Glas gehoben: das Hoch auf den Helden (rund 11.000 Erfahrung, Level 48 ist sicher). |
 | `fragment.hallway` | Kind | `kind.dialogue` | `markt.txt` | Sie ist dem Kind auf dem Markt gefolgt und hat den Flur gesehen (Fragment 1 von 6, Bible §15). |
 | `fragment.closed_door` | Kind | `kind.dialogue` | `gasthaus.txt` | Sie ist dem Kind im Gasthaus gefolgt und hat die geschlossene Tür gesehen (Fragment 2 von 6). |
 | `fragment.empty_room` | Kind | `kind.dialogue` | `spiegelhalle.txt` | Sie ist dem Kind in der Halle der Spiegel gefolgt und hat das leere Zimmer gesehen (Fragment 3 von 6). |
-| `melody.child_hum` | Musik | `elysia.dialogue` | – | Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes. |
+| `melody.child_hum` | Musik | `elysia.dialogue` | `ankunft.dialogue` | Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes. |
