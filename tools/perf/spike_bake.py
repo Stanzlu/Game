@@ -6,6 +6,7 @@ The baker itself stays untouched on purpose: every change to bake_ground.py, pix
 outdates the stamp of every committed map (tools/art/mapfile.py).
 """
 import os
+import resource
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "art"))
@@ -25,7 +26,10 @@ def main():
         pa.save_rgba(bake_ground.res_path(meta["water"]), water)
     if "treeline" in meta:
         pa.save_rgba(bake_ground.res_path(meta["treeline"]), bake_ground.bake_treeline(baker))
-    print("baked %s (%dx%d)" % (sys.argv[1], baker.w, baker.h))
+    peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    if sys.platform == "darwin":
+        peak //= 1024  # macOS counts bytes, Linux kilobytes
+    print("baked %s (%dx%d) peak_kb=%d" % (sys.argv[1], baker.w, baker.h, peak))
 
 
 if __name__ == "__main__":

@@ -10,7 +10,6 @@ spike_tmp (not committed). Needs numpy and Pillow (requirements-art.txt) and God
 import argparse
 import json
 import os
-import resource
 import subprocess
 import sys
 import time
@@ -20,15 +19,13 @@ SPIKE = os.path.join(ROOT, "spike_tmp")
 
 
 def run(cmd):
-    """(seconds, peak KB of the child, output) of a command."""
-    before = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss
+    """(seconds, output) of a command."""
     started = time.time()
     done = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=900)
     seconds = time.time() - started
-    peak = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss
     if done.returncode != 0:
         sys.exit("failed: %s\n%s%s" % (" ".join(cmd), done.stdout, done.stderr))
-    return seconds, max(peak, before), done.stdout + done.stderr
+    return seconds, done.stdout + done.stderr
 
 
 def main():
@@ -43,18 +40,19 @@ def main():
         name = "tal_%dx%d" % (nx, ny)
         out = os.path.join("spike_tmp", name + ".txt")
         run([sys.executable, "tools/art/tile_map.py", args.source, str(nx), str(ny), out])
-        seconds, peak, _ = run([sys.executable, "tools/perf/spike_bake.py", out])
+        seconds, output = run([sys.executable, "tools/perf/spike_bake.py", out])
+        peak = int(output.split("peak_kb=")[-1].split()[0])
         png = os.path.getsize(os.path.join(SPIKE, name + "_ground.png"))
         baked[name] = (seconds, peak / 1024.0, png / 1048576.0)
         print("baked %s in %.0f s, %.0f MB peak, ground png %.1f MB" % ((name,) + baked[name]), file=sys.stderr)
-    seconds, _, _ = run(["tools/godot.sh", "--headless", "--import"])
+    seconds, _ = run(["tools/godot.sh", "--headless", "--import"])
     print("imported in %.0f s" % seconds, file=sys.stderr)
     print("| Karte | Zellen | Kacheln | Bake (s) | Bake (MB) | PNG (MB) | Parse (ms) | Aufbau (ms) | Knoten | Speicher (MB) | Prozess (µs/Bild) |")
     print("|---|---|---|---|---|---|---|---|---|---|---|")
     for nx, ny in sizes:
         name = "tal_%dx%d" % (nx, ny)
-        _, _, output = run(["tools/godot.sh", "--headless", "res://tools/perf/map_spike.tscn", "--",
-                            "--map=res://spike_tmp/%s.txt" % name])
+        _, output = run(["tools/godot.sh", "--headless", "--quit-after", "2000", "res://tools/perf/map_spike.tscn",
+                         "--", "--profile=spike", "--map=res://spike_tmp/%s.txt" % name])
         line = [l for l in output.splitlines() if l.startswith("SPIKE ")]
         if not line:
             sys.exit("no result for %s:\n%s" % (name, output))
@@ -62,7 +60,7 @@ def main():
         b = baked[name]
         print("| %s | %d × %d | %d | %.0f | %.0f | %.1f | %s | %s | %d | %s | %d |" % (
             name, r["cells"][0], r["cells"][1], r["symbols"], b[0], b[1], b[2],
-            r["parse_ms"], r["build_ms"], r["nodes"], r["static_mb"], r["frame_us"]))
+            r["parse_ms"], r["build_ms"], r["nodes"], r["static_mb"], r["process_us"]))
 
 
 if __name__ == "__main__":

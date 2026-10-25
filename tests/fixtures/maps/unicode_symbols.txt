@@ -1,6 +1,7 @@
-; Zeichen außerhalb von ASCII als Kartensymbole (T6, ADR-068): zwei aus der Grundebene, eines aus dem Umfeld der
-; Zeichenfolgen (€), ein Zeichen aus den höheren Ebenen (😀). Python (tools/art/mapfile.py) und GDScript (MapData)
-; lesen diese eine Datei und müssen dasselbe sehen: fünf Zeichen breit, vier Zeilen hoch, zwei Marker, vier Kacheln.
+; Zeichen außerhalb von ASCII als Kartensymbole (T6, ADR-068): Kleinbuchstabe mit Umlaut (ö), Währungszeichen (€), ein
+; chinesisches Zeichen (日), ein griechischer Großbuchstabe (Ω) und ein Zeichen oberhalb der Grundebene (😀). Python
+; (tools/art/mapfile.py) und GDScript (MapData) lesen diese eine Datei und müssen dasselbe sehen: fünf Zellen breit,
+; vier Zeilen hoch, zwei Marker, drei Kacheln (ö, €, 日).
 [legend]
 ö = {"atlas": [0, 0], "surface": "grass"}
 € = {"atlas": [2, 0], "surface": "dirt"}

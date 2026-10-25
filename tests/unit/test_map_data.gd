@@ -144,7 +144,17 @@ func test_symbols_outside_ascii_are_cells() -> void:
 	assert_eq(data.placements.size(), 2)
 
 
-func test_a_blank_symbol_is_not_a_cell() -> void:
-	# whitespace is stripped from every line, so it can never be a symbol (the art tools agree)
-	var data := MapData.parse("..\n. \n..", LEGEND, "blank")
-	assert_false(data.is_valid(), "a trailing blank is cut off, and the row is short")
+func test_trailing_blanks_of_a_row_are_cut_off() -> void:
+	# the art tools cut them off too (tools/art/test_mapfile.py), so both see the same width
+	var data := MapData.parse("..  \n..\t\n..", LEGEND, "blanks")
+	assert_true(data.is_valid(), str(data.errors))
+	assert_eq([data.width, data.height], [2, 3])
+
+
+func test_a_space_cannot_be_a_symbol() -> void:
+	# NBSP and the wide space: Python cuts them off a legend line, Godot would keep them
+	for space: int in [0x00A0, 0x2003, 0x3000]:
+		var text := '[legend]\n%s = {"atlas": [0, 0], "surface": "grass"}\n[map]\n..' % char(space)
+		var data := MapData.parse(text, LEGEND, "space")
+		assert_false(data.is_valid(), "U+%04X is no symbol" % space)
+		assert_string_contains(data.errors[0], "a space is no symbol")

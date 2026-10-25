@@ -36,10 +36,15 @@ func _run() -> void:
 	var build_us := Time.get_ticks_usec() - started
 	var nodes := int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)) - nodes_before
 	var memory := (Performance.get_monitor(Performance.MEMORY_STATIC) - memory_before) / 1048576.0
-	started = Time.get_ticks_usec()
+	# the engine's own time of the frame's process and physics steps; a wall clock around the loop
+	# would measure the pause headless mode puts between frames (about 7 ms), not the scene
+	var process_s := 0.0
 	for i in FRAMES:
 		await get_tree().process_frame
-	var frame_us := float(Time.get_ticks_usec() - started) / float(FRAMES)
+		process_s += (
+			Performance.get_monitor(Performance.TIME_PROCESS)
+			+ Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
+		)
 	var result := {
 		"map": _map,
 		"ok": ok,
@@ -50,7 +55,7 @@ func _run() -> void:
 		"build_ms": snappedf(build_us / 1000.0, 0.1),
 		"nodes": nodes,
 		"static_mb": snappedf(memory, 0.1),
-		"frame_us": int(frame_us),
+		"process_us": int(process_s / float(FRAMES) * 1000000.0),
 	}
 	print("SPIKE ", JSON.stringify(result))
 	get_tree().quit(0 if ok else 1)

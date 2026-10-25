@@ -90,6 +90,14 @@ class SymbolTests(unittest.TestCase):
         self.assertEqual(symbols["😀"]["marker"], "player_spawn")
         self.assertEqual(sum(row.count("😀") + row.count("Ω") for row in rows), 2, "two markers")
 
+    def test_trailing_blanks_of_a_row_are_cut_off(self):
+        # MapData does the same (tests/unit/test_map_data.gd): both see the same width
+        path = os.path.join(tempfile.mkdtemp(), "blanks.txt")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("[map]\n..  \n..\t\n..\n")
+        _, _, rows = mapfile.parse_map(path)
+        self.assertEqual(rows, ["..", "..", ".."])
+
     def test_a_row_is_as_long_as_its_symbols_not_its_bytes(self):
         _, _, rows = mapfile.parse_map(self.FIXTURE)
         self.assertEqual({len(row) for row in rows}, {5})
