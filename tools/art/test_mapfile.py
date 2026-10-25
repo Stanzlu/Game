@@ -75,5 +75,26 @@ class StampTests(unittest.TestCase):
         self.assertEqual(mapfile.check(), [])
 
 
+
+
+class SymbolTests(unittest.TestCase):
+    """Symbols outside ASCII (T6, ADR-068): the parser of the art tools and MapData read the same file."""
+
+    FIXTURE = os.path.join(mapfile.ROOT, "tests", "fixtures", "maps", "unicode_symbols.txt")
+
+    def test_symbols_outside_ascii_are_cells(self):
+        meta, symbols, rows = mapfile.parse_map(self.FIXTURE)
+        self.assertEqual(rows, ["日日日日日", "日ö😀€日", "日€Ωö日", "日日日日日"])
+        for symbol in "ö€日😀Ω":
+            self.assertIn(symbol, symbols)
+        self.assertEqual(symbols["😀"]["marker"], "player_spawn")
+        self.assertEqual(sum(row.count("😀") + row.count("Ω") for row in rows), 2, "two markers")
+
+    def test_a_row_is_as_long_as_its_symbols_not_its_bytes(self):
+        _, _, rows = mapfile.parse_map(self.FIXTURE)
+        self.assertEqual({len(row) for row in rows}, {5})
+        self.assertGreater(len(rows[1].encode("utf-8")), 5)
+
+
 if __name__ == "__main__":
     unittest.main()

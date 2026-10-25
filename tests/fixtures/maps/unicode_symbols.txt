@@ -1,0 +1,14 @@
+; Zeichen außerhalb von ASCII als Kartensymbole (T6, ADR-068): zwei aus der Grundebene, eines aus dem Umfeld der
+; Zeichenfolgen (€), ein Zeichen aus den höheren Ebenen (😀). Python (tools/art/mapfile.py) und GDScript (MapData)
+; lesen diese eine Datei und müssen dasselbe sehen: fünf Zeichen breit, vier Zeilen hoch, zwei Marker, vier Kacheln.
+[legend]
+ö = {"atlas": [0, 0], "surface": "grass"}
+€ = {"atlas": [2, 0], "surface": "dirt"}
+日 = {"atlas": [4, 0], "surface": "stone", "solid": true}
+😀 = {"ground": "ö", "marker": "player_spawn"}
+Ω = {"ground": "€", "marker": "spawn_other"}
+[map]
+日日日日日
+日ö😀€日
+日€Ωö日
+日日日日日

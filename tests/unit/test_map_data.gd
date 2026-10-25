@@ -122,3 +122,29 @@ func test_comments_before_the_map_block_are_ignored() -> void:
 	var data := MapData.parse("; a comment\n[legend]\n; another\n[map]\n..", LEGEND)
 	assert_true(data.is_valid(), str(data.errors))
 	assert_eq(data.height, 1)
+
+
+# --- symbols outside ASCII (T6, ADR-068) ---------------------------------------------------------
+
+
+func test_symbols_outside_ascii_are_cells() -> void:
+	# the same file tools/art/test_mapfile.py reads: both parsers have to see the same map
+	var text := FileAccess.get_file_as_string("res://tests/fixtures/maps/unicode_symbols.txt")
+	var data := MapData.parse(text, {"tile_size": 16, "symbols": {}}, "unicode_symbols")
+	assert_true(data.is_valid(), str(data.errors))
+	assert_eq([data.width, data.height], [5, 4], "a cell is a symbol, not a byte")
+	assert_eq(data.ground_rows[1], "日ö" + "ö" + "€日", "the marker cell keeps its ground tile")
+	assert_eq(data.tile_symbol_at(Vector2i(1, 1)), "ö")
+	assert_true(data.is_solid(Vector2i(0, 0)), "日 is a wall")
+	assert_eq(data.surface_at_cell(Vector2i(3, 1)), &"dirt")
+	var spawns := data.find_marker("player_spawn")
+	assert_eq(spawns.size(), 1)
+	assert_eq(spawns[0]["cell"], Vector2i(2, 1), "a symbol above the basic plane is one cell")
+	assert_eq(data.find_marker("spawn_other")[0]["cell"], Vector2i(2, 2))
+	assert_eq(data.placements.size(), 2)
+
+
+func test_a_blank_symbol_is_not_a_cell() -> void:
+	# whitespace is stripped from every line, so it can never be a symbol (the art tools agree)
+	var data := MapData.parse("..\n. \n..", LEGEND, "blank")
+	assert_false(data.is_valid(), "a trailing blank is cut off, and the row is short")
