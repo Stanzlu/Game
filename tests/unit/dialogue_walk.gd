@@ -38,3 +38,31 @@ static func play(path: String, cue: String, picks: PackedStringArray = []) -> Pa
 			next_id = chosen.next_id
 		line = await DialogueManager.get_next_dialogue_line(resource, next_id)
 	return seen
+
+
+## The allowed answers at each choice of `cue`, in order. `picks` steers the walk as in `play`
+## (a reader that only exists with a facet shows up in the list of the choice it belongs to).
+static func groups(
+	path: String, cue: String, picks: PackedStringArray = []
+) -> Array[PackedStringArray]:
+	var resource := load(path) as DialogueResource
+	var found: Array[PackedStringArray] = []
+	var choice := 0
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(resource, cue)
+	while line != null:
+		var next_id := line.next_id
+		if not line.responses.is_empty():
+			var pick := picks[choice] if choice < picks.size() else ""
+			choice += 1
+			var texts: PackedStringArray = []
+			var chosen: DialogueResponse = null
+			for r: DialogueResponse in line.responses:
+				if not r.is_allowed:
+					continue
+				texts.append(r.text)
+				if chosen == null or (not pick.is_empty() and pick in r.text):
+					chosen = r
+			found.append(texts)
+			next_id = chosen.next_id
+		line = await DialogueManager.get_next_dialogue_line(resource, next_id)
+	return found
