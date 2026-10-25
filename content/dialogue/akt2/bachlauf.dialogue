@@ -1,0 +1,115 @@
+# Der Bachlauf, Akt II, Segment B3 (docs/akt2/REGIONSBRIEFE.md). Alles, was der Bach zurückgelassen hat, steht als kleine
+# Fundstelle am Pfad: der Pfosten mit dem leeren Haken (dort beginnt die Nebenquest "Die Reuse"), der Schwimmer im Schilf, die
+# Reuse hinter dem Wehr, drei Kuriositäten, zwei Spuren der Welt (Fragmente), die Hufabdrücke auf dem Balken, der Blick zurück
+# und, wer genau hinsieht, der aufgeknotete Knoten am Haken. Niemand spricht; es sind Erzählzeilen ohne Doppelpunkt. Nichts
+# hier erklärt, warum jemand gegangen ist (Brief O5, kein Kind), und jede Stelle ist freiwillig: der Abend endet auch ohne sie.
+# Antworten stehen mit der nehmenden Antwort zuerst; was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+~ hook
+if WorldState.has_flag("valley.trap_hooked")
+	Der leere Haken am Pfosten. Der helle Streifen im Holz darunter. [ID:bl_hook_4] [#draft]
+else
+	Ein Pfosten am Ufer, oben ein eiserner Haken. [ID:bl_hook_1] [#draft]
+	Im Holz darunter ein heller Streifen, lang und rund. Dort hat etwas lange gehangen. [ID:bl_hook_2] [#draft]
+	Der Haken ist leer. Was daran hing, ist bachabwärts gegangen. [ID:bl_hook_3] [#draft]
+	do WorldState.start_quest("side_valley_trap")
+	do WorldState.set_flag("valley.trap_hooked")
+=> END
+
+~ weight
+Im Gras am Fuß des Pfostens liegt ein Senkblei, so groß wie ein Daumenglied. Eine Kerbe für die Schnur. [ID:bl_weight_1] [#draft]
+- Einstecken. [ID:bl_weight_r1] [#draft]
+	Du steckst es ein. Es zieht die Tasche nach unten, genau wie vorgesehen. [ID:bl_weight_2] [#draft]
+	do WorldState.add_item("curiosity_lead_weight")
+	do WorldState.set_flag("valley.weight_taken")
+- Liegen lassen. [ID:bl_weight_r2] [#draft]
+	Du lässt es liegen. Es hält das Gras unten. [ID:bl_weight_3] [#draft]
+=> END
+
+~ knot
+if WorldState.has_flag("valley.knot_seen")
+	Der offene Knoten am Haken. [ID:bl_knot_4] [#draft]
+else
+	Am Haken sitzt noch eine Schlinge Schnur, so dünn und so grau, dass man sie für Holz hält. [ID:bl_knot_1] [#draft]
+	Sie ist nicht gerissen. Sie ist aufgeknotet, flach und sauber, von jemandem, der das oft getan hat. [ID:bl_knot_2] [#draft]
+	Wer es abnahm, hat es nicht weit gelegt. Der Bach schon. [ID:bl_knot_3] [#draft]
+	do WorldState.set_flag("valley.knot_seen")
+=> END
+
+~ float
+if WorldState.has_flag("valley.trap_floated")
+	Der Schwimmer im Schilf, die Spitze bachabwärts. [ID:bl_float_3] [#draft]
+else
+	Im Schilf hängt ein Schwimmer aus Kork, rot und weiß, die Farbe schält sich. [ID:bl_float_1] [#draft]
+	Er zeigt mit seiner kleinen Spitze bachabwärts. Das Wasser zeigt dorthin auch, nur lauter. [ID:bl_float_2] [#draft]
+	do WorldState.advance_quest("side_valley_trap", "float")
+	do WorldState.set_flag("valley.trap_floated")
+=> END
+
+~ trap
+if WorldState.has_flag("valley.trap_freed")
+	Die Reuse liegt frei im Strom, die Öffnung stromab. [ID:bl_trap_9] [#draft]
+	=> END
+if WorldState.quest_stage("side_valley_trap") == "float"
+	Hinter dem Wehr klemmt ein Geflecht aus Weiden, lang wie ein Arm, halb unter Wasser. Eine Reuse. [ID:bl_trap_1] [#draft]
+	do WorldState.advance_quest("side_valley_trap", "weir")
+else
+	Die Reuse klemmt noch hinter dem Wehr. [ID:bl_trap_2] [#draft]
+=> trap_free
+
+~ trap_free
+- Sie lösen. [ID:bl_trap_r1] [#draft]
+	Du ziehst, bis sie nachgibt. Sie dreht sich im Strom und liegt dann ruhig, die Öffnung stromab. [ID:bl_trap_3] [#draft]
+	Im Geflecht liegt etwas. Kein Fisch. Ein Kamm, dem bis auf einen Zahn alle fehlen. [ID:bl_trap_4] [#draft]
+	do WorldState.add_item("curiosity_comb")
+	do WorldState.advance_quest("side_valley_trap", "done")
+	do WorldState.set_flag("valley.trap_freed")
+- Klemmen lassen. [ID:bl_trap_r2] [#draft]
+	Du lässt sie. Sie hat sich dort eingerichtet. [ID:bl_trap_5] [#draft]
+=> END
+
+~ glass
+Im Flachwasser liegt ein Stück Glas, blau, von der Strömung rund gerieben. [ID:bl_glass_1] [#draft]
+- Herausholen. [ID:bl_glass_r1] [#draft]
+	Du fischst es heraus. Nass ist es noch blauer. [ID:bl_glass_2] [#draft]
+	do WorldState.add_item("curiosity_blue_glass")
+	do WorldState.set_flag("valley.glass_taken")
+- Liegen lassen. [ID:bl_glass_r2] [#draft]
+	Du lässt es liegen. Der Bach dreht es um, als wollte er nachsehen. [ID:bl_glass_3] [#draft]
+=> END
+
+~ table
+if WorldState.has_flag("fragment.bank_table")
+	Das Brett auf den zwei Stümpfen. Die zwei Ringe. [ID:bl_table_5] [#draft]
+else
+	Zwei Baumstümpfe am Ufer, ein Brett darüber. Auf dem Brett zwei Ringe, wo Becher gestanden haben. [ID:bl_table_1] [#draft]
+	Beide Stümpfe sind glatt gesessen. Beide stehen zum Wasser hin. [ID:bl_table_2] [#draft]
+	Du setzt dich auf den einen. Das Brett wackelt nicht. Wer das gebaut hat, konnte das. [ID:bl_table_3] [#draft]
+	Für einen Atemzug stehen zwei Becher auf dem Brett, und es dampft aus ihnen. Dann ist da wieder nur Holz. [ID:bl_table_4] [#draft]
+	do WorldState.set_flag("fragment.bank_table")
+=> END
+
+~ dry_bed
+if WorldState.has_flag("fragment.dry_bed")
+	Die trockene Rinne, die Kiesel alle gleich gedreht. [ID:bl_bed_5] [#draft]
+else
+	Neben dem Bach läuft eine Rinne, so breit wie er, aber trocken. Kiesel liegen darin, alle in dieselbe Richtung gedreht. [ID:bl_bed_1] [#draft]
+	Hier ist er einmal geflossen. Irgendwann lag er ein Stück daneben. [ID:bl_bed_2] [#draft]
+	Du gehst ein paar Schritte in der Rinne. Es ist still darin. Das Rauschen kommt von nebenan. [ID:bl_bed_3] [#draft]
+	Für einen Atemzug liegt Wasser in der Rinne, glatt und leise. Dann sind es wieder Kiesel. [ID:bl_bed_4] [#draft]
+	do WorldState.set_flag("fragment.dry_bed")
+=> END
+
+~ goat_trace
+Auf dem Balken, der das Wasser staut, stehen Hufabdrücke im Moos. Eine Reihe, genau hintereinander. [ID:bl_goat_1] [#draft]
+Der Balken ist schmal. Das Wasser zu beiden Seiten ist tief. Das wurde der Ziege offenbar nicht gesagt. [ID:bl_goat_2] [#draft]
+=> END
+
+~ look_back
+Über den Bäumen steht dünner Rauch, gerade nach oben. Das Haus. [ID:bl_back_1] [#draft]
+Von hier aus zieht der Kamin ausgezeichnet. [ID:bl_back_2] [#draft]
+=> END
+
+~ bach_wait
+Hinter der Hecke geht ein Pfad am Bach entlang. Der Regen hat ihn zu Matsch gemacht. [ID:bl_wait_1] [#draft]
+=> END
