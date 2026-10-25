@@ -213,14 +213,14 @@ func test_beat_flags_are_set_by_the_beat_log_and_need_no_reader() -> void:
 
 func test_chapter_marks_count_like_flags() -> void:
 	var src := _sources()
-	src.code["res://w/a.gd"] = 'func f():\n\tChapter.mark("act1")\n'
+	src.code["res://w/a.gd"] = 'func f():\n\tChapter.mark("act9")\n'
 	var problems := StoryLint.flag_problems(src)
 	assert_eq(problems.size(), 1, "a chapter nobody reads")
-	assert_string_contains(problems[0], "sets flag 'chapter.act1'")
-	src.code["res://w/b.gd"] = 'func g():\n\treturn Chapter.reached("act1")\n'
+	assert_string_contains(problems[0], "sets flag 'chapter.act9'")
+	src.code["res://w/b.gd"] = 'func g():\n\treturn Chapter.reached("act9")\n'
 	assert_eq(StoryLint.flag_problems(src), PackedStringArray())
-	src.code["res://w/c.gd"] = 'func h():\n\tChapter.mark("act1")\n'
-	assert_string_contains(StoryLint.duplicate_problems(src)[0], "'chapter.act1' is also marked at")
+	src.code["res://w/c.gd"] = 'func h():\n\tChapter.mark("act9")\n'
+	assert_string_contains(StoryLint.duplicate_problems(src)[0], "'chapter.act9' is also marked at")
 
 
 func test_a_flag_set_for_tests_and_named_as_such_is_allowed() -> void:

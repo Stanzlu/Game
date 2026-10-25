@@ -196,3 +196,4 @@ func test_the_crossing_leaves_leaf_and_feather_behind() -> void:
 	sequence.run()
 	await wait_for_signal(sequence.finished, 5.0)
 	assert_eq(WorldState.state.inventory.keys(), ["item_stone", "item_seed"])
+	assert_true(Chapter.reached("act1"), "and the crossing marks Act I as reached")

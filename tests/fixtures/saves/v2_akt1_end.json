@@ -1,0 +1,171 @@
+{
+	"game_version": "0.8.4",
+	"saved_at": "2026-10-25T02:23:39Z",
+	"schema_version": 2,
+	"world_state": {
+		"day_preset": "regentag",
+		"discovered": [],
+		"elysia": {
+			"gold": 11340,
+			"xp": 51250
+		},
+		"facets": {
+			"perception": true
+		},
+		"flags": {
+			"beat.butterflies_caught": true,
+			"beat.child": true,
+			"beat.child_melody": true,
+			"beat.elysia_start": true,
+			"beat.feast": true,
+			"beat.feast_enter": true,
+			"beat.fountain": true,
+			"beat.hall_enter": true,
+			"beat.hall_mirror": true,
+			"beat.hall_room_1": true,
+			"beat.hall_room_2": true,
+			"beat.inn_enter": true,
+			"beat.inn_fed": true,
+			"beat.inn_room": true,
+			"beat.inn_slept": true,
+			"beat.irritation": true,
+			"beat.market_board": true,
+			"beat.market_board_done": true,
+			"beat.market_bread": true,
+			"beat.market_enter": true,
+			"beat.market_hall_open": true,
+			"beat.market_melody": true,
+			"beat.perception": true,
+			"beat.rift_found": true,
+			"beat.stone": true,
+			"beat.trail_door": true,
+			"beat.trail_hallway": true,
+			"beat.trail_room": true,
+			"beat.valley_arrival": true,
+			"chapter.act1": true,
+			"elysia.butterflies_asked": true,
+			"elysia.butterfly_first": true,
+			"elysia.butterfly_second": true,
+			"elysia.butterfly_third": true,
+			"elysia.chest_tree_opened": true,
+			"elysia.child_met": true,
+			"elysia.child_vanished": true,
+			"elysia.feast": true,
+			"elysia.feast_invited": true,
+			"elysia.feast_toast": true,
+			"elysia.hall_feather_taken": true,
+			"elysia.hall_leaf_taken": true,
+			"elysia.hall_mirror_seen": true,
+			"elysia.hall_open": true,
+			"elysia.hall_room_1": true,
+			"elysia.hall_room_2": true,
+			"elysia.hall_seen": true,
+			"elysia.inn_book_seen": true,
+			"elysia.inn_book_signed": true,
+			"elysia.inn_fed": true,
+			"elysia.inn_met": true,
+			"elysia.inn_room": true,
+			"elysia.inn_slept": true,
+			"elysia.inn_stayed": true,
+			"elysia.loops": true,
+			"elysia.loops_1": true,
+			"elysia.loops_2": true,
+			"elysia.market_greeted": true,
+			"elysia.market_seen": true,
+			"elysia.market_shop_seen": true,
+			"elysia.rift_crossed": true,
+			"elysia.rift_open": true,
+			"elysia.stone_taken": true,
+			"elysia.woke": true,
+			"fragment.closed_door": true,
+			"fragment.empty_room": true,
+			"fragment.hallway": true,
+			"melody.child_hum": true,
+			"melody.elysia_perfect": true,
+			"valley.arrived": true
+		},
+		"house": {
+			"cat_name": "",
+			"curiosity_slots": {},
+			"fire_lit": false
+		},
+		"inventory": {
+			"item_seed": 1,
+			"item_stone": 1
+		},
+		"player": {
+			"map": "tal",
+			"name": "",
+			"preset": 0,
+			"x": 936.0,
+			"y": 152.0
+		},
+		"playtime_seconds": 139.299999999995,
+		"quests": {
+			"main_elysia_hero": {
+				"history": [
+					"greet",
+					"butterflies",
+					"reward",
+					"celebrated",
+					"inn",
+					"market",
+					"hall",
+					"feast",
+					"repeat"
+				],
+				"objectives_done": [],
+				"stage": "repeat"
+			},
+			"main_elysia_trail": {
+				"history": [
+					"hum",
+					"trail",
+					"rift"
+				],
+				"objectives_done": [],
+				"stage": "rift"
+			},
+			"side_elysia_board": {
+				"history": [
+					"bread",
+					"deliver",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_butterflies": {
+				"history": [
+					"catch",
+					"return",
+					"done"
+				],
+				"objectives_done": [
+					"first",
+					"second",
+					"third"
+				],
+				"stage": "done"
+			},
+			"side_elysia_fountain": {
+				"history": [
+					"check",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_guestbook": {
+				"history": [
+					"sign",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			}
+		},
+		"relationships": {},
+		"ui_mode": "REAL"
+	}
+}
