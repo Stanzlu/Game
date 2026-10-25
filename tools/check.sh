@@ -230,6 +230,12 @@ if grep -E "after await, but (class instance|script) is gone" "$gut_log"; then
   echo "check: a coroutine outlived its node (await on the tree's signals; see CLAUDE.md)" >&2
   exit 1
 fi
+# A test script that does not parse or does not extend GutTest is skipped with a warning, and the run
+# stays green with fewer tests: the log is searched for that as well.
+if grep -E "Ignoring script|Failed to load script \"res://tests" "$gut_log"; then
+  echo "check: GUT did not load a test script (parse error or no 'extends GutTest')" >&2
+  exit 1
+fi
 rm -f "$gut_log"
 
 echo

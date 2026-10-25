@@ -13,7 +13,7 @@ Schritten, ein Pull Request je Phase. Die 0-€-Regel und Fragen bei großen Wei
 ## Befehle
 - `tools/check.sh` vor jedem Push (Lint, Format, Import, Smoke-Run, GUT). Muss grün sein; rund 3 Minuten, die Tabelle am
   Ende zeigt die Zeit je Schritt. GUT läuft mit `--fixed-fps 60` (Spielzeit so schnell wie der Rechner rechnet, ADR-051);
-  `GUT_FIXED_FPS=0 tools/check.sh` fährt in Echtzeit (rund 12 Minuten, vor jedem Phasenende und bei Zeitfehlern).
+  `GUT_FIXED_FPS=0 tools/check.sh` fährt in Echtzeit (rund 12 Minuten, vor jedem Phasenende und bei Zeitfehlern). Ein Testskript, das nicht lädt oder nicht von `GutTest` erbt, lässt `check.sh` scheitern.
 - Einzelne Testdatei: `tools/godot.sh --headless -s addons/gut/gut_cmdln.gd -gselect=test_log -gexit`
 - `tools/export.sh <ziel>` und `tools/smoke_export.sh` für Builds; `tools/capture.sh` für Screenshots.
 - gdtoolkit liegt in `.venv/` (`python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`).

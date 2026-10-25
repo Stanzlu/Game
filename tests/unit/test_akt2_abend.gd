@@ -105,12 +105,23 @@ func test_a_saved_game_with_two_or_three_values_still_gets_one_reading() -> void
 				readings += 1
 		assert_eq(readings, 1, "one reading for %s" % str(flags))
 		assert_eq(_remembered().size(), 1, "and one memory")
-	WorldState.new_game()
-	WorldState.set_flag("value.calm")
-	WorldState.set_flag("value.closeness")
-	assert_true(
-		_has(await DialogueWalk.play(TAL, CUE), "tal_eve_val_5"), "the window before the knock"
-	)
+
+
+func test_the_order_of_the_trace_is_the_door_then_the_window_then_the_knock() -> void:
+	# not a ranking of the values: which trace is strongest for someone at that fire
+	var cases: Array = [
+		[["value.freedom", "value.calm"], "tal_eve_val_2", "saw_door_ajar"],
+		[["value.freedom", "value.closeness"], "tal_eve_val_2", "saw_door_ajar"],
+		[["value.freedom", "value.calm", "value.closeness"], "tal_eve_val_2", "saw_door_ajar"],
+		[["value.calm", "value.closeness"], "tal_eve_val_5", "checked_house"],
+	]
+	for entry: Array in cases:
+		WorldState.new_game()
+		for flag: String in entry[0]:
+			WorldState.set_flag(flag)
+		var seen := await DialogueWalk.play(TAL, CUE)
+		assert_true(_has(seen, entry[1]), "the first line of the reading for %s" % str(entry[0]))
+		assert_eq(_remembered(), PackedStringArray([entry[2]]), "and its memory")
 
 
 func test_the_reading_asks_nothing_and_offers_no_answer() -> void:
@@ -210,18 +221,18 @@ func test_no_line_names_a_value_judges_comforts_or_asks_for_a_reason() -> void:
 		"vermiss",
 	]
 	for id: String in _all_ids():
+		var text := LineText.of(id).to_lower()
 		for word: String in forbidden:
-			assert_false(LineText.of(id).contains(word), "'%s' in %s" % [word, id])
+			assert_false(text.contains(word.to_lower()), "'%s' in %s" % [word, id])
 
 
 func test_mira_keeps_her_short_sentences() -> void:
-	# Ø 7,2 words in her sheet, never a speech: no line of hers longer than ten words
+	# Ø 7,2 words in her sheet, never a speech: no line of hers longer than ten words, narration
+	# no longer than the longest narration line of the evening (twenty-one, STIL)
+	var narration := PackedStringArray(["tal_eve_val_1", "tal_eve_val_5", "tal_eve_val_9", LAST])
 	for id: String in _all_ids():
-		var text := LineText.of(id)
-		var words := text.split(" ", false).size()
-		assert_lt(words, 21, "%s is short" % id)
-	for id: String in ["tal_eve_val_2", "tal_eve_val_3", "tal_eve_val_4", "tal_eve_val_6"]:
-		assert_lt(LineText.of(id).split(" ", false).size(), 11, id)
+		var words := LineText.of(id).split(" ", false).size()
+		assert_lt(words, 22 if id in narration else 11, "%s is short" % id)
 
 
 # --- The journal and the budget ------------------------------------------------------------------
@@ -236,10 +247,13 @@ func test_the_three_memories_have_a_sentence_in_the_journal() -> void:
 
 
 func test_act_two_stays_within_its_six_new_memories_of_mira() -> void:
-	# B2 used kept_origin and kept_day, B6 uses three: one of the six is left for the acts after
-	var used := PackedStringArray(["kept_origin", "kept_day"])
-	used.append_array(MEMORIES)
-	assert_lt(used.size(), 6, "one left")
+	# 41 sentences for Mira before Act II (the Slice's); B2 added two, B6 adds three, one is left
+	var rows := 0
+	for line in FileAccess.get_file_as_string("res://content/locale/journal.csv").split("\n"):
+		if line.begins_with("MEMORY_MIRA_"):
+			rows += 1
+	assert_eq(rows, 41 + 2 + 3, "five new ones so far")
+	assert_lt(rows, 41 + 6 + 1, "never more than six")
 	var source := FileAccess.get_file_as_string(TAL)
 	var cue_from := source.find("~ " + CUE)
 	var cue_to := source.find("~ evening_elysia")

@@ -1,3 +1,4 @@
+extends GutTest
 ## Act II, segment B6, the scene of the valley: the real ending plays Mira's reading of the value
 ## between her question and 'Morgen gehe ich weiter.', Act II is not over before 'Zum Meer.', and
 ## the chapter marks come as one block with the save. What is said is tested in test_akt2_abend.
@@ -10,10 +11,12 @@ func before_each() -> void:
 	WorldState.new_game()
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
 	Settings.set_value("text.auto_advance", true, false)
+	Settings.set_value("text.speed", 3, false)
 
 
 func after_each() -> void:
 	Settings.set_value("text.auto_advance", false, false)
+	Settings.set_value("text.speed", 1, false)
 	WorldState.new_game()
 	ScreenFade.fade_in(0.0)
 	get_tree().paused = false
