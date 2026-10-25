@@ -623,6 +623,39 @@
    "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII)."
   },
   {
+   "id": "spuren-der-welt",
+   "kind": "vorausdeutung",
+   "title": "Spuren der Welt und der Vergangenheit",
+   "bible": "§31",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "bl_hook_2"
+    },
+    {
+     "type": "line",
+     "ref": "bl_table_4"
+    },
+    {
+     "type": "line",
+     "ref": "bl_bed_4"
+    },
+    {
+     "type": "line",
+     "ref": "bl_knot_2"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.bank_table"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.dry_bed"
+    }
+   ],
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne (Akt II). Die Fragmente des Kindes (Bible §15) bleiben davon getrennt."
+  },
+  {
    "id": "ziege",
    "kind": "gag",
    "title": "Die Ziege",
@@ -647,6 +680,18 @@
     {
      "type": "line",
      "ref": "tal_fence_2"
+    },
+    {
+     "type": "line",
+     "ref": "bl_goat_1"
+    },
+    {
+     "type": "line",
+     "ref": "bl_goat_2"
+    },
+    {
+     "type": "line",
+     "ref": "bl_goat_3"
     },
     {
      "type": "flag",
@@ -1289,6 +1334,61 @@
    "flag": "melody.child_hum",
    "axis": "Musik",
    "meaning": "Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes."
+  },
+  {
+   "flag": "valley.trap_hooked",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat am Pfosten mit dem leeren Haken die Nebenquest „Die Reuse“ begonnen (Akt II, B3)."
+  },
+  {
+   "flag": "valley.trap_floated",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Schwimmer im Schilf gefunden, dessen Spitze bachabwärts zeigt (Akt II, B3)."
+  },
+  {
+   "flag": "valley.trap_freed",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat die Reuse hinter dem Wehr gelöst; sie liegt frei im Strom, im Geflecht ein Kamm (Akt II, B3)."
+  },
+  {
+   "flag": "valley.weight_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das Senkblei am Fuß des Pfostens eingesteckt (Kuriosität, Akt II, B3)."
+  },
+  {
+   "flag": "valley.glass_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das blaue Glas aus dem Flachwasser geholt (Kuriosität, Akt II, B3)."
+  },
+  {
+   "flag": "valley.looks_closely",
+   "axis": "Wahrnehmung",
+   "meaning": "Die Szene des Bachlaufs leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr am Pfosten (Akt II, B3)."
+  },
+  {
+   "flag": "valley.knot_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat den aufgeknoteten Knoten am Haken gesehen, flach und sauber (nur mit der Facette Wahrnehmung)."
+  },
+  {
+   "flag": "fragment.bank_table",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat sich auf den Stumpf am Uferbrett gesetzt: zwei Ringe, zwei Becher, für einen Atemzug Dampf (Spur der Welt, Akt II, B3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "fragment.dry_bed",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die trockene Rinne neben dem Bach gesehen, die Kiesel alle gleich gedreht (Spur der Welt, Akt II, B3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "valley.goat_prints_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die Hufabdrücke der Ziege auf dem Balken des Wehrs gesehen (Akt II, B3; rührt Quest und Stiefel der Ziege nicht an)."
+  },
+  {
+   "flag": "valley.view_back_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat vom Aussichtsplatz im Bachlauf den Rauch des Hauses über den Bäumen gesehen (Akt II, B3)."
   }
  ]
 }

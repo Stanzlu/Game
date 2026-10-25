@@ -53,8 +53,12 @@ func _ready() -> void:
 	# visit) would otherwise win over the scene's preset
 	if WorldState.has_flag("house.mira_visited") and WorldState.day_preset() in ["", "regentag"]:
 		WorldState.set_day_preset("abend")
+	# the way back from the Bachlauf (B3) lands at the marker spawn_bach; super() clears the name
+	var from_bachlauf := SceneTravel.pending_spawn == "bach"
 	super()
 	WorldState.flag_changed.connect(_on_flag_changed)
+	if from_bachlauf:
+		Beat.mark("bachlauf_back")
 	if not WorldState.has_flag("valley.arrived"):
 		WorldState.set_flag("valley.arrived")
 		Beat.mark("valley_arrival")

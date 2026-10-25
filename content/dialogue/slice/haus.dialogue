@@ -91,6 +91,7 @@ else
 ~ window
 if WorldState.is_fire_lit() and WorldState.day_preset() == "abend"
 	Im Fenster spiegelt sich das Feuer. Dahinter wird das Tal golden. [ID:haus_window_3]
+	Weiter unten steigt vom Bach Nebel auf. [ID:haus_window_4] [#draft]
 elif WorldState.is_fire_lit()
 	Im Fenster spiegelt sich das Feuer. Dahinter regnet es auf das Tal. [ID:haus_window_2]
 else

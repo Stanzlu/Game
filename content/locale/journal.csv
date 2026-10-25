@@ -42,6 +42,11 @@ QUEST_SIDE_VALLEY_GOAT_OBJ_POTATO,Etwas finden, das eine Ziege mehr will als ein
 QUEST_SIDE_VALLEY_GOAT_TRADE,"Die Ziege will etwas für den Stiefel. Was sie will, weiß nur sie."
 QUEST_SIDE_VALLEY_GOAT_RETURN,"Ich hab den Stiefel. Leicht angeknabbert. Mira wartet an ihrem Feuer."
 QUEST_SIDE_VALLEY_GOAT_DONE,"Mira hat ihren Stiefel wieder. Die Ziege hat eine Kartoffel. Alle sind zufrieden, die Ziege am meisten."
+QUEST_SIDE_VALLEY_TRAP_TITLE,Die Reuse
+QUEST_SIDE_VALLEY_TRAP_HOOK,"Am Pfosten am Bach hängt nichts mehr, nur ein heller Streifen im Holz. Was dort hing, ist bachabwärts gegangen. Ich bleibe am Wasser. Zurück zeigt der Rauch über den Bäumen."
+QUEST_SIDE_VALLEY_TRAP_FLOAT,"Im Schilf liegt ein Schwimmer aus Kork. Seine Spitze zeigt bachabwärts."
+QUEST_SIDE_VALLEY_TRAP_WEIR,"Hinter dem Wehr klemmt eine Reuse, halb unter Wasser. Sie hat nicht vor, von allein herauszukommen."
+QUEST_SIDE_VALLEY_TRAP_DONE,"Die Reuse liegt wieder frei im Strom. Fisch war keiner drin. Dafür ein Kamm."
 JOURNAL_PEOPLE,Menschen
 JOURNAL_PERSON_MIRA,Mira
 MEMORY_MIRA_SAID_HELLO,"Ich habe Hallo gesagt. Sie auch. Dann hat sie mir gesagt, dass ich im Regen stehe."

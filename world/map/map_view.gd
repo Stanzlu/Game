@@ -265,15 +265,17 @@ func _add_reflections() -> void:
 		return
 	reflection_material.set_shader_parameter("map_origin", global_position)
 	for child in entities.get_children():
-		if (
-			not child is Node2D
-			or child is Player
-			or not _near_water(world_to_cell((child as Node2D).global_position))
-		):
-			continue
-		if child is CanvasItem and (child as CanvasItem).z_index < 0:
-			continue
-		add_reflection(child as Node2D)
+		if child is Node2D and _reflects(child, world_to_cell((child as Node2D).global_position)):
+			add_reflection(child as Node2D)
+
+
+## Whether a prop on `cell` shows in the water: near water, not the player (who has his own), and
+## not lying flat on the ground (z below 0: logs, planks, a trap in the stream). The same rule for
+## props built with the map and for those a flag builds later.
+func _reflects(node: Node, cell: Vector2i) -> bool:
+	if node is Player or not _near_water(cell):
+		return false
+	return not (node is CanvasItem and (node as CanvasItem).z_index < 0)
 
 
 ## Gives `owner_node` (its child "Sprite") a reflection in open water; with `puddles` it
@@ -580,7 +582,7 @@ func refresh_conditions() -> void:
 		_conditional[index] = prop
 		if params.has("sprite_when"):
 			_looks[index] = Decor.variant_sprite(params)
-		if prop != null and _near_water(placement["cell"]) and not prop is Player:
+		if prop != null and _reflects(prop, placement["cell"]):
 			add_reflection(prop)
 
 

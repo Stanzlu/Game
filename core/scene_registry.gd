@@ -8,6 +8,7 @@ const SCENES := {
 	"elysia": "res://world/levels/slice/elysia.tscn",
 	"tal": "res://world/levels/slice/tal.tscn",
 	"haus": "res://world/levels/slice/haus.tscn",
+	"bachlauf": "res://world/levels/akt2/bachlauf.tscn",
 	"gasthaus": "res://world/levels/akt1/gasthaus.tscn",
 	"markt": "res://world/levels/akt1/markt.tscn",
 	"spiegelhalle": "res://world/levels/akt1/spiegelhalle.tscn",
@@ -35,10 +36,19 @@ const SMOKE: PackedStringArray = [
 	"spiegelhalle",
 	"tal",
 	"haus",
+	"bachlauf",
 	"weg",
 ]
 const BENCHMARK: PackedStringArray = [
-	"look_elysia", "tal", "haus", "gasthaus", "markt", "spiegelhalle", "weg", "look_wald"
+	"look_elysia",
+	"tal",
+	"bachlauf",
+	"haus",
+	"gasthaus",
+	"markt",
+	"spiegelhalle",
+	"weg",
+	"look_wald"
 ]
 
 ## UI mode a scene starts in when it is opened from the prototype menu (new game).

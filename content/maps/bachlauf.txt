@@ -1,0 +1,115 @@
+; Akt II, B3: der Bachlauf unterhalb des Tals, die erste große Karte (Klasse M, ADR-068). Ein Rundkurs am Bach:
+; das Westufer hinunter, über den Baumstamm der Südfurt, das Ostufer hinauf, über den Stamm der Kopffurt zurück zur Lücke im
+; Wald, die zum Tal führt. Layout: tools/art/layout_akt2_maps.py bachlauf --write (ersetzt den [map]-Block), danach
+; tools/art/bake_ground.py content/maps/bachlauf.txt. Hier liegt alles, was der Bach zurückgelassen hat.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/bachlauf_ground.png"
+water = "res://assets/generated/maps/bachlauf_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.35, "spacing": 11, "clump": 56}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.05, "spacing": 18}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.18, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^v", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TPC", "radius": 1, "density": 0.35, "spacing": 10}, {"sprite": "tal/small_mushrooms", "on": ".", "near": "TPCh", "radius": 1, "density": 0.1, "spacing": 16}, {"sprite": "tal/twig", "on": ".", "near": "TPC", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.2, "spacing": 22}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+v = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "fall"}
+; begehbares Wasser: unter den Baumstämmen der beiden Furten (y)
+y = {"atlas": [6, 0], "surface": "wood", "paint": "water"}
+; Wald, Wiese und Ufer
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+j = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/reeds"}}
+; die Baumstämme über den beiden Furten (Wurzelteller am Westufer) und eine Bank, von der man zurückschaut
+Y = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fallen_tree"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
+; Ankunft aus dem Tal (die Lücke im Wald), der Start eines neuen Spiels und die Tür zurück
+@ = {"ground": ",", "marker": "player_spawn"}
+& = {"ground": ",", "marker": "spawn_tal"}
+% = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "bach", "auto": true, "size": [3, 1]}}
+; die Reuse: der Pfosten mit dem leeren Haken (Quest), der Schwimmer im Schilf, die Reuse hinter dem Wehr, dazu das Wehr selbst
+1 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_post", "cue": "hook", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18}}
+4 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_float", "cue": "float", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18, "if": "valley.trap_hooked"}}
+5 = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_trap_stuck", "sprite_when": {"valley.trap_freed": "tal/bl_trap_free"}, "cue": "trap", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 22, "if": "valley.trap_floated"}}
+6 = {"ground": "v", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_weir"}}
+; Dinge, die der Bach liegen gelassen hat: ein Senkblei, blaues Glas, Uferbrett mit zwei Stümpfen, die trockene Rinne
+2 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_weight", "cue": "weight", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 14, "unless": "valley.weight_taken"}}
+0 = {"ground": "p", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_glass", "cue": "glass", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 16, "unless": "valley.glass_taken"}}
+8 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_stumps", "cue": "table", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 22}}
+9 = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_dry_pebbles", "cue": "dry_bed", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 24}}
+k = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_dry_pebbles"}}
+; Stellen ohne Bild: der aufgeknotete Knoten am Haken (nur, wer genau hinsieht), die Hufabdrücke auf dem Balken, der Blick zurück
+3 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "knot", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 16, "if": "valley.looks_closely"}}
+7 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "goat_trace", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18}}
+$ = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "look_back", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 16}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,%,hh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhh.....hhhhhhhhhhhhh,,,hh~~~hhhhhhhhhhhh....hhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh.........hhhhhhhh....,,,hh~~~hhhhhhhhhhh........hhhhh.hhhhhhhh...hhhhhh
+hhhhhh..................hhhh......,,,..~~~...hhhhhh...........................hhhhhh
+hhhhh.............................,,,..~~~.....hhh..R.......g...........R......hhhhh
+hhhh.........P....................,&,j..~~.j...................................hhhhh
+hhhh......................T.......,@....~~..........R..........................hhhhh
+hhhh...........g.....T............,,,,,,~~~,,,..................................hhhh
+hhh.......................g......1.,,,,Yyyy,,,,..............P..................hhhh
+hhh.............................23.,,...~~~..,,.................................hhhh
+hhh...T.............................,,j..~~~.j,,........mmm.....................hhhh
+hh........................T.........,,...~~~~.,,,.......mmmmmm..T...............hhhh
+hh....g.........T......T.............,,...~~~..,,,......mmmmm...................hhhh
+hhh..............................T....,,.j.~~~..,,........................P.....hhhh
+hhh...................................,,...~~~~..,,...........g..C..............hhhh
+hhhh..g..g.............................,,...~~~...,,............................hhhh
+hhhhh...................................,,...~~~...,,..........................hhhhh
+hhhhh...................................,,..j~~~~..,,,......C..................hhhhh
+hhhhhh.......C..P........................,,...~~~...,,.........................hhhhh
+hhhhh...................mmm...............,,..~~~~j..,,........................hhhhh
+hhhhh..............mmmm.mmmm.......P......,,...~~~~...,,.......................hhhhh
+hhhhh..............mmmmmmmm................,,...~~~...,,,.......C..............hhhhh
+hhhhh......T........mmmmmmm................,,..8~~~~...,,......................hhhhh
+hhhhh....................mm...........T.....,,.j.~~~~j..,,.........R...R........hhhh
+hhhhh.......................................,,,...~~~...,,......................hhhh
+hhhhh..................................g.....,,...~~~~...,,.mm..................hhhh
+hhhh.........g...............................,,,...~~~.j.,,.mmm..................hhh
+hhhh.............................P.R...T......,,...~~~...,,.mkm..................hhh
+hhhh......................................C...,,...~~~...,,.mmm....P.R...........hhh
+hhhh...........T..........P..R................,,.4.~~~....,,mmm........P.........hhh
+hhhh............................P.............,,...~~~....,,mmm..................hhh
+hhhhh.........................................,,...~~~.j.,,.m9m..................hhh
+hhhhh.........................................,,...~~~...,,.mmm..................hhh
+hhhhhh.......................................,,...~~~~...,,mmmm.....C...........hhhh
+hhhhh..................P...R...........g.....,,...~~~...,,,mmm..................hhhh
+hhhhh..........................pppp..........,,.j.~~~...,,.mkm..................hhhh
+hhhhh...........................p...........,,...~~~~..,,,.mm..................hhhhh
+hhhh........g..........................T....,,...~~~...,,......................hhhhh
+hhhh...R....................P..............,,.j.~~~~j.,,.................g....hhhhhh
+hhhh........R.........................g...,,...~~~~..,,,......................hhhhhh
+hhhh.....................................,,.,,0~~~...,,.......................hhhhhh
+hhh....T......T.........................,,,,,~~~~...,,........................hhhhhh
+hhh.............................T......,,,,.~~~~~...,,...mmmm.................hhhhhh
+hhh....................P...............,,..~~~~.j..,,....m,$m..................hhhhh
+hh....................................,,...~~~~...,,....,,bm..........P........hhhhh
+hhh...T..........T..................g.,,..~~~~....,,.,,,,..................T...hhhhh
+hhh............................P......,...~~~.j..,,,,,........P.................hhhh
+hhhh.................................,,.j.~~~...,,,...............C.....g.......hhhh
+hhhhh.......T........................,,...~~~...,,..............................hhhh
+hhhhhh...T...........................,,.7.v6v...,,............T.................hhhh
+hhhhhh...............................,,...~~~...,,......................T.......hhhh
+hhhhhh.g.......g.........g...........,,..j5~~..j,,..........g...................hhhh
+hhhhhh................................,,..~~~~..,,..............g......g........hhhh
+hhhhhh.............T..................,,,..~~~..,,..P...P.......................hhhh
+hhhhh..............................g...,,,.~~~~.,,..............................hhhh
+hhhhh...................................,,,Yyyy,,,........g.................C...hhhh
+hhhhh............................P..........~~~~...............................hhhhh
+hhhhh.......g................................~~~~..............................hhhhh
+hhhh...............P.....R....................~~~~j........T.......T...........hhhhh
+hhhh...........................................~~~~....g.......................hhhhh
+hhhh......g....................................~~~~~...........................hhhhh
+hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh....~~~~~..hhhhhhhhh.......hhhhhhhh.hhhh
+hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh

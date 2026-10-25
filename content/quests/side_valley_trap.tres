@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+
+[sub_resource type="Resource" id="Resource_hook"]
+script = ExtResource("2_stage")
+id = "hook"
+next = PackedStringArray("float")
+
+[sub_resource type="Resource" id="Resource_float"]
+script = ExtResource("2_stage")
+id = "float"
+next = PackedStringArray("weir")
+
+[sub_resource type="Resource" id="Resource_weir"]
+script = ExtResource("2_stage")
+id = "weir"
+next = PackedStringArray("done")
+
+[sub_resource type="Resource" id="Resource_done"]
+script = ExtResource("2_stage")
+id = "done"
+outcome = "done"
+
+[resource]
+script = ExtResource("1_quest")
+id = "side_valley_trap"
+kind = 1
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_hook"), SubResource("Resource_float"), SubResource("Resource_weir"), SubResource("Resource_done")])
+draft = false

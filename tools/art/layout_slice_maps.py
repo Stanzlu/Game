@@ -120,6 +120,10 @@ def tal():
     for x, y in [(13, 23), (20, 21), (24, 18), (27, 20), (31, 22), (8, 25), (36, 22), (49, 22)]:
         if g.get(x, y) in ".,m":
             g.set(x, y, "p")
+    # Akt II (B3): the hedge opens by the stream's west bank, a path leads south to the Bachlauf
+    for y in range(35, 38):
+        for x in range(41, 44):
+            g.set(x, y, ",")
     stones = _stepping_stones(g)
     log_cells = _fallen_tree(g)
     props = {
@@ -181,6 +185,12 @@ def tal():
         # until Mira was asked, the stream holds you back (her no is the valley's first beat)
         "J": [(log_cells[-1], LOG_ROW)],
         "j": [(STONE_X + len(STONE_FIELD[0]), STONE_ROWS[1])],
+        # where the Antreiber stands once he has left the house (6), and the way to the Bachlauf: the
+        # door (8) once Mira has visited, until then a blocker (9), and the place one arrives at (7)
+        "6": [(29, 13)],
+        "7": [(42, 33)],
+        "9": [(42, 35)],
+        "8": [(42, 37)],
     }
     for c, pts in props.items():
         for x, y in pts:

@@ -21,6 +21,7 @@ Früh sichtbar, später rückblickend sinnvoll. Keine Enthüllung darf nur auf I
 | **Der Betäuber (Gastwirt)** | §14, §46 | `el_host_3`, `el_host_11`, `haus_rest_7`, `elysia.soup_served`, `elysia.host_warned`, `gh_room_3`, `gh_slept_2`, `gh_slept_4`, `elysia.inn_declined`, `elysia.inn_stayed`, `mk_host_1`, `mk_host_6`, `mk_host_5` | Akt VI: derselbe Wirt, das freiwillige Aufstehen. `haus_rest_7` trägt den Satz schon zurück in die Wirklichkeit; im Gasthaus zum Immer (Akt I) sind es drei Angebote, jedes frei abzulehnen: das Essen, das Zimmer („Du musst heute nicht zurück.“, `gh_room_3`), die Nacht („Du kannst für immer bleiben.“, `gh_slept_2`). |
 | **Wiederkehrende Formulierungen** | §46 | `el_host_3`, `haus_rest_7`, `tal_mira_8`, `tal_eve_tarp_1`, `tal_eve_tarp_2`, `haus_mira_8`, `tal_mira_again_1`, `tal_end_5`, `tal_south_sign_2`, `mk_baker_3`, `mk_baker_1`, `mk_tailor_5`, `mk_board_4`, `sh_keeper_2`, `sh_gate_2`, `mk_fest_3`, `mk_baker_7`, `mk_tailor_7`, `elysia.feast_noticed` | „Nirgends mehr hin“ wird von Elysia in die Wirklichkeit getragen; „Zum Meer.“ trägt das Ende (Akt VII). |
 | **Fragmente späterer Melodien** | §31, §46 | `el_child_3`, `tal_shell_1`, `tal_eve_shell_2`, `valley.shell_seen`, `mk_music_1`, `mk_music_2`, `melody.elysia_perfect`, `melody.child_hum` | Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). |
+| **Spuren der Welt und der Vergangenheit** | §31 | `bl_hook_2`, `bl_table_4`, `bl_bed_4`, `bl_knot_2`, `fragment.bank_table`, `fragment.dry_bed` | Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne (Akt II). Die Fragmente des Kindes (Bible §15) bleiben davon getrennt. |
 
 ## Laufende Gags (Bible §33)
 
@@ -28,7 +29,7 @@ Jeder Gag hat Auftritte und eine Auflösung. Gags tragen einen Gegenstand, eine 
 
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
-| **Die Ziege** | §33 | `haus_mira_19`, `tal_goat_1`, `tal_goat_8`, `tal_mira_eve_3`, `tal_fence_2`, `valley.goat_met`, `valley.goat_loose`, `valley.goat_traded` | Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. |
+| **Die Ziege** | §33 | `haus_mira_19`, `tal_goat_1`, `tal_goat_8`, `tal_mira_eve_3`, `tal_fence_2`, `bl_goat_1`, `bl_goat_2`, `bl_goat_3`, `valley.goat_met`, `valley.goat_loose`, `valley.goat_traded` | Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. |
 | **Die Kartoffel** | §33 | `tal_goat_4`, `tal_mira_eve_r1`, `valley.potato_taken` | Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung. |
 | **Die Ente** | §33 | noch nicht | Orins Erzfeind (Akt IV). Die Ente verhält sich vollkommen normal. Kein Auftritt im Slice. |
 | **Der Antreiber optimiert Freizeit** | §33 | `tal_antr_2`, `tal_antr_busy_1`, `tal_antr_busy_3`, `nein_antr_3`, `nein_antr_4`, `haus_antr_10`, `haus_antr_11`, `valley.antreiber_rests`, `house.antreiber_by_fire` | Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2). |
@@ -142,3 +143,14 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `fragment.closed_door` | Kind | `kind.dialogue` | `gasthaus.txt` | Sie ist dem Kind im Gasthaus gefolgt und hat die geschlossene Tür gesehen (Fragment 2 von 6). |
 | `fragment.empty_room` | Kind | `kind.dialogue` | `spiegelhalle.txt` | Sie ist dem Kind in der Halle der Spiegel gefolgt und hat das leere Zimmer gesehen (Fragment 3 von 6). |
 | `melody.child_hum` | Musik | `elysia.dialogue` | `ankunft.dialogue` | Sie kann das Summen des Kindes aus dem Garten: die zweite Melodie des ersten Aktes. |
+| `valley.trap_hooked` | Fortschritt | `bachlauf.dialogue` | `bachlauf.dialogue`, `bachlauf.txt` | Sie hat am Pfosten mit dem leeren Haken die Nebenquest „Die Reuse“ begonnen (Akt II, B3). |
+| `valley.trap_floated` | Fortschritt | `bachlauf.dialogue` | `bachlauf.dialogue`, `bachlauf.txt` | Sie hat den Schwimmer im Schilf gefunden, dessen Spitze bachabwärts zeigt (Akt II, B3). |
+| `valley.trap_freed` | Fortschritt | `bachlauf.dialogue` | `bachlauf.dialogue`, `bachlauf.txt` | Sie hat die Reuse hinter dem Wehr gelöst; sie liegt frei im Strom, im Geflecht ein Kamm (Akt II, B3). |
+| `valley.weight_taken` | Gegenstände | `bachlauf.dialogue` | `bachlauf.txt` | Sie hat das Senkblei am Fuß des Pfostens eingesteckt (Kuriosität, Akt II, B3). |
+| `valley.glass_taken` | Gegenstände | `bachlauf.dialogue` | `bachlauf.txt` | Sie hat das blaue Glas aus dem Flachwasser geholt (Kuriosität, Akt II, B3). |
+| `valley.looks_closely` | Wahrnehmung | `bachlauf_scene.gd` | `bachlauf.txt` | Die Szene des Bachlaufs leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr am Pfosten (Akt II, B3). |
+| `valley.knot_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat den aufgeknoteten Knoten am Haken gesehen, flach und sauber (nur mit der Facette Wahrnehmung). |
+| `fragment.bank_table` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat sich auf den Stumpf am Uferbrett gesetzt: zwei Ringe, zwei Becher, für einen Atemzug Dampf (Spur der Welt, Akt II, B3; kein Bild des Kindes). |
+| `fragment.dry_bed` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat die trockene Rinne neben dem Bach gesehen, die Kiesel alle gleich gedreht (Spur der Welt, Akt II, B3; kein Bild des Kindes). |
+| `valley.goat_prints_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat die Hufabdrücke der Ziege auf dem Balken des Wehrs gesehen (Akt II, B3; rührt Quest und Stiefel der Ziege nicht an). |
+| `valley.view_back_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat vom Aussichtsplatz im Bachlauf den Rauch des Hauses über den Bäumen gesehen (Akt II, B3). |

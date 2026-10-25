@@ -1,0 +1,23 @@
+# Fragment Uferbrett (B3): zwei glatt gesessene Stümpfe, ein Brett, zwei Ringe, wo Becher standen
+name: fragment_bank_table
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a2318 d=#5b4330 m=#8a6a48 l=#b8946a c=#e8d6b0
+outline: o
+---
+................
+................
+................
+.oooooooooooooo.
+.olllllllllllmo.
+.olcclllllccllo.
+.ommccmmmmccmmo.
+.oooooooooooooo.
+..olmo....olmo..
+..olmo....olmo..
+.olmmdo..olmmdo.
+.olmmdo..olmmdo.
+.olmmmdo.olmmmdo
+.ooooooo.ooooooo
+................
+................

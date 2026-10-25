@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cltccja68agcv"
+path="res://.godot/imported/bachlauf.dialogue-aa16445f6d2609cf0644f4ae44eb561c.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt2/bachlauf.dialogue"
+dest_files=["res://.godot/imported/bachlauf.dialogue-aa16445f6d2609cf0644f4ae44eb561c.tres"]
+
+[params]
+
+defaults=true
