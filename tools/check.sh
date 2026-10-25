@@ -178,7 +178,7 @@ segments=(
   "akt1_kind_spur_gasthaus:gasthaus:600:trail_door fragment.closed_door"
   "akt1_kind_spur_spiegelhalle:spiegelhalle:600:trail_room fragment.empty_room"
   "akt1_anschluss:elysia:2800:stone elysia.stone_taken child child_melody rift_found elysia.rift_open elysia.rift_crossed valley_arrival"
-  "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
+  "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
 )
 for segment in "${segments[@]}"; do
   IFS=: read -r name scene frames marks <<<"$segment"

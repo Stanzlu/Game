@@ -27,9 +27,9 @@ import dialogue
 HERE = os.path.dirname(os.path.abspath(__file__))
 BASELINE = os.path.join(HERE, "calibration_baseline.json")
 BASELINE_AKT1 = os.path.join(HERE, "calibration_akt1.json")
-## Pixels a second of the walking pace (entities/player/movement_tuning.gd): the autopilot teleports
-## where a player walks, so the pixels it skipped are turned back into seconds.
-WALK_SPEED = 84.0
+## Pixels a second of the walking pace of the default feel (entities/player/tuning/direkt.tres): the
+## autopilot teleports where a player walks, so the pixels it skipped are turned back into seconds.
+WALK_SPEED = 88.0
 FINISHED_RE = re.compile(r"autopilot finished (\{.*\})")
 SETTINGS = os.path.join(dialogue.ROOT, "core", "settings.gd")
 SPEED_NAMES = ["langsam", "normal", "schnell", "sofort"]
@@ -95,6 +95,8 @@ def record_akt1(log_path):
     match = FINISHED_RE.search(text)
     if match is None:
         raise ValueError("the log has no 'autopilot finished' line (did the run reach its end?)")
+    if "autopilot wait timed out" in text:
+        raise ValueError("the run had a wait that timed out: its numbers say nothing (fix the run first)")
     numbers = json.loads(match.group(1))
     beats = [{"beat": name, "seconds": seconds} for name, seconds in parse_log(text)]
     data = {

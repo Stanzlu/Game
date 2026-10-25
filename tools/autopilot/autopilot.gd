@@ -59,10 +59,9 @@ var _wait_saw_dialogue := false
 var _dialogue_ticks := 0
 var _clicks := 0
 var _finished := false
-## The straight-line pixels of the teleports and meetings inside a scene (the walks a player would
-## have to make), and the scene the last one was in.
+## The straight-line pixels from where the player stands to where a teleport, a meeting or a door
+## takes them: the walks a player would have had to make.
 var _route_px := 0.0
-var _route_scene := 0
 
 
 static func start_if_requested(tree: SceneTree) -> void:
@@ -379,13 +378,9 @@ func _teleport(cell: Array) -> void:
 	player.call(&"teleport", target)
 
 
-## Adds the way from where the player stands to `to`, if it is in the same scene as the last one.
+## Adds the way from where the player stands (after a change of scene: where they arrived) to `to`.
 func _count_route(player: Node2D, to: Vector2) -> void:
-	var scene := get_tree().current_scene
-	var id := scene.get_instance_id() if scene != null else 0
-	if id == _route_scene:
-		_route_px += player.global_position.distance_to(to)
-	_route_scene = id
+	_route_px += player.global_position.distance_to(to)
 
 
 func _meet(cue: String) -> void:
@@ -419,6 +414,9 @@ func _to_door(target: String) -> void:
 			continue
 		if SceneRegistry.resolve(str(node.get(&"target"))) != key:
 			continue
+		var player := get_tree().get_first_node_in_group(&"player") as Node2D
+		if player != null:
+			_count_route(player, (node as Node2D).global_position)
 		SceneTravel.go(node, key, str(node.get(&"spawn")), str(node.get(&"sound")))
 		return
 	Log.error(Log.Category.INPUT, "autopilot enter: no door", {"target": target})

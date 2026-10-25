@@ -30,7 +30,7 @@
   {"use": [20, 10], "face": "up", "log": "the host: the room", "t": 0.2},
   {"use": [17, 15], "face": "down", "log": "the guest book", "t": 0.2},
   {"use": [4, 14], "face": "left", "log": "the bed", "t": 0.2},
-  {"wait_for": {"flag": "elysia.inn_slept"}, "timeout": 60, "log": "the same morning", "t": 0.1},
+  {"wait_for": {"beat": "inn_slept"}, "timeout": 60, "log": "the same morning is over", "t": 0.1},
   {"use": [20, 10], "face": "up", "log": "the host: the third offer", "t": 0.2},
   {"enter": "elysia", "log": "back into the garden", "t": 0.2},
   {"enter": "markt", "log": "down the stairs to the market", "t": 0.2},
