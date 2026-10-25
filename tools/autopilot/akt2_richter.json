@@ -1,0 +1,17 @@
+[
+  {"relative": true},
+  {"log": "Act II, B4: two falls into the stream, a voice after the second", "t": 0.5},
+  {"flag": "chapter.act1", "t": 0.1},
+  {"flag": "valley.mira_met", "log": "the first no is behind (the way to the stones is open)", "t": 0.1},
+  {"teleport": [44, 19], "log": "stones: the round ones, the wrong way", "t": 0.5},
+  {"press": ["move_left"], "t": 0.3},
+  {"wait_for": {"flag": "valley.fell_in"}, "timeout": 10, "log": "the first fall", "t": 0.1},
+  {"release": ["move_left"], "t": 0.1},
+  {"wait_for": {"dialogue_closed": true}, "timeout": 20, "log": "the cold and the funny one, no voice", "t": 0.5},
+  {"teleport": [44, 19], "log": "and again", "t": 1.0},
+  {"press": ["move_left"], "t": 0.3},
+  {"wait_for": {"flag": "valley.fell_twice"}, "timeout": 10, "log": "the second fall", "t": 0.1},
+  {"release": ["move_left"], "t": 0.1},
+  {"wait_for": {"beat": "act2_richter"}, "timeout": 40, "log": "the voice is heard", "t": 0.5},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]
