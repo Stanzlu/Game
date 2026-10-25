@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt2/bachlauf_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+
+[node name="Bachlauf" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/bachlauf.txt"
+player_sheet = ExtResource("2_sheet")
+wind_leaves = true
+reflect_player = true
+day_preset = "abend"
+water_ripples = 0.45
+cloud_shadows = 0.01
+water_glints = 0.6
+fog_banks = 22
+fog_color = Color(0.98, 0.9, 0.8, 0.14)
+swimmers = 3
+frogs = 5

@@ -172,6 +172,6 @@ func test_old_keys_work_for_doors_titles_and_start() -> void:
 func test_every_registered_scene_is_still_there_for_saves_to_find() -> void:
 	# A key a save may hold is never removed: when this list loses a name, the name moves to
 	# SceneRegistry.aliases instead (ADR-052). Add new scenes here as they ship.
-	for key: String in ["elysia", "tal", "haus", "weg"]:
+	for key: String in ["elysia", "tal", "haus", "weg", "bachlauf"]:
 		assert_true(SceneRegistry.has(key), "slice scene '%s' went missing" % key)
 		assert_true(ResourceLoader.exists(SceneRegistry.path(key)), key)
