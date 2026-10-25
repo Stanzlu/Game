@@ -112,7 +112,6 @@ im weiteren Spiel nichts verloren geht.
 | F | `MapData` behält `paint` nicht; `FootstepFx` liest die Legende der Karte selbst (kleines Duplikat) | – | `paint` in `MapData.tiles` halten, dann entfällt `_find_mud_symbols` |
 | F | Antreiber-Sprechblasen (`$Bark`) liegen noch im Weltraum; `GuestWalker` und `AntreiberActor` bauen Ähnliches | – | wie der Prompt in eine UI-Schicht über `world_to_ui` heben; beide Figuren zusammenlegen |
 | F | Blende nach dem Riss erst nach dem ersten gezeichneten Bild starten (ruckelfreie Ankunft) | #69 | `GameScene` und `SceneTravel` |
-| F | `layout_slice_maps.py tal --write` überschreibt Handänderungen an `tal.txt` | #72 | Handänderungen ins Skript übernehmen |
 | F | Godot schreibt bei jedem Import oder Testlauf eine `uid` in `default_bus_layout.tres` (laut Bericht des Pakets menus; im Arbeitsbaum zurückgesetzt) | – | die `uid` einmal einchecken, dann entfällt die Änderung |
 
 ## 4. Grafik, Ton und Text

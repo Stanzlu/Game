@@ -141,10 +141,10 @@ def weir(ms):
     beam = c.rect(4, 9, 76, 15)
     c.paint(beam, ex["plank"], 0.5 + 0.25 * (c.yy < 11) - 0.2 * (c.yy >= 13) + 0.12 * (grain - 0.5),
             contrast=2.0, dither=False)
-    # posts at both ends, a little taller than the beam
+    # posts at both ends, no taller than the beam is wide: the sprite lies flat and the bank is walkable
     for x0 in (2, 72):
-        c.paint(c.rect(x0, 6, x0 + 6, 22), ex["plank"], np.where(c.xx < x0 + 3, 0.6, 0.3), dither=False)
-        c.paint(c.rect(x0, 5, x0 + 6, 7), ex["plank"], 0.8, dither=False)
+        c.paint(c.rect(x0, 8, x0 + 6, 17), ex["plank"], np.where(c.xx < x0 + 3, 0.6, 0.3), dither=False)
+        c.paint(c.rect(x0, 8, x0 + 6, 10), ex["plank"], 0.8, dither=False)
     # moss on the top of the beam
     moss = c.rect(8, 9, 72, 12) & (pa.value_noise(26, 80, 3, rng) > 0.35)
     c.paint(moss, MOSS_DARK, 0.45 + 0.4 * pa.value_noise(26, 80, 2, rng), dither=False)

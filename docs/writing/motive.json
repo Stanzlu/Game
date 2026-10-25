@@ -690,6 +690,10 @@
      "ref": "bl_goat_2"
     },
     {
+     "type": "line",
+     "ref": "bl_goat_3"
+    },
+    {
      "type": "flag",
      "ref": "valley.goat_met"
     },
@@ -1375,6 +1379,16 @@
    "flag": "fragment.dry_bed",
    "axis": "Wahrnehmung",
    "meaning": "Sie hat die trockene Rinne neben dem Bach gesehen, die Kiesel alle gleich gedreht (Spur der Welt, Akt II, B3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "valley.goat_prints_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die Hufabdrücke der Ziege auf dem Balken des Wehrs gesehen (Akt II, B3; rührt Quest und Stiefel der Ziege nicht an)."
+  },
+  {
+   "flag": "valley.view_back_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat vom Aussichtsplatz im Bachlauf den Rauch des Hauses über den Bäumen gesehen (Akt II, B3)."
   }
  ]
 }

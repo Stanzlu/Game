@@ -29,7 +29,7 @@ Jeder Gag hat Auftritte und eine Auflösung. Gags tragen einen Gegenstand, eine 
 
 | Motiv | Bible | Im Slice | Auflösung |
 |---|---|---|---|
-| **Die Ziege** | §33 | `haus_mira_19`, `tal_goat_1`, `tal_goat_8`, `tal_mira_eve_3`, `tal_fence_2`, `bl_goat_1`, `bl_goat_2`, `valley.goat_met`, `valley.goat_loose`, `valley.goat_traded` | Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. |
+| **Die Ziege** | §33 | `haus_mira_19`, `tal_goat_1`, `tal_goat_8`, `tal_mira_eve_3`, `tal_fence_2`, `bl_goat_1`, `bl_goat_2`, `bl_goat_3`, `valley.goat_met`, `valley.goat_loose`, `valley.goat_traded` | Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. |
 | **Die Kartoffel** | §33 | `tal_goat_4`, `tal_mira_eve_r1`, `valley.potato_taken` | Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung. |
 | **Die Ente** | §33 | noch nicht | Orins Erzfeind (Akt IV). Die Ente verhält sich vollkommen normal. Kein Auftritt im Slice. |
 | **Der Antreiber optimiert Freizeit** | §33 | `tal_antr_2`, `tal_antr_busy_1`, `tal_antr_busy_3`, `nein_antr_3`, `nein_antr_4`, `haus_antr_10`, `haus_antr_11`, `valley.antreiber_rests`, `house.antreiber_by_fire` | Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2). |
@@ -152,3 +152,5 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `valley.knot_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat den aufgeknoteten Knoten am Haken gesehen, flach und sauber (nur mit der Facette Wahrnehmung). |
 | `fragment.bank_table` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat sich auf den Stumpf am Uferbrett gesetzt: zwei Ringe, zwei Becher, für einen Atemzug Dampf (Spur der Welt, Akt II, B3; kein Bild des Kindes). |
 | `fragment.dry_bed` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat die trockene Rinne neben dem Bach gesehen, die Kiesel alle gleich gedreht (Spur der Welt, Akt II, B3; kein Bild des Kindes). |
+| `valley.goat_prints_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat die Hufabdrücke der Ziege auf dem Balken des Wehrs gesehen (Akt II, B3; rührt Quest und Stiefel der Ziege nicht an). |
+| `valley.view_back_seen` | Wahrnehmung | `bachlauf.dialogue` | `bachlauf.dialogue` | Sie hat vom Aussichtsplatz im Bachlauf den Rauch des Hauses über den Bäumen gesehen (Akt II, B3). |

@@ -30,7 +30,7 @@ DOOR = (POCKET_X, 1)
 ARRIVAL = (POCKET_X, 6)
 START = (POCKET_X, 7)
 HEAD_FORD_Y = 9  # the narrow ford near the head: a trunk across the stream
-SOUTH_FORD_Y = 57  # the south ford, wider water
+SOUTH_FORD_Y = 56  # the south ford: three cells of water, as wide as the trunk reaches
 WEIR_Y = 50  # the weir: one row of fall across the stream, the trap behind it
 DRY_BED_Y = (27, 38)  # the dry channel on the east bank, as wide as the stream, rows from..to
 
@@ -115,7 +115,7 @@ def bachlauf():
         g.set(x, WEIR_Y, "v")
     # a short spur through the reeds to the shallows (blue glass), and a lookout on the east slope
     g.path([bank(44, -1, 5.6), bank(41.5, -1, 3.2), bank(41, -1, 2.6)], 1.2, ",", only=".mh")
-    g.path([bank(48, 1, 5.7), (bank(47, 1, 5.7)[0] + 7, 46), (bank(47, 1, 5.7)[0] + 12, 44)], 1.4, ",", only=".mh")
+    g.path([bank(48, 1, 5.7), (bank(47, 1, 5.7)[0] + 6, 46), (bank(47, 1, 5.7)[0] + 10, 44)], 1.4, ",", only=".mh")
     # the dry channel on the east bank: as wide as the stream, no water in it
     top, bottom = DRY_BED_Y
     chan = [(round(stream_x(y) + 9.0, 1), y) for y in range(top, bottom + 1, 3)]
@@ -173,13 +173,17 @@ def build():
     # two stumps with a board on the west bank, the dry channel and its pebbles on the east
     put("8", stream_x(23) - 3, 23)
     put("9", stream_x(32) + 9.0, 32)
+    # more pebbles in the same channel, all turned the same way (no cue: the spot is the one above)
+    for y in (28, 36):
+        x, y = int(round(stream_x(y) + 9.0)), y
+        g.set(x, y, "k")
     # the lookout: where the way back is to be seen
-    put("$", bank(47, 1, 5.7)[0] + 12, 44)
+    put("$", bank(47, 1, 5.7)[0] + 10, 44)
     # the trunks of the two fords: root plate on the west bank, anchored at the first bank cell
     for y in (HEAD_FORD_Y, SOUTH_FORD_Y):
         put("Y", min(x for x in range(W) if g.get(x, y) == "y") - 1, y)
     # a bench at the lookout
-    put("b", bank(47, 1, 5.7)[0] + 11, 45)
+    put("b", bank(47, 1, 5.7)[0] + 9, 45)
     # the door to the valley and the markers
     put("%", DOOR[0], DOOR[1])
     put("&", ARRIVAL[0], ARRIVAL[1])

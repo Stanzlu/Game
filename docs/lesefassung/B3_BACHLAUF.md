@@ -93,13 +93,19 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### BL10 · `goat_trace`
 
-- *Auf dem Balken, der das Wasser staut, stehen Hufabdrücke im Moos. Eine Reihe, genau hintereinander.* `[#draft]`  <sub>bl_goat_1</sub>
-- *Der Balken ist schmal. Das Wasser zu beiden Seiten ist tief. Das wurde der Ziege offenbar nicht gesagt.* `[#draft]`  <sub>bl_goat_2</sub>
+*wenn* `valley.goat_prints_seen`
+  - *Die Hufabdrücke im Moos, in einer Reihe.* `[#draft]`  <sub>bl_goat_3</sub>
+*sonst*
+  - *Auf dem Balken, der das Wasser staut, stehen Hufabdrücke im Moos. Eine Reihe, genau hintereinander.* `[#draft]`  <sub>bl_goat_1</sub>
+  - *Der Balken ist schmal. Das Wasser zu beiden Seiten ist tief. Das wurde der Ziege offenbar nicht gesagt.* `[#draft]`  <sub>bl_goat_2</sub>
 
 ### BL11 · `look_back`
 
-- *Über den Bäumen steht dünner Rauch, gerade nach oben. Das Haus.* `[#draft]`  <sub>bl_back_1</sub>
-- *Von hier aus zieht der Kamin ausgezeichnet.* `[#draft]`  <sub>bl_back_2</sub>
+*wenn* `valley.view_back_seen`
+  - *Der Rauch über den Bäumen. Das Haus.* `[#draft]`  <sub>bl_back_3</sub>
+*sonst*
+  - *Über den Bäumen steht dünner Rauch, gerade nach oben. Das Haus.* `[#draft]`  <sub>bl_back_1</sub>
+  - *Von hier aus zieht der Kamin ausgezeichnet.* `[#draft]`  <sub>bl_back_2</sub>
 
 ### BL12 · `bach_wait`
 

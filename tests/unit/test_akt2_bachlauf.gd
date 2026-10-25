@@ -22,13 +22,20 @@ func _has(seen: PackedStringArray, id: String) -> bool:
 	return LineText.of(id) in seen
 
 
-## Every line of every cue of the file, each cue played with the first answer.
-func _all_lines() -> PackedStringArray:
-	var resource := load(BACH) as DialogueResource
-	var lines: PackedStringArray = []
-	for title: String in resource.get_cues():
-		lines.append_array(await DialogueWalk.play(BACH, title))
-	return lines
+## Every line of the file by its ID (replays, second answers and the answers themselves included),
+## plus the line the valley's window gains, the journal's help and the three curiosities' texts.
+func _all_texts() -> PackedStringArray:
+	var source := FileAccess.get_file_as_string(BACH)
+	var found: PackedStringArray = []
+	for hit in RegEx.create_from_string("\\[ID:(bl_[a-z0-9_]+)\\]").search_all(source):
+		found.append(LineText.of(hit.get_string(1)))
+	found.append(LineText.of("haus_window_4"))
+	for key: String in ["TITLE", "HOOK", "FLOAT", "WEIR", "DONE"]:
+		found.append(tr("QUEST_SIDE_VALLEY_TRAP_" + key))
+	for id: String in ["CURIOSITY_BLUE_GLASS", "CURIOSITY_LEAD_WEIGHT", "CURIOSITY_COMB"]:
+		found.append(tr(id + "_NAME"))
+		found.append(tr(id + "_DESC"))
+	return found
 
 
 # --- The quest ---------------------------------------------------------------------------------
@@ -145,7 +152,7 @@ func test_the_perception_find_is_seen_once_and_needs_nothing() -> void:
 	assert_eq(WorldState.quest_stage(QUEST), "", "the quest never needed it")
 
 
-func test_the_goats_prints_touch_nothing_of_her_quest() -> void:
+func test_the_goats_prints_touch_nothing_of_her_quest_and_are_told_once() -> void:
 	WorldState.start_quest("side_valley_goat")
 	var before := WorldState.quest_stage("side_valley_goat")
 	var seen := await DialogueWalk.play(BACH, "goat_trace")
@@ -153,12 +160,18 @@ func test_the_goats_prints_touch_nothing_of_her_quest() -> void:
 	assert_eq(WorldState.quest_stage("side_valley_goat"), before)
 	for flag: String in ["valley.goat_met", "valley.goat_traded", "valley.potato_taken"]:
 		assert_false(WorldState.has_flag(flag), flag)
+	assert_eq(
+		await DialogueWalk.play(BACH, "goat_trace"), PackedStringArray([LineText.of("bl_goat_3")])
+	)
 
 
-func test_the_look_back_names_the_house_and_the_wet_path_waits() -> void:
+func test_the_look_back_names_the_house_is_told_once_and_the_wet_path_waits() -> void:
 	var back := await DialogueWalk.play(BACH, "look_back")
-	assert_true(_has(back, "bl_back_1"))
+	assert_true(_has(back, "bl_back_1") and _has(back, "bl_back_2"))
 	assert_false(LineText.of("bl_back_1").contains("Zuhause"), "the house is not home")
+	assert_eq(
+		await DialogueWalk.play(BACH, "look_back"), PackedStringArray([LineText.of("bl_back_3")])
+	)
 	var wait := await DialogueWalk.play(BACH, "bach_wait")
 	assert_eq(wait, PackedStringArray([LineText.of("bl_wait_1")]))
 
@@ -177,24 +190,46 @@ func test_the_valleys_window_invites_in_the_evening_and_only_then() -> void:
 
 
 func test_it_is_all_narration_with_no_question_or_cry() -> void:
+	# the cues are narration: nobody speaks, whatever the walk takes
 	var resource := load(BACH) as DialogueResource
 	for title: String in resource.get_cues():
 		var line: DialogueLine = await DialogueManager.get_next_dialogue_line(resource, title)
 		while line != null:
 			assert_eq(line.character, "", "narration: %s" % line.text)
-			for mark: String in ["?", "!", "…"]:
-				assert_false(line.text.contains(mark), "%s in %s" % [mark, line.text])
 			var next_id := line.next_id
 			if not line.responses.is_empty():
 				next_id = line.responses[0].next_id
 			line = await DialogueManager.get_next_dialogue_line(resource, next_id)
+	# and no line, answer, journal text or description has a question, a cry or an ellipsis in it
+	var texts := _all_texts()
+	assert_gt(texts.size(), 55, "every line, answer and string was read")
+	for text: String in texts:
+		for mark: String in ["?", "!", "…"]:
+			assert_false(text.contains(mark), "%s in: %s" % [mark, text])
 
 
 func test_no_trace_names_a_child_a_reason_or_a_memory() -> void:
 	# Brief O5: Act II's fragments are traces of the world and of the past, never pictures of the child
-	# and never why anyone left
-	var lines := await _all_lines()
-	assert_gt(lines.size(), 30)
-	for line: String in lines:
-		for word: String in ["Kind", "Erinnerung", "erinner", "Zuhause", "Meer", "Heim", "verlor"]:
-			assert_false(line.contains(word), "'%s' in: %s" % [word, line])
+	# and never why anyone left; the check reads every ID of the file, replays and answers included
+	var forbidden := [
+		"Kind",
+		"Erinnerung",
+		"erinner",
+		"Zuhause",
+		"Meer",
+		"Heim",
+		"verlor",
+		"Mutter",
+		"Vater",
+		"Mama",
+		"Papa",
+		"Familie",
+		"Abschied",
+		"verlassen",
+		"gestorben",
+		"tot",
+		"vermiss",
+	]
+	for text: String in _all_texts():
+		for word: String in forbidden:
+			assert_false(text.contains(word), "'%s' in: %s" % [word, text])

@@ -73,6 +73,18 @@ class BachlaufLayoutTests(unittest.TestCase):
         self.assertIn(east, full)
         self.assertNotIn(east, dry, "without the logs the east bank is a world away")
 
+    def test_a_trunk_reaches_across_each_ford(self):
+        # the trunk sprite (tal/fallen_tree) is 86 px wide with its root plate on the first bank cell:
+        # it covers the three cells of water after it and a bit of the far bank, no more
+        _, _, rows = _map()
+        for y in (layout.HEAD_FORD_Y, layout.SOUTH_FORD_Y):
+            self.assertLessEqual(rows[y].count("y"), 3, "row %d: the log is as long as the ford" % y)
+            self.assertEqual(rows[y].count("Y"), 1)
+
+    def test_the_dry_channel_has_more_pebbles_than_its_one_spot(self):
+        _, _, rows = _map()
+        self.assertEqual("".join(rows).count("k"), 2, "two more rows of pebbles, no cue")
+
     def test_the_arrival_is_outside_the_doors_zone(self):
         _, _, rows = _map()
         spot = {}

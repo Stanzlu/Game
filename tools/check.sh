@@ -180,7 +180,7 @@ segments=(
   "akt1_anschluss:elysia:2800:stone elysia.stone_taken child child_melody rift_found elysia.rift_open elysia.rift_crossed valley_arrival"
   "akt2_ankunft:tal:1500:valley_arrival chapter.act1 arrival_echo"
   "akt2_nein:haus:4500:act2_nein act2_blick house.antreiber_refused house.antreiber_by_fire house.mira_visited house.prints_seen"
-  "akt2_bachlauf:bachlauf:4500:bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken"
+  "akt2_bachlauf:bachlauf:4500:bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken valley.goat_prints_seen valley.view_back_seen"
   "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
 )
 for segment in "${segments[@]}"; do

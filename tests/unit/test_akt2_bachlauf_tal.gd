@@ -17,6 +17,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	Input.action_release(&"move_down")
 	SceneTravel.pending_spawn = ""
 	SceneTravel.arrival_fade = -1.0
 	SceneTravel.stay = false
@@ -45,6 +46,17 @@ func _at(scene: GameScene, cell: Vector2i, script: Script) -> Node:
 	return null
 
 
+## Holds `action` until `done` holds or `frames` physics frames have passed; true if it held.
+func _hold(action: StringName, done: Callable, frames: int) -> bool:
+	Input.action_press(action)
+	var left := frames
+	while left > 0 and not done.call():
+		await wait_physics_frames(1)
+		left -= 1
+	Input.action_release(action)
+	return done.call()
+
+
 func _doors(scene: GameScene) -> Array:
 	return scene.map.entities.get_children().filter(
 		func(node: Node) -> bool:
@@ -54,13 +66,23 @@ func _doors(scene: GameScene) -> Array:
 
 func test_until_mira_has_visited_the_wet_path_holds_you_back() -> void:
 	var scene := await _valley()
-	assert_not_null(_at(scene, BLOCKER_CELL, BLOCKER_SCRIPT), "mud behind the hedge")
+	var blocker := _at(scene, BLOCKER_CELL, BLOCKER_SCRIPT)
+	assert_not_null(blocker, "mud behind the hedge")
 	assert_eq(_doors(scene).size(), 0, "no way down yet")
+	# the blocker covers the whole gap (three cells), and nobody walks past it: from the cell above it
+	# the player holds south and stays above the hedge line
+	scene.player.global_position = scene.map.cell_to_world(Vector2i(42, 34))
+	await wait_physics_frames(2)
+	var below := func() -> bool:
+		return scene.map.world_to_cell(scene.player.global_position).y >= BLOCKER_CELL.y + 1
+	assert_false(await _hold(&"move_down", below, 120), "the mud holds the player back")
+	assert_lt(scene.map.world_to_cell(scene.player.global_position).y, BLOCKER_CELL.y + 1)
 
 
 func test_after_her_visit_the_door_leads_down_and_the_blocker_is_gone() -> void:
 	SceneTravel.stay = true
 	WorldState.set_flag("house.mira_visited")
+	SceneTravel.pending_spawn = "bach"
 	var scene := await _valley()
 	assert_null(_at(scene, BLOCKER_CELL, BLOCKER_SCRIPT))
 	var doors := _doors(scene)
@@ -68,9 +90,11 @@ func test_after_her_visit_the_door_leads_down_and_the_blocker_is_gone() -> void:
 	assert_eq(
 		doors[0].get(&"spawn"), "tal", "arriving where the Bachlauf made the place for the valley"
 	)
-	scene.player.global_position = scene.map.cell_to_world(DOOR_CELL)
-	await wait_physics_frames(4)
-	assert_eq(SceneTravel.last_target, "bachlauf")
+	assert_eq(SceneTravel.last_target, "", "nothing has travelled yet")
+	var gone := func() -> bool: return SceneTravel.last_target == "bachlauf"
+	assert_true(
+		await _hold(&"move_down", gone, 300), "walking south from the arrival reaches the door"
+	)
 
 
 func test_the_way_back_arrives_at_the_gap_and_marks_the_beat_in_the_valley() -> void:
@@ -80,3 +104,11 @@ func test_the_way_back_arrives_at_the_gap_and_marks_the_beat_in_the_valley() -> 
 	var scene := await _valley()
 	assert_eq(scene.map.world_to_cell(scene.player.global_position), ARRIVAL_CELL)
 	assert_true(Beat.reached("bachlauf_back"))
+
+
+func test_an_ordinary_arrival_in_the_valley_does_not_mark_the_way_back() -> void:
+	# the beat says "came back from the stream", not "was in the valley"
+	WorldState.set_flag("house.mira_visited")
+	SceneTravel.pending_spawn = "rift"
+	await _valley()
+	assert_false(Beat.reached("bachlauf_back"))

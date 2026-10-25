@@ -101,13 +101,21 @@ else
 => END
 
 ~ goat_trace
-Auf dem Balken, der das Wasser staut, stehen Hufabdrücke im Moos. Eine Reihe, genau hintereinander. [ID:bl_goat_1] [#draft]
-Der Balken ist schmal. Das Wasser zu beiden Seiten ist tief. Das wurde der Ziege offenbar nicht gesagt. [ID:bl_goat_2] [#draft]
+if WorldState.has_flag("valley.goat_prints_seen")
+	Die Hufabdrücke im Moos, in einer Reihe. [ID:bl_goat_3] [#draft]
+else
+	Auf dem Balken, der das Wasser staut, stehen Hufabdrücke im Moos. Eine Reihe, genau hintereinander. [ID:bl_goat_1] [#draft]
+	Der Balken ist schmal. Das Wasser zu beiden Seiten ist tief. Das wurde der Ziege offenbar nicht gesagt. [ID:bl_goat_2] [#draft]
+	do WorldState.set_flag("valley.goat_prints_seen")
 => END
 
 ~ look_back
-Über den Bäumen steht dünner Rauch, gerade nach oben. Das Haus. [ID:bl_back_1] [#draft]
-Von hier aus zieht der Kamin ausgezeichnet. [ID:bl_back_2] [#draft]
+if WorldState.has_flag("valley.view_back_seen")
+	Der Rauch über den Bäumen. Das Haus. [ID:bl_back_3] [#draft]
+else
+	Über den Bäumen steht dünner Rauch, gerade nach oben. Das Haus. [ID:bl_back_1] [#draft]
+	Von hier aus zieht der Kamin ausgezeichnet. [ID:bl_back_2] [#draft]
+	do WorldState.set_flag("valley.view_back_seen")
 => END
 
 ~ bach_wait
