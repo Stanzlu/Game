@@ -11,6 +11,7 @@ import sys
 import numpy as np
 
 import pixelart as pa
+import slice_props
 from pixelart import ramp
 
 IRON = ramp("#1a1a1e", "#2a2b30", "#3e4047", "#565a62", "#7a7f88")
@@ -225,6 +226,20 @@ def dry_pebbles(ms):
     return c
 
 
+def stool(ms):
+    """The second stool of the house, carried to the fire: a round seat on three legs, the same wood
+    as the table's (B5)."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(12, 14)
+    logs = slice_props.LOGS
+    c.paint(c.ellipse(6, 5, 5.2, 3.0), logs, 0.62, dither=False)
+    c.paint(c.ellipse(6, 4.4, 3.2, 1.6), logs, 0.8, dither=False)
+    for x in (2, 5, 9):
+        c.paint(c.rect(x, 6, x + 1, 12), logs, 0.3, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
 def build(ms):
     ms.save("tal", "bl_post", post(ms), (8, 36), shape={"circle": 3, "offset": [0, -1]}, shadow=[6, 2])
     ms.save("tal", "bl_float", float_in_reeds(ms), (11, 26), sway=1.0)
@@ -235,6 +250,10 @@ def build(ms):
     ms.save("tal", "bl_glass", glass_in_shallows(ms), (7, 6), flat=True)
     ms.save("tal", "bl_weight", lead_weight(ms), (6, 8), shadow=[4, 2])
     ms.save("tal", "bl_dry_pebbles", dry_pebbles(ms), (24, 9), flat=True)
+    # B5: the second stool, and the table without it
+    ms.save("haus", "stool", stool(ms), (6, 12), shape={"circle": 4, "offset": [0, -2]}, shadow=[5, 2])
+    ms.save("haus", "table_one", slice_props.table(ms, stools=(0,)), (22, 24),
+            shape={"rect": [34, 8], "offset": [0, -6]}, shadow=[18, 4])
 
 
 def preview(path):

@@ -1183,6 +1183,26 @@
    "res://assets/generated/props/haus/shell.png"
   ]
  },
+ "haus/stool": {
+  "anchor": [
+   6,
+   12
+  ],
+  "shadow": [
+   5,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/stool.png"
+  ]
+ },
  "haus/table": {
   "anchor": [
    22,
@@ -1204,6 +1224,29 @@
   },
   "textures": [
    "res://assets/generated/props/haus/table.png"
+  ]
+ },
+ "haus/table_one": {
+  "anchor": [
+   22,
+   24
+  ],
+  "shadow": [
+   18,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    34,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/table_one.png"
   ]
  },
  "tal/barrel": {
