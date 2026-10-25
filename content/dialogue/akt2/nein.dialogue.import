@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bel38ib7ei1xo"
+path="res://.godot/imported/nein.dialogue-25217437f24317f5fd8365607e7472f4.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt2/nein.dialogue"
+dest_files=["res://.godot/imported/nein.dialogue-25217437f24317f5fd8365607e7472f4.tres"]
+
+[params]
+
+defaults=true

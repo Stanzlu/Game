@@ -12,6 +12,8 @@ extends LookScene
 ## her place while she talks).
 
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
+## The answer to the Antreiber's ideas at the fire (Act II, B2).
+const NEIN_DIALOGUE := "res://content/dialogue/akt2/nein.dialogue"
 const COLD_TINT := Color(0.5, 0.56, 0.68)
 ## Once the fire burns, the room is lit by it: a dim warm base, and the fireplace's own
 ## flickering light gives the falloff (a bright flat tint made the corners as light as the
@@ -80,6 +82,9 @@ func _ready() -> void:
 	world_tint = WARM_TINT if warm else COLD_TINT
 	ambience = _ambience(warm)
 	music = "valley" if warm else "silence"
+	# whoever looks closely sees one more spot in the room (the map's prop reads the flag)
+	if WorldState.has_facet("perception"):
+		WorldState.set_flag("house.looks_closely")
 	super()
 	_add_window_light()
 	_add_night_surround()
@@ -136,8 +141,10 @@ func _antreiber_visit() -> void:
 	SaveSystem.unblock(ANTREIBER_BLOCK)
 
 
-## He followed the player home and has ideas. Staying seated lets him sit down too; getting
-## up sends him off to find something to do outside.
+## He followed the player home and has ideas, and the player may answer (nein.dialogue): "Heute
+## nicht." is taken and he sits down; "Morgen." is a date, and he goes to look at the roof. Without
+## a word the old answer holds: staying seated lets him sit down too, getting up sends him off to
+## find something to do outside.
 func _antreiber_comes() -> void:
 	var actor := ANTREIBER_ACTOR.instantiate() as AntreiberActor
 	actor.sheet = ANTREIBER_SHEET
@@ -148,19 +155,33 @@ func _antreiber_comes() -> void:
 	await actor.walk_to(map.cell_to_world(ANTREIBER_CELL), 40.0)
 	actor.face(Facing.from_vector(player.global_position - actor.global_position))
 	await Talk.present(self, DIALOGUE, "antreiber_fire", player)
+	await Talk.present(self, NEIN_DIALOGUE, "antreiber_ask", player)
+	if WorldState.has_flag("house.antreiber_postponed"):
+		await _antreiber_leaves(actor)
+		return
 	var seated := 0.0
-	while seated < STAY_SEATED * Settings.timing_factor() and player.state == Player.State.SIT:
+	var refused := WorldState.has_flag("house.antreiber_refused")
+	while (
+		not refused
+		and seated < STAY_SEATED * Settings.timing_factor()
+		and player.state == Player.State.SIT
+	):
 		await get_tree().process_frame
 		if not get_tree().paused:
 			seated += get_process_delta_time()
-	if player.state == Player.State.SIT:
+	if refused or player.state == Player.State.SIT:
 		actor.sit_down(Facing.Dir.W)
 		await Talk.present(self, DIALOGUE, "antreiber_sits", player)
 		WorldState.set_flag("house.antreiber_by_fire")
 		actor.queue_free()
 		return
 	await Talk.present(self, DIALOGUE, "antreiber_cheers", player)
-	# he is gone for the story once he heads for the door (nothing can be saved meanwhile)
+	await _antreiber_leaves(actor)
+
+
+## He goes out by the door; he is gone for the story once he heads for it (nothing can be saved
+## meanwhile).
+func _antreiber_leaves(actor: AntreiberActor) -> void:
 	WorldState.set_flag("house.antreiber_left")
 	await actor.walk_to(map.cell_to_world(DOOR_CELL), 55.0)
 	AudioDirector.sfx("door_close", -3.0)
@@ -173,6 +194,10 @@ func _on_flag_changed(id: String, value: bool) -> void:
 	elif id == "house.cat_fed" and value:
 		# she comes in through the window and curls up at the fire
 		SoundBank.play_at(map.entities, "cat_meow", map.cell_to_world(CAT_CELL))
+	elif id == "house.antreiber_refused" and value:
+		Beat.mark("act2_nein")
+	elif id == "house.prints_seen" and value:
+		Beat.mark("act2_blick")
 
 
 ## The cat gets a name, if the player wants one (Game Bible §28).

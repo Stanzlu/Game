@@ -77,6 +77,8 @@ else
 	elif WorldState.has_flag("elysia.soup_served")
 		Für einen Moment denkst du an das Gasthaus drüben. An die Suppe, die immer warm war. [ID:haus_bed_3]
 		Dann ist der Moment vorbei. Das Bett ist immer noch kalt. [ID:haus_bed_4]
+if WorldState.has_facet("perception")
+	An einer Ecke der Decke ist ein Stück gestopft. Das Garn ist rot, die Decke grau. [ID:haus_bed_6]
 => END
 
 ~ bucket
@@ -116,6 +118,16 @@ elif WorldState.has_item("item_fish")
 	do WorldState.set_flag("house.cat_fed")
 else
 	Draußen auf dem Fensterbrett sitzt eine Katze und schaut herein. Nicht zu dir. Zum Feuer. [ID:haus_cat_1]
+=> END
+
+# Nur wer genau hinsieht, findet diese Stelle (die Szene setzt house.looks_closely aus der Facette Wahrnehmung).
+~ haus_prints
+if WorldState.has_flag("house.prints_seen")
+	Die Abdrücke im Staub laufen noch ans Fenster und zurück. [ID:haus_prints_3]
+else
+	Im Staub auf den Dielen sind Abdrücke. Klein, rund, vier Zehen. [ID:haus_prints_1]
+	Sie laufen ans Fenster und wieder zurück, mehrmals. [ID:haus_prints_2]
+	do WorldState.set_flag("house.prints_seen")
 => END
 
 ~ cat_named
@@ -172,6 +184,8 @@ if WorldState.has_flag("house.cat_fed")
 	=> cat_antreiber
 % Der Antreiber sitzt am Feuer und sieht aus, als würde er gleich aufspringen. Er springt nicht. [ID:haus_antr_8]
 % Antreiber: Ich sitz nur kurz. [ID:haus_antr_9]
+% [if WorldState.has_flag("house.antreiber_refused") /] Antreiber: Das Dach hat Zeit. Steht auf der Liste. Ganz unten. [ID:haus_antr_10]
+% [if WorldState.has_flag("house.antreiber_refused") /] Der Antreiber sitzt am Feuer und zählt nichts mehr an den Fingern. [ID:haus_antr_11]
 => END
 
 ~ knock
@@ -228,6 +242,10 @@ Mira: Wo kommst du eigentlich her? [ID:haus_mira_12]
 	Mira: Das kenn ich. [ID:haus_mira_16]
 	Mira schaut ins Feuer und sagt nichts mehr dazu. [ID:haus_mira_17]
 	do WorldState.add_memory("mira", "said_dont_know")
+- Das sag ich nicht. [if WorldState.has_facet("boundaries") /] [ID:haus_mira_r15]
+	Mira: Dann kommst du von hier. [ID:haus_mira_39]
+	Mira: Das spart Weg. [ID:haus_mira_40]
+	do WorldState.add_memory("mira", "kept_origin")
 Mira: Und du? Wie heißt du? [ID:haus_mira_35]
 - {{WorldState.player_name()}}. [ID:haus_mira_r12]
 	Mira: {{WorldState.player_name()}}. Hm. [ID:haus_mira_36]
@@ -251,6 +269,9 @@ Mira: Der Fisch ist gut. Nichts Besonderes. Aber gut. [ID:haus_mira_18]
 	do WorldState.add_memory("mira", "ate_quietly")
 if WorldState.has_flag("elysia.soup_served")
 	Der Fisch schmeckt nach Rauch und ein bisschen nach Bach. Und hat Gräten. Viele. [ID:haus_mira_28]
+Mira: Dein Kamin zieht schlecht. [ID:haus_mira_41]
+Der Rauch steigt gerade nach oben. Sie wedelt ihn trotzdem weg. [ID:haus_mira_42]
+Mira: Meiner raucht nie. [ID:haus_mira_43]
 Mira: Die Leute, die hier gewohnt haben, hatten eine Ziege. Die läuft noch rum. [ID:haus_mira_19]
 Mira: Sie hat meinen Stiefel. [ID:haus_mira_20]
 - Deinen Stiefel? [ID:haus_mira_r7]

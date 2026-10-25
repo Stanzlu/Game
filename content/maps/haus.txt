@@ -21,6 +21,8 @@ u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
 c = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_window", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20, "sound": "cat_meow_muffled", "if": "house.fire_lit", "unless": "house.cat_fed"}}
 k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "sound": "purr", "if": "house.cat_fed", "unless": "house.antreiber_by_fire"}}
+; Abdrücke im Staub: ein Punkt im Raum, den nur sieht, wer genau hinsieht (die Szene setzt house.looks_closely aus der Facette)
+p = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "haus_prints", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 14, "if": "house.looks_closely"}}
 ; der Antreiber, wenn man am Feuer sitzen geblieben ist; später schläft die Katze auf ihm (Bible §28)
 a = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "antreiber_rest", "sit": true, "face": "w", "if": "house.antreiber_by_fire"}}
 z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "lift": 14, "if": ["house.cat_fed", "house.antreiber_by_fire"]}}
@@ -40,7 +42,7 @@ Q = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size":
 ############WWWWWWWWWWWWWWWW############
 ############WWWWWWWRWWcwWWWW############
 ############W___K__________W############
-############W__M__ak_______W############
+############W__M__ak__p____W############
 ############W____rz______b_W############
 ############W_______T______W############
 ############W______@_______W############

@@ -170,6 +170,8 @@ gh_window_2	akt1/gasthaus.dialogue	-
 gh_woke_1	akt1/gasthaus.dialogue	-
 gh_woke_2	akt1/gasthaus.dialogue	-
 haus_antr_1	slice/haus.dialogue	-
+haus_antr_10	slice/haus.dialogue	-
+haus_antr_11	slice/haus.dialogue	-
 haus_antr_2	slice/haus.dialogue	-
 haus_antr_3	slice/haus.dialogue	-
 haus_antr_4	slice/haus.dialogue	-
@@ -183,6 +185,7 @@ haus_bed_2	slice/haus.dialogue	-
 haus_bed_3	slice/haus.dialogue	-
 haus_bed_4	slice/haus.dialogue	-
 haus_bed_5	slice/haus.dialogue	-
+haus_bed_6	slice/haus.dialogue	-
 haus_bucket_1	slice/haus.dialogue	-
 haus_bucket_2	slice/haus.dialogue	-
 haus_cat_1	slice/haus.dialogue	-
@@ -244,7 +247,12 @@ haus_mira_35	slice/haus.dialogue	-
 haus_mira_36	slice/haus.dialogue	-
 haus_mira_37	slice/haus.dialogue	-
 haus_mira_38	slice/haus.dialogue	-
+haus_mira_39	slice/haus.dialogue	-
 haus_mira_4	slice/haus.dialogue	-
+haus_mira_40	slice/haus.dialogue	-
+haus_mira_41	slice/haus.dialogue	-
+haus_mira_42	slice/haus.dialogue	-
+haus_mira_43	slice/haus.dialogue	-
 haus_mira_5	slice/haus.dialogue	-
 haus_mira_6	slice/haus.dialogue	-
 haus_mira_7	slice/haus.dialogue	-
@@ -257,6 +265,7 @@ haus_mira_r11	slice/haus.dialogue	-
 haus_mira_r12	slice/haus.dialogue	-
 haus_mira_r13	slice/haus.dialogue	-
 haus_mira_r14	slice/haus.dialogue	-
+haus_mira_r15	slice/haus.dialogue	-
 haus_mira_r2	slice/haus.dialogue	-
 haus_mira_r3	slice/haus.dialogue	-
 haus_mira_r4	slice/haus.dialogue	-
@@ -265,6 +274,9 @@ haus_mira_r6	slice/haus.dialogue	-
 haus_mira_r7	slice/haus.dialogue	-
 haus_mira_r8	slice/haus.dialogue	-
 haus_mira_r9	slice/haus.dialogue	-
+haus_prints_1	slice/haus.dialogue	-
+haus_prints_2	slice/haus.dialogue	-
+haus_prints_3	slice/haus.dialogue	-
 haus_rest_1	slice/haus.dialogue	-
 haus_rest_2	slice/haus.dialogue	-
 haus_rest_3	slice/haus.dialogue	-
@@ -417,6 +429,14 @@ mk_tailor_6	akt1/markt.dialogue	-
 mk_tailor_7	akt1/markt.dialogue	-
 mk_tailor_8	akt1/markt.dialogue	-
 mk_tailor_9	akt1/markt.dialogue	-
+nein_antr_1	akt2/nein.dialogue	-
+nein_antr_2	akt2/nein.dialogue	-
+nein_antr_3	akt2/nein.dialogue	-
+nein_antr_4	akt2/nein.dialogue	-
+nein_antr_5	akt2/nein.dialogue	-
+nein_antr_r1	akt2/nein.dialogue	-
+nein_antr_r2	akt2/nein.dialogue	-
+nein_antr_r3	akt2/nein.dialogue	-
 sh_feather_1	akt1/spiegelhalle.dialogue	-
 sh_feather_2	akt1/spiegelhalle.dialogue	-
 sh_feather_3	akt1/spiegelhalle.dialogue	-
@@ -544,6 +564,7 @@ tal_eve_day_1	slice/tal.dialogue	-
 tal_eve_day_10	slice/tal.dialogue	-
 tal_eve_day_11	slice/tal.dialogue	-
 tal_eve_day_12	slice/tal.dialogue	-
+tal_eve_day_13	slice/tal.dialogue	-
 tal_eve_day_2	slice/tal.dialogue	-
 tal_eve_day_3	slice/tal.dialogue	-
 tal_eve_day_4	slice/tal.dialogue	-
@@ -558,9 +579,11 @@ tal_eve_day_r3	slice/tal.dialogue	-
 tal_eve_day_r4	slice/tal.dialogue	-
 tal_eve_day_r5	slice/tal.dialogue	-
 tal_eve_day_r6	slice/tal.dialogue	-
+tal_eve_day_r7	slice/tal.dialogue	-
 tal_eve_ely_1	slice/tal.dialogue	-
 tal_eve_ely_10	slice/tal.dialogue	-
 tal_eve_ely_11	slice/tal.dialogue	-
+tal_eve_ely_12	slice/tal.dialogue	-
 tal_eve_ely_2	slice/tal.dialogue	-
 tal_eve_ely_3	slice/tal.dialogue	-
 tal_eve_ely_4	slice/tal.dialogue	-

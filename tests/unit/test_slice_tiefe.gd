@@ -230,8 +230,12 @@ func test_staying_seated_lets_the_antreiber_sit_by_the_fire() -> void:
 	WorldState.set_fire_lit(true)
 	await wait_physics_frames(2)
 	scene.player.sit_on(scene.map.cell_to_world(Vector2i(17, 11)), Facing.Dir.N)
-	# with auto advance every line takes its time: fire, his ideas, him sitting down
-	await wait_until(func() -> bool: return WorldState.has_flag("house.antreiber_by_fire"), 75.0)
+	# with auto advance every line takes its time: fire, his ideas, him sitting down; the player
+	# answers him with silence (the answers of B2 are tested in test_akt2_nein_szene)
+	var seated := func() -> bool:
+		BoxAnswers.pick(scene.dialogue_box, "…")
+		return WorldState.has_flag("house.antreiber_by_fire")
+	await wait_until(seated, 75.0)
 	assert_true(WorldState.has_flag("house.antreiber_by_fire"))
 	await wait_physics_frames(3)
 	assert_not_null(_first(scene, "antreiber_rest"), "he stays by the fire")
@@ -254,9 +258,13 @@ func test_getting_up_sends_the_antreiber_off() -> void:
 	var arrived := func() -> bool:
 		return not scene.map.entities.find_children("*", "AntreiberActor", true, false).is_empty()
 	await wait_until(arrived, 20.0)
-	# his ideas first, then the player gets up instead of staying seated
-	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 20.0)
-	await wait_until(func() -> bool: return not scene.dialogue_box.is_open(), 20.0)
+	# his ideas first and the player's silence, then the player gets up instead of staying seated
+	var answered := {"yes": false}
+	var asked := func() -> bool:
+		if BoxAnswers.pick(scene.dialogue_box, "…"):
+			answered["yes"] = true
+		return answered["yes"] and not scene.dialogue_box.is_open()
+	await wait_until(asked, 40.0)
 	scene.player.stand_up()
 	await wait_until(func() -> bool: return WorldState.has_flag("house.antreiber_left"), 20.0)
 	assert_true(WorldState.has_flag("house.antreiber_left"))
