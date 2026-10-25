@@ -5,7 +5,7 @@ Usage: .venv/bin/python tools/perf/map_spike.py [--source content/maps/tal.txt] 
 Tiles the source map (tools/art/tile_map.py), bakes the ground (time and memory of the baker), imports the
 images and builds each map in a MapView headless (tools/perf/map_spike.gd: parse and build time, nodes,
 memory, process time per frame). Prints a table for docs/PERFORMANCE.md. Everything it writes lies in
-build/spike (not committed). Needs numpy and Pillow (requirements-art.txt) and Godot (tools/godot.sh).
+spike_tmp (not committed). Needs numpy and Pillow (requirements-art.txt) and Godot (tools/godot.sh).
 """
 import argparse
 import json
@@ -16,14 +16,14 @@ import sys
 import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SPIKE = os.path.join(ROOT, "build", "spike")
+SPIKE = os.path.join(ROOT, "spike_tmp")
 
 
 def run(cmd):
     """(seconds, peak KB of the child, output) of a command."""
     before = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss
     started = time.time()
-    done = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
+    done = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=900)
     seconds = time.time() - started
     peak = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss
     if done.returncode != 0:
@@ -41,7 +41,7 @@ def main():
     baked = {}
     for nx, ny in sizes:
         name = "tal_%dx%d" % (nx, ny)
-        out = os.path.join("build", "spike", name + ".txt")
+        out = os.path.join("spike_tmp", name + ".txt")
         run([sys.executable, "tools/art/tile_map.py", args.source, str(nx), str(ny), out])
         seconds, peak, _ = run([sys.executable, "tools/perf/spike_bake.py", out])
         png = os.path.getsize(os.path.join(SPIKE, name + "_ground.png"))
@@ -53,8 +53,8 @@ def main():
     print("|---|---|---|---|---|---|---|---|---|---|---|")
     for nx, ny in sizes:
         name = "tal_%dx%d" % (nx, ny)
-        _, _, output = run(["tools/godot.sh", "--headless", "-s", "tools/perf/map_spike.gd", "--",
-                            "--map=res://build/spike/%s.txt" % name])
+        _, _, output = run(["tools/godot.sh", "--headless", "res://tools/perf/map_spike.tscn", "--",
+                            "--map=res://spike_tmp/%s.txt" % name])
         line = [l for l in output.splitlines() if l.startswith("SPIKE ")]
         if not line:
             sys.exit("no result for %s:\n%s" % (name, output))

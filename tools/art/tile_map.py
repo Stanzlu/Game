@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tiles a text map NX times to the right and NY times down (standard library only).
 
-Usage: python3 tools/art/tile_map.py content/maps/tal.txt 2 2 build/spike/tal_2x2.txt
+Usage: python3 tools/art/tile_map.py content/maps/tal.txt 2 2 spike_tmp/tal_2x2.txt
 The large-map spike (T6, docs/PERFORMANCE.md) uses it to get a synthetic map of any size out of a real one:
 same legend, same props and markers (every tile has its own), the baked images ([meta] ground, water,
 treeline) pointing at files named after the output. A tool for measuring, not for making maps.
@@ -14,7 +14,7 @@ BAKED_KEYS = ("ground", "water", "treeline")
 
 
 def tile(text, nx, ny, name):
-    """The map text tiled; the [meta] image paths become res://build/spike/<name>_<kind>.png."""
+    """The map text tiled; the [meta] image paths become res://spike_tmp/<name>_<kind>.png."""
     if nx < 1 or ny < 1:
         raise ValueError("a map is tiled at least once each way")
     # the header line stands alone ("[map]" also appears in comments)
@@ -24,7 +24,7 @@ def tile(text, nx, ny, name):
     head, body = parts
     for key in BAKED_KEYS:
         head = re.sub(r'(?m)^%s = "[^"]*"$' % key,
-                      '%s = "res://build/spike/%s_%s.png"' % (key, name, key), head)
+                      '%s = "res://spike_tmp/%s_%s.png"' % (key, name, key), head)
     # a mirror axis (Elysia) belongs to the first tile only; the spike maps are not symmetric
     head = re.sub(r"(?m)^symmetry = .*\n", "", head)
     lines = [line for line in body.replace("\r", "").split("\n")]

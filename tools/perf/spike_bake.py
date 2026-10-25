@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Bakes a spike map without writing a stamp (T6): tools/art/bake_ground.py minus write_stamp.
 
-Usage: .venv/bin/python tools/perf/spike_bake.py build/spike/tal_2x2.txt
+Usage: .venv/bin/python tools/perf/spike_bake.py spike_tmp/tal_2x2.txt
 The baker itself stays untouched on purpose: every change to bake_ground.py, pixelart.py or mapfile.py
 outdates the stamp of every committed map (tools/art/mapfile.py).
 """

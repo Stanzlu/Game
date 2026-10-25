@@ -1,7 +1,8 @@
-extends SceneTree
+extends Node
 ## Large-map spike (T6, docs/PERFORMANCE.md): builds one text map in a MapView and prints what it
 ## costs as one line, "SPIKE {json}". Run by tools/perf/map_spike.py:
-##   tools/godot.sh --headless -s tools/perf/map_spike.gd -- --map=res://build/spike/tal_2x2.txt
+##   tools/godot.sh --headless res://tools/perf/map_spike.tscn -- --map=res://spike_tmp/tal_2x2.txt
+## A scene and not a -s script: the autoloads the map needs are not there when a script compiles.
 ## A measuring tool: it reads the wall clock, as the game and its tests never do.
 
 const FRAMES := 120
@@ -9,7 +10,7 @@ const FRAMES := 120
 var _map := ""
 
 
-func _initialize() -> void:
+func _ready() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--map="):
 			_map = arg.trim_prefix("--map=")
@@ -19,7 +20,7 @@ func _initialize() -> void:
 func _run() -> void:
 	if _map.is_empty():
 		push_error("map_spike: --map=<res:// path> missing")
-		quit(1)
+		get_tree().quit(1)
 		return
 	var text := FileAccess.get_file_as_string(_map)
 	var legend := MapView.load_legend(MapView.DEFAULT_LEGEND)
@@ -29,7 +30,7 @@ func _run() -> void:
 	var nodes_before := int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
 	var memory_before := Performance.get_monitor(Performance.MEMORY_STATIC)
 	var view := MapView.new()
-	root.add_child(view)
+	add_child(view)
 	started = Time.get_ticks_usec()
 	var ok := view.build_from_text(text, _map)
 	var build_us := Time.get_ticks_usec() - started
@@ -37,7 +38,7 @@ func _run() -> void:
 	var memory := (Performance.get_monitor(Performance.MEMORY_STATIC) - memory_before) / 1048576.0
 	started = Time.get_ticks_usec()
 	for i in FRAMES:
-		await process_frame
+		await get_tree().process_frame
 	var frame_us := float(Time.get_ticks_usec() - started) / float(FRAMES)
 	var result := {
 		"map": _map,
@@ -52,4 +53,4 @@ func _run() -> void:
 		"frame_us": int(frame_us),
 	}
 	print("SPIKE ", JSON.stringify(result))
-	quit(0 if ok else 1)
+	get_tree().quit(0 if ok else 1)
