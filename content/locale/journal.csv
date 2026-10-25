@@ -32,7 +32,7 @@ QUEST_SIDE_ELYSIA_BUTTERFLIES_DONE,"Die Schmetterlinge sind zurück und fliegen 
 QUEST_MAIN_VALLEY_SHELTER_TITLE,Ein Dach
 QUEST_MAIN_VALLEY_SHELTER_CROSS,"Regen. Die Frau am Bach heißt Mira und hat Nein gesagt. Drüben überm Bach soll ein leeres Haus stehen. Die Brücke ist kaputt."
 QUEST_MAIN_VALLEY_SHELTER_HOUSE,"Ich bin drüben. Irgendwo hier muss das Haus sein."
-QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräuchte ich trockenes Holz. Laut dem Zettel am Kamin liegt welches im Schuppen am Ende des Weges nach Westen."
+QUEST_MAIN_VALLEY_SHELTER_WOOD,"Das Haus ist leer und kalt. Für ein Feuer bräuchte ich trockenes Holz. Laut dem Zettel am Kamin liegt welches im Schuppen am Ende des Weges nach Westen. Der Weg soll lang sein. Länger, wenn man es eilig hat."
 QUEST_MAIN_VALLEY_SHELTER_FIRE,"Ich hab trockenes Holz. Jetzt zurück zum Haus, zum Kamin."
 QUEST_MAIN_VALLEY_SHELTER_DONE,"Das Feuer brennt. Es ist nicht viel. Aber es ist warm."
 QUEST_SIDE_VALLEY_GOAT_TITLE,Der Stiefel
@@ -79,6 +79,8 @@ MEMORY_MIRA_DAY_SILENCE,"Am Feuer hat sie erzählt. Zwei Löcher im Netz geflick
 MEMORY_MIRA_TOLD_ELYSIA_EASY,"Sie hat nach Elysia gefragt. Ich habe gesagt, dort war alles leicht. Sie hat nicht gefragt, warum ich dann hier bin."
 MEMORY_MIRA_MISSED_ELYSIA,"Ich habe ihr gesagt, dass mir Elysia manchmal fehlt. Sie hat Klar gesagt."
 MEMORY_MIRA_KEPT_BOUNDARY,"Sie hat nach Elysia gefragt. Ich wollte nicht darüber reden. Sie hat nicht noch mal gefragt."
+MEMORY_MIRA_KEPT_ORIGIN,"Sie wollte wissen, wo ich herkomme. Das habe ich nicht gesagt. Dann komme ich von hier, meinte sie."
+MEMORY_MIRA_KEPT_DAY,"Am Feuer sollte ich erzählen. Ich habe nichts erzählt. Sie hat das Netz näher ans Feuer gezogen."
 MEMORY_MIRA_ELYSIA_SILENCE,"Sie hat nach Elysia gefragt. Ich habe geschwiegen. Auch eine Antwort, sagt sie."
 MEMORY_MIRA_ASKED_SHELL,"Die Muschel an ihrer Plane ist vom Meer. Sie war noch nie da."
 MEMORY_MIRA_LEFT_SHELL,"Ich habe nicht nach der Muschel gefragt."

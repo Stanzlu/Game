@@ -190,6 +190,9 @@ Mira: Erzähl was. Irgendwas. Das Feuer brennt noch eine Weile. [ID:tal_eve_day_
 	Mira: Wie heißt sie? [ID:tal_eve_day_8]
 	Du weißt es nicht. Sie hat es dir nicht gesagt. [ID:tal_eve_day_9]
 	do WorldState.add_memory("mira", "told_cat")
+- Heute nicht mehr. [if WorldState.has_facet("boundaries") /] [ID:tal_eve_day_r7]
+	Mira zieht das Netz näher ans Feuer. Das nasse Garn dampft. [ID:tal_eve_day_13]
+	do WorldState.add_memory("mira", "kept_day")
 - … [ID:tal_eve_day_r6]
 	Mira schweigt eine Weile mit. Dann erzählt sie selbst. [ID:tal_eve_day_10]
 	Mira: Ich hab heute zwei Löcher im Netz geflickt. Und ein neues gefunden. [ID:tal_eve_day_11]
@@ -198,6 +201,9 @@ Mira: Erzähl was. Irgendwas. Das Feuer brennt noch eine Weile. [ID:tal_eve_day_
 => END
 
 ~ evening_elysia
+if WorldState.has_memory("mira", "kept_origin")
+	Mira schaut ins Feuer. Nach Elysia fragt sie nicht. [ID:tal_eve_ely_12]
+	=> END
 if WorldState.has_memory("mira", "said_elsewhere")
 	Mira: Dieses Woanders. Wie war's da? [ID:tal_eve_ely_10]
 elif WorldState.has_memory("mira", "said_dont_know")

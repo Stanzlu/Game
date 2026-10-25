@@ -295,6 +295,48 @@ func test_calls_and_local_names_are_not_effects() -> void:
 	assert_eq(StoryLint.effect_problems(src), PackedStringArray())
 
 
+# --- facets --------------------------------------------------------------------------------
+
+
+func test_a_facet_that_is_set_and_read_is_fine() -> void:
+	var src := _sources()
+	src.dialogues["res://d/a.dialogue"] = 'do WorldState.set_facet("boundaries")'
+	src.dialogues["res://d/b.dialogue"] = '- Nein. [if WorldState.has_facet("boundaries") /] [ID:x]'
+	assert_eq(StoryLint.facet_problems(src), PackedStringArray())
+
+
+func test_a_facet_that_is_set_and_never_read_is_found() -> void:
+	var src := _sources()
+	src.dialogues["res://d/a.dialogue"] = 'do WorldState.set_facet("boundaries")'
+	var problems := StoryLint.facet_problems(src)
+	assert_eq(problems.size(), 1)
+	assert_string_contains(problems[0], "sets facet 'boundaries', nothing reads it")
+
+
+func test_a_facet_that_is_read_and_never_set_is_found() -> void:
+	var src := _sources()
+	src.code["res://w/a.gd"] = 'func f():\n\treturn WorldState.has_facet("perception")\n'
+	var problems := StoryLint.facet_problems(src)
+	assert_eq(problems.size(), 1)
+	assert_string_contains(problems[0], "reads facet 'perception', nothing sets it")
+
+
+func test_a_facet_read_in_a_script_counts_as_read() -> void:
+	var src := _sources()
+	src.dialogues["res://d/a.dialogue"] = 'do WorldState.set_facet("perception")'
+	src.code["res://w/a.gd"] = 'func f():\n\treturn WorldState.has_facet("perception")\n'
+	assert_eq(StoryLint.facet_problems(src), PackedStringArray())
+
+
+func test_every_facet_the_project_sets_has_two_readers_or_more_where_the_brief_asks() -> void:
+	# Act II, B2: Grenzen is read by two answers that only exist with it (docs/akt2/REGIONSBRIEFE.md)
+	var src := StoryLint.load_project()
+	var readers := 0
+	for path: String in src.dialogues:
+		readers += ((src.dialogues[path] as String).split('has_facet("boundaries")').size() - 1)
+	assert_gte(readers, 2, "boundaries: two readers, each next to an answer that always applies")
+
+
 # --- the real project ----------------------------------------------------------------------
 
 
@@ -311,6 +353,7 @@ func test_the_real_project_passes_every_rule() -> void:
 	assert_eq(StoryLint.cue_problems(src), PackedStringArray())
 	assert_eq(StoryLint.quest_problems(src), PackedStringArray())
 	assert_eq(StoryLint.flag_problems(src), PackedStringArray())
+	assert_eq(StoryLint.facet_problems(src), PackedStringArray())
 	assert_eq(StoryLint.duplicate_problems(src), PackedStringArray())
 	assert_eq(StoryLint.effect_problems(src), PackedStringArray())
 

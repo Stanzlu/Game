@@ -233,6 +233,42 @@
      "ref": "ank_fire_2"
     },
     {
+     "type": "line",
+     "ref": "nein_antr_r1"
+    },
+    {
+     "type": "line",
+     "ref": "nein_antr_1"
+    },
+    {
+     "type": "line",
+     "ref": "nein_antr_2"
+    },
+    {
+     "type": "line",
+     "ref": "haus_mira_r15"
+    },
+    {
+     "type": "line",
+     "ref": "haus_mira_39"
+    },
+    {
+     "type": "line",
+     "ref": "haus_mira_40"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_day_r7"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_day_13"
+    },
+    {
+     "type": "line",
+     "ref": "tal_eve_ely_12"
+    },
+    {
      "type": "flag",
      "ref": "elysia.asked_for_no"
     }
@@ -372,6 +408,18 @@
     {
      "type": "line",
      "ref": "haus_shelf_1"
+    },
+    {
+     "type": "line",
+     "ref": "haus_prints_1"
+    },
+    {
+     "type": "line",
+     "ref": "haus_prints_2"
+    },
+    {
+     "type": "line",
+     "ref": "haus_bed_6"
     },
     {
      "type": "flag",
@@ -661,6 +709,22 @@
     {
      "type": "line",
      "ref": "tal_antr_busy_3"
+    },
+    {
+     "type": "line",
+     "ref": "nein_antr_3"
+    },
+    {
+     "type": "line",
+     "ref": "nein_antr_4"
+    },
+    {
+     "type": "line",
+     "ref": "haus_antr_10"
+    },
+    {
+     "type": "line",
+     "ref": "haus_antr_11"
     },
     {
      "type": "flag",
@@ -1040,6 +1104,26 @@
    "flag": "house.antreiber_left",
    "axis": "Beschützer",
    "meaning": "Der Antreiber hat das Haus wieder verlassen."
+  },
+  {
+   "flag": "house.antreiber_refused",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Antreiber am Feuer „Heute nicht.“ gesagt: er setzt sich, sein Zweitens fällt aus (Akt II, B2; setzt die Facette Grenzen)."
+  },
+  {
+   "flag": "house.antreiber_postponed",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Antreiber am Feuer „Morgen.“ gesagt: für ihn ein Termin, er geht nachsehen, ob das Dach noch da ist (Akt II, B2)."
+  },
+  {
+   "flag": "house.looks_closely",
+   "axis": "Wahrnehmung",
+   "meaning": "Die Szene des Hauses leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr im Raum (Akt II, B2)."
+  },
+  {
+   "flag": "house.prints_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die Abdrücke im Staub gesehen: klein, rund, vier Zehen, bis ans Fenster und zurück (nur mit der Facette Wahrnehmung)."
   },
   {
    "flag": "house.mira_knocked",

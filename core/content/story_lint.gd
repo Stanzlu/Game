@@ -9,7 +9,9 @@ extends RefCounted
 ## every cue a map or script starts exists in its dialogue; every quest stage has a trigger
 ## (something advances to it); every flag that is read is set somewhere and every flag that is
 ## set is read somewhere (a flag nobody reads is a fake choice in the making); no spawn marker or
-## beat appears twice; a script that makes its own flash or shake reads the matching setting.
+## beat appears twice; every facet that is set is read somewhere and the other way round (a facet
+## shows itself as answers that were not there before, Game Bible §16); a script that makes its
+## own flash or shake reads the matching setting.
 ## Like the dialogue sources, the files are not shipped: exported builds skip this lint.
 
 const CODE_DIRS: PackedStringArray = [
@@ -48,6 +50,7 @@ static var _flag_call_regex := RegEx.create_from_string(
 static var _flag_param_regex := RegEx.create_from_string(
 	'"(?:flag|start_flag)"\\s*:\\s*("[^"]*"|[A-Za-z_][A-Za-z0-9_]*)'
 )
+static var _facet_regex := RegEx.create_from_string('\\b(set_facet|has_facet)\\(\\s*"([a-z_]+)"')
 static var _token_regex := RegEx.create_from_string('"[^"]*"|[A-Za-z_][A-Za-z0-9_]*')
 static var _mark_regex := RegEx.create_from_string(
 	'\\b(Beat|Chapter)\\.(mark|reached)\\(\\s*("[^"]*"|[A-Za-z_][A-Za-z0-9_]*)(?=\\s*[,)])'
@@ -125,6 +128,7 @@ static func validate_project() -> PackedStringArray:
 	problems.append_array(cue_problems(src))
 	problems.append_array(quest_problems(src))
 	problems.append_array(flag_problems(src))
+	problems.append_array(facet_problems(src))
 	problems.append_array(duplicate_problems(src))
 	problems.append_array(effect_problems(src))
 	return problems
@@ -336,6 +340,26 @@ static func flag_problems(src: Sources) -> PackedStringArray:
 		if int(mentions.get(flag, 0)) > int(set_mentions.get(flag, 0)):
 			continue
 		problems.append("%s: sets flag '%s', nothing reads it" % [sets[flag], flag])
+	return problems
+
+
+## Facets named by literal calls: one that is set needs a reader and one that is read needs a
+## setter. A facet nobody reads changes nothing the player can see; one nobody sets is dead code.
+static func facet_problems(src: Sources) -> PackedStringArray:
+	var problems: PackedStringArray = []
+	var sets := {}
+	var reads := {}
+	var texts: Array[Dictionary] = [src.code, src.dialogues]
+	for texts_of_kind in texts:
+		for path: String in texts_of_kind:
+			for m in _facet_regex.search_all(texts_of_kind[path]):
+				(sets if m.get_string(1) == "set_facet" else reads)[m.get_string(2)] = path
+	for facet: String in reads:
+		if not sets.has(facet):
+			problems.append("%s: reads facet '%s', nothing sets it" % [reads[facet], facet])
+	for facet: String in sets:
+		if not reads.has(facet):
+			problems.append("%s: sets facet '%s', nothing reads it" % [sets[facet], facet])
 	return problems
 
 

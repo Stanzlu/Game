@@ -1,0 +1,21 @@
+# Nein und Blick, Akt II, Segment B2 (docs/akt2/REGIONSBRIEFE.md).
+# Der Antreiber am Feuer hat nach seinen beiden Sätzen (haus_antr_1, haus_antr_2) eine Bitte ohne Wort gestellt; jetzt darf die
+# Spielerin antworten. Jede Antwort hat ihre Folge am Antreiber selbst, keine straft und keine belohnt: "Heute nicht." wird
+# angenommen (er setzt sich, sein Zweitens fällt aus), "Morgen." ist für ihn ein Termin (er geht nachsehen), "…" überlässt es
+# dem Sitzen wie bisher. Er fragt nicht nach, warum; er lobt nicht; er sagt, was er glaubt, nie, was es bedeutet.
+# "Heute nicht." setzt die Facette Grenzen (Bible §16, Stufe I und II) und öffnet zwei Antworten in späteren Gesprächen.
+# Zeilen ohne Sprecher sind Erzählung.
+
+~ antreiber_ask
+- Heute nicht. [ID:nein_antr_r1] [#draft]
+	Antreiber: Heute nicht. [ID:nein_antr_1] [#draft]
+	Er hebt einen Finger, für ein Zweitens. Es kommt keins. [ID:nein_antr_2] [#draft]
+	do WorldState.set_facet("boundaries")
+	do WorldState.set_flag("house.antreiber_refused")
+- Morgen. [ID:nein_antr_r2] [#draft]
+	Antreiber: Morgen. Das ist ein Termin. [ID:nein_antr_3] [#draft]
+	Er geht zur Tür, um nachzusehen, ob das Dach noch da ist. [ID:nein_antr_4] [#draft]
+	do WorldState.set_flag("house.antreiber_postponed")
+- … [ID:nein_antr_r3] [#draft]
+	Der Antreiber wartet. Er zählt etwas an den Fingern ab. [ID:nein_antr_5] [#draft]
+=> END

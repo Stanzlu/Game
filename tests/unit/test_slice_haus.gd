@@ -184,8 +184,11 @@ func test_after_loading_the_rest_by_the_fire_is_not_told_again() -> void:
 		if box.is_open() and box.line != null:
 			if spoken.is_empty() or spoken.back() != box.line.text:
 				spoken.append(box.line.text)
+		# the group of answers after his ideas: the first allowed answer
+		BoxAnswers.pick(box)
 		return WorldState.has_flag("house.antreiber_by_fire")
 	await wait_until(watch, 40.0)
+	assert_true(WorldState.has_flag("house.antreiber_by_fire"), "he sits down after loading too")
 	assert_false(spoken.is_empty())
 	assert_true(
 		spoken[0].begins_with("Wir könnten noch Holz"),

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Reading version of dialogue files (standard library only): the text as a script, for a human reader.
 
-Usage: python3 tools/writing/readable.py TITLE OUT.md [FILE.dialogue ...]
-Without files all story dialogue is written. The reading version is for the owner, who is the only
+Usage: python3 tools/writing/readable.py TITLE OUT.md [FILE.dialogue[#cue,cue] ...]
+Without files all story dialogue is written. A file with "#cue,cue" gives only those cues (the delta
+of a segment in a file that older segments wrote); the numbers stay those of the whole file and a cue
+that is not in the file stops the run. The reading version is for the owner, who is the only
 reader (ADR-049): per cue a number (E3, T12) to answer with "OK", "ändern" or "raus", then the
 lines in the order the game plays them, with the conditions that pick them and the answers as
 branches. It shows no code except the conditions; what a line sets (flags, items, XP) is left out
@@ -54,10 +56,12 @@ def condition_text(expression):
     return expression.replace("WorldState.", "")
 
 
-def render_file(path, prefix):
+def render_file(path, prefix, only=None):
     out = []
     pending = []
     cue_number = 0
+    skipping = False  # inside a cue that `only` leaves out
+    found = set()
     stack = []  # (indent, label) of the open conditions
     opened = False  # the comment above the first cue is the file's header: no reader's business
     with open(path, encoding="utf-8") as f:
@@ -76,6 +80,11 @@ def render_file(path, prefix):
                 pending = []
                 opened = True
             name = stripped[2:].strip()
+            found.add(name)
+            skipping = only is not None and name not in only
+            if skipping:
+                pending = []
+                continue
             out += ["", "### %s%d · `%s`" % (prefix, cue_number, name), ""]
             out += ["> " + note for note in pending]
             if pending:
@@ -84,6 +93,8 @@ def render_file(path, prefix):
             stack = []
             continue
         pending = []
+        if skipping:
+            continue
         while stack and stack[-1][0] >= indent:
             stack.pop()
         pad = "  " * max(indent - 0, 0)
@@ -103,6 +114,9 @@ def render_file(path, prefix):
             if jump.group(2) != "END":
                 what = "dazwischen" if jump.group(1) else "weiter bei"
                 out.append("%s- *→ %s* `%s`" % (pad, what, jump.group(2)))
+            elif indent > 0:
+                # an end inside a condition skips what follows for this branch: the reader must see it
+                out.append("%s- *→ Ende des Szenenstücks*" % pad)
             continue
         if stripped.startswith(("do ", "do! ", "set ", "=>", "match", "when", "while", "using", "import")):
             continue
@@ -130,6 +144,9 @@ def render_file(path, prefix):
             out.append("%s- **%s:** %s%s%s%s" % (pad, match.group(1), clean(match.group(2)), note, marker, tail))
         else:
             out.append("%s- *%s*%s%s%s" % (pad, clean(stripped), note, marker, tail))
+    missing = sorted(set(only or ()) - found)
+    if missing:
+        raise SystemExit("readable: no cue %s in %s" % (", ".join(missing), os.path.basename(path)))
     return out
 
 
@@ -142,13 +159,22 @@ def render(title, paths):
            "Bedingung oder nach einer Antwort kommt. Hinter jeder Zeile die ID in klein.", "",
            "**So antwortest du:** je Szene (E3, T12 …) „OK“, „ändern: …“ oder „raus“. Was du nicht nennst, "
            "gilt als OK.", ""]
-    for path in paths:
+    for entry in paths:
+        path, only = entry if isinstance(entry, tuple) else (entry, None)
         name = os.path.splitext(os.path.basename(path))[0].replace(".dialogue", "")
         prefix = PREFIX.get(name, name[:1].upper())
         out += ["", "## " + os.path.basename(path).replace(".dialogue", ""), ""]
-        out += render_file(path, prefix)
+        out += render_file(path, prefix, only)
     out.append("")
     return "\n".join(out)
+
+
+def with_cues(argument):
+    """"file.dialogue#cue,cue" becomes (absolute path, {cues}); a plain path stays a path."""
+    path, _, cues = argument.partition("#")
+    if not cues:
+        return os.path.abspath(path)
+    return (os.path.abspath(path), set(cues.split(",")))
 
 
 def story_paths():
@@ -166,7 +192,7 @@ def main(argv):
         print(__doc__)
         return 2
     title, target = argv[0], argv[1]
-    paths = [os.path.abspath(p) for p in argv[2:]] or story_paths()
+    paths = [with_cues(arg) for arg in argv[2:]] or story_paths()
     with open(target, "w", encoding="utf-8", newline="\n") as f:
         f.write(render(title, paths))
     print("readable: wrote %s (%d files)" % (os.path.relpath(target, dialogue.ROOT), len(paths)))
