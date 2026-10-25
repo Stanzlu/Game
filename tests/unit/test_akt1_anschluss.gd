@@ -76,7 +76,8 @@ func test_taking_the_stone_shortens_the_music_a_second_time() -> void:
 	await wait_physics_frames(2)
 	assert_false(WorldState.has_flag("elysia.loops_2"))
 	_stone(scene).get_node("Interactable").interacted.emit(null)
-	await wait_physics_frames(2)
+	# the director sets the stage flag in _process
+	await wait_process_frames(2)
 	assert_true(WorldState.has_flag("elysia.stone_taken"))
 	assert_true(WorldState.has_item("item_stone"))
 	assert_true(WorldState.has_flag("elysia.loops_2"), "the quarter loop comes with the stone")
@@ -148,6 +149,29 @@ func test_once_the_rift_is_open_the_host_drops_the_first_of_his_two_sentences() 
 	assert_eq(LineText.of("gh_host_loop_2"), LineText.of("gh_host_2"), "word for word")
 
 
+func test_once_the_rift_is_open_the_mistress_of_the_feast_has_only_her_toast_left() -> void:
+	WorldState.set_flag("elysia.feast_toast")
+	WorldState.set_flag("elysia.loops")
+	var loop_1 := await DialogueWalk.play(MARKT_DIALOGUE, "festmaster")
+	assert_eq(loop_1, PackedStringArray([LineText.of("mk_fest_9")]), "loop 1 until the rift")
+	WorldState.set_flag("elysia.rift_open")
+	var loop_2 := await DialogueWalk.play(MARKT_DIALOGUE, "festmaster")
+	assert_eq(loop_2, PackedStringArray([LineText.of("mk_fest_11")]), "loop 2")
+	assert_eq(LineText.of("mk_fest_11"), LineText.of("mk_fest_7"), "the toast, word for word")
+
+
+func test_loop_2_lines_are_at_most_half_as_long_as_the_loop_1_lines() -> void:
+	# the rule of ADR-064: a whole earlier sentence, and a short one; the music shrinks the same way
+	var pairs := [["mk_gate_11", "mk_gate_10"], ["mk_fest_11", "mk_fest_9"]]
+	for pair: Array in pairs:
+		var short := LineText.of(pair[0]).split(" ").size()
+		var long := LineText.of(pair[1]).split(" ").size()
+		assert_lte(short * 2, long, "%s is at most half of %s" % pair)
+	var host_short := LineText.of("gh_host_loop_2").split(" ").size()
+	var host_both := host_short + LineText.of("gh_host_loop_1").split(" ").size()
+	assert_lte(host_short * 2, host_both, "the host keeps one of his two sentences, the shorter")
+
+
 func test_the_rift_alone_changes_nothing_before_the_repetition() -> void:
 	WorldState.set_flag("elysia.rift_open")
 	WorldState.set_flag("elysia.feast")
@@ -161,8 +185,14 @@ func test_the_rift_alone_changes_nothing_before_the_repetition() -> void:
 # --- The crossing ----------------------------------------------------------------------------
 
 
-func test_the_crossing_keeps_stone_and_seed_and_nothing_of_the_curiosities() -> void:
-	# Game Bible §11: stone and seed are what goes over; a leaf or a feather stays in Elysia
-	assert_eq(RiftSequence.KEEP, PackedStringArray(["item_stone", "item_seed"]))
-	for id: String in ["curiosity_dry_leaf", "curiosity_feather"]:
-		assert_false(id in RiftSequence.KEEP, "%s stays behind" % id)
+func test_the_crossing_leaves_leaf_and_feather_behind() -> void:
+	# Game Bible §11: stone and seed are what goes over, whatever else was picked up in Elysia
+	var scene := await _garden()
+	for id: String in ["item_stone", "item_seed", "curiosity_dry_leaf", "curiosity_feather"]:
+		WorldState.add_item(id, 1, false)
+	var sequence := RiftSequence.play(scene, "look_tal", false)
+	sequence.time_scale = 0.02
+	sequence.travel = false
+	sequence.run()
+	await wait_for_signal(sequence.finished, 5.0)
+	assert_eq(WorldState.state.inventory.keys(), ["item_stone", "item_seed"])

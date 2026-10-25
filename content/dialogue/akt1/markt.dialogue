@@ -201,6 +201,10 @@ Gastwirt: Die Festmeisterin wartet am Brunnen. Sie hat ein Hoch für dich. Sie h
 => END
 
 ~ festmaster
+# Loop 2 (A9): once the rift is open, only her toast is left of everything she said, three times.
+if WorldState.has_flag("elysia.feast_toast") and WorldState.has_flag("elysia.rift_open")
+	Festmeisterin: Auf den Helden! Auf den Helden! Auf den Helden! [ID:mk_fest_11] [#draft]
+	=> END
 if WorldState.has_flag("elysia.feast_toast")
 	Festmeisterin: Da ist er! Der Held des Festes! Wir haben alles für dich vorbereitet. Wir haben alles immer für dich vorbereitet. [ID:mk_fest_9] [#draft]
 	=> END
