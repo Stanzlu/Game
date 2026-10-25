@@ -1235,6 +1235,122 @@
    "res://assets/generated/props/tal/bench.png"
   ]
  },
+ "tal/bl_dry_pebbles": {
+  "anchor": [
+   24,
+   9
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/bl_dry_pebbles.png"
+  ]
+ },
+ "tal/bl_float": {
+  "anchor": [
+   11,
+   26
+  ],
+  "sway": 1.0,
+  "textures": [
+   "res://assets/generated/props/tal/bl_float.png"
+  ]
+ },
+ "tal/bl_glass": {
+  "anchor": [
+   7,
+   6
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/bl_glass.png"
+  ]
+ },
+ "tal/bl_post": {
+  "anchor": [
+   8,
+   36
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/bl_post.png"
+  ]
+ },
+ "tal/bl_stumps": {
+  "anchor": [
+   20,
+   27
+  ],
+  "shadow": [
+   18,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    34,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/bl_stumps.png"
+  ]
+ },
+ "tal/bl_trap_free": {
+  "anchor": [
+   10,
+   28
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/bl_trap_free.png"
+  ]
+ },
+ "tal/bl_trap_stuck": {
+  "anchor": [
+   10,
+   28
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/bl_trap_stuck.png"
+  ]
+ },
+ "tal/bl_weight": {
+  "anchor": [
+   6,
+   8
+  ],
+  "shadow": [
+   4,
+   2
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/bl_weight.png"
+  ]
+ },
+ "tal/bl_weir": {
+  "anchor": [
+   40,
+   18
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/bl_weir.png"
+  ]
+ },
  "tal/boot": {
   "anchor": [
    7,
