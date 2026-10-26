@@ -4,6 +4,8 @@ extends Node2D
 ## came from. Params: {"wobbly": bool}. The cell under a stone is walkable water (map "w").
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
+## The voice after the second fall (Act II, B4): once, in the file's own words.
+const JUDGE_DIALOGUE := "res://content/dialogue/akt2/richter.dialogue"
 const SPLASH := preload("res://assets/generated/props/fx/splash.png")
 ## The tipping zone is a thin slice at the painted stone's feet line, not the stone's cell.
 ## The player's foot collider (10x5 at (0, -2)) reaches 4.5 px above and 0.5 px below the
@@ -84,8 +86,12 @@ func _on_body_entered(body: Node2D) -> void:
 ## The player goes into the stream and climbs out on the bank they came from.
 func _fall(player: Player, heading: Vector2) -> void:
 	player.lock(&"fall")
+	# no save holds valley.fell_twice without the voice that belongs to it (a window closed in the
+	# middle of the fall); the block ends with the fall, and its autosave holds the whole of it
+	SaveSystem.block(&"fall")
 	await NodeTimer.after(self, TIP_SECONDS)
 	var fell_before := WorldState.has_flag("valley.fell_in")
+	var second := fell_before and not WorldState.has_flag("valley.fell_twice")
 	WorldState.set_flag("valley.fell_twice" if fell_before else "valley.fell_in")
 	Log.info(Log.Category.WORLD_STATE, "fell into the stream", {"cell": global_position / 16.0})
 	AudioDirector.sfx("splash_fall")
@@ -106,10 +112,17 @@ func _fall(player: Player, heading: Vector2) -> void:
 	ScreenFade.fade_in(0.6)
 	player.unlock(&"fall")
 	await Talk.present(self, DIALOGUE, "fell_in", player)
+	if second:
+		# only the second fall, only once (the third has set valley.fell_twice long since); the mark
+		# comes after the box, so its autosave holds the whole of it
+		await Talk.present(self, JUDGE_DIALOGUE, "judge", player)
+		Beat.mark("act2_richter")
+	SaveSystem.unblock(&"fall")
 
 
 func _exit_tree() -> void:
 	_falling = false
+	SaveSystem.unblock(&"fall")
 
 
 ## The marker on the bank the player came from: walking east they came from the west.

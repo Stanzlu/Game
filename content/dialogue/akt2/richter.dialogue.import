@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ccy5u7nyy0ytw"
+path="res://.godot/imported/richter.dialogue-08dd213f30d775af3c47bf29abb938ed.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt2/richter.dialogue"
+dest_files=["res://.godot/imported/richter.dialogue-08dd213f30d775af3c47bf29abb938ed.tres"]
+
+[params]
+
+defaults=true

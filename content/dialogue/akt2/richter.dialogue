@@ -1,0 +1,15 @@
+# Richter, Akt II, Segment B4 (docs/akt2/REGIONSBRIEFE.md, O2). Eine Stimme nach dem zweiten Sturz in den Bach: nur Text,
+# Aktenton, nur über Dinge, nie über die Spielerin. Kein Urteil, keine Anrede, keine Antwort, kein Name: der Sprecher heißt
+# "Stimme", bis Akt IV ihn einführt (STIL Regel 4). Sie spricht einmal, direkt nach den Zeilen des Sturzes (`fell_in`), und
+# das letzte Wort hat die Welt, nicht sie. Der Stein setzt den Beat `act2_richter`; ein Flag braucht es nicht, Akt IV liest den Beat.
+
+~ judge
+Vom Wasser her räuspert sich etwas, trocken wie Papier. [ID:ric_1] [#draft]
+Stimme: Zu Protokoll. [ID:ric_2] [#draft]
+Stimme: Ein Stein und ein Bach sind beteiligt. [ID:ric_3] [#draft]
+Stimme: Der Stein wird gehört. Er macht keine Angaben. [ID:ric_4] [#draft]
+Stimme: Der Bach wird gehört. Er macht viele Angaben, alle gleichzeitig. [ID:ric_5] [#draft]
+Stimme: Die Akte bleibt offen. [ID:ric_6] [#draft]
+Stimme: Um Ruhe wird gebeten. [ID:ric_7] [#draft]
+Der Bach rauscht weiter. [ID:ric_8] [#draft]
+=> END

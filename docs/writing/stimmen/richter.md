@@ -1,6 +1,6 @@
 # Der Richter
 
-**Ohne Beleg im Slice.** Aus der Bible (§14, §33) und dem Plan (Akt II, IV, VI).
+**Beleg in Akt II (B4):** 8 Zeilen in `content/dialogue/akt2/richter.dialogue` (`ric_1` bis `ric_8`), eine Stimme nach dem zweiten Sturz in den Bach, nur über Dinge. Sonst aus der Bible (§14, §33) und dem Plan (Akt II, IV, VI).
 
 ## Funktion
 
@@ -21,7 +21,17 @@ Akt II: erste Stimme nach dem Bachsturz oder einem ähnlichen Fehler, noch schar
 verhaspelt sich. Akt VI: erstmals ist die Spielfigur schneller als er. Er zeigt einmal, warum diese Stimme einmal schützte
 (Risiko 8): als Vorwegnahme dessen, was andere sagen könnten.
 
-## Probezeilen (Entwurf zur Probe, nicht im Spiel)
+## Goldzeilen (Akt II)
+
+- `ric_2` „Zu Protokoll.“
+- `ric_4` „Der Stein wird gehört. Er macht keine Angaben.“
+- `ric_5` „Der Bach wird gehört. Er macht viele Angaben, alle gleichzeitig.“
+- `ric_7` „Um Ruhe wird gebeten.“
+
+Der Sprecher heißt „Stimme“, bis Akt IV ihn einführt (STIL Regel 4). In Akt II spricht er nur über Dinge, nie über die Spielerin
+(O2): kein „Angeklagter“, kein „du“, keine Zahl der Stürze, nichts von Mira. Das letzte Wort hat die Welt („Der Bach rauscht weiter.“).
+
+## Probezeilen für spätere Akte (Entwurf zur Probe, nicht im Spiel; für Akt II unbrauchbar: sie reden über die Person)
 
 - „Der Angeklagte hat den Stiefel verloren. Den linken.“
 - „Peinlich. Auch wenn es keiner gesehen hat. Besonders dann.“

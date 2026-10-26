@@ -843,8 +843,21 @@
    "kind": "gag",
    "title": "Der Richter überdramatisiert",
    "bible": "§33",
-   "appears": [],
-   "payoff": "Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Kein Auftritt im Slice."
+   "appears": [
+    {
+     "type": "line",
+     "ref": "ric_3"
+    },
+    {
+     "type": "line",
+     "ref": "ric_5"
+    },
+    {
+     "type": "line",
+     "ref": "ric_7"
+    }
+   ],
+   "payoff": "Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Akt II (B4): eine Stimme nach dem zweiten Sturz, nur über Dinge (ein Stein ohne Angaben, ein Bach mit allen auf einmal, eine Bitte um Ruhe, die der Bach überhört); der Beat `act2_richter` merkt sich, dass sie gesprochen hat, Akt IV führt ihn als \"Richter\" ein."
   },
   {
    "id": "kind-lied",

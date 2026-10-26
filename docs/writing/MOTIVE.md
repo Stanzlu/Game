@@ -34,7 +34,7 @@ Jeder Gag hat Auftritte und eine Auflösung. Gags tragen einen Gegenstand, eine 
 | **Die Kartoffel** | §33 | `tal_goat_4`, `tal_mira_eve_r1`, `valley.potato_taken` | Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung. |
 | **Die Ente** | §33 | noch nicht | Orins Erzfeind (Akt IV). Die Ente verhält sich vollkommen normal. Kein Auftritt im Slice. |
 | **Der Antreiber optimiert Freizeit** | §33 | `tal_antr_2`, `tal_antr_busy_1`, `tal_antr_busy_3`, `nein_antr_3`, `nein_antr_4`, `haus_antr_10`, `haus_antr_11`, `valley.antreiber_rests`, `house.antreiber_by_fire` | Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2). |
-| **Der Richter überdramatisiert** | §33 | noch nicht | Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Kein Auftritt im Slice. |
+| **Der Richter überdramatisiert** | §33 | `ric_3`, `ric_5`, `ric_7` | Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Akt II (B4): eine Stimme nach dem zweiten Sturz, nur über Dinge (ein Stein ohne Angaben, ein Bach mit allen auf einmal, eine Bitte um Ruhe, die der Bach überhört); der Beat `act2_richter` merkt sich, dass sie gesprochen hat, Akt IV führt ihn als "Richter" ein. |
 
 ## Das Kind (Bible §15)
 
@@ -86,7 +86,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `valley.flower_smelled` | Wahrnehmung | `tal.dialogue` | `tal.dialogue` | An der Blume im Tal gerochen. |
 | `valley.crossed` | Fortschritt | `tal_scene.gd` | `tal.dialogue`, `tal_scene.gd` | Den Bach überquert. |
 | `valley.fell_in` | Entscheidungen | `stepping_stone.gd` | `haus.dialogue`, `tal.dialogue`, `stepping_stone.gd` | In den Bach gefallen (nur der Weg über die runden Steine). |
-| `valley.fell_twice` | Gag | `stepping_stone.gd` | `tal.dialogue` | Ein zweites Mal in den Bach gefallen. |
+| `valley.fell_twice` | Gag | `stepping_stone.gd` | `tal.dialogue`, `stepping_stone.gd` | Ein zweites Mal in den Bach gefallen. |
 | `valley.bridge_fixed` | Mira | `haus.dialogue` | `tal.dialogue`, `tal.txt` | Mira hat ein Brett über die Brücke gelegt. |
 | `valley.wood_needed` | Fortschritt | `haus.dialogue` | `haus.dialogue`, `tal.txt` | Trockenes Holz wird gebraucht. |
 | `valley.wood_taken` | Beschützer | – | `tal.dialogue`, `tal.txt`, `haus_scene.gd`, `tal_scene.gd` | Das Holz wurde geholt (Ende des Antreiber-Weges). |
