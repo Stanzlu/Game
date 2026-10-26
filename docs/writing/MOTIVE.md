@@ -105,10 +105,10 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `house.shelf_both` | Haus | `haus.dialogue` | `haus.txt` | Löffel und Stein stehen im Regal. |
 | `house.cat_fed` | Haus | `haus.dialogue` | `haus.dialogue`, `tal.dialogue`, `haus.txt` | Die Katze ist gefüttert und im Haus. |
 | `house.cat_naming` | Haus | `haus.dialogue`, `haus_scene.gd` | `haus_scene.gd` | Die Katze wird benannt. |
-| `house.antreiber_by_fire` | Beschützer | `haus_scene.gd` | `haus.dialogue`, `haus.txt`, `tal.txt`, `haus_scene.gd` | Der Antreiber sitzt am Feuer des Hauses. |
+| `house.antreiber_by_fire` | Beschützer | `haus_scene.gd` | `haus.dialogue`, `haus.txt`, `tal.txt`, `waldweg.txt`, `haus_scene.gd` | Der Antreiber sitzt am Feuer des Hauses. |
 | `house.antreiber_left` | Beschützer | `haus_scene.gd` | `tal.txt`, `haus_scene.gd` | Der Antreiber hat das Haus wieder verlassen. |
 | `house.antreiber_refused` | Beschützer | `nein.dialogue` | `haus.dialogue`, `haus_scene.gd` | Sie hat dem Antreiber am Feuer „Heute nicht.“ gesagt: er setzt sich, sein Zweitens fällt aus (Akt II, B2; setzt die Facette Grenzen). |
-| `house.antreiber_postponed` | Beschützer | `nein.dialogue` | `haus_scene.gd` | Sie hat dem Antreiber am Feuer „Morgen.“ gesagt: für ihn ein Termin, er geht nachsehen, ob das Dach noch da ist (Akt II, B2). |
+| `house.antreiber_postponed` | Beschützer | `nein.dialogue` | `waldweg.dialogue`, `haus_scene.gd` | Sie hat dem Antreiber am Feuer „Morgen.“ gesagt: für ihn ein Termin, er geht nachsehen, ob das Dach noch da ist (Akt II, B2). |
 | `house.looks_closely` | Wahrnehmung | `haus_scene.gd` | `haus.txt` | Die Szene des Hauses leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr im Raum (Akt II, B2). |
 | `house.prints_seen` | Wahrnehmung | `haus.dialogue` | `haus.dialogue` | Sie hat die Abdrücke im Staub gesehen: klein, rund, vier Zehen, bis ans Fenster und zurück (nur mit der Facette Wahrnehmung). |
 | `house.mira_knocked` | Mira | `haus_scene.gd` | – | Mira hat geklopft (Marke für Tests und Autopilot). |
@@ -164,7 +164,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `forest.rested` | Entscheidungen | `waldweg.dialogue` | `waldweg_scene.gd` | Sie hat am Rastplatz Feuer gemacht und Tee gekocht, aus eigenem Willen: die Facette Fürsorge entsteht, der Hang geht danach leichter (Akt III, W2). Kein Zähler, kein Wert. |
 | `forest.fire_1` | Fortschritt | `waldweg.dialogue` | `waldweg.dialogue`, `waldweg.txt` | Das Feuer am ersten Rastplatz brennt (die Karte zeigt es; Akt III, W2). |
 | `forest.fire_2` | Fortschritt | `waldweg.dialogue` | `waldweg.dialogue`, `waldweg.txt` | Das Feuer am zweiten Rastplatz brennt (die Karte zeigt es; Akt III, W2). |
-| `forest.antreiber_met` | Beschützer | `waldweg.dialogue` | `waldweg.dialogue` | Sie hat mit dem Antreiber am leeren sechsten Brett gesprochen (Akt III, W2); die Wegzeichen sind sein Gag, das Warum folgt in W4. |
+| `forest.antreiber_met` | Beschützer | `waldweg.dialogue` | `waldweg.dialogue`, `tal.txt` | Sie hat mit dem Antreiber am leeren sechsten Brett gesprochen (Akt III, W2); die Wegzeichen sind sein Gag, das Warum folgt in W4. |
 | `forest.antreiber_sat` | Beschützer | `waldweg.dialogue` | `waldweg.dialogue`, `waldweg.txt` | Sie hat dem Antreiber am leeren Brett Tee angeboten, und er hat sich gesetzt (nur mit der Facette Fürsorge; Akt III, W2). Keine Auszeichnung, keine Strafe für das Gegenteil. |
 | `forest.cone_taken` | Gegenstände | `waldweg.dialogue` | `waldweg.txt` | Sie hat den Zapfen unter der Fichte eingesteckt (Kuriosität, Akt III, W2). |
 | `fragment.hang_steps` | Wahrnehmung | `waldweg.dialogue` | `waldweg.dialogue` | Sie ist die Stufen im Hohlweg hinabgegangen: für einen Atemzug sind sie neu (Spur der Welt, Akt III, W2; kein Bild des Kindes). |

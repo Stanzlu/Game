@@ -813,10 +813,10 @@ tal_west_3	slice/tal.dialogue	-
 tal_wood_1	slice/tal.dialogue	-
 tal_wood_2	slice/tal.dialogue	-
 tal_wood_3	slice/tal.dialogue	-
+wd_antr_0a	akt3/waldweg.dialogue	-
+wd_antr_0b	akt3/waldweg.dialogue	-
 wd_antr_1	akt3/waldweg.dialogue	-
 wd_antr_10	akt3/waldweg.dialogue	-
-wd_antr_11	akt3/waldweg.dialogue	-
-wd_antr_12	akt3/waldweg.dialogue	-
 wd_antr_2	akt3/waldweg.dialogue	-
 wd_antr_3	akt3/waldweg.dialogue	-
 wd_antr_4	akt3/waldweg.dialogue	-
@@ -852,6 +852,12 @@ wd_m5_1	akt3/waldweg.dialogue	-
 wd_m5_2	akt3/waldweg.dialogue	-
 wd_m6_1	akt3/waldweg.dialogue	-
 wd_m6_2	akt3/waldweg.dialogue	-
+wd_m6_3	akt3/waldweg.dialogue	-
+wd_m6_4	akt3/waldweg.dialogue	-
+wd_m6_5	akt3/waldweg.dialogue	-
+wd_m6_6	akt3/waldweg.dialogue	-
+wd_m6_r1	akt3/waldweg.dialogue	-
+wd_m6_r2	akt3/waldweg.dialogue	-
 wd_rest1_1	akt3/waldweg.dialogue	-
 wd_rest1_2	akt3/waldweg.dialogue	-
 wd_rest1_3	akt3/waldweg.dialogue	-
