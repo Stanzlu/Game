@@ -146,13 +146,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Für einen Atemzug sind sie neu, die Erde dunkel, jede Kante scharf, und es riecht nach frisch gestochener Erde. Dann sind sie wieder alt.* `[#draft]`  <sub>wd_steps_3</sub>
   - *Wer die Stufen gestochen hat, hat es für alle getan, die danach kamen.* `[#draft]`  <sub>wd_steps_4</sub>
 
-### W2-14 · `hut_door`
-
-- *Die Hütte steht in einer Mulde, das Dach grün von Moos. Aus dem Schornstein kommt dünner Rauch.* `[#draft]`  <sub>wd_hut_1</sub>
-- *Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm.* `[#draft]`  <sub>wd_hut_2</sub>
-- *Du gehst nicht näher heran. Noch nicht.* `[#draft]`  <sub>wd_hut_3</sub>
-
-### W2-15 · `cone`
+### W2-14 · `cone`
 
 - *Unter der Fichte liegt ein Zapfen, so groß wie eine Faust, die Schuppen halb offen.* `[#draft]`  <sub>wd_cone_1</sub>
 - ▸ **Einstecken.**
@@ -160,13 +154,13 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **Liegen lassen.**
   - *Du lässt ihn liegen. Die Fichte hat noch viele.* `[#draft]`  <sub>wd_cone_3</sub>
 
-### W2-16 · `bach_south_wait`
+### W2-15 · `bach_south_wait`
 
 > Der Süden des Bachlaufs, solange der Morgen danach nicht begonnen hat (kein Beat act3_morning): die Lücke in der Hecke
 > führt an den Rand der Karte, und der Abend von Akt II geht nicht in den Wald.
 
 - *Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter.* `[#draft]`  <sub>wd_bachwait_1</sub>
 
-### W2-17 · `south_wait`
+### W2-16 · `south_wait`
 
 - *Hinter dem leeren Brett läuft der Weg in Brombeeren aus. Der Bach nimmt es dort allein mit dem Wald auf.* `[#draft]`  <sub>wd_south_1</sub>

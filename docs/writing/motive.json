@@ -623,9 +623,17 @@
     {
      "type": "flag",
      "ref": "melody.child_hum"
+    },
+    {
+     "type": "line",
+     "ref": "hu_flute_2"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.hermit_flute"
     }
    ],
-   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII)."
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich)."
   },
   {
    "id": "spuren-der-welt",
@@ -672,9 +680,17 @@
     {
      "type": "flag",
      "ref": "fragment.hang_steps"
+    },
+    {
+     "type": "line",
+     "ref": "hu_line_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.clothesline"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass."
   },
   {
    "id": "werte-am-feuer",
@@ -1559,6 +1575,56 @@
    "flag": "fragment.hang_steps",
    "axis": "Wahrnehmung",
    "meaning": "Sie ist die Stufen im Hohlweg hinabgegangen: für einen Atemzug sind sie neu (Spur der Welt, Akt III, W2; kein Bild des Kindes)."
+  },
+  {
+   "flag": "forest.hut_tea",
+   "axis": "Beschützer",
+   "meaning": "Sie hat den Becher Tee vor der Tür der Hütte getrunken, das erste Angebot des Einsiedlers (Akt III, W3). Er stellt etwas hin und lässt es stehen."
+  },
+  {
+   "flag": "forest.hut_met",
+   "axis": "Beschützer",
+   "meaning": "Sie hat mit dem Einsiedler gesprochen: Tee ist da, der Hocker ist frei (Akt III, W3)."
+  },
+  {
+   "flag": "forest.hut_stay_1",
+   "axis": "Entscheidungen",
+   "meaning": "Sie ist beim Einsiedler geblieben, erste Stufe: das Bild rückt ein Stück näher, nichts Neues geschieht (Akt III, W3, ADR-070 O6)."
+  },
+  {
+   "flag": "forest.hut_stay_2",
+   "axis": "Entscheidungen",
+   "meaning": "Sie ist beim Einsiedler noch geblieben, zweite Stufe (Akt III, W3). Aufstehen gibt das Bild sofort zurück."
+  },
+  {
+   "flag": "forest.hut_stay_3",
+   "axis": "Entscheidungen",
+   "meaning": "Sie ist beim Einsiedler ein drittes Mal geblieben: die Tür steht offen, das Spiel speichert einmal, weiter geht das Bleiben nicht (Akt III, W3)."
+  },
+  {
+   "flag": "forest.hermit_invited",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Einsiedler Tee im Tal angeboten (nur mit der Facette Fürsorge): sein Becher ist gepackt (Akt III, W3; W6 liest es)."
+  },
+  {
+   "flag": "forest.pipe_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat die Holunderpfeife vom Fensterbrett der Hütte eingesteckt (Kuriosität, Akt III, W3)."
+  },
+  {
+   "flag": "forest.pebble_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Kiesel mit Loch an der Hüttenwand eingesteckt (Kuriosität, Akt III, W3)."
+  },
+  {
+   "flag": "fragment.clothesline",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist an der Leine zwischen Hütte und Fichte stehen geblieben: für einen Atemzug hängen Tücher daran, noch nass (Spur der Welt, Akt III, W3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "melody.hermit_flute",
+   "axis": "Musik",
+   "meaning": "Sie hat die Flöte des Einsiedlers gehört, als sie sich zu ihm setzte: die Melodie von Akt III, hörbar, kein Fragment (W3)."
   }
  ]
 }

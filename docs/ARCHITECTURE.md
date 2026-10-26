@@ -186,7 +186,7 @@ Dialoge, Hebel, Zonen, Debug ──► WorldState ──► GameState ──► 
 ## Darstellung
 
 640×360 Basisauflösung, Integer-Scaling, Nearest-Filter. Die Welt rendert pixelgenau im SubViewport
-der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen haben `view_zoom` (Vorgabe 1,25, ADR-045; das Haus 1,5 als Ausnahme für Innenräume): Der
+der `GameView`, die UI in Fensterauflösung (ADR-012). Szenen haben `view_zoom` (Vorgabe 1,25, ADR-045; das Haus 1,5 als Ausnahme für Innenräume; die Hütte des Einsiedlers ändert den Zoom beim Bleiben mit `GameView.zoom_to` in einem Schritt, ADR-070 O6): Der
 Welt-Viewport schrumpft auf `view_size` = 640×360 / Zoom, das Anzeige-Sprite wächst um den Zoom, und
 bei nicht ganzzahligem Zoom tastet `sharp_display.gdshader` bzw. `grade.gdshader` scharf ab
 (`sharp_sample.gdshaderinc`). Welt nach UI rechnet `GameView.world_to_ui` um (zieht den Bruchteil der weichen Kamera ab, `camera_remainder`); der Interaktions-Hinweis nutzt es in einer eigenen CanvasLayer. Theme in
