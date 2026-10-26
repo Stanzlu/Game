@@ -10,8 +10,8 @@ WALDWEG = os.path.join(mapfile.ROOT, "content", "maps", "waldweg.txt")
 # ground cells a person can stand on (the legend's own grounds: grass, path, mud, puddle)
 STANDABLE = set(".,mp")
 # the spots of the walk, each once on the map (the rest of the letters are scattered forest)
-NAMED = "123456AEHDSNn@BQqazUKr"
-CUES = "123456QqazUKHDSnB"
+NAMED = "123456AEHDSNn@BQqazUKrCZYX"
+CUES = "123456QqazUKHDSnBCZYX"
 
 
 def _map():
@@ -122,7 +122,7 @@ class WaldwegLayoutTests(unittest.TestCase):
         near = [(x, y) for x, y in spots["P"] if abs(x - kx) <= 3 and abs(y - ky) <= 3]
         self.assertTrue(near, "the text says under the spruce: a spruce stands within three cells")
         # a tree is drawn upward from its foot: none within two columns and eight rows south of a cue
-        for glyph in "123456KQqU":
+        for glyph in "123456KQqUCYX":
             x, y = spots[glyph][0]
             for dy in range(1, 9):
                 for dx in range(-2, 3):

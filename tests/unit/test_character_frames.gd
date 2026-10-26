@@ -4,7 +4,7 @@ extends GutTest
 ## Mira's sheet carries the work rows after the look rows.
 
 const DIR := "res://assets/generated/characters/"
-const SHEETS := ["player", "mira", "elysian", "antreiber", "child", "host"]
+const SHEETS := ["player", "mira", "elysian", "antreiber", "einsiedler", "child", "host"]
 const FRAME := Vector2i(24, 32)
 const ROW_IDLE := 0
 const ROW_WALK := 8

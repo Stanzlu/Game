@@ -1,0 +1,23 @@
+# Fragment Wäscheleine (W3): zwei Pfosten, eine Leine, Holzklammern in gleichen Abständen, ein Tuch noch nass
+name: fragment_clothesline
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2e2a26 s=#8fa4a6 b=#7a5a3a k=#3c3a36 p=#c4a672 w=#ece8dc l=#b7b3a6 v=#4f7fae g=#5a7a42 d=#4a3a2a t=#9a7a4e
+outline: o
+---
+................
+.oooooooooooooo.
+.osssssssssssso.
+.osssssssssssso.
+.obbkksssskkbbo.
+.obbsskkkkssbbo.
+.obbsspwwpssbbo.
+.obbsswllwssbbo.
+.obbsswwlwssbbo.
+.obbsswllwssbbo.
+.obbssswwsssbbo.
+.obbsssvssvsbbo.
+.oggggggggggggo.
+.odddddtddddtdo.
+.oooooooooooooo.
+................

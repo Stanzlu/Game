@@ -4,8 +4,8 @@
 Draws the [map] block of content/maps/waldweg.txt (W2): the first forest of the real world. The brook of the
 Bachlauf comes in from the north and goes on to the south; a worn path follows its west bank through a tall
 forest of beech and spruce: past the way markers of the Antreiber, the first Rastplatz, the Hang (a sunken
-lane with steps cut into it), the second Rastplatz, a spur to the hermit's hut in the west (its door is
-wired by W3) and on to the last marker with its blank board and the way south (a blocker until W4).
+lane with steps cut into it), the second Rastplatz, a spur to the hermit's hut in the west (its door leads
+to the interior, W3) and on to the last marker with its blank board and the way south (a blocker until W4).
 Hand-written head (meta, legend) stays; only the [map] block is replaced.
 
 Usage: python3 tools/art/layout_akt3_maps.py waldweg [--write]
@@ -182,7 +182,7 @@ def build():
     put("a", path_x(HANG_Y[0]), HANG_Y[0])
     put("z", path_x(HANG_Y[1]), HANG_Y[1])
     put("U", path_x(31) - 1, 31)
-    # the hut: footprint in the glade, the spot in front of its door and the marker before it
+    # the hut: footprint in the glade, its door (W3: into the interior) and the marker before it
     put("H", *HUT)
     put("D", HUT[0], HUT[1] + 1)
     put("S", HUT[0] + 2, HUT[1] + 3)
@@ -206,6 +206,16 @@ def build():
     scatter("R", 14, 1)
     scatter("F", 40, 1)
     scatter("g", 18, 1)
+    # W3, after the scatter so that the forest stays as it was: what lies before the hut's door (the cup of tea on
+    # its stone, branches across the spur, a pebble with a hole, a washing line with nothing on it)
+    for glyph, (x, y) in (
+        ("C", (HUT[0] + 1, HUT[1] + 1)),
+        ("Z", (HUT[0] + 4, HUT[1] + 2)),
+        ("Y", (HUT[0] + 2, HUT[1])),
+        ("X", (HUT[0] + 6, HUT[1])),
+    ):
+        assert g.get(x, y) in (".", ","), (glyph, x, y, g.get(x, y))
+        put(glyph, x, y)
     g.add_rails()
     build.shortfall = shortfall
     return g, named
