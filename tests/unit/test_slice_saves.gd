@@ -250,12 +250,29 @@ func test_valley_during_the_ending() -> void:
 	)
 
 
-func test_valley_after_the_end() -> void:
+func test_valley_the_morning_after_the_end() -> void:
+	# "Weiter" after the end of Act II begins the morning after (W1, ADR-070), not the ending again
 	_the_end()
 	_save_and_load()
 	var scene := await _build(TAL)
 	await wait_physics_frames(2)
-	assert_null(get_tree().get_first_node_in_group(&"cutscene"), "the ending does not replay")
+	assert_not_null(get_tree().get_first_node_in_group(&"cutscene"), "the morning is told")
+	assert_eq(WorldState.day_preset(), "morgen", "it is the next morning")
+	assert_true(WorldState.has_flag("valley.mira_gone"), "Mira has gone on")
+	assert_false(Beat.reached("act3_morning"), "marked when the lines are done, not before")
+	assert_eq(_alive(scene, "Goat").size(), 1)
+	assert_true(Chapter.reached("slice"))
+
+
+func test_valley_after_the_morning() -> void:
+	_the_end()
+	WorldState.set_flag("beat.act3_morning")
+	_save_and_load()
+	var scene := await _build(TAL)
+	await wait_physics_frames(2)
+	assert_null(
+		get_tree().get_first_node_in_group(&"cutscene"), "neither ending nor morning replay"
+	)
 	assert_eq(_alive(scene, "Goat").size(), 1)
 	assert_true(WorldState.is_quest_done("side_valley_goat"))
 	assert_true(Chapter.reached("slice"))

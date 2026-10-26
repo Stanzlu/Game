@@ -13,6 +13,8 @@ const CASES: Array[Array] = [
 	["res://content/audio/haus_kalt.tres", -5.0],
 	["res://content/audio/haus_feuer.tres", -5.0],
 	["res://content/audio/wald_nacht.tres", -5.0],
+	["res://content/audio/tal_morgen.tres", -7.0],
+	["res://content/audio/haus_morgen.tres", -5.0],
 ]
 
 var _frame := 0

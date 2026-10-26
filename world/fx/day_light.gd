@@ -91,6 +91,33 @@ const PRESETS := {
 		"ambience_db": -4.0,
 		"music": "silence",
 	},
+	"morgen":
+	# the morning after the evening at the fire (Act III, ADR-070): clear and cold, a thin haze
+	# over the meadows that the sun has not reached yet, dew that glints. No rain, no rays (the
+	{
+		# low sun of the evening is Mira's), no music: the valley's theme is hers and she is gone.
+		"world_tint": Color(0.96, 0.99, 1.0),
+		"saturation": 1.08,
+		"contrast": 1.07,
+		"brightness": 0.05,
+		"tint": Color(0.97, 1.0, 1.04),
+		"shadow_tint": Color(0.03, 0.03, 0.08),
+		"vignette": 0.12,
+		"bloom": 0.5,
+		"depth_haze": 0.1,
+		"haze_color": Color(0.86, 0.9, 0.94),
+		"sky_top": Color("#79a8d8"),
+		"sky_bottom": Color("#f4e0cc"),
+		"mountains": 0.85,
+		"lamps": 0.1,
+		"rain": false,
+		"ripples": 0.0,
+		"clouds": 0.08,
+		"rays": 0.0,
+		"ambience": "res://content/audio/tal_morgen.tres",
+		"ambience_db": -7.0,
+		"music": "silence",
+	},
 }
 const GRADE_KEYS: PackedStringArray = [
 	"saturation",

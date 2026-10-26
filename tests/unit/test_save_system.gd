@@ -163,15 +163,37 @@ func test_reaching_reality_is_read_from_the_saves() -> void:
 	assert_true(saves.reached_reality(), "a save after the crossing shows REAL")
 
 
-func test_the_end_of_the_slice_is_read_from_the_saves() -> void:
+## A save of a bare state that has reached `chapter` ("" = none), stamped explicitly: saves written
+## within one second tie in latest_slot(), so "the newest" is never left to the clock.
+func _write_chapter(slot: String, saved_at: String, chapter := "") -> void:
+	var written := GameState.new()
+	written.player.map = "sandbox"
+	if not chapter.is_empty():
+		written.flags[Chapter.flag_for(chapter)] = true
+	_write_raw(slot, SaveCodec.encode(written, saved_at))
+
+
+func test_the_end_of_the_game_is_read_from_the_saves() -> void:
 	assert_false(saves.slice_finished(), "no saves: nothing finished")
-	assert_eq(saves.save_slot("slot_1"), OK)
+	_write_chapter("slot_1", "2026-10-01T10:00:00Z")
 	assert_false(saves.summary("slot_1")["finished"])
 	assert_false(saves.slice_finished())
-	Chapter.mark("slice")
-	assert_eq(saves.save_slot("slot_2"), OK)
-	assert_true(saves.summary("slot_2")["finished"])
-	assert_true(saves.slice_finished(), "any slot that reached the end counts")
+	_write_chapter("slot_2", "2026-10-02T10:00:00Z", "slice")
+	assert_false(saves.summary("slot_2")["finished"], "the end of Act II is not the end (ADR-070)")
+	assert_false(saves.slice_finished())
+	_write_chapter("slot_3", "2026-10-03T10:00:00Z", Chapter.LAST)
+	assert_true(saves.summary("slot_3")["finished"])
+	assert_true(saves.slice_finished(), "the newest save has reached the last chapter")
+
+
+func test_the_closing_line_follows_the_newest_save_only() -> void:
+	_write_chapter("slot_1", "2026-10-01T10:00:00Z", Chapter.LAST)
+	_write_chapter("slot_2", "2026-10-02T10:00:00Z")
+	assert_false(saves.slice_finished(), "a game begun after the end says nothing about it")
+	_write_chapter("slot_3", "2026-10-03T10:00:00Z", Chapter.LAST)
+	assert_true(saves.slice_finished())
+	_write_raw("slot_3", "broken")
+	assert_false(saves.slice_finished(), "a broken newest slot falls back to the one before it")
 
 
 func test_a_quest_step_and_what_follows_are_saved_together() -> void:

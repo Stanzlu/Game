@@ -1,0 +1,12 @@
+[
+  {"relative": true},
+  {"log": "Act III, W1: 'Weiter' from the end of Act II begins the morning after; the stream is entered", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "log": "the frozen end of Act II: the valley", "t": 0.1},
+  {"wait_for": {"beat": "act3_morning"}, "timeout": 60, "log": "the morning is told (Mira's place, the ring of black earth) and the way begins", "t": 0.1},
+  {"wait_for": {"quest": "main_forest_way", "stage": "leave"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 0.1},
+  {"enter": "bachlauf", "log": "south through the hedge, along the stream", "t": 0.5},
+  {"wait_for": {"scene": "bachlauf"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"quest": "main_forest_way", "stage": "brook"}, "timeout": 20, "log": "the stream is entered: the way goes on along the water", "t": 0.1},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]

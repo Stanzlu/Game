@@ -46,9 +46,9 @@ g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/barrel", "cue": "rain_barrel", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
 W = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/woodpile", "cue": "woodpile", "dialogue": "res://content/dialogue/slice/tal.dialogue"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/bench"}}
-; Miras Lager: Plane, Feuer, das Netz, das sie flickt, und Mira selbst
+; Miras Lager: Plane, Feuer, das Netz, das sie flickt, und Mira selbst. Am Morgen danach (Akt III, valley.mira_gone) sind Feuer und Mira fort; Plane und Gestell bleiben stehen (ihr Schatten ist gebacken).
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tarp"}}
-c = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/campfire"}}
+c = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/campfire", "unless": "valley.mira_gone"}}
 r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/net_rack", "cue": "net", "dialogue": "res://content/dialogue/slice/tal.dialogue", "radius": 16}}
 ; Dinge zum Ansehen, Riechen, Schmecken: die Muschel an Miras Plane, der Stein mit dem Stiefelabdruck,
 ; Wildblumen, Brombeeren, ein krummer Baum, die Zaunlücke (gerade breit genug für eine Ziege).
@@ -67,7 +67,7 @@ l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "s
 ; Mira hat ihren eigenen Tag: Netz, Feuer, die Angel am Bach, jedes Mal verschieden lang. Abends
 ; sitzt sie auf der anderen Seite ihres Feuers (M).
 N = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "route": [[0, 0], [2, 2], [-3, 2]], "pause": [5, 11], "speed": 24, "unless": "house.mira_visited"}}
-M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "face": "w", "sit": true, "if": "house.mira_visited"}}
+M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/tal.dialogue", "cue": "mira", "glance": true, "face": "w", "sit": true, "if": "house.mira_visited", "unless": "valley.mira_gone"}}
 ; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
 k = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken", "unless": "valley.bridge_fixed"}}
 L = {"ground": "y", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 3], "unless": "valley.bridge_fixed"}}

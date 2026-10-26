@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SoundscapeDef" format=3]
+
+[ext_resource type="Script" path="res://world/audio/soundscape_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+wind = 0.25
+beds = Array[Dictionary]([{"sound": "wind", "db": -11.0, "gust": 0.8}, {"sound": "leaves", "db": -19.0, "gust": 1.0}, {"sound": "stream", "db": -9.5, "gust": 0.0}])
+events = Array[Dictionary]([{"sound": "blackbird", "every": [3.5, 9.0], "db": -8.0, "pan": 0.9, "pitch": 1.04}, {"sound": "robin", "every": [5.0, 14.0], "db": -10.0, "pan": 0.9, "pitch": 1.04}, {"sound": "tit", "every": [9.0, 24.0], "db": -13.0, "pan": 0.9, "pitch": 1.04}, {"sound": "pigeon", "every": [25.0, 60.0], "db": -16.0, "pan": 1.0, "pitch": 1.04}, {"sound": "drip", "every": [6.0, 16.0], "db": -19.0, "pan": 0.7, "pitch": 1.04}, {"sound": "crow", "every": [45.0, 100.0], "db": -20.0, "pan": 1.0, "pitch": 1.04}, {"sound": "rustle", "every": [18.0, 45.0], "db": -22.0, "pan": 0.9, "pitch": 1.04, "gust": true}, {"sound": "dog", "every": [90.0, 200.0], "db": -23.0, "pan": 1.0, "pitch": 1.04}])

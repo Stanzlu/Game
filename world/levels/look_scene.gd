@@ -38,7 +38,7 @@ const TREELINE_ABOVE := 64
 @export var fog_banks := 0
 @export var fog_color := Color(0.75, 0.85, 1.0, 0.16)
 ## Real-world scenes: start preset of the DayLight ("keine" = fixed look, e.g. Elysia).
-@export_enum("keine", "regentag", "abend", "nacht") var day_preset := "keine"
+@export_enum("keine", "regentag", "abend", "nacht", "morgen") var day_preset := "keine"
 @export_group("Depth")
 ## The depth arc (ADR-043): Elysia is a flat picture (all off); the real world gets aerial
 ## haze towards the top of the view and a backdrop beyond the northern treeline (pixels it

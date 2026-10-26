@@ -21,7 +21,15 @@ INLINE_CONDITION = re.compile(r"^(%\d*\s+)?\[(if|elif)\s+(.*?)\s*/\]\s*(.*)$")
 RESPONSE_CONDITION = re.compile(r"\s*\[if\s+(.*?)\s*/\]")
 TOKEN = re.compile(r"\{\{(.*?)\}\}")
 EFFECT = re.compile(r"\[/?(?:wave|rainbow|shake|wait|speed|next|pause|tremble)[^\]]*\]")
-PREFIX = {"elysia": "E", "tal": "T", "haus": "H", "antreiber": "A", "ankunft": "AN", "bachlauf": "BL"}
+PREFIX = {
+    "elysia": "E",
+    "tal": "T",
+    "haus": "H",
+    "antreiber": "A",
+    "ankunft": "AN",
+    "bachlauf": "BL",
+    "aufbruch": "W1-",  # Act III: one prefix per segment ("W1-1")
+}
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]
 

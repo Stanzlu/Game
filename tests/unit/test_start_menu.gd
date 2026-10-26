@@ -35,10 +35,15 @@ func _clear_saves() -> void:
 
 ## Writes the running state as the autosave.
 func _write_autosave(finished: bool) -> void:
+	_write_chapter_autosave(Chapter.LAST if finished else "")
+
+
+## The same, having reached the chapter `chapter` ("" = none).
+func _write_chapter_autosave(chapter: String) -> void:
 	WorldState.new_game()
 	WorldState.set_location("elysia", Vector2.ZERO)
-	if finished:
-		Chapter.mark("slice")
+	if not chapter.is_empty():
+		Chapter.mark(chapter)
 	assert_eq(SaveSystem.write_slot(SaveService.AUTOSAVE, SaveCodec.encode(WorldState.state)), OK)
 
 
@@ -84,6 +89,23 @@ func test_new_game_asks_only_while_the_game_is_unfinished() -> void:
 	boot._new_game_requested()
 	assert_true(boot._name_entry.visible, "after the end the name is asked right away")
 	assert_false(boot._confirm.visible)
+
+
+func test_new_game_asks_at_the_end_of_act_two() -> void:
+	# "Weiter" has more game behind it there (the morning after, ADR-070)
+	_write_chapter_autosave("slice")
+	var boot := await _boot()
+	boot._new_game_requested()
+	assert_true(boot._confirm.visible)
+	assert_false(boot._name_entry.visible)
+
+
+func test_the_end_of_act_two_has_no_closing_line() -> void:
+	BootScript._forced_title = TitleBackground.Mode.REAL
+	_write_chapter_autosave("slice")
+	var boot := await _boot()
+	assert_eq(boot._subtitle.text, "", "the game goes on after Act II")
+	assert_eq(_rows(boot)[0], tr("MENU_CONTINUE"))
 
 
 func test_a_finished_game_says_so_under_the_real_logo() -> void:

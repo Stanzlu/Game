@@ -12,6 +12,7 @@ enum EchoPhase { OFF, STEPS, GUST, SAYING }
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
 const ARRIVAL_DIALOGUE := "res://content/dialogue/akt2/ankunft.dialogue"
+const MORNING_DIALOGUE := "res://content/dialogue/akt3/aufbruch.dialogue"
 const MAIN_MENU := "res://core/boot/boot.tscn"
 ## Cells west of this column are the house side of the stream.
 const STREAM_COLUMN := 38
@@ -37,6 +38,10 @@ const ECHO_JUMP := 8.0
 ## A gust is waited for this long (play time) before the echo goes on without one.
 const ECHO_GUST_SECONDS := 4.0
 const ECHO_GUST_MIN := 0.5
+## The morning after the end of Act II (W1, ADR-070): the picture comes up slowly, like the
+## light, and the first line waits for it (play time).
+const MORNING_FADE_SECONDS := 3.0
+const MORNING_WAIT_SECONDS := 0.8
 
 var _follower: AntreiberActor
 var _follow_time := 0.0
@@ -49,9 +54,19 @@ var _echo_cut: Cutscene
 
 
 func _ready() -> void:
+	# "Weiter" after the end of Act II begins the morning after (ADR-070). The gate is the chapter
+	# "slice" (older end saves lack "act2") and the beat that says the morning was told; it is decided
+	# here and nowhere else, because the ending itself marks "slice" in this very scene on its way to
+	# the title. Time of day and Mira's absence are set before the map is built: the map reads flags
+	# when it spawns its props, and the scene takes the stored time of day over its own.
+	var morning := Chapter.reached("slice") and not Beat.reached("act3_morning")
+	if morning:
+		WorldState.set_day_preset("morgen")
+		WorldState.set_flag("valley.mira_gone")
+		SceneTravel.arrival_fade = MORNING_FADE_SECONDS
 	# after Mira's visit it is evening; the stored time of day (the rainy day of the first
 	# visit) would otherwise win over the scene's preset
-	if WorldState.has_flag("house.mira_visited") and WorldState.day_preset() in ["", "regentag"]:
+	elif WorldState.has_flag("house.mira_visited") and WorldState.day_preset() in ["", "regentag"]:
 		WorldState.set_day_preset("abend")
 	# the way back from the Bachlauf (B3) lands at the marker spawn_bach; super() clears the name
 	var from_bachlauf := SceneTravel.pending_spawn == "bach"
@@ -76,6 +91,10 @@ func _ready() -> void:
 	# scene): the ending plays again instead of leaving the slice unfinishable
 	if WorldState.has_flag("valley.ending") and not Chapter.reached("slice"):
 		_play_ending.call_deferred()
+	if morning:
+		# the empty seat across the fire is what she left; the player stands where they sat
+		player.facing = Facing.Dir.E
+		_play_morning.call_deferred()
 
 
 ## B1: after the first steps a gust goes through the wet leaves (the real world's wind, which the
@@ -110,6 +129,21 @@ func _arrival_echo() -> void:
 	_echo_cut.end()
 	_echo = EchoPhase.OFF
 	Beat.mark("arrival_echo")
+
+
+## W1: the morning after. A few lines of things (the dew on her place, the ring of black
+## earth), then the quest begins and the morning is marked: Beat.mark autosaves, so a game
+## closed during the lines tells them again on the next "Weiter" (everything set in _ready is
+## idempotent). No text into the dark: the picture comes up from the black first.
+func _play_morning() -> void:
+	var cut := Cutscene.begin(self)
+	while ScreenFade.is_covered() or ScreenFade.is_fading():
+		await cut.wait(0.1)
+	await cut.wait(MORNING_WAIT_SECONDS)
+	await cut.say(MORNING_DIALOGUE, "morning")
+	WorldState.start_quest("main_forest_way")
+	cut.end()
+	Beat.mark("act3_morning")
 
 
 ## True while nothing may start: a line is up, a menu is open, the player is held, or the picture

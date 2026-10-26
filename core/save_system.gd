@@ -261,7 +261,7 @@ func summary(slot: String) -> Dictionary:
 	info["playtime"] = result.state.playtime_seconds
 	info["map"] = result.state.player.map
 	info["ui_mode"] = result.state.ui_mode
-	info["finished"] = Chapter.in_flags(result.state.flags, "slice")
+	info["finished"] = Chapter.in_flags(result.state.flags, Chapter.LAST)
 	return info
 
 
@@ -275,14 +275,12 @@ func reached_reality() -> bool:
 	return false
 
 
-## True once any readable save has reached the end of the vertical slice: the start menu
-## then says so under the logo, and "Neues Spiel" no longer asks about the finished game.
+## True when the newest readable save has reached the last chapter this build tells
+## (`Chapter.LAST`): the start menu then says so under the logo. A game begun after the end says
+## nothing about the old one, and the end of Act II is not the end of the game (ADR-070).
 func slice_finished() -> bool:
-	for slot in SLOTS:
-		var info := summary(slot)
-		if info["status"] == "ok" and info["finished"]:
-			return true
-	return false
+	var slot := latest_slot()
+	return not slot.is_empty() and bool(summary(slot)["finished"])
 
 
 ## The most recently written readable slot, or "".

@@ -31,6 +31,15 @@ func test_the_slice_flag_of_older_builds_still_counts() -> void:
 	assert_false(Chapter.in_flags({}, "slice"))
 
 
+func test_the_last_chapter_is_after_the_slice() -> void:
+	# "finished" means the newest save has reached it: the end of Act II goes on (ADR-070)
+	assert_ne(Chapter.LAST, "slice")
+	assert_true(GameState.is_flag_id(Chapter.flag_for(Chapter.LAST)))
+	assert_false(Chapter.in_flags({"chapter.slice": true, "slice.finished": true}, Chapter.LAST))
+	Chapter.mark(Chapter.LAST)
+	assert_true(Chapter.reached(Chapter.LAST))
+
+
 func test_a_chapter_survives_a_save() -> void:
 	Chapter.mark("slice")
 	var back := SaveCodec.decode(SaveCodec.encode(WorldState.state))

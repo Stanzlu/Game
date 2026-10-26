@@ -132,7 +132,7 @@ T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 
 - `GameScene`-Exports: `music` (`keep`, `silence`, `elysia`, `valley`, `forest`, `antreiber`), `ambience` (Loop oder `SoundscapeDef`) und `ambience_db`, `view_zoom` (Vorgabe 1,25; nur Innenräume bekommen 1,5, ADR-045).
 - Ein neuer Klang mit Erzählwert (Frösche, Katze, Riss …) bekommt einen Eintrag in `AudioDirector.CAPTIONS` und eine Zeile `CAPTION_<NAME>` in `ui.csv` („Geräusche als Text“, ADR-046); wer ihn nur gedämpft oder von weit her hören soll, darf ohne bleiben (`cat_meow_muffled`). Jeder Klang braucht außerdem eine Lautheitsgruppe und einen Aufrufgain nach der Tabelle in `tools/audio/check_levels.py` (ADR-047).
-- `LookScene.day_preset` (`keine`, `regentag`, `abend`, `nacht`) aktiviert das Tageslicht. Elysia bleibt ohne.
+- `LookScene.day_preset` (`keine`, `regentag`, `abend`, `nacht`, `morgen`) aktiviert das Tageslicht. Elysia bleibt ohne.
 - Startet man eine Szene im Prototyp-Menü, gilt ihr UI-Modus aus `SceneRegistry.START_MODES`.
 
 ## Dialogformat (Dialogue Manager 4)

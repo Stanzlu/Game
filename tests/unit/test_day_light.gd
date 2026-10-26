@@ -43,6 +43,45 @@ func test_tal_starts_on_a_rainy_day_and_cycles_presets() -> void:
 	assert_lt(day.world_tint.color.b, 0.9, "night darkens the valley")
 
 
+## The morning after the evening at the fire (Act III, W1, ADR-070): every time of day of the
+## game has a complete grade, a soundscape that exists and a music choice the director knows.
+func test_every_time_of_day_is_complete_and_the_morning_is_clear_and_dry() -> void:
+	var keys: Array = DayLight.PRESETS["abend"].keys()
+	for name: String in GameState.DAY_PRESETS:
+		assert_true(DayLight.PRESETS.has(name), name)
+		var grade: Dictionary = DayLight.PRESETS[name]
+		for key: String in keys:
+			assert_true(grade.has(key), "%s lacks %s" % [name, key])
+		assert_eq(grade.size(), keys.size(), "%s has a key the others lack" % name)
+		var def := load(str(grade["ambience"])) as SoundscapeDef
+		assert_not_null(def, name)
+		assert_eq(def.problems(), PackedStringArray(), name)
+		var music := str(grade["music"])
+		assert_true(music in ["keep", "silence"] or AudioDirector.is_track(music), name)
+	var morning: Dictionary = DayLight.PRESETS["morgen"]
+	assert_false(morning["rain"], "the rain is over")
+	assert_eq(float(morning["rays"]), 0.0, "the low sun of the evening is Mira's")
+	assert_eq(morning["music"], "silence", "the valley's theme is hers and she is gone")
+	var haze: Color = morning["haze_color"]
+	assert_gt(haze.get_luminance(), 0.85, "a thin, light haze")
+	assert_lte(float(morning["depth_haze"]), 0.12)
+	assert_eq(str(morning["ambience"]).get_file(), "tal_morgen.tres")
+
+
+func test_resting_goes_on_from_the_night_to_the_morning() -> void:
+	var scene: LookScene = TAL.instantiate()
+	add_child_autofree(scene)
+	await wait_physics_frames(3)
+	var day := scene.day_light
+	assert_eq(day.next_preset(0.0), "abend")
+	assert_eq(day.next_preset(0.0), "nacht")
+	assert_eq(day.next_preset(0.0), "morgen")
+	await wait_physics_frames(2)
+	assert_false(day.rain.is_raining())
+	assert_eq(AudioDirector.ambience_stream.resource_path.get_file(), "tal_morgen.tres")
+	assert_eq(day.next_preset(0.0), "regentag", "and round to the rain again")
+
+
 ## The rain grade stays cool and rich (ADR-041): the audit measured the baked warm ground
 ## turning grey-green under a green-lifting shadow tint and a thick mist.
 func test_the_rainy_day_is_cool_and_rich_not_grey() -> void:
