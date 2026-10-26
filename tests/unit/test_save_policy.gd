@@ -93,6 +93,34 @@ func test_the_frozen_v2_end_of_act_one_keeps_its_story() -> void:
 		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
 
 
+func test_the_frozen_v2_end_of_act_two_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt2_full.json from v2_akt1_end.json, frozen where it ends:
+	# Act II is over, the title has been shown, and Continue starts the morning after (ADR-070)
+	var result := SaveCodec.decode(_fixture("v2_akt2_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "tal")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL)
+	assert_eq(s.day_preset, "abend")
+	for chapter: String in ["act1", "act2", "slice"]:
+		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
+	assert_false(Chapter.in_flags(s.flags, "act3"), "and Act III has not begun")
+	assert_true(s.flags["valley.ending"], "the evening ended on Mira's answer")
+	assert_true(s.facets.has("perception") and s.facets.has("boundaries"))
+	assert_false(s.facets.has("care"), "the facet of Act III is still to come")
+	assert_true(s.flags["value.freedom"], "the first answer at the fire is the autopilot's")
+	assert_true(s.flags["melody.house_hum"])
+	for quest_id: String in ["main_valley_shelter", "side_valley_goat", "side_valley_trap"]:
+		assert_true(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage).is_final(), quest_id)
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+	assert_eq(s.relationships["mira"].state, GameState.Relationship.State.FAMILIAR)
+	assert_eq(s.inventory.keys().size(), 4, "the seed and the three things from the brook")
+	assert_gt(s.playtime_seconds, 300.0)
+
+
 func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	var result := SaveCodec.decode(_fixture("v2_slice_end.json"))
 	assert_true(result.ok, result.error)
