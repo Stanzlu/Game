@@ -8,5 +8,8 @@
   {"enter": "bachlauf", "log": "south through the hedge, along the stream", "t": 0.5},
   {"wait_for": {"scene": "bachlauf"}, "timeout": 30, "t": 0.1},
   {"wait_for": {"quest": "main_forest_way", "stage": "brook"}, "timeout": 20, "log": "the stream is entered: the way goes on along the water", "t": 0.1},
+  {"enter": "waldweg", "log": "south through the hedge's gap: the stream goes into the wood", "t": 0.5},
+  {"wait_for": {"scene": "waldweg"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"quest": "main_forest_way", "stage": "wood"}, "timeout": 20, "log": "the forest path is entered: the way goes on through the wood", "t": 0.1},
   {"log": "segment finished", "quit": true, "t": 0.5}
 ]
