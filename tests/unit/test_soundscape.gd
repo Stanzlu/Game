@@ -7,6 +7,7 @@ const DEFS: PackedStringArray = [
 	"res://content/audio/tal_abend.tres",
 	"res://content/audio/tal_nacht.tres",
 	"res://content/audio/wald_nacht.tres",
+	"res://content/audio/tal_morgen.tres",
 ]
 
 var audio: AudioDirectorService

@@ -4,8 +4,13 @@ extends RefCounted
 ## slice is the chapter "slice", the acts of Full Production follow ("act1" ...). The start
 ## menu, the save slots and the ending read them, so no code has to know a flag per act.
 ## A mark is set once and never cleared; `Beat` marks the steps inside a chapter.
+## The last chapter this build tells is LAST: a save that has reached it counts as finished (the
+## start menu says so under the logo, "Neues Spiel" no longer asks). The end of Act II is not that
+## any more: "Weiter" goes on with the morning after (ADR-070). LAST moves with the act that ends
+## the build; game code never reads `Chapter.reached("act3")` before the act sets it (StoryLint).
 
 const PREFIX := "chapter."
+const LAST := "act3"
 ## Flags that older builds set for a chapter: chapter id -> flag. Still read, never set again.
 const LEGACY := {"slice": "slice.finished"}
 

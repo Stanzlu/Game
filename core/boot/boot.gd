@@ -193,7 +193,8 @@ func _apply_title_mode() -> void:
 		AudioDirector.set_ambience(AMBIENCE, -16.0, 2.0)
 	else:
 		_logo.position = Vector2(30.0, 22.0)
-		# a finished game says so quietly under the logo (it left the end card, Game Bible §56)
+		# a finished game (the newest save has reached Chapter.LAST) says so quietly under the logo
+		# (it left the end card, Game Bible §56)
 		_subtitle.text = tr("END_OF_SLICE") if SaveSystem.slice_finished() else ""
 		_subtitle.theme_type_variation = &"MutedLabel"
 		_subtitle.add_theme_color_override(&"font_color", Color(0.96, 0.93, 0.87))
@@ -364,7 +365,7 @@ func _any_save_to_load() -> bool:
 
 
 ## A new game replaces the autosave: with a running game in it, ask first (slots stay). A
-## finished game has nothing left to lose: the name is asked at once.
+## finished game (Chapter.LAST reached) has nothing left to lose: the name is asked at once.
 func _new_game_requested() -> void:
 	var autosave := SaveSystem.summary(SaveService.AUTOSAVE)
 	if autosave["status"] == "ok" and not autosave["finished"]:

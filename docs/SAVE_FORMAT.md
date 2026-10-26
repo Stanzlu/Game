@@ -69,7 +69,7 @@ Automatische Läufe schreiben nie dorthin (ADR-018): Tests nutzen `user://profil
 | `house` | Feuer an/aus; Kuriositäten-Fächer (nur bekannte Items, die ins Regal dürfen); `cat_name`: Name der Katze (max. 24 Zeichen), leer = unbenannt. Fehlt `cat_name` (Stände vor ADR-042), gilt leer; kein neues Schema. |
 | `inventory` | nur bekannte Items, Anzahl 1 bis Stapelgrenze. |
 | `ui_mode` | `ELYSIA` oder `REAL`. |
-| `day_preset` | Tageszeit der wirklichen Welt: `regentag`, `abend`, `nacht` oder leer (noch keine). Ausruhen auf der Bank schaltet weiter. Seit Schema 2, fehlt es, gilt leer. |
+| `day_preset` | Tageszeit der wirklichen Welt: `regentag`, `abend`, `nacht`, `morgen` (seit Akt III, W1; additiv: ein älterer Build verwirft den Wert mit einer Warnung und fällt auf den Standard zurück) oder leer (noch keine). Ausruhen auf der Bank schaltet weiter. Seit Schema 2, fehlt es, gilt leer. |
 | `elysia` | XP und Gold (kosmetisch). Das Level wird aus XP berechnet: `1 + floor(sqrt(xp / 15))`. |
 | `player` | Name (max. 24 Zeichen), Preset 0–7, Szenen-Schlüssel (`SceneRegistry`) und Position der Figur. Ein unbekannter Schlüssel macht den Stand unladbar (`unknown_map`). |
 | `playtime_seconds` | Spielzeit ohne Pausen und Menüs. |
@@ -96,7 +96,7 @@ Unbekannte Felder werden ignoriert. Ungültige Einträge werden verworfen und al
 - **Schema-Wechsel:** Neue Felder sind optional mit Vorgabe. Bricht etwas, gibt es im selben Pull Request einen Migrationsschritt in `SaveCodec.migrations()`, ein neues eingefrorenes Beispiel `tests/fixtures/saves/v<N>_*.json` und einen Eintrag hier. `test_save_policy` verlangt je Schema-Version ein Beispiel.
 - **Szenen-Schlüssel** stehen im Spielstand (`player.map`) und werden nie entfernt. Bei einer Umbenennung wandert der alte Schlüssel in `SceneRegistry.aliases` (alt → neu); beim Laden wird auf den neuen umgeschrieben.
 - **Flags und IDs** (Quests, Items, Erinnerungen) werden ebenfalls nicht umbenannt; ein unbekannter Eintrag wird beim Laden verworfen und gemeldet (siehe Regeln oben). Eine Umbenennung braucht einen Migrationsschritt.
-- **Kapitel:** `Chapter.mark("<id>")` setzt `chapter.<id>`; Startmenü und Spielstand-Liste lesen es über `Chapter` (`SaveSystem.summary()["finished"]` gilt dem Slice).
+- **Kapitel:** `Chapter.mark("<id>")` setzt `chapter.<id>`; Startmenü und Spielstand-Liste lesen es über `Chapter` (`SaveSystem.summary()["finished"]` gilt dem letzten Kapitel, das der Build kennt, `Chapter.LAST`; das Ende von Akt II zählt seit Akt III, W1, nicht mehr als Ende).
 
 ## Kennzahlen
 

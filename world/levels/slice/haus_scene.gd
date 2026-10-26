@@ -300,11 +300,16 @@ func _fire_catches() -> void:
 func _ambience(warm: bool) -> Resource:
 	if not warm:
 		return COLD_AMBIENCE
-	return EVENING_AMBIENCE if WorldState.day_preset() == "abend" else WARM_AMBIENCE
+	return EVENING_AMBIENCE if _dry() else WARM_AMBIENCE
+
+
+## The rain is over: the evening after it, and the morning after the evening (Act III, ADR-070).
+func _dry() -> bool:
+	return WorldState.day_preset() in ["abend", "morgen"]
 
 
 func _add_window_light() -> void:
-	var evening := WorldState.day_preset() == "abend"
+	var evening := _dry()
 	_window_energy = WINDOW_ENERGY_EVENING if evening else WINDOW_ENERGY
 	_window_light = PointLight2D.new()
 	_window_light.name = "WindowLight"

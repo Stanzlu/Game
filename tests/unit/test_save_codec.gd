@@ -75,6 +75,11 @@ func test_time_of_day_round_trips_and_unknown_values_are_dropped() -> void:
 	var repaired := SaveCodec.decode(text)
 	assert_eq(repaired.state.day_preset, "")
 	assert_gt(repaired.warnings.size(), 0)
+	# the morning after (Act III, ADR-070) is a known value, not a repair
+	state.day_preset = "morgen"
+	var morning := SaveCodec.decode(SaveCodec.encode(state))
+	assert_eq(morning.state.day_preset, "morgen")
+	assert_eq(morning.warnings.size(), 0)
 
 
 func test_hostile_values_are_dropped_and_reported() -> void:

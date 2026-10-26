@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bcad1pebnjd5w"
+path="res://.godot/imported/aufbruch.dialogue-5723b94916d56d07adfbc0d9745fee59.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt3/aufbruch.dialogue"
+dest_files=["res://.godot/imported/aufbruch.dialogue-5723b94916d56d07adfbc0d9745fee59.tres"]
+
+[params]
+
+defaults=true

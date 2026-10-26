@@ -1260,6 +1260,11 @@
    "meaning": "Mira ist wieder gegangen."
   },
   {
+   "flag": "valley.mira_gone",
+   "axis": "Mira",
+   "meaning": "Am Morgen nach dem Abend am Feuer ist Mira weitergezogen: ihr Platz und ihr Feuer sind fort (Akt III, W1)."
+  },
+  {
    "flag": "elysia.inn_met",
    "axis": "Fortschritt",
    "meaning": "Die Spielerin hat den Gastwirt im Gasthaus zum Immer getroffen (Stufe „inn“ der Heldenquest)."

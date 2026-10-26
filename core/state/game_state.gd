@@ -16,8 +16,10 @@ const MAX_NAME_LENGTH := 24
 const MAX_PRESET := 7
 const MAX_ENTRIES := 4096
 const MAX_AMOUNT := 1_000_000_000
-## Times of day of the Real world, in the order resting passes them (DayLight).
-const DAY_PRESETS: PackedStringArray = ["regentag", "abend", "nacht"]
+## Times of day of the Real world, in the order resting passes them (DayLight): the rainy day, the
+## evening after it, the night, and the morning after that (Act III, ADR-070; an older build drops
+## "morgen" with a warning and falls back to its default).
+const DAY_PRESETS: PackedStringArray = ["regentag", "abend", "nacht", "morgen"]
 
 static var _flag_regex := RegEx.create_from_string("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$")
 static var _id_regex := RegEx.create_from_string("^[a-z][a-z0-9_]*$")

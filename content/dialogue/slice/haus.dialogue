@@ -98,7 +98,7 @@ if WorldState.has_flag("value.calm")
 => END
 
 ~ window
-if WorldState.is_fire_lit() and WorldState.day_preset() == "abend"
+if WorldState.is_fire_lit() and WorldState.day_preset() in ["abend", "morgen"]
 	Im Fenster spiegelt sich das Feuer. Dahinter wird das Tal golden. [ID:haus_window_3]
 	Weiter unten steigt vom Bach Nebel auf. [ID:haus_window_4] [#draft]
 elif WorldState.is_fire_lit()
@@ -148,7 +148,7 @@ Er bleibt sitzen. Er wagt nicht, sich zu bewegen. [ID:haus_cat_antr_5]
 ~ fire_rest
 # Told once: the scene skips the cue when house.rested is set (the cue sets it).
 Du sitzt am Feuer. Die Wärme kommt erst an den Knien an, dann im Gesicht. [ID:haus_rest_1]
-if WorldState.day_preset() == "abend"
+if WorldState.day_preset() in ["abend", "morgen"]
 	Draußen ist es still geworden. Der Regen ist vorbei. [ID:haus_rest_6]
 else
 	Draußen regnet es weiter. Nur nicht mehr auf dich. [ID:haus_rest_2]

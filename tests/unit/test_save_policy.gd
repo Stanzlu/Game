@@ -106,7 +106,8 @@ func test_the_frozen_v2_end_of_act_two_keeps_its_story() -> void:
 	assert_eq(s.day_preset, "abend")
 	for chapter: String in ["act1", "act2", "slice"]:
 		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
-	assert_false(Chapter.in_flags(s.flags, "act3"), "and Act III has not begun")
+	assert_false(Chapter.in_flags(s.flags, Chapter.LAST), "and it is not the end of the game")
+	assert_false(s.flags.has("beat.act3_morning"), "the morning after is still to be told")
 	assert_true(s.flags["valley.ending"], "the evening ended on Mira's answer")
 	assert_true(s.facets.has("perception") and s.facets.has("boundaries"))
 	assert_false(s.facets.has("care"), "the facet of Act III is still to come")
@@ -148,7 +149,8 @@ func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	assert_eq(s.relationships["mira"].memories.size(), 12)
 	assert_eq(s.inventory.size(), 2)
 	assert_true(s.flags.has("beat.ending"))
-	assert_true(Chapter.in_flags(s.flags, "slice"), "the slice counts as finished (legacy flag)")
+	assert_true(Chapter.in_flags(s.flags, "slice"), "the slice counts as reached (legacy flag)")
+	assert_false(Chapter.in_flags(s.flags, Chapter.LAST), "but the game goes on after it")
 
 
 func test_the_frozen_v2_file_survives_a_round_trip() -> void:

@@ -73,6 +73,7 @@ Alles aus eigenen Generatoren (Python mit numpy; Godot-Seite nur Daten), ohne fr
 | `assets/generated/sfx/house_hum_0.wav` (Akt II, B5) | das Lied im Haus: die Antwortphrase des Talthemas, gesummt, im Raum gehallt (3,9 s, −20 LUFS) | projekt-eigen, programmatisch (`tools/audio/make_slice_sfx.py`, Phrase `make_music.ANSWER`) | projekt-eigen | echte Stimme oder Instrument |
 | `content/audio/haus_abend.tres` | neue Soundscape-Definition für das Haus am Abend (Daten aus vorhandenen Betten) | von Hand | projekt-eigen |
 | `content/audio/{tal_abend,tal_regentag,haus_feuer}.tres` | Pegel angepasst | von Hand | projekt-eigen |
+| `content/audio/tal_morgen.tres` (Akt III, W1) | neue Soundscape-Definition für das Tal am Morgen danach: Wind, Laub, Bach, dichter Vogelchor, Tropfen vom Tau, ohne Grillen (Daten aus vorhandenen Betten und Einzelklängen) | von Hand | projekt-eigen |
 
 Noch Platzhalter ohne Lautheitsnormierung: `gate`, `lever`, `splash` und `ui_move`, `ui_confirm`, `ui_back`
 unter `assets/placeholder/audio` (Spitze −6 dBFS; KNOWN_ISSUES #65).

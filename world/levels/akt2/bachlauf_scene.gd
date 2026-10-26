@@ -14,6 +14,9 @@ func _ready() -> void:
 	super()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.quest_changed.connect(_on_quest_changed)
+	# Act III (ADR-070): the morning after leads along the stream; the quest only moves from its start
+	if WorldState.quest_stage("main_forest_way") == "leave":
+		WorldState.advance_quest("main_forest_way", "brook")
 	Beat.mark("bachlauf_enter")
 
 

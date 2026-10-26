@@ -76,11 +76,12 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   Einstellungen, Tastenbelegung, Zum Startmenü, Spiel beenden. „Bewegungsgefühl“ und „Richtungen“
   stehen in den Einstellungen nur in Debug-Builds (Gruppe „Entwicklung“).
 - Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia; nach
-  dem Ende ohne Rückfrage), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
+  dem Ende des Spiels, `Chapter.LAST`, ohne Rückfrage, am Ende von Akt II mit), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
   der Leistungstest), Einstellungen, Mitwirkende (`CreditsMenu`, im Elysia-Titel „Die Helden hinter dem
   Helden“), Beenden. Die Fußzeile trägt den Tastenhinweis des benutzten Geräts und die Version. Unter dem
-  Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald ein lesbarer Stand das Ende trägt
-  (`SaveSystem.slice_finished()`, liest `Chapter`). `--start=<schlüssel>` und
+  Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald der neueste lesbare Stand das letzte Kapitel trägt
+  (`SaveSystem.slice_finished()`, liest `Chapter.LAST`; seit Akt III, W1, ist das Ende von Akt II nicht mehr das
+  Ende: „Weiter“ beginnt den Morgen danach, ADR-070). `--start=<schlüssel>` und
   `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
   `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
 
@@ -305,7 +306,7 @@ nur eine Aufnahme. Positionsklänge (`SoundBank.play_at`) tragen 360 px; auf Kar
 
 - `RiftSequence` (`world/fx/rift_sequence.gd`) inszeniert den ersten Übertritt; der Riss
   (`world/props/rift.tscn`) startet sie (Schritt zum Riss, Anschwellen, Einfrieren des Weltbilds bei jedem Verlust eines HUD-Teils). Danach UI-Modus REAL, Inventar Stein und Samen, Tal.
-- `DayLight` (`world/fx/day_light.gd`) in `LookScene` (`day_preset`): Regentag, Abend, Nacht.
+- `DayLight` (`world/fx/day_light.gd`) in `LookScene` (`day_preset`): Regentag, Abend, Nacht, Morgen (Akt III).
   Die Bank im Tal (`pass_time`) und das Debug-Panel schalten weiter.
 - Elysia-Objekte: Truhe (`chest.tscn`), Aufheben (`pickup.tscn`), Lob mit XP über Dialog-Mutationen.
 - Während der Sequenz ist sie in der Gruppe `cutscene`: Pause-Menü und Tagebuch bleiben zu
