@@ -339,10 +339,14 @@ class ActCalibrationTests(unittest.TestCase):
         self.assertTrue({"tal.dialogue", "haus.dialogue", "feuer.dialogue", "richter.dialogue"} <= names)
         self.assertNotIn("elysia.dialogue", names)
 
-    def test_the_whole_story_is_the_two_acts_and_nothing_is_counted_twice(self):
+    def test_the_whole_story_is_the_acts_and_nothing_is_counted_twice(self):
         everything = {s.path for s in dialogue.sources(story_only=True)}
-        covered = {s.path for s in calibrate.act_sources("akt1")} | {s.path for s in calibrate.act_sources("akt2")}
+        acts = [{s.path for s in calibrate.act_sources(act)} for act in ("akt1", "akt2", "akt3")]
+        covered = acts[0] | acts[1] | acts[2]
         self.assertEqual(everything - covered, set(), "a story file that belongs to no act")
+        self.assertEqual(acts[0] & acts[1] | acts[0] & acts[2] | acts[1] & acts[2], set(), "a file in two acts")
+        # every act-III file is in akt3/ and the files of the Slice stay Act II's
+        self.assertTrue(all("/akt3/" in p.replace(os.sep, "/") for p in acts[2]))
 
     def test_an_act_run_that_starts_from_a_save_gives_back_only_the_acts_seconds(self):
         self.assertEqual(calibrate.start_seconds("akt1"), 0)

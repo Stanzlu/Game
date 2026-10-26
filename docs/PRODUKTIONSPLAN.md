@@ -303,7 +303,7 @@ kurz davor.
 
 **Bewusst vertagt, mit Auslöser** (`OFFENE_PUNKTE.md`, Abschnitt 3): Licht (12 Lichtquellen im Wald, Lampen auf
 Nachtgras) vor der ersten Nachtkarte in Akt IV; Regenspritzer auf Dächern vor der Stadt; feinere Ufer-Kollision vor
-der Küste; Spiegelungen für wandernde Figuren vor Stadt und Hafen; Nähte des Antreiber-Wegs vor Akt III; Shader-Hänger
+der Küste; Spiegelungen für wandernde Figuren vor Stadt und Hafen; Nähte des Antreiber-Wegs, sobald ein Segment die Wegstücke wiederverwendet (Akt III tut es nicht, ADR-070); Shader-Hänger
 beim ersten Betreten und die Ausreißer bis 240 ms mit jeder neuen Region im Leistungstest; Leistung des Dialogue
 Manager bei siebenfachem Text mit Akt I gemessen.
 
