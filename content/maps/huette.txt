@@ -1,0 +1,51 @@
+; Akt III, W3: die Hütte des Einsiedlers von innen (Klasse S, Zoom 1,5 wie das Haus; beim Bleiben schließt sich das Bild auf 1,75 und 2,0, ADR-070 O6).
+; Wände und Fenster malt das Requisit haus/hut_shell, den Dielenboden backt tools/art/bake_ground.py content/maps/huette.txt.
+; Von Hand gesetzt, kein Generator. Der Raum liegt in den Zellen 9 bis 22 und 5 bis 14; die Tür unten (D) ist nie abgeschlossen und nie gesperrt.
+; Dinge statt Erklärung (sein Warum): der Riegel innen hängt offen (v), ein zweiter Becher hängt glatt am Nagel (n), das Fenster zeigt immer dasselbe (w).
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/huette_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_door"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/hut_shell"}}
+K = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/hut_stove"}}
+T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/hut_table"}}
+; der Einsiedler sitzt am Tisch; der Hocker daneben ist der Platz, den er hingestellt hat (er fragt nicht)
+E = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_einsiedler_look.tres", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "cue": "hermit", "sit": true, "face": "w"}}
+p = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/stool", "sit": {"face": "e", "offset": [0, 4]}}}
+b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/hut_bed"}}
+u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/bucket"}}
+; die Dinge an der Wand: Brett mit der Flöte, Fenster mit Pfeife auf dem Sims, Nagel mit dem zweiten Becher, der offene Riegel neben der Tür
+f = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "flute_shelf", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 20}}
+w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 20}}
+n = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "cup_nail", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 20}}
+v = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "bolt", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 12}}
+; die Tür nach draußen (wie im Haus ohne Zone-Falle: zwei Zellen vor ihr kommt man an)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "waldweg", "spawn": "huette", "auto": true, "sound": "door_close"}}
+; wer die Bleiben-Stufen gegangen ist, sieht die Tür offen stehen (ein Bild über der geschlossenen Tür)
+d = {"ground": "#", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/hut_door_open", "if": "forest.hut_stay_3"}}
+[map]
+################################
+################################
+################################
+################################
+################################
+#########SWWWWWWWWWWWWW#########
+#########WWWWWWWWWWWWWW#########
+#########WWfWwWnWWWWWWW#########
+#########W_________K__W#########
+#########W____________W#########
+#########W____T_E_____W#########
+#########W_____p______W#########
+#########W__1@______b_W#########
+#########Wu___________W#########
+#########WWWDvWWWWWWWWW#########
+############d###################
+################################
+################################
+################################
+################################

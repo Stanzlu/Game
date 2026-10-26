@@ -41,7 +41,8 @@ var camera_position := Vector2.ZERO
 var camera_remainder := Vector2.ZERO
 var target: Node2D
 var bounds := Rect2()
-## How many UI pixels one world pixel covers (1.25 in every scene, 1.5 in the house; ADR-045).
+## How many UI pixels one world pixel covers (1.25 in every scene, 1.5 in the house; ADR-045;
+## the hermit's hut closes in to 1.75 and 2.0 while she stays there, ADR-070 O6).
 var zoom := 1.0
 ## Size of the visible world in world pixels (BASE_SIZE / zoom, rounded up).
 var view_size := BASE_SIZE
@@ -84,7 +85,7 @@ func _ready() -> void:
 		display.material = _sharp_material()
 
 
-## Sets the zoom (1 to 3). Call before the world is built; changing it later is possible but
+## Sets the zoom (1 to 3). Call before the world is built; changing it later (`zoom_to`)
 ## reallocates the world texture.
 func set_zoom(value: float) -> void:
 	zoom = clampf(value, 1.0, 3.0)
@@ -97,6 +98,17 @@ func set_zoom(value: float) -> void:
 		CanvasItem.TEXTURE_FILTER_NEAREST if whole else CanvasItem.TEXTURE_FILTER_LINEAR
 	)
 	_has_position = false
+
+
+## Changes the zoom while the scene runs, in one step (the hermit's hut closes in while she stays,
+## ADR-070 O6). Never tween it: every change reallocates the world texture and passes through
+## zooms that are not sharp. The camera is placed again at once, so no frame shows the old picture.
+func zoom_to(value: float) -> void:
+	if is_equal_approx(clampf(value, 1.0, 3.0), zoom):
+		return
+	set_zoom(value)
+	display.queue_redraw()
+	_process(0.0)
 
 
 ## Converts a world position to a position in the 640x360 UI space (for overlays that

@@ -1,6 +1,6 @@
 ; Akt III, W2: der Waldweg, die zweite große Karte (Klasse M, ADR-068). Der Bach des Bachlaufs geht nach Süden weiter, ein Pfad
 ; hält sich am Westufer durch hohen Wald: die Wegzeichen des Antreibers, zwei Rastplätze, der Hang (ein Hohlweg mit Stufen), ein
-; Abzweig zur Hütte im Westen (ihre Tür verdrahtet W3) und das letzte, leere Brett, hinter dem der Weg nach Süden zu bleibt (bis W4).
+; Abzweig zur Hütte im Westen (Akt III, W3: ihre Tür führt in die Hütte) und das letzte, leere Brett, hinter dem der Weg nach Süden zu bleibt (bis W4).
 ; Layout: tools/art/layout_akt3_maps.py waldweg --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/waldweg.txt.
 [meta]
 style = "tal"
@@ -44,10 +44,15 @@ L = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 a = {"ground": ",", "marker": "hang_top"}
 z = {"ground": ",", "marker": "hang_foot"}
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "hang_steps", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 20}}
-; die Hütte: Haus, die Stelle vor der Tür (W3 setzt dort die Tür) und die Marke davor
+; die Hütte: Haus, die Tür (nie abgeschlossen, nie gesperrt), die Marke davor und, was vor der Tür liegt: der Becher Tee auf dem Stein,
+; Zweige quer über dem Pfad, ein Kiesel mit Loch, eine Leine ohne Wäsche (ihre Texte stehen in huette.dialogue)
 H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_hut"}}
-D = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "hut_door", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 16}}
+D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "huette", "spawn": "door"}}
 S = {"ground": ",", "marker": "spawn_huette"}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_hut_cup", "cue": "door_tea", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 14}}
+Z = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_hut_branches", "cue": "branches", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 14}}
+Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pebbles", "cue": "pebble", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 10, "unless": "forest.pebble_taken"}}
+X = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_line", "cue": "clothesline", "dialogue": "res://content/dialogue/akt3/huette.dialogue", "radius": 18}}
 ; ein Zapfen unter der Fichte, bemooste Steine am Knick
 K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_cone", "cue": "cone", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 14, "unless": "forest.cone_taken"}}
 r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stone_mossy"}}
@@ -98,9 +103,9 @@ hhhhhh..T.......F.....T.....P....hhh....F........,,...~~~..hhhhhhhhhhhhhhhhhhhhh
 hhhhhh.....T.......R..........F..hh..P....T.....,,,q..~~~..hhhhhhhhhhhhhhhhhhhhhhhhhhhh.....hhhhhhhh
 hhhhh..........T.........P....................p.,,...~~~....hhhhhhhhhhhhhhhhhhhhhhhhhh...T..hhhhhhhh
 hhhhh...T....F.....T..T.......T...R..........ppp,,.L~~~......hhhhhhhhhhhhhhhhhhhhhhhh.......hhhhhhhh
-hhhhh.F.........R..........H..........,,,,,,,,,,,...~~~........hhhhhhhhhhhhhhhhhhhhhhhh......hhhhhhh
-hhhh.......................D.....,,,,,,,,,,,...,,...~~......F..hhhhhhhhhhhhhhhhhhhhhhhhh...hhhhhhhhh
-hhhhh..F.T..P........P..g..,,,,,,,,,...........,,..~~~.........hhhhhhhhhhhhhhhhh..hhhhhhh.hhhhhhhhhh
+hhhhh.F.........R..........H.Y...X....,,,,,,,,,,,...~~~........hhhhhhhhhhhhhhhhhhhhhhhh......hhhhhhh
+hhhh.......................DC....,,,,,,,,,,,...,,...~~......F..hhhhhhhhhhhhhhhhhhhhhhhhh...hhhhhhhhh
+hhhhh..F.T..P........P..g..,,,,Z,,,,...........,,..~~~.........hhhhhhhhhhhhhhhhh..hhhhhhh.hhhhhhhhhh
 hhhhh............T.g.......,,S............R....,...~~~.P.P..T..hhhhhhhhhhhhhhh...hhhhhhhhhhhhhhhhhhh
 hhhhhh...g.....F......g.T.......R....hhhh...F..,...~~~.........hhhhhhhh..........hhhhhhhhhhhhhhhhhhh
 hhhhhhh....T.R......T.............h.hhhhhhh....,,5.~~~.........hhhhhhh.....F....hhhhhhhhhhhhhhhhhhhh
