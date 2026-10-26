@@ -4,7 +4,7 @@ Je Segment ein Brief nach Abschnitt 4.5 des Produktionsplans, wie in `docs/akt1/
 Scheitern und Speichern, Barrierefreiheit, Endlichkeit. Der Brief eines Segments wird hier verbindlich, sobald es gebaut ist; Änderungen im Pull Request des Segments.
 Zeiten rechnet `tools/writing/calibrate.py` (`docs/KALIBRIERUNG.md`); seit ADR-066 stehen die Modellminuten neben der geplanten Zahl, und gebaut wird nach Zeilen, Karten, Requisiten und Pull Requests.
 
-**Stand (V0, ADR-067):** Brief und Anschluss-Daten sind gebaut. Geplant (Plan 5.1): 90 Minuten, Humor 3, „UI-Verlust, Wetter, Mira, erstes Nein, Haus, Wahrnehmung“, Tal plus 1–2 Karten der Klasse M.
+**Stand (B7, ADR-069):** Akt II ist gebaut und durchgespielt: V0 und V1, B1 bis B7, neun Pull Requests, 121 neue Zeilen (geplant 162), 475 Zeilen im Akt; `akt2_full.json` misst im Modell **18 Minuten** (15 bis 23, Obergrenze 44). Geplant (Plan 5.1): 90 Minuten, Humor 3, „UI-Verlust, Wetter, Mira, erstes Nein, Haus, Wahrnehmung“, Tal plus 1–2 Karten der Klasse M.
 
 ## Was Akt II schon hat
 
@@ -43,11 +43,11 @@ Was bleibt, wie es ist: alle 354 IDs (nie umbenennen, nur `id_lock.py --retire`)
 | B4 | Richter: eine Stimme nach dem zweiten Sturz | `tal` | 8 (geplant 12) | 1 | **gebaut** (8 Zeilen, 0,5 Modellminuten) |
 | B5 | Feuer: Werte, das Lied im Haus, ein Fragment | `haus` | 24 (geplant 30) | 1 | **gebaut** (24 Zeilen, 1,5 Modellminuten) |
 | B6 | Abend und Anschluss: Mira liest die Werte, Kapitelmarke `act2` | `tal` | 13 (geplant 18) | 1 | **gebaut** (13 Zeilen, 0,8 Modellminuten) |
-| B7 | Durchlauf: `akt2_full.json`, Lesefassung, Messung | – | 0 | 1 | geplant |
+| B7 | Durchlauf: `akt2_full.json`, Lesefassung, Messung | – | 0 | 1 | **gebaut** (240 s Lauf, Modell 18,3 Minuten) |
 | **Summe** | | | **121** (geplant 162) | **9** | |
 
-**Budget.** 354 vorhandene plus 121 neue Zeilen sind 475 von den im Plan abgeleiteten 557 (85 %); im Modell rund 28 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu die gebauten Segmente mit ihrem Weg, 0,5 + 2,1 + 6,2 + 0,5 + 1,5 + 0,8) gegen 90 geplante. Die Lücke von rund 62 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
-Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 14 neue Tests je Segment. Mit einer zweiten Karte (B3b) wären es 537 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
+**Budget.** 354 vorhandene plus 121 neue Zeilen sind 475 von den im Plan abgeleiteten 557 (85 %); nach der Summe der Briefe im Modell rund 28 Minuten (16 für die vorhandenen 354 Zeilen nach `calibrate.py`, dazu die gebauten Segmente mit ihrem geschätzten Weg, 0,5 + 2,1 + 6,2 + 0,5 + 1,5 + 0,8), **gemessen mit `akt2_full.json` 18,3 Minuten** (ADR-069) gegen 90 geplante. Die Lücke von rund 72 Minuten kommt nicht aus Text (ADR-066, Plan 10.1);
+Bible §43 und §59 verbieten, sie mit Gehen zu füllen. Rund 24 neue Tests je Segment (gezählt in B7). Mit einer zweiten Karte (B3b) wären es 537 Zeilen und 10 Pull Requests, mit dem Pull Request für das Streuen der Karten (T6.3, nur wenn V1 es verlangt) 11. **Auslöser für Cut-First:** mehr als 11 Pull Requests oder mehr als 700 Zeilen im Akt (Bestand plus neu).
 
 **Reihenfolge.** V0, V1, B1, B2, B3, B5, B6, B4 (nach B6, damit der Abend zuerst steht), B7. B1 und B2 können vor V1 gebaut werden, wenn der Leistungstest auf dem Mac auf sich warten lässt.
 
@@ -298,6 +298,27 @@ Kein neuer Ort und keine Szene: der Stein im Bach (`world/props/stepping_stone.g
 **Ohne Rückfrage entschieden.** Eine eigene Datei `akt2/richter.dialogue` statt Zeilen in `tal.dialogue` (der Stein ruft sie nach seinen eigenen Zeilen, die gesperrten `tal_fell_*` bleiben unberührt); kein Zweig für einen Nachtrag beim dritten Sturz (eine Stimme, die beim Hüpfen mahnt, beschämt durch Wiederholung, §51); kein Flag `valley.judge_heard` (der Beat reicht); kein Ton, kein Bild (ADR-067 verwarf den Richter als Effekt); die Lesart von „nie nahe Mira“ wie oben.
 **Prüfungen.** `tests/unit/test_akt2_richter.gd` (8 Tests: acht Zeilen in Reihenfolge, nur die Stimme spricht und hat eine Stimmart, keine Antwort und keine Wirkung (der ganze Zustand vorher und nachher), keine Frage, kein Ausruf, keine Ziffer, kein Wort an die Spielerin (ganze Wörter und Wortanfänge, auch gebeugt), die Wortprobe fängt Gebeugtes und Satzzeichen, keine Zahl der Stürze, nichts vom Sturz, von Mira oder vom Kind, kurz, die Welt hat das letzte Wort) und `test_akt2_richter_szene.gd` (4 Tests: erster Sturz ohne Stimme, zweiter mit ihr bis zur Welt als letztem Wort und mit freier Spielerin, dritter ohne; die Stimme nach den Zeilen des Sturzes; ein Stand mit beiden Flags hört sie nie; ein Ort für Cue und Beat, das Speichern gesperrt vor der Stimme und frei erst nach dem Beat), `tools/autopilot/akt2_richter.json` mit Eintrag in `segments` (`act2_richter`, `valley.fell_in`, `valley.fell_twice`). `slice_full.json` fällt einmal und bleibt unberührt.
 
----
+## B7 Durchlauf
 
-*B7 bekommt seinen Brief in dem Pull Request, der ihn baut.*
+Kein Inhalt (0 neue Zeilen): der Pull Request, der Akt II ganz spielt und misst, wie P6.12c es für Akt I tat (ADR-065), und der die Summe der Briefe durch den Lauf ersetzt (ADR-069).
+
+**Der Lauf.** `tools/autopilot/akt2_full.json` (176 Ereignisse) beginnt im eingefrorenen Stand `v2_akt1_end.json` (Ende von `akt1_full.json`) und spielt Akt II ohne gesetztes Flag und ohne Geschenk:
+Ankunft und Böe, die Funde am Ostufer, Miras Nein, die zwei Stürze mit der Stimme, die flachen Steine, die Funde am Westufer, das kalte Haus, den Schuppenweg mit dem Antreiber und dem Holz,
+Feuer, Ausruhen, Lied, Antreiber, Mira, die Wahl am Feuer, Kräuter, Katze und Regal, die Pfütze am Abend, den Bachlauf mit seiner Quest, die Ziege, die Kartoffel und den Tausch,
+das Ende am Feuer mit `act2` und `slice`. 50 Stationen (39 Stellen, 4 Gespräche, 7 Türen), 68 Waits, jeder `wait_for` mit Zeitgrenze (ein Ablauf ist ein ERROR). `check.sh` spielt ihn nach `akt1_full` und verlangt 62 Marken (22 Beats, 40 Flags);
+was der Stand schon trägt (`chapter.act1`, `valley_arrival`, `melody.child_hum`), steht nicht darunter. Er nimmt überall die erste Antwort, also genau einen Zweig (Tür, „Heute nicht.“, „Wohin?“, Miras Lesung der Tür);
+die anderen Zweige (Wahl am Feuer, Miras vier Lesungen, die Antreiber-Antworten) haben GUT-Tests. Die Segmentskripte bleiben als schnelle Prüfung je Segment.
+
+**Das Maß** (`calibration_akt2.json`, ADR-069): 240 Sekunden Spielzeit (ohne die 139 des Ausgangsstands), davon 97 mit offenem Gespräch, 197 Klicks (41 % der 475 Zeilen), 9.915 Pixel Luftlinie; Weg 4,3 Minuten.
+Modell: **langsam 23,0 / normal 18,3 / schnell 15,3 Minuten**, Obergrenze 43,9, 25,9 Zeilen je Minute. Die laufende Summe der Briefe (28 Minuten) war zu hoch, weil sie Wege schätzte (9,9 Minuten ohne Umweg) statt sie zu messen (4,3).
+Gegen 90 geplante Minuten füllen Lesen und Wege rund ein Fünftel; der Rest müsste von Spiel kommen (ADR-066, Bible §43, §59), nicht von mehr Text. Das ist kein Mangel des Akts, den dieser Pull Request behebt, sondern die Zahl, die dein Durchlauf prüft.
+
+**Die Lesefassungen.** `docs/lesefassung/README.md` führt alle elf Dateien auf (Slice, Akt I, B1 bis B6), ihren Umfang und den Stand der Antworten: nichts ist beantwortet, nichts ist `[#ok]`.
+Die Cue-Nummern einer Lesefassung sind die Stelle des Cues in seiner Datei zum Zeitpunkt der Erzeugung; ältere Dateien der Slice-Dateien (`SLICE.md`, `B2_NEIN.md`) zählen vor den Zeilen von B6, deshalb tragen zwei Cues dieselbe Nummer (T9). Beantwortet wird mit dem Namen des Cues und der Datei.
+
+**Kosten und Cut-First.** 9 Pull Requests geplant, 9 gebaut (V0, V1, B1 bis B7); die Schwelle (mehr als 11 Pull Requests oder mehr als 700 Zeilen, Bestand plus neu) ist nicht erreicht (475). 121 von 162 geplanten neuen Zeilen, im Mittel 20 je Inhalts-Pull-Request (Akt I: 35); 154 neue Tests (137 in GUT, 17 in Python; rund 24 je Segment; die Zeile „Rund 14 neue Tests je Segment“ in der Planung galt Akt I). Cut-First: Platz 1 (B3b) nie gebaut, Platz 2 (B4) in der kleinsten Fassung, Platz 3 (Kuriositäten) auf 4 von 6, die Plätze 4 und 5 nicht angefasst. Sammelstücke: Nebenquests 2 von 2, Kuriositäten 4 von 6, Fragmente 3 von 3, Melodien 1 von 1; Mira: 5 von 6 neuen Erinnerungsvarianten.
+
+**Gemessen, nicht erreicht.** Die Bildrate der Karte der Klasse M auf dem Mac ist weiter ungemessen (ADR-068 „Offen“); der Aufbau der Karte dauert im Container 0,4 Sekunden.
+
+**Ohne Rückfrage entschieden.** Der Lauf beginnt im eingefrorenen Stand und nicht mit gesetzten Flags (er prüft so, dass der Stand von Akt I weiterspielbar ist); kein neues Autopilot-Ereignis (die Antworten wählt der Lauf nicht, jeder Zweig hat GUT-Tests); die Quellen der Kalibrierung von Akt II sind `akt2/` und die Dateien des Slice für die Wirklichkeit; die Segment-Marken eines Laufs, der aus einem Stand beginnt, zählen nur, was im Lauf geschieht.
+**Prüfungen.** `tools/writing/test_writing.py` (9 neue Tests: Quellen je Akt, jede Story-Datei in genau einem Akt, ein Lauf aus einem Stand gibt nur die Sekunden des Akts, ein Lauf ohne Ende und einer mit abgelaufenem Wait werden abgewiesen, ein Durchlauf wird ab dem Beginn des Akts gezählt und angepasst, ein Log ohne den Beginn des Akts wird abgewiesen, beide Messungen sind echte Läufe) und der Eintrag `akt2_full` in `segments` (62 Marken, 16.000 Bilder bei 30 Bildern je Sekunde, der Lauf braucht rund 7.200).

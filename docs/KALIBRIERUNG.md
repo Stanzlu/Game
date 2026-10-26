@@ -62,18 +62,52 @@ Akt I hat 333 Zeilen (Segmente und Garten).
 - **Der Autopilot sieht 33 % der Zeilen.** Er nimmt in jedem Gespräch die erste Antwort und sucht nichts Freiwilliges; das Modell nimmt 60 %.
 - **Die Textdichte liegt bei 24 Zeilen je Minute** (Plan 9.6: 6). Wie beim Slice trägt der Text allein keine 100 Minuten.
 
+## Akt II nach dem Lauf des Autopiloten (P6.14, B7, ADR-069)
+
+`tools/autopilot/akt2_full.json` spielt Akt II vom Tal nach dem Riss bis zum Ende des Abends: Ankunft, Miras Nein, zwei Stürze und die Stimme,
+das Westufer, das kalte Haus, der Schuppenweg mit Antreiber und Holz, Feuer, Ausruhen, Lied, Antreiber, Mira, die Wahl am Feuer, die Kräuter,
+der Bachlauf, die Ziege und das Ende mit den Kapitelmarken `act2` und `slice`. Er setzt kein Flag und gibt keinen Gegenstand;
+er beginnt dort, wo `akt1_full.json` endet, nämlich im eingefrorenen Stand `tests/fixtures/saves/v2_akt1_end.json` (`check.sh`:
+eine Szene mit `@` vor dem Namen kopiert den Stand als Autosave des Probeprofils und startet mit `--continue`). Der Stand trägt 139 Sekunden Spielzeit, die
+`--record-akt2` abzieht. `check.sh` spielt den Lauf bei jedem Durchgang (rund 9 Sekunden) und verlangt 62 Marken (22 Beats, 40 Flags).
+
+Das Log gibt den Weg: **240 Sekunden** Spielzeit, davon 97 mit offenem Gespräch, 197 geklickte Zeilen (**41 %** der 475 Zeilen von Akt II; die Zeilen von
+`tal`, `haus` und `antreiber` aus dem Slice zählen dazu: die Segmente erweitern `tal` und `haus`, und der Lauf spielt auch die Begegnung mit dem Antreiber) und 9.915 Pixel Luftlinie, die der Autopilot springt statt geht.
+Der Weg ohne Lesen ist damit 143 Sekunden plus 113 für die Sprünge, **4,3 Minuten**. Die Sekunden schwanken um bis zu vier, weil der Böen-Auftakt der Ankunft (`ECHO_GUST_SECONDS`) zufällig ist.
+
+| Tempo | Akt II |
+|---|---|
+| langsam | 23,0 min |
+| normal | 18,3 min |
+| schnell | 15,3 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 43,9 min |
+
+`python3 tools/writing/calibrate.py --akt2` zeigt die Tabelle, `--record-akt2 <Log>` schreibt `calibration_akt2.json` neu (nach einem neuen Segment den Lauf wiederholen),
+`--akt2 --log <Log>` passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `valley_arrival`). Dazu vier Befunde:
+
+- **Der Plan rechnet mit 90 Minuten für Akt II, das Modell mit 15 bis 23.** Die laufende Summe der Briefe (rund 28 Minuten) rechnete die Wege der sechs gebauten Segmente mit 5,2 Minuten (8,3 mit dem Umweg ×1,6 des Modells) zu den 281 Sekunden Weg des Slice-Laufs, zusammen 9,9 Minuten ohne Umweg,
+  und die 354 vorhandenen Zeilen mit 16 Minuten aus dem Slice-Lauf; der gemessene Weg von Akt II ist 4,3 Minuten ohne Umweg (6,9 mit). Gemessen ist kleiner als geschätzt. Die Lücke zu 90 Minuten ist
+  wie bei Akt I größer als jede Annahme des Modells (der äußerste Eckfall, Obergrenze, gibt 44); dein Durchlauf legt Anteil, Pause und Umweg fest.
+- **Der Autopilot sieht 41 % der Zeilen** (Akt I: 33 %). Er nimmt in jedem Gespräch die erste Antwort; die Zweige der Wahl am Feuer, Miras vier Lesungen,
+  Antreiber-Antworten, Fragen nach Elysia, „Zum Meer?“ und die zweite Fensterzeile im Haus bleiben dem Lauf unbekannt und stehen unter GUT-Tests.
+- **Die Textdichte liegt bei 25,9 Zeilen je Minute** (Akt I: 24,0; Plan 9.6: 6). Auch Akt II trägt seine Länge nicht aus Text.
+- **Der Slice-Wert (`calibrate.py` ohne Schalter) zählt seit Akt II die 38 Zeilen von Akt II in den Slice-Dateien mit:** 484 statt 446 Zeilen, 21,7 statt 20,7 Minuten bei normalem Tempo. Die Tabelle
+  „Der Slice nach dem Modell“ oben bleibt der Stand von P6.6; die Akt-Werte zählen jede Zeile genau einmal (ein Test prüft, dass keine Story-Datei zu keinem Akt gehört).
+
 ## Benutzen
 
 ```
 python3 tools/writing/calibrate.py                                   den Slice bei jedem Tempo
 python3 tools/writing/calibrate.py --akt1                            Akt I bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --akt2                            Akt II bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2 für Akt II)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
-python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2 für Akt II)
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.
-Jedes Akt-I-Segment nennt in seinem Regions-Brief diese drei Zahlen und vergleicht sie nach dem Bau mit der Messung
+Jedes Segment nennt in seinem Regions-Brief diese drei Zahlen und vergleicht sie nach dem Bau mit der Messung
 des Autopiloten (Beat-Zeiten im Log).
 
 ## Dein Durchlauf (nur wenn du magst)
