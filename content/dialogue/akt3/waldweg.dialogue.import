@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://hl7koylda62g"
+path="res://.godot/imported/waldweg.dialogue-4ccf9176e7e7a31232eb4d926c67845f.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt3/waldweg.dialogue"
+dest_files=["res://.godot/imported/waldweg.dialogue-4ccf9176e7e7a31232eb4d926c67845f.tres"]
+
+[params]
+
+defaults=true
