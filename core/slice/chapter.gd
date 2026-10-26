@@ -7,7 +7,7 @@ extends RefCounted
 ## The last chapter this build tells is LAST: a save that has reached it counts as finished (the
 ## start menu says so under the logo, "Neues Spiel" no longer asks). The end of Act II is not that
 ## any more: "Weiter" goes on with the morning after (ADR-070). LAST moves with the act that ends
-## the build; game code never reads `Chapter.reached("act3")` before the act sets it (StoryLint).
+## the build; game code never asks for a chapter by its id before an act sets it (StoryLint).
 
 const PREFIX := "chapter."
 const LAST := "act3"

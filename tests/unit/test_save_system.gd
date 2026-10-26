@@ -175,7 +175,7 @@ func _write_chapter(slot: String, saved_at: String, chapter := "") -> void:
 
 func test_the_end_of_the_game_is_read_from_the_saves() -> void:
 	assert_false(saves.slice_finished(), "no saves: nothing finished")
-	assert_eq(saves.save_slot("slot_1"), OK)
+	_write_chapter("slot_1", "2026-10-01T10:00:00Z")
 	assert_false(saves.summary("slot_1")["finished"])
 	assert_false(saves.slice_finished())
 	_write_chapter("slot_2", "2026-10-02T10:00:00Z", "slice")
