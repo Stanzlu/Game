@@ -5,7 +5,9 @@ Draws the [map] block of content/maps/bachlauf.txt (B3): the stream below the va
 big map of the game. A worn track leads along the stream on both banks in one loop (nothing to go
 back over): down the west bank, over the log of the south ford, up the east bank and over the log
 of the narrow ford at the head to where it began, a gap in the northern forest that leads back to
-the valley. Hand-written head (meta, legend) stays; only the [map] block is replaced.
+the valley. Since Act III (W2) the track also leaves from the south ford through a gap in the southern
+forest, along the brook, to the forest map waldweg. Hand-written head (meta, legend) stays; only the
+[map] block is replaced.
 
 Usage: python3 tools/art/layout_akt2_maps.py bachlauf [--write]
 Afterwards re-run tools/art/bake_ground.py content/maps/bachlauf.txt (once the layout is final: a
@@ -33,6 +35,9 @@ HEAD_FORD_Y = 9  # the narrow ford near the head: a trunk across the stream
 SOUTH_FORD_Y = 56  # the south ford: three cells of water, as wide as the trunk reaches
 WEIR_Y = 50  # the weir: one row of fall across the stream, the trap behind it
 DRY_BED_Y = (27, 38)  # the dry channel on the east bank, as wide as the stream, rows from..to
+SOUTH_X = 45  # Act III (W1/W2): the gap in the southern forest, three cells wide (44 to 46), the way on along the brook
+SOUTH_DOOR = (SOUTH_X, 64)
+SOUTH_ARRIVAL = (SOUTH_X, 60)
 
 
 def centerline():
@@ -89,6 +94,10 @@ def bachlauf():
     for y in range(0, 7):
         for x in range(POCKET_X - 1, POCKET_X + 2):
             g.set(x, y, ",")
+    # the gap in the southern forest (Act III): the way on, along the brook, into the forest
+    for y in range(60, H):
+        for x in range(SOUTH_X - 1, SOUTH_X + 2):
+            g.set(x, y, ",", only=".h")
     # a pool the stream leaves behind and a few wet places
     g.ellipse(32.0, 36.0, 1.9, 1.0, "p", only=".", wobble=0.5, seed=2)
     g.ellipse(58.5, 44.0, 2.4, 1.4, "m", only=".", wobble=0.7, seed=3)
@@ -108,6 +117,8 @@ def bachlauf():
         cols = [x for x in range(W) if g.get(x, y) == "y"]
         for x in (min(cols) - 2, min(cols) - 1, max(cols) + 1, max(cols) + 2):
             g.set(x, y, ",", only=".mph")
+    # the way from the south ford on into the gap (Act III)
+    g.path([bank(56, -1, 4.0), (43.5, 58.5), (SOUTH_X, 61)], 2.0, ",", only=".mph")
     # the way from the end of the west leg to the south ford, and from the head ford to the pocket
     g.path([bank(8.5, 1, 3.8), (POCKET_X + 3, 8.5), (POCKET_X, 8)], 2.0, ",", only=".mph")
     # the weir: the stream falls one row over a beam
@@ -188,6 +199,9 @@ def build():
     put("%", DOOR[0], DOOR[1])
     put("&", ARRIVAL[0], ARRIVAL[1])
     put("@", START[0], START[1])
+    # the door south (Act III, gated by the morning after) and its arrival
+    put("W", *SOUTH_DOOR)
+    put("w", *SOUTH_ARRIVAL)
     # trees: pines and trees in the forest margins, crooked ones in the meadow, rocks and tall grass by the water
     scatter("T", 26, 2)
     scatter("P", 20, 2)
