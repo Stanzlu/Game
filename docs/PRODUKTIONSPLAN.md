@@ -21,7 +21,7 @@ Einwände sind eingearbeitet.
 - **Danach Akt I (Elysia)** von rund 15 auf rund 100 geplante Minuten (gebaut und im Modell: rund 14, Abschnitt 10.1), Segment für Segment, je Segment ein Pull Request mit
   Lesefassung für dich (P6.6–P6.12). Die große Kartenarbeit (Großkarten, Kartenformat v2, neuer Baker) kommt erst
   vor der ersten großen Region der Wirklichkeit, nicht vorher.
-- **Von dir gebraucht:** zwei Entscheidungen (Abschnitt 11, am 24.10. nach Empfehlung entschieden) und seit P6.13 und V0 fünf Fragen (Abschnitt 11, 3 bis 7). Ohne Antwort oder mit „Weiter“ gilt die Empfehlung
+- **Von dir gebraucht:** zwei Entscheidungen (Abschnitt 11, am 24.10. nach Empfehlung entschieden) und seit P6.13, V0 von Akt II und V0 von Akt III sechs Fragen (Abschnitt 11, 3 bis 8). Ohne Antwort oder mit „Weiter“ gilt die Empfehlung
   (wie bei ADR-047), und sie bleibt umkehrbar.
 
 ## 1. Ausgangslage
@@ -303,7 +303,7 @@ kurz davor.
 
 **Bewusst vertagt, mit Auslöser** (`OFFENE_PUNKTE.md`, Abschnitt 3): Licht (12 Lichtquellen im Wald, Lampen auf
 Nachtgras) vor der ersten Nachtkarte in Akt IV; Regenspritzer auf Dächern vor der Stadt; feinere Ufer-Kollision vor
-der Küste; Spiegelungen für wandernde Figuren vor Stadt und Hafen; Nähte des Antreiber-Wegs vor Akt III; Shader-Hänger
+der Küste; Spiegelungen für wandernde Figuren vor Stadt und Hafen; Nähte des Antreiber-Wegs, sobald ein Segment die Wegstücke wiederverwendet (Akt III tut es nicht, ADR-070); Shader-Hänger
 beim ersten Betreten und die Ausreißer bis 240 ms mit jeder neuen Region im Leistungstest; Leistung des Dialogue
 Manager bei siebenfachem Text mit Akt I gemessen.
 
@@ -407,7 +407,8 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss · **gebaut** (ADR-064; Stein nach dem Hoch, Samen-Zeile, Schleife 2 für Torwächter, Festmeisterin und Gastwirt; rund 1 statt 5 Minuten neu) | Akt-I-Durchlauf per Autopilot · **gebaut** (ADR-065, `akt1_full.json`: 141 s, Modell 14 bis 33 min gegen 100 geplant) | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst · **erledigt** (Abschnitt 10.1, ADR-066): Minuten bleiben Modell, geplant wird in Zeilen und Pull Requests, die Länge entscheidet dein Durchlauf | Plan aktualisiert | Rückmeldung (Fragen in Abschnitt 11) |
 | **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 121 neue Zeilen (geplant 162, B1 baut 6 statt 15, B2 23 statt 25, B3 47 statt 62, B4 8 statt 12, B5 24 statt 30, B6 13 statt 18), im Modell gemessen 18 Minuten (15 bis 23) gegen 90, ADR-069); V1 T6/T7 klein · **gebaut** (ADR-068), B1 Ankunft · **gebaut** (6 Zeilen), B2 Nein und Blick · **gebaut** (23 Zeilen), B3 Bachlauf · **gebaut** (47 Zeilen statt 62, die erste Karte der Klasse M, 84 × 66; Quest „Die Reuse“, drei Kuriositäten, zwei Fragmente), B5 Feuer · **gebaut** (24 Zeilen statt 30: Werte am Feuer als drei Handgriffe und ein Schweigen, das Lied im Haus hörbar ohne Fragment, das dritte Fragment, Beat `act2_safe`), B6 Abend · **gebaut** (13 Zeilen statt 18: Mira liest die Spuren der Werte am Lagerfeuer, ohne ein Wertwort und ohne Antwort; Kapitelmarke `act2` vor `slice`), B4 Richter · **gebaut** (8 Zeilen statt 12: eine Stimme nur über Dinge, genau einmal beim zweiten Sturz, Beat `act2_richter`), B7 Durchlauf · **gebaut** (ADR-069: `akt2_full.json` aus dem eingefrorenen Stand von Akt I, 240 Sekunden Spielzeit, 197 Klicks, 62 Marken, `calibrate.py --akt2`; Modell 18,3 Minuten bei 475 Zeilen) | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` · **gebaut** | Fragen 7 (Voreinstellungen), Lesefassungen (`docs/lesefassung/README.md`), dein Durchlauf von Akt II |
-| **P6.15 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge III bis VII (Akt II ist gebaut), Segmente wie in Akt I und II; ein Lauf beginnt im eingefrorenen Stand am Ende des Akts davor (ADR-069) | – | je Akt Lesefassungen und ein Durchlauf |
+| **P6.15** | Akt III (Wald): V0 Brief und Anschluss · **gebaut** (ADR-070, `docs/akt3/REGIONSBRIEFE.md`: acht Pull Requests, 190 geplante neue Zeilen, zwei Karten der Klasse M, eine Hütte, ein Nachtwald; „Weiter“ beginnt den Morgen danach; Fürsorge als Rast; das Warum des Antreibers als Flutmarke; Stand `v2_akt2_end.json`); W1 Aufbruch, W2 Waldweg, W3 Hütte, W4 Flut, W5 Warten, W6 Heimkehr, W7 Durchlauf · geplant | Smoke, Segmentskript und Marken je Segment, `akt3_full.json` | Frage 8 (Voreinstellungen), Lesefassungen, dein Durchlauf von Akt III |
+| **P6.16 ff.** | je Akt IV bis VII: Regions-Brief, Vorarbeit (T7 großer Baker und die Lichter vor der ersten Nachtkarte der Stadt, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Segmente wie in Akt I bis III; ein Lauf beginnt im eingefrorenen Stand am Ende des Akts davor (ADR-069) | – | je Akt Lesefassungen und ein Durchlauf |
 
 **Abnahmeregel:** Ein Prüfpaket je Phase, höchstens 10 Fragen. Was unbeantwortet bleibt, setze ich nach meiner
 Empfehlung um und markiere es als „vorläufig“; es bleibt umkehrbar.
@@ -465,7 +466,7 @@ Im Mittel 35 neue Zeilen und 14 neue Tests je Segment. Zwei Sorten: Segmente mit
 Segment-Pull-Requests und drei weiteren (P6.6, P6.7, P6.12c), zusammen zehn, unter den 12–15 geplanten, also unter der Cut-First-Schwelle (Abschnitt 12). Angeliefert gegen Plan 4.3:
 51 % der Zeilen, 59 % der Cues, vier von fünf Karten, 25 Requisiten, keine neue Musik und keine neuen Effekte.
 
-**Rest in Pull Requests** (abgeleitet, Stand Akt I; nach Akt II bleiben die Akte III bis VII mit 2.878 geplanten Zeilen und rund 46 bis 82 Segment-Pull-Requests): Die Akte II bis VII mit den geplanten 3.436 Zeilen sind bei 62 Zeilen je Pull Request rund 55, bei 35 rund 98 Segment-Pull-Requests; dazu kommt Vorarbeit
+**Rest in Pull Requests** (abgeleitet, Stand Akt I; nach Akt II bleiben die Akte III bis VII mit 2.878 geplanten Zeilen und rund 46 bis 82 Segment-Pull-Requests; Akt III ist mit acht Pull Requests und 190 geplanten neuen Zeilen angesetzt, ADR-070): Die Akte II bis VII mit den geplanten 3.436 Zeilen sind bei 62 Zeilen je Pull Request rund 55, bei 35 rund 98 Segment-Pull-Requests; dazu kommt Vorarbeit
 (Brief je Akt, T6, T7, T9), rund ein Pull Request je Akt. Wollte man 555 Minuten allein mit Text füllen (13.335 Zeilen), wären es 215 bis 382. Mit Spielzeit aus Mechanik statt Text
 (Wächter-Maschine, Boot, Minispiele) wächst der Aufwand an den Systemen, den dieses Maß nicht erfasst.
 
@@ -532,6 +533,10 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Sta
 
 **7. Akt II: Voreinstellungen** (Stand 25.10., ADR-067; Tabelle O1 bis O9 im Brief `docs/akt2/REGIONSBRIEFE.md`)
 - Frage: Neun Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar: O1 das Ende des Slice bleibt der Schluss von Akt II; O2 der Richter nur als Text ab dem zweiten Sturz (gebaut in B4: nur über Dinge, die Landung am Ostufer neben Mira zählt nicht als „nahe“); O3 Werte als konkrete Wahlen am Feuer; O4 eine Karte der Klasse M; O5 das Lied im Haus ist hörbar und kein Fragment (und von den 24 Fragmenten sind sechs Bilder des Kindes, 18 Spuren der Welt, siehe 5.5); O6 die neue Karte liegt südlich am Bach; O7 dein „OK“ auf die Lesefassung des Slice als Einfrieren; O8 Blatt und Feder bleiben in Elysia; O9 die Fragen 3 bis 6 gelten weiter (nach Abschnitt 5 bauen, keine Länge ändern).
+- **Empfehlung:** die Voreinstellungen; sag, welche du anders willst.
+
+**8. Akt III: Voreinstellungen** (Stand 26.10., ADR-070; Tabelle O1 bis O15 im Brief `docs/akt3/REGIONSBRIEFE.md`)
+- Frage: Fünfzehn Weichen sind mit Voreinstellung entschieden und bleiben umkehrbar. Die vier, die du am ehesten anders willst: O1 „Weiter“ beginnt nach dem Titel den Morgen danach (statt eines Übergangs ohne Menü); O6 der Einsiedler lässt bis zu drei Stufen bleiben, und das Bild wird mit jeder enger, danach speichert das Spiel und die Tür steht offen; O7 das Warum des Antreibers ist eine Flutmarke und ein Lager, keine Erzählung; O10 das Echo des Kindes ist eine Laterne im Nachtwald, auf die man zugeht und die wartet (kein Fragment, kein Bild, kein Wort des Kindes). Dazu O3 (der Wald ist Tag, `morgen` als neue Voreinstellung), O5 (Fürsorge als Rast mit Tee) und O9 (Werkbank und Gäste als Flags, kein Schema 3).
 - **Empfehlung:** die Voreinstellungen; sag, welche du anders willst.
 
 ## 12. Risiken

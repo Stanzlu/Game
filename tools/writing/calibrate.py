@@ -34,7 +34,7 @@ BASELINE = os.path.join(HERE, "calibration_baseline.json")
 BASELINE_AKT1 = os.path.join(HERE, "calibration_akt1.json")
 BASELINE_AKT2 = os.path.join(HERE, "calibration_akt2.json")
 BASELINES = {"akt1": BASELINE_AKT1, "akt2": BASELINE_AKT2}
-ACT_NAMES = {"akt1": "Akt I", "akt2": "Akt II"}
+ACT_NAMES = {"akt1": "Akt I", "akt2": "Akt II", "akt3": "Akt III"}
 ## The save an act's autopilot run starts from: its play time (seconds) is not the act's and is taken off.
 START_SAVES = {"akt2": os.path.join(dialogue.ROOT, "tests", "fixtures", "saves", "v2_akt1_end.json")}
 ## The beat where Act II begins; a human run of the whole game is counted from it.
@@ -76,7 +76,8 @@ def slice_sources():
 def act_sources(act):
     """The story dialogue of an act. Act I: the segments (akt1/) and Elysia's garden (the Slice's
     elysia.dialogue). Act II: its segments (akt2/) and the real world's files of the Slice, which
-    the segments extend (tal, haus) or the run plays (antreiber)."""
+    the segments extend (tal, haus) or the run plays (antreiber). Act III: its segments (akt3/) only;
+    its lines for the house are cues of their own in akt3/, so that they are never counted as Act II."""
     found = []
     for source in dialogue.sources(story_only=True):
         path = source.path.replace(os.sep, "/")
@@ -84,6 +85,8 @@ def act_sources(act):
         if act == "akt1" and ("/akt1/" in path or name.startswith("elysia")):
             found.append(source)
         elif act == "akt2" and ("/akt2/" in path or ("/slice/" in path and not name.startswith("elysia"))):
+            found.append(source)
+        elif act == "akt3" and "/akt3/" in path:
             found.append(source)
     return found
 
