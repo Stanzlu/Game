@@ -202,6 +202,8 @@ def build():
     # the door south (Act III, gated by the morning after) and its arrival
     put("W", *SOUTH_DOOR)
     put("w", *SOUTH_ARRIVAL)
+    # before the morning after (no door) a blocker one row below keeps the way shut at the map's edge
+    put("Q", SOUTH_DOOR[0], SOUTH_DOOR[1] + 1)
     # trees: pines and trees in the forest margins, crooked ones in the meadow, rocks and tall grass by the water
     scatter("T", 26, 2)
     scatter("P", 20, 2)

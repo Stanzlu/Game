@@ -49,7 +49,7 @@ class BachlaufLayoutTests(unittest.TestCase):
     def test_every_named_spot_stands_once_and_the_trunks_twice(self):
         _, _, rows = _map()
         text = "".join(rows)
-        for glyph in "1234567890$%&@8bWw":
+        for glyph in "1234567890$%&@8bWwQ":
             self.assertEqual(text.count(glyph), 1, glyph)
         self.assertEqual(text.count("Y"), 2, "one trunk over each ford")
 
@@ -59,7 +59,7 @@ class BachlaufLayoutTests(unittest.TestCase):
         reach = _reach(rows, symbols, start)
         for y, row in enumerate(rows):
             for x, glyph in enumerate(row):
-                if glyph in "1234567890$%&8bWw":
+                if glyph in "1234567890$%&8bWwQ":
                     near = any((x + dx, y + dy) in reach for dx in range(-2, 3) for dy in range(-2, 3))
                     self.assertTrue(near, "%s at %d,%d is out of reach" % (glyph, x, y))
 
@@ -104,6 +104,9 @@ class BachlaufLayoutTests(unittest.TestCase):
         self.assertEqual(door, layout.SOUTH_DOOR)
         self.assertEqual(arrival, layout.SOUTH_ARRIVAL)
         self.assertGreaterEqual(abs(door[1] - arrival[1]), 4, "a door zone of three cells must not catch it")
+        blocker = spot["Q"]
+        self.assertEqual(blocker, (door[0], door[1] + 1), "the blocker shuts the gap right behind the door's cell")
+        self.assertEqual(blocker[1], len(rows) - 1, "it stands in the last row: nothing lies below it")
 
     def test_the_weir_lies_across_the_whole_stream(self):
         _, _, rows = _map()

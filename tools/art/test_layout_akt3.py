@@ -115,6 +115,29 @@ class WaldwegLayoutTests(unittest.TestCase):
         faces = sum(row.count("^") for row in rows[top[1] : foot[1] + 1])
         self.assertGreaterEqual(faces, 8)
 
+    def test_a_spruce_stands_over_the_cone_and_no_crown_hides_a_spot_with_a_cue(self):
+        _, _, rows = _map()
+        spots = _spots(rows)
+        kx, ky = spots["K"][0]
+        near = [(x, y) for x, y in spots["P"] if abs(x - kx) <= 3 and abs(y - ky) <= 3]
+        self.assertTrue(near, "the text says under the spruce: a spruce stands within three cells")
+        # a tree is drawn upward from its foot: none within two columns and eight rows south of a cue
+        for glyph in "123456KQqU":
+            x, y = spots[glyph][0]
+            for dy in range(1, 9):
+                for dx in range(-2, 3):
+                    if (x + dx, y + dy) == (kx - 2, ky - 1):
+                        continue  # the spruce over the cone is a narrow cone of its own
+                    cell = rows[y + dy][x + dx] if y + dy < len(rows) else "h"
+                    self.assertNotIn(cell, "TP", "a crown hides %s at %d,%d (tree at %d,%d)" % (glyph, x, y, x + dx, y + dy))
+
+    def test_the_forest_is_a_mix_of_spruce_and_beech(self):
+        _, _, rows = _map()
+        text = "".join(rows)
+        self.assertGreaterEqual(text.count("P"), 30)
+        self.assertGreaterEqual(text.count("T"), 40)
+        self.assertEqual(layout.build.shortfall if hasattr(layout.build, "shortfall") else {}, {}, "the scatter placed all it was asked to")
+
     def test_the_hut_stands_in_a_glade_off_the_path_and_has_a_spot_before_its_door(self):
         _, symbols, rows = _map()
         spots = _spots(rows)

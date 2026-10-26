@@ -13,27 +13,27 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### W2-1 · `mark_1`
 
 - *Am Pfosten ein Brett, sauber gesägt, ein roter Pfeil nach Süden.* `[#draft]`  <sub>wd_m1_1</sub>
-- *Darunter, in gerader Kreideschrift und mit dem Lineal unterstrichen, „Erstens gehen.“* `[#draft]`  <sub>wd_m1_2</sub>
+- *Darunter, in gerader Kreideschrift und mit dem Lineal unterstrichen, »Erstens gehen.«* `[#draft]`  <sub>wd_m1_2</sub>
 
 ### W2-2 · `mark_2`
 
-- *Das zweite Brett, derselbe Pfeil. „Zweitens schneller gehen.“* `[#draft]`  <sub>wd_m2_1</sub>
+- *Das zweite Brett, derselbe Pfeil. »Zweitens schneller gehen.«* `[#draft]`  <sub>wd_m2_1</sub>
 - *Der Strich darunter ist doppelt gezogen, für den Fall, dass einer das Erste überliest.* `[#draft]`  <sub>wd_m2_2</sub>
 
 ### W2-3 · `mark_3`
 
-- *Das dritte Brett hat zwei Spalten. Links steht „Pausen“, rechts „Schritte“.* `[#draft]`  <sub>wd_m3_1</sub>
+- *Das dritte Brett hat zwei Spalten. Links steht »Pausen«, rechts »Schritte«.* `[#draft]`  <sub>wd_m3_1</sub>
 - *Links ist ein einziger Strich, wieder ausgewischt. Das Holz ist an der Stelle heller geworden.* `[#draft]`  <sub>wd_m3_2</sub>
 - *Rechts sind es Striche in Fünferbündeln, so viele, dass auf der Rückseite weitergezählt wurde.* `[#draft]`  <sub>wd_m3_3</sub>
 
 ### W2-4 · `mark_4`
 
-- *Das vierte Brett. „Hang. Ohne Pause.“* `[#draft]`  <sub>wd_m4_1</sub>
-- *Darunter stand ein zweiter Satz. Er ist so dick durchgestrichen, dass nur noch ein „aber“ zu lesen ist.* `[#draft]`  <sub>wd_m4_2</sub>
+- *Das vierte Brett. »Hang. Ohne Pause.«* `[#draft]`  <sub>wd_m4_1</sub>
+- *Darunter stand ein zweiter Satz. Er ist so dick durchgestrichen, dass nur noch ein »aber« zu lesen ist.* `[#draft]`  <sub>wd_m4_2</sub>
 
 ### W2-5 · `mark_5`
 
-- *Auf dem fünften Brett steht „Fast da.“ Darunter noch einmal, kleiner, und noch einmal, bis die Schrift am Rand ausläuft.* `[#draft]`  <sub>wd_m5_1</sub>
+- *Auf dem fünften Brett steht »Fast da.« Darunter noch einmal, kleiner, und noch einmal, bis die Schrift am Rand ausläuft.* `[#draft]`  <sub>wd_m5_1</sub>
 - *Es hat keinen Pfeil mehr. Der Weg ist ja nicht zu verfehlen.* `[#draft]`  <sub>wd_m5_2</sub>
 
 ### W2-6 · `mark_6`
@@ -42,7 +42,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Das sechste Brett, leer. Das Holz ist noch hell, ohne einen einzigen Strich.* `[#draft]`  <sub>wd_m6_5</sub>
   - *→ Ende des Szenenstücks*
 - *Das sechste Brett ist leer. Das Holz ist noch hell, frisch gesägt, ohne einen einzigen Strich.* `[#draft]`  <sub>wd_m6_1</sub>
-- *Der Platz für das Wort, das nach „Fast da“ kommt, ist frei geblieben.* `[#draft]`  <sub>wd_m6_2</sub>
+- *Der Platz für das Wort, das nach »Fast da« kommt, ist frei geblieben.* `[#draft]`  <sub>wd_m6_2</sub>
 - *Oben in einer Kerbe im Pfosten liegt ein Stummel rote Kreide.* `[#draft]`  <sub>wd_m6_3</sub>
 *wenn* `side_forest_marks und follow`
 - *→ weiter bei* `mark_6_chalk`
@@ -58,7 +58,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 > --- Der Antreiber am leeren Brett -------------------------------------------------------------------------------------
 > Er steht, solange er nicht gebeten wurde zu sitzen (Karte: Figur A); danach sitzt er (Figur E). Wer ihn am Feuer im Haus
-> gelassen hat (house.antreiber_by_fire), trifft ihn hier nicht: die Katze liegt auf ihm. Alle anderen finden ihn vor sich,
+> gelassen hat (house.antreiber_by_fire), trifft ihn hier nicht: er sitzt dort (die Katze liegt auf ihm, sobald sie gefüttert ist). Alle anderen finden ihn vor sich,
 > schneller, als es möglich ist. "Setz dich. Es gibt Tee." gibt es nur mit der Facette care: wer nicht gerastet hat, hat
 > keinen Tee. Ob er sitzt, ist keine Auszeichnung und keine Strafe; die Kreide und die Nebenquest hängen nicht an ihm.
 
@@ -160,6 +160,13 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **Liegen lassen.**
   - *Du lässt ihn liegen. Die Fichte hat noch viele.* `[#draft]`  <sub>wd_cone_3</sub>
 
-### W2-16 · `south_wait`
+### W2-16 · `bach_south_wait`
+
+> Der Süden des Bachlaufs, solange der Morgen danach nicht begonnen hat (kein Beat act3_morning): die Lücke in der Hecke
+> führt an den Rand der Karte, und der Abend von Akt II geht nicht in den Wald.
+
+- *Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter.* `[#draft]`  <sub>wd_bachwait_1</sub>
+
+### W2-17 · `south_wait`
 
 - *Hinter dem leeren Brett läuft der Weg in Brombeeren aus. Der Bach nimmt es dort allein mit dem Wald auf.* `[#draft]`  <sub>wd_south_1</sub>

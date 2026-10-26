@@ -11,28 +11,28 @@
 
 ~ mark_1
 Am Pfosten ein Brett, sauber gesägt, ein roter Pfeil nach Süden. [ID:wd_m1_1] [#draft]
-Darunter, in gerader Kreideschrift und mit dem Lineal unterstrichen, „Erstens gehen.“ [ID:wd_m1_2] [#draft]
+Darunter, in gerader Kreideschrift und mit dem Lineal unterstrichen, »Erstens gehen.« [ID:wd_m1_2] [#draft]
 do WorldState.start_quest("side_forest_marks")
 => END
 
 ~ mark_2
-Das zweite Brett, derselbe Pfeil. „Zweitens schneller gehen.“ [ID:wd_m2_1] [#draft]
+Das zweite Brett, derselbe Pfeil. »Zweitens schneller gehen.« [ID:wd_m2_1] [#draft]
 Der Strich darunter ist doppelt gezogen, für den Fall, dass einer das Erste überliest. [ID:wd_m2_2] [#draft]
 => END
 
 ~ mark_3
-Das dritte Brett hat zwei Spalten. Links steht „Pausen“, rechts „Schritte“. [ID:wd_m3_1] [#draft]
+Das dritte Brett hat zwei Spalten. Links steht »Pausen«, rechts »Schritte«. [ID:wd_m3_1] [#draft]
 Links ist ein einziger Strich, wieder ausgewischt. Das Holz ist an der Stelle heller geworden. [ID:wd_m3_2] [#draft]
 Rechts sind es Striche in Fünferbündeln, so viele, dass auf der Rückseite weitergezählt wurde. [ID:wd_m3_3] [#draft]
 => END
 
 ~ mark_4
-Das vierte Brett. „Hang. Ohne Pause.“ [ID:wd_m4_1] [#draft]
-Darunter stand ein zweiter Satz. Er ist so dick durchgestrichen, dass nur noch ein „aber“ zu lesen ist. [ID:wd_m4_2] [#draft]
+Das vierte Brett. »Hang. Ohne Pause.« [ID:wd_m4_1] [#draft]
+Darunter stand ein zweiter Satz. Er ist so dick durchgestrichen, dass nur noch ein »aber« zu lesen ist. [ID:wd_m4_2] [#draft]
 => END
 
 ~ mark_5
-Auf dem fünften Brett steht „Fast da.“ Darunter noch einmal, kleiner, und noch einmal, bis die Schrift am Rand ausläuft. [ID:wd_m5_1] [#draft]
+Auf dem fünften Brett steht »Fast da.« Darunter noch einmal, kleiner, und noch einmal, bis die Schrift am Rand ausläuft. [ID:wd_m5_1] [#draft]
 Es hat keinen Pfeil mehr. Der Weg ist ja nicht zu verfehlen. [ID:wd_m5_2] [#draft]
 => END
 
@@ -42,7 +42,7 @@ if WorldState.quest_stage("side_forest_marks") == "done"
 	Das sechste Brett, leer. Das Holz ist noch hell, ohne einen einzigen Strich. [ID:wd_m6_5] [#draft]
 	=> END
 Das sechste Brett ist leer. Das Holz ist noch hell, frisch gesägt, ohne einen einzigen Strich. [ID:wd_m6_1] [#draft]
-Der Platz für das Wort, das nach „Fast da“ kommt, ist frei geblieben. [ID:wd_m6_2] [#draft]
+Der Platz für das Wort, das nach »Fast da« kommt, ist frei geblieben. [ID:wd_m6_2] [#draft]
 Oben in einer Kerbe im Pfosten liegt ein Stummel rote Kreide. [ID:wd_m6_3] [#draft]
 if WorldState.quest_stage("side_forest_marks") == "follow"
 	do WorldState.advance_quest("side_forest_marks", "blank")
@@ -59,7 +59,7 @@ if WorldState.quest_stage("side_forest_marks") == "follow"
 
 # --- Der Antreiber am leeren Brett -------------------------------------------------------------------------------------
 # Er steht, solange er nicht gebeten wurde zu sitzen (Karte: Figur A); danach sitzt er (Figur E). Wer ihn am Feuer im Haus
-# gelassen hat (house.antreiber_by_fire), trifft ihn hier nicht: die Katze liegt auf ihm. Alle anderen finden ihn vor sich,
+# gelassen hat (house.antreiber_by_fire), trifft ihn hier nicht: er sitzt dort (die Katze liegt auf ihm, sobald sie gefüttert ist). Alle anderen finden ihn vor sich,
 # schneller, als es möglich ist. "Setz dich. Es gibt Tee." gibt es nur mit der Facette care: wer nicht gerastet hat, hat
 # keinen Tee. Ob er sitzt, ist keine Auszeichnung und keine Strafe; die Kreide und die Nebenquest hängen nicht an ihm.
 
@@ -171,6 +171,12 @@ Unter der Fichte liegt ein Zapfen, so groß wie eine Faust, die Schuppen halb of
 	do WorldState.set_flag("forest.cone_taken")
 - Liegen lassen. [ID:wd_cone_r2] [#draft]
 	Du lässt ihn liegen. Die Fichte hat noch viele. [ID:wd_cone_3] [#draft]
+=> END
+
+# Der Süden des Bachlaufs, solange der Morgen danach nicht begonnen hat (kein Beat act3_morning): die Lücke in der Hecke
+# führt an den Rand der Karte, und der Abend von Akt II geht nicht in den Wald.
+~ bach_south_wait
+Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter. [ID:wd_bachwait_1] [#draft]
 => END
 
 ~ south_wait

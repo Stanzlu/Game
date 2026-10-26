@@ -6,8 +6,10 @@ extends GutTest
 ## test_akt3_waldweg_szene.
 
 const BACHLAUF := preload("res://world/levels/akt2/bachlauf.tscn")
+const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
 const DOOR_CELL := Vector2i(45, 64)
 const ARRIVAL_CELL := Vector2i(45, 60)
+const BLOCKER_CELL := Vector2i(45, 65)
 
 
 func before_each() -> void:
@@ -51,16 +53,43 @@ func _hold(action: StringName, done: Callable, frames: int) -> bool:
 	return done.call()
 
 
-func test_until_the_morning_after_the_south_has_no_door() -> void:
+func _blocker(scene: GameScene) -> Node:
+	var spot := scene.map.cell_to_world(BLOCKER_CELL)
+	for node in scene.map.entities.get_children():
+		if (
+			not node.is_queued_for_deletion()
+			and node.get_script() == BLOCKER_SCRIPT
+			and node.global_position.distance_to(spot) < 2.0
+		):
+			return node
+	return null
+
+
+func test_until_the_morning_after_the_south_has_no_door_and_a_blocker_shuts_the_edge() -> void:
 	var scene := await _scene()
 	assert_eq(_doors(scene).size(), 0, "the evening of Act II does not walk into Act III")
 	assert_false(scene.map.data.find_marker("spawn_waldweg").is_empty(), "but the place is ready")
+	assert_not_null(_blocker(scene), "the gap ends in a blocker, as the valley's gap does")
+
+
+func test_in_the_evening_the_way_south_ends_inside_the_map() -> void:
+	SceneTravel.stay = true
+	SceneTravel.pending_spawn = "waldweg"
+	var scene := await _scene()
+	assert_eq(scene.map.world_to_cell(scene.player.global_position), ARRIVAL_CELL)
+	var never := func() -> bool: return false
+	await _hold(&"move_down", never, 360)
+	var cell := scene.map.world_to_cell(scene.player.global_position)
+	assert_lt(cell.y, BLOCKER_CELL.y, "stopped above the blocker, never out of the map")
+	assert_gte(cell.y, ARRIVAL_CELL.y + 3, "and she did walk down the pocket")
+	assert_eq(SceneTravel.last_target, "", "no door before the morning")
 
 
 func test_from_the_morning_after_a_door_leads_down_into_the_wood() -> void:
 	WorldState.set_flag("beat.act3_morning")
 	var scene := await _scene()
 	var doors := _doors(scene)
+	assert_null(_blocker(scene), "the way is open: the blocker is gone with the flag")
 	assert_eq(doors.size(), 1)
 	assert_eq(doors[0].get(&"spawn"), "bachlauf", "to the place the forest made for it")
 	assert_eq(

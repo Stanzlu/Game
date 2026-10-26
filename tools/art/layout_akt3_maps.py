@@ -136,18 +136,30 @@ def build():
                     return False
         return True
 
-    def scatter(glyph, count, clearance, margin=5, region=None):
+    # a tall crown hides what lies behind it: no tree stands within two columns and eight rows south of a
+    # spot with a cue (the sprites are drawn upward from the trunk's foot)
+    reserved = []
+
+    def hidden(x, y):
+        return any(x0 <= x <= x1 and y0 <= y <= y1 for x0, x1, y0, y1 in reserved)
+
+    def scatter(glyph, count, clearance, margin=5, region=None, tall=False):
         placed = 0
         tries = 0
         while placed < count and tries < 6000:
             tries += 1
             x0, x1, y0, y1 = region or (margin, W - margin, margin, H - margin)
             x, y = rng.randint(x0, x1 - 1), rng.randint(y0, y1 - 1)
+            if tall and hidden(x, y):
+                continue
             if free(x, y, clearance):
                 g.set(x, y, glyph)
                 placed += 1
+        if placed < count:
+            shortfall[glyph] = (placed, count)
 
     named = {}
+    shortfall = {}
 
     def put(glyph, x, y):
         x, y = int(round(x)), int(round(y))
@@ -183,13 +195,19 @@ def build():
     put("@", START[0], START[1])
     # the way on to the south is closed (until W4): a blocker across the path
     put("B", *BLOCKER)
+    # the spruce over the cone: a trunk just northwest of it, the cone in front
+    put("P", named["K"][0][0] - 2, named["K"][0][1] - 1)
+    for glyph in "123456KQqU":
+        for x, y in named[glyph]:
+            reserved.append((x - 2, x + 2, y + 1, y + 8))
     # the forest: beech and spruce keep a few cells from the path, stones and ferns near it
-    scatter("T", 70, 2)
-    scatter("P", 80, 2)
+    scatter("P", 40, 1, tall=True)
+    scatter("T", 48, 2, tall=True)
     scatter("R", 14, 1)
     scatter("F", 40, 1)
     scatter("g", 18, 1)
     g.add_rails()
+    build.shortfall = shortfall
     return g, named
 
 
@@ -205,6 +223,8 @@ def write(name="waldweg"):
     with open(path, "w", encoding="utf-8") as f:
         f.write(head + text() + "\n")
     print("wrote [map] block of", os.path.relpath(path, ROOT))
+    if build.shortfall:
+        print("note: the scatter placed fewer than asked (glyph: placed, asked):", build.shortfall)
 
 
 if __name__ == "__main__":

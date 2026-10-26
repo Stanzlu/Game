@@ -57,7 +57,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 			Beat.mark("waldweg_tea")
 
 
-## The last of the Antreiber's boards has been read and he has talked about the empty one.
+## The list is complete: the stub of chalk from the empty sixth board is taken (stage done). It does
+## not depend on the Antreiber, who is not on the path for everyone.
 func _on_quest_changed(quest_id: String, stage: String) -> void:
 	if quest_id == "side_forest_marks" and stage == "done":
 		Beat.mark("waldweg_marks")

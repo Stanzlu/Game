@@ -261,6 +261,17 @@ func test_narration_has_no_colon_question_cry_or_ellipsis_and_no_digit() -> void
 	assert_gt(checked, 40, "every line of narration was read")
 
 
+func test_none_of_his_lines_has_a_cry_in_it() -> void:
+	# a static scan: every line of his, whatever flags a walk would need to reach it
+	var spoken := 0
+	for raw in FileAccess.get_file_as_string(STORY_FILE).split("\n"):
+		var line := raw.strip_edges()
+		if line.begins_with("Antreiber:"):
+			spoken += 1
+			assert_false(line.contains("!"), "he only cries while he drives: %s" % line)
+	assert_gte(spoken, 9, "all his lines were read")
+
+
 func test_the_antreiber_drives_nobody_here_and_speaks_in_lists_and_times() -> void:
 	var resource := load(WALD) as DialogueResource
 	var spoken := 0

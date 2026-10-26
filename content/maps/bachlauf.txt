@@ -34,6 +34,7 @@ b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite":
 ; Akt III (W2): die Lücke im Wald im Süden führt am Bach entlang in den Waldweg, aber erst am Morgen danach (sonst gäbe es im Akt II ein Tor in den nächsten Akt)
 W = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "waldweg", "spawn": "bachlauf", "auto": true, "size": [3, 1], "if": "beat.act3_morning"}}
 w = {"ground": ",", "marker": "spawn_waldweg"}
+Q = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "bach_south_wait", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "unless": "beat.act3_morning"}}
 ; die Reuse: der Pfosten mit dem leeren Haken (Quest), der Schwimmer im Schilf, die Reuse hinter dem Wehr, dazu das Wehr selbst
 1 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_post", "cue": "hook", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18}}
 4 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_float", "cue": "float", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18, "if": "valley.trap_hooked"}}
@@ -115,4 +116,4 @@ hhhh......g.................................,,,~~~~~...........................h
 hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh,,,.~~~~~..hhhhhhhhh.......hhhhhhhh.hhhh
 hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,..~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,W,hhh~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhh~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,Q,hhhh~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
