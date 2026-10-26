@@ -428,8 +428,8 @@ bei den Annahmen des Modells wäre ein Umweg von ×28 bis ×30 nötig, selbst be
 
 **Akt II nach dem Lauf** [V] (P6.14, B7, ADR-069, `docs/KALIBRIERUNG.md`): Akt II hat 475 Zeilen (354 im Slice, 121 neu; geplant waren 557). Der Autopilot spielt ihn aus dem Stand am Ende von Akt I in
 240 Sekunden (97 mit offenem Gespräch, 197 Klicks, 9.915 Pixel übersprungene Wege). Das Modell (`calibrate.py --akt2`) gibt **rund 18 Minuten** bei normalem Tempo (15,3 bis 23,0), als Obergrenze 44, bei 25,9 Zeilen je Minute.
-Die laufende Summe der Briefe (28 Minuten) schätzte die Wege mit 8,5 Minuten, gemessen sind es 4,3. Geplant waren 90 Minuten. Acht Pull Requests mit Inhalt und Vorarbeit plus dieser (neun, wie geplant), 121 neue Zeilen
-(20 je Inhalts-Pull-Request gegen 35 in Akt I, weil Akt II eine große Karte und viel Zustand trug), 154 neue GUT-Tests (rund 24 je Segment), Cut-First nicht ausgelöst. Der Slice-Wert des Modells zählt seit Akt II 38 Zeilen von Akt II mit (484 Zeilen, 21,7 Minuten).
+Die laufende Summe der Briefe (28 Minuten) schätzte die Wege mit 9,9 Minuten ohne Umweg, gemessen sind es 4,3. Geplant waren 90 Minuten. Acht Pull Requests mit Inhalt und Vorarbeit plus dieser (neun, wie geplant), 121 neue Zeilen
+(20 je Inhalts-Pull-Request gegen 35 in Akt I, weil Akt II eine große Karte und viel Zustand trug), 154 neue Tests (137 in GUT, 17 in Python; rund 24 je Segment), Cut-First nicht ausgelöst. Der Slice-Wert des Modells zählt seit Akt II 38 Zeilen von Akt II mit (484 Zeilen, 21,7 Minuten).
 
 **Plan gegen Modell je Akt** (geplante Zeilen abgeleitet mit dem Verhältnis von Akt I, 650 Zeilen für 105 Minuten; Modell mit der Dichte von Akt I, 24 Zeilen je Minute):
 

@@ -368,22 +368,48 @@ class ActCalibrationTests(unittest.TestCase):
                 if os.path.exists(leftover):
                     os.remove(leftover)
 
-    def test_a_run_with_a_timed_out_wait_or_no_end_is_refused(self):
+    def refused(self, log):
         handle, path = tempfile.mkstemp(suffix=".log")
         with os.fdopen(handle, "w", encoding="utf-8") as f:
-            f.write("autopilot wait timed out\n")
+            f.write(log)
         try:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(ValueError) as caught:
                 calibrate.record_act("akt2", path)
+            return str(caught.exception)
         finally:
             os.remove(path)
+
+    def test_a_run_with_no_end_is_refused(self):
+        self.assertIn("finished", self.refused("autopilot wait timed out\n"))
+
+    def test_a_run_with_a_timed_out_wait_is_refused_even_when_it_reached_its_end(self):
+        log = "autopilot wait timed out\n"
+        log += '[2s] INFO  INPUT: autopilot finished {"clicks":10,"dialogue_s":50,"route_px":880,"seconds":900}\n'
+        self.assertIn("timed out", self.refused(log))
 
     def test_a_human_run_is_counted_from_where_the_act_begins(self):
         beats = [("elysia_start", 0), ("valley_arrival", 4000), ("ending", 4000 + 1500)]
         self.assertEqual(calibrate.act_origin("akt2", beats), 4000)
         self.assertEqual(calibrate.act_origin("akt1", beats), 0)
         rows = calibrate.per_beat_act("akt2", [("valley_arrival", 4000), ("ending", 5500)])
-        self.assertTrue(all(real == seconds - 4000 for (_, real, _), seconds in zip(rows, [5500])))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][:2], ("ending", 1500))
+        self.assertEqual(rows[0][2], calibrate.act_baseline("akt2")["data"]["beats"][-1]["seconds"])
+
+    def test_the_fit_of_a_human_run_ignores_what_was_played_before_the_act(self):
+        alone = calibrate.fit_act("akt2", [("valley_arrival", 0), ("ending", 1500)], 1)
+        after = calibrate.fit_act("akt2", [("valley_arrival", 4000), ("ending", 5500)], 1)
+        self.assertGreater(alone, 1.0)
+        self.assertAlmostEqual(alone, after)
+
+    def test_a_log_that_never_saw_the_acts_beginning_is_refused(self):
+        beats = [("arrival_echo", 3700), ("fire", 4100), ("ending", 4700)]
+        with self.assertRaises(ValueError):
+            calibrate.act_origin("akt2", beats)
+        with self.assertRaises(ValueError):
+            calibrate.fit_act("akt2", beats, 1)
+        with self.assertRaises(ValueError):
+            calibrate.per_beat_act("akt2", beats)
 
     def test_the_baselines_are_real_runs_with_more_clicks_than_a_third_of_nothing(self):
         for act in calibrate.BASELINES:

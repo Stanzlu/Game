@@ -76,7 +76,7 @@ def slice_sources():
 def act_sources(act):
     """The story dialogue of an act. Act I: the segments (akt1/) and Elysia's garden (the Slice's
     elysia.dialogue). Act II: its segments (akt2/) and the real world's files of the Slice, which
-    the segments extend (tal, haus, antreiber)."""
+    the segments extend (tal, haus) or the run plays (antreiber)."""
     found = []
     for source in dialogue.sources(story_only=True):
         path = source.path.replace(os.sep, "/")
@@ -214,12 +214,17 @@ def fit(beats, speed_index, seen=SEEN_SHARE, pause=ADVANCE_PAUSE):
 
 
 def act_origin(act, beats):
-    """Seconds on a human run's clock where an act begins (Act II: the beat valley_arrival), else 0."""
+    """Seconds on a human run's clock where an act begins (Act II: the beat valley_arrival), else 0.
+    A log of a later sitting (loaded from a save inside the act) never saw the beginning: its clock is
+    the whole game's, so fitting it to the act would give nonsense and is refused."""
     wanted = ACT_STARTS.get(act)
+    if wanted is None:
+        return 0
     for name, seconds in beats:
         if name == wanted:
             return seconds
-    return 0
+    raise ValueError("the log has no '%s' beat, where %s begins on the clock: play from there in one sitting"
+                     % (wanted, ACT_NAMES[act]))
 
 
 def fit_act(act, beats, speed_index, seen=SEEN_SHARE, pause=ADVANCE_PAUSE):
@@ -295,8 +300,12 @@ def main(argv):
     if "--log" in argv:
         with open(argv[argv.index("--log") + 1], encoding="utf-8", errors="replace") as f:
             beats = parse_log(f.read())
-        factor = fit_act(act, beats, speed_index) if act else fit(beats, speed_index)
-        origin = act_origin(act, beats) if act else 0
+        try:
+            factor = fit_act(act, beats, speed_index) if act else fit(beats, speed_index)
+            origin = act_origin(act, beats) if act else 0
+        except ValueError as problem:
+            print("calibrate: %s" % problem, file=sys.stderr)
+            return 1
         print("run: %d beats, %.1f min at the last one%s" % (len(beats), (beats[-1][1] - origin) / 60.0,
               " (%s)" % ACT_NAMES[act] if act else " (Slice)"))
         print("fitted wander factor %.2f (assumed %.2f); put it in WANDER" % (factor, WANDER))

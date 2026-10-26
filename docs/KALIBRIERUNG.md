@@ -72,7 +72,7 @@ eine Szene mit `@` vor dem Namen kopiert den Stand als Autosave des Probeprofils
 `--record-akt2` abzieht. `check.sh` spielt den Lauf bei jedem Durchgang (rund 9 Sekunden) und verlangt 62 Marken (22 Beats, 40 Flags).
 
 Das Log gibt den Weg: **240 Sekunden** Spielzeit, davon 97 mit offenem Gespräch, 197 geklickte Zeilen (**41 %** der 475 Zeilen von Akt II; die Zeilen von
-`tal`, `haus` und `antreiber` aus dem Slice zählen dazu, weil die Segmente sie erweitern) und 9.915 Pixel Luftlinie, die der Autopilot springt statt geht.
+`tal`, `haus` und `antreiber` aus dem Slice zählen dazu: die Segmente erweitern `tal` und `haus`, und der Lauf spielt auch die Begegnung mit dem Antreiber) und 9.915 Pixel Luftlinie, die der Autopilot springt statt geht.
 Der Weg ohne Lesen ist damit 143 Sekunden plus 113 für die Sprünge, **4,3 Minuten**. Die Sekunden schwanken um bis zu vier, weil der Böen-Auftakt der Ankunft (`ECHO_GUST_SECONDS`) zufällig ist.
 
 | Tempo | Akt II |
@@ -85,8 +85,8 @@ Der Weg ohne Lesen ist damit 143 Sekunden plus 113 für die Sprünge, **4,3 Minu
 `python3 tools/writing/calibrate.py --akt2` zeigt die Tabelle, `--record-akt2 <Log>` schreibt `calibration_akt2.json` neu (nach einem neuen Segment den Lauf wiederholen),
 `--akt2 --log <Log>` passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `valley_arrival`). Dazu vier Befunde:
 
-- **Der Plan rechnet mit 90 Minuten für Akt II, das Modell mit 15 bis 23.** Die laufende Summe der Briefe (rund 28 Minuten) rechnete die Wege der Segmente mit geschätzten 8,5 Minuten
-  und die 354 vorhandenen Zeilen mit 16 Minuten aus dem Slice-Lauf; der gemessene Weg von Akt II ist 4,3 Minuten. Gemessen ist kleiner als geschätzt. Die Lücke zu 90 Minuten ist
+- **Der Plan rechnet mit 90 Minuten für Akt II, das Modell mit 15 bis 23.** Die laufende Summe der Briefe (rund 28 Minuten) rechnete die Wege der sechs gebauten Segmente mit 5,2 Minuten (8,3 mit dem Umweg ×1,6 des Modells) zu den 281 Sekunden Weg des Slice-Laufs, zusammen 9,9 Minuten ohne Umweg,
+  und die 354 vorhandenen Zeilen mit 16 Minuten aus dem Slice-Lauf; der gemessene Weg von Akt II ist 4,3 Minuten ohne Umweg (6,9 mit). Gemessen ist kleiner als geschätzt. Die Lücke zu 90 Minuten ist
   wie bei Akt I größer als jede Annahme des Modells (der äußerste Eckfall, Obergrenze, gibt 44); dein Durchlauf legt Anteil, Pause und Umweg fest.
 - **Der Autopilot sieht 41 % der Zeilen** (Akt I: 33 %). Er nimmt in jedem Gespräch die erste Antwort; die Zweige der Wahl am Feuer, Miras vier Lesungen,
   Antreiber-Antworten, Fragen nach Elysia, „Zum Meer?“ und die zweite Fensterzeile im Haus bleiben dem Lauf unbekannt und stehen unter GUT-Tests.
