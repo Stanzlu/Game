@@ -2051,6 +2051,280 @@
    "res://assets/generated/props/tal/twig_2.png"
   ]
  },
+ "tal/wd_beech": {
+  "anchor": [
+   48,
+   124
+  ],
+  "shadow": [
+   30,
+   9
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 0.8,
+  "textures": [
+   "res://assets/generated/props/tal/wd_beech_0.png",
+   "res://assets/generated/props/tal/wd_beech_1.png",
+   "res://assets/generated/props/tal/wd_beech_2.png"
+  ]
+ },
+ "tal/wd_cone": {
+  "anchor": [
+   6,
+   8
+  ],
+  "shadow": [
+   4,
+   2
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wd_cone.png"
+  ]
+ },
+ "tal/wd_fern": {
+  "anchor": [
+   13,
+   17
+  ],
+  "rustle": true,
+  "surface": "tall_grass",
+  "sway": 1.5,
+  "textures": [
+   "res://assets/generated/props/tal/wd_fern_0.png",
+   "res://assets/generated/props/tal/wd_fern_1.png",
+   "res://assets/generated/props/tal/wd_fern_2.png"
+  ]
+ },
+ "tal/wd_hut": {
+  "anchor": [
+   44,
+   72
+  ],
+  "shadow": [
+   34,
+   6
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    64,
+    24
+   ]
+  },
+  "smoke": [
+   19,
+   -69
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wd_hut.png"
+  ]
+ },
+ "tal/wd_marker_arrow": {
+  "anchor": [
+   9,
+   38
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_marker_arrow.png"
+  ]
+ },
+ "tal/wd_marker_blank": {
+  "anchor": [
+   9,
+   38
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_marker_blank.png"
+  ]
+ },
+ "tal/wd_marker_plain": {
+  "anchor": [
+   9,
+   38
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_marker_plain.png"
+  ]
+ },
+ "tal/wd_marker_tally": {
+  "anchor": [
+   9,
+   38
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_marker_tally.png"
+  ]
+ },
+ "tal/wd_rest_cold": {
+  "anchor": [
+   16,
+   30
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "circle": 8,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_rest_cold.png"
+  ]
+ },
+ "tal/wd_rest_lit": {
+  "anchor": [
+   16,
+   30
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/wd_rest_lit_emit.png"
+  ],
+  "shadow": [
+   12,
+   4
+  ],
+  "shape": {
+   "circle": 8,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "smoke": [
+   0,
+   -26
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wd_rest_lit.png"
+  ]
+ },
+ "tal/wd_rest_log": {
+  "anchor": [
+   22,
+   18
+  ],
+  "shadow": [
+   20,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    38,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_rest_log.png"
+  ]
+ },
+ "tal/wd_spruce": {
+  "anchor": [
+   28,
+   116
+  ],
+  "shadow": [
+   18,
+   6
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "sway": 0.5,
+  "textures": [
+   "res://assets/generated/props/tal/wd_spruce_0.png",
+   "res://assets/generated/props/tal/wd_spruce_1.png",
+   "res://assets/generated/props/tal/wd_spruce_2.png"
+  ]
+ },
+ "tal/wd_stone_mossy": {
+  "anchor": [
+   15,
+   19
+  ],
+  "shadow": [
+   13,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    20,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wd_stone_mossy_0.png",
+   "res://assets/generated/props/tal/wd_stone_mossy_1.png"
+  ]
+ },
  "tal/wildflowers": {
   "anchor": [
    6,

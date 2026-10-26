@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="QuestDef" format=3]
+
+[ext_resource type="Script" path="res://core/content/quest_def.gd" id="1_quest"]
+[ext_resource type="Script" path="res://core/content/quest_stage_def.gd" id="2_stage"]
+
+[sub_resource type="Resource" id="Resource_follow"]
+script = ExtResource("2_stage")
+id = "follow"
+next = PackedStringArray("blank", "done")
+
+[sub_resource type="Resource" id="Resource_blank"]
+script = ExtResource("2_stage")
+id = "blank"
+next = PackedStringArray("done")
+
+[sub_resource type="Resource" id="Resource_done"]
+script = ExtResource("2_stage")
+id = "done"
+outcome = "done"
+
+[resource]
+script = ExtResource("1_quest")
+id = "side_forest_marks"
+kind = 1
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_follow"), SubResource("Resource_blank"), SubResource("Resource_done")])
+draft = false

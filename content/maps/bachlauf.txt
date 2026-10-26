@@ -31,6 +31,10 @@ b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite":
 @ = {"ground": ",", "marker": "player_spawn"}
 & = {"ground": ",", "marker": "spawn_tal"}
 % = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "bach", "auto": true, "size": [3, 1]}}
+; Akt III (W2): die Lücke im Wald im Süden führt am Bach entlang in den Waldweg, aber erst am Morgen danach (sonst gäbe es im Akt II ein Tor in den nächsten Akt)
+W = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "waldweg", "spawn": "bachlauf", "auto": true, "size": [3, 1], "if": "beat.act3_morning"}}
+w = {"ground": ",", "marker": "spawn_waldweg"}
+Q = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "bach_south_wait", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "unless": "beat.act3_morning"}}
 ; die Reuse: der Pfosten mit dem leeren Haken (Quest), der Schwimmer im Schilf, die Reuse hinter dem Wehr, dazu das Wehr selbst
 1 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_post", "cue": "hook", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18}}
 4 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bl_float", "cue": "float", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "radius": 18, "if": "valley.trap_hooked"}}
@@ -104,12 +108,12 @@ hhhhhh................................,,..~~~~..,,..............g......g........
 hhhhhh.............T..................,,,..~~~..,,..P...P.......................hhhh
 hhhhh..............................g...,,,.~~~~.,,..............................hhhh
 hhhhh...................................,,,Yyyy,,,........g.................C...hhhh
-hhhhh............................P..........~~~~...............................hhhhh
-hhhhh.......g................................~~~~..............................hhhhh
-hhhh...............P.....R....................~~~~j........T.......T...........hhhhh
-hhhh...........................................~~~~....g.......................hhhhh
-hhhh......g....................................~~~~~...........................hhhhh
-hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh....~~~~~..hhhhhhhhh.......hhhhhhhh.hhhh
-hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhh............................P.......,,,~~~~...............................hhhhh
+hhhhh.......g.............................,,,~~~~..............................hhhhh
+hhhh...............P.....R.................,,,~~~~j........T.......T...........hhhhh
+hhhh........................................,w,~~~~....g.......................hhhhh
+hhhh......g.................................,,,~~~~~...........................hhhhh
+hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh,,,.~~~~~..hhhhhhhhh.......hhhhhhhh.hhhh
+hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,..~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,W,hhh~~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,Q,hhhh~~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh

@@ -1,0 +1,23 @@
+# Fragment Stufen im Hang (W2): Tritte, in den Hang geschnitten, jede Mitte gleich tief ausgetreten
+name: fragment_hang_steps
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2e2a26 d=#4a3a2a e=#6e5436 t=#9a7a4e L=#c4a672 s=#8fa4a6 g=#5a7a42
+outline: o
+---
+................
+.oooooooooooooo.
+.osssssssssssso.
+.osssssssssssso.
+.osssssssssgggo.
+.osssssssssgeeo.
+.osssssssssdeeo.
+.osssssstLtdeeo.
+.ossssssdeedeeo.
+.ossssssdeedeeo.
+.ossstLtdeedeeo.
+.osssdeedeedeeo.
+.osssdeedeedeeo.
+.otLtdeedeedeeo.
+.oooooooooooooo.
+................

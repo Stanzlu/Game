@@ -664,9 +664,17 @@
     {
      "type": "flag",
      "ref": "fragment.beam_herbs"
+    },
+    {
+     "type": "line",
+     "ref": "wd_steps_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.hang_steps"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen."
   },
   {
    "id": "werte-am-feuer",
@@ -834,6 +842,34 @@
     {
      "type": "flag",
      "ref": "house.antreiber_by_fire"
+    },
+    {
+     "type": "line",
+     "ref": "wd_m1_2"
+    },
+    {
+     "type": "line",
+     "ref": "wd_m2_1"
+    },
+    {
+     "type": "line",
+     "ref": "wd_m3_2"
+    },
+    {
+     "type": "line",
+     "ref": "wd_m5_1"
+    },
+    {
+     "type": "line",
+     "ref": "wd_antr_3"
+    },
+    {
+     "type": "line",
+     "ref": "wd_antr_8"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.antreiber_sat"
     }
    ],
    "payoff": "Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2)."
@@ -1488,6 +1524,41 @@
    "flag": "valley.view_back_seen",
    "axis": "Wahrnehmung",
    "meaning": "Sie hat vom Aussichtsplatz im Bachlauf den Rauch des Hauses über den Bäumen gesehen (Akt II, B3)."
+  },
+  {
+   "flag": "forest.rested",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat am Rastplatz Feuer gemacht und Tee gekocht, aus eigenem Willen: die Facette Fürsorge entsteht, der Hang geht danach leichter (Akt III, W2). Kein Zähler, kein Wert."
+  },
+  {
+   "flag": "forest.fire_1",
+   "axis": "Fortschritt",
+   "meaning": "Das Feuer am ersten Rastplatz brennt (die Karte zeigt es; Akt III, W2)."
+  },
+  {
+   "flag": "forest.fire_2",
+   "axis": "Fortschritt",
+   "meaning": "Das Feuer am zweiten Rastplatz brennt (die Karte zeigt es; Akt III, W2)."
+  },
+  {
+   "flag": "forest.antreiber_met",
+   "axis": "Beschützer",
+   "meaning": "Sie hat mit dem Antreiber am leeren sechsten Brett gesprochen (Akt III, W2); die Wegzeichen sind sein Gag, das Warum folgt in W4."
+  },
+  {
+   "flag": "forest.antreiber_sat",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Antreiber am leeren Brett Tee angeboten, und er hat sich gesetzt (nur mit der Facette Fürsorge; Akt III, W2). Keine Auszeichnung, keine Strafe für das Gegenteil."
+  },
+  {
+   "flag": "forest.cone_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Zapfen unter der Fichte eingesteckt (Kuriosität, Akt III, W2)."
+  },
+  {
+   "flag": "fragment.hang_steps",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist die Stufen im Hohlweg hinabgegangen: für einen Atemzug sind sie neu (Spur der Welt, Akt III, W2; kein Bild des Kindes)."
   }
  ]
 }

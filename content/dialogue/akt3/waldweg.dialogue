@@ -1,0 +1,184 @@
+# Der Waldweg, Akt III, Segment W2 (docs/akt3/REGIONSBRIEFE.md). Ein Pfad am Westufer des Bachs durch hohen Wald. Alles, was auf
+# dem Weg steht, spricht für sich: die Wegzeichen des Antreibers (Bretter an Pfosten, rote Kreide; die Nebenquest "Die
+# Wegzeichen"), zwei Rastplätze (Feuerring, Kessel, Stamm; hier setzt die Spielerin zum ersten Mal die Facette care, aus
+# freiem Willen und ohne Folge für irgendwen außer für sie), der Hang (ein Hohlweg, der mit Rast leichter geht), ein
+# Zapfen, die Hütte im Westen und das letzte, leere Brett, an dem der Antreiber steht. Seine Bretter sind sein Gag und sein
+# Lebenslauf: Listen, Zeit, ein ausgestrichenes "aber". Das leere Brett zeigt, dass er nicht weiß, was nach "da" kommt.
+# Er erklärt nichts und sagt nichts über die Spielerin; sein Warum zeigt W4 (die Flut).
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt). Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Die Wegzeichen ----------------------------------------------------------------------------------------------------
+
+~ mark_1
+Am Pfosten ein Brett, sauber gesägt, ein roter Pfeil nach Süden. [ID:wd_m1_1] [#draft]
+Darunter, in gerader Kreideschrift und mit dem Lineal unterstrichen, »Erstens gehen.« [ID:wd_m1_2] [#draft]
+do WorldState.start_quest("side_forest_marks")
+=> END
+
+~ mark_2
+Das zweite Brett, derselbe Pfeil. »Zweitens schneller gehen.« [ID:wd_m2_1] [#draft]
+Der Strich darunter ist doppelt gezogen, für den Fall, dass einer das Erste überliest. [ID:wd_m2_2] [#draft]
+=> END
+
+~ mark_3
+Das dritte Brett hat zwei Spalten. Links steht »Pausen«, rechts »Schritte«. [ID:wd_m3_1] [#draft]
+Links ist ein einziger Strich, wieder ausgewischt. Das Holz ist an der Stelle heller geworden. [ID:wd_m3_2] [#draft]
+Rechts sind es Striche in Fünferbündeln, so viele, dass auf der Rückseite weitergezählt wurde. [ID:wd_m3_3] [#draft]
+=> END
+
+~ mark_4
+Das vierte Brett. »Hang. Ohne Pause.« [ID:wd_m4_1] [#draft]
+Darunter stand ein zweiter Satz. Er ist so dick durchgestrichen, dass nur noch ein »aber« zu lesen ist. [ID:wd_m4_2] [#draft]
+=> END
+
+~ mark_5
+Auf dem fünften Brett steht »Fast da.« Darunter noch einmal, kleiner, und noch einmal, bis die Schrift am Rand ausläuft. [ID:wd_m5_1] [#draft]
+Es hat keinen Pfeil mehr. Der Weg ist ja nicht zu verfehlen. [ID:wd_m5_2] [#draft]
+=> END
+
+~ mark_6
+do WorldState.start_quest("side_forest_marks")
+if WorldState.quest_stage("side_forest_marks") == "done"
+	Das sechste Brett, leer. Das Holz ist noch hell, ohne einen einzigen Strich. [ID:wd_m6_5] [#draft]
+	=> END
+Das sechste Brett ist leer. Das Holz ist noch hell, frisch gesägt, ohne einen einzigen Strich. [ID:wd_m6_1] [#draft]
+Der Platz für das Wort, das nach »Fast da« kommt, ist frei geblieben. [ID:wd_m6_2] [#draft]
+Oben in einer Kerbe im Pfosten liegt ein Stummel rote Kreide. [ID:wd_m6_3] [#draft]
+if WorldState.quest_stage("side_forest_marks") == "follow"
+	do WorldState.advance_quest("side_forest_marks", "blank")
+=> mark_6_chalk
+
+~ mark_6_chalk
+- Einstecken. [ID:wd_m6_r1] [#draft]
+	Du steckst ihn ein. Er ist rau vom Reiben und fast aufgebraucht. [ID:wd_m6_4] [#draft]
+	do WorldState.add_item("curiosity_chalk_stub")
+	do WorldState.advance_quest("side_forest_marks", "done")
+- Liegen lassen. [ID:wd_m6_r2] [#draft]
+	Du lässt ihn in der Kerbe. Das Brett wartet. [ID:wd_m6_6] [#draft]
+=> END
+
+# --- Der Antreiber am leeren Brett -------------------------------------------------------------------------------------
+# Er steht, solange er nicht gebeten wurde zu sitzen (Karte: Figur A); danach sitzt er (Figur E). Wer ihn am Feuer im Haus
+# gelassen hat (house.antreiber_by_fire), trifft ihn hier nicht: er sitzt dort (die Katze liegt auf ihm, sobald sie gefüttert ist). Alle anderen finden ihn vor sich,
+# schneller, als es möglich ist. "Setz dich. Es gibt Tee." gibt es nur mit der Facette care: wer nicht gerastet hat, hat
+# keinen Tee. Ob er sitzt, ist keine Auszeichnung und keine Strafe; die Kreide und die Nebenquest hängen nicht an ihm.
+
+~ antreiber_end
+if WorldState.has_flag("forest.antreiber_sat")
+	Antreiber: Der Tee ist gut. Ich sag das nicht oft. [ID:wd_antr_sat] [#draft]
+	=> END
+if WorldState.has_flag("forest.antreiber_met")
+	Antreiber: Noch nichts. Ich bin dran. [ID:wd_antr_again] [#draft]
+	=> antreiber_ask
+if WorldState.has_flag("house.antreiber_postponed")
+	Antreiber: Du hast morgen gesagt. Es ist morgen. Ich bin pünktlich. [ID:wd_antr_0a] [#draft]
+else
+	Antreiber: Ich bin schon mal vorgegangen. Das spart Zeit. [ID:wd_antr_0b] [#draft]
+Antreiber: Ich hab für alles ein Brett gesägt. Nur für das letzte fehlt mir das Wort. [ID:wd_antr_1] [#draft]
+Er klappt einen Zollstock auf und wieder zu, als wäre er mitten in einer Rechnung. [ID:wd_antr_2] [#draft]
+Antreiber: Ich hab es ausgerechnet. Es ging in den Zahlen auf. Nur das Wort nicht. [ID:wd_antr_3] [#draft]
+do WorldState.set_flag("forest.antreiber_met")
+=> antreiber_ask
+
+~ antreiber_ask
+- Setz dich. Es gibt Tee. [if WorldState.has_facet("care") /] [ID:wd_antr_r1] [#draft]
+	Antreiber: Tee. [ID:wd_antr_4] [#draft]
+	Er sieht auf das Brett, auf den Weg, auf die Flasche in deiner Hand. Dann lässt er sich neben dem Pfosten nieder, in Etappen. [ID:wd_antr_5] [#draft]
+	Antreiber: Ich sitz nur kurz. [ID:wd_antr_6] [#draft]
+	Er hält den Becher mit beiden Händen und weiß nicht, wohin mit den Daumen. [ID:wd_antr_7] [#draft]
+	do WorldState.set_flag("forest.antreiber_sat")
+- Wie weit ist es noch? [ID:wd_antr_r2] [#draft]
+	Antreiber: Fast da. [ID:wd_antr_8] [#draft]
+	Er hört selbst, wie das klingt, und sieht auf das leere Brett. [ID:wd_antr_9] [#draft]
+- … [ID:wd_antr_r3] [#draft]
+	Er wartet, ob noch etwas kommt. Dann klappt er den Zollstock wieder zu. [ID:wd_antr_10] [#draft]
+=> END
+
+# --- Die Rastplätze ----------------------------------------------------------------------------------------------------
+# Ein Feuerring aus flachen Steinen, ein Kessel, trockenes Holz, ein Stamm zum Sitzen. Das erste Mal, gleich an welchem
+# Platz, setzt care und das Flag forest.rested (der Hang geht danach leichter, die Karte zeigt das Feuer). Die Ergebnis-
+# Zeilen kennen zwei Fassungen: die lange fürs erste Mal, die kurze, wenn die Facette schon da ist. "Weitergehen" lässt
+# den Ring kalt; nichts geht verloren, der Hang ist nur steiler.
+
+~ rest_1
+if WorldState.has_flag("forest.fire_1")
+	=> embers
+Neben dem Weg ein Ring aus flachen Steinen, die Asche grau und kalt. Ein Kessel hängt an einem Haken darüber. [ID:wd_rest1_1] [#draft]
+Trockenes Holz liegt daneben, ordentlich geschichtet, und ein Stamm zum Sitzen. Jemand hat gedacht, dass hier wieder jemand rastet. [ID:wd_rest1_2] [#draft]
+- Feuer machen. [ID:wd_rest1_r1] [#draft]
+	if WorldState.has_facet("care")
+		Ein Dach aus Scheiten, ein Funke, der Kessel. Es geht schneller als beim ersten Mal. [ID:wd_rest1_3] [#draft]
+	else
+		Du schichtest das Holz zu einem Dach, so wie man es zeigt, und das Feuer nimmt es an. [ID:wd_rest1_4] [#draft]
+		Der Kessel braucht lange, bis er singt. Du lässt ihn. [ID:wd_rest1_5] [#draft]
+		Der Tee schmeckt nach Harz und nach Rauch. Du hast nicht gewusst, dass du durstig bist. [ID:wd_rest1_6] [#draft]
+		Den Rest füllst du in die Flasche. Sie bleibt eine Weile warm. [ID:wd_rest1_7] [#draft]
+		do WorldState.set_facet("care")
+	do WorldState.set_flag("forest.rested")
+	do WorldState.set_flag("forest.fire_1")
+- Weitergehen. [ID:wd_rest1_r2] [#draft]
+	Der Stamm bleibt, wo er ist. Mehr hat er nicht zu tun. [ID:wd_rest1_8] [#draft]
+=> END
+
+~ rest_2
+if WorldState.has_flag("forest.fire_2")
+	=> embers
+Am Fuß des Hangs ein zweiter Ring, ein zweiter Kessel, ein zweiter Stamm. Wer das eingerichtet hat, kannte den Hang. [ID:wd_rest2_1] [#draft]
+Die Asche ist grau und kalt. Das Holz liegt bereit. [ID:wd_rest2_2] [#draft]
+- Feuer machen. [ID:wd_rest2_r1] [#draft]
+	if WorldState.has_facet("care")
+		Du weißt jetzt, wie das geht. Das Wasser singt, bevor du dich gesetzt hast. [ID:wd_rest2_3] [#draft]
+	else
+		Du schichtest das Holz, das Feuer nimmt es an. Der Kessel braucht seine Zeit, und du gibst sie ihm. [ID:wd_rest2_4] [#draft]
+		Der Tee schmeckt nach Harz. Die Beine sagen jetzt, was sie den ganzen Hang lang gesagt haben. [ID:wd_rest2_5] [#draft]
+		Den Rest füllst du in die Flasche. [ID:wd_rest2_6] [#draft]
+		do WorldState.set_facet("care")
+	do WorldState.set_flag("forest.rested")
+	do WorldState.set_flag("forest.fire_2")
+- Weitergehen. [ID:wd_rest2_r2] [#draft]
+	Du gehst weiter. Der Ring wartet, ohne beleidigt zu sein. [ID:wd_rest2_7] [#draft]
+=> END
+
+~ embers
+Unter dem Kessel liegt Glut. Der Stamm daneben ist noch warm. [ID:wd_embers_1] [#draft]
+=> END
+
+# --- Der Hang, die Hütte, der Zapfen, das Ende des Weges ----------------------------------------------------------------
+# Der Hohlweg ist ein Fragment (Spur der Welt, kein Bild des Kindes): Stufen, jemand hat sie gestochen, kein Grund wird genannt.
+
+~ hang_steps
+if WorldState.has_flag("fragment.hang_steps")
+	Die Stufen im Hohlweg, die Kanten rund getreten. [ID:wd_steps_5] [#draft]
+else
+	Im Hohlweg sind Stufen in die Erde gestochen, jede etwas schräg, damit das Wasser abläuft. [ID:wd_steps_1] [#draft]
+	Du gehst sie hinab. Die Kanten sind rund, von sehr vielen Schuhen. [ID:wd_steps_2] [#draft]
+	Für einen Atemzug sind sie neu, die Erde dunkel, jede Kante scharf, und es riecht nach frisch gestochener Erde. Dann sind sie wieder alt. [ID:wd_steps_3] [#draft]
+	Wer die Stufen gestochen hat, hat es für alle getan, die danach kamen. [ID:wd_steps_4] [#draft]
+	do WorldState.set_flag("fragment.hang_steps")
+=> END
+
+~ hut_door
+Die Hütte steht in einer Mulde, das Dach grün von Moos. Aus dem Schornstein kommt dünner Rauch. [ID:wd_hut_1] [#draft]
+Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm. [ID:wd_hut_2] [#draft]
+Du gehst nicht näher heran. Noch nicht. [ID:wd_hut_3] [#draft]
+=> END
+
+~ cone
+Unter der Fichte liegt ein Zapfen, so groß wie eine Faust, die Schuppen halb offen. [ID:wd_cone_1] [#draft]
+- Einstecken. [ID:wd_cone_r1] [#draft]
+	Du steckst ihn ein. Er riecht nach Harz und nach dem, was er noch werden wollte. [ID:wd_cone_2] [#draft]
+	do WorldState.add_item("curiosity_cone")
+	do WorldState.set_flag("forest.cone_taken")
+- Liegen lassen. [ID:wd_cone_r2] [#draft]
+	Du lässt ihn liegen. Die Fichte hat noch viele. [ID:wd_cone_3] [#draft]
+=> END
+
+# Der Süden des Bachlaufs, solange der Morgen danach nicht begonnen hat (kein Beat act3_morning): die Lücke in der Hecke
+# führt an den Rand der Karte, und der Abend von Akt II geht nicht in den Wald.
+~ bach_south_wait
+Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter. [ID:wd_bachwait_1] [#draft]
+=> END
+
+~ south_wait
+Hinter dem leeren Brett läuft der Weg in Brombeeren aus. Der Bach nimmt es dort allein mit dem Wald auf. [ID:wd_south_1] [#draft]
+=> END
