@@ -137,7 +137,7 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   `DialogueBox` meldet `opened`, `finished` und `syllable(character)`; `NpcWalker`, `ChildGuide` und
   `AntreiberActor` wippen damit beim Sprechen.
 - Autopilot: `"meet": "<cue>"` stellt die Figur neben die NPC mit diesem Cue, wo immer sie gerade ist.
-- Autopilot v2 (ADR-065): `wait_for` hält die Skriptuhr an, bis ein Flag, Beat, eine Szene, Quest-Stufe oder das Ende eines Gesprächs da ist (ein Ablauf ist ein ERROR); Makros `talk`, `use`, `enter`; `{"relative": true}`; `quit`. `tools/autopilot/akt1_full.json` spielt Akt I ohne gesetztes Flag.
+- Autopilot v2 (ADR-065): `wait_for` hält die Skriptuhr an, bis ein Flag, Beat, eine Szene, Quest-Stufe oder das Ende eines Gesprächs da ist (ein Ablauf ist ein ERROR); Makros `talk`, `use`, `enter`; `{"relative": true}`; `quit`. `tools/autopilot/akt1_full.json` spielt Akt I ohne gesetztes Flag; `akt2_full.json` spielt Akt II aus dem Stand `tests/fixtures/saves/v2_akt1_end.json` (ADR-069; `check.sh`: Szene `@<stand>` kopiert ihn als Autosave und startet mit `--continue`).
 - Der Riss gibt das Ziel samt Spawn weiter (`RiftSequence.spawn`), die Ankunft blendet langsam auf.
 - Durchlauf ohne Hand: `tools/autopilot/slice_full.json` (Hauptmenü bis Titelkarte); Teilstrecken
   `slice_{elysia,tal,haus,weg,abend}.json`. Der Autopilot klickt Gespräche durch (`"dialogue"`) und

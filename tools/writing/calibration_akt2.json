@@ -1,0 +1,98 @@
+{
+ "_comment": "The Akt II run of the autopilot (tools/autopilot/akt2_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt2. The run starts from tests/fixtures/saves/v2_akt1_end.json, which carries 139 s of play: taken off here, so the numbers are the act's.",
+ "seconds": 240,
+ "dialogue_seconds": 97,
+ "clicks": 197,
+ "route_px": 9915,
+ "beats": [
+  {
+   "beat": "arrival_echo",
+   "seconds": 8
+  },
+  {
+   "beat": "first_no",
+   "seconds": 30
+  },
+  {
+   "beat": "act2_richter",
+   "seconds": 43
+  },
+  {
+   "beat": "crossed",
+   "seconds": 46
+  },
+  {
+   "beat": "house_entered",
+   "seconds": 66
+  },
+  {
+   "beat": "act2_blick",
+   "seconds": 83
+  },
+  {
+   "beat": "shed_path",
+   "seconds": 85
+  },
+  {
+   "beat": "wood",
+   "seconds": 103
+  },
+  {
+   "beat": "fire",
+   "seconds": 123
+  },
+  {
+   "beat": "act2_safe",
+   "seconds": 128
+  },
+  {
+   "beat": "act2_nein",
+   "seconds": 134
+  },
+  {
+   "beat": "mira_visit",
+   "seconds": 142
+  },
+  {
+   "beat": "act2_werte",
+   "seconds": 158
+  },
+  {
+   "beat": "evening",
+   "seconds": 173
+  },
+  {
+   "beat": "bachlauf_enter",
+   "seconds": 178
+  },
+  {
+   "beat": "bachlauf_hook",
+   "seconds": 181
+  },
+  {
+   "beat": "bachlauf_blick",
+   "seconds": 186
+  },
+  {
+   "beat": "bachlauf_float",
+   "seconds": 191
+  },
+  {
+   "beat": "bachlauf_weir",
+   "seconds": 201
+  },
+  {
+   "beat": "bachlauf_freed",
+   "seconds": 203
+  },
+  {
+   "beat": "bachlauf_back",
+   "seconds": 206
+  },
+  {
+   "beat": "ending",
+   "seconds": 217
+  }
+ ],
+ "start_seconds": 139
+}

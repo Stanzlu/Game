@@ -21,7 +21,7 @@ Einwände sind eingearbeitet.
 - **Danach Akt I (Elysia)** von rund 15 auf rund 100 geplante Minuten (gebaut und im Modell: rund 14, Abschnitt 10.1), Segment für Segment, je Segment ein Pull Request mit
   Lesefassung für dich (P6.6–P6.12). Die große Kartenarbeit (Großkarten, Kartenformat v2, neuer Baker) kommt erst
   vor der ersten großen Region der Wirklichkeit, nicht vorher.
-- **Von dir gebraucht:** zwei Entscheidungen (Abschnitt 11, am 24.10. nach Empfehlung entschieden) und seit P6.13 vier Fragen (Abschnitt 11, 3 bis 6). Ohne Antwort oder mit „Weiter“ gilt die Empfehlung
+- **Von dir gebraucht:** zwei Entscheidungen (Abschnitt 11, am 24.10. nach Empfehlung entschieden) und seit P6.13 und V0 fünf Fragen (Abschnitt 11, 3 bis 7). Ohne Antwort oder mit „Weiter“ gilt die Empfehlung
   (wie bei ADR-047), und sie bleibt umkehrbar.
 
 ## 1. Ausgangslage
@@ -406,8 +406,8 @@ Jede Zeile ist mindestens ein Pull Request; die Akt-I-Segmente je ein eigener. �
 | **P6.11** | A6 Fest · **gebaut** (ADR-061, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 6 statt 14 Minuten); A7 Wiederholung · **gebaut** (ADR-062; rund 2 statt 9 Minuten, die Schleifen sind Zustand, kein Ort) | XP-Test Level 48, Schleifentexte wortgleich | Lesefassung |
 | **P6.12** | A8 Kind-Spur · **gebaut** (ADR-063, Brief in `docs/akt1/REGIONSBRIEFE.md`; rund 8 statt 12 Minuten); A9 Anschluss an den Riss · **gebaut** (ADR-064; Stein nach dem Hoch, Samen-Zeile, Schleife 2 für Torwächter, Festmeisterin und Gastwirt; rund 1 statt 5 Minuten neu) | Akt-I-Durchlauf per Autopilot · **gebaut** (ADR-065, `akt1_full.json`: 141 s, Modell 14 bis 33 min gegen 100 geplant) | **Akt I spielen (rund 100 Min)** |
 | **P6.13** | Neuplanung mit gemessenen Minuten; A4 nur, wenn du mehr Elysia willst · **erledigt** (Abschnitt 10.1, ADR-066): Minuten bleiben Modell, geplant wird in Zeilen und Pull Requests, die Länge entscheidet dein Durchlauf | Plan aktualisiert | Rückmeldung (Fragen in Abschnitt 11) |
-| **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 121 neue Zeilen (geplant 162, B1 baut 6 statt 15, B2 23 statt 25, B3 47 statt 62, B4 8 statt 12, B5 24 statt 30, B6 13 statt 18), im Modell rund 28 Minuten gegen 90); V1 T6/T7 klein · **gebaut** (ADR-068), B1 Ankunft · **gebaut** (6 Zeilen), B2 Nein und Blick · **gebaut** (23 Zeilen), B3 Bachlauf · **gebaut** (47 Zeilen statt 62, die erste Karte der Klasse M, 84 × 66; Quest „Die Reuse“, drei Kuriositäten, zwei Fragmente), B5 Feuer · **gebaut** (24 Zeilen statt 30: Werte am Feuer als drei Handgriffe und ein Schweigen, das Lied im Haus hörbar ohne Fragment, das dritte Fragment, Beat `act2_safe`), B6 Abend · **gebaut** (13 Zeilen statt 18: Mira liest die Spuren der Werte am Lagerfeuer, ohne ein Wertwort und ohne Antwort; Kapitelmarke `act2` vor `slice`), B4 Richter · **gebaut** (8 Zeilen statt 12: eine Stimme nur über Dinge, genau einmal beim zweiten Sturz, Beat `act2_richter`), B7 | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` | Fragen 7 (Voreinstellungen), Lesefassungen |
-| **P6.15 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge II bis VII, Segmente wie in Akt I | – | je Akt Lesefassungen und ein Durchlauf |
+| **P6.14** | Akt II: V0 Brief und Anschluss · **gebaut** (ADR-067, `docs/akt2/REGIONSBRIEFE.md`: 9 Pull Requests, 121 neue Zeilen (geplant 162, B1 baut 6 statt 15, B2 23 statt 25, B3 47 statt 62, B4 8 statt 12, B5 24 statt 30, B6 13 statt 18), im Modell gemessen 18 Minuten (15 bis 23) gegen 90, ADR-069); V1 T6/T7 klein · **gebaut** (ADR-068), B1 Ankunft · **gebaut** (6 Zeilen), B2 Nein und Blick · **gebaut** (23 Zeilen), B3 Bachlauf · **gebaut** (47 Zeilen statt 62, die erste Karte der Klasse M, 84 × 66; Quest „Die Reuse“, drei Kuriositäten, zwei Fragmente), B5 Feuer · **gebaut** (24 Zeilen statt 30: Werte am Feuer als drei Handgriffe und ein Schweigen, das Lied im Haus hörbar ohne Fragment, das dritte Fragment, Beat `act2_safe`), B6 Abend · **gebaut** (13 Zeilen statt 18: Mira liest die Spuren der Werte am Lagerfeuer, ohne ein Wertwort und ohne Antwort; Kapitelmarke `act2` vor `slice`), B4 Richter · **gebaut** (8 Zeilen statt 12: eine Stimme nur über Dinge, genau einmal beim zweiten Sturz, Beat `act2_richter`), B7 Durchlauf · **gebaut** (ADR-069: `akt2_full.json` aus dem eingefrorenen Stand von Akt I, 240 Sekunden Spielzeit, 197 Klicks, 62 Marken, `calibrate.py --akt2`; Modell 18,3 Minuten bei 475 Zeilen) | Smoke, Segmentskript und Marken je Segment, `akt2_full.json` · **gebaut** | Fragen 7 (Voreinstellungen), Lesefassungen (`docs/lesefassung/README.md`), dein Durchlauf von Akt II |
+| **P6.15 ff.** | je Akt: Regions-Brief, Vorarbeit (T6, T7, T9 nach Bedarf), Karten, Text, Lesefassung, Durchlauf (`tools/autopilot/akt<N>_full.json`, `calibrate.py`); Reihenfolge III bis VII (Akt II ist gebaut), Segmente wie in Akt I und II; ein Lauf beginnt im eingefrorenen Stand am Ende des Akts davor (ADR-069) | – | je Akt Lesefassungen und ein Durchlauf |
 
 **Abnahmeregel:** Ein Prüfpaket je Phase, höchstens 10 Fragen. Was unbeantwortet bleibt, setze ich nach meiner
 Empfehlung um und markiere es als „vorläufig“; es bleibt umkehrbar.
@@ -425,6 +425,11 @@ Zuverlässigkeit: Zeilen, Wörter und Läufe sind gezählt; Anteil (60 %), Pause
 (du hast den Slice in mehreren Builds gespielt, aber nicht mit der Uhr, ADR-049; Akt I kennst du als Lesefassung). Keine zulässige Einstellung bringt Akt I auf 105 Minuten:
 bei den Annahmen des Modells wäre ein Umweg von ×28 bis ×30 nötig, selbst bei „langsam, alles gesehen, Pause 2 s“ ×24; der äußerste geprüfte Eckfall
 (langsam, alles gesehen, Pause 3 s, Umweg ×3) gibt 40 Minuten, die 33 Minuten oben sind die großzügige Obergrenze des Modells. Das Modell ist ein Maßstab, kein Urteil.
+
+**Akt II nach dem Lauf** [V] (P6.14, B7, ADR-069, `docs/KALIBRIERUNG.md`): Akt II hat 475 Zeilen (354 im Slice, 121 neu; geplant waren 557). Der Autopilot spielt ihn aus dem Stand am Ende von Akt I in
+240 Sekunden (97 mit offenem Gespräch, 197 Klicks, 9.915 Pixel übersprungene Wege). Das Modell (`calibrate.py --akt2`) gibt **rund 18 Minuten** bei normalem Tempo (15,3 bis 23,0), als Obergrenze 44, bei 25,9 Zeilen je Minute.
+Die laufende Summe der Briefe (28 Minuten) schätzte die Wege mit 8,5 Minuten, gemessen sind es 4,3. Geplant waren 90 Minuten. Acht Pull Requests mit Inhalt und Vorarbeit plus dieser (neun, wie geplant), 121 neue Zeilen
+(20 je Inhalts-Pull-Request gegen 35 in Akt I, weil Akt II eine große Karte und viel Zustand trug), 154 neue GUT-Tests (rund 24 je Segment), Cut-First nicht ausgelöst. Der Slice-Wert des Modells zählt seit Akt II 38 Zeilen von Akt II mit (484 Zeilen, 21,7 Minuten).
 
 **Plan gegen Modell je Akt** (geplante Zeilen abgeleitet mit dem Verhältnis von Akt I, 650 Zeilen für 105 Minuten; Modell mit der Dichte von Akt I, 24 Zeilen je Minute):
 
@@ -460,7 +465,7 @@ Im Mittel 35 neue Zeilen und 14 neue Tests je Segment. Zwei Sorten: Segmente mit
 Segment-Pull-Requests und drei weiteren (P6.6, P6.7, P6.12c), zusammen zehn, unter den 12–15 geplanten, also unter der Cut-First-Schwelle (Abschnitt 12). Angeliefert gegen Plan 4.3:
 51 % der Zeilen, 59 % der Cues, vier von fünf Karten, 25 Requisiten, keine neue Musik und keine neuen Effekte.
 
-**Rest in Pull Requests** (abgeleitet): Die Akte II bis VII mit den geplanten 3.436 Zeilen sind bei 62 Zeilen je Pull Request rund 55, bei 35 rund 98 Segment-Pull-Requests; dazu kommt Vorarbeit
+**Rest in Pull Requests** (abgeleitet, Stand Akt I; nach Akt II bleiben die Akte III bis VII mit 2.878 geplanten Zeilen und rund 46 bis 82 Segment-Pull-Requests): Die Akte II bis VII mit den geplanten 3.436 Zeilen sind bei 62 Zeilen je Pull Request rund 55, bei 35 rund 98 Segment-Pull-Requests; dazu kommt Vorarbeit
 (Brief je Akt, T6, T7, T9), rund ein Pull Request je Akt. Wollte man 555 Minuten allein mit Text füllen (13.335 Zeilen), wären es 215 bis 382. Mit Spielzeit aus Mechanik statt Text
 (Wächter-Maschine, Boot, Minispiele) wächst der Aufwand an den Systemen, den dieses Maß nicht erfasst.
 
@@ -515,7 +520,7 @@ Nur echte Weichen. Ohne Antwort oder mit „Weiter“ gilt die Empfehlung. **Sta
 
 **3. Wie lang fühlt sich Akt I an?** (nur du kannst es messen)
 - Frage: Spiel Akt I einmal (das Spiel schreibt die Beat-Zeiten ins Log, `calibrate.py --akt1 --log <Log>` wertet sie aus) und sag mir die gefühlten Minuten. Erst dann wissen wir, welches Ende der Lücke stimmt (14–18, 30–40 oder 100 Minuten).
-- **Empfehlung:** ohne Antwort baue ich Akt II bis VII weiter nach Abschnitt 5, ohne die Länge zu ändern.
+- **Empfehlung:** ohne Antwort baue ich Akt III bis VII weiter nach Abschnitt 5 (Akt II ist gebaut), ohne die Länge zu ändern.
 
 **4. Gilt die Länge (10–12 Stunden) oder die Menge (§48)?**
 - Frage: Ist die Spielzeit der Bible ein Ziel, das bleibt (dann tragen Spiel und Erkunden den Großteil der Minuten), oder gelten die Mengen aus §48 als Umfang und die Länge ist das, was herauskommt (Abweichung von der Bible, ADR und deine Antwort)?

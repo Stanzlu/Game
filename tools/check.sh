@@ -165,9 +165,12 @@ fi
 grep -o '"beat":"[a-z_]*"' "$smoke_log" | cut -d'"' -f4 | paste -sd' ' -
 echo "smoke ok"
 
-# The segments of Act I (docs/akt1/REGIONSBRIEFE.md): each plays its own script from its own scene
-# on a fresh profile and has to reach its marks. "script:scene:frames:mark mark ..."; a mark is a
-# beat (the log line "beat":"<id>") or, with a dot in it, a flag that was set ("flag":"<id>","value":true).
+# The segments of Act I and II (docs/akt1/REGIONSBRIEFE.md, docs/akt2/REGIONSBRIEFE.md): each plays its
+# own script from its own scene on a fresh profile and has to reach its marks.
+# "script:scene:frames:mark mark ..."; a mark is a beat (the log line "beat":"<id>") or, with a dot in
+# it, a flag that was set ("flag":"<id>","value":true). A scene written "@<name>" starts from the frozen
+# save tests/fixtures/saves/<name>.json instead (the profile gets it as its autosave, "--continue"):
+# akt2_full begins where akt1_full ended. What is in that save never shows up as a mark.
 segments=(
   "akt1_gasthaus:gasthaus:2400:inn_enter inn_fed inn_room inn_slept elysia.inn_book_signed"
   "akt1_markt:markt:2500:market_enter market_board market_bread market_board_done market_melody elysia.market_greeted"
@@ -185,14 +188,21 @@ segments=(
   "akt2_abend:tal:2400:ending chapter.act2 chapter.slice value.calm"
   "akt2_bachlauf:bachlauf:4500:bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken valley.goat_prints_seen valley.view_back_seen"
   "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
+  "akt2_full:@v2_akt1_end:16000:arrival_echo first_no act2_richter crossed house_entered shed_path wood fire act2_safe act2_nein mira_visit act2_werte act2_blick evening bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back ending valley.mira_met valley.fell_in valley.fell_twice valley.crossed valley.wood_needed valley.wood_taken valley.antreiber_rests house.fire_lit house.rested melody.house_hum house.antreiber_refused house.antreiber_by_fire house.mira_visited house.mira_left value.freedom fragment.beam_herbs house.prints_seen house.spoon_found house.shelf_filled house.shelf_stone house.cat_fed fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken valley.knot_seen valley.goat_prints_seen valley.view_back_seen valley.trap_freed valley.shell_seen valley.berries_eaten valley.flower_smelled valley.reflection_seen valley.goat_met valley.potato_taken valley.goat_traded valley.mountains_seen valley.ending chapter.act2 chapter.slice"
 )
 for segment in "${segments[@]}"; do
   IFS=: read -r name scene frames marks <<<"$segment"
   step "smoke: segment $name (autopilot)"
   rm -rf "$user_root/profiles/segment_check"
   smoke_log="$(mktemp)"
+  start_args=("--start=$scene")
+  if [[ "$scene" == @* ]]; then
+    mkdir -p "$user_root/profiles/segment_check/saves"
+    cp "tests/fixtures/saves/${scene#@}.json" "$user_root/profiles/segment_check/saves/autosave.json"
+    start_args=(--continue)
+  fi
   tools/godot.sh --headless --fixed-fps 30 --quit-after "$frames" -- --profile=segment_check --text=instant \
-    --start="$scene" --autopilot="res://tools/autopilot/$name.json" >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
+    "${start_args[@]}" --autopilot="res://tools/autopilot/$name.json" >"$smoke_log" 2>&1 || { cat "$smoke_log"; exit 1; }
   rm -rf "$user_root/profiles/segment_check"
   if has_errors "$smoke_log"; then
     grep -E "$ERROR_PATTERN" "$smoke_log" | grep -vE "$IGNORE_PATTERN"

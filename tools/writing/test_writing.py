@@ -329,6 +329,72 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(rows[0][1:], (900, calibrate.baseline()["beats"]["fire"]))
 
 
+class ActCalibrationTests(unittest.TestCase):
+    def test_the_acts_have_their_own_text_and_nothing_in_common(self):
+        one = {s.path for s in calibrate.act_sources("akt1")}
+        two = {s.path for s in calibrate.act_sources("akt2")}
+        self.assertTrue(one and two)
+        self.assertEqual(one & two, set())
+        names = {os.path.basename(p) for p in two}
+        self.assertTrue({"tal.dialogue", "haus.dialogue", "feuer.dialogue", "richter.dialogue"} <= names)
+        self.assertNotIn("elysia.dialogue", names)
+
+    def test_the_whole_story_is_the_two_acts_and_nothing_is_counted_twice(self):
+        everything = {s.path for s in dialogue.sources(story_only=True)}
+        covered = {s.path for s in calibrate.act_sources("akt1")} | {s.path for s in calibrate.act_sources("akt2")}
+        self.assertEqual(everything - covered, set(), "a story file that belongs to no act")
+
+    def test_an_act_run_that_starts_from_a_save_gives_back_only_the_acts_seconds(self):
+        self.assertEqual(calibrate.start_seconds("akt1"), 0)
+        self.assertGreater(calibrate.start_seconds("akt2"), 100)
+        handle, path = tempfile.mkstemp(suffix=".log")
+        start = calibrate.start_seconds("akt2")
+        log = '[1s] INFO  WORLD_STATE: beat {"beat":"arrival_echo","minute":2.5,"seconds":%d}\n' % (start + 9)
+        log += '[2s] INFO  INPUT: autopilot finished {"clicks":10,"dialogue_s":50,"route_px":880,"seconds":%d}\n' % (start + 200)
+        with os.fdopen(handle, "w", encoding="utf-8") as f:
+            f.write(log)
+        saved = calibrate.BASELINES["akt2"]
+        calibrate.BASELINES["akt2"] = path + ".json"
+        try:
+            data = calibrate.record_act("akt2", path)
+            self.assertEqual(data["seconds"], 200)
+            self.assertEqual(data["start_seconds"], start)
+            self.assertEqual(data["beats"], [{"beat": "arrival_echo", "seconds": 9}])
+            floor = calibrate.act_baseline("akt2")
+            self.assertAlmostEqual(floor["way"], 200 - 50 + 880 / calibrate.WALK_SPEED)
+        finally:
+            calibrate.BASELINES["akt2"] = saved
+            for leftover in (path, path + ".json"):
+                if os.path.exists(leftover):
+                    os.remove(leftover)
+
+    def test_a_run_with_a_timed_out_wait_or_no_end_is_refused(self):
+        handle, path = tempfile.mkstemp(suffix=".log")
+        with os.fdopen(handle, "w", encoding="utf-8") as f:
+            f.write("autopilot wait timed out\n")
+        try:
+            with self.assertRaises(ValueError):
+                calibrate.record_act("akt2", path)
+        finally:
+            os.remove(path)
+
+    def test_a_human_run_is_counted_from_where_the_act_begins(self):
+        beats = [("elysia_start", 0), ("valley_arrival", 4000), ("ending", 4000 + 1500)]
+        self.assertEqual(calibrate.act_origin("akt2", beats), 4000)
+        self.assertEqual(calibrate.act_origin("akt1", beats), 0)
+        rows = calibrate.per_beat_act("akt2", [("valley_arrival", 4000), ("ending", 5500)])
+        self.assertTrue(all(real == seconds - 4000 for (_, real, _), seconds in zip(rows, [5500])))
+
+    def test_the_baselines_are_real_runs_with_more_clicks_than_a_third_of_nothing(self):
+        for act in calibrate.BASELINES:
+            floor = calibrate.act_baseline(act)
+            self.assertGreater(floor["way"], 60)
+            self.assertGreater(floor["data"]["clicks"], 50)
+            minutes, lines = calibrate.act_estimate(act, 1)
+            self.assertTrue(8.0 < minutes < 45.0, "%s: %.1f" % (act, minutes))
+            self.assertGreater(lines, 300)
+
+
 class ReadableTests(unittest.TestCase):
     def render(self, text):
         handle, path = tempfile.mkstemp(suffix=".dialogue")
