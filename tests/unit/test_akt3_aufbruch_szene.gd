@@ -98,8 +98,11 @@ func test_the_hedge_door_to_the_stream_is_there_and_open() -> void:
 
 func test_the_lines_come_once_the_picture_is_back() -> void:
 	_load_end()
+	# the picture is black when the valley opens (as after "Weiter") and comes back over three seconds
+	await ScreenFade.fade_out(0.0)
 	SceneTravel.arrival_fade = 3.0
 	var scene := await _valley()
+	assert_true(ScreenFade.is_covered() or ScreenFade.is_fading(), "the fade-in is under way")
 	var seen := {"up": false, "dark": false}
 	var watch := func() -> bool:
 		if scene.dialogue_box.is_open() and not seen["up"]:
@@ -165,6 +168,11 @@ func test_the_house_in_the_morning_is_as_dry_as_in_the_evening() -> void:
 	await wait_physics_frames(3)
 	assert_eq(WorldState.day_preset(), "morgen")
 	assert_true(scene._dry())
+	assert_eq(scene.music, "silence", "the valley's theme is Mira's: not in the house this morning")
+	assert_eq(scene.ambience.resource_path.get_file(), "haus_morgen.tres", "a bird, no crickets")
+	assert_eq(
+		scene._window_light.color, HausScene.WINDOW_LIGHT_MORNING, "clear cold light in the window"
+	)
 	var window := await DialogueWalk.play(HAUS_DIALOGUE, "window")
 	assert_true(LineText.of("haus_window_3") in window, "no rain in the window")
 	assert_false(LineText.of("haus_window_2") in window)

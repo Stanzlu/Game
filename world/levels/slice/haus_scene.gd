@@ -37,6 +37,9 @@ const WINDOW_ENERGY := 0.45
 ## In the evening the rain has stopped and the low sun shines in warm and weaker.
 const WINDOW_LIGHT_EVENING := Color("#e0a860")
 const WINDOW_ENERGY_EVENING := 0.35
+## The morning after it (Act III, ADR-070): the light is clear and cold, weaker than the rain's.
+const WINDOW_LIGHT_MORNING := Color("#c4d8ec")
+const WINDOW_ENERGY_MORNING := 0.4
 ## Night outside the walls: a soft dark ring round the room, so the house does not hang in a flat
 ## dark field. Alpha at the far edge, and the radius (px) where it is full.
 const NIGHT_ALPHA := 0.8
@@ -48,6 +51,8 @@ const COLD_AMBIENCE := preload("res://content/audio/haus_kalt.tres")
 const WARM_AMBIENCE := preload("res://content/audio/haus_feuer.tres")
 ## Fire and quiet crickets, no rain on the roof any more (the day_preset is "abend").
 const EVENING_AMBIENCE := preload("res://content/audio/haus_abend.tres")
+## Fire and a bird outside, no crickets (the day_preset is "morgen", Act III).
+const MORNING_AMBIENCE := preload("res://content/audio/haus_morgen.tres")
 ## Seconds the player sits by the burning fire before the quiet moment (Game Bible §45:
 ## after the fire comes rest); a little later Mira knocks.
 const REST_BEFORE_KNOCK := 2.5
@@ -90,7 +95,8 @@ func _ready() -> void:
 	var warm := WorldState.is_fire_lit()
 	world_tint = WARM_TINT if warm else COLD_TINT
 	ambience = _ambience(warm)
-	music = "valley" if warm else "silence"
+	# the valley's theme is Mira's: the morning after she went on has none
+	music = "valley" if warm and not _morning() else "silence"
 	# whoever looks closely sees one more spot in the room (the map's prop reads the flag)
 	if WorldState.has_facet("perception"):
 		WorldState.set_flag("house.looks_closely")
@@ -300,6 +306,8 @@ func _fire_catches() -> void:
 func _ambience(warm: bool) -> Resource:
 	if not warm:
 		return COLD_AMBIENCE
+	if _morning():
+		return MORNING_AMBIENCE
 	return EVENING_AMBIENCE if _dry() else WARM_AMBIENCE
 
 
@@ -308,13 +316,22 @@ func _dry() -> bool:
 	return WorldState.day_preset() in ["abend", "morgen"]
 
 
+## The morning after the evening at the fire (Act III): dry, but its own light and sound.
+func _morning() -> bool:
+	return WorldState.day_preset() == "morgen"
+
+
 func _add_window_light() -> void:
 	var evening := _dry()
 	_window_energy = WINDOW_ENERGY_EVENING if evening else WINDOW_ENERGY
+	var light := WINDOW_LIGHT_EVENING if evening else WINDOW_LIGHT
+	if _morning():
+		_window_energy = WINDOW_ENERGY_MORNING
+		light = WINDOW_LIGHT_MORNING
 	_window_light = PointLight2D.new()
 	_window_light.name = "WindowLight"
 	_window_light.texture = Decor.light_texture()
-	_window_light.color = WINDOW_LIGHT_EVENING if evening else WINDOW_LIGHT
+	_window_light.color = light
 	_window_light.energy = _window_energy
 	_window_light.texture_scale = 88.0 / 32.0
 	_window_light.position = WINDOW_CELL * float(map.data.tile_size)

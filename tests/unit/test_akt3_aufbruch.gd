@@ -52,16 +52,31 @@ func test_the_morning_is_narration_without_a_voice_and_without_a_verdict() -> vo
 			assert_false(line.contains(digit), "%s: numbers are written out" % id)
 
 
+func test_nobody_speaks_in_the_morning() -> void:
+	# a line with a speaker reads "Name: text" in the file; narration has none
+	var speaker := RegEx.create_from_string("^[^\\t#~=\\[]*\\w: ")
+	var seen := 0
+	for line in FileAccess.get_file_as_string(MORNING).split("\n"):
+		if line.contains("[ID:auf_morn_"):
+			seen += 1
+			assert_null(speaker.search(line), "narration has no speaker: %s" % line)
+	assert_eq(seen, IDS.size())
+
+
 func test_her_absence_is_shown_by_things() -> void:
 	assert_string_contains(LineText.of("auf_morn_2"), "Miras Platz")
-	assert_string_contains(LineText.of("auf_morn_3"), "Ring")
+	assert_string_contains(LineText.of("auf_morn_3"), "dunkle Stelle")
 	assert_string_contains(LineText.of("auf_morn_5"), "Bach")
 
 
 func test_the_cue_sets_nothing_and_asks_nothing() -> void:
-	var before := WorldState.state.flags.duplicate()
+	var before := JSON.stringify(WorldState.state.to_dict())
 	await DialogueWalk.play(MORNING, "morning")
-	assert_eq(WorldState.state.flags, before, "the scene marks the morning, the cue only tells it")
+	assert_eq(
+		JSON.stringify(WorldState.state.to_dict()),
+		before,
+		"the scene marks the morning, the cue only tells it"
+	)
 	assert_eq(await DialogueWalk.answers(MORNING, "morning"), PackedStringArray(), "no choice")
 
 

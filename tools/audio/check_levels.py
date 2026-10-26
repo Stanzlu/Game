@@ -92,6 +92,7 @@ PLACES = {
     "wald_nacht": ("wald_nacht.tres", -5.0, -25.6),
     "haus_abend": ("haus_abend.tres", -5.0, -25.5),
     "tal_morgen": ("tal_morgen.tres", -7.0, -25.7),
+    "haus_morgen": ("haus_morgen.tres", -5.0, -25.5),
 }
 PLACE_TOLERANCE_DB = 1.5
 PLACE_SPAN_DB = 3.0

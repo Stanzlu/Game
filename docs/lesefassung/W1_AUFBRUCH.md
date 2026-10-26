@@ -14,6 +14,6 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 - *Es ist hell geworden, ohne dass die Sonne schon da ist.* `[#draft]`  <sub>auf_morn_1</sub>
 - *Auf dem Gras liegt Tau. Auf Miras Platz auch.* `[#draft]`  <sub>auf_morn_2</sub>
-- *Vom Feuer ist ein Ring aus schwarzer Erde geblieben. An einer Seite ist er noch warm.* `[#draft]`  <sub>auf_morn_3</sub>
+- *Vom Feuer ist eine dunkle Stelle im Matsch geblieben. An einer Seite ist sie noch warm.* `[#draft]`  <sub>auf_morn_3</sub>
 - *Sie ist weitergezogen. Zum Meer, hat sie gesagt.* `[#draft]`  <sub>auf_morn_4</sub>
 - *Hinter der Hecke im Süden läuft der Bach weiter, als hätte er es nicht eilig.* `[#draft]`  <sub>auf_morn_5</sub>
