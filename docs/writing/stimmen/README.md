@@ -17,6 +17,7 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | [Kind](kind.md) | 2 | nur Fragment; wächst mit Akt II |
 | [Spielfigur](spielfigur.md) | 67 | die Antworten, nicht eine Person |
 | [Richter](richter.md) | 6 | Akt II (B4): „Stimme“ nach dem zweiten Sturz, nur über Dinge (dazu zwei Erzählzeilen) |
+| [Einsiedler](einsiedler.md) | 9 | Akt III (W3): die Hütte, Angebote statt Fragen |
 
 ## Ohne Beleg (aus der Bible, Annahmen; „Probezeilen“ sind Entwürfe, nicht im Spiel)
 
@@ -26,7 +27,6 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | [Orin](orin.md) | IV | Bible §13, §33 |
 | [Lio](lio.md) | IV | Bible §13, §44 |
 | [Gefälliger](gefaelliger.md) | IV | Bible §14 |
-| [Einsiedler](einsiedler.md) | III | Bible §14 |
 | [Wächter](waechter.md) | V | Bible §14 |
 | [Betäuber](betaeuber.md) | I (Gastwirt), VI | Bible §14, Gastwirt-Blatt |
 

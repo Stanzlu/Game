@@ -22,7 +22,8 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 | [B5_FEUER.md](B5_FEUER.md) | Akt II: Feuer, Wahl, Lied und Kräuter im Haus | 6 | 35 | 730 |
 | [B6_ABEND.md](B6_ABEND.md) | Akt II: Miras Lesung am Abend | 1 | 13 | 320 |
 | [W1_AUFBRUCH.md](W1_AUFBRUCH.md) | Akt III: der Morgen nach dem Ende von Akt II | 1 | 5 | 162 |
-| [W2_WALDWEG.md](W2_WALDWEG.md) | Akt III: der Waldweg (Wegzeichen, Rast, Antreiber am leeren Brett, Stufen, Zapfen) | 17 | 60 | 1.517 |
+| [W2_WALDWEG.md](W2_WALDWEG.md) | Akt III: der Waldweg (Wegzeichen, Rast, Antreiber am leeren Brett, Stufen, Zapfen) | 16 | 57 | 1.467 |
+| [W3_HUETTE.md](W3_HUETTE.md) | Akt III: die Hütte des Einsiedlers (Becher, Hocker, Bleiben in drei Stufen, die Flöte, Leine, Pfeife, Kiesel) | 22 | 60 | 1.409 |
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://2yql3kf6mke4"
+path="res://.godot/imported/huette.dialogue-806481cc9fd243a0e1a83e07c5bd894d.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt3/huette.dialogue"
+dest_files=["res://.godot/imported/huette.dialogue-806481cc9fd243a0e1a83e07c5bd894d.tres"]
+
+[params]
+
+defaults=true

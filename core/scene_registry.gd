@@ -10,6 +10,7 @@ const SCENES := {
 	"haus": "res://world/levels/slice/haus.tscn",
 	"bachlauf": "res://world/levels/akt2/bachlauf.tscn",
 	"waldweg": "res://world/levels/akt3/waldweg.tscn",
+	"huette": "res://world/levels/akt3/huette.tscn",
 	"gasthaus": "res://world/levels/akt1/gasthaus.tscn",
 	"markt": "res://world/levels/akt1/markt.tscn",
 	"spiegelhalle": "res://world/levels/akt1/spiegelhalle.tscn",
@@ -39,6 +40,7 @@ const SMOKE: PackedStringArray = [
 	"haus",
 	"bachlauf",
 	"waldweg",
+	"huette",
 	"weg",
 ]
 const BENCHMARK: PackedStringArray = [
@@ -47,6 +49,7 @@ const BENCHMARK: PackedStringArray = [
 	"bachlauf",
 	"waldweg",
 	"haus",
+	"huette",
 	"gasthaus",
 	"markt",
 	"spiegelhalle",

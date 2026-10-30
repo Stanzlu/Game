@@ -40,7 +40,7 @@ im weiteren Spiel nichts verloren geht.
 |---|---|---|
 | Endkarte | Keine Zeile auf der Karte (Bible §56: Schwarz, dann der Titel). „Hier endet der Prototyp. Danke fürs Spielen.“ steht als Untertitel unter dem „Nach Elysia“-Logo im Startmenü, sobald der neueste Stand das letzte Kapitel des Builds trägt (`Chapter.LAST`; seit Akt III, W1, ist das Ende von Akt II nicht mehr das Ende: „Weiter“ beginnt den Morgen danach, ADR-070). Kein Abspann im Slice; Lizenzen und Mitwirkende im Startmenü und im Build. | ADR-030, Nachtrag 22.10. |
 | Kamera | *Weich* bleibt Standard und ist straffer eingestellt, *Pixelgenau* bleibt Option, der Playtest fragt. „Bewegungsgefühl“ und „Richtungen“ sind nur noch in Debug-Builds wählbar. | ADR-012, Nachtrag 22.10. |
-| Zoom | 1,25× überall, im Haus 1,5× (Ausnahme Innenräume). | ADR-045, Nachtrag 22.10. |
+| Zoom | 1,25× überall, im Haus 1,5× (Ausnahme Innenräume); in der Hütte des Einsiedlers beim Bleiben 1,75× und 2,0× (ein Schritt je Antwort, nur solange sie sitzt). | ADR-045, Nachtrag 22.10.; ADR-070 Nachtrag W3. |
 | Mischpixel | Unverändert bis zum Playtest; keine Option „Pixelraster exakt“, keine Vollbild-Rand-Option, solange niemand es nennt. | ADR-045, Nachtrag 22.10. |
 | Elysias erste Zeilen | Wärmer und ernster geschrieben; die unheimlich-aufrichtigen Sätze bleiben. | ADR-047 |
 | Tastenumbelegung | gebaut, ADR-048 (Seite „Tastenbelegung“ im Pause-Menü und unter Einstellungen). | ADR-048, ADR-011 und ADR-018, Nachträge |

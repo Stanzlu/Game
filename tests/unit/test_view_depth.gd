@@ -45,6 +45,44 @@ func test_zoom_shrinks_the_world_and_scales_its_picture() -> void:
 	assert_eq(view.zoom, 3.0, "clamped")
 
 
+func test_the_zoom_can_change_while_the_scene_runs_in_one_step() -> void:
+	# the hermit's hut closes in while she stays (ADR-070 O6): 1.5, 1.75, 2.0 and back
+	var view := _view(1.5)
+	view.bounds = Rect2(0, 0, 800, 600)
+	var target := Node2D.new()
+	view.world_root.add_child(target)
+	target.position = Vector2(400, 300)
+	view.follow(target)
+	await wait_process_frames(2)
+	view.zoom_to(1.75)
+	assert_eq(view.zoom, 1.75)
+	assert_eq(view.view_size, Vector2i((Vector2(640, 360) / 1.75).ceil()), "366x206")
+	assert_eq(view.viewport.size, view.view_size + Vector2i(2, 2), "plus the border")
+	assert_eq(view.display.texture_filter, CanvasItem.TEXTURE_FILTER_LINEAR, "sharp shader")
+	view.zoom_to(2.0)
+	assert_eq(view.view_size, Vector2i(320, 180))
+	assert_eq(view.display.texture_filter, CanvasItem.TEXTURE_FILTER_NEAREST, "exact")
+	var centre := Vector2(400, 300) + GameView.FOLLOW_OFFSET
+	assert_almost_eq(view.camera_position, centre, Vector2.ONE, "placed again at once")
+	assert_almost_eq(view.world_to_ui(centre), Vector2(320, 180), Vector2.ONE)
+	# before any frame the picture is laid out for the new size, never for the old one
+	var half := Vector2(view.viewport.size) * 0.5
+	assert_eq(view.viewport.canvas_transform.origin, half - view.camera_position)
+	assert_eq(
+		view.display.position, (-Vector2.ONE * GameView.BORDER - view.camera_remainder) * view.zoom
+	)
+	# a room smaller than the picture is centred at the new zoom, whatever the old one framed
+	view.bounds = Rect2(100, 100, 224, 160)
+	view.zoom_to(1.75)
+	view.zoom_to(2.0)
+	assert_almost_eq(view.camera_position, Vector2(212, 180), Vector2.ONE, "the middle of the room")
+	view.zoom_to(1.5)
+	assert_eq(view.view_size, Vector2i(427, 240), "the room's own picture, back in the same call")
+	var before := view.viewport.size
+	view.zoom_to(1.5)
+	assert_eq(view.viewport.size, before, "asking for the zoom it has changes nothing")
+
+
 func test_the_world_picture_is_always_sampled_sharp() -> void:
 	var view := _view(1.5)
 	var mat := view.display.material as ShaderMaterial

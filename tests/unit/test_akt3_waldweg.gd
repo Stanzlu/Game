@@ -5,7 +5,8 @@ extends GutTest
 ## empty and holds a stub of chalk), two places to rest (the first time sets the facet care and the
 ## flag forest.rested, whichever place it is), the Antreiber at the empty board (absent for whoever
 ## left him at the fire in the house), a cone, the steps in the sunken lane (a trace of the world)
-## and the hut that W3 opens. The scene (map, beats, the Hang) is tested in test_akt3_waldweg_szene.
+## and the way on to the south (the hut's own cues are in huette.dialogue, W3). The scene (map,
+## beats, the Hang) is tested in test_akt3_waldweg_szene.
 
 const WALD := "res://content/dialogue/akt3/waldweg.dialogue"
 const QUEST := "side_forest_marks"
@@ -236,9 +237,7 @@ func test_the_two_curiosities_are_in_the_game_and_count() -> void:
 	assert_eq(Collection.curiosities(), 2)
 
 
-func test_the_hut_and_the_end_of_the_way_say_what_they_show_and_nothing_more() -> void:
-	var hut := await DialogueWalk.play(WALD, "hut_door")
-	assert_true(_has(hut, "wd_hut_2"), "the tea stands in front of the door, not inside")
+func test_the_end_of_the_way_says_what_it_shows_and_nothing_more() -> void:
 	assert_eq(
 		await DialogueWalk.play(WALD, "south_wait"), PackedStringArray([LineText.of("wd_south_1")])
 	)

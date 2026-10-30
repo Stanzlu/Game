@@ -1,6 +1,6 @@
 # Der Einsiedler
 
-**Ohne Beleg im Slice.** Aus der Bible (§14) und dem Plan (Akt III).
+**Beleg in Akt III (W3):** 9 Zeilen in `content/dialogue/akt3/huette.dialogue` (Ø 6,7 Wörter, keine Frage, kein Ausruf), dazu die Dinge der Hütte als Erzählung. Aus der Bible (§14) und dem Plan (Akt III).
 
 ## Funktion
 
@@ -21,13 +21,21 @@ Danach im Haus: er kommt manchmal zu Besuch.
 Akt III: die Hütte im Wald → Bleiben (das Spiel macht es möglich, ohne Fortschritt) → Aufstehen (freiwillig, ohne
 Streit) → später Besuche im Haus. Das Warum: warum Alleinsein sicher war.
 
-## Probezeilen (Entwurf zur Probe, nicht im Spiel)
+## Goldzeilen
 
-- „Tee ist da. Sitz, wenn du magst.“
-- „Du kannst bleiben. Ich frag nicht, wie lang.“
-- „Draußen ist alles wie immer. Hier auch.“
+- `hu_h_1` „Tee ist da. Sitz, wenn du magst.“
+- `hu_h_2` „Der vor der Tür war für jeden. Heute du.“
+- `hu_h_5` „Der Hocker ist frei.“
+- `hu_s1_2` „Draußen ist alles wie immer. Hier auch.“
+- `hu_s2_2` „Ich frag nicht, wie lang.“
+- `hu_h_8` „Geh, wenn du gehst. Der Tee verzeiht es.“
+
+Das Warum zeigen die Dinge, nie eine Zeile: der Tee steht vor der Tür und nicht am Tisch, auf dem Pfad liegen Zweige übereinander, innen hängt der Riegel offen, ein zweiter Becher hängt glatt und unbenutzt am Nagel, und das Fenster zeigt immer dasselbe.
+
+## Weitere Entwürfe (nicht im Spiel)
+
+- „Du kannst bleiben. Ich frag nicht, wie lang.“ (steht gekürzt in `hu_s2_2`)
 - „Die Tür ist nicht abgeschlossen. Sie klemmt nur.“
-- „Geh, wenn du gehst. Der Tee wartet nicht, aber er verzeiht.“
 
 ## Gegenbeispiele
 

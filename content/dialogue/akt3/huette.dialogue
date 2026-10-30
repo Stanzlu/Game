@@ -1,0 +1,211 @@
+# Die Hütte, Akt III, Segment W3 (docs/akt3/REGIONSBRIEFE.md, ADR-070 O6). Der Einsiedler lebt in einer Hütte in einer Mulde
+# abseits des Pfades. Er hält niemanden fest und fragt nichts; er stellt etwas hin und lässt es stehen: einen Becher Tee vor der Tür
+# (erstes Angebot), einen Hocker am Tisch (zweites), das Bleiben (drittes). Jedes Angebot ist abzulehnen, ohne dass etwas fehlt.
+# Sein Warum zeigen Dinge, keine Zeile erklärt es: der Tee steht vor der Tür und nicht am Tisch, Zweige liegen einer über dem anderen auf dem Pfad,
+# innen hängt der Riegel offen, ein zweiter Becher hängt glatt am Nagel, und das Fenster zeigt immer dasselbe. Was Alleinsein
+# ist, wird nicht bewertet, weder gut noch schlecht (Bible §51).
+# Bleiben hat höchstens drei Stufen, jede eine Antwort und nie eine Zeit; bei den ersten zwei schließt sich das Bild ein Stück (die
+# Szene liest die Flags), nach der dritten steht die Tür offen und das Spiel speichert einmal. Danach gibt es nur ruhige Zeilen, ohne
+# Ende des Bleibens und ohne Strafe. Aufstehen geht jederzeit (die Szene gibt das Bild zurück).
+# Die Flöte spielt er beim ersten Sitzen, ungefragt; sie ist die Melodie dieses Aktes (melody.hermit_flute) und kein Fragment.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Schilder und Zettel stünden in » «.
+# Was gesetzt wird, steht am Ende der Zeilen, das Flag zuletzt; die Stufen des Bleibens setzen ihr Flag zuerst, damit das Bild
+# mit der Zeile reagiert.
+
+# --- Draußen: was vor der Tür liegt ---------------------------------------------------------------------------------------
+
+~ door_tea
+if WorldState.has_flag("forest.hut_tea")
+	Der Becher steht auf dem Stein, wo er stand. Er ist noch warm. [ID:hu_door_5] [#draft]
+	=> END
+Aus dem Schornstein der Hütte steigt dünner Rauch. [ID:hu_door_1] [#draft]
+Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm. [ID:hu_door_2] [#draft]
+Niemand ist zu sehen. Der Becher steht da, als gehöre er dem, der vorbeikommt. [ID:hu_door_3] [#draft]
+- Trinken. [ID:hu_door_r1] [#draft]
+	Du trinkst. Der Tee schmeckt nach Holunder und nach Rauch. [ID:hu_door_4] [#draft]
+	do WorldState.set_flag("forest.hut_tea")
+- Stehen lassen. [ID:hu_door_r2] [#draft]
+	Du lässt ihn stehen. Er wärmt den Stein weiter. [ID:hu_door_6] [#draft]
+- … [ID:hu_door_r3] [#draft]
+	Du siehst dem Rauch nach, der gerade nach oben geht. [ID:hu_door_7] [#draft]
+=> END
+
+~ branches
+Auf dem Pfad zur Hütte liegen Zweige, einer über dem anderen. [ID:hu_branch_1] [#draft]
+Man sieht sie, und man steigt über sie. Gebunden sind sie nicht. [ID:hu_branch_2] [#draft]
+=> END
+
+~ pebble
+Im Gras an der Hüttenwand liegt ein Kiesel, glatt, mittendurch ein Loch. [ID:hu_pebble_1] [#draft]
+- Einstecken. [ID:hu_pebble_r1] [#draft]
+	Du hältst ihn vors Auge. Der Wald ist rund und sehr nah. [ID:hu_pebble_2] [#draft]
+	do WorldState.add_item("curiosity_holed_stone")
+	do WorldState.set_flag("forest.pebble_taken")
+- Liegen lassen. [ID:hu_pebble_r2] [#draft]
+	Du lässt ihn liegen. Er sieht weiter durch sich hindurch. [ID:hu_pebble_3] [#draft]
+=> END
+
+# Eine Spur der Welt (Fragment, kein Bild des Kindes, kein Grund): eine Leine ohne Wäsche, die für einen Atemzug nicht leer ist.
+~ clothesline
+if WorldState.has_flag("fragment.clothesline")
+	Die Leine zwischen den zwei Pfosten, die Klammern in einer Reihe. [ID:hu_line_5] [#draft]
+else
+	Zwischen zwei Pfosten ist eine Leine gespannt. Die Holzklammern sitzen in gleichen Abständen, grau vom Wetter. [ID:hu_line_1] [#draft]
+	Nichts hängt daran. Das Gras darunter ist platt getreten, eine Bahn entlang. [ID:hu_line_2] [#draft]
+	Für einen Atemzug hängt ein Tuch daran, noch nass, und es tropft. Dann ist es wieder nur eine Leine. [ID:hu_line_3] [#draft]
+	Wer sie gespannt hat, hat auf Wind gerechnet. [ID:hu_line_4] [#draft]
+	do WorldState.set_flag("fragment.clothesline")
+=> END
+
+# --- Drinnen: die Dinge ---------------------------------------------------------------------------------------------------
+
+~ bolt
+Innen an der Tür hängt ein Riegel, das Eisen blank von einer einzigen Hand. [ID:hu_bolt_1] [#draft]
+Er hängt offen und pendelt ein wenig, wenn die Tür sich bewegt. [ID:hu_bolt_2] [#draft]
+=> END
+
+~ cup_nail
+An einem Nagel neben dem Fenster hängt ein zweiter Becher. [ID:hu_cup_1] [#draft]
+Er ist glatt vom Abwischen. Benutzt sieht er nicht aus. [ID:hu_cup_2] [#draft]
+=> END
+
+~ flute_shelf
+if WorldState.has_flag("melody.hermit_flute")
+	Die Flöte liegt wieder auf dem Brett. Das Holz ist an den Löchern dunkel gegriffen. [ID:hu_shelf_3] [#draft]
+else
+	Auf einem Brett an der Wand liegt eine Flöte aus hellem Holz. [ID:hu_shelf_1] [#draft]
+	Auf dem Brett liegt Staub, nur um die Flöte herum nicht. [ID:hu_shelf_2] [#draft]
+=> END
+
+~ window
+if WorldState.has_flag("forest.pipe_taken")
+	=> window_view
+Das Fenster zeigt den Wald im Abendlicht, zwei Stämme und dazwischen Dämmerung. Es zeigt immer dasselbe. [ID:hu_win_1] [#draft]
+Auf dem Fensterbrett liegt eine Holunderpfeife, ein Stück Holz mit einem einzigen Loch. [ID:hu_win_2] [#draft]
+- Einstecken. [ID:hu_win_r1] [#draft]
+	Du pustest hinein. Ein Ton, ein guter, mehr hat sie nicht. [ID:hu_win_3] [#draft]
+	do WorldState.add_item("curiosity_elder_pipe")
+	do WorldState.set_flag("forest.pipe_taken")
+- Liegen lassen. [ID:hu_win_r2] [#draft]
+	Du lässt sie liegen. Sie hat Zeit. [ID:hu_win_4] [#draft]
+=> END
+
+~ window_view
+Das Fenster zeigt den Wald im Abendlicht, zwei Stämme und dazwischen Dämmerung. Es zeigt immer dasselbe. [ID:hu_win_5] [#draft]
+=> END
+
+# --- Er selbst ----------------------------------------------------------------------------------------------------------
+# Er spricht in Angeboten, kurz und trocken, und stellt keine Frage. "Komm doch mal ins Tal." gibt es nur mit der Facette care
+# (wer Tee machen kann, kann ihn auch anbieten); sein Becher ist dann gepackt. Wer geht, geht ohne Folge.
+
+~ hermit
+if WorldState.has_flag("forest.hut_met") or WorldState.has_flag("melody.hermit_flute")
+	=> hermit_again
+Einsiedler: Tee ist da. Sitz, wenn du magst. [ID:hu_h_1] [#draft]
+if WorldState.has_flag("forest.hut_tea")
+	Einsiedler: Der vor der Tür war für jeden. Heute du. [ID:hu_h_2] [#draft]
+else
+	Einsiedler: Der Tee draußen wird kalt. Er mag das. [ID:hu_h_3] [#draft]
+Er zeigt mit dem Kinn auf den Hocker. Mehr zeigt er nicht. [ID:hu_h_4] [#draft]
+do WorldState.set_flag("forest.hut_met")
+=> hermit_end
+
+~ hermit_again
+if WorldState.has_flag("forest.hermit_invited")
+	Einsiedler: Der Becher ist gepackt. [ID:hu_h_6] [#draft]
+else
+	Einsiedler: Der Hocker ist frei. [ID:hu_h_5] [#draft]
+=> hermit_end
+
+~ hermit_end
+- Komm doch mal ins Tal. Ich hab Tee. [if WorldState.has_facet("care") and not WorldState.has_flag("forest.hermit_invited") /] [ID:hu_h_r1] [#draft]
+	Einsiedler: Tee ist ein Grund. Becher bring ich mit. [ID:hu_h_7] [#draft]
+	do WorldState.set_flag("forest.hermit_invited")
+- Ich gehe weiter. [ID:hu_h_r2] [#draft]
+	Einsiedler: Geh, wenn du gehst. Der Tee verzeiht es. [ID:hu_h_8] [#draft]
+- … [ID:hu_h_r3] [#draft]
+	Er nickt. Der Dampf aus dem Becher steht gerade. [ID:hu_h_9] [#draft]
+=> END
+
+# --- Sitzen und Bleiben -------------------------------------------------------------------------------------------------
+# Die Szene startet `stay`, sobald sie sich auf den Hocker setzt (einmal je Sitzen). Beim ersten Mal spielt er die Flöte.
+
+~ stay
+if WorldState.has_flag("forest.hut_stay_3")
+	=> stay_done
+if WorldState.has_flag("melody.hermit_flute")
+	=> stay_ask
+=> flute
+
+~ flute
+do WorldState.set_flag("melody.hermit_flute")
+Der Einsiedler nimmt die Flöte vom Brett, ohne etwas zu sagen. [ID:hu_flute_1] [#draft]
+Er spielt eine kurze Weise, langsam, an den Rändern ein wenig schief. Sie steigt, hält und sinkt wieder. [ID:hu_flute_2] [#draft]
+Dann legt er die Flöte zurück aufs Brett. Der Tee dampft noch. [ID:hu_flute_3] [#draft]
+=> stay_ask
+
+~ stay_ask
+Der Hocker ist bequem, der Tee heiß. Niemand sagt, wie lange. [ID:hu_ask_1] [#draft]
+- Bleiben. [ID:hu_ask_r1] [#draft]
+	=> stay_next
+- Nur sitzen. [ID:hu_ask_r2] [#draft]
+	Du sitzt und hältst den Becher. Das Fenster zeigt den Wald, wie vorhin. [ID:hu_ask_2] [#draft]
+- … [ID:hu_ask_r3] [#draft]
+	Es ist still. Nur der Ofen knackt. [ID:hu_ask_3] [#draft]
+=> END
+
+~ stay_next
+if WorldState.has_flag("forest.hut_stay_2")
+	=> stay_3
+if WorldState.has_flag("forest.hut_stay_1")
+	=> stay_2
+=> stay_1
+
+~ stay_1
+do WorldState.set_flag("forest.hut_stay_1")
+Du bleibst. Der Ofen knackt, und die Wände rücken ein wenig näher. Es ist gemütlich. [ID:hu_s1_1] [#draft]
+Einsiedler: Draußen ist alles wie immer. Hier auch. [ID:hu_s1_2] [#draft]
+- Noch bleiben. [ID:hu_s1_r1] [#draft]
+	=> stay_2
+- Nur sitzen. [ID:hu_s1_r2] [#draft]
+	Du sitzt. Der Tee wird lauwarm, und du trinkst ihn trotzdem. [ID:hu_s1_3] [#draft]
+- … [ID:hu_s1_r3] [#draft]
+	Das Fenster zeigt den Wald im Abendlicht. Es zeigt ihn weiter. [ID:hu_s1_4] [#draft]
+=> END
+
+~ stay_2
+do WorldState.set_flag("forest.hut_stay_2")
+Du bleibst noch. Die Hütte ist warm und sehr klein geworden. Niemand drängt. [ID:hu_s2_1] [#draft]
+Einsiedler: Ich frag nicht, wie lang. [ID:hu_s2_2] [#draft]
+- Noch bleiben. [ID:hu_s2_r1] [#draft]
+	=> stay_3
+- Nur sitzen. [ID:hu_s2_r2] [#draft]
+	Du sitzt. Der Becher in deinen Händen ist das Größte im Raum. [ID:hu_s2_3] [#draft]
+- … [ID:hu_s2_r3] [#draft]
+	Der Dampf steigt auf und löst sich unter dem Dach. [ID:hu_s2_4] [#draft]
+=> END
+
+~ stay_3
+do WorldState.set_flag("forest.hut_stay_3")
+Du bleibst. Es ist warm und still. [ID:hu_s3_1] [#draft]
+Die Tür geht von allein einen Spalt auf, wie sie es tut. Draußen ist es nicht dunkler geworden. [ID:hu_s3_2] [#draft]
+=> END
+
+~ stay_done
+Die Tür steht offen. Der Tee ist warm. Niemand sagt etwas. [ID:hu_done_1] [#draft]
+=> stay_more
+
+~ stay_more
+- Bleiben. [ID:hu_done_r1] [#draft]
+	=> stay_calm
+- Nur sitzen. [ID:hu_done_r2] [#draft]
+	Du sitzt. Mehr ist nicht zu tun. [ID:hu_done_2] [#draft]
+- … [ID:hu_done_r3] [#draft]
+	Der Dampf aus dem Becher steht gerade nach oben. [ID:hu_done_3] [#draft]
+=> END
+
+~ stay_calm
+% Du bleibst. Es ist, wie es war. [ID:hu_calm_1] [#draft]
+% Du bleibst. Der Ofen knackt leise. [ID:hu_calm_2] [#draft]
+% Du bleibst. Das Fenster zeigt, was es zeigt. [ID:hu_calm_3] [#draft]
+=> stay_more

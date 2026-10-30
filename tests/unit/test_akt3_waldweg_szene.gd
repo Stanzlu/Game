@@ -23,7 +23,7 @@ const SPOTS: Array[String] = [
 	"rest_1",
 	"rest_2",
 	"hang_steps",
-	"hut_door",
+	"door_tea",
 	"cone",
 ]
 
@@ -146,7 +146,7 @@ func test_the_brook_of_the_bachlauf_leads_into_the_wood_and_the_quest_follows() 
 	WorldState.advance_quest("main_forest_way", "brook")
 	await _scene()
 	assert_eq(WorldState.quest_stage("main_forest_way"), "wood")
-	assert_true(WorldState.is_quest_done("main_forest_way"), "the last stage built so far")
+	assert_true(WorldState.is_quest_active("main_forest_way"), "the wood is not the end of the way")
 
 
 func test_a_game_without_the_heros_walk_gets_no_quest_from_the_wood() -> void:
@@ -338,16 +338,18 @@ func test_the_quest_marks_its_end_with_a_beat() -> void:
 	assert_not_null(scene)
 
 
-func test_the_hut_has_a_spot_in_front_of_its_door_and_no_door_yet() -> void:
+func test_the_hut_has_a_door_that_is_never_in_the_way_and_the_cup_stands_beside_it() -> void:
 	var scene := await _scene()
-	assert_not_null(_first(scene, "hut_door"), "the spot W3 turns into a door")
+	assert_not_null(_first(scene, "door_tea"), "the cup of tea on its stone beside the door")
 	assert_false(
-		scene.map.data.find_marker("spawn_huette").is_empty(), "the place made for the hut"
+		scene.map.data.find_marker("spawn_huette").is_empty(), "the place made for the way back"
 	)
 	var doors := scene.map.entities.get_children().filter(
 		func(node: Node) -> bool: return node.get(&"target") == "huette"
 	)
-	assert_eq(doors.size(), 0, "W3 wires it")
+	assert_eq(doors.size(), 1, "one door into the hut")
+	assert_eq(doors[0].get(&"spawn"), "door", "to the place the hut made for it")
+	assert_false(doors[0].get(&"auto"), "a door that is walked up to, not run into")
 
 
 func test_the_way_on_to_the_south_is_shut_and_holds_you_back() -> void:

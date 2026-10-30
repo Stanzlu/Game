@@ -217,6 +217,7 @@ PLACE_SPIEGELHALLE,Die Halle der Spiegel
 PLACE_WEG,Der Weg zum Schuppen
 PLACE_BACHLAUF,Der Bachlauf
 PLACE_WALDWEG,Der Waldweg
+PLACE_HUETTE,Die Hütte
 END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text
 CAPTION_FROGS,Frösche quaken.
@@ -230,6 +231,7 @@ CAPTION_FIRE,Das Feuer knistert.
 CAPTION_CAT,Die Katze miaut.
 CAPTION_PURR,Die Katze schnurrt.
 CAPTION_GATE,Ein Tor öffnet sich.
+CAPTION_FLUTE,Jemand spielt eine Flöte.
 SETTINGS_SHOW_CONTROLS,Tastenbelegung
 CONTROLS_TITLE,Tastenbelegung
 CONTROLS_MOVE,Gehen

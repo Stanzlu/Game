@@ -20,7 +20,7 @@
   {"wait_for": {"beat": "waldweg_marks"}, "timeout": 30, "t": 0.1},
   {"talk": "antreiber_end", "log": "the Antreiber at the empty board: tea is the first answer, and he sits", "t": 0.5},
   {"wait_for": {"beat": "waldweg_tea"}, "timeout": 30, "t": 0.1},
-  {"use": [27, 46], "face": "up", "log": "the hut: tea in front of the door, and nothing more yet", "t": 0.5},
+  {"use": [29, 45], "face": "left", "log": "the cup of tea on its stone beside the hut's door (the first answer takes it)", "t": 0.5},
   {"enter": "bachlauf", "log": "back to the stream", "t": 0.5},
   {"wait_for": {"scene": "bachlauf"}, "timeout": 30, "t": 0.1},
   {"log": "segment finished", "quit": true, "t": 0.5}

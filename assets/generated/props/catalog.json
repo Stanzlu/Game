@@ -1112,6 +1112,123 @@
    "res://assets/generated/props/haus/fireplace_lit_2.png"
   ]
  },
+ "haus/hut_bed": {
+  "anchor": [
+   15,
+   40
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -16
+   ],
+   "rect": [
+    28,
+    30
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/hut_bed.png"
+  ]
+ },
+ "haus/hut_door_open": {
+  "anchor": [
+   8,
+   24
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/hut_door_open.png"
+  ]
+ },
+ "haus/hut_pipe": {
+  "anchor": [
+   23,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/hut_pipe.png"
+  ]
+ },
+ "haus/hut_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "lights": [
+   {
+    "color": "#e8b070",
+    "energy": 0.4,
+    "offset": [
+     72,
+     40
+    ],
+    "range": 80
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/haus/hut_shell.png"
+  ]
+ },
+ "haus/hut_stove": {
+  "anchor": [
+   22,
+   52
+  ],
+  "emissive": [
+   "res://assets/generated/props/haus/hut_stove_emit.png"
+  ],
+  "flicker": true,
+  "lights": [
+   {
+    "color": "#ff9a4a",
+    "energy": 1.4,
+    "offset": [
+     0,
+     -14
+    ],
+    "range": 130
+   }
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    40,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/hut_stove.png"
+  ]
+ },
+ "haus/hut_table": {
+  "anchor": [
+   22,
+   24
+  ],
+  "shadow": [
+   18,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    34,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/hut_table.png"
+  ]
+ },
  "haus/rug": {
   "anchor": [
    22,
@@ -2126,6 +2243,34 @@
   ],
   "textures": [
    "res://assets/generated/props/tal/wd_hut.png"
+  ]
+ },
+ "tal/wd_hut_branches": {
+  "anchor": [
+   24,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/wd_hut_branches.png"
+  ]
+ },
+ "tal/wd_hut_cup": {
+  "anchor": [
+   8,
+   10
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wd_hut_cup.png"
+  ]
+ },
+ "tal/wd_line": {
+  "anchor": [
+   24,
+   26
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wd_line.png"
   ]
  },
  "tal/wd_marker_arrow": {

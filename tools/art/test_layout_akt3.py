@@ -10,8 +10,8 @@ WALDWEG = os.path.join(mapfile.ROOT, "content", "maps", "waldweg.txt")
 # ground cells a person can stand on (the legend's own grounds: grass, path, mud, puddle)
 STANDABLE = set(".,mp")
 # the spots of the walk, each once on the map (the rest of the letters are scattered forest)
-NAMED = "123456AEHDSNn@BQqazUKr"
-CUES = "123456QqazUKHDSnB"
+NAMED = "123456AEHDSNn@BQqazUKrCZYX"
+CUES = "123456QqazUKHDSnBCZYX"
 
 
 def _map():
@@ -122,7 +122,7 @@ class WaldwegLayoutTests(unittest.TestCase):
         near = [(x, y) for x, y in spots["P"] if abs(x - kx) <= 3 and abs(y - ky) <= 3]
         self.assertTrue(near, "the text says under the spruce: a spruce stands within three cells")
         # a tree is drawn upward from its foot: none within two columns and eight rows south of a cue
-        for glyph in "123456KQqU":
+        for glyph in "123456KQqUCYX":
             x, y = spots[glyph][0]
             for dy in range(1, 9):
                 for dx in range(-2, 3):
@@ -147,6 +147,17 @@ class WaldwegLayoutTests(unittest.TestCase):
         self.assertIn(door, reach, "reachable on foot")
         self.assertIn(marker, reach)
         self.assertLessEqual(abs(hut[0] - layout.path_x(hut[1])), 30)
+
+    def test_what_lies_before_the_hut_is_not_hidden_by_its_sprite(self):
+        _, _, rows = _map()
+        spots = _spots(rows)
+        hut = spots["H"][0]
+        # the hut sprite is 88 px wide around its cell (opaque to 473 px, a good cell and a half right of the
+        # cell's own right edge): the pebble, the one find on the level of the wall, lies clear of it
+        pebble = spots["Y"][0]
+        self.assertGreaterEqual(pebble[0] - hut[0], 3, "the pebble lies beside the hut's wall, not under it")
+        self.assertEqual(pebble[1], hut[1])
+        self.assertLess(pebble[0], spots["X"][0][0], "and before the line")
 
     def test_the_brook_is_water_all_the_way_and_the_path_keeps_to_its_west_bank(self):
         _, symbols, rows = _map()

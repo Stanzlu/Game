@@ -282,6 +282,21 @@ DESIGNS = {
         "stopwatch": True,
         "bag": "none",
     },
+    # The Einsiedler (Akt III, W3): old, round, slow and friendly. Grey hair in a knot, an olive wool cape
+    # worn soft, a linen shirt, no stopwatch and no hurry.
+    "einsiedler": {
+        "skin": ramp("#7a4638", "#b8764f", "#dc9f72", "#f6c9a0"),
+        "hair": ramp("#4a463e", "#7a7468", "#aaa396", "#d2ccc0", "#f2eee4"),
+        "top": ramp("#22261a", "#3c4426", "#667040", "#9aa468"),
+        "inner": ramp("#7a6e5a", "#b0a48a", "#dcd2b8", "#f6efdc"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#2a2420", "#443a30", "#665848", "#887866"),
+        "boots": ramp("#1e1612", "#3a2a20", "#5c4430", "#80624a"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d97a68"),
+        "outline": pa.hex_rgb("#1b1410"),
+        "hair_style": "bun", "outfit": "cape", "build": "round", "bag": "none",
+    },
     # Mira: practical traveler in the valley. Mustard rain cape, auburn ponytail, backpack.
     "mira": {
         "skin": ramp("#7a4438", "#b56f55", "#dea27e", "#f6cfae"),
@@ -304,7 +319,7 @@ DESIGNS = {
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
-SOFT = ("player", "mira", "child", "antreiber")
+SOFT = ("player", "mira", "child", "antreiber", "einsiedler")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 

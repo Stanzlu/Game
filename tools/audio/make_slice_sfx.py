@@ -351,12 +351,62 @@ def child_hum(rng, phrase=MOTIF, unit=0.48, space=None):
     return outdoors(out, 0.14) if space is None else space(out)
 
 
+# --- The hermit ---------------------------------------------------------------------------
+
+# D4, the key of the valley (D dorian): the degrees are those of the child's hum, one note family
+HERMIT_ROOT = 62
+# His tune: the motif (3-5-6-5-3-2), a breath, the end of the answer (3-2-1), so it comes home.
+# (degree, eighths); degree 0 is a breath. Together about 7.9 s with HERMIT_UNIT.
+HERMIT_TUNE = [(3, 1), (5, 1), (6, 2), (5, 1), (3, 1), (2, 2), (0, 1.5), (3, 1), (2, 1), (1, 3)]
+HERMIT_UNIT = 0.45  # seconds per eighth: slower than the child (0.48 for the motif, but he holds longer)
+
+
+def flute_note(freq, seconds, rng, vibrato=0.0, breath=0.05):
+    """One note of a wooden flute: nearly a sine (a hollow second and a faint third and fourth
+    partial), breath noise that swells with the tone and a small chiff at the start. The pitch
+    scoops up from a hair under, drifts a little (about two cents) and only the long notes get a
+    vibrato, late and shallow. `breath` is the noise level against the tone."""
+    n = int(RATE * seconds)
+    t = np.arange(n) / RATE
+    scoop = 2 ** (-0.30 / 12 * np.exp(-t / 0.05))
+    knots = np.linspace(0, seconds, max(int(seconds / 0.4), 1) + 1)
+    drift = np.interp(t, knots, rng.normal(0, 0.0010, len(knots)))
+    swing = vibrato * 0.0045 * np.clip((t - 0.3) / 0.4, 0, 1) * np.sin(2 * np.pi * rng.uniform(4.8, 5.4) * t)
+    phase = 2 * np.pi * np.cumsum(freq * scoop * (1 + drift + swing)) / RATE
+    tone = sum(a * np.sin(k * phase) for k, a in ((1, 1.0), (2, 0.30), (3, 0.10), (4, 0.03)))
+    attack = np.minimum(1.0, t / 0.05)
+    shape = np.sin(0.5 * np.pi * attack) ** 2 * np.clip((seconds - t) / 0.12, 0, 1)
+    shape = shape * (1 + 0.04 * np.sin(2 * np.pi * rng.uniform(0.6, 1.1) * t + rng.uniform(0, 6.28)))
+    air = fft_band(noise(n, rng), 1200, 4200, 2)
+    air = air / (np.std(air) + 1e-9) * breath * np.std(tone)
+    chiff = air * np.exp(-t / 0.035) * 2.2
+    return tone * shape + air * shape + chiff * attack
+
+
+def hermit_flute(rng, unit=HERMIT_UNIT, space=None):
+    """The hermit's flute (Act III, W3): his tune once through, slow and a little uneven, in the
+    small wooden room of the hut. Notes overlap a hair (legato), the last one is held and dies.
+    Not a loop; no pitch spread when it is played (AudioDirector.sfx(..., 1.0)): a tune stays a tune."""
+    pos = 0.4
+    parts = []
+    for deg, eighths in HERMIT_TUNE:
+        length = eighths * unit * rng.uniform(0.96, 1.06)
+        if deg > 0:
+            f = midi_hz(degree(HERMIT_ROOT, DORIAN, deg)) * rng.uniform(0.996, 1.004)
+            held = length + 0.06 + (0.35 if eighths >= 3 else 0.0)
+            note = flute_note(f, held, rng, vibrato=1.0 if eighths >= 2 else 0.0)
+            parts.append(at(note * rng.uniform(0.86, 1.0), pos + rng.normal(0, 0.012)))
+        pos += length
+    dry = mix(*parts)
+    return room(dry, 0.22, 0.40) if space is None else space(dry)
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
-          "cloth": -18.0, "bird": -16.0, "bark": -17.0}
+          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0}
 LOOPS = set()
 
 
@@ -395,6 +445,9 @@ def build(only=None):
     sounds["bird"] = (bird_landing(new_rng, 0), "bird")
     for i in range(3):
         sounds["bark_%d" % i] = (drover_call(new_rng, i), "bark")
+    # the hermit's flute (Act III, W3): its own random stream again
+    flute_rng = np.random.default_rng(47)
+    sounds["hermit_flute_0"] = (hermit_flute(flute_rng), "flute")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

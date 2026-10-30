@@ -157,12 +157,6 @@ else
 	do WorldState.set_flag("fragment.hang_steps")
 => END
 
-~ hut_door
-Die Hütte steht in einer Mulde, das Dach grün von Moos. Aus dem Schornstein kommt dünner Rauch. [ID:wd_hut_1] [#draft]
-Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm. [ID:wd_hut_2] [#draft]
-Du gehst nicht näher heran. Noch nicht. [ID:wd_hut_3] [#draft]
-=> END
-
 ~ cone
 Unter der Fichte liegt ein Zapfen, so groß wie eine Faust, die Schuppen halb offen. [ID:wd_cone_1] [#draft]
 - Einstecken. [ID:wd_cone_r1] [#draft]
