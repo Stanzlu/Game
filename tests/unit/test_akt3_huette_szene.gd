@@ -86,7 +86,14 @@ func _answering(
 		if next[0] < answers.size() and BoxAnswers.pick(scene.dialogue_box, answers[next[0]]):
 			next[0] += 1
 		return done.call()
-	await wait_until(watch, timeout)
+	var reached: bool = await wait_until(watch, timeout)
+	assert_true(reached, "the box asked, and the answers %s were taken" % [answers])
+	assert_eq(next[0], answers.size(), "every answer was taken")
+
+
+## The room is smaller than the picture at every zoom, so the camera stands at its middle.
+func _room_centre() -> Vector2:
+	return Vector2(ROOM.position * 16) + Vector2(ROOM.size * 16) / 2.0
 
 
 func _stays() -> int:
@@ -163,6 +170,16 @@ func test_with_the_flood_seen_first_the_hut_ends_the_wood() -> void:
 	assert_true(WorldState.is_quest_done(QUEST))
 
 
+func test_the_pipe_is_on_the_sill_until_it_is_taken() -> void:
+	var scene := await _scene()
+	assert_eq(_decor_with(scene, "haus/hut_pipe").size(), 1, "the pipe lies on the sill")
+	scene.queue_free()
+	await wait_physics_frames(2)
+	WorldState.set_flag("forest.pipe_taken")
+	var after := await _scene()
+	assert_eq(_decor_with(after, "haus/hut_pipe").size(), 0, "nothing lies on the sill any more")
+
+
 func test_a_game_without_the_walk_gets_no_quest_from_the_hut() -> void:
 	await _scene()
 	assert_eq(WorldState.quest_stage(QUEST), "")
@@ -174,15 +191,26 @@ func test_a_game_without_the_walk_gets_no_quest_from_the_hut() -> void:
 func test_sitting_down_asks_once_and_declining_changes_nothing() -> void:
 	var scene := await _scene()
 	WorldState.set_flag("melody.hermit_flute")
+	var opened := [0]
+	scene.dialogue_box.opened.connect(func() -> void: opened[0] += 1)
 	await _sit(scene)
-	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	var asked: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	assert_true(asked, "sitting down opens the question")
 	await _answering(scene, PackedStringArray(["Nur sitzen."]), _closed(scene))
 	await wait_physics_frames(3)
+	assert_eq(opened[0], 1, "one question for one sitting")
 	assert_eq(_stays(), 0, "no step")
 	assert_eq(scene.view.zoom, 1.5, "the picture as it was")
 	assert_eq(scene.player.state, Player.State.SIT, "she sits on, free to stand up")
 	assert_false(scene.player.is_locked())
 	assert_true(SaveSystem.blockers().is_empty(), "nothing holds the game from saving")
+	scene.player.stand_up()
+	await wait_physics_frames(3)
+	await _sit(scene)
+	var again: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	assert_true(again, "a second sitting asks again")
+	assert_eq(opened[0], 2)
+	await _answering(scene, PackedStringArray(["…"]), _closed(scene))
 
 
 func test_the_first_sitting_plays_the_flute_and_writes_it_out_once() -> void:
@@ -204,9 +232,11 @@ func test_each_answer_to_staying_closes_the_picture_in_one_step() -> void:
 	WorldState.set_flag("melody.hermit_flute")
 	await _sit(scene)
 	var zooms: Array[float] = []
+	var eyes: Array[Vector2] = []
 	var on_flag := func(id: String, value: bool) -> void:
 		if value and id in STAY_FLAGS:
 			zooms.append(scene.view.zoom)
+			eyes.append(scene.view.camera_position)
 	WorldState.flag_changed.connect(on_flag)
 	await _answering(
 		scene, PackedStringArray(["Bleiben.", "Noch bleiben.", "Noch bleiben."]), _closed(scene)
@@ -221,9 +251,10 @@ func test_each_answer_to_staying_closes_the_picture_in_one_step() -> void:
 	assert_eq(zooms[zooms.size() - 3], 1.75, "the first answer: a step closer, with the line")
 	assert_eq(zooms[zooms.size() - 2], 2.0)
 	assert_eq(zooms[zooms.size() - 1], 2.0, "the third opens the door and goes no further")
-	assert_almost_eq(
-		scene.view.world_to_ui(scene.view.camera_position), Vector2(320, 180), Vector2.ONE
-	)
+	assert_eq(eyes.size(), 3)
+	for eye: Vector2 in eyes:
+		assert_almost_eq(eye, _room_centre(), Vector2.ONE, "the camera stays at the room's middle")
+	assert_almost_eq(scene.view.camera_position, _room_centre(), Vector2.ONE)
 
 
 func test_the_third_step_opens_the_door_and_the_game_saves_once() -> void:
@@ -264,6 +295,7 @@ func test_standing_up_gives_the_picture_back_in_the_same_moment() -> void:
 	scene.player.stand_up()
 	assert_eq(scene.view.zoom, 1.5, "no wait, no hold")
 	assert_eq(scene.view.view_size, Vector2i(427, 240))
+	assert_almost_eq(scene.view.camera_position, _room_centre(), Vector2.ONE)
 	assert_eq(_stays(), 2, "nothing is taken back and nothing is lost")
 
 
@@ -291,9 +323,16 @@ func test_a_loaded_game_never_starts_tight_and_keeps_the_open_door() -> void:
 	for flag: String in STAY_FLAGS:
 		WorldState.set_flag(flag)
 	WorldState.set_flag("melody.hermit_flute")
+	# the autosave of the third step is written while she sits: the stool's seat (cell 15, 11)
+	var seat := Vector2(15 * 16 + 8, 11 * 16 + 8 + 4)
+	SaveSystem._arrival = {"map": "huette", "position": seat}
+	SaveSystem.loading = true
 	var scene := await _scene()
+	assert_false(SaveSystem.loading, "the arrival was taken")
+	assert_almost_eq(scene.player.global_position, seat, Vector2(2, 4), "she is where she sat")
 	assert_eq(scene.view.zoom, 1.5)
-	assert_ne(scene.player.state, Player.State.SIT)
+	assert_ne(scene.player.state, Player.State.SIT, "standing, not sitting")
+	assert_false(scene.dialogue_box.is_open(), "no question is open")
 	assert_eq(_decor_with(scene, "haus/hut_door_open").size(), 1, "the door is still open")
 
 
@@ -303,6 +342,8 @@ func test_after_the_third_step_stay_only_gives_calm_lines_and_nothing_else() -> 
 	WorldState.set_flag("melody.hermit_flute")
 	var scene := await _scene()
 	await _sit(scene)
+	var asked: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	assert_true(asked, "even after the third step sitting asks, and the answer is calm")
 	var saves: Array[String] = []
 	var on_saved := func(slot: String) -> void: saves.append(slot)
 	SaveSystem.saved.connect(on_saved)
@@ -326,8 +367,10 @@ func test_nothing_in_the_scene_is_timed() -> void:
 	var scene := await _scene()
 	WorldState.set_flag("melody.hermit_flute")
 	await _sit(scene)
-	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	var asked: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	assert_true(asked, "the question is open")
 	await wait_seconds(10.0)
+	assert_true(scene.dialogue_box.is_open(), "and it waits as long as she does")
 	assert_eq(_stays(), 0, "ten seconds of game time at the open question change nothing")
 	assert_eq(scene.view.zoom, 1.5)
 	var source := FileAccess.get_file_as_string("res://world/levels/akt3/huette_scene.gd")
@@ -344,6 +387,7 @@ func test_the_door_out_is_reached_from_the_arrival_and_leads_to_the_forest_path(
 	var scene := await _scene()
 	var cell := scene.map.world_to_cell(scene.player.global_position)
 	assert_eq(cell, Vector2i(12, 12), "the arrival is at the door's marker")
+	assert_eq(SceneTravel.last_target, "", "nothing has travelled yet")
 	var gone := func() -> bool: return SceneTravel.last_target == "waldweg"
 	Input.action_press(&"move_down")
 	var left := 240
@@ -360,6 +404,8 @@ func test_even_after_the_third_step_the_door_out_is_free() -> void:
 	SceneTravel.stay = true
 	SceneTravel.pending_spawn = "door"
 	var scene := await _scene()
+	assert_eq(SceneTravel.last_target, "", "nothing has travelled yet")
+	assert_eq(_decor_with(scene, "haus/hut_door_open").size(), 1, "the door stands open")
 	var gone := func() -> bool: return SceneTravel.last_target == "waldweg"
 	Input.action_press(&"move_down")
 	var left := 240
@@ -368,4 +414,3 @@ func test_even_after_the_third_step_the_door_out_is_free() -> void:
 		left -= 1
 	Input.action_release(&"move_down")
 	assert_true(gone.call(), "nothing holds her, with the door open or shut")
-	assert_not_null(scene)

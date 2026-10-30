@@ -65,6 +65,17 @@ func test_the_zoom_can_change_while_the_scene_runs_in_one_step() -> void:
 	var centre := Vector2(400, 300) + GameView.FOLLOW_OFFSET
 	assert_almost_eq(view.camera_position, centre, Vector2.ONE, "placed again at once")
 	assert_almost_eq(view.world_to_ui(centre), Vector2(320, 180), Vector2.ONE)
+	# before any frame the picture is laid out for the new size, never for the old one
+	var half := Vector2(view.viewport.size) * 0.5
+	assert_eq(view.viewport.canvas_transform.origin, half - view.camera_position)
+	assert_eq(
+		view.display.position, (-Vector2.ONE * GameView.BORDER - view.camera_remainder) * view.zoom
+	)
+	# a room smaller than the picture is centred at the new zoom, whatever the old one framed
+	view.bounds = Rect2(100, 100, 224, 160)
+	view.zoom_to(1.75)
+	view.zoom_to(2.0)
+	assert_almost_eq(view.camera_position, Vector2(212, 180), Vector2.ONE, "the middle of the room")
 	view.zoom_to(1.5)
 	assert_eq(view.view_size, Vector2i(427, 240), "the room's own picture, back in the same call")
 	var before := view.viewport.size

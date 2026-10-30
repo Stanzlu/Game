@@ -7,7 +7,7 @@ extends GutTest
 const PATH := "res://content/maps/huette.txt"
 const DIALOGUE := "res://content/dialogue/akt3/huette.dialogue"
 const ROOM := Rect2i(9, 5, 14, 10)
-const ONCE := "SKTEpbufwnvDd@1"
+const ONCE := "SKTEpbufwqnvDd@1"
 
 
 func _legend_and_rows() -> Array:
@@ -59,7 +59,7 @@ func test_no_blocker_stands_anywhere_and_the_door_out_has_no_condition() -> void
 	for glyph: String in legend:
 		var entry: Dictionary = legend[glyph]
 		assert_false("blocker" in str(entry.get("prop", "")), "%s: nothing holds her in" % glyph)
-		if glyph != "d":
+		if glyph != "d" and glyph != "q":
 			var params: Dictionary = entry.get("params", {})
 			assert_false(
 				params.has("if") or params.has("unless"), "%s: nothing is conditional" % glyph
@@ -73,6 +73,26 @@ func test_no_blocker_stands_anywhere_and_the_door_out_has_no_condition() -> void
 		"forest.hut_stay_3",
 		"the door stands open after the third step"
 	)
+
+
+func test_the_pipe_lies_on_the_sill_beside_the_window_and_goes_when_it_is_taken() -> void:
+	var parsed := _legend_and_rows()
+	var legend: Dictionary = parsed[0]
+	var rows: PackedStringArray = parsed[1]
+	var window := Vector2i(-1, -1)
+	var pipe := Vector2i(-1, -1)
+	for y in range(rows.size()):
+		for x in range(rows[y].length()):
+			if rows[y][x] == "w":
+				window = Vector2i(x, y)
+			if rows[y][x] == "q":
+				pipe = Vector2i(x, y)
+	assert_eq(pipe, window + Vector2i(1, 0), "in the cell right of the window")
+	var params: Dictionary = legend["q"]["params"]
+	assert_eq(params["sprite"], "haus/hut_pipe")
+	assert_eq(params["unless"], "forest.pipe_taken", "taken with the answer, it is gone")
+	assert_false(params.has("cue"), "the window holds the cue, not the picture of the pipe")
+	assert_eq(legend["w"]["params"]["cue"], "window")
 
 
 func test_the_arrival_is_two_cells_from_the_door_and_the_player_starts_beside_it() -> void:

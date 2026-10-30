@@ -5,7 +5,7 @@
   {"wait_for": {"beat": "forest_rest"}, "timeout": 30, "t": 0.1},
   {"use": [29, 45], "face": "left", "log": "offer one: the cup of tea on its stone before the door, taken with the first answer", "t": 0.5},
   {"wait_for": {"flag": "forest.hut_tea"}, "timeout": 30, "t": 0.1},
-  {"use": [30, 44], "face": "left", "log": "the pebble with a hole by the hut's wall", "t": 0.5},
+  {"use": [31, 44], "face": "left", "log": "the pebble with a hole by the hut's wall", "t": 0.5},
   {"wait_for": {"flag": "forest.pebble_taken"}, "timeout": 30, "t": 0.1},
   {"use": [34, 44], "face": "left", "log": "the washing line with nothing on it: a trace of the world", "t": 0.5},
   {"wait_for": {"flag": "fragment.clothesline"}, "timeout": 30, "t": 0.1},

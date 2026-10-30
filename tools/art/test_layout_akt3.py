@@ -148,6 +148,17 @@ class WaldwegLayoutTests(unittest.TestCase):
         self.assertIn(marker, reach)
         self.assertLessEqual(abs(hut[0] - layout.path_x(hut[1])), 30)
 
+    def test_what_lies_before_the_hut_is_not_hidden_by_its_sprite(self):
+        _, _, rows = _map()
+        spots = _spots(rows)
+        hut = spots["H"][0]
+        # the hut sprite is 88 px wide around its cell (opaque to 473 px, a good cell and a half right of the
+        # cell's own right edge): the pebble, the one find on the level of the wall, lies clear of it
+        pebble = spots["Y"][0]
+        self.assertGreaterEqual(pebble[0] - hut[0], 3, "the pebble lies beside the hut's wall, not under it")
+        self.assertEqual(pebble[1], hut[1])
+        self.assertLess(pebble[0], spots["X"][0][0], "and before the line")
+
     def test_the_brook_is_water_all_the_way_and_the_path_keeps_to_its_west_bank(self):
         _, symbols, rows = _map()
         spots = _spots(rows)

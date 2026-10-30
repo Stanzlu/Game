@@ -30,7 +30,7 @@ Streit) → später Besuche im Haus. Das Warum: warum Alleinsein sicher war.
 - `hu_s2_2` „Ich frag nicht, wie lang.“
 - `hu_h_8` „Geh, wenn du gehst. Der Tee verzeiht es.“
 
-Das Warum zeigen die Dinge, nie eine Zeile: der Tee steht vor der Tür und nicht am Tisch, quer über dem Pfad liegen Zweige, innen hängt der Riegel offen, ein zweiter Becher hängt glatt und unbenutzt am Nagel, und das Fenster zeigt immer dasselbe.
+Das Warum zeigen die Dinge, nie eine Zeile: der Tee steht vor der Tür und nicht am Tisch, auf dem Pfad liegen Zweige übereinander, innen hängt der Riegel offen, ein zweiter Becher hängt glatt und unbenutzt am Nagel, und das Fenster zeigt immer dasselbe.
 
 ## Weitere Entwürfe (nicht im Spiel)
 

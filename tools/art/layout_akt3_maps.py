@@ -211,7 +211,7 @@ def build():
     for glyph, (x, y) in (
         ("C", (HUT[0] + 1, HUT[1] + 1)),
         ("Z", (HUT[0] + 4, HUT[1] + 2)),
-        ("Y", (HUT[0] + 2, HUT[1])),
+        ("Y", (HUT[0] + 3, HUT[1])),
         ("X", (HUT[0] + 6, HUT[1])),
     ):
         assert g.get(x, y) in (".", ","), (glyph, x, y, g.get(x, y))

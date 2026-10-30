@@ -174,7 +174,7 @@ Jedes Flag, das die Geschichte setzt, steht hier mit seiner Achse (Plan 5.6: Bez
 | `forest.hut_stay_2` | Entscheidungen | `huette.dialogue` | `huette.dialogue` | Sie ist beim Einsiedler noch geblieben, zweite Stufe (Akt III, W3). Aufstehen gibt das Bild sofort zurück. |
 | `forest.hut_stay_3` | Entscheidungen | `huette.dialogue` | `huette.dialogue`, `huette.txt` | Sie ist beim Einsiedler ein drittes Mal geblieben: die Tür steht offen, das Spiel speichert einmal, weiter geht das Bleiben nicht (Akt III, W3). |
 | `forest.hermit_invited` | Beschützer | `huette.dialogue` | `huette.dialogue` | Sie hat dem Einsiedler Tee im Tal angeboten (nur mit der Facette Fürsorge): sein Becher ist gepackt (Akt III, W3; W6 liest es). |
-| `forest.pipe_taken` | Gegenstände | `huette.dialogue` | `huette.dialogue` | Sie hat die Holunderpfeife vom Fensterbrett der Hütte eingesteckt (Kuriosität, Akt III, W3). |
+| `forest.pipe_taken` | Gegenstände | `huette.dialogue` | `huette.dialogue`, `huette.txt` | Sie hat die Holunderpfeife vom Fensterbrett der Hütte eingesteckt (Kuriosität, Akt III, W3). |
 | `forest.pebble_taken` | Gegenstände | `huette.dialogue` | `waldweg.txt` | Sie hat den Kiesel mit Loch an der Hüttenwand eingesteckt (Kuriosität, Akt III, W3). |
-| `fragment.clothesline` | Wahrnehmung | `huette.dialogue` | `huette.dialogue` | Sie ist an der Leine zwischen Hütte und Fichte stehen geblieben: für einen Atemzug hängen Tücher daran, noch nass (Spur der Welt, Akt III, W3; kein Bild des Kindes). |
+| `fragment.clothesline` | Wahrnehmung | `huette.dialogue` | `huette.dialogue` | Sie ist an der Leine zwischen den zwei Pfosten stehen geblieben: für einen Atemzug hängt ein Tuch daran, noch nass (Spur der Welt, Akt III, W3; kein Bild des Kindes). |
 | `melody.hermit_flute` | Musik | `huette.dialogue` | `huette.dialogue` | Sie hat die Flöte des Einsiedlers gehört, als sie sich zu ihm setzte: die Melodie von Akt III, hörbar, kein Fragment (W3). |

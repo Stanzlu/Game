@@ -503,6 +503,16 @@ def hut_cup(ms):
     return c
 
 
+def hut_pipe(ms):
+    """The elder pipe lying on the window sill: a pale piece of pipe wood with one hole and a darker underside;
+    14 x 4, drawn by the map from the next cell (anchor (23, 7)) so that it lies on the sill of the window in column 4."""
+    c = ms.Canvas(14, 4)
+    c.paint(c.rect(0, 0, 14, 3), FLUTE_WOOD, np.where(c.yy < 1, 0.9, 0.62), dither=False)
+    c.paint(c.rect(0, 2, 14, 3), FLUTE_WOOD, 0.3, dither=False)
+    c.fill(c.rect(8, 1, 9, 2), np.array([42, 28, 18], np.float32))  # the one hole
+    return c
+
+
 def hut_branches(ms):
     """A few branches lying across the spur: weathered grey-brown, one forked, a twig or two, a little moss
     where they touch the ground; flat, 48 x 14, anchor (24, 7)."""
@@ -600,6 +610,7 @@ def build(ms):
     ms.save("haus", "hut_table", hut_table(ms), (22, 24), shape={"rect": [34, 8], "offset": [0, -6]}, shadow=[18, 4])
     ms.save("haus", "hut_bed", hut_bed(ms), (15, 40), shape={"rect": [28, 30], "offset": [0, -16]})
     ms.save("haus", "hut_door_open", hut_door_open(ms), (8, 24), flat=True)
+    ms.save("haus", "hut_pipe", hut_pipe(ms), (23, 7), flat=True)
     ms.save("tal", "wd_hut_cup", hut_cup(ms), (8, 10))
     ms.save("tal", "wd_hut_branches", hut_branches(ms), (24, 7), flat=True)
     ms.save("tal", "wd_line", hut_line(ms), (24, 26))

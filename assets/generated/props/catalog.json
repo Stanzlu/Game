@@ -1141,6 +1141,16 @@
    "res://assets/generated/props/haus/hut_door_open.png"
   ]
  },
+ "haus/hut_pipe": {
+  "anchor": [
+   23,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/hut_pipe.png"
+  ]
+ },
  "haus/hut_shell": {
   "anchor": [
    8,

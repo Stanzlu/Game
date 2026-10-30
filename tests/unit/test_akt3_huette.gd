@@ -100,6 +100,16 @@ func test_he_offers_the_stool_and_says_what_the_tea_outside_was() -> void:
 	assert_false(_has(again, "hu_h_1"), "the greeting is said once")
 
 
+func test_whoever_sat_before_talking_is_not_greeted_as_a_newcomer() -> void:
+	# the stool stands two cells from the door: she may sit, hear the flute and stand up before she
+	# says a word to him
+	WorldState.set_flag("melody.hermit_flute")
+	var seen := await DialogueWalk.play(HUT, "hermit", PackedStringArray(["…"]))
+	assert_true(_has(seen, "hu_h_5"), "only the stool, which she has just left")
+	for id: String in ["hu_h_1", "hu_h_2", "hu_h_3", "hu_h_4"]:
+		assert_false(_has(seen, id), "the greeting for a newcomer: %s" % id)
+
+
 func test_the_invitation_to_the_valley_needs_the_tea_she_can_make() -> void:
 	var without := await DialogueWalk.groups(HUT, "hermit", PackedStringArray(["…"]))
 	assert_eq(without[0].size(), 2, "no tea to offer: the way on and the silence")
@@ -166,9 +176,26 @@ func test_each_step_sets_its_own_flag_first_and_declining_stops_there() -> void:
 	assert_false(WorldState.has_flag("forest.hut_stay_3"))
 
 
+func test_every_step_sets_its_flag_in_its_first_statement_so_the_picture_goes_with_the_line(
+) -> void:
+	var lines := FileAccess.get_file_as_string(STORY_FILE).split("\n")
+	for step in range(1, 4):
+		var at := lines.find("~ stay_%d" % step)
+		assert_gt(at, -1, "stay_%d exists" % step)
+		assert_eq(
+			lines[at + 1].strip_edges(),
+			'do WorldState.set_flag("forest.hut_stay_%d")' % step,
+			"the flag is the first thing stay_%d does" % step
+		)
+
+
 func test_nothing_new_happens_while_she_stays() -> void:
 	WorldState.set_flag("melody.hermit_flute")
+	assert_true(WorldState.start_quest(QUEST))
+	assert_true(WorldState.advance_quest(QUEST, "brook"))
+	assert_true(WorldState.advance_quest(QUEST, "wood"))
 	var items := WorldState.state.inventory.duplicate()
+	var flags_before := WorldState.state.flags.duplicate()
 	await DialogueWalk.play(
 		HUT, "stay", PackedStringArray(["Bleiben", "Noch bleiben", "Noch bleiben"])
 	)
@@ -176,7 +203,15 @@ func test_nothing_new_happens_while_she_stays() -> void:
 	assert_eq(Collection.fragments(), 0)
 	assert_eq(Collection.curiosities(), 0)
 	assert_eq(Collection.melodies(), 1, "the flute was there before")
-	assert_eq(WorldState.quest_stage(QUEST), "", "no stage, no objective")
+	assert_eq(WorldState.quest_stage(QUEST), "wood", "staying moves the quest nowhere")
+	assert_false(WorldState.is_objective_done(QUEST, "hermit"), "the smoke is the scene's goal")
+	assert_false(WorldState.is_objective_done(QUEST, "flood"))
+	var added: Array[String] = []
+	for flag: String in WorldState.state.flags:
+		if not flags_before.has(flag):
+			added.append(flag)
+	added.sort()
+	assert_eq(added, STAY_FLAGS, "only the three steps are written, no care and no rest")
 
 
 func test_after_the_third_step_there_are_only_calm_lines_and_no_end() -> void:
@@ -184,17 +219,22 @@ func test_after_the_third_step_there_are_only_calm_lines_and_no_end() -> void:
 		WorldState.set_flag(flag)
 	WorldState.set_flag("melody.hermit_flute")
 	var before := _stays()
+	var flags_before := WorldState.state.flags.duplicate()
 	var seen := await DialogueWalk.play(
 		HUT, "stay", PackedStringArray(["Bleiben", "Bleiben", "Bleiben", "Nur sitzen"])
 	)
 	assert_true(_has(seen, "hu_done_1"), "the door stands open")
-	var calm := 0
+	var calm_texts: Array[String] = []
 	for id: String in ["hu_calm_1", "hu_calm_2", "hu_calm_3"]:
-		if _has(seen, id):
+		calm_texts.append(LineText.of(id))
+	var calm := 0
+	for text: String in seen:
+		if text in calm_texts:
 			calm += 1
-	assert_gte(calm, 1, "a calm line for each stay")
+	assert_eq(calm, 3, "one calm line for each of the three stays")
 	assert_true(_has(seen, "hu_done_2"), "sitting only ends the cue")
 	assert_eq(_stays(), before, "no step beyond the third")
+	assert_eq(WorldState.state.flags.size(), flags_before.size(), "no flag is added by staying")
 	var groups := await DialogueWalk.groups(HUT, "stay_more", PackedStringArray(["Bleiben", "…"]))
 	assert_eq(groups.size(), 2, "the answers come back after a calm line")
 	assert_eq(groups[0], groups[1], "the same three answers")
@@ -353,6 +393,8 @@ func test_nothing_explains_why_he_lives_alone_and_nothing_judges_it() -> void:
 		"Fürsorge",
 		"achtsam",
 	]
-	for text: String in _all_texts():
+	var texts := _all_texts()
+	assert_gt(texts.size(), 80, "every line, answer and journal row was collected")
+	for text: String in texts:
 		for word: String in forbidden:
 			assert_false(text.contains(word), "'%s' in: %s" % [word, text])

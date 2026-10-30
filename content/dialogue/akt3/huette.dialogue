@@ -1,22 +1,22 @@
 # Die Hütte, Akt III, Segment W3 (docs/akt3/REGIONSBRIEFE.md, ADR-070 O6). Der Einsiedler lebt in einer Hütte in einer Mulde
 # abseits des Pfades. Er hält niemanden fest und fragt nichts; er stellt etwas hin und lässt es stehen: einen Becher Tee vor der Tür
 # (erstes Angebot), einen Hocker am Tisch (zweites), das Bleiben (drittes). Jedes Angebot ist abzulehnen, ohne dass etwas fehlt.
-# Sein Warum zeigen Dinge, keine Zeile erklärt es: der Tee steht vor der Tür und nicht am Tisch, Zweige liegen quer über dem Pfad,
+# Sein Warum zeigen Dinge, keine Zeile erklärt es: der Tee steht vor der Tür und nicht am Tisch, Zweige liegen einer über dem anderen auf dem Pfad,
 # innen hängt der Riegel offen, ein zweiter Becher hängt glatt am Nagel, und das Fenster zeigt immer dasselbe. Was Alleinsein
 # ist, wird nicht bewertet, weder gut noch schlecht (Bible §51).
-# Bleiben hat höchstens drei Stufen, jede eine Antwort und nie eine Zeit; bei jeder schließt sich das Bild ein Stück (die Szene
-# liest die Flaggen), nach der dritten steht die Tür offen und das Spiel speichert einmal. Danach gibt es nur ruhige Zeilen, ohne
+# Bleiben hat höchstens drei Stufen, jede eine Antwort und nie eine Zeit; bei den ersten zwei schließt sich das Bild ein Stück (die
+# Szene liest die Flags), nach der dritten steht die Tür offen und das Spiel speichert einmal. Danach gibt es nur ruhige Zeilen, ohne
 # Ende des Bleibens und ohne Strafe. Aufstehen geht jederzeit (die Szene gibt das Bild zurück).
 # Die Flöte spielt er beim ersten Sitzen, ungefragt; sie ist die Melodie dieses Aktes (melody.hermit_flute) und kein Fragment.
 # Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Schilder und Zettel stünden in » «.
-# Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt; die Stufen des Bleibens setzen ihre Flagge zuerst, damit das Bild
+# Was gesetzt wird, steht am Ende der Zeilen, das Flag zuletzt; die Stufen des Bleibens setzen ihr Flag zuerst, damit das Bild
 # mit der Zeile reagiert.
 
 # --- Draußen: was vor der Tür liegt ---------------------------------------------------------------------------------------
 
 ~ door_tea
 if WorldState.has_flag("forest.hut_tea")
-	Der Becher steht leer auf dem Stein. Er ist noch warm. [ID:hu_door_5] [#draft]
+	Der Becher steht auf dem Stein, wo er stand. Er ist noch warm. [ID:hu_door_5] [#draft]
 	=> END
 Aus dem Schornstein der Hütte steigt dünner Rauch. [ID:hu_door_1] [#draft]
 Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm. [ID:hu_door_2] [#draft]
@@ -31,7 +31,7 @@ Niemand ist zu sehen. Der Becher steht da, als gehöre er dem, der vorbeikommt. 
 => END
 
 ~ branches
-Quer über dem Pfad zur Hütte liegen Zweige, alle in dieselbe Richtung gelegt. [ID:hu_branch_1] [#draft]
+Auf dem Pfad zur Hütte liegen Zweige, einer über dem anderen. [ID:hu_branch_1] [#draft]
 Man sieht sie, und man steigt über sie. Gebunden sind sie nicht. [ID:hu_branch_2] [#draft]
 => END
 
@@ -48,11 +48,11 @@ Im Gras an der Hüttenwand liegt ein Kiesel, glatt, mittendurch ein Loch. [ID:hu
 # Eine Spur der Welt (Fragment, kein Bild des Kindes, kein Grund): eine Leine ohne Wäsche, die für einen Atemzug nicht leer ist.
 ~ clothesline
 if WorldState.has_flag("fragment.clothesline")
-	Die Leine zwischen Hütte und Fichte, die Klammern in einer Reihe. [ID:hu_line_5] [#draft]
+	Die Leine zwischen den zwei Pfosten, die Klammern in einer Reihe. [ID:hu_line_5] [#draft]
 else
-	Zwischen der Hütte und einer Fichte ist eine Leine gespannt. Die Holzklammern sitzen in gleichen Abständen, grau vom Wetter. [ID:hu_line_1] [#draft]
+	Zwischen zwei Pfosten ist eine Leine gespannt. Die Holzklammern sitzen in gleichen Abständen, grau vom Wetter. [ID:hu_line_1] [#draft]
 	Nichts hängt daran. Das Gras darunter ist platt getreten, eine Bahn entlang. [ID:hu_line_2] [#draft]
-	Für einen Atemzug hängen Tücher daran, noch nass, und es tropft. Dann ist es wieder nur eine Leine. [ID:hu_line_3] [#draft]
+	Für einen Atemzug hängt ein Tuch daran, noch nass, und es tropft. Dann ist es wieder nur eine Leine. [ID:hu_line_3] [#draft]
 	Wer sie gespannt hat, hat auf Wind gerechnet. [ID:hu_line_4] [#draft]
 	do WorldState.set_flag("fragment.clothesline")
 => END
@@ -99,7 +99,7 @@ Das Fenster zeigt den Wald im Abendlicht, zwei Stämme und dazwischen Dämmerung
 # (wer Tee machen kann, kann ihn auch anbieten); sein Becher ist dann gepackt. Wer geht, geht ohne Folge.
 
 ~ hermit
-if WorldState.has_flag("forest.hut_met")
+if WorldState.has_flag("forest.hut_met") or WorldState.has_flag("melody.hermit_flute")
 	=> hermit_again
 Einsiedler: Tee ist da. Sitz, wenn du magst. [ID:hu_h_1] [#draft]
 if WorldState.has_flag("forest.hut_tea")

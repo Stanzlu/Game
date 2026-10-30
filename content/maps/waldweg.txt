@@ -45,7 +45,7 @@ a = {"ground": ",", "marker": "hang_top"}
 z = {"ground": ",", "marker": "hang_foot"}
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "hang_steps", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 20}}
 ; die Hütte: Haus, die Tür (nie abgeschlossen, nie gesperrt), die Marke davor und, was vor der Tür liegt: der Becher Tee auf dem Stein,
-; Zweige quer über dem Pfad, ein Kiesel mit Loch, eine Leine ohne Wäsche (ihre Texte stehen in huette.dialogue)
+; Zweige auf dem Pfad, ein Kiesel mit Loch, eine Leine ohne Wäsche (ihre Texte stehen in huette.dialogue)
 H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_hut"}}
 D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "huette", "spawn": "door"}}
 S = {"ground": ",", "marker": "spawn_huette"}
@@ -103,7 +103,7 @@ hhhhhh..T.......F.....T.....P....hhh....F........,,...~~~..hhhhhhhhhhhhhhhhhhhhh
 hhhhhh.....T.......R..........F..hh..P....T.....,,,q..~~~..hhhhhhhhhhhhhhhhhhhhhhhhhhhh.....hhhhhhhh
 hhhhh..........T.........P....................p.,,...~~~....hhhhhhhhhhhhhhhhhhhhhhhhhh...T..hhhhhhhh
 hhhhh...T....F.....T..T.......T...R..........ppp,,.L~~~......hhhhhhhhhhhhhhhhhhhhhhhh.......hhhhhhhh
-hhhhh.F.........R..........H.Y...X....,,,,,,,,,,,...~~~........hhhhhhhhhhhhhhhhhhhhhhhh......hhhhhhh
+hhhhh.F.........R..........H..Y..X....,,,,,,,,,,,...~~~........hhhhhhhhhhhhhhhhhhhhhhhh......hhhhhhh
 hhhh.......................DC....,,,,,,,,,,,...,,...~~......F..hhhhhhhhhhhhhhhhhhhhhhhhh...hhhhhhhhh
 hhhhh..F.T..P........P..g..,,,,Z,,,,...........,,..~~~.........hhhhhhhhhhhhhhhhh..hhhhhhh.hhhhhhhhhh
 hhhhh............T.g.......,,S............R....,...~~~.P.P..T..hhhhhhhhhhhhhhh...hhhhhhhhhhhhhhhhhhh

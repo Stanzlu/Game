@@ -13,7 +13,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### W3-1 · `door_tea`
 
 *wenn* `forest.hut_tea`
-  - *Der Becher steht leer auf dem Stein. Er ist noch warm.* `[#draft]`  <sub>hu_door_5</sub>
+  - *Der Becher steht auf dem Stein, wo er stand. Er ist noch warm.* `[#draft]`  <sub>hu_door_5</sub>
   - *→ Ende des Szenenstücks*
 - *Aus dem Schornstein der Hütte steigt dünner Rauch.* `[#draft]`  <sub>hu_door_1</sub>
 - *Auf einem flachen Stein vor der Tür steht ein Becher. Der Tee darin ist noch warm.* `[#draft]`  <sub>hu_door_2</sub>
@@ -27,7 +27,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### W3-2 · `branches`
 
-- *Quer über dem Pfad zur Hütte liegen Zweige, alle in dieselbe Richtung gelegt.* `[#draft]`  <sub>hu_branch_1</sub>
+- *Auf dem Pfad zur Hütte liegen Zweige, einer über dem anderen.* `[#draft]`  <sub>hu_branch_1</sub>
 - *Man sieht sie, und man steigt über sie. Gebunden sind sie nicht.* `[#draft]`  <sub>hu_branch_2</sub>
 
 ### W3-3 · `pebble`
@@ -43,11 +43,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Eine Spur der Welt (Fragment, kein Bild des Kindes, kein Grund): eine Leine ohne Wäsche, die für einen Atemzug nicht leer ist.
 
 *wenn* `fragment.clothesline`
-  - *Die Leine zwischen Hütte und Fichte, die Klammern in einer Reihe.* `[#draft]`  <sub>hu_line_5</sub>
+  - *Die Leine zwischen den zwei Pfosten, die Klammern in einer Reihe.* `[#draft]`  <sub>hu_line_5</sub>
 *sonst*
-  - *Zwischen der Hütte und einer Fichte ist eine Leine gespannt. Die Holzklammern sitzen in gleichen Abständen, grau vom Wetter.* `[#draft]`  <sub>hu_line_1</sub>
+  - *Zwischen zwei Pfosten ist eine Leine gespannt. Die Holzklammern sitzen in gleichen Abständen, grau vom Wetter.* `[#draft]`  <sub>hu_line_1</sub>
   - *Nichts hängt daran. Das Gras darunter ist platt getreten, eine Bahn entlang.* `[#draft]`  <sub>hu_line_2</sub>
-  - *Für einen Atemzug hängen Tücher daran, noch nass, und es tropft. Dann ist es wieder nur eine Leine.* `[#draft]`  <sub>hu_line_3</sub>
+  - *Für einen Atemzug hängt ein Tuch daran, noch nass, und es tropft. Dann ist es wieder nur eine Leine.* `[#draft]`  <sub>hu_line_3</sub>
   - *Wer sie gespannt hat, hat auf Wind gerechnet.* `[#draft]`  <sub>hu_line_4</sub>
 
 ### W3-5 · `bolt`
@@ -91,7 +91,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Er spricht in Angeboten, kurz und trocken, und stellt keine Frage. "Komm doch mal ins Tal." gibt es nur mit der Facette care
 > (wer Tee machen kann, kann ihn auch anbieten); sein Becher ist dann gepackt. Wer geht, geht ohne Folge.
 
-*wenn* `forest.hut_met`
+*wenn* `forest.hut_met und melody.hermit_flute`
   - *→ weiter bei* `hermit_again`
 - **Einsiedler:** Tee ist da. Sitz, wenn du magst. `[#draft]`  <sub>hu_h_1</sub>
 *wenn* `forest.hut_tea`
