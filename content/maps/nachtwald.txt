@@ -1,6 +1,6 @@
-; Akt III, W5: der Nachtwald, eine kleine Karte der Klasse S (höchstens 48 x 36 Zellen, hier 44 x 34), Stil tal, Voreinstellung der Nacht. Der Pfad kommt als
-; schmaler Gang aus der Flutlichtung im Norden, biegt nach Westen und führt auf einer langen Geraden (so lang wie ein Bild breit ist, damit man das Licht
-; schon von weitem sieht) auf eine Lichtung zu. In ihrer Mitte steht eine kleine Laterne am Boden und brennt; um sie liegt ein flacher Kreis aus mattem Licht
+; Akt III, W5: der Nachtwald, eine kleine Karte der Klasse S (höchstens 48 x 36 Zellen, hier 44 x 34), Stil tal, die Nacht als Palette der Szene (Exporte, kein day_preset). Der Pfad kommt als
+; schmaler Gang aus der Flutlichtung im Norden, biegt in einem langen Bogen nach Westen (rund 21 Zellen, damit man das Licht rund ein Dutzend Zellen vorher
+; schon von weitem sieht) und führt auf eine Lichtung zu. Keine Krone verdeckt den Weg: südlich jeder Wegzelle wächst auf acht Zeilen und drei Spalten kein Baum. In ihrer Mitte steht eine kleine Laterne am Boden und brennt; um sie liegt ein flacher Kreis aus mattem Licht
 ; (ein eigenes Bild, das nie über jemandem liegt, der daneben sitzt), und man setzt sich an ihre Ostseite. Danach führt der Pfad nach Südwesten zu einer Tür,
 ; die nach Hause führt, ohne dass es dasteht. Dazu glimmen die Bäume am Weg (gebackenes Glühen, kein Licht: Plan 7 vertagt das Licht) und ein morscher
 ; Stamm in der Ecke der Lichtung; nichts flackert, nichts blitzt (Bible §50).
@@ -51,25 +51,25 @@ hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..@..hhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.,,,.hhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..h..,,.hhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.T..F.,,..hhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....g,,..hhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhP..K...,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..g...,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhT..K...,,..hhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......,,,..hhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.F..,,...hhh
-hhhhhhhhh...hhh....hhhhhhhhhhh.....,,,..hhhh
-hhhhhhhh.......G.T.G.hhhhhh..R.R..,,,.G.hhhh
-hhhhhhhh..Y...........P..T.G.....,,,...hhhhh
-hhhhhhhhh....................T.,,,,....hhhhh
-hhhhhhhh..............G.P.P,,,,,,....Thhhhhh
-hhhhhhhh........l......g,C,,,,,......hhhhhhh
-hhhhhhhh.R......L......,,,,...T.P.G.hhhhhhhh
-hhhhhhhhh............,,,..........hhhhhhhhhh
-hhhhhhhhhh.........,,,,..F...T.Phhhhhhhhhhhh
-hhhhhhhhhhhR.....,,,,,.....hhhhhhhhhhhhhhhhh
-hhhhhhhhhh....,,,,,..T...R..Rhhhhhhhhhhhhhhh
-hhhhhhhhhG.T,,,,,......R.....hhhhhhhhhhhhhhh
-hhhhhhhh..,,,,,......P...F.R.hhhhhhhhhhhhhhh
-hhhhhhhP.Q,,,..g..F..hhh.g..hhhhhhhhhhhhhhhh
-hhhhhhh,,,,...F.F.hhhhhhP.hhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh....,,...hhh
+hhhhhhhhh...hhh....hhhhhhhhhhh.g...,,,..hhhh
+hhhhhhhh.......G.G.G.hhhhhh..T....,,,..Rhhhh
+hhhhhhhh..Y...........P..P.G.....,,,...hhhhh
+hhhhhhhhh....................P.,,,,..F.hhhhh
+hhhhhhhh..............G.P.T,,,,,,.....hhhhhh
+hhhhhhhh........l.......,C,,,,,g.....hhhhhhh
+hhhhhhhhg.......L......,,,,.....F...hhhhhhhh
+hhhhhhhhhR...........,,,..........hhhhhhhhhh
+hhhhhhhhhh.........,,,,..R...F..hhhhhhhhhhhh
+hhhhhhhhhhh......,,,,,.....hhhhhhhhhhhhhhhhh
+hhhhhhhhhh....,,,,,..........hhhhhhhhhhhhhhh
+hhhhhhhhhG..,,,,,...R...F..R.hhhhhhhhhhhhhhh
+hhhhhhhh..,,,,,..............hhhhhhhhhhhhhhh
+hhhhhhh..Q,,,.....F.Rhhh..R.hhhhhhhhhhhhhhhh
+hhhhhhh,,,,.....R.hhhhhhF.hhhhhhhhhhhhhhhhhh
 hhhhhhh,,,.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhh,H,hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

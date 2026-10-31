@@ -511,9 +511,10 @@ class FlutlichtungNightWayTests(unittest.TestCase):
         for y in range(arrival[1], door[1] + 1):
             for x in range(door[0] - 1, door[0] + 2):
                 self.assertEqual(_ground(symbols, rows[y][x]), ",", "path at %d,%d" % (x, y))
-        # no new tree, stone or bush: the forest and with it the baked shadows are the ones of W4
+        # no new tree, stone or bush: the forest and with it the baked shadows are the ones of W4 (their numbers, fixed)
         text = "".join(rows)
-        self.assertEqual(text.count("U"), layout.build_flut()[0].text().count("U"))
+        for glyph, count in {"U": 18, "P": 6, "R": 7, "F": 14, "g": 12, "T": 0, "B": 1}.items():
+            self.assertEqual(text.count(glyph), count, "%s: W5 changed no tree, stone or bush of the Flutlichtung" % glyph)
 
     def test_the_way_is_clear_between_the_blocker_and_the_door_and_the_arrival_is_connected(self):
         _, symbols, rows, spots = _flut()
@@ -570,8 +571,8 @@ class NachtwaldLayoutTests(unittest.TestCase):
         for glyph in NACHT_NAMED:
             self.assertEqual(text.count(glyph), 1, glyph)
         self.assertGreaterEqual(text.count("G"), 6, "glow trees along the way and round the glade")
-        self.assertGreaterEqual(text.count("T"), 6)
-        self.assertGreaterEqual(text.count("P"), 6)
+        self.assertGreaterEqual(text.count("T"), 3, "beeches")
+        self.assertGreaterEqual(text.count("P"), 3, "and spruce: the crown reserve of the way leaves room for about eight in all")
 
     def test_the_forest_is_placed_as_asked(self):
         layout.build_nacht()
@@ -706,13 +707,35 @@ class NachtwaldLayoutTests(unittest.TestCase):
         self.assertNotIn("if", symbols["L"]["params"])
         self.assertNotIn("unless", symbols["L"]["params"], "it stays where it is")
 
-    def test_the_lantern_shows_from_twelve_to_fifteen_cells_on_a_straight_stretch_of_the_way(self):
-        _, symbols, rows, spots = _night()
+    def test_the_lantern_comes_into_the_picture_a_dozen_cells_or_more_before_the_glade(self):
+        _, _, rows, spots = _night()
         lx, ly = spots["L"][0]
-        seen = [(x, y) for y, row in enumerate(rows) for x, c in enumerate(row)
-                if _ground(symbols, c) == "," and 12 <= math.hypot(x - lx, y - ly) <= 15.5
-                and abs(x - lx) <= 16 and abs(y - ly) <= 8]
-        self.assertGreaterEqual(len(seen), 4, "path cells that show it on a 32 x 18 cell picture from 12 to 15 cells off")
+        samples = layout._centerline(layout.NACHT_PATH, layout.NACHT_PATH_WIDTHS)
+        # walking the way from the door: the first step from which the lantern lies inside the picture (32 x 18 cells)
+        seen = [i for i, (x, y, _) in enumerate(samples) if abs(x - lx) <= 16 and abs(y - ly) <= 9]
+        self.assertTrue(seen, "the lantern is seen from the way")
+        self.assertGreater(seen[0], 0, "not from the door already")
+        x, y, _ = samples[seen[0]]
+        self.assertGreaterEqual(math.hypot(x - lx, y - ly), 12, "it shows from afar, as the only warm point in the wood")
+        # and it keeps showing: every later step of the way up to the glade has it inside the picture
+        self.assertEqual(seen, list(range(seen[0], seen[-1] + 1)))
+
+    def test_no_crown_hides_the_way(self):
+        _, symbols, rows, _ = _night()
+        checked = 0
+        for y, row in enumerate(rows):
+            for x, cell in enumerate(row):
+                if _ground(symbols, cell) != ",":
+                    continue
+                checked += 1
+                for dy in range(1, 9):
+                    for dx in range(-3, 4):
+                        below = rows[y + dy][x + dx] if y + dy < len(rows) and 0 <= x + dx < len(row) else "h"
+                        # the trees the generator scatters (the glow tree to look at, K, is a named spot at a fixed cell
+                        # whose crown only touches the corner of the box: the picture test counts its real pixels)
+                        self.assertNotIn(below, "TPG",
+                                         "the crown of the tree at %d,%d hides the way at %d,%d" % (x + dx, y + dy, x, y))
+        self.assertGreater(checked, 100, "the cells of the way were walked")
 
     def test_the_glow_trees_are_the_guide_along_the_way(self):
         _, symbols, rows, spots = _night()

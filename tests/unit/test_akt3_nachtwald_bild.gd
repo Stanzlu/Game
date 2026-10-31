@@ -15,6 +15,9 @@ const SMALL_COVER_LIMIT := 0.15
 ## her. The generator keeps the crown of every tree off her seat (the reserve over the seat's cell),
 ## so nothing touches her today; the limit leaves room for a leaf or two.
 const SITTER_COVER_LIMIT := 0.02
+## What may cover her on the way: the edge of a crown at the most, never a trunk or a share she
+## would miss (the generator keeps every crown off the cells south of the way).
+const WALK_COVER_LIMIT := 0.15
 ## Where the seat lies from the lantern's foot (the map's "sit" offset): its east side.
 const SEAT_OFFSET := Vector2(18, 2)
 
@@ -263,6 +266,47 @@ func test_the_one_who_sits_beside_the_lantern_is_not_under_a_crown_or_a_trunk() 
 		SITTER_COVER_LIMIT,
 		"she is %.0f%% under others (%s)" % [(seen[0] as float) * 100.0, seen[1]]
 	)
+
+
+## The ground of the way (",") is the path she walks: this test puts her on every one of its cells
+## and measures how much of her a crown or a trunk draws over.
+func test_nothing_hides_her_on_the_way() -> void:
+	var scene := await _scene()
+	var cells := _path_cells(scene)
+	assert_gt(cells.size(), 100, "the cells of the way were found")
+	var worst := 0.0
+	var worst_cell := Vector2i.ZERO
+	var hidden_cells := 0
+	var first_name := ""
+	for cell in cells:
+		scene.player.global_position = scene.map.cell_to_world(cell)
+		var seen := _sitter_share(scene)
+		var share := seen[0] as float
+		if share > WALK_COVER_LIMIT:
+			hidden_cells += 1
+		if share > worst:
+			worst = share
+			worst_cell = cell
+			first_name = seen[1]
+	assert_eq(
+		hidden_cells,
+		0,
+		(
+			"she is more than %.0f%% under others on %d cells of the way, worst %.0f%% at %s (%s)"
+			% [WALK_COVER_LIMIT * 100.0, hidden_cells, worst * 100.0, worst_cell, first_name]
+		)
+	)
+
+
+## The cells whose ground is the path.
+func _path_cells(scene: GameScene) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	var data: MapData = scene.map.data
+	for y in data.height:
+		for x in data.width:
+			if data.ground_rows[y][x] == ",":
+				cells.append(Vector2i(x, y))
+	return cells
 
 
 func test_the_lantern_is_not_under_anything_either_when_she_sits_there() -> void:

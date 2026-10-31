@@ -14,13 +14,14 @@ north (the door to the Waldweg), the brook runs along its east side and widens t
 (dry silt, wet silt along the water, puddles); beeches with a line of silt stand at its rim. From north to south: the
 door, the arrival, the trail of one runner in the dry silt, the bleached trunk (the mark) with the Antreiber, the camp
 (ring, kettle, blanket), then, along the brook, the driftwood and a ford of flat stones; a nest lies in the grass at the west
-rim and a forked branch stands on the bank. The path leaves through a gap in the south edge (a blocker, which is
-gone once the way is open since W5, and behind it a door to the Nachtwald).
+rim and a forked branch stands on the bank. The path leaves through a gap in the south edge (a blocker that holds
+until the hero's walk stands in `night`, flag `forest.night_way` since W5, and behind it the door to the Nachtwald).
 
-Nachtwald (W5): a night in the wood, 46 x 36 cells (class S). A path comes in from the north (the door to the
-Flutlichtung), runs south and then west for the length of a screen to a glade, in whose middle a small lantern stands
-on the ground (a flat ring of light round it, a place to sit on its east side), and goes on to the south-west to a
-door that leads home. Glow trees stand along the way, a rotten log in the glade's rim.
+Nachtwald (W5): a night in the wood, 44 x 34 cells (class S). A path comes in from the north (the door to the
+Flutlichtung), runs south, bends west in a long curve of about 21 cells to a glade, in whose middle a small lantern
+stands on the ground (a flat ring of light round it, a place to sit on its east side), and goes on to the south-west to
+a door that leads home. Glow trees stand along the way, on its north side (no crown may hide the way: nothing grows
+within three columns and eight rows south of any cell of it), a rotten log in the glade's rim.
 
 Usage: python3 tools/art/layout_akt3_maps.py waldweg|flutlichtung|nachtwald [--write]
 Afterwards re-run tools/art/bake_ground.py content/maps/<map>.txt (once the layout is final; the Waldweg needs none
@@ -400,7 +401,7 @@ def build_flut():
     put("k", flut_bank(FLUT_FORK_Y) - 1, FLUT_FORK_Y)
     put("d", flut_bank(FLUT_DRIFT_Y), FLUT_DRIFT_Y)
     put("i", flut_bank(FLUT_FORD_Y) + 2, FLUT_FORD_Y)
-    # the way on to the south is closed (until W5)
+    # the way on to the south: a blocker, until the hero's walk stands in `night` (flag forest.night_way, W5); behind it the door
     put("B", *FLUT_BLOCKER)
     for glyph in FLUT_CUES:
         for x, y in named[glyph]:
@@ -444,9 +445,9 @@ NACHT_GLOW_CUE = (33, 12)  # the glow tree to look at, beside the way down
 NACHT_LOG = (10, 17)  # the rotten log in the glade's north-west rim
 NACHT_HOME_X = 8  # the way on to the south-west, three cells wide (7 to 9)
 NACHT_HOME_DOOR = (NACHT_HOME_X, NACHT_H - 2)
-NACHT_HOME_CUE = (9, 28)  # on the path, the last stretch before the door, five rows from it
-# the way: down from the door, then west for the length of a screen (so that the lantern shows from a good distance),
-# through the glade's south side and on to the south-west
+NACHT_HOME_CUE = (9, 28)  # on the path, the last stretch before the door, four rows from it
+# the way: down from the door, then west in a long curve (about 21 cells in x, so that the lantern comes into view from
+# a good distance, a dozen cells), through the glade's south side and on to the south-west
 NACHT_PATH = [(37, 3), (37, 8), (37, 13), (34, 17), (29, 19.5), (24.5, 20.5), (21, 23), (15, 25.5), (11, 27.5), (8, 29.5),
               (8, 33)]
 NACHT_PATH_WIDTHS = [2.0] * len(NACHT_PATH)
@@ -543,8 +544,12 @@ def build_nacht():
     for glyph in NACHT_CUES:
         for x, y in named[glyph]:
             reserved.append((x - 3, x + 3, y + 1, y + 8))
-    # and none over the way in
-    reserved.append((NACHT_NORTH_X - 4, NACHT_NORTH_X + 4, 0, 14))
+    # and none over the way: a crown hides the walker, so nothing grows within three columns and eight rows south of ANY cell of
+    # the way (the gap in the north, the worn path, the spots on it): the trees stand on its north side or far off
+    for y in range(NACHT_H):
+        for x in range(NACHT_W):
+            if g.get(x, y) in ",Nn@CQH":
+                reserved.append((x - 3, x + 3, y + 1, y + 8))
     lx, ly = NACHT_LANTERN
     # nor over the place where she sits (on the lantern's east side, a cell and a half from it): the crown of a beech
     # reaches three cells to each side and eight rows up, and the sitter's head must stay in the picture
@@ -584,14 +589,14 @@ def build_nacht():
         next_at += 5.0
         side = -side
     # and round the glade, on its rim, but never in the lantern's crown reserve
-    for angle in (-100, -60, 160, 130, 40, -20):
+    for angle in (-100, -60, 160, 130, 40, -20, -140, -80, 180, 100):
         a = math.radians(angle)
         for grow in (1.0, 1.1, 0.9):
             if tree("G", lx + math.cos(a) * 6.9 * grow, ly - 0.5 + math.sin(a) * 4.9 * grow):
                 break
     # the forest: spruce and beech keep a few cells from the cues, stones and ferns near the trees
     outside = lambda x, y: not in_glade(x, y)
-    scatter("PT", 18, 0, outside, tall=True, apart=2)
+    scatter("PT", 8, 0, outside, tall=True, apart=2)  # the crown reserve of the way leaves room for about this many
     scatter("R", 8, 1, outside)
     scatter("F", 7, 1, outside)
     scatter("g", 4, 0, outside)
