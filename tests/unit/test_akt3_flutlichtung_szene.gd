@@ -893,6 +893,8 @@ func test_the_stones_carry_her_across_the_brook_and_the_water_beside_them_does_n
 
 
 func test_the_way_on_to_the_south_is_shut_and_holds_you_back_before_the_night() -> void:
+	# behind the blocker lies the door to the night wood: if it ever gives way, no real scene change
+	SceneTravel.stay = true
 	var scene := await _scene()
 	var blocker := _at(scene, BLOCKER_CELL, BLOCKER_SCRIPT)
 	assert_not_null(blocker, "a blocker across the path")

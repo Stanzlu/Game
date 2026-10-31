@@ -17,9 +17,6 @@ extends LookScene
 ## their pictures and does not flicker (Game Bible §50).
 
 const DIALOGUE := "res://content/dialogue/akt3/nachtwald.dialogue"
-## The hum, as quiet as it gets and still heard in a silent wood (dB on the SFX bus).
-const HUM_DB := -8.0
-
 var _asked := false
 
 
@@ -48,5 +45,6 @@ func _ask() -> void:
 ## hums. Later sittings find it set: no change of the flag, so no second hum.
 func _on_flag_changed(id: String, value: bool) -> void:
 	if value and id == "forest.waited":
-		AudioDirector.sfx("child_hum", HUM_DB, 1.0)
+		# -8 dB: as quiet as it gets, still heard in a silent wood (tools/audio/check_levels.py reads it)
+		AudioDirector.sfx("child_hum", -8.0, 1.0)
 		Beat.mark("act3_waiting")

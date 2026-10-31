@@ -597,7 +597,28 @@ func test_the_sound_of_the_hum_is_in_the_game_and_has_its_text() -> void:
 	assert_not_null(SoundBank.stream("child_hum", 1.0, 0.0), "and there is a sound to play")
 
 
-func test_she_can_get_up_at_any_moment_even_in_the_middle_of_the_lines() -> void:
+func test_a_key_does_not_get_her_up_while_the_lines_are_up_and_does_when_they_are_done() -> void:
+	var scene := await _scene()
+	await _sit(scene)
+	var up: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
+	assert_true(up, "the lines are up")
+	assert_true(scene.player.is_locked(), "the box holds her like in every talk")
+	Input.action_press(&"move_down")
+	await wait_physics_frames(30)
+	Input.action_release(&"move_down")
+	assert_eq(scene.player.state, Player.State.SIT, "no key moves her while the lines are up")
+	await _read_through(scene)
+	assert_eq(scene.player.state, Player.State.SIT, "she still sits when they are done")
+	Input.action_press(&"move_down")
+	var stood: bool = await wait_until(
+		func() -> bool: return scene.player.state != Player.State.SIT, 5.0
+	)
+	Input.action_release(&"move_down")
+	assert_true(stood, "and the first step then gets her up: nothing is timed, nothing is held")
+	assert_push_error_count(0)
+
+
+func test_being_put_up_in_the_middle_of_the_lines_breaks_nothing() -> void:
 	var scene := await _scene()
 	var opened := _count_openings(scene)
 	await _sit(scene)
@@ -660,6 +681,16 @@ func test_whoever_does_not_sit_loses_nothing_and_nothing_waits_for_them() -> voi
 	assert_false(Beat.reached("act3_waiting"))
 	assert_false(scene.dialogue_box.is_open())
 	assert_false(scene.player.is_locked())
+
+
+func test_the_scene_plays_the_childs_hum_and_not_the_song_of_the_house() -> void:
+	# both hums share one caption, so it cannot tell them apart: the call itself must name the sound
+	var code := _code(SCENE_SOURCE)
+	assert_true(
+		code.contains('AudioDirector.sfx("child_hum"'), "the echo of the waiting is the child's hum"
+	)
+	assert_false(code.contains("house_hum"), "and not the song in the house (a melody of its own)")
+	assert_eq(code.count("AudioDirector.sfx("), 1, "one sound in the whole scene")
 
 
 func test_nothing_in_the_scene_script_is_timed_held_or_moved() -> void:

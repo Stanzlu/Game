@@ -1245,13 +1245,14 @@ def build(ms):
 
 
 def night_strip(ms, width, height):
-    """The night wood as the preset "nacht" shows it, roughly: the ground and every sprite multiplied by the world
-    tint of day_light.gd (0.32, 0.38, 0.58), every emissive layer drawn on top unshaded and unchanged (no grade, no
-    bloom: this is only to judge whether the glow is legible against the tint and does not blind). Left to right:
+    """The night wood as the scene shows it, roughly: the ground and every sprite multiplied by the world tint of
+    nachtwald.tscn (0.5, 0.55, 0.74, the palette of the prototype look_wald; the scene sets exports and no day_preset),
+    every emissive layer drawn on top unshaded and unchanged (no grade, no bloom: this is only to judge whether the
+    glow is legible against the tint and does not blind). Left to right:
     the two glow trees, an ordinary beech and spruce next to them, the log (glowing and dark), the lantern in its
     ring of light."""
     from PIL import Image
-    tint = np.array([0.32, 0.38, 0.58])
+    tint = np.array([0.5, 0.55, 0.74])
     strip = Image.new("RGBA", (width, height), tuple(int(v) for v in pa.STYLES["tal"]["grass"][1] * tint) + (255,))
     foot = height - 20
     trees = [glow_tree(ms, *spec) for spec in GLOW_TREES]
