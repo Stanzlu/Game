@@ -92,8 +92,9 @@ Antreiber: Der Boden hält. [ID:fl_again_2] [#draft]
 	Er nickt, ohne aufzusehen. [ID:fl_again_4] [#draft]
 => END
 
-# --- Der Südausgang (Platzhalter für W5) ---------------------------------------------------------------------------------------
-# Ein Blocker in der Lücke im Südrand: der Pfad geht dort zwischen die Kronen weiter, und noch ist es hell. Wenn W5 die Lücke zur Tür macht, fällt der Cue.
+# --- Der Südausgang (hält zurück, bis der Weg in die Nacht offen ist) ---------------------------------------------------------------------------------------
+# Ein Blocker in der Lücke im Südrand: der Pfad geht dort zwischen die Kronen weiter, und noch ist es hell. Er hält zurück, solange forest.night_way fehlt (das
+# setzen die Szenen, wenn die Heldenquest in night steht); dahinter liegt die Tür in den Nachtwald (W5). Der Cue bleibt für alle, die noch nicht so weit sind.
 
 ~ south_wait
 Im Süden geht der Pfad zwischen die Kronen, schmal und im Schatten. [ID:fl_south_1] [#draft]

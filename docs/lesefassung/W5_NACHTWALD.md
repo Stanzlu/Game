@@ -18,7 +18,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - *Sie steht dort, wo sie von Weitem stand. Die Flamme biegt sich nicht.* `[#draft]`  <sub>nw_wait_2</sub>
 - *Nichts raschelt, kein Ast knackt.* `[#draft]`  <sub>nw_wait_3</sub>
 - *Dann summt es, nur ein paar Töne, so leise, dass du nicht sagen kannst, woher.* `[#draft]`  <sub>nw_wait_4</sub>
-- *Es hört auf. Die Flamme steht wie vorher.* `[#draft]`  <sub>nw_wait_5</sub>
+- *Die Flamme steht wie vorher.* `[#draft]`  <sub>nw_wait_5</sub>
 
 ### W5-2 · `wait_again`
 
@@ -36,10 +36,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### W5-4 · `glow_tree`
 
 > --- Ein Leuchtbaum ---------------------------------------------------------------------------------------------------------
-> Decor tal/wd_glow_tree: eine Buche mit dunkler Rinde, an Stamm und Ästen laufen lange Streifen, die matt grün glimmen (dazu ein paar Blätter der
-> Krone). Das Glimmen sitzt gebacken im Bild und fällt nicht auf den Boden.
+> Decor tal/wd_glow_tree: eine Buche mit dunkler Rinde, auf der es matt grün glimmt (zwei Bilder, je nach Zelle: das eine mit langen Streifen am Stamm, das
+> andere mit einem kurzen Streifen und Flecken am Stamm und mehr Glimmen in der Krone). Die Zeile gilt für beide. Das Glimmen sitzt gebacken im Bild und
+> fällt nicht auf den Boden.
 
-- *Die Rinde ist dunkel. In langen Streifen glimmt sie matt grün, so wie Pilze glimmen.* `[#draft]`  <sub>nw_glow_1</sub>
+- *Die Rinde ist dunkel. Am Stamm und in der Krone glimmt es matt grün, in Streifen und Flecken, so wie Pilze glimmen.* `[#draft]`  <sub>nw_glow_1</sub>
 - *Das Glimmen bleibt am Baum. Auf dem Boden darunter liegt es nicht.* `[#draft]`  <sub>nw_glow_2</sub>
 
 ### W5-5 · `foxfire`
@@ -64,8 +65,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### W5-6 · `home_way`
 
 > --- Der Weg nach Hause: gezeigt, nicht gesagt ---------------------------------------------------------------------------------
-> Ein Ding kurz vor der Tür ins Tal (Südwesten). Der Wald lichtet sich, der Pfad wird breit, und es riecht nach dem Bach, den sie kennt.
+> Ein Ding kurz vor der Tür ins Tal (Südwesten). Am letzten Stamm vorbei läuft der Pfad gerade auf die Tür zu (südlich der Stelle steht keiner mehr), und es
+> riecht nach dem Bach, den sie kennt.
 > Das Wort für den Ort steht nirgends.
 
-- *Die Stämme stehen hier weiter auseinander, und der Pfad wird breit und eben.* `[#draft]`  <sub>nw_home_1</sub>
-- *Zwischen den letzten riecht es nach dem Bach, den du kennst.* `[#draft]`  <sub>nw_home_2</sub>
+- *Hinter dem letzten Stamm läuft der Pfad gerade weiter.* `[#draft]`  <sub>nw_home_1</sub>
+- *Dort riecht es nach dem Bach, den du kennst.* `[#draft]`  <sub>nw_home_2</sub>

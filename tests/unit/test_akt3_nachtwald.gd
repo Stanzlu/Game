@@ -67,6 +67,8 @@ const FORBIDDEN: Array[String] = [
 	"Punkte",
 	"Prozent",
 	"Level",
+	"Ursache",
+	"Täter",
 ]
 ## Phrases the earlier segments have used up; a line of this file must not say them again.
 const USED_UP: Array[String] = [
@@ -324,7 +326,11 @@ func test_the_first_sitting_shows_the_lantern_the_flame_the_silence_and_a_hum() 
 	assert_string_contains(LineText.of("nw_wait_2"), "von Weitem", "it stays where it stood")
 	assert_string_contains(LineText.of("nw_wait_2"), "biegt sich nicht", "the flame is calm")
 	assert_string_contains(LineText.of("nw_wait_5"), "Flamme", "the lantern burns on")
-	assert_true(LineText.of("nw_wait_5").contains("hört auf"), "the hum stops")
+	for word: String in ["hört auf", "verstummt", "still", "vorbei", "Ende"]:
+		assert_false(
+			LineText.of("nw_wait_5").contains(word),
+			"no line states the end of the sound: %s" % word
+		)
 	assert_false(LineText.of("nw_wait_1").contains("Flamme"), "she sits before she looks")
 
 
@@ -449,7 +455,7 @@ func test_the_way_home_is_shown_and_never_named() -> void:
 	var seen := await DialogueWalk.play(NW, "home_way")
 	assert_eq(seen.size(), 2)
 	var text := _say(["nw_home_1", "nw_home_2"])
-	for word: String in ["Stämme", "Pfad", "breit", "Bach", "kennst"]:
+	for word: String in ["Stamm", "Pfad", "gerade", "Bach", "kennst"]:
 		assert_string_contains(text, word)
 	for word: String in [
 		"Hause", "daheim", "Heimat", "zurück", "Ziel", "angekommen", "endlich", "Ende", "geschafft"
