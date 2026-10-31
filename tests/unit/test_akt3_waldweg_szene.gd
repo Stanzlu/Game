@@ -4,13 +4,15 @@ extends GutTest
 ## the west bank of a brook, the six boards, two rings that are cold until someone rests at them,
 ## the Hang that is slow until she has rested once, the Antreiber at the empty board (not there
 ## for whoever left him at the fire in the house, sitting once he has had tea), the cone that leaves
-## the map when taken, the hut whose door W3 wires, a way on to the south that stays shut until W4,
-## the door back to the Bachlauf and the beats of the walk. What is said is tested in
-## test_akt3_waldweg.
+## the map when taken, the hut whose door W3 wires, the door to the south that W4 wires (the way on
+## to the Flutlichtung, where the Antreiber has gone ahead), the door back to the Bachlauf and the
+## beats of the walk. What is said is tested in test_akt3_waldweg.
 
 const WALDWEG := preload("res://world/levels/akt3/waldweg.tscn")
-const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
-const BLOCKER_CELL := Vector2i(50, 57)
+const TAL := preload("res://world/levels/slice/tal.tscn")
+const DOOR_SCRIPT := preload("res://world/props/door.gd")
+const SOUTH_DOOR_CELL := Vector2i(50, 60)
+const SOUTH_ARRIVAL_CELL := Vector2i(50, 56)
 const DOOR_CELL := Vector2i(45, 1)
 const ARRIVAL_CELL := Vector2i(45, 6)
 const SPOTS: Array[String] = [
@@ -304,7 +306,7 @@ func test_after_tea_he_sits_instead_of_standing() -> void:
 
 
 func test_the_valley_does_not_keep_a_second_one_once_he_has_been_met_here() -> void:
-	var tal: TalScene = load("res://world/levels/slice/tal.tscn").instantiate()
+	var tal: TalScene = TAL.instantiate()
 	WorldState.set_flag("house.antreiber_left")
 	add_child_autofree(tal)
 	await wait_physics_frames(3)
@@ -312,6 +314,30 @@ func test_the_valley_does_not_keep_a_second_one_once_he_has_been_met_here() -> v
 	WorldState.set_flag("forest.antreiber_met")
 	await wait_physics_frames(3)
 	assert_eq(_walkers(tal, "antreiber_busy").size(), 0, "he went ahead")
+
+
+func test_he_has_gone_ahead_to_the_flutlichtung_and_is_not_here_standing_or_sitting() -> void:
+	var scene := await _scene()
+	assert_eq(_antreiber(scene).size(), 1, "he is here until he has gone ahead")
+	WorldState.set_flag("forest.antreiber_ahead")
+	await wait_physics_frames(3)
+	assert_eq(_antreiber(scene).size(), 0, "gone from the board")
+	WorldState.set_flag("forest.antreiber_sat")
+	await wait_physics_frames(3)
+	assert_eq(_antreiber(scene).size(), 0, "and not sitting by it either")
+	assert_not_null(_first(scene, "mark_6"), "the board is still there, empty")
+
+
+func test_the_valley_keeps_no_one_of_him_once_he_has_gone_ahead() -> void:
+	var tal: TalScene = TAL.instantiate()
+	WorldState.set_flag("house.antreiber_left")
+	add_child_autofree(tal)
+	await wait_physics_frames(3)
+	assert_eq(_walkers(tal, "antreiber_busy").size(), 1, "busy at the woodpile")
+	WorldState.set_flag("forest.antreiber_ahead")
+	await wait_physics_frames(3)
+	assert_eq(_walkers(tal, "antreiber_busy").size(), 0, "he is ahead, in the clearing")
+	assert_eq(_walkers(tal, "antreiber_west").size(), 0, "and not on the bench either")
 
 
 # --- Finds, beats, the ends of the way -----------------------------------------------------
@@ -352,16 +378,30 @@ func test_the_hut_has_a_door_that_is_never_in_the_way_and_the_cup_stands_beside_
 	assert_false(doors[0].get(&"auto"), "a door that is walked up to, not run into")
 
 
-func test_the_way_on_to_the_south_is_shut_and_holds_you_back() -> void:
+func test_the_way_on_to_the_south_is_a_door_to_the_flutlichtung_and_the_way_to_it_is_free() -> void:
 	WorldState.set_flag("house.antreiber_by_fire")  # no one stands in the path
 	var scene := await _scene()
-	var blocker := _at(scene, BLOCKER_CELL, BLOCKER_SCRIPT)
-	assert_not_null(blocker, "a blocker across the path")
-	await _go_to(scene, Vector2i(BLOCKER_CELL.x, BLOCKER_CELL.y - 4))
-	var stopped := func() -> bool: return false
-	await _hold(&"move_down", stopped, 240)
-	assert_lt(scene.map.world_to_cell(scene.player.global_position).y, BLOCKER_CELL.y)
-	assert_eq(SceneTravel.last_target, "", "no door to the south yet")
+	var door := _at(scene, SOUTH_DOOR_CELL, DOOR_SCRIPT)
+	assert_not_null(door, "a door across the path, where the blocker stood")
+	assert_eq(door.get(&"target"), "flutlichtung")
+	assert_eq(door.get(&"spawn"), "waldweg", "to the place the Flutlichtung made for it")
+	assert_true(door.get(&"auto"), "the path itself leads through it")
+	assert_true(SceneRegistry.has("flutlichtung"), "the door has somewhere to go")
+	assert_false(scene.map.data.find_marker("spawn_flutlichtung").is_empty())
+	await _go_to(scene, SOUTH_ARRIVAL_CELL)
+	var gone := func() -> bool: return SceneTravel.last_target == "flutlichtung"
+	assert_true(await _hold(&"move_down", gone, 240), "south from the arrival reaches the door")
+
+
+func test_coming_back_from_the_flutlichtung_you_arrive_four_cells_above_the_door() -> void:
+	WorldState.set_flag("house.antreiber_by_fire")
+	SceneTravel.stay = true
+	SceneTravel.pending_spawn = "flutlichtung"
+	var scene := await _scene()
+	assert_eq(scene.map.world_to_cell(scene.player.global_position), SOUTH_ARRIVAL_CELL)
+	assert_gte(SOUTH_DOOR_CELL.y - SOUTH_ARRIVAL_CELL.y, 4, "an arrival outside the door's zone")
+	await wait_physics_frames(10)
+	assert_eq(SceneTravel.last_target, "", "no way back in at once")
 
 
 func test_the_door_leads_back_to_the_bachlauf_and_the_way_to_it_is_free() -> void:

@@ -1,6 +1,7 @@
 ; Akt III, W2: der Waldweg, die zweite große Karte (Klasse M, ADR-068). Der Bach des Bachlaufs geht nach Süden weiter, ein Pfad
 ; hält sich am Westufer durch hohen Wald: die Wegzeichen des Antreibers, zwei Rastplätze, der Hang (ein Hohlweg mit Stufen), ein
-; Abzweig zur Hütte im Westen (Akt III, W3: ihre Tür führt in die Hütte) und das letzte, leere Brett, hinter dem der Weg nach Süden zu bleibt (bis W4).
+; Abzweig zur Hütte im Westen (Akt III, W3: ihre Tür führt in die Hütte) und das letzte, leere Brett, hinter dem der Weg nach Süden zur
+; Flutlichtung führt (Akt III, W4: eine Tür, vorher ein Blocker).
 ; Layout: tools/art/layout_akt3_maps.py waldweg --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/waldweg.txt.
 [meta]
 style = "tal"
@@ -33,9 +34,9 @@ N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": 
 4 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_marker_tally", "cue": "mark_4", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 18}}
 5 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_marker_plain", "cue": "mark_5", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 18}}
 6 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_marker_blank", "cue": "mark_6", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 18}}
-; der Antreiber am leeren Brett; hat man ihn zum Sitzen gebeten, sitzt er daneben
-A = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "cue": "antreiber_end", "face": "w", "unless": ["house.antreiber_by_fire", "forest.antreiber_sat"]}}
-E = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "cue": "antreiber_end", "sit": true, "face": "w", "if": "forest.antreiber_sat"}}
+; der Antreiber am leeren Brett; hat man ihn zum Sitzen gebeten, sitzt er daneben; ist er auf die Flutlichtung vorgegangen (forest.antreiber_ahead, W4), steht er hier nicht mehr
+A = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "cue": "antreiber_end", "face": "w", "unless": ["house.antreiber_by_fire", "forest.antreiber_sat", "forest.antreiber_ahead"]}}
+E = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "cue": "antreiber_end", "sit": true, "face": "w", "if": "forest.antreiber_sat", "unless": "forest.antreiber_ahead"}}
 ; die beiden Rastplätze: ein Feuerring mit Kessel (kalt, bis dort jemand gerastet hat; jeder Platz hat sein Flag) und ein Stamm daneben
 Q = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_rest_cold", "sprite_when": {"forest.fire_1": "tal/wd_rest_lit"}, "cue": "rest_1", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 20}}
 q = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_rest_cold", "sprite_when": {"forest.fire_2": "tal/wd_rest_lit"}, "cue": "rest_2", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 20}}
@@ -56,8 +57,9 @@ X = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; ein Zapfen unter der Fichte, bemooste Steine am Knick
 K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_cone", "cue": "cone", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue", "radius": 14, "unless": "forest.cone_taken"}}
 r = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stone_mossy"}}
-; der Weg nach Süden ist zu, bis W4 ihn öffnet
-B = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "south_wait", "dialogue": "res://content/dialogue/akt3/waldweg.dialogue"}}
+; Akt III (W4): der Weg nach Süden führt als Tür auf die Flutlichtung, die Ankunft von dort liegt vier Zeilen davor
+W = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "flutlichtung", "spawn": "waldweg", "auto": true, "size": [3, 1]}}
+w = {"ground": ",", "marker": "spawn_flutlichtung"}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,N,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -115,9 +117,9 @@ hhhhhhhh...F.....P.........hhhhhhhhhhhhhhhhhh...,...~~~....hhhhhhhhhhhhhh.......
 hhhhhhhh.P.........F.P..P...hhhhhhhhhhhhhhhh....,,...~~....hhhhhhhhhhhhhh.....T......hhhhhhhhhhhhhhh
 hhhhhhhh...P..T..............hhhhhhhhhhhh.......6,,,.~~~....hhhhhhhhhhhhhh.P.........hhhhhh...hhhhhh
 hhhhhhh..g.....................hhh.hhhhh.........,AE..~~....hhhhhhhhhhhhh............hhhhh....hhhhhh
-hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh.....,,,..~~~hhhhhhhhhhhhh.hhhhhhhh......hhhhh.hhhhhhhhh
-hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..,B,hhh~~hhhhhhhhhhhhhhhhhhhhhhhhhh..hhhhhhhhhhhhhhh
+hhhhhhhh...........hhhhhhhh.......hhhhhhhhhh.....,w,..~~~hhhhhhhhhhhhh.hhhhhhhh......hhhhh.hhhhhhhhh
+hhhhhhhhhhh.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..,,,hhh~~hhhhhhhhhhhhhhhhhhhhhhhhhh..hhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,W,hhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

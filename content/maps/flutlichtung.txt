@@ -1,0 +1,103 @@
+; Akt III, W4: die Flutlichtung, die dritte große Karte (Klasse M, ADR-068). Der Pfad aus dem Waldweg führt als schmaler Gang durch den
+; Wald an den Rand einer Lichtung, an der der Bach vorbeiläuft. Das Wasser hat sie einmal bedeckt und Schlick zurückgelassen: trockenen
+; (Pfad), nassen (Schlamm) und Lachen. Von Nord nach Süd: die Tür, die Ankunft, die Spur eines Läufers im trockenen Schlick, der bleiche
+; Stamm ohne Krone (die Marke) mit dem Antreiber, das Lager (Ring, Kessel, Decke), am Ufer das Treibholz und die flachen Steine quer
+; durch den Bach; im Gras am Westrand liegt ein Nest, am Ufer steht ein Ast mit einer Gabel. Der Südausgang ist ein Blocker (Platzhalter
+; für W5). Layout: tools/art/layout_akt3_maps.py flutlichtung --write (ersetzt den [map]-Block), danach
+; tools/art/bake_ground.py content/maps/flutlichtung.txt. Die Streuregeln sind Laufzeit-Meta: sie brauchen keinen neuen Bake.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/flutlichtung_ground.png"
+water = "res://assets/generated/maps/flutlichtung_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.22, "spacing": 12, "clump": 48}, {"sprite": "tal/wd_fern", "on": ".", "near": "UPh", "radius": 2, "density": 0.14, "spacing": 14}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.1, "spacing": 14}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.1, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "UP", "radius": 2, "density": 0.3, "spacing": 10}, {"sprite": "tal/reeds", "on": ".m", "near": "~", "radius": 1, "density": 0.2, "spacing": 22}, {"sprite": "tal/twig", "on": "mp,", "near": "~mp", "radius": 1, "density": 0.3, "spacing": 12}, {"sprite": "tal/leaves", "on": "mp", "density": 0.3, "spacing": 12}, {"sprite": "tal/pebbles", "on": "mp", "density": 0.3, "spacing": 13}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.2, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+; begehbares Wasser unter den flachen Steinen (y), wie die Furt im Tal
+y = {"atlas": [3, 0], "surface": "stone", "paint": "water"}
+; der Wald um die Lichtung: die Buchen am Rand tragen den Schlick bis auf Kopfhöhe (U), dazu Fichten auf höherem Grund, bemooster Stein, Farn, hohes Gras
+U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_flood_beech"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_spruce"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stone_mossy"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_fern"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+; Ankunft aus dem Waldweg (der Gang im Wald), der Start eines neuen Spiels und die Tür zurück
+@ = {"ground": ",", "marker": "player_spawn"}
+n = {"ground": ",", "marker": "spawn_waldweg"}
+N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "waldweg", "spawn": "flutlichtung", "auto": true, "size": [3, 1]}}
+; die Spur eines Läufers im trockenen Schlick, flach, sie laufen nach Norden; der bleiche Stamm ohne Krone mit der Linie
+S = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_flood_prints", "cue": "flood_trail", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 16}}
+M = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_flood_mark", "cue": "flood_mark", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 20}}
+; der Antreiber an der Marke; hat man ihn zum Sitzen gebeten, sitzt er daneben (nie am Feuer im Haus)
+A = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "cue": "antreiber_flood", "face": "w", "unless": ["house.antreiber_by_fire", "forest.flood_sat"]}}
+E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "cue": "antreiber_flood", "sit": true, "face": "w", "if": "forest.flood_sat", "unless": "house.antreiber_by_fire"}}
+; das Lager: der Ring voll Schlick mit dem Kessel, daneben die steife Decke am Pfahl (ohne eigenen Cue)
+C = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_flood_ring", "cue": "flood_camp", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 22}}
+D = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_flood_blanket"}}
+; Nebenquest B: das Nest im Gras am Westrand und der Ast mit der Gabel am Ufer (mit dem Nest darin, wenn es dort liegt)
+o = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_nest", "cue": "nest", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 14, "unless": "forest.nest_taken"}}
+k = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_fork", "sprite_when": {"forest.nest_placed": "tal/wd_fork_nest"}, "cue": "fork", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 18}}
+; das Treibholz am Ufer (Kuriosität) und die flachen Steine quer durch den Bach (Fragment): man geht auf ihnen hinüber
+d = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_driftwood", "cue": "driftwood", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 14, "unless": "forest.driftwood_taken"}}
+i = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stones", "cue": "stones", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 26}}
+; der Weg nach Süden ist zu, bis W5 ihn öffnet
+B = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "south_wait", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue"}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,N,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,n,hhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,@,hhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhh.Phhhhhhhhhhhhhh.F...,,,hhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhh.....hhhhhhhhhh..U.....,,,.hhhhhm~~~hhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhh..g....U.Rhhhhh.F....g..,S,...hh.mm~~~hhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhh....U......hhU.....g....,,,.......m~~~mhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhP......................,,,.F..U..mm~~~hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhh........U.R....,,,.....,,,........mm~~~hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhh..F..........,,,,,,,...,,,..g.....mm~~~hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhh.U...........,,,,,,,,,,..............mm~~~hhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhh....F........,,,,,,,,,,,,...,,,,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhh............,,,,,,,,,,,,,,,,,,,,,,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh...F.g......mm,m,,,,,,,,,,M,,,,,,,,p,,,,,mm~~~hhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh.P.........,mmmp,..,,,,,,,,A,,,,,,ppp,,,,,mm~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh..........,,mmm....,,,,,,,,E,,,,,,,,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh..........,,,,,,...,,,,,,,,,,,,,,,,,,,,,,,,m~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhF....o....,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh...g......,mmm,,,,,,,,,,,,,,,,,,...,,,,,,,,mm~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhP.........,mmm,,,,,,,,,,,,,,,,,.....,,,,,,,mm~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhh...........mmmm,,,,,,,,,,,,,,,,.....,,,,,,kmm~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhg..F.......mmmm,,,,,,,,,,,,,,,,,,,,,,,,,,,m~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhh...........,m,,,,,,,D,,,,,,,,,,,,,,,,,,,,m~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhh...R..g.....,,,,,C,,,,,,,,,,,,pp,,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhR...........,,,,,,,,..,,,,,pppp,,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhh....F.......,,,,,,,....,,mmmpp,,,,,,,mm~~~hhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhU........,,,,,,,,...,,mmmm,,,,,,,,mm~~~~..hhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhh...F......,,,,,,,,,,,,,mmmmmmm,,,,,md~~~..U.hhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhF...........,,,,,,,,,,,,......mm,,,,mm~~~m....Fhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhh...P..........,,,,,,,,,,.......,,,,,,mm~~~.......hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhh................,,,,,,p,........,,,,,mm~~~....g.....hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhh....g..........,,,.,pp........U.,,pppm~~~m.......U...hhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhh.P.............,,,..,hhU..U......,,,mmyiy..g.R.....R.hhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhh..............,,,....hhhhhh...g.hhhhmm~~~...........hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhh.....F.R..,,,,....Uhhhhhhhhhhhhhhhh~~~.........F.hhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhU......,,,..U...hhhhhhhhhhhhhhhh~~~....U..Uhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.,,,......hhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,B,hhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhh
