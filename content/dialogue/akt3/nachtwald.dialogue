@@ -1,0 +1,81 @@
+# Der Nachtwald, Akt III, Segment W5 (docs/akt3/REGIONSBRIEFE.md, ADR-070 O10). Eine Nacht im Wald, ohne Regen und ohne Musik, und es gibt nur
+# einen Klang. Am Boden einer kleinen Lichtung brennt eine Laterne; man geht auf sie zu, und sie bleibt, wo sie ist. Setzt man sich neben sie,
+# summt es einmal, ganz leise und aus keiner Richtung. Das ist das ganze Bild (Bible §15, Warten, als Echo und nie als Kind): kein
+# Kind im Bild, kein Wort von ihm, keine Erklärung, kein Zähler, kein Fragment. Warten ist das Sitzen und nie eine Uhr; wer weitergeht, verliert nichts.
+# Keine Zeile deutet das Summen oder nennt es ein Lied, und keines der anderen Bilder (Flur, Tür, Hand, Verstecken, Zimmer, Haus) kommt vor.
+# Dazu glimmen die Bäume und ein morscher Stamm matt grün, wie Pilze es tun, gebacken ins Bild und ohne Licht auf dem Boden (Plan 7 vertagt das
+# Licht), und die Laterne ist das einzige warme Licht im Wald und brennt ruhig, ohne Flackern (Bible §50). Der zweite Ausgang führt nach Hause und sagt es nicht.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Schilder und Zettel stünden in » «.
+# Was gesetzt wird: wait setzt forest.waited MITTEN im Cue, nach der Zeile, die die Stille zeigt, und vor der Zeile, in der es summt (die Szene hört
+# das Flag und spielt den Klang genau einmal, danach nie wieder); foxfire setzt das Item und forest.foxfire_taken am Ende. Sonst setzt nichts etwas.
+
+# --- Sitzen neben der Laterne ----------------------------------------------------------------------------------------------
+# Die Szene startet wait einmal je Sitzen. Beim ersten Mal: sie sitzt, die Laterne bleibt, es ist still, dann summt es ein paar Töne, und die Flamme steht wie vorher.
+# Keine Zeile sagt, dass das Summen aufhört: der Text kennt die Länge des Klangs nicht (rund fünf Sekunden), und eine Zeile über sein Ende käme bei jeder
+# Textgeschwindigkeit zu früh oder zu spät.
+# Danach (forest.waited gesetzt) bleibt es bei einer ruhigen Zeile und ohne Klang.
+
+~ wait
+if WorldState.has_flag("forest.waited")
+	=> wait_again
+Du setzt dich neben die Laterne auf den Boden. [ID:nw_wait_1] [#draft]
+Sie steht dort, wo sie von Weitem stand. Die Flamme biegt sich nicht. [ID:nw_wait_2] [#draft]
+Nichts raschelt, kein Ast knackt. [ID:nw_wait_3] [#draft]
+do WorldState.set_flag("forest.waited")
+Dann summt es, nur ein paar Töne, so leise, dass du nicht sagen kannst, woher. [ID:nw_wait_4] [#draft]
+Die Flamme steht wie vorher. [ID:nw_wait_5] [#draft]
+=> END
+
+~ wait_again
+Du sitzt neben der Laterne. Die Flamme steht ruhig, und im Wald rührt sich nichts. [ID:nw_again_1] [#draft]
+=> END
+
+# --- Die Laterne von weitem -------------------------------------------------------------------------------------------------
+# Ein Ding vor der Lichtung, einige Zellen vor der Laterne, nur zum Sehen: zwischen den Stämmen ein kleines orangefarbenes Licht auf dem Boden, das sich
+# nicht bewegt, in einem Wald, der sonst grün glimmt (Decor tal/wd_lantern: eine kleine Eisenlaterne mit Glas, darin eine ruhige Flamme, ein Bild ohne Flackern).
+
+~ lantern_far
+Zwischen den Stämmen brennt etwas am Boden, ein kleines orangefarbenes Licht. [ID:nw_far_1] [#draft]
+Es zuckt nicht und wandert nicht. Alles andere im Wald glimmt grün oder gar nicht. [ID:nw_far_2] [#draft]
+=> END
+
+# --- Ein Leuchtbaum ---------------------------------------------------------------------------------------------------------
+# Decor tal/wd_glow_tree: eine Buche mit dunkler Rinde, auf der es matt grün glimmt (zwei Bilder, je nach Zelle: das eine mit langen Streifen am Stamm, das
+# andere mit einem kurzen Streifen und Flecken am Stamm und mehr Glimmen in der Krone). Die Zeile gilt für beide. Das Glimmen sitzt gebacken im Bild und
+# fällt nicht auf den Boden.
+
+~ glow_tree
+Die Rinde ist dunkel. Am Stamm und in der Krone glimmt es matt grün, in Streifen und Flecken, so wie Pilze glimmen. [ID:nw_glow_1] [#draft]
+Das Glimmen bleibt am Baum. Auf dem Boden darunter liegt es nicht. [ID:nw_glow_2] [#draft]
+=> END
+
+# --- Kuriosität: das Leuchtholz ---------------------------------------------------------------------------------------------
+# Decor tal/wd_foxfire_log: ein morscher Stamm im Gras, oben ein Streifen Moos, links glatt durchtrennt (eine Schnittfläche mit Ring und Riss), rechts abgebrochen; in der unteren Hälfte und in
+# den Rissen glimmt das Holz matt grün. Mit dem Einstecken bricht sie ein Stück heraus, und das Bild ist danach der dunkle Stamm mit einer hellen
+# Kerbe (sprite_when) oder weg (unless): die erste Zeile des Cues gilt für den Stamm, der noch glimmt, die letzte für den, der dunkel liegt.
+
+~ foxfire
+if WorldState.has_flag("forest.foxfire_taken")
+	Der Stamm liegt dunkel im Gras. Wo ein Stück fehlt, zeigt das Holz hell. [ID:nw_fox_6] [#draft]
+	=> END
+Ein morscher Stamm liegt im Gras, oben mit Moos, an einem Ende glatt durchtrennt, am anderen abgebrochen. [ID:nw_fox_1] [#draft]
+In der unteren Hälfte und in den Rissen glimmt das Holz matt grün. [ID:nw_fox_2] [#draft]
+- Einstecken. [ID:nw_fox_r1] [#draft]
+	Du brichst ein Stück heraus, weich wie nasses Brot, und steckst es ein. Durch den Stoff glimmt es weiter. [ID:nw_fox_3] [#draft]
+	do WorldState.add_item("curiosity_foxfire")
+	do WorldState.set_flag("forest.foxfire_taken")
+- Liegen lassen. [ID:nw_fox_r2] [#draft]
+	Du lässt den Stamm, wie er liegt. Er glimmt an seiner Stelle weiter. [ID:nw_fox_4] [#draft]
+- … [ID:nw_fox_r3] [#draft]
+	Du beugst dich darüber. Es riecht nach Pilz und nach feuchter Erde. [ID:nw_fox_5] [#draft]
+=> END
+
+# --- Der Weg nach Hause: gezeigt, nicht gesagt ---------------------------------------------------------------------------------
+# Ein Ding kurz vor der Tür ins Tal (Südwesten). Am letzten Stamm vorbei läuft der Pfad gerade auf die Tür zu (südlich der Stelle steht keiner mehr), und es
+# riecht nach dem Bach, den sie kennt.
+# Das Wort für den Ort steht nirgends.
+
+~ home_way
+Hinter dem letzten Stamm läuft der Pfad gerade weiter. [ID:nw_home_1] [#draft]
+Dort riecht es nach dem Bach, den du kennst. [ID:nw_home_2] [#draft]
+=> END

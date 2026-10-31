@@ -129,6 +129,9 @@ CLASSES = [
     ("purr", ["purr"], 0.0, "SFX", "haus_feuer", 0.0, 8.0),
     ("song in the house", ["house_hum_0"], -2.0, "SFX", "haus_feuer", 0.0, 6.0),
     ("flute in the hut", ["hermit_flute_0"], -2.0, "SFX", "haus_abend", 0.0, 6.0),
+    # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
+    # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
+    ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),
     ("frogs, at the bank", ["frog_croak_0", "frog_croak_1"], -2.0, "SFX", "tal_regentag", 2.0, 8.0),
     ("goat", ["goat_bleat_0", "goat_munch"], -2.0, "SFX", "tal_abend", 2.0, 8.0),
     ("bird landing", ["bird"], -2.0, "SFX", "tal_regentag", 2.0, 10.0),

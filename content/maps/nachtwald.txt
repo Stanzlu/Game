@@ -1,0 +1,76 @@
+; Akt III, W5: der Nachtwald, eine kleine Karte der Klasse S (höchstens 48 x 36 Zellen, hier 44 x 34), Stil tal, die Nacht als Palette der Szene (Exporte, kein day_preset). Der Pfad kommt als
+; schmaler Gang aus der Flutlichtung im Norden, biegt in einem langen Bogen nach Westen (rund 21 Zellen, damit man das Licht rund ein Dutzend Zellen vorher
+; schon von weitem sieht) und führt auf eine Lichtung zu. Keine Krone verdeckt den Weg: südlich jeder Wegzelle wächst auf acht Zeilen und drei Spalten kein Baum. In ihrer Mitte steht eine kleine Laterne am Boden und brennt; um sie liegt ein flacher Kreis aus mattem Licht
+; (ein eigenes Bild, das nie über jemandem liegt, der daneben sitzt), und man setzt sich an ihre Ostseite. Danach führt der Pfad nach Südwesten zu einer Tür,
+; die nach Hause führt, ohne dass es dasteht. Dazu glimmen die Bäume am Weg (gebackenes Glühen, kein Licht: Plan 7 vertagt das Licht) und ein morscher
+; Stamm in der Ecke der Lichtung; nichts flackert, nichts blitzt (Bible §50).
+; Layout: tools/art/layout_akt3_maps.py nachtwald --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/nachtwald.txt.
+; Die Streuregeln sind Laufzeit-Meta (leicht, damit der Wald dunkel und ruhig bleibt) und brauchen keinen neuen Bake.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/nachtwald_ground.png"
+water = "res://assets/generated/maps/nachtwald_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.18, "spacing": 12, "clump": 48}, {"sprite": "tal/wd_fern", "on": ".", "near": "TPGKh", "radius": 2, "density": 0.1, "spacing": 14}, {"sprite": "tal/pebbles", "on": ",", "density": 0.1, "spacing": 14}, {"sprite": "tal/leaves", "on": ".", "near": "TPGK", "radius": 2, "density": 0.3, "spacing": 10}, {"sprite": "tal/twig", "on": ".", "near": "TPGK", "radius": 1, "density": 0.15, "spacing": 14}, {"sprite": "tal/grass_tuft", "on": ",", "near": ".", "radius": 1, "density": 0.15, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+; der dunkle Wald: Buche, Fichte, bemooster Stein, Farn, hohes Gras
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_beech"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_spruce"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stone_mossy"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_fern"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+; die Leuchtbäume (G) säumen den Weg: dunkle Rinde, auf der es matt grün glimmt, gebacken und ohne Licht; K ist der eine, den man ansehen kann
+G = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_glow_tree"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_glow_tree", "cue": "glow_tree", "dialogue": "res://content/dialogue/akt3/nachtwald.dialogue", "radius": 18}}
+; die Tür im Norden zurück in die Flutlichtung, die Ankunft von dort und der Start eines neuen Spiels
+N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "flutlichtung", "spawn": "nachtwald", "auto": true, "size": [3, 1]}}
+n = {"ground": ",", "marker": "spawn_flutlichtung"}
+@ = {"ground": ",", "marker": "player_spawn"}
+; ein Ding vor der Lichtung, nur zum Sehen: das kleine Licht am Boden, neun Zellen vor der Laterne auf dem Pfad (ohne Bild)
+C = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "lantern_far", "dialogue": "res://content/dialogue/akt3/nachtwald.dialogue", "radius": 14}}
+; die Laterne am Boden in der Mitte der Lichtung: man setzt sich an ihre Ostseite (face w, sie sitzt der Laterne zugewandt); sie weicht nicht und führt nirgendwohin.
+; Der Kreis aus Licht (l) steht eine Zelle über ihr und ist um eine Zelle nach unten gezogen (lift), so liegt er um ihren Fuß und unter jedem, der daneben sitzt
+L = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_lantern", "sit": {"face": "w", "offset": [18, 2]}}}
+l = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_lantern_pool", "lift": -16}}
+; der morsche Stamm in der Nordwestecke der Lichtung (Kuriosität); wer ein Stück herausgebrochen hat, sieht ihn dunkel mit einer hellen Bruchstelle
+Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_foxfire_log", "sprite_when": {"forest.foxfire_taken": "tal/wd_foxfire_log_dim"}, "cue": "foxfire", "dialogue": "res://content/dialogue/akt3/nachtwald.dialogue", "radius": 24}}
+; der letzte Abschnitt vor der Tür nach Hause (ein Ding ohne Bild) und die Tür selbst, nie gesperrt
+Q = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "home_way", "dialogue": "res://content/dialogue/akt3/nachtwald.dialogue", "radius": 14}}
+H = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "bach", "auto": true, "size": [3, 1]}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,N,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,n,hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..@..hhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.,,,.hhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..h..,,.hhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.T..F.,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..g...,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhT..K...,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......,,,..hhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh....,,...hhh
+hhhhhhhhh...hhh....hhhhhhhhhhh.g...,,,..hhhh
+hhhhhhhh.......G.G.G.hhhhhh..T....,,,..Rhhhh
+hhhhhhhh..Y...........P..P.G.....,,,...hhhhh
+hhhhhhhhh....................P.,,,,..F.hhhhh
+hhhhhhhh..............G.P.T,,,,,,.....hhhhhh
+hhhhhhhh........l.......,C,,,,,g.....hhhhhhh
+hhhhhhhhg.......L......,,,,.....F...hhhhhhhh
+hhhhhhhhhR...........,,,..........hhhhhhhhhh
+hhhhhhhhhh.........,,,,..R...F..hhhhhhhhhhhh
+hhhhhhhhhhh......,,,,,.....hhhhhhhhhhhhhhhhh
+hhhhhhhhhh....,,,,,..........hhhhhhhhhhhhhhh
+hhhhhhhhhG..,,,,,...R...F..R.hhhhhhhhhhhhhhh
+hhhhhhhh..,,,,,..............hhhhhhhhhhhhhhh
+hhhhhhh..Q,,,.....F.Rhhh..R.hhhhhhhhhhhhhhhh
+hhhhhhh,,,,.....R.hhhhhhF.hhhhhhhhhhhhhhhhhh
+hhhhhhh,,,.....hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhh,H,hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh

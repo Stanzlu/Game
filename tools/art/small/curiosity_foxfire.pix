@@ -1,0 +1,23 @@
+# Leuchtholz (W5): ein Stück faules Holz aus dem Nachtwald, die Rinde zerbröselt, im Inneren glimmt es matt grün
+name: curiosity_foxfire
+out: assets/generated/items
+size: 16x16
+palette: o=#16221c d=#33291f b=#5a4a36 l=#8a7352 m=#1f6050 g=#3a9a7a h=#9ce0bc
+outline: o
+---
+................
+................
+................
+....oooooooooo..
+..ooblllllllllo.
+.olblllbbllbbllo
+.oblblbbgbbbbbo.
+.olbbllgghgbbgdo
+.oblbbbmgmbbhgo.
+.olbbbbbbdbbmdo.
+..obddddgdddddo.
+...ooddddddddoo.
+.....ooooooooo..
+................
+................
+................

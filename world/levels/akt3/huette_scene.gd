@@ -35,6 +35,9 @@ func _ready() -> void:
 	WorldState.complete_objective("main_forest_way", "hermit")
 	if WorldState.is_objective_done("main_forest_way", "flood"):
 		WorldState.advance_quest("main_forest_way", "night")
+	# with both goals done the way on to the south lies open (the blocker of the Flutlichtung reads it)
+	if WorldState.quest_stage("main_forest_way") == "night":
+		WorldState.set_flag("forest.night_way")
 	Beat.mark("huette_enter")
 
 

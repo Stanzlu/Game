@@ -1,5 +1,6 @@
 """Tests of the Act III map generator (standard library only): python3 -m unittest discover -s tools/art."""
 import json
+import math
 import os
 import re
 import unittest
@@ -11,7 +12,9 @@ import mapfile
 WALDWEG = os.path.join(mapfile.ROOT, "content", "maps", "waldweg.txt")
 FLUTLICHTUNG = os.path.join(mapfile.ROOT, "content", "maps", "flutlichtung.txt")
 TAL = os.path.join(mapfile.ROOT, "content", "maps", "tal.txt")
+NACHTWALD = os.path.join(mapfile.ROOT, "content", "maps", "nachtwald.txt")
 FLUT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt3", "flutlichtung.dialogue")
+NACHT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt3", "nachtwald.dialogue")
 # ground cells a person can stand on (the legend's own grounds: grass, path, mud, puddle)
 STANDABLE = set(".,mp")
 # the Flutlichtung also has the ford: shallow water over flat stones (surface stone, not solid)
@@ -20,9 +23,12 @@ FLUT_STANDABLE = STANDABLE | {"y"}
 NAMED = "123456AEHDSNn@WwQqazUKrCZYX"
 CUES = "123456QqazUKHDSnWCZYX"
 # the Flutlichtung's spots, each once (the ford's other two cells are plain 'y')
-FLUT_NAMED = "NnSMAECDokdiB@"
+FLUT_NAMED = "NnSMAECDokdiB@Ww"
 # the spots with a cue (the arrival and the start are no cues)
 FLUT_CUES = "SMAECokdiB"
+# the Nachtwald's spots, each once (the glow trees G and the rest of the forest come in numbers)
+NACHT_NAMED = "NnH@KCLlYQ"
+NACHT_TREES = "TPGK"
 
 
 def _map(path=WALDWEG):
@@ -281,9 +287,9 @@ class FlutlichtungLayoutTests(unittest.TestCase):
 
     def test_the_spots_come_in_the_order_of_the_walk_from_north_to_south(self):
         _, _, rows, spots = _flut()
-        order = ["N", "n", "S", "M", "C", "d", "i", "B"]
+        order = ["N", "n", "S", "M", "C", "d", "i", "B", "W"]
         ys = [spots[glyph][0][1] for glyph in order]
-        self.assertEqual(ys, sorted(set(ys)), "door, arrival, trail, mark, camp, driftwood, stones, way on")
+        self.assertEqual(ys, sorted(set(ys)), "door, arrival, trail, mark, camp, driftwood, stones, way on, door south")
         self.assertGreater(spots["@"][0][1], spots["n"][0][1])
         self.assertLessEqual(abs(spots["A"][0][0] - spots["M"][0][0]), 2, "he stands at the trunk")
         self.assertLessEqual(abs(spots["A"][0][1] - spots["M"][0][1]), 2)
@@ -467,6 +473,300 @@ class FlutlichtungLayoutTests(unittest.TestCase):
         self.assertEqual(meta["style"], "tal")
         self.assertEqual(meta["ground"], "res://assets/generated/maps/flutlichtung_ground.png")
         self.assertEqual(meta["water"], "res://assets/generated/maps/flutlichtung_water.png")
+
+
+class FlutlichtungNightWayTests(unittest.TestCase):
+    """W5: behind the blocker in the gap of the south edge the path ends in a door to the Nachtwald."""
+
+    def test_the_blocker_leaves_with_the_flag_that_opens_the_way_and_keeps_its_line(self):
+        _, symbols, rows, spots = _flut()
+        blocker = symbols["B"]["params"]
+        self.assertEqual(blocker["unless"], "forest.night_way", "it is gone once the way is open")
+        self.assertEqual(blocker["cue"], "south_wait", "and its line stays for whoever tries it before")
+        self.assertEqual(blocker["size"], [3, 1])
+        self.assertEqual(spots["B"][0], layout.FLUT_BLOCKER)
+
+    def test_the_door_leads_to_the_nachtwald_and_the_arrival_from_there_is_four_rows_before_it(self):
+        _, symbols, rows, spots = _flut()
+        door, arrival, blocker = spots["W"][0], spots["w"][0], spots["B"][0]
+        self.assertEqual((door, arrival), (layout.FLUT_NIGHT_DOOR, layout.FLUT_NIGHT_ARRIVAL))
+        params = symbols["W"]["params"]
+        self.assertEqual((params["target"], params["spawn"]), ("nachtwald", "flutlichtung"))
+        self.assertTrue(params["auto"])
+        self.assertEqual(params["size"], [3, 1])
+        self.assertNotIn("if", params, "the door is never locked, the blocker in front of it is what closes the way")
+        self.assertNotIn("unless", params)
+        self.assertEqual(symbols["w"]["marker"], "spawn_nachtwald")
+        self.assertGreaterEqual(door[1] - arrival[1], 4, "a door zone must not catch the arrival")
+        self.assertEqual(door[0], arrival[0], "straight on along the path")
+        self.assertLess(arrival[1], blocker[1], "she arrives north of the blocker, which is gone by then")
+        self.assertLess(blocker[1], door[1], "and the door lies behind it")
+
+    def test_the_door_and_the_arrival_stand_on_path_cells_so_that_the_baked_ground_stays(self):
+        _, symbols, rows, spots = _flut()
+        for glyph in "Ww":
+            self.assertEqual(symbols[glyph]["ground"], ",", glyph)
+        door, arrival = spots["W"][0], spots["w"][0]
+        # the three cells of the way, from the arrival to the door, are all path: nothing else changed
+        for y in range(arrival[1], door[1] + 1):
+            for x in range(door[0] - 1, door[0] + 2):
+                self.assertEqual(_ground(symbols, rows[y][x]), ",", "path at %d,%d" % (x, y))
+        # no new tree, stone or bush: the forest and with it the baked shadows are the ones of W4 (their numbers, fixed)
+        text = "".join(rows)
+        for glyph, count in {"U": 18, "P": 6, "R": 7, "F": 14, "g": 12, "T": 0, "B": 1}.items():
+            self.assertEqual(text.count(glyph), count, "%s: W5 changed no tree, stone or bush of the Flutlichtung" % glyph)
+
+    def test_the_way_is_clear_between_the_blocker_and_the_door_and_the_arrival_is_connected(self):
+        _, symbols, rows, spots = _flut()
+        reach = _reach(rows, symbols, spots["@"][0], FLUT_STANDABLE)
+        self.assertIn(spots["w"][0], reach, "the arrival is connected to the start on foot")
+        self.assertIn(spots["W"][0], reach)
+        x, y = spots["B"][0]
+        for row in range(y + 1, spots["W"][0][1] + 1):
+            around = [i for i in range(x - 4, x + 5) if _ground(symbols, rows[row][i]) in FLUT_STANDABLE]
+            self.assertEqual(around, [x - 1, x, x + 1], "row %d: three cells to the door" % row)
+
+    def test_the_nachtwald_has_the_counterparts(self):
+        _, flut, _, _ = _flut()
+        _, night, _ = _map(NACHTWALD)
+        out, back = flut["W"]["params"], night["N"]["params"]
+        self.assertEqual((back["target"], back["spawn"]), ("flutlichtung", "nachtwald"))
+        self.assertEqual((out["target"], out["spawn"]), ("nachtwald", "flutlichtung"))
+        self.assertEqual(night["n"]["marker"], "spawn_flutlichtung")
+        self.assertEqual(flut["w"]["marker"], "spawn_nachtwald")
+
+
+def _night():
+    meta, symbols, rows = _map(NACHTWALD)
+    return meta, symbols, rows, _spots(rows)
+
+
+def _night_sprites(meta, symbols, rows):
+    """Every sprite the Nachtwald draws: its props, what the story swaps in, and what it scatters."""
+    sprites = set()
+    for glyph in set("".join(rows)):
+        params = symbols[glyph].get("params", {})
+        if params.get("sprite"):
+            sprites.add(params["sprite"])
+        sprites.update(params.get("sprite_when", {}).values())
+    sprites.update(rule["sprite"] for rule in meta["scatter"])
+    return sprites
+
+
+class NachtwaldLayoutTests(unittest.TestCase):
+    def test_the_committed_map_is_what_the_generator_draws(self):
+        _, _, rows = _map(NACHTWALD)
+        self.assertEqual(rows, layout.text("nachtwald").split("\n"), "run layout_akt3_maps.py nachtwald --write")
+
+    def test_the_map_is_class_s(self):
+        _, _, rows = _map(NACHTWALD)
+        self.assertLessEqual(len(rows), 36, "at most 48 x 36 cells (class S)")
+        self.assertLessEqual(len(rows[0]), 48)
+        self.assertEqual({len(r) for r in rows}, {len(rows[0])}, "every row is as wide as the first")
+        self.assertEqual((len(rows[0]), len(rows)), (layout.NACHT_W, layout.NACHT_H))
+
+    def test_every_spot_stands_once_and_the_glow_trees_come_in_numbers(self):
+        _, _, rows, _ = _night()
+        text = "".join(rows)
+        for glyph in NACHT_NAMED:
+            self.assertEqual(text.count(glyph), 1, glyph)
+        self.assertGreaterEqual(text.count("G"), 6, "glow trees along the way and round the glade")
+        self.assertGreaterEqual(text.count("T"), 3, "beeches")
+        self.assertGreaterEqual(text.count("P"), 3, "and spruce: the crown reserve of the way leaves room for about eight in all")
+
+    def test_the_forest_is_placed_as_asked(self):
+        layout.build_nacht()
+        self.assertEqual(layout.build_nacht.shortfall, {}, "the scatter placed all it was asked to")
+
+    def test_every_glyph_has_its_own_legend_line_and_every_cue_is_in_the_dialogue(self):
+        with open(NACHTWALD, encoding="utf-8") as f:
+            source = f.read()
+        _, symbols, rows, _ = _night()
+        for glyph in set("".join(rows)):
+            self.assertIsNotNone(re.search(r"^%s = " % re.escape(glyph), source, re.M), "no legend line for " + glyph)
+        with open(NACHT_DIALOGUE, encoding="utf-8") as f:
+            cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
+        used = set()
+        for glyph in set("".join(rows)):
+            params = symbols[glyph].get("params", {})
+            if "cue" in params:
+                used.add(params["cue"])
+                self.assertTrue(params["dialogue"].endswith("akt3/nachtwald.dialogue"), glyph)
+        self.assertEqual(used, {"glow_tree", "lantern_far", "foxfire", "home_way"})
+        self.assertLessEqual(used, cues, "every cue of the map is a cue of the dialogue")
+        self.assertIn("wait", cues, "the sitting is asked by the scene, not by a spot on the map")
+        self.assertNotIn("wait", used)
+
+    def test_every_sprite_of_the_map_is_in_the_catalog(self):
+        meta, symbols, rows, _ = _night()
+        catalog = mapfile.load_catalog()
+        for sprite in _night_sprites(meta, symbols, rows):
+            self.assertIn(sprite, catalog, sprite)
+
+    def test_there_is_no_light_in_the_wood_and_nothing_flickers(self):
+        meta, symbols, rows, _ = _night()
+        catalog = mapfile.load_catalog()
+        for sprite in _night_sprites(meta, symbols, rows):
+            entry = catalog[sprite]
+            self.assertNotIn("lights", entry, "no PointLight2D in the wood (Plan 7): " + sprite)
+            for key in ("flicker", "glow", "beam", "smoke", "sparkle", "loop_sound"):
+                self.assertNotIn(key, entry, "%s of %s moves or sounds" % (key, sprite))
+        # what glows is baked into the picture: the trees, the log and the lantern carry an emissive layer
+        for sprite in ("tal/wd_glow_tree", "tal/wd_foxfire_log", "tal/wd_lantern", "tal/wd_lantern_pool"):
+            self.assertIn("emissive", catalog[sprite], sprite)
+        self.assertNotIn("emissive", catalog["tal/wd_foxfire_log_dim"], "the log that was taken from is dark")
+
+    def test_the_scatter_rules_are_light_and_the_meta_names_the_baked_images(self):
+        meta, _, _, _ = _night()
+        self.assertEqual(meta["style"], "tal")
+        self.assertEqual(meta["ground"], "res://assets/generated/maps/nachtwald_ground.png")
+        self.assertEqual(meta["water"], "res://assets/generated/maps/nachtwald_water.png")
+        self.assertLessEqual(len(meta["scatter"]), 8)
+        self.assertLessEqual(sum(rule["density"] for rule in meta["scatter"]), 1.5)
+
+    def test_every_spot_can_be_reached_from_the_start_on_foot(self):
+        _, symbols, rows, spots = _night()
+        reach = _reach(rows, symbols, spots["@"][0])
+        for glyph in layout.NACHT_CUES:
+            x, y = spots[glyph][0]
+            near = any((x + dx, y + dy) in reach for dx in range(-2, 3) for dy in range(-2, 3))
+            self.assertTrue(near, "%s at %d,%d is out of reach" % (glyph, x, y))
+        for glyph in "nNH":
+            self.assertIn(spots[glyph][0], reach, glyph)
+
+    def test_the_spots_come_in_the_order_of_the_walk_from_the_north_door_to_the_door_home(self):
+        _, _, rows, spots = _night()
+        order = ["N", "n", "K", "C", "L", "Q", "H"]
+        ys = [spots[glyph][0][1] for glyph in order]
+        self.assertEqual(ys, sorted(set(ys)), "door, arrival, glow tree, the light far off, lantern, last stretch, door home")
+        self.assertGreater(spots["@"][0][1], spots["n"][0][1])
+        self.assertEqual(spots["l"][0], (spots["L"][0][0], spots["L"][0][1] - 1), "its ring of light one cell above it")
+
+    def test_the_arrival_is_outside_the_doors_zone_and_the_doors_are_wide_and_never_locked(self):
+        _, symbols, rows, spots = _night()
+        door, arrival, start = spots["N"][0], spots["n"][0], spots["@"][0]
+        self.assertEqual((door, arrival, start), (layout.NACHT_DOOR, layout.NACHT_ARRIVAL, layout.NACHT_START))
+        self.assertGreaterEqual(abs(arrival[1] - door[1]), 4, "a door zone must not catch the arrival")
+        self.assertGreaterEqual(abs(start[1] - door[1]), 4)
+        self.assertEqual(spots["H"][0], layout.NACHT_HOME_DOOR)
+        self.assertGreaterEqual(spots["H"][0][1] - spots["Q"][0][1], 4, "the last stretch lies before the door's zone")
+        for glyph, target, spawn in (("N", "flutlichtung", "nachtwald"), ("H", "tal", "bach")):
+            params = symbols[glyph]["params"]
+            self.assertEqual((params["target"], params["spawn"]), (target, spawn))
+            self.assertTrue(params["auto"])
+            self.assertEqual(params["size"], [3, 1])
+            self.assertNotIn("if", params, "never locked")
+            self.assertNotIn("unless", params)
+        self.assertEqual(symbols["n"]["marker"], "spawn_flutlichtung")
+        self.assertEqual(symbols["@"]["marker"], "player_spawn")
+
+    def test_the_door_home_leads_to_the_arrival_of_the_valley_that_is_there(self):
+        _, tal, tal_rows = _map(TAL)
+        self.assertTrue(any(entry.get("marker") == "spawn_bach" for entry in tal.values()), "spawn_bach in the valley")
+        spots = _spots(tal_rows)
+        arrival = [spots[g][0] for g, entry in tal.items() if entry.get("marker") == "spawn_bach" and g in spots][0]
+        door = [spots[g][0] for g, entry in tal.items()
+                if entry.get("prop", "").endswith("door.tscn") and entry["params"]["target"] == "bachlauf" and g in spots][0]
+        self.assertGreaterEqual(door[1] - arrival[1], 4, "that arrival is no door zone either")
+
+    def test_the_ways_in_and_out_are_three_cells_wide_up_to_the_doors(self):
+        _, symbols, rows, spots = _night()
+        x, y = spots["N"][0]
+        for row in range(0, 7):
+            around = [i for i in range(x - 4, x + 5) if _ground(symbols, rows[row][i]) in STANDABLE]
+            self.assertEqual(around, [x - 1, x, x + 1], "row %d: the gap in the northern forest" % row)
+        x, y = spots["H"][0]
+        for row in range(y - 1, layout.NACHT_H):
+            around = [i for i in range(x - 4, x + 5) if _ground(symbols, rows[row][i]) in STANDABLE]
+            self.assertEqual(around, [x - 1, x, x + 1], "row %d: three cells, no way round the door" % row)
+
+    def test_no_crown_hides_a_spot_with_a_cue_or_the_lantern(self):
+        _, _, rows, spots = _night()
+        for glyph in layout.NACHT_CUES + "n":
+            x, y = spots[glyph][0]
+            for dy in range(1, 9):
+                for dx in range(-3, 4):
+                    cell = rows[y + dy][x + dx] if y + dy < len(rows) else "h"
+                    self.assertNotIn(cell, NACHT_TREES, "a crown hides %s at %d,%d (tree at %d,%d)" % (glyph, x, y, x + dx, y + dy))
+
+    def test_nothing_stands_where_she_sits_and_the_lantern_has_room_all_round(self):
+        _, symbols, rows, spots = _night()
+        lx, ly = spots["L"][0]
+        # the seat is on the east side (offset 18 px, two to the right of it at most); the room round it is bare grass
+        for y in range(ly - 2, ly + 2):
+            for x in range(lx - 3, lx + 5):
+                cell = rows[y][x]
+                self.assertIn(cell, ".lL", "something stands at %d,%d, in the lantern's room" % (x, y))
+        seat = symbols["L"]["params"]["sit"]
+        self.assertEqual(seat["face"], "w", "she sits at its east side, facing it")
+        self.assertGreater(seat["offset"][0], 0)
+        self.assertLessEqual(seat["offset"][0], 24, "beside it, not far off")
+        self.assertEqual(symbols["l"]["params"]["lift"], -16, "the ring of light is drawn round its foot")
+        self.assertEqual(symbols["l"]["params"]["sprite"], "tal/wd_lantern_pool")
+        self.assertNotIn("cue", symbols["L"]["params"], "the lantern has no line of its own: sitting is what asks")
+        self.assertNotIn("if", symbols["L"]["params"])
+        self.assertNotIn("unless", symbols["L"]["params"], "it stays where it is")
+
+    def test_the_lantern_comes_into_the_picture_a_dozen_cells_or_more_before_the_glade(self):
+        _, _, rows, spots = _night()
+        lx, ly = spots["L"][0]
+        samples = layout._centerline(layout.NACHT_PATH, layout.NACHT_PATH_WIDTHS)
+        # walking the way from the door: the first step from which the lantern lies inside the picture (32 x 18 cells)
+        seen = [i for i, (x, y, _) in enumerate(samples) if abs(x - lx) <= 16 and abs(y - ly) <= 9]
+        self.assertTrue(seen, "the lantern is seen from the way")
+        self.assertGreater(seen[0], 0, "not from the door already")
+        x, y, _ = samples[seen[0]]
+        self.assertGreaterEqual(math.hypot(x - lx, y - ly), 12, "it shows from afar, as the only warm point in the wood")
+        # and it keeps showing: every later step of the way up to the glade has it inside the picture
+        self.assertEqual(seen, list(range(seen[0], seen[-1] + 1)))
+
+    def test_no_crown_hides_the_way(self):
+        _, symbols, rows, _ = _night()
+        checked = 0
+        for y, row in enumerate(rows):
+            for x, cell in enumerate(row):
+                if _ground(symbols, cell) != ",":
+                    continue
+                checked += 1
+                for dy in range(1, 9):
+                    for dx in range(-3, 4):
+                        below = rows[y + dy][x + dx] if y + dy < len(rows) and 0 <= x + dx < len(row) else "h"
+                        # the trees the generator scatters (the glow tree to look at, K, is a named spot at a fixed cell
+                        # whose crown only touches the corner of the box: the picture test counts its real pixels)
+                        self.assertNotIn(below, "TPG",
+                                         "the crown of the tree at %d,%d hides the way at %d,%d" % (x + dx, y + dy, x, y))
+        self.assertGreater(checked, 100, "the cells of the way were walked")
+
+    def test_the_glow_trees_are_the_guide_along_the_way(self):
+        _, symbols, rows, spots = _night()
+        glow = spots["G"] + spots["K"]
+        for y, row in enumerate(rows):
+            for x, c in enumerate(row):
+                if _ground(symbols, c) == "," and y > 14:
+                    near = min(math.hypot(x - gx, y - gy) for gx, gy in glow)
+                    self.assertLessEqual(near, 9.0, "no glow tree within 9 cells of the way at %d,%d" % (x, y))
+        for glyph in "GK":
+            self.assertEqual(symbols[glyph]["params"]["sprite"], "tal/wd_glow_tree")
+        self.assertEqual(symbols["K"]["params"]["cue"], "glow_tree")
+
+    def test_the_log_is_a_curiosity_that_stays_and_goes_dark_when_a_piece_is_taken(self):
+        _, symbols, rows, spots = _night()
+        params = symbols["Y"]["params"]
+        self.assertEqual(params["sprite"], "tal/wd_foxfire_log")
+        self.assertEqual(params["sprite_when"], {"forest.foxfire_taken": "tal/wd_foxfire_log_dim"})
+        self.assertEqual(params["cue"], "foxfire")
+        self.assertNotIn("unless", params, "the log stays, only its glow goes")
+        x, y = spots["Y"][0]
+        for dx in range(-2, 3):
+            self.assertEqual(_ground(symbols, rows[y][x + dx]), ".", "grass under the whole log (the sprite is four cells wide)")
+
+    def test_the_nachtwald_is_a_wood_of_beech_and_spruce_with_a_few_stones_and_ferns(self):
+        _, _, rows, _ = _night()
+        text = "".join(rows)
+        self.assertGreaterEqual(text.count("h"), 900, "a wall of forest all round the way")
+        self.assertGreaterEqual(text.count("F") + text.count("R"), 8)
+        self.assertGreaterEqual(text.count("."), 250, "grass in the glade and at the way")
+        self.assertGreaterEqual(text.count(","), 100, "the way")
 
 
 if __name__ == "__main__":

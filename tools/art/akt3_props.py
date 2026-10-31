@@ -1,6 +1,6 @@
 """Props for Act III (docs/akt3/REGIONSBRIEFE.md), drawn like make_sprites.py and registered in the same
 catalog (style "tal", so they share the atlas of the valley; the forest of the real world is the valley's
-palette with taller trees). Called from make_sprites.build(); `--preview out.png` draws them on one sheet (4x).
+palette with taller trees). Called from make_sprites.build(); `--preview out.png` draws them on one sheet (2x).
 
 Waldweg (W2): the tall forest (spruce and beech, a trunk and a high crown so that the path below stays in
 view), the hermit's hut seen from the front (its door is wired by W3: a latch and no lock, Bible §14), a trunk
@@ -12,6 +12,12 @@ Hut (W3): the hermit's room from inside (style "haus", the warm cabin of the val
 wooden room, a stove, a bare table, a bed under a wool blanket, a flute on pegs, one clean cup on a nail,
 a window that always shows the same dusk), the open door that lies over the closed one, and three things
 outside: a cup on a flat stone, branches across the spur, a clothesline with nothing on it.
+
+Flood clearing (W4): the water line on beeches and a mark, the drowned camp, the blanket, one runner's trail, a nest,
+a fork, driftwood and stepping stones.
+
+Night wood (W5): glow trees, the lantern with its ring of light, a glowing log. Nothing here is a light: the glow is
+baked into the emissive layer (drawn above the night tint, unshaded), like the mushrooms and wd_rest_lit.
 """
 import os
 import sys
@@ -59,10 +65,11 @@ def spruce(ms, seed):
     return c
 
 
-def beech(ms, seed, mark=None):
+def beech(ms, seed, mark=None, bark=BEECH_BARK):
     """Hochwald beech: long pale smooth trunk, three limbs, one high crown; 96 x 128, anchor (48, 124).
     `mark(c, centre_of_y, base)` (optional, draws without random numbers of the tree) lays something over the
-    finished tree before the outline: the flood line of the Flutlichtung (flood_beech)."""
+    finished tree before the outline: the flood line of the Flutlichtung (flood_beech), the glow of the night wood
+    (glow_tree). `bark` is the ramp of trunk, roots and limbs (the glow trees have a dark one)."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["tal"]
     c = ms.Canvas(96, 128)
@@ -70,7 +77,7 @@ def beech(ms, seed, mark=None):
     lean = rng.uniform(-2, 2)
     for side in (-1, 1):
         root = ms.limb_mask(c, cx + side * 2, base - 6, cx + side * rng.uniform(7, 10), base, 4)
-        c.paint(root, BEECH_BARK, 0.2 + 0.5 * c.cylinder(cx - 12, cx + 12), contrast=3.0, dither=False)
+        c.paint(root, bark, 0.2 + 0.5 * c.cylinder(cx - 12, cx + 12), contrast=3.0, dither=False)
     trunk = np.zeros((c.h, c.w), bool)
     for y in range(58, base):
         t = (base - y) / (base - 58)
@@ -78,7 +85,7 @@ def beech(ms, seed, mark=None):
         half = 4.2 * (1 - 0.25 * t)
         trunk[y, int(round(x - half)):int(round(x + half)) + 1] = True
     grain = pa.value_noise(c.h, c.w, (10, 1), rng)
-    c.paint(trunk, BEECH_BARK, 0.15 + 0.7 * c.cylinder(cx + lean / 2 - 6, cx + lean / 2 + 6) + 0.1 * (grain - 0.5),
+    c.paint(trunk, bark, 0.15 + 0.7 * c.cylinder(cx + lean / 2 - 6, cx + lean / 2 + 6) + 0.1 * (grain - 0.5),
             contrast=2.6, dither=False)
     c.paint(trunk & (c.yy > base - 18) & (pa.value_noise(c.h, c.w, 3, rng) > 0.55) & (c.xx < cx + lean), MOSS, 0.55,
             dither=False)
@@ -87,7 +94,7 @@ def beech(ms, seed, mark=None):
         d = rng.uniform(20, 30)
         sx, sy = cx + lean + np.cos(a) * d * 1.3, 40 + np.sin(a) * d * 0.5 + 8
         limb = ms.limb_mask(c, cx + lean, 62, sx, sy + 4, 4)
-        c.paint(limb, BEECH_BARK, 0.3 + 0.4 * c.cylinder(sx - 3, sx + 3), contrast=3.0, dither=False)
+        c.paint(limb, bark, 0.3 + 0.4 * c.cylinder(sx - 3, sx + 3), contrast=3.0, dither=False)
         subs.append((sy, sx, rng.uniform(15, 19)))
     subs.append((30, cx + lean, 21))
     blobs = []
@@ -944,6 +951,230 @@ def stepping_stones(ms):
     return c
 
 
+# --------------------------------------------------------------------------- the night wood (W5)
+# The Nachtwald has no light source: nothing here is a PointLight2D (Plan 7 puts the light off until the first night
+# map of the city). What glows is baked into the emissive layer, which the game draws above the night tint, unshaded
+# (like the cyan mushrooms and wd_rest_lit): the trees and the log glow a cool, matt green (foxfire; a wood full of
+# them must not blind, so only a few pixels reach the bloom threshold of the grade), the lantern is the one warm
+# light of the wood, small and still. Nothing flickers: one picture of the flame, one ring of light on the ground.
+GLOW_BARK = ramp("#0e1214", "#182022", "#252f31", "#364442", "#4d605b")
+FOXFIRE = ramp("#0f2e2c", "#1a5446", "#2b7f66", "#4aa888", "#80d0ac")
+ROTTEN = ramp("#1a1612", "#2e261c", "#483c2c", "#64543c", "#86724f")
+PUNK = ramp("#16221f", "#222f2a", "#34433b")  # the same patches of the log when nothing glows any more
+LANTERN_IRON = ramp("#14161a", "#2a2d34", "#454a54", "#6e7480")
+LANTERN_LIGHT = {"g": "#80461a", "G": "#be6c26", "F": "#f2a63c", "f": "#fff0a8"}  # glass dim, glass, flame, core
+POOL = ramp("#2a190b", "#47290f", "#6e4a1c", "#9a6c2c")  # the ring of light on the ground, matt amber
+GLOW_TREES = [(801, 0.42, 0.30, 0.12), (803, 0.32, 0.26, 0.22)]  # seed, trunk, limb, crown share: bark-lit, crown-lit
+LANTERN_ROWS = [
+    "...iiii...",
+    "..i....i..",
+    "..iiiiii..",
+    ".IIIIIIIi.",
+    ".igGGGGgi.",
+    ".igGFFGgi.",
+    ".igFffFgi.",
+    ".igFffFgi.",
+    ".igGFFGgi.",
+    ".iggggggi.",
+    ".bbbbbbbb.",
+    "..bBbbbb..",
+]
+
+
+def _palette_hits(c, colors):
+    """Index of the ramp colour each opaque pixel of `c` has (-1 where it has none of them)."""
+    hit = np.full((c.h, c.w), -1, int)
+    for k, col in enumerate(colors):
+        hit[np.all(np.abs(c.rgb - col) < 0.5, axis=-1) & c.a] = k
+    return hit
+
+
+def _thicken(mask):
+    """Drops the pixels of a patch that have fewer than two neighbours (no stray single pixels, no hairlines)."""
+    n = np.zeros(mask.shape, int)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        n += np.roll(np.roll(mask, dy, 0), dx, 1)
+    return mask & (n >= 2)
+
+
+def _rim(mask):
+    """The pixels of a patch that touch something outside it (its edge, 4-neighbourhood)."""
+    inner = mask.copy()
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        inner &= np.roll(np.roll(mask, dy, 0), dx, 1)
+    return mask & ~inner
+
+
+def _bleed(c, e, patch, surface):
+    """The glow spills a little onto the wood beside it: the pixels of `surface` right next to a patch, every other
+    one in the darkest foxfire colour (a checker), so that the edge of a patch is soft and not cut."""
+    near = np.zeros(patch.shape, bool)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        near |= np.roll(np.roll(patch, dy, 0), dx, 1)
+    near &= surface & ~patch & (((c.xx + c.yy) % 2) == 0)
+    _glow_into(c, e, near, np.zeros(patch.shape, int))
+
+
+def _glow_into(c, e, mask, index):
+    """Lights the masked pixels: foxfire colours `index` (array) on the sprite and on its emissive layer."""
+    col = FOXFIRE[np.clip(index, 0, len(FOXFIRE) - 1)]
+    c.rgb[mask] = col[mask]
+    c.a |= mask
+    e.rgb[mask] = col[mask]
+    e.a |= mask
+
+
+def glow_tree(ms, seed, trunk_share, limb_share, crown_share):
+    """A beech of the night wood: the same tree as wd_beech with dark, wet bark (it stands against the dark as a
+    silhouette) whose lichen glows matt green: streaks of foxfire down the trunk and along the limbs (their share of
+    the bark is `trunk_share` and `limb_share`), and a few leaf clumps of the crown whose lit side glows
+    (`crown_share` of the lit leaves). Returns (sprite, emissive); 96 x 128, anchor (48, 124), like wd_beech."""
+    rng = np.random.default_rng(seed + 200)
+    st = pa.STYLES["tal"]
+    foliage = st["foliage_blue" if seed % 2 else "foliage"]
+    e = ms.Canvas(96, 128)
+
+    def mark(c, centre, base):
+        bark = _palette_hits(c, GLOW_BARK) >= 0
+        leaf = _palette_hits(c, foliage)
+        mid = np.array([centre(min(max(y, 58), base)) for y in range(c.h)])[:, None]
+        trunk = bark & (np.abs(c.xx + 0.5 - mid) <= 5.0) & (c.yy >= 58) & (c.yy < base - 4)
+        streaks = pa.value_noise(c.h, c.w, (12, 2.4), rng)  # long and thin: the glow runs with the grain
+        lumps = pa.value_noise(c.h, c.w, 3.0, rng)
+        patch = _thicken(trunk & (streaks > 1 - trunk_share)) | _thicken(bark & ~trunk & (lumps > 1 - limb_share))
+        tone = pa.value_noise(c.h, c.w, 2.2, rng)
+        index = np.where(tone > 0.84, 3, 2)
+        index = np.where(_rim(patch) | (tone < 0.22), 1, index)
+        foot = _thicken(bark & (c.yy >= base - 6) & (pa.value_noise(c.h, c.w, 2.5, rng) > 0.46))
+        _glow_into(c, e, patch | foot, np.where(foot & ~patch, 1, index))
+        _bleed(c, e, patch | foot, bark)
+        spots = (leaf >= 2) & (pa.value_noise(c.h, c.w, 3.2, rng) > 1 - crown_share)
+        spots = _thicken(spots)
+        _glow_into(c, e, spots, np.where(leaf >= 4, 2, 1))
+
+    c = beech(ms, seed, mark=mark, bark=GLOW_BARK)
+    return c, e
+
+
+def _sheet_of(c, rows, colors, ox, oy):
+    """Draws a hand-made grid of characters (one colour each, '.' is transparent) onto `c` at (ox, oy)."""
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch != ".":
+                c.rgb[oy + y, ox + x] = colors[ch]
+                c.a[oy + y, ox + x] = True
+
+
+def _pool(c, e, cx, cy, rx, ry, levels, close_to_edge=0.0):
+    """A ring of matt light on the ground, drawn on both layers: concentric bands of POOL, the brightest in the
+    middle, every step ordered-dithered into the next so that it reads as a soft round pool and not as a target.
+    `levels` is how many POOL colours it uses (the last ones); pixels under the dither of the first band are left
+    out, so the edge is a broken line of dots."""
+    d = np.hypot((c.xx + 0.5 - cx) / rx, (c.yy + 0.5 - cy) / ry)
+    thr = np.tile(pa.BAYER4, (c.h // 4 + 1, c.w // 4 + 1))[:c.h, :c.w]
+    q = np.floor(np.clip(1 - d, 0, 1) ** 0.85 * levels + thr).astype(int)
+    q = np.minimum(q, levels)
+    lit = (d <= 1.0) & (q >= 1)
+    col = POOL[len(POOL) - levels + np.clip(q - 1, 0, levels - 1)]
+    for layer in (c, e):
+        layer.rgb[lit] = col[lit]
+        layer.a |= lit
+
+
+def lantern(ms):
+    """The small lantern on the ground of the night wood: an iron frame with a ring on top, a dim glass cage around
+    one calm flame (pale core, amber body), a base plate. The glass and the flame are the emissive layer, one picture
+    (no flicker), and a few dots of amber on the ground right around its foot (the large ring of light on the
+    ground is wd_lantern_pool, a flat prop, so that it never lies over a person sitting beside the lantern).
+    Returns (sprite, emissive); 28 x 24, anchor (14, 20): the lantern itself is 12 x 14 px with its outline."""
+    st = pa.STYLES["tal"]
+    c, e = ms.Canvas(28, 24), ms.Canvas(28, 24)
+    colors = {"i": LANTERN_IRON[2], "I": LANTERN_IRON[3], "b": LANTERN_IRON[2], "B": LANTERN_IRON[3]}
+    for ch, hexcolor in LANTERN_LIGHT.items():
+        colors[ch] = pa.hex_rgb(hexcolor)
+    _sheet_of(c, LANTERN_ROWS, colors, 9, 7)
+    glow = np.zeros((24, 28), bool)
+    for y, row in enumerate(LANTERN_ROWS):
+        for x, ch in enumerate(row):
+            if ch in LANTERN_LIGHT:
+                glow[7 + y, 9 + x] = True
+    c.outline(st["outline"])
+    solid = c.a.copy()  # the frame stands in front of its own ring of light
+    halo, halo_e = ms.Canvas(28, 24), ms.Canvas(28, 24)
+    _pool(halo, halo_e, 14, 19.4, 11.5, 3.6, 2)
+    free = halo_e.a & ~solid
+    for layer, source in ((c, halo), (e, halo_e)):
+        layer.rgb[free] = source.rgb[free]
+        layer.a |= free
+    e.rgb[glow] = c.rgb[glow]
+    e.a |= glow
+    return c, e
+
+
+def lantern_pool(ms):
+    """The ring of light of the lantern on the ground: matt amber, brightest at the foot of the lantern, ordered
+    dither between the steps; flat (the game draws it under everyone, so it never covers a person who sits beside
+    the lantern, and it is baked, not a light). Returns (sprite, emissive); 80 x 32, anchor (40, 16)."""
+    c, e = ms.Canvas(80, 32), ms.Canvas(80, 32)
+    _pool(c, e, 40, 16, 37, 14.4, 4)
+    return c, e
+
+
+def foxfire_log(ms, lit):
+    """A fallen trunk, rotten through: dark bark with ochre punk showing where it has crumbled, a skin of moss along
+    the top, the cut face of the root end to the left with its rings, the other end broken off in splinters. In its
+    lower half and along two cracks the wood glows matt green (foxfire; `lit`); `lit=False` is the same log after
+    somebody has taken a piece: the patches are dull and dark, and one pale notch of fresh wood shows where it was
+    broken out. 60 x 26, anchor (30, 20)."""
+    rng = np.random.default_rng(821)
+    st = pa.STYLES["tal"]
+    c, e = ms.Canvas(60, 26), ms.Canvas(60, 26)
+    cy, x0, x1 = 13.5, 8, 54
+    along = np.clip((c.xx - x0) / (x1 - x0), 0, 1)
+    rad = 6.6 + 0.9 * (1 - along) + 0.5 * np.sin(c.xx * 0.43) + 0.3 * np.sin(c.xx * 1.1 + 2)
+    t = (c.yy + 0.5 - cy) / rad
+    body = (np.abs(t) <= 1.0) & (c.xx >= x0) & (c.xx < x1)
+    splinter = (c.xx >= 49 + 5 * (pa.value_noise(c.h, c.w, (2, 9), rng) - 0.5) * 2) & (c.yy < cy)
+    body &= ~((c.xx >= 50) & (c.yy < cy - 2) & (pa.value_noise(c.h, c.w, (3, 6), rng) > 0.5))
+    body &= ~((c.xx >= 52) & (c.yy > cy + 3))
+    body &= ~((c.xx >= 53) & splinter)
+    light = np.sqrt(np.clip(1 - t * t, 0, 1)) * 0.7 + np.clip(-t, 0, 1) * 0.3
+    grain = pa.value_noise(c.h, c.w, (1, 8), rng)
+    c.paint(body, ROTTEN, 0.12 + 0.6 * light + 0.16 * (grain - 0.5), contrast=2.0, dither=False)
+    crumbled = body & (t > -0.2) & (pa.value_noise(c.h, c.w, (3, 7), rng) > 0.64)
+    c.paint(crumbled, ROTTEN, 0.5 + 0.2 * (grain - 0.5), dither=False)  # punk: paler, ochre, where the bark has gone
+    moss = body & (t < -0.25) & (pa.value_noise(c.h, c.w, (3, 5), rng) > 0.42)
+    c.paint(moss, MOSS, 0.3 + 0.5 * light, dither=False)
+    face = c.ellipse(x0, cy, 3.4, rad[int(cy), x0] + 0.2)  # the cut face of the root end
+    rings = (np.hypot(c.xx + 0.5 - x0, (c.yy + 0.5 - cy) * 0.55).astype(int) % 2) == 0
+    c.paint(face, ROTTEN, np.where(rings, 0.55, 0.78), dither=False)
+    c.paint(c.rect(x0 - 3, cy - 0.5, x0 + 1, cy + 0.5) & face, ROTTEN, 0.2, dither=False)  # a heart crack
+    # the foxfire: a few patches along the grain in the lower half and a vein that joins them; rim darker
+    patches = np.zeros((c.h, c.w), bool)
+    for px, py, rx, ry in ((17, 16.2, 5.6, 2.3), (29, 13.8, 4.2, 1.7), (37, 16.6, 6.2, 2.5), (46.5, 15, 3.6, 2.0),
+                           (23, 19.4, 3.2, 1.2), (43, 11, 2.6, 1.3)):
+        wob = pa.value_noise(c.h, c.w, 2.5, rng)
+        patches |= (c.ellipse(px, py, rx, ry) | c.ellipse(px, py, rx * 0.6, ry * 1.5) & (wob > 0.5)) & body & (t > -0.55)
+    veins = np.zeros((c.h, c.w), bool)
+    for ax, ay, bx, by in ((43, 16, 46, 14), (10, 16, 13, 15), (24, 11, 27, 10)):
+        for i in range(12):
+            veins[int(round(ay + (by - ay) * i / 11)), int(round(ax + (bx - ax) * i / 11))] = True
+    patches = _thicken(patches | (veins & body))
+    tone = pa.value_noise(c.h, c.w, 2.0, rng)
+    index = np.where(tone > 0.74, 3, 2)
+    index = np.where(_rim(patches), 1, index)
+    if lit:
+        _glow_into(c, e, patches, index)
+        _bleed(c, e, patches, body)
+    else:
+        c.paint(patches, PUNK, np.where(_rim(patches), 0.1, 0.45 + 0.4 * (tone - 0.5)), dither=False)
+        c.paint(c.rect(33, 11, 37, 14) & body, TWIG_WOOD, np.where(c.xx < 35, 0.95, 0.7), dither=False)
+        c.paint(c.rect(33, 11, 37, 12) & body, TWIG_WOOD, 0.35, dither=False)
+    c.outline(st["outline"])
+    return c, e
+
+
+
 def build(ms):
     ms.save("tal", "wd_spruce", [spruce(ms, 701 + k) for k in range(3)], (28, 116),
             shape={"circle": 5, "offset": [0, -2]}, sway=0.5, shadow=[18, 6])
@@ -996,6 +1227,50 @@ def build(ms):
     ms.save("tal", "wd_fork_nest", fork(ms, True), (16, 37), shape={"circle": 3, "offset": [0, -1]})
     ms.save("tal", "wd_driftwood", driftwood(ms), (8, 9))
     ms.save("tal", "wd_stones", stepping_stones(ms), (40, 8), flat=True)
+    # the night wood (W5): no PointLight2D anywhere, the glow is the emissive layer (drawn above the night tint). The
+    # glow trees are two beeches (shadow: they stand in the baked stamp of nachtwald); the lantern is small, its
+    # ring of light on the ground is a flat prop of its own; the log carries no shadow, and a second, dark one
+    # (wd_foxfire_log_dim) is what lies there after a piece has been taken
+    trees = [glow_tree(ms, *spec) for spec in GLOW_TREES]
+    ms.save("tal", "wd_glow_tree", [t[0] for t in trees], (48, 124), emissive=[t[1] for t in trees],
+            shape={"circle": 6, "offset": [0, -2]}, sway=0.5, shadow=[30, 9])
+    lamp, lamp_glow = lantern(ms)
+    ms.save("tal", "wd_lantern", lamp, (14, 20), emissive=lamp_glow, shape={"circle": 3, "offset": [0, -1]})
+    pool, pool_glow = lantern_pool(ms)
+    ms.save("tal", "wd_lantern_pool", pool, (40, 16), emissive=pool_glow, flat=True)
+    log, log_glow = foxfire_log(ms, True)
+    ms.save("tal", "wd_foxfire_log", log, (30, 20), emissive=log_glow, shape={"rect": [40, 8], "offset": [0, -4]})
+    ms.save("tal", "wd_foxfire_log_dim", foxfire_log(ms, False)[0], (30, 20),
+            shape={"rect": [40, 8], "offset": [0, -4]})
+
+
+def night_strip(ms, width, height):
+    """The night wood as the scene shows it, roughly: the ground and every sprite multiplied by the world tint of
+    nachtwald.tscn (0.5, 0.55, 0.74, the palette of the prototype look_wald; the scene sets exports and no day_preset),
+    every emissive layer drawn on top unshaded and unchanged (no grade, no bloom: this is only to judge whether the
+    glow is legible against the tint and does not blind). Left to right:
+    the two glow trees, an ordinary beech and spruce next to them, the log (glowing and dark), the lantern in its
+    ring of light."""
+    from PIL import Image
+    tint = np.array([0.5, 0.55, 0.74])
+    strip = Image.new("RGBA", (width, height), tuple(int(v) for v in pa.STYLES["tal"]["grass"][1] * tint) + (255,))
+    foot = height - 20
+    trees = [glow_tree(ms, *spec) for spec in GLOW_TREES]
+    lamp, lamp_glow = lantern(ms)
+    pool, pool_glow = lantern_pool(ms)
+    log, log_glow = foxfire_log(ms, True)
+    parts = [(trees[0][0], trees[0][1], 48, 124, 56), (trees[1][0], trees[1][1], 48, 124, 150),
+             (beech(ms, 711), None, 48, 124, 244), (spruce(ms, 701), None, 28, 116, 310),
+             (log, log_glow, 30, 20, 380), (foxfire_log(ms, False)[0], None, 30, 20, 440),
+             (pool, pool_glow, 40, 16, 540), (lamp, lamp_glow, 14, 20, 540)]
+    for base, glow, ax, ay, x in parts:
+        top = (x - ax, foot - ay)
+        tinted = base.rgba().copy()
+        tinted[..., :3] *= tint
+        strip.alpha_composite(Image.fromarray(tinted.astype(np.uint8), "RGBA"), top)
+        if glow is not None:
+            strip.alpha_composite(Image.fromarray(glow.rgba().astype(np.uint8), "RGBA"), top)
+    return strip
 
 
 def preview(path):
@@ -1043,10 +1318,13 @@ def preview(path):
             strip.alpha_composite(img, (x, strip_h - 2 - img.height if img.height < strip_h - 2 else 0))
             x += img.width + 8
         strips.append(strip)
-    full = Image.new("RGBA", (sheet.width, sheet.height + 2 * strip_h))
+    strips.append(night_strip(ms, sheet.width, strip_h + 20))
+    full = Image.new("RGBA", (sheet.width, sheet.height + sum(s.height for s in strips)))
     full.alpha_composite(sheet, (0, 0))
-    for k, strip in enumerate(strips):
-        full.alpha_composite(strip, (0, sheet.height + k * strip_h))
+    y = sheet.height
+    for strip in strips:
+        full.alpha_composite(strip, (0, y))
+        y += strip.height
     full.resize((full.width * 2, full.height * 2), Image.NEAREST).save(path)
 
 

@@ -1,0 +1,18 @@
+[
+  {"relative": true},
+  {"log": "Act III, W5: the night wood; a run from here has no Act I, II or morning behind it", "t": 0.5},
+  {"use": [25, 21], "face": "up", "log": "the small light on the path before the glade: it burns on the ground and does not move", "t": 0.5},
+  {"use": [33, 13], "face": "up", "log": "a tree whose bark glows matt green", "t": 0.5},
+  {"use": [10, 18], "face": "up", "log": "the rotten log in the corner of the glade: a piece broken from it, taken with the first answer", "t": 0.5},
+  {"wait_for": {"flag": "forest.foxfire_taken"}, "timeout": 30, "t": 0.1},
+  {"use": [18, 21], "face": "left", "log": "she sits down beside the lantern, on its east side: the cue tells the silence, then it hums once", "t": 0.5},
+  {"wait_for": {"flag": "forest.waited"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "act3_waiting"}, "timeout": 30, "t": 0.1},
+  {"log": "she sits on; nothing runs on a clock", "t": 3.0},
+  {"press": ["move_down"], "log": "a step gets her up again; nothing was locked", "t": 0.5},
+  {"release": ["move_down"], "t": 0.4},
+  {"use": [9, 29], "face": "up", "log": "the last stretch before the door: the trunks stand apart, the path grows wide", "t": 0.5},
+  {"enter": "tal", "log": "the door at the end of the path: nothing locked it, and the brook is the valley's", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "t": 0.1},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]

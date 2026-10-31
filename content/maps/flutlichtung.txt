@@ -2,8 +2,8 @@
 ; Wald an den Rand einer Lichtung, an der der Bach vorbeiläuft. Das Wasser hat sie einmal bedeckt und Schlick zurückgelassen: trockenen
 ; (Pfad), nassen (Schlamm) und Lachen. Von Nord nach Süd: die Tür, die Ankunft, die Spur eines Läufers im trockenen Schlick, der bleiche
 ; Stamm ohne Krone (die Marke) mit dem Antreiber, das Lager (Ring, Kessel, Decke), am Ufer das Treibholz und die flachen Steine quer
-; durch den Bach; im Gras am Westrand liegt ein Nest, am Ufer steht ein Ast mit einer Gabel. Der Südausgang ist ein Blocker (Platzhalter
-; für W5). Layout: tools/art/layout_akt3_maps.py flutlichtung --write (ersetzt den [map]-Block), danach
+; durch den Bach; im Gras am Westrand liegt ein Nest, am Ufer steht ein Ast mit einer Gabel. Der Südausgang ist ein Blocker, solange der Weg
+; nach Süden nicht offen ist (forest.night_way, W5); dahinter führt eine Tür in den Nachtwald. Layout: tools/art/layout_akt3_maps.py flutlichtung --write (ersetzt den [map]-Block), danach
 ; tools/art/bake_ground.py content/maps/flutlichtung.txt. Die Streuregeln sind Laufzeit-Meta: sie brauchen keinen neuen Bake.
 [meta]
 style = "tal"
@@ -44,8 +44,11 @@ k = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; das Treibholz am Ufer (Kuriosität) und die flachen Steine quer durch den Bach (Fragment): man geht auf ihnen hinüber
 d = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_driftwood", "cue": "driftwood", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 14, "unless": "forest.driftwood_taken"}}
 i = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wd_stones", "cue": "stones", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "radius": 26}}
-; der Weg nach Süden ist zu, bis W5 ihn öffnet
-B = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "south_wait", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue"}}
+; der Weg nach Süden ist zu, bis er offen ist (forest.night_way, Akt III W5: sobald die Hütte und die Marke gesehen sind); dahinter führt eine Tür
+; in den Nachtwald, und von dort kommt man bei w wieder an (vier Zeilen vor ihr, nördlich des Blockers)
+B = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "south_wait", "dialogue": "res://content/dialogue/akt3/flutlichtung.dialogue", "unless": "forest.night_way"}}
+W = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "nachtwald", "spawn": "flutlichtung", "auto": true, "size": [3, 1]}}
+w = {"ground": ",", "marker": "spawn_nachtwald"}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,N,hhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -95,9 +98,9 @@ hhhhhhhhhhhhhhhhhhhhhhhh.....F.R..,,,,....Uhhhhhhhhhhhhhhhh~~~.........F.hhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhU......,,,..U...hhhhhhhhhhhhhhhh~~~....U..Uhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.,,,......hhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,w,hhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,B,hhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,W,hhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh,,,hhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhh

@@ -88,8 +88,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### W4-7 · `south_wait`
 
-> --- Der Südausgang (Platzhalter für W5) ---------------------------------------------------------------------------------------
-> Ein Blocker in der Lücke im Südrand: der Pfad geht dort zwischen die Kronen weiter, und noch ist es hell. Wenn W5 die Lücke zur Tür macht, fällt der Cue.
+> --- Der Südausgang (hält zurück, bis der Weg in die Nacht offen ist) ---------------------------------------------------------------------------------------
+> Ein Blocker in der Lücke im Südrand: der Pfad geht dort zwischen die Kronen weiter, und noch ist es hell. Er hält zurück, solange forest.night_way fehlt (das
+> setzen die Szenen, wenn die Heldenquest in night steht); dahinter liegt die Tür in den Nachtwald (W5). Der Cue bleibt für alle, die noch nicht so weit sind.
 
 - *Im Süden geht der Pfad zwischen die Kronen, schmal und im Schatten.* `[#draft]`  <sub>fl_south_1</sub>
 - *Es ist noch hell genug, um umzukehren.* `[#draft]`  <sub>fl_south_2</sub>
