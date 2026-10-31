@@ -93,7 +93,7 @@ Antreiber: Der Boden hält. [ID:fl_again_2] [#draft]
 => END
 
 # --- Der Südausgang (Platzhalter für W5) ---------------------------------------------------------------------------------------
-# Ein Blocker in der Lücke im Südrand: der Pfad läuft im Unterholz aus. Wenn W5 die Lücke zur Tür macht, fällt der Cue.
+# Ein Blocker in der Lücke im Südrand: der Pfad geht dort zwischen die Kronen weiter, und noch ist es hell. Wenn W5 die Lücke zur Tür macht, fällt der Cue.
 
 ~ south_wait
 Im Süden geht der Pfad zwischen die Kronen, schmal und im Schatten. [ID:fl_south_1] [#draft]
@@ -159,7 +159,7 @@ Es hat einen kurzen Seitenast und, nicht weit davon, einen Knoten mit Ringen. Da
 
 # --- Fragment: die Trittsteine (eine Spur der Welt, kein Bild des Kindes, nicht die Marke) --------------------------------------
 # Decor tal/wd_stones, flach, im Bach: vier flache Steine quer durch das Wasser, einer hinter dem anderen, jeder eine Schrittlänge vom
-# nächsten, mit Kieseln unter jedem, das Wasser teilt sich um sie. Sie sind nicht gefallen, jemand hat sie getragen und gelegt, und sie
+# nächsten, auf dem dritten schon Moos, das Wasser teilt sich um sie. Sie sind nicht gefallen, jemand hat sie getragen und gelegt, und sie
 # tragen noch. Das Fragment steht zuletzt; danach nur eine kurze Zeile.
 
 ~ stones
