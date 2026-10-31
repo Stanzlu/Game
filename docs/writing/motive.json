@@ -1005,9 +1005,13 @@
     {
      "type": "flag",
      "ref": "melody.child_hum"
+    },
+    {
+     "type": "line",
+     "ref": "nw_wait_4"
     }
    ],
-   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus, hörbar und kein Fragment (`melody.house_hum`, Brief O5); Akt V: das Summen trägt die zentrale Szene, ohne ein Fragment zu sein."
+   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus, hörbar und kein Fragment (`melody.house_hum`, Brief O5); Akt III: im Nachtwald summt es einmal, ein paar Töne, ohne Deutung (`nw_wait_4`, kein Fragment, Brief O10); Akt V: das Summen trägt die zentrale Szene, ohne ein Fragment zu sein."
   },
   {
    "id": "kind-warten",
@@ -1026,9 +1030,25 @@
     {
      "type": "flag",
      "ref": "elysia.child_vanished"
+    },
+    {
+     "type": "line",
+     "ref": "nw_wait_2"
+    },
+    {
+     "type": "line",
+     "ref": "nw_wait_3"
+    },
+    {
+     "type": "line",
+     "ref": "nw_wait_4"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.waited"
     }
    ],
-   "payoff": "Akt III: ein Echo im Wald; Akt VI: ein Blick in Elysia."
+   "payoff": "Akt III (W5, Nachtwald, Brief O10): ein Echo im Wald, und es bleibt eines. Eine kleine Laterne brennt am Boden und bleibt, wo sie ist, wenn man auf sie zugeht (`nw_wait_2`); wer sich neben sie setzt, hört es einmal summen, ganz leise und aus keiner Richtung (`nw_wait_4`). Kein Kind im Bild, kein Wort von ihm, keine Erklärung, kein Zähler, kein Fragment: Warten ist das Sitzen und nie eine Uhr, und wer weitergeht, verliert nichts. Akt VI: ein Blick in Elysia."
   },
   {
    "id": "kind-fragmente",
@@ -1729,6 +1749,21 @@
    "flag": "fragment.stepping_stones",
    "axis": "Wahrnehmung",
    "meaning": "Sie ist auf den ersten der flachen Steine quer durch den Bach getreten: jemand hat sie getragen und gelegt, und sie tragen noch (Spur der Welt, Akt III, W4; kein Bild des Kindes)."
+  },
+  {
+   "flag": "forest.night_way",
+   "axis": "Fortschritt",
+   "meaning": "Der Weg nach Süden ist offen: die Heldenquest steht in der Stufe night (die Szenen setzen es beim Betreten der Flutlichtung und der Hütte und in dem Augenblick, in dem die Quest die Stufe erreicht), und die Lücke im Südrand der Flutlichtung ist dann eine Tür in den Nachtwald (Akt III, W5). Eine Quest, die nie gestartet wurde, öffnet ihn nicht."
+  },
+  {
+   "flag": "forest.waited",
+   "axis": "Kind",
+   "meaning": "Sie hat sich im Nachtwald neben die Laterne gesetzt und es einmal summen gehört, ganz leise und aus keiner Richtung (Akt III, W5, Brief O10): das Echo des Warten-Bildes (Bible §15), hörbar, kein Fragment, kein Zähler. Wer weitergeht, verliert nichts; der Klang spielt höchstens einmal je Spielstand."
+  },
+  {
+   "flag": "forest.foxfire_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das Leuchtholz im Farn des Nachtwalds eingesteckt (Kuriosität, Akt III, W5); der Stamm bleibt liegen und ist danach dunkel mit einer hellen Bruchstelle."
   }
  ]
 }

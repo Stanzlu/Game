@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bxorlv3ibs2aa"
+path="res://.godot/imported/nachtwald.dialogue-2efd8dd7e523543fd4e3cd21b1dc9506.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt3/nachtwald.dialogue"
+dest_files=["res://.godot/imported/nachtwald.dialogue-2efd8dd7e523543fd4e3cd21b1dc9506.tres"]
+
+[params]
+
+defaults=true
