@@ -380,6 +380,7 @@ func test_the_hut_has_a_door_that_is_never_in_the_way_and_the_cup_stands_beside_
 
 func test_the_way_on_to_the_south_is_a_door_to_the_flutlichtung_and_the_way_to_it_is_free() -> void:
 	WorldState.set_flag("house.antreiber_by_fire")  # no one stands in the path
+	SceneTravel.stay = true  # the door only records where it would go
 	var scene := await _scene()
 	var door := _at(scene, SOUTH_DOOR_CELL, DOOR_SCRIPT)
 	assert_not_null(door, "a door across the path, where the blocker stood")
