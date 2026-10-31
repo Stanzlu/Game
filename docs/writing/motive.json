@@ -755,7 +755,7 @@
      "ref": "forest.flood_sat"
     }
    ],
-   "payoff": "Der Antreiber erklärt sich nie. Die Flutlichtung (Akt III, W4) zeigt, warum Rennen einmal sinnvoll war, und nur an Dingen: Schlick bis über Kopfhöhe an jedem Stamm, ein einziger Schnitt, zu dem kein Brett gehört (alles andere hat er beschriftet), eine steife Decke mit seinem roten Strich, die Abdrücke eines einzigen Läufers, die nach Norden laufen, den Weg zurück, und er selbst, der nachmisst, während seine Füße auf der Stelle gehen (`fl_antr_3`) und stillstehen, sobald er sitzt (`fl_ask_3`). Kein Wort nennt Ursache, Täter oder Wirkung auf die Spielerin (Bible §15, §51). Im Haus ist er später repariert und plant Freizeit (Plan 5.2).",
+   "payoff": "Der Antreiber erklärt sich nie. Die Flutlichtung (Akt III, W4) zeigt, warum Rennen einmal sinnvoll war, und nur an Dingen: Schlick bis über Kopfhöhe an jeder Buche der Lichtung, ein einziger Schnitt, zu dem kein Brett gehört (alles andere hat er beschriftet), eine steife Decke mit seinem roten Strich, die Abdrücke eines einzigen Läufers, die nach Norden laufen, den Weg zurück, und er selbst, der nachmisst, während seine Füße auf der Stelle gehen (`fl_antr_3`) und stillstehen, sobald er sitzt (`fl_ask_3`). Kein Wort nennt Ursache, Täter oder Wirkung auf die Spielerin (Bible §15, §51). Im Haus ist er später repariert und plant Freizeit (Plan 5.2).",
    "payoff_lines": [
     "fl_ask_3",
     "fl_antr_3"

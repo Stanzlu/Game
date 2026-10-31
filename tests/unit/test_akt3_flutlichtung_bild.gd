@@ -181,21 +181,43 @@ func test_a_find_is_not_hidden_by_anything_that_stands_over_it() -> void:
 		)
 
 
+## A copy of the find's own picture on the same spot, `dy` pixels further south (negative: north)
+## and on layer `layer`.
+func _cover_of(scene: GameScene, find: Node2D, layer: int, dy: float) -> Sprite2D:
+	var cover := Sprite2D.new()
+	cover.centered = false
+	cover.texture = find.sprite.texture
+	cover.offset = find.sprite.offset
+	cover.flip_h = find.sprite.flip_h
+	cover.position = find.global_position + Vector2(0, dy)
+	cover.z_index = layer
+	scene.map.entities.add_child(cover)
+	return cover
+
+
 func test_the_check_sees_a_sprite_that_does_hide_a_find() -> void:
 	var scene := await _scene()
 	for cue: String in ["nest", "flood_mark", "stones"]:
 		var find := _first(scene, cue)
 		var before := _hidden_share(scene, find.sprite)
-		# the same picture, two pixels south of it and one layer up: in front of it
-		var cover := Sprite2D.new()
-		cover.centered = false
-		cover.texture = find.sprite.texture
-		cover.offset = find.sprite.offset
-		cover.flip_h = find.sprite.flip_h
-		cover.position = find.global_position + Vector2(0, 2)
-		cover.z_index = 1
-		scene.map.entities.add_child(cover)
-		var after := _hidden_share(scene, find.sprite)
-		cover.free()
-		assert_gt(after[0] as float, 0.6, "'%s' is under its copy" % cue)
-		assert_lt(before[0] as float, after[0] as float)
+		var layer := int(_order(scene, find.sprite).x)
+		# a higher layer hides it, whatever the rows say
+		var up := _cover_of(scene, find, layer + 1, 0.0)
+		var after_up := _hidden_share(scene, find.sprite)
+		up.free()
+		assert_gt(after_up[0] as float, 0.6, "'%s' is under its copy one layer up" % cue)
+		# the same layer decides by the rows: two pixels further south stands in front of it
+		var south := _cover_of(scene, find, layer, 2.0)
+		var after_south := _hidden_share(scene, find.sprite)
+		south.free()
+		assert_gt(after_south[0] as float, 0.6, "'%s' is under its copy to the south" % cue)
+		assert_lt(before[0] as float, after_south[0] as float)
+		# two pixels further north (or one layer down) stands behind it and hides nothing
+		var north := _cover_of(scene, find, layer, -2.0)
+		var after_north := _hidden_share(scene, find.sprite)
+		north.free()
+		assert_eq(after_north[0], before[0], "'%s': its copy to the north is behind it" % cue)
+		var down := _cover_of(scene, find, layer - 1, 2.0)
+		var after_down := _hidden_share(scene, find.sprite)
+		down.free()
+		assert_eq(after_down[0], before[0], "'%s': its copy one layer down is behind it" % cue)

@@ -621,7 +621,7 @@ def flood_band(c, rng, xc_of, base, line, half=5.2, reach=12):
 
 
 def flood_beech(ms, seed):
-    """A hochwald beech with the flood line on its trunk (the clearing's trees all carry it at the same height);
+    """A hochwald beech with the flood line on its trunk (the clearing's beeches all carry it at the same height);
     96 x 128, anchor (48, 124), line at y = 84. The tree itself is drawn exactly like wd_beech."""
     rng = np.random.default_rng(seed + 100)
     line = 124 - FLOOD_LINE_ABOVE_FOOT
@@ -981,7 +981,7 @@ def build(ms):
     ms.save("tal", "wd_hut_cup", hut_cup(ms), (8, 10))
     ms.save("tal", "wd_hut_branches", hut_branches(ms), (24, 7), flat=True)
     ms.save("tal", "wd_line", hut_line(ms), (24, 26))
-    # the flood clearing (W4): every tree carries the flood line at the same height; the flood mark, the camp, the
+    # the flood clearing (W4): every beech carries the flood line at the same height (the spruces stand on higher ground); the flood mark, the camp, the
     # blanket and the trail say what happened there without anyone in it; the nest, the fork, the driftwood and
     # the stepping stones are the gentle things. Only the trees and the mark have a shadow (it feeds the baked
     # map stamp of flutlichtung); everything the map places under if/unless has none.

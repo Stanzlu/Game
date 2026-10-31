@@ -337,7 +337,17 @@ func test_the_valley_keeps_no_one_of_him_once_he_has_gone_ahead() -> void:
 	WorldState.set_flag("forest.antreiber_ahead")
 	await wait_physics_frames(3)
 	assert_eq(_walkers(tal, "antreiber_busy").size(), 0, "he is ahead, in the clearing")
-	assert_eq(_walkers(tal, "antreiber_west").size(), 0, "and not on the bench either")
+
+
+func test_the_bench_of_the_valley_keeps_no_one_of_him_once_he_has_gone_ahead() -> void:
+	var tal: TalScene = TAL.instantiate()
+	WorldState.set_flag("valley.antreiber_rests")
+	add_child_autofree(tal)
+	await wait_physics_frames(3)
+	assert_eq(_walkers(tal, "antreiber_west").size(), 1, "resting on the bench")
+	WorldState.set_flag("forest.antreiber_ahead")
+	await wait_physics_frames(3)
+	assert_eq(_walkers(tal, "antreiber_west").size(), 0, "he is ahead, not on the bench")
 
 
 # --- Finds, beats, the ends of the way -----------------------------------------------------

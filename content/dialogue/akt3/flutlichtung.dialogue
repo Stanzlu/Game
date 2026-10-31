@@ -74,7 +74,7 @@ do WorldState.set_flag("forest.antreiber_met")
 - Setz dich. Es gibt Tee. [if WorldState.has_facet("care") and not WorldState.has_flag("forest.flood_sat") /] [ID:fl_ask_r1] [#draft]
 	Du hältst ihm die Flasche hin. Er prüft erst den Boden mit der Schuhspitze, einmal und noch einmal. [ID:fl_ask_1] [#draft]
 	Antreiber: Trocken. [ID:fl_ask_2] [#draft]
-	Er setzt sich auf den Boden, gleich dort, wo er stand, und nimmt die Flasche. Seine Füße stehen still. [ID:fl_ask_3] [#draft]
+	Er setzt sich neben dem Stamm auf den Boden und nimmt die Flasche. Seine Füße stehen still. [ID:fl_ask_3] [#draft]
 	do WorldState.set_flag("forest.flood_sat")
 - Ich bleibe hier. [ID:fl_ask_r2] [#draft]
 	Er lässt den Zollstock sinken, bis er neben seinem Bein hängt. [ID:fl_ask_4] [#draft]

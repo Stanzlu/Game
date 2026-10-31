@@ -412,9 +412,13 @@ class FlutlichtungLayoutTests(unittest.TestCase):
         self.assertEqual(symbols["o"]["params"]["unless"], "forest.nest_taken")
         self.assertEqual(symbols["d"]["params"]["unless"], "forest.driftwood_taken")
         self.assertEqual(symbols["k"]["params"]["sprite_when"], {"forest.nest_placed": "tal/wd_fork_nest"})
+        catalog = mapfile.load_catalog()
         for glyph in "SMCDkio":
             params = symbols.get(glyph, {}).get("params", {})
-            self.assertNotIn("light", params, "no light in the forest")
+            sprites = [params["sprite"]] + list(params.get("sprite_when", {}).values())
+            for sprite in sprites:
+                self.assertIn(sprite, catalog, sprite)
+                self.assertNotIn("lights", catalog[sprite], "no light in the forest: " + sprite)
 
     def test_the_silt_the_wet_silt_and_the_puddles_lie_in_a_clearing(self):
         _, _, rows, _ = _flut()

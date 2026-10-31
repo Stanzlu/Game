@@ -69,7 +69,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **Setz dich. Es gibt Tee.** *(wenn `care und forest.flood_sat nicht`)*
   - *Du hältst ihm die Flasche hin. Er prüft erst den Boden mit der Schuhspitze, einmal und noch einmal.* `[#draft]`  <sub>fl_ask_1</sub>
   - **Antreiber:** Trocken. `[#draft]`  <sub>fl_ask_2</sub>
-  - *Er setzt sich auf den Boden, gleich dort, wo er stand, und nimmt die Flasche. Seine Füße stehen still.* `[#draft]`  <sub>fl_ask_3</sub>
+  - *Er setzt sich neben dem Stamm auf den Boden und nimmt die Flasche. Seine Füße stehen still.* `[#draft]`  <sub>fl_ask_3</sub>
 - ▸ **Ich bleibe hier.**
   - *Er lässt den Zollstock sinken, bis er neben seinem Bein hängt.* `[#draft]`  <sub>fl_ask_4</sub>
 - ▸ **…**
