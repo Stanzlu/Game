@@ -7,7 +7,7 @@
   {"wait_for": {"beat": "flut_enter"}, "timeout": 30, "t": 0.1},
   {"wait_for": {"flag": "forest.antreiber_ahead"}, "timeout": 30, "t": 0.1},
   {"use": [50, 14], "face": "down", "log": "the trail of one runner in the dry silt, going north", "t": 0.5},
-  {"use": [46, 23], "face": "right", "log": "the bleached trunk without a crown, the band of silt over her head: the goal of the way", "t": 0.5},
+  {"use": [43, 26], "face": "right", "log": "the bleached trunk without a crown, the band of silt over her head: the goal of the way", "t": 0.5},
   {"wait_for": {"flag": "forest.flood_seen"}, "timeout": 30, "t": 0.1},
   {"wait_for": {"beat": "flut_mark"}, "timeout": 30, "t": 0.1},
   {"talk": "antreiber_flood", "log": "the Antreiber at the trunk, measuring; with care the first answer is the tea, and he sits on the ground", "t": 0.5},
