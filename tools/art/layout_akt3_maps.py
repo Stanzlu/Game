@@ -546,6 +546,9 @@ def build_nacht():
     # and none over the way in
     reserved.append((NACHT_NORTH_X - 4, NACHT_NORTH_X + 4, 0, 14))
     lx, ly = NACHT_LANTERN
+    # nor over the place where she sits (on the lantern's east side, a cell and a half from it): the crown of a beech
+    # reaches three cells to each side and eight rows up, and the sitter's head must stay in the picture
+    reserved.append((lx - 1, lx + 4, ly + 1, ly + 8))
     placed_trees.append(NACHT_GLOW_CUE)  # the glow tree to look at is one of the trees
 
     def in_glade(x, y):

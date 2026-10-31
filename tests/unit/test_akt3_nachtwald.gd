@@ -515,7 +515,7 @@ func test_once_a_piece_is_taken_the_log_is_one_line_without_an_answer() -> void:
 func test_the_log_says_what_the_picture_shows_and_the_glow_is_not_explained() -> void:
 	var text := _say(["nw_fox_1", "nw_fox_2"])
 	for word: String in [
-		"morsch", "Stamm", "Farn", "Moos", "Splittern", "Rissen", "glimmt", "matt grün"
+		"morsch", "Stamm", "Gras", "Moos", "durchtrennt", "abgebrochen", "Rissen", "glimmt", "matt grün"
 	]:
 		assert_string_contains(text, word)
 	assert_eq(text.count("Stamm"), 1, "one log")

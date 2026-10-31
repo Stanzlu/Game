@@ -47,15 +47,15 @@ Das Glimmen bleibt am Baum. Auf dem Boden darunter liegt es nicht. [ID:nw_glow_2
 => END
 
 # --- Kuriosität: das Leuchtholz ---------------------------------------------------------------------------------------------
-# Decor tal/wd_foxfire_log: ein morscher Stamm im Farn, oben ein Streifen Moos, am einen Ende in Splittern gebrochen; in der unteren Hälfte und in
+# Decor tal/wd_foxfire_log: ein morscher Stamm im Gras, oben ein Streifen Moos, links glatt durchtrennt (eine Schnittfläche mit Ring und Riss), rechts abgebrochen; in der unteren Hälfte und in
 # den Rissen glimmt das Holz matt grün. Mit dem Einstecken bricht sie ein Stück heraus, und das Bild ist danach der dunkle Stamm mit einer hellen
 # Kerbe (sprite_when) oder weg (unless): die erste Zeile des Cues gilt für den Stamm, der noch glimmt, die letzte für den, der dunkel liegt.
 
 ~ foxfire
 if WorldState.has_flag("forest.foxfire_taken")
-	Der Stamm liegt dunkel im Farn. Wo ein Stück herausgebrochen ist, zeigt das Holz hell. [ID:nw_fox_6] [#draft]
+	Der Stamm liegt dunkel im Gras. Wo ein Stück fehlt, zeigt das Holz hell. [ID:nw_fox_6] [#draft]
 	=> END
-Ein morscher Stamm liegt im Farn, oben mit Moos, am einen Ende in Splittern gebrochen. [ID:nw_fox_1] [#draft]
+Ein morscher Stamm liegt im Gras, oben mit Moos, an einem Ende glatt durchtrennt, am anderen abgebrochen. [ID:nw_fox_1] [#draft]
 In der unteren Hälfte und in den Rissen glimmt das Holz matt grün. [ID:nw_fox_2] [#draft]
 - Einstecken. [ID:nw_fox_r1] [#draft]
 	Du brichst ein Stück heraus, weich wie nasses Brot, und steckst es ein. Durch den Stoff glimmt es weiter. [ID:nw_fox_3] [#draft]
