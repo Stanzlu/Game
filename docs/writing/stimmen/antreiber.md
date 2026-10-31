@@ -1,6 +1,7 @@
 # Der Antreiber
 
-**Beleg im Slice:** 44 Zeilen (Weg zum Schuppen, Haus, Abend im Tal).
+**Beleg:** 59 Zeilen: im Slice 45 (Weg zum Schuppen, Haus, Abend im Tal), in Akt II 2 (Nein am Feuer), in Akt III 9 am leeren
+Brett (W2, `waldweg.dialogue`) und 3 an der Flutmarke (W4, `flutlichtung.dialogue`).
 
 ## Funktion
 
@@ -17,14 +18,18 @@ einmal sinnvoll war (Risiko 8; `sl_antr_why_2`).
 - Verrät sich durch Widerspruch im selben Atemzug („Pausen machen wir, wenn wir da sind. Dann gleich eine lange.“) und
   durch Zeilen, die abbrechen („Ich müsste eigentlich …“).
 - Er meint es ernst; der Text lacht nie über ihn, nur mit der Lücke zwischen Satz und Körper.
+- Akt III, W4: Die Lücke zwischen Satz und Körper sind die Füße. Sie gehen auf der Stelle, auf den Ballen, ohne dass er hinsieht
+  (`fl_antr_3`), und stehen still, sobald er sitzt (`fl_ask_3`). An der Flutmarke sagt er nur, was er tut (messen, prüfen), nie,
+  was es bedeutet: kein Wort über Wasser, Menschen oder Gründe, kein Wort über die Spielerin, kein „!“. Drei Zeilen, Ø 3,7 Wörter.
 
 ## Verlauf
 
 Start (Plan, Liste) → Antreiben (Lob als Druck: „Du machst das gut. Noch ein bisschen besser, dann reicht es.“) →
 Müdigkeit, die er nicht zugibt → Sorge, wenn die Spielfigur langsamer wird → verwirrt über das Stehen („Das ist kein Plan.
 Das ist Stehen.“) → Schweigen → das Warum, kurz und ohne Erklärung → Feuer im Haus („Ich sitz nur kurz.“, die Hände
-wissen nicht wohin) → die Katze legt sich auf ihn. Akt III erzählt, woher das Rennen kommt; im Haus ist er später
-repariert und plant Freizeit (Plan 5.2).
+wissen nicht wohin) → die Katze legt sich auf ihn. Akt III erzählt, woher das Rennen kommt: am Brett (W2) die Liste
+ohne das letzte Wort, an der Flutmarke (W4) nur Dinge (Schlick bis über Kopfhöhe, Lager, Spur eines Läufers) und er selbst, der nachmisst; im Haus
+ist er später repariert und plant Freizeit (Plan 5.2).
 
 ## Goldzeilen
 
@@ -41,6 +46,9 @@ repariert und plant Freizeit (Plan 5.2).
 - `sl_antr_why_2` „Wer schnell genug ist, den holt nichts ein. Nicht die Kälte, nicht das Dunkel. Das hat immer funktioniert.“
 - `sl_antr_why_4` „Hab ich gar nicht gemerkt.“
 - `haus_antr_2` „Oder das Dach. Das Dach tropft. Hast du den Eimer gesehen?“
+- `fl_antr_2` „Ich messe nur nach. Es stimmt noch.“
+- `fl_ask_2` „Trocken.“
+- `fl_again_2` „Der Boden hält.“
 - `tal_antr_2` „Ich hab ausgerechnet, wie lange man sitzen darf. Ich hab's vergessen.“
 - `tal_antr_busy_3` „Ich hab das Holz umgestapelt. Nass ist es immer noch. Aber ordentlich.“
 
@@ -51,3 +59,7 @@ repariert und plant Freizeit (Plan 5.2).
 3. „Ich bin ausgebrannt.“ — Fachwort, Burnout-Sprache (Lint).
 4. „Das Böse sitzt in mir, ich muss dich aufhalten.“ — Schurke statt Beschützer (Risiko 8).
 5. Eine ruhige, ausgewogene Rede über Pausen — er kann Ruhe erst im Feuer, und auch dann zappelt er.
+6. „Ich bin gerannt, weil das Wasser kam.“ — nennt Ursache und Wirkung; das Warum bleibt ein Ding (Risiko 8, §15, §51).
+7. „Seitdem renne ich. Du musst nicht rennen wie ich.“ — Mentor und Lehre; er sagt nie, was es bedeutet (STIL „Nie“ 9).
+8. Ein Freizeit-Gag nach der Marke („Ich hab die Pause schon eingeplant.“) — auf das schwere Ding folgt kein Witz (Risiko 7); der
+   Gag gehört W6.

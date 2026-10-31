@@ -398,6 +398,7 @@ func _antreiber_pending() -> bool:
 		WorldState.has_flag("valley.wood_taken")
 		and not WorldState.has_flag("house.antreiber_by_fire")
 		and not WorldState.has_flag("house.antreiber_left")
+		and not WorldState.has_flag("forest.antreiber_ahead")
 	)
 
 

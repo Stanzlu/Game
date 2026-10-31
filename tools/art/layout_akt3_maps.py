@@ -5,11 +5,20 @@ Draws the [map] block of content/maps/waldweg.txt (W2): the first forest of the 
 Bachlauf comes in from the north and goes on to the south; a worn path follows its west bank through a tall
 forest of beech and spruce: past the way markers of the Antreiber, the first Rastplatz, the Hang (a sunken
 lane with steps cut into it), the second Rastplatz, a spur to the hermit's hut in the west (its door leads
-to the interior, W3) and on to the last marker with its blank board and the way south (a blocker until W4).
+to the interior, W3) and on to the last marker with its blank board and the way south (a door to the
+Flutlichtung since W4: a door on the path and an arrival four rows before it).
 Hand-written head (meta, legend) stays; only the [map] block is replaced.
 
-Usage: python3 tools/art/layout_akt3_maps.py waldweg [--write]
-Afterwards re-run tools/art/bake_ground.py content/maps/waldweg.txt (once the layout is final).
+Flutlichtung (W4): the clearing the brook runs past, 88 x 54 cells (class M). A corridor of three cells leads in from the
+north (the door to the Waldweg), the brook runs along its east side and widens the ground into a clearing of silt
+(dry silt, wet silt along the water, puddles); beeches with a line of silt stand at its rim. From north to south: the
+door, the arrival, the trail of one runner in the dry silt, the bleached trunk (the mark) with the Antreiber, the camp
+(ring, kettle, blanket), then, along the brook, the driftwood and a ford of flat stones; a nest lies in the grass at the west
+rim and a forked branch stands on the bank. The path leaves through a gap in the south edge (a blocker until W5).
+
+Usage: python3 tools/art/layout_akt3_maps.py waldweg|flutlichtung [--write]
+Afterwards re-run tools/art/bake_ground.py content/maps/<map>.txt (once the layout is final; the Waldweg needs none
+for the door, because only cells of the path change their letter).
 """
 import math
 import os
@@ -30,7 +39,8 @@ DOOR = (NORTH_X, 1)
 ARRIVAL = (NORTH_X, 6)
 START = (NORTH_X, 7)
 SOUTH_X = 50  # the way on to the south, three cells wide (49 to 51)
-BLOCKER = (SOUTH_X, 57)
+SOUTH_DOOR = (SOUTH_X, 60)  # W4: the door to the Flutlichtung, in the gap of the southern forest
+SOUTH_ARRIVAL = (SOUTH_X, 56)  # and the arrival from it, four rows before the door (beyond the sixth board)
 HANG_Y = (27, 35)  # the sunken lane: markers at its top and its foot
 REST_Y = (19, 41)  # the two Rastplätze: one before the Hang, one after it
 POSTS = {"1": 9, "2": 15, "3": 24, "4": 38, "5": 49}  # the way markers of the Antreiber, by row
@@ -38,25 +48,30 @@ LAST_POST = (SOUTH_X - 2, 54)  # the sixth board, blank, where he stands
 HUT = (27, 44)  # the hut in its glade, west of the path
 
 
-def centerline():
-    """The brook's centre line, sampled the way Grid.path does: [(x, y, width)]."""
+def _centerline(stream, widths):
+    """A brook's centre line, sampled the way Grid.path does: [(x, y, width)]."""
     out = []
-    for i in range(len(STREAM) - 1):
-        p0 = STREAM[max(i - 1, 0)]
-        p1, p2 = STREAM[i], STREAM[i + 1]
-        p3 = STREAM[min(i + 2, len(STREAM) - 1)]
+    for i in range(len(stream) - 1):
+        p0 = stream[max(i - 1, 0)]
+        p1, p2 = stream[i], stream[i + 1]
+        p3 = stream[min(i + 2, len(stream) - 1)]
         for s in range(40):
             t = s / 40
             t2, t3 = t * t, t * t * t
             x, y = (0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2
                            + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3) for k in (0, 1))
-            out.append((x, y, WIDTHS[i] + (WIDTHS[i + 1] - WIDTHS[i]) * t))
-    out.append((STREAM[-1][0], STREAM[-1][1], WIDTHS[-1]))
+            out.append((x, y, widths[i] + (widths[i + 1] - widths[i]) * t))
+    out.append((stream[-1][0], stream[-1][1], widths[-1]))
     return out
 
 
+def centerline():
+    """The Waldweg's brook centre line: [(x, y, width)]."""
+    return _centerline(STREAM, WIDTHS)
+
+
 def stream_x(y):
-    """Centre column of the brook at row y (the sample nearest to it)."""
+    """Centre column of the Waldweg's brook at row y (the sample nearest to it)."""
     return min(centerline(), key=lambda s: abs(s[1] - y))[0]
 
 
@@ -193,8 +208,6 @@ def build():
     put("N", DOOR[0], DOOR[1])
     put("n", ARRIVAL[0], ARRIVAL[1])
     put("@", START[0], START[1])
-    # the way on to the south is closed (until W4): a blocker across the path
-    put("B", *BLOCKER)
     # the spruce over the cone: a trunk just northwest of it, the cone in front
     put("P", named["K"][0][0] - 2, named["K"][0][1] - 1)
     for glyph in "123456KQqU":
@@ -216,13 +229,197 @@ def build():
     ):
         assert g.get(x, y) in (".", ","), (glyph, x, y, g.get(x, y))
         put(glyph, x, y)
+    # W4, the same way: the way on to the south is a door (it was a blocker until W4) and the arrival from it. Both
+    # lie on path cells, so that the ground, the trees and the baked shadows stay as they were
+    for glyph, (x, y) in (("W", SOUTH_DOOR), ("w", SOUTH_ARRIVAL)):
+        assert g.get(x, y) == ",", (glyph, x, y, g.get(x, y))
+        put(glyph, x, y)
     g.add_rails()
     build.shortfall = shortfall
     return g, named
 
 
-def text():
-    return build()[0].text()
+# --- Flutlichtung (W4) -------------------------------------------------------------------------------------------
+FLUT_W, FLUT_H = 88, 54
+# the brook comes in beside the corridor, runs along the clearing's east edge and leaves in the south-east
+FLUT_STREAM = [(58, 0), (58, 9), (62, 17), (66, 25), (66, 33), (62, 40), (60, 46), (64, 53)]
+FLUT_WIDTHS = [2.4, 2.4, 2.6, 2.8, 2.8, 2.6, 2.4, 2.4]
+FLUT_NORTH_X = 50  # the corridor from the Waldweg, three cells wide (49 to 51): the Waldweg's SOUTH_X
+FLUT_DOOR = (FLUT_NORTH_X, 1)
+FLUT_ARRIVAL = (FLUT_NORTH_X, 6)
+FLUT_START = (FLUT_NORTH_X, 7)
+FLUT_TRAIL = (FLUT_NORTH_X, 15)  # the foot of the runner's trail: the prints run seven rows north from it
+FLUT_MARK = (44, 26)  # the bleached trunk without a crown; he stands at it and measures
+FLUT_ANTREIBER = (45, 27)
+FLUT_SEAT = (45, 28)  # where he sits once he has been offered tea
+FLUT_CAMP = (40, 33)  # the ring (it reaches one cell east of its cell), the kettle on its side
+FLUT_BLANKET = (43, 32)  # the stiff blanket on its post, east of the ring (its sprite covers cells 42 to 44)
+FLUT_NEST = (26, 27)  # in the grass at the west rim, above the silt
+FLUT_FORK_Y = 30  # the forked branch on the west bank
+FLUT_DRIFT_Y = 37  # the driftwood on the bank
+FLUT_FORD_Y = 42  # the flat stones across the brook (three cells of water, the stones' sprite is four cells wide)
+FLUT_SOUTH_X = 34  # the way on to the south (W5), three cells wide (33 to 35)
+FLUT_BLOCKER = (FLUT_SOUTH_X, 50)
+# spots with a cue: no crown may hide them (the same rule as in the Waldweg, a column wider for the beeches)
+FLUT_CUES = "SMAECokdi"
+# the big sprites and the cells around their own cell that they cover: (columns left, columns right, rows up);
+# the trunk 40 x 112 px, the blanket 48 x 64, the ring 40 x 36, a beech 96 x 128, a spruce 56 x 120 (cells of 16 px)
+FLUT_BIG = {"M": (1, 1, 7), "D": (1, 1, 4), "C": (1, 1, 2), "U": (3, 3, 8), "P": (2, 2, 8)}
+
+
+def flut_stream_x(y):
+    """Centre column of the Flutlichtung's brook at row y."""
+    return min(_centerline(FLUT_STREAM, FLUT_WIDTHS), key=lambda s: abs(s[1] - y))[0]
+
+
+def flut_bank(y):
+    """The last cell of the west bank at row y (one cell from the three cells of water)."""
+    return int(round(flut_stream_x(y))) - 2
+
+
+def flut_forest():
+    g = Grid(FLUT_W, FLUT_H, fill="h")
+    # the clearing and its bays, then the ground the water covered: dry silt, wet silt along the brook, puddles
+    g.ellipse(44, 28, 22, 14.5, ".", only="h", wobble=0.16, seed=11)
+    g.ellipse(33, 40, 10, 6.5, ".", only="h", wobble=0.3, seed=12)  # the bay in the south-west, toward the way on
+    # the west bank of the brook, a few cells wide, from the clearing's north edge to its south end
+    carve = [(x - 2.5, y) for x, y in FLUT_STREAM[2:6]]
+    g.path(carve, 2.0, ".", only="h", widths=[w + 4.5 for w in FLUT_WIDTHS[2:6]])
+    g.ellipse(29, 17, 5, 3.5, ".", only="h", wobble=0.4, seed=14)  # high ground in the north-west
+    g.ellipse(46, 29, 16, 10, ",", only=".", wobble=0.3, seed=21)
+    g.ellipse(58, 30, 8, 12, ",", only=".", wobble=0.32, seed=22)
+    g.ellipse(41, 38, 5, 3.5, ",", only=".", wobble=0.3, seed=23)
+    # rises the water did not cover: islands of grass in the silt
+    for cx, cy, rx, ry, seed in ((38, 25, 2.2, 1.5, 24), (54, 29, 2.6, 1.7, 25), (45, 35, 2.0, 1.4, 26)):
+        g.ellipse(cx, cy, rx, ry, ".", only=",", wobble=0.4, seed=seed)
+    # the corridor in from the Waldweg
+    for y in range(0, 20):
+        for x in range(FLUT_NORTH_X - 1, FLUT_NORTH_X + 2):
+            g.set(x, y, ",", only="h.")
+    # wet silt along the brook, a few wet places inland, puddles in the hollows
+    g.path(FLUT_STREAM, 5.0, "m", only=".,", widths=[w + 3.4 for w in FLUT_WIDTHS])
+    for cx, cy, rx, ry, seed in ((33, 30, 3.0, 2.0, 31), (51, 37, 3.5, 2.0, 32), (34, 24, 2.2, 1.5, 33)):
+        g.ellipse(cx, cy, rx, ry, "m", only=",", wobble=0.5, seed=seed)
+    for cx, cy, rx, ry, seed in ((37, 25, 1.7, 1.0, 41), (53, 34, 1.9, 1.1, 42), (44, 41, 1.6, 1.0, 43),
+                                 (56, 24, 1.4, 1.0, 44), (31, 33, 1.5, 1.0, 45), (57, 41, 1.4, 0.9, 46)):
+        g.ellipse(cx, cy, rx, ry, "p", only=",m", wobble=0.4, seed=seed)
+    # the brook
+    g.path(FLUT_STREAM, 2.5, "~", only=".h,mp", widths=FLUT_WIDTHS)
+    # the ford: three cells of water walked on stones, a bank on each side and a small meadow on the east bank
+    c = int(round(flut_stream_x(FLUT_FORD_Y)))
+    for x in range(c - 4, c + 5):
+        g.set(x, FLUT_FORD_Y, ".", only="h~")
+    for row in (FLUT_FORD_Y - 1, FLUT_FORD_Y + 1):  # three cells of water on both sides of the ford
+        for x in range(c - 1, c + 2):
+            g.set(x, row, "~")
+    for x in range(c - 1, c + 2):
+        g.set(x, FLUT_FORD_Y, "y")
+    g.set(c - 2, FLUT_FORD_Y, "m")
+    g.ellipse(c + 6, FLUT_FORD_Y - 1, 6, 5, ".", only="h", wobble=0.3, seed=51)
+    for x in range(c + 2, c + 5):
+        g.set(x, FLUT_FORD_Y, ".", only="h~")
+    # the way on to the south: a path out of the bay and a gap three cells wide through the forest of the south edge
+    g.path([(40, 38), (37, 43), (FLUT_SOUTH_X, 46), (FLUT_SOUTH_X, 53)], 2.4, ",", only="h.mp")
+    for y in range(46, FLUT_H):
+        for x in range(FLUT_SOUTH_X - 1, FLUT_SOUTH_X + 2):
+            g.set(x, y, ",", only=".h")
+    return g
+
+
+def build_flut():
+    """The Flutlichtung: the named spots first, then the trees keep their distance from them and from the cues."""
+    g = flut_forest()
+    rng = random.Random(88)
+    named = {}
+    shortfall = {}
+    reserved = []
+    placed_trees = []
+
+    def put(glyph, x, y):
+        x, y = int(round(x)), int(round(y))
+        assert g.get(x, y) is not None, (glyph, x, y)
+        g.set(x, y, glyph)
+        named.setdefault(glyph, []).append((x, y))
+
+    def hidden(x, y):
+        return any(x0 <= x <= x1 and y0 <= y <= y1 for x0, x1, y0, y1 in reserved)
+
+    def square(x, y, clearance):
+        return [g.get(x + dx, y + dy) for dy in range(-clearance, clearance + 1)
+                for dx in range(-clearance, clearance + 1)]
+
+    def near(x, y, radius, glyphs):
+        return any(g.get(x + dx, y + dy) in glyphs for dy in range(-radius, radius + 1)
+                   for dx in range(-radius, radius + 1))
+
+    def free(x, y, clearance):
+        return g.get(x, y) == "." and all(c in (".", "h") for c in square(x, y, clearance))
+
+    def scatter(glyph, count, clearance, test, apart=0, tall=False):
+        placed = 0
+        tries = 0
+        while placed < count and tries < 6000:
+            tries += 1
+            x, y = rng.randint(4, FLUT_W - 5), rng.randint(4, FLUT_H - 5)
+            if not free(x, y, clearance) or not test(x, y):
+                continue
+            if tall and hidden(x, y):
+                continue
+            if apart and any(abs(x - tx) < apart and abs(y - ty) < apart for tx, ty in placed_trees):
+                continue
+            g.set(x, y, glyph)
+            if tall:
+                placed_trees.append((x, y))
+            placed += 1
+        if placed < count:
+            shortfall[glyph] = (placed, count)
+
+    # the door, the arrival and the start
+    put("N", *FLUT_DOOR)
+    put("n", *FLUT_ARRIVAL)
+    put("@", *FLUT_START)
+    # what the flood left: the trail of one runner, the trunk, the Antreiber at it, the camp
+    put("S", *FLUT_TRAIL)
+    put("M", *FLUT_MARK)
+    put("A", *FLUT_ANTREIBER)
+    put("E", *FLUT_SEAT)
+    put("C", *FLUT_CAMP)
+    put("D", *FLUT_BLANKET)
+    # the nest in the grass, the forked branch and the driftwood on the bank, the stones across the water
+    put("o", *FLUT_NEST)
+    put("k", flut_bank(FLUT_FORK_Y) - 1, FLUT_FORK_Y)
+    put("d", flut_bank(FLUT_DRIFT_Y), FLUT_DRIFT_Y)
+    put("i", flut_bank(FLUT_FORD_Y) + 2, FLUT_FORD_Y)
+    # the way on to the south is closed (until W5)
+    put("B", *FLUT_BLOCKER)
+    for glyph in FLUT_CUES:
+        for x, y in named[glyph]:
+            reserved.append((x - 3, x + 3, y + 1, y + 8))
+    # no crown over the corridor either (a beech reaches three cells to each side, eight rows up from its foot)
+    reserved.append((FLUT_NORTH_X - 4, FLUT_NORTH_X + 4, 0, 28))
+    # the beeches that carry the line of silt stand at the rim, where the silt ends; the high ground has spruce
+    def rim(x, y):
+        return near(x, y, 2, "h") and near(x, y, 6, ",mp")
+
+    def high(x, y):
+        return near(x, y, 2, "h") and not near(x, y, 3, ",mpy~")
+
+    scatter("U", 18, 1, rim, apart=3, tall=True)
+    scatter("P", 6, 1, high, apart=3, tall=True)
+    scatter("R", 7, 1, lambda x, y: near(x, y, 3, "h"))
+    scatter("F", 14, 1, lambda x, y: near(x, y, 3, "h"))
+    scatter("g", 12, 1, lambda x, y: near(x, y, 4, "h"))
+    build_flut.shortfall = shortfall
+    return g, named
+
+
+build_flut.shortfall = {}
+
+BUILDERS = {"waldweg": build, "flutlichtung": build_flut}
+
+
+def text(name="waldweg"):
+    return BUILDERS[name]()[0].text()
 
 
 def write(name="waldweg"):
@@ -230,17 +427,19 @@ def write(name="waldweg"):
     with open(path, encoding="utf-8") as f:
         head = f.read()
     head = head[:head.index("[map]\n") + len("[map]\n")]
+    grid_text = text(name)
     with open(path, "w", encoding="utf-8") as f:
-        f.write(head + text() + "\n")
+        f.write(head + grid_text + "\n")
     print("wrote [map] block of", os.path.relpath(path, ROOT))
-    if build.shortfall:
-        print("note: the scatter placed fewer than asked (glyph: placed, asked):", build.shortfall)
+    shortfall = BUILDERS[name].shortfall
+    if shortfall:
+        print("note: the scatter placed fewer than asked (glyph: placed, asked):", shortfall)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2 or sys.argv[1] != "waldweg":
-        sys.exit("usage: layout_akt3_maps.py waldweg [--write]")
+    if len(sys.argv) < 2 or sys.argv[1] not in BUILDERS:
+        sys.exit("usage: layout_akt3_maps.py waldweg|flutlichtung [--write]")
     if "--write" in sys.argv:
         write(sys.argv[1])
     else:
-        print(text())
+        print(text(sys.argv[1]))

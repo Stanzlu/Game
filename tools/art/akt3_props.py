@@ -59,8 +59,10 @@ def spruce(ms, seed):
     return c
 
 
-def beech(ms, seed):
-    """Hochwald beech: long pale smooth trunk, three limbs, one high crown; 96 x 128, anchor (48, 124)."""
+def beech(ms, seed, mark=None):
+    """Hochwald beech: long pale smooth trunk, three limbs, one high crown; 96 x 128, anchor (48, 124).
+    `mark(c, centre_of_y, base)` (optional, draws without random numbers of the tree) lays something over the
+    finished tree before the outline: the flood line of the Flutlichtung (flood_beech)."""
     rng = np.random.default_rng(seed)
     st = pa.STYLES["tal"]
     c = ms.Canvas(96, 128)
@@ -94,6 +96,8 @@ def beech(ms, seed):
             blobs.append((sy + rng.uniform(-r * .3, r * .3), sx + rng.uniform(-r * .35, r * .35), r * rng.uniform(.62, .82)))
     alpha, value = pa.render_foliage((c.h, c.w), blobs, rng, small=(3.4, 5.2))
     c.paint(alpha, st["foliage_blue" if seed % 2 else "foliage"], value, contrast=3.0, dither=False)
+    if mark is not None:
+        mark(c, lambda y: cx + lean * (base - y) / (base - 58), base)
     c.outline(st["outline"])
     return c
 
@@ -577,6 +581,369 @@ def hut_line(ms):
     return c
 
 
+# --------------------------------------------------------------------------- the flood clearing (W4)
+# One water line for everything on the clearing: it stands FLOOD_LINE_ABOVE_FOOT pixels over the foot (the anchor)
+# of every trunk, post and stake, higher than a head (the player is about 26 px tall). Below it a crust of dry silt
+# and a veil of silt that gets darker towards the roots; the line itself is the crust's top edge, 4 px thick.
+# Nothing here glows, nothing here has a light; the only red is the Antreiber's chalk (ANTREIBER_RED) and only in
+# one 1 px stripe, on the hem of the blanket.
+FLOOD_LINE_ABOVE_FOOT = 40
+SILT = ramp("#4a3f32", "#6e6046", "#948564", "#b8a984", "#d6c9a6")
+SILT_WET = ramp("#2a2018", "#3e3024", "#574634", "#725c44")
+BLEACHED = ramp("#3a3733", "#6a665e", "#9a9588", "#c4bdab", "#e4dec9")
+DRIED_STEM = ramp("#2e2a14", "#4a4420", "#6e6430", "#908442", "#b0a45c")
+NEST_MOSS = ramp("#1c3018", "#2e4c26", "#46702e", "#6c9a40")
+
+
+def flood_band(c, rng, xc_of, base, line, half=5.2, reach=12):
+    """The flood line on a trunk: a crust of dried silt (4 px, the line itself), a veil of silt with a vertical grain
+    below it, getting darker towards the roots (the last 6 px are wet), a sharp dark top edge, a few flecks over it,
+    and flotsam caught at the edge (two twigs, a tuft of grass; the stream came from the left)."""
+    grain = pa.value_noise(c.h, c.w, (9, 1), rng)
+    near = np.abs(c.xx + 0.5 - np.vectorize(xc_of)(np.clip(c.yy, 0, c.h - 1))) <= reach
+    below = c.a & (c.yy >= line) & near
+    t = np.clip((c.yy - line) / max(base - line, 1), 0, 1)
+    crust = below & (c.yy < line + 4)
+    v = 0.46 + 0.44 * (grain - 0.5) - 0.22 * t
+    c.paint(below, SILT, np.where(crust, 0.72 + 0.1 * (grain - 0.5), v), contrast=2.0, dither=False)
+    wet = below & (c.yy > base - 6)
+    c.paint(wet, SILT_WET, 0.5 - 0.25 * (c.yy - (base - 6)) / 6, dither=False)
+    xc_edge = xc_of(line - 1)
+    edge = c.a & (c.yy == line - 1) & (np.abs(c.xx + 0.5 - xc_edge) <= half)
+    c.paint(edge, SILT, 0.0, dither=False)
+    flecks = c.a & (c.yy == line - 2) & (rng.random((c.h, c.w)) > 0.72) & (np.abs(c.xx + 0.5 - xc_of(line - 2)) <= half - 0.7)
+    c.paint(flecks, SILT, 0.35, dither=False)
+    x0 = int(round(xc_of(line + 1) - half))
+    c.fill(c.rect(x0 - 5, line, x0 + 1, line + 1), TWIG_WOOD[2])
+    c.fill(c.rect(x0 - 3, line + 1, x0 + 1, line + 2), TWIG_WOOD[1])
+    c.fill(c.rect(x0 - 2, line - 2, x0 + 1, line - 1), CORD[2])
+    c.fill(c.rect(x0 - 4, line + 2, x0 - 1, line + 3), CORD[1])
+
+
+def flood_beech(ms, seed):
+    """A hochwald beech with the flood line on its trunk (the clearing's beeches all carry it at the same height);
+    96 x 128, anchor (48, 124), line at y = 84. The tree itself is drawn exactly like wd_beech."""
+    rng = np.random.default_rng(seed + 100)
+    line = 124 - FLOOD_LINE_ABOVE_FOOT
+    return beech(ms, seed, mark=lambda c, xc_of, base: flood_band(c, rng, xc_of, base, line))
+
+
+def flood_mark(ms):
+    """The flood mark: a dead trunk bleached grey and without a crown, broken off at the top in three splinters, one
+    stub of a limb, the flood line (crust and veil) and ONE horizontal cut in the crust (a blade drawn once across
+    the trunk, 10 px, a pale chip under it; no number, no date). 40 x 112, anchor (20, 108), line at y = 68."""
+    rng = np.random.default_rng(761)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(40, 112)
+    cx, base, top = 20, 109, 14
+    line = 108 - FLOOD_LINE_ABOVE_FOOT
+
+    def centre(y):
+        return cx + 0.6 * np.sin(y * 0.21)
+
+    trunk = np.zeros((c.h, c.w), bool)
+    for y in range(top, base):
+        t = (base - y) / (base - top)
+        half = 5.6 * (1 - 0.3 * t) + (0.8 if y > base - 6 else 0)
+        trunk[y, int(round(centre(y) - half)):int(round(centre(y) + half)) + 1] = True
+    for dx, h in ((-3, 8), (2, 5), (4, 9)):  # the broken top: three splinters
+        trunk[top - h + 3:top + 1, cx + dx - 1:cx + dx + 1] |= True
+    grain = pa.value_noise(c.h, c.w, (12, 1), rng)
+    c.paint(trunk, BLEACHED, 0.18 + 0.7 * c.cylinder(cx - 8, cx + 8) + 0.14 * (grain - 0.5), contrast=2.4, dither=False)
+    cracks = trunk & (pa.value_noise(c.h, c.w, (6, 1), rng) > 0.8) & (c.xx > cx - 3)
+    c.paint(cracks, BLEACHED, 0.1, dither=False)
+    c.paint(ms.limb_mask(c, cx - 3, 40, cx - 11, 36, 4), BLEACHED, 0.55, dither=False)  # the stub of a limb
+    flood_band(c, rng, centre, base, line, half=5.4, reach=9)
+    # the cut: dark in the pale crust (rows line+2 and line+3), a lighter chip right under it, dark ends
+    cut_y = line + 2
+    c.paint(c.rect(cx - 5, cut_y, cx + 5, cut_y + 2), BLEACHED, 0.0, dither=False)
+    c.paint(c.rect(cx - 4, cut_y + 2, cx + 4, cut_y + 3), BLEACHED, 1.0, dither=False)
+    c.paint(c.rect(cx - 6, cut_y - 1, cx - 5, cut_y + 3) | c.rect(cx + 5, cut_y - 1, cx + 6, cut_y + 3), SILT, 0.1, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def flood_ring(ms):
+    """The camp, drowned: a ring of stones with dried silt where the ash was (cracked like a dry bed), two stones
+    washed out of the ring, a tripod of which two legs stand askew and the third lies across the silt, the empty
+    hook still hanging at the crossing, the kettle on its side with half of it in the silt, its lid beside it.
+    No ash, no embers. 40 x 36, anchor (16, 30)."""
+    rng = np.random.default_rng(771)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(40, 36)
+    ground = c.ellipse(16, 27.5, 9.6, 4.4)
+    c.paint(ground, SILT, 0.42 + 0.3 * (pa.value_noise(36, 40, 3, rng) - 0.5), contrast=2.0, dither=False)
+    # dried cracks: a long one across with two branches, 1 px lines in the dark of the silt
+    for pts in (((8, 28), (11, 27), (14, 28), (17, 27), (20, 28), (24, 27)), ((14, 28), (13, 30), (14, 32)),
+                ((17, 27), (18, 25), (17, 24)), ((20, 28), (21, 30))):
+        for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+            n = max(abs(bx - ax), abs(by - ay), 1)
+            for i in range(n + 1):
+                x, y = int(round(ax + (bx - ax) * i / n)), int(round(ay + (by - ay) * i / n))
+                c.paint(c.rect(x, y, x + 1, y + 1) & ground, SILT, 0.12, dither=False)
+    for k in range(9):
+        a = k / 9 * 2 * np.pi
+        r = 1.0 if k not in (2, 6) else 1.5  # two stones were washed out of the ring
+        x, y = 16 + np.cos(a) * 9.4 * r, 27.5 + np.sin(a) * 4.4 * r
+        c.paint(c.ellipse(x, y, 3.0, 2.3), st["rock"], 0.35 + 0.55 * c.sphere(x - 1, y - 1, 3.4, 2.7), contrast=2.0)
+        c.paint(c.ellipse(x, y + 1.6, 2.4, 0.8), SILT, 0.5, dither=False)  # silt up the foot of the stone
+    # the tripod: two legs stand askew and cross at the top, the empty hook hangs from the crossing, a third leg
+    # lies across the silt in front of the ring
+    c.paint(ms.limb_mask(c, 7, 27, 15, 6, 2.6), ex["bark"], 0.45, dither=False)
+    c.paint(ms.limb_mask(c, 22, 27, 14, 6, 2.6), ex["bark"], 0.55, dither=False)
+    c.paint(c.rect(13, 5, 17, 8), ex["bark"], 0.3, dither=False)  # the lashing where they cross
+    c.paint(c.rect(15, 8, 16, 14), BRIGHT_IRON, 0.8, dither=False)  # a hook on a chain, nothing hangs on it
+    c.paint(c.rect(15, 13, 18, 14) | c.rect(17, 13, 18, 16), BRIGHT_IRON, 0.8, dither=False)
+    for xx0, xx1 in ((6, 10), (20, 24)):  # silt on the feet of the two standing legs
+        c.paint(c.rect(xx0, 25, xx1, 29), SILT, 0.5, dither=False)
+    c.paint(ms.limb_mask(c, 4, 33, 23, 31, 2.8), ex["bark"], 0.4, dither=False)  # the third leg, lying
+    # the kettle lies on its side, the opening towards the ring, half of it in the silt; the lid next to it
+    kettle = c.ellipse(32.4, 28.6, 5.8, 4.6)
+    c.paint(kettle, BRIGHT_IRON, 0.3 + 0.65 * c.sphere(30, 26.5, 6.2, 5.0), dither=False)
+    c.paint(c.ellipse(27.8, 28.6, 2.4, 4.0), BRIGHT_IRON, 0.9, dither=False)  # the rim of the opening
+    c.paint(c.ellipse(27.4, 28.6, 1.5, 3.1), BRIGHT_IRON, 0.0, dither=False)  # the dark opening
+    c.paint(kettle & (c.yy >= 30.5), SILT, 0.5, dither=False)  # the lower half stands in the silt
+    c.paint(c.rect(36, 26, 40, 27) | c.rect(38, 24, 40, 27), BRIGHT_IRON, 0.65, dither=False)  # the spout
+    c.paint(c.rect(29, 22, 36, 23) | c.rect(28, 23, 29, 26) | c.rect(36, 23, 37, 25), BRIGHT_IRON, 0.7, dither=False)  # the bail
+    c.paint(c.ellipse(25, 34, 3.0, 1.2), BRIGHT_IRON, 0.65, dither=False)  # the lid
+    c.paint(c.rect(24, 33, 26, 34), BRIGHT_IRON, 0.95, dither=False)  # its knob
+    c.outline(st["outline"])
+    return c
+
+
+def flood_blanket(ms):
+    """A blanket hung over the arm of a stake, stiff with silt, folded in two: a long front panel and a shorter,
+    darker back panel to its right. The top fold above the line is still pale wool, everything below it is soaked
+    through and dried (the weave still shows, two creases run down from the arm), one lower corner stands out like a
+    board. The hem is a folded band, frayed under it, and along it runs ONE 1 px stripe of the Antreiber's chalk,
+    drawn straight with a ruler. 48 x 64, anchor (24, 60), line at y = 20."""
+    rng = np.random.default_rng(781)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(48, 64)
+    line = 60 - FLOOD_LINE_ABOVE_FOOT
+    xi, yi = c.xx.astype(int), c.yy.astype(int)
+    for y in range(12, 60):  # the stake, leaning a little; silt on it from the line down
+        x = int(round(24 - (y - 12) * 0.04))
+        c.paint(c.rect(x - 2, y, x + 2, y + 1), ex["bark"], np.where(c.xx < x, 0.6, 0.32), dither=False)
+        if y >= line:
+            c.paint(c.rect(x - 2, y, x + 2, y + 1), SILT, np.where(c.xx < x, 0.5, 0.3), dither=False)
+    noise = pa.value_noise(64, 48, (6, 2), rng)
+    weave = rng.random((64, 48)) > 0.86
+
+    def panel(left, right, top, bottom, tone, wave):
+        sides = (xi >= left + np.round(wave * np.sin(c.yy * 0.5)).astype(int)) & \
+                (xi < right + np.round(wave * np.sin(c.yy * 0.4 + 1)).astype(int))
+        return sides & (yi >= top) & (yi < bottom)
+
+    # the back panel (behind the arm, shorter, darker)
+    back = panel(27, 38, 14, 38, 0.0, 1.0)
+    c.paint(back, WOOL, 0.4 + 0.15 * np.sin(c.xx * 1.3), contrast=2.0, dither=False)
+    c.paint(back & (yi >= line), SILT, 0.28 + 0.2 * noise, contrast=1.8, dither=False)
+    c.paint(back & (yi >= line) & (yi < line + 3), SILT, 0.6, dither=False)
+    c.paint(back & (yi >= 35), SILT, 0.5, dither=False)  # its hem
+    c.paint(ms.limb_mask(c, 7, 14, 41, 12, 3.0), ex["bark"], 0.55, dither=False)  # the arm
+    # the front panel, folded over the arm
+    hem_y = 46 - np.clip((c.xx - 24) * 0.9, 0, 6)  # one lower corner is lifted: stiff
+    front = panel(11, 30, 12, 60, 0.0, 1.0) & (c.yy < hem_y)
+    folds = 0.5 + 0.2 * np.sin(c.xx * 1.15 + 0.4) + 0.1 * (pa.value_noise(64, 48, 3, rng) - 0.5)
+    c.paint(front, WOOL, folds - 0.1 * np.clip((c.yy - 14) / 30, 0, 1), contrast=2.0, dither=False)
+    soaked = front & (yi >= line)
+    c.paint(soaked, SILT, 0.4 + 0.2 * noise + 0.1 * (folds - 0.5), contrast=1.8, dither=False)
+    c.paint(front & weave, WOOL, 0.28, dither=False)
+    c.paint(soaked & weave, SILT, 0.16, dither=False)  # the weave shows through the silt
+    for x0, x1 in ((22, 17), (26, 28)):  # two stiff creases down from the arm: a dark edge and a lit one beside it
+        for y in range(16, 41):
+            x = int(round(x0 + (x1 - x0) * (y - 16) / 24.0))
+            c.paint(c.rect(x, y, x + 1, y + 1) & front, SILT if y >= line else WOOL, 0.1, dither=False)
+            c.paint(c.rect(x + 1, y, x + 2, y + 1) & front, SILT if y >= line else WOOL, 0.85, dither=False)
+    c.paint(front & (yi < line), WOOL, 0.9 - 0.12 * (c.yy - 12) / 8, dither=False)  # the dry top fold, pale
+    c.paint(front & (yi < 14), WOOL, 1.0, dither=False)  # lit top of the roll
+    c.paint(front & (yi >= line) & (yi < line + 3), SILT, 0.82, dither=False)  # the crust: the line itself
+    c.paint(front & (yi == line - 1), SILT, 0.0, dither=False)  # a sharp top edge to the silt
+    tip = front & (c.xx >= 25) & (hem_y < 46) & (c.yy >= hem_y - 7)
+    c.paint(tip, SILT, 0.84, dither=False)  # the lifted corner, its dry underside showing
+    c.paint(tip & (c.yy >= hem_y - 7) & (c.yy < hem_y - 6), SILT, 0.1, dither=False)
+    hem = front & (yi >= 41) & (c.yy < hem_y) & ~tip
+    c.paint(hem, SILT, 0.62, dither=False)  # the hem, a folded band
+    c.paint(front & (yi == 41) & ~tip, SILT, 0.92, dither=False)  # its pressed top edge
+    c.paint(c.rect(13, 42, 24, 43) & front, ANTREIBER_RED, 0.25, dither=False)  # ONE stripe of chalk, ruled straight
+    frayed = (c.yy >= hem_y) & (c.yy < hem_y + 3) & (xi >= 12) & (xi < 29)
+    n = (rng.random((64, 48)) * 3.4).astype(int)
+    c.paint(frayed & (c.yy < hem_y + n) & ((xi % 2) == 0), SILT, 0.6, dither=False)
+    c.outline(st["outline"])
+    wet = c.ellipse(24, 59.6, 7.0, 1.7) & ~c.a & (rng.random((64, 48)) > 0.25)  # a little wet silt round the foot
+    c.paint(wet, SILT_WET, 0.45, dither=False)
+    return c
+
+
+def flood_prints(ms):
+    """The trail of one runner in dry silt, going north (up) the way the player came: a sole with a broad ball
+    (7 x 5 px) and a heel (5 x 4 px) with a gap between them, the toes turned out a little, left and right of one
+    line, a long stride (15 px) and behind each one a few flecks thrown backwards. The first ones are deep (dark
+    floor, a lit far wall), then shallower, the last ones hardly there. Only opaque pixels in the mud tones of the
+    style. Flat; 24 x 112, anchor (12, 108): the deepest one lies at the foot, the faintest at the head."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(24, 112)
+    mud, path = st["mud"], st["path"]
+    ball = [".XXXXX.", "XXXXXXX", "XXXXXXX", "XXXXXXX", ".XXXXX."]
+    heel = [".XXXXX.", ".XXXXX.", ".XXXXX.", "..XXX.."]
+    stride, top = 15, 97
+    for i in range(7):
+        left = i % 2 == 0
+        deep, faint = i < 3, i >= 5
+        floor = mud[0] if deep else (mud[1] if not faint else mud[2])
+        shallow = mud[1] if deep else mud[2]
+        lit = path[3] if deep else (path[2] if not faint else None)
+        x0, y0 = (3 if left else 14), top - i * stride
+        out = -1 if left else 1  # the toes turn out
+        pixels = {}
+        for r, row in enumerate(ball):
+            for k, ch in enumerate(row):
+                if ch != "." and not (faint and r > 3):
+                    pixels[(x0 + k + (out if r < 2 else 0), y0 + r)] = floor
+        if not faint:
+            for r, row in enumerate(heel):
+                for k, ch in enumerate(row):
+                    if ch != ".":
+                        pixels[(x0 + k, y0 + 6 + r)] = shallow
+        for (x, y), color in pixels.items():
+            wall = (x + 1, y) not in pixels or (x, y + 1) not in pixels  # the far wall, lit from the upper left
+            c.fill(c.rect(x, y, x + 1, y + 1), lit if (wall and lit is not None) else color)
+        spray = ((x0 + 1, y0 + 11), (x0 + 5, y0 + 12)) if not faint else ((x0 + 3, y0 + 5),)
+        for x, y in spray:
+            c.fill(c.rect(x, y, x + 1, y + 1), mud[1] if deep else mud[2])
+    return c
+
+
+def nest(ms):
+    """An empty bird's nest lying in the grass: a bowl of woven dry stems with a little living moss on its
+    underside, the hollow dark and empty, three stems sticking out. 16 x 10, anchor (8, 8)."""
+    rng = np.random.default_rng(791)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(16, 10)
+    xi, yi = c.xx.astype(int), c.yy.astype(int)
+    rim = c.ellipse(8, 4.2, 5.9, 2.9)
+    bowl = (c.ellipse(8, 5.8, 5.9, 3.6) & (c.yy >= 4)) | rim
+    strands = ((xi * 2 + yi * 3 + (yi // 2) * 2) % 5) / 4.0  # diagonal stems of changing tone
+    c.paint(bowl, DRIED_STEM, 0.22 + 0.5 * strands + 0.12 * (rng.random((10, 16)) - 0.5) + 0.12 * (c.yy < 6), contrast=1.4, dither=False)
+    c.paint(rim & ~c.ellipse(8, 4.5, 4.0, 1.6), DRIED_STEM, 0.45 + 0.5 * strands, contrast=1.4, dither=False)  # the woven rim
+    c.paint(c.ellipse(8, 4.5, 4.0, 1.6), DRIED_STEM, 0.0, dither=False)  # the hollow
+    c.paint(c.rect(5, 4, 10, 5), DRIED_STEM, 0.08, dither=False)
+    moss = bowl & (c.yy >= 7) & (pa.value_noise(10, 16, 2.5, rng) > 0.5)
+    c.paint(moss, NEST_MOSS, 0.5 + 0.3 * c.sphere(5, 5, 9, 5), dither=False)
+    c.fill(c.rect(4, 3, 6, 4) | c.rect(10, 3, 12, 4), NEST_MOSS[2])  # two tufts of moss in the rim
+    c.fill(c.rect(1, 5, 3, 6), DRIED_STEM[3])  # a stem sticking out to the left
+    c.fill(c.rect(12, 2, 15, 3), DRIED_STEM[2])  # one to the upper right
+    c.fill(c.rect(13, 7, 15, 8), DRIED_STEM[1])  # and one low on the right
+    c.outline(st["outline"])
+    return c
+
+
+def _limb(c, pts, widths, ramp_colors, contrast=2.2):
+    """A round limb along a polyline, lit from the upper left; `widths` is the width at each point."""
+    mask = np.zeros((c.h, c.w), bool)
+    value = np.zeros((c.h, c.w), np.float32)
+    light = np.array([-0.55, -0.65, 0.52], np.float32)
+    light /= np.linalg.norm(light)
+    for (ax, ay), (bx, by), wa, wb in zip(pts, pts[1:], widths, widths[1:]):
+        steps = int(max(abs(bx - ax), abs(by - ay), 1) * 3)
+        tx, ty = bx - ax, by - ay
+        n = np.hypot(tx, ty) or 1.0
+        nx, ny = -ty / n, tx / n
+        for i in range(steps + 1):
+            k = i / steps
+            x, y, half = ax + tx * k, ay + ty * k, (wa + (wb - wa) * k) / 2
+            dx, dy = c.xx + 0.5 - x, c.yy + 0.5 - y
+            u = (dx * nx + dy * ny) / half
+            inside = (dx * dx + dy * dy <= half * half + 0.3)
+            lam = np.clip(u * (nx * light[0] + ny * light[1]) + np.sqrt(np.clip(1 - u * u, 0, 1)) * light[2], 0, 1)
+            mask |= inside
+            value = np.where(inside, 0.12 + 0.8 * lam, value)
+    c.paint(mask, ramp_colors, value, contrast=contrast, dither=False)
+    return mask
+
+
+def fork(ms, with_nest):
+    """A limb standing up from the bank and forking in a wide Y over the water: weathered grey-brown, a little moss
+    where it leaves the ground, one short twig. With `with_nest` the nest from the quest lies in the crotch, the way
+    a nest lies that was always there: the prongs pass in front of its sides. 32 x 40, anchor (16, 37)."""
+    rng = np.random.default_rng(793)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(32, 40)
+    c.paint(c.ellipse(16, 37, 6.4, 2.0), TWIG_WOOD, 0.25, dither=False)  # roots flare into the bank
+    _limb(c, [(16, 38), (15, 31), (16, 27)], [7, 6, 5.5], TWIG_WOOD)
+    _limb(c, [(16, 27), (9, 18), (4, 8)], [5, 3.6, 2.4], TWIG_WOOD)
+    _limb(c, [(16, 27), (23, 19), (28, 10)], [4.8, 3.4, 2.2], TWIG_WOOD)
+    _limb(c, [(7, 14), (2, 12)], [2, 1.2], TWIG_WOOD)  # the short twig
+    grain = pa.value_noise(40, 32, (4, 1), rng)
+    c.paint(c.a & (grain > 0.74), TWIG_WOOD, 0.18, dither=False)  # a few dark cracks along the limbs
+    moss = c.a & (c.yy >= 34) & (pa.value_noise(40, 32, 2, rng) > 0.4)
+    c.paint(moss, MOSS, 0.5, dither=False)
+    c.fill(c.rect(3, 7, 6, 8), TWIG_WOOD[4])  # the pale cut ends, where it has broken
+    c.fill(c.rect(27, 9, 30, 10), TWIG_WOOD[4])
+    if with_nest:
+        before = (c.rgb.copy(), c.a.copy())
+        c.blit(nest(ms), 8, 20)
+        flank = before[1] & ((c.xx < 11) | (c.xx > 21)) & (c.yy >= 20) & (c.yy < 27)
+        c.rgb[flank] = before[0][flank]  # the prongs pass in front of the nest's sides
+    c.outline(st["outline"])
+    return c
+
+
+def driftwood(ms):
+    """A piece of driftwood on the shore: silver-grey, worn smooth by water, a side branch and a knot with its
+    rings, the broken end a little lighter. 16 x 12, anchor (8, 9)."""
+    rng = np.random.default_rng(795)
+    st = pa.STYLES["tal"]
+    silver = BLEACHED[:4]  # no near-white: a piece of wood, not a bone
+    c = ms.Canvas(16, 12)
+    _limb(c, [(2.4, 9.6), (8, 8.2), (13.6, 7.0)], [4.0, 3.8, 2.8], silver)
+    _limb(c, [(8.5, 8), (10, 2.6)], [2.6, 1.5], silver)  # the side branch
+    c.paint(c.a & (pa.value_noise(12, 16, (1, 3), rng) > 0.6), silver, 0.1, dither=False)  # grain
+    c.paint(c.ellipse(5, 8.8, 1.5, 1.2), silver, 0.05, dither=False)  # the knot
+    c.paint(c.ellipse(5, 8.8, 0.6, 0.5), silver, 0.6, dither=False)
+    c.paint(c.ellipse(2.3, 9.6, 1.2, 1.7), silver, 0.9, dither=False)  # the broken end
+    c.outline(st["outline"])
+    return c
+
+
+def stepping_stones(ms):
+    """Four flat slabs across the stream, one step apart (16 px), their tops at one height: they did not fall
+    there, somebody carried and laid them. Each shows a pale flat top and a dark edge of its thickness, a ring of
+    ripples where the water goes around it (the stream comes from the north), a few pebbles wedged under it.
+    Flat; 64 x 16, anchor (40, 8): the anchor is the centre of the THIRD stone, so that the four stones lie on four
+    cells in a row (the cells -2, -1, 0, +1 from the anchor cell) with their centres on the cell centres."""
+    rng = np.random.default_rng(797)
+    st = pa.STYLES["tal"]
+    water = st["water"]
+    stones = ms.Canvas(64, 16)
+    centres = (8, 24, 40, 56)
+    widths = (6.2, 6.8, 6.0, 6.5)
+    for k, cx in enumerate(centres):
+        rx = widths[k]
+        def slab(cy, ry, cx=cx, rx=rx):
+            return (np.abs(stones.xx + 0.5 - cx) / rx) ** 3 + (np.abs(stones.yy + 0.5 - cy) / ry) ** 3 <= 1.0
+
+        side = slab(8.6, 3.0)
+        stones.paint(side, st["stone"], 0.26 + 0.1 * (pa.value_noise(16, 64, 2, rng) - 0.5), dither=False)  # the thickness
+        top = slab(6.8, 2.9)
+        light = 0.66 + 0.2 * stones.sphere(cx - 2, 5.5, rx * 1.5, 4.0) + 0.1 * (pa.value_noise(16, 64, 2, rng) - 0.5)
+        stones.paint(top, st["stone"], light, contrast=2.0, dither=False)  # the flat top
+        stones.paint(top & (stones.yy < 5.6) & (stones.xx < cx), st["stone"], 0.92, dither=False)  # the lit edge
+        if k == 2:
+            stones.paint(top & (stones.xx > cx + 1) & (stones.yy > 5), MOSS, 0.5, dither=False)  # moss on one of them
+        stones.paint(stones.rect(cx - 3, 11, cx + 3, 12), st["rock"], 0.2, dither=False)  # pebbles wedged under it
+    stones.outline(st["outline"])
+    c = ms.Canvas(64, 16)
+    for k, cx in enumerate(centres):
+        ring = c.ellipse(cx, 8.2, widths[k] + 2.6, 5.0) & ~c.ellipse(cx, 8.2, widths[k] + 1.2, 3.7)
+        c.paint(c.ellipse(cx, 9.4, widths[k] + 0.8, 3.8), water, 0.0, dither=False)  # the dark of the wet
+        c.fill(ring & (((c.xx.astype(int) + (c.yy.astype(int) < 8) * 1) % 3) != 0), water[3])  # a broken ring of ripples
+        c.fill(ring & (c.yy < 5) & (np.abs(c.xx + 0.5 - cx) < 3), water[4])  # a bright swell on the upstream side
+    c.blit(stones, 0, 0)
+    return c
+
+
 def build(ms):
     ms.save("tal", "wd_spruce", [spruce(ms, 701 + k) for k in range(3)], (28, 116),
             shape={"circle": 5, "offset": [0, -2]}, sway=0.5, shadow=[18, 6])
@@ -614,6 +981,21 @@ def build(ms):
     ms.save("tal", "wd_hut_cup", hut_cup(ms), (8, 10))
     ms.save("tal", "wd_hut_branches", hut_branches(ms), (24, 7), flat=True)
     ms.save("tal", "wd_line", hut_line(ms), (24, 26))
+    # the flood clearing (W4): every beech carries the flood line at the same height (the spruces stand on higher ground); the flood mark, the camp, the
+    # blanket and the trail say what happened there without anyone in it; the nest, the fork, the driftwood and
+    # the stepping stones are the gentle things. Only the trees and the mark have a shadow (it feeds the baked
+    # map stamp of flutlichtung); everything the map places under if/unless has none.
+    ms.save("tal", "wd_flood_beech", [flood_beech(ms, 751 + k) for k in range(3)], (48, 124),
+            shape={"circle": 6, "offset": [0, -2]}, sway=0.8, shadow=[30, 9])
+    ms.save("tal", "wd_flood_mark", flood_mark(ms), (20, 108), shape={"circle": 5, "offset": [0, -2]}, shadow=[14, 5])
+    ms.save("tal", "wd_flood_ring", flood_ring(ms), (16, 30), shape={"circle": 8, "offset": [0, -2]})
+    ms.save("tal", "wd_flood_blanket", flood_blanket(ms), (24, 60), shape={"circle": 3, "offset": [0, -1]})
+    ms.save("tal", "wd_flood_prints", flood_prints(ms), (12, 108), flat=True)
+    ms.save("tal", "wd_nest", nest(ms), (8, 8))
+    ms.save("tal", "wd_fork", fork(ms, False), (16, 37), shape={"circle": 3, "offset": [0, -1]})
+    ms.save("tal", "wd_fork_nest", fork(ms, True), (16, 37), shape={"circle": 3, "offset": [0, -1]})
+    ms.save("tal", "wd_driftwood", driftwood(ms), (8, 9))
+    ms.save("tal", "wd_stones", stepping_stones(ms), (40, 8), flat=True)
 
 
 def preview(path):
@@ -646,7 +1028,26 @@ def preview(path):
         img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
         sheet.alpha_composite(img, (x, 156 + 150 - img.height if img.height < 150 else 156))
         x += img.width + 8
-    sheet.resize((sheet.width * 2, sheet.height * 2), Image.NEAREST).save(path)
+    # the flood clearing: dry silt (left strip) and grass (right strip) behind the same row, the stones on water
+    flood = [flood_beech(ms, 751), flood_beech(ms, 752), flood_mark(ms), flood_ring(ms), flood_blanket(ms),
+             flood_prints(ms), nest(ms), fork(ms, False), fork(ms, True), driftwood(ms), stepping_stones(ms)]
+    strip_h = 150
+    strips = []
+    for ground in ((118, 94, 70, 255), (72, 112, 52, 255)):
+        strip = Image.new("RGBA", (sheet.width, strip_h), ground)
+        x = 8
+        for item in flood:
+            img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+            if item is flood[-1]:
+                strip.alpha_composite(Image.new("RGBA", (img.width, img.height), tuple(pa.STYLES["tal"]["water"][2].astype(int)) + (255,)), (x, strip_h - img.height - 2))
+            strip.alpha_composite(img, (x, strip_h - 2 - img.height if img.height < strip_h - 2 else 0))
+            x += img.width + 8
+        strips.append(strip)
+    full = Image.new("RGBA", (sheet.width, sheet.height + 2 * strip_h))
+    full.alpha_composite(sheet, (0, 0))
+    for k, strip in enumerate(strips):
+        full.alpha_composite(strip, (0, sheet.height + k * strip_h))
+    full.resize((full.width * 2, full.height * 2), Image.NEAREST).save(path)
 
 
 if __name__ == "__main__":

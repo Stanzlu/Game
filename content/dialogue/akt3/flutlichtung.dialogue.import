@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://dgb78efiqf315"
+path="res://.godot/imported/flutlichtung.dialogue-7cb6088764afb13f4ea17c65e2de9811.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt3/flutlichtung.dialogue"
+dest_files=["res://.godot/imported/flutlichtung.dialogue-7cb6088764afb13f4ea17c65e2de9811.tres"]
+
+[params]
+
+defaults=true

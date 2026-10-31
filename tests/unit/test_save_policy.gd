@@ -212,7 +212,8 @@ func test_every_registered_scene_is_still_there_for_saves_to_find() -> void:
 		"spiegelhalle",
 		"bachlauf",
 		"waldweg",
-		"huette"
+		"huette",
+		"flutlichtung"
 	]
 	for key: String in keys:
 		assert_true(SceneRegistry.has(key), "scene '%s' went missing" % key)

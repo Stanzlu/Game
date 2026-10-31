@@ -1,0 +1,23 @@
+# Fragment Trittsteine (W4): flache Steine quer durch einen Bach, jeder einen Schritt vom nächsten, die Oberseiten auf einer Höhe
+name: fragment_stepping_stones
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2e2a26 w=#4f8f90 d=#2f6670 l=#9fd0c6 h=#c9c4b4 s=#9a9688 k=#5f5b52
+outline: o
+---
+................
+.oooooooooooooo.
+.owwdwwwwlwwdwo.
+.owlwwwdwwwlwwo.
+.owwwlwwwwwdwlo.
+.owdwwwlwwwwwdo.
+.owwlwwwlwwwlwo.
+.owhhhwhhhwhhho.
+.owssswssswssso.
+.owkkkwkkkwkkko.
+.owwdddwdddwddo.
+.owwlwwwlwwwlwo.
+.owdwwwwwdwwwdo.
+.owwwlwwwwwlwwo.
+.oooooooooooooo.
+................

@@ -5,8 +5,9 @@ extends GutTest
 ## empty and holds a stub of chalk), two places to rest (the first time sets the facet care and the
 ## flag forest.rested, whichever place it is), the Antreiber at the empty board (absent for whoever
 ## left him at the fire in the house), a cone, the steps in the sunken lane (a trace of the world)
-## and the way on to the south (the hut's own cues are in huette.dialogue, W3). The scene (map,
-## beats, the Hang) is tested in test_akt3_waldweg_szene.
+## and the way on to the south, a door since W4 (the hut's own cues are in huette.dialogue, W3,
+## the clearing's in flutlichtung.dialogue). The scene (map, beats, the Hang) is tested in
+## test_akt3_waldweg_szene.
 
 const WALD := "res://content/dialogue/akt3/waldweg.dialogue"
 const QUEST := "side_forest_marks"
@@ -237,10 +238,11 @@ func test_the_two_curiosities_are_in_the_game_and_count() -> void:
 	assert_eq(Collection.curiosities(), 2)
 
 
-func test_the_end_of_the_way_says_what_it_shows_and_nothing_more() -> void:
-	assert_eq(
-		await DialogueWalk.play(WALD, "south_wait"), PackedStringArray([LineText.of("wd_south_1")])
-	)
+func test_the_blocker_of_the_south_is_a_door_now_and_its_line_is_retired() -> void:
+	var text := FileAccess.get_file_as_string(WALD)
+	assert_false(text.contains("~ south_wait"), "the door to the Flutlichtung has no cue")
+	assert_false(text.contains("wd_south_1"), "the line is retired, not reused (ids.lock)")
+	assert_true(text.contains("~ bach_south_wait"), "the south of the Bachlauf still waits")
 
 
 # --- What it never says ----------------------------------------------------------------------

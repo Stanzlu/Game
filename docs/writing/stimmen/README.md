@@ -10,7 +10,7 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | Blatt | Zeilen im Slice | Anmerkung |
 |---|---|---|
 | [Mira](mira.md) | 106 | „Die Frau“ bis zur Vorstellung |
-| [Antreiber](antreiber.md) | 44 | Weg, Haus, Abend |
+| [Antreiber](antreiber.md) | 59 | Weg, Haus, Abend; Akt II (Nein), Akt III (Brett, Flutmarke) |
 | [Elysianer](elysianer.md) | 21 | Chor von Elysia |
 | [Gärtnerin](gaertnerin.md) | 15 | Schmetterlinge, Brunnen |
 | [Gastwirt](gastwirt.md) | 17 | Gesicht des Betäubers |

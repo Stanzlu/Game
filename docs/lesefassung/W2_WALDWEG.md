@@ -160,7 +160,3 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > führt an den Rand der Karte, und der Abend von Akt II geht nicht in den Wald.
 
 - *Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter.* `[#draft]`  <sub>wd_bachwait_1</sub>
-
-### W2-16 · `south_wait`
-
-- *Hinter dem leeren Brett läuft der Weg in Brombeeren aus. Der Bach nimmt es dort allein mit dem Wald auf.* `[#draft]`  <sub>wd_south_1</sub>
