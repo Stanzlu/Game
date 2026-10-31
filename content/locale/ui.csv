@@ -219,6 +219,7 @@ PLACE_BACHLAUF,Der Bachlauf
 PLACE_WALDWEG,Der Waldweg
 PLACE_HUETTE,Die Hütte
 PLACE_FLUTLICHTUNG,Die Flutlichtung
+PLACE_NACHTWALD,Der Nachtwald
 END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text
 CAPTION_FROGS,Frösche quaken.

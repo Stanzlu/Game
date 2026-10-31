@@ -168,6 +168,22 @@ func test_with_the_flood_seen_first_the_hut_ends_the_wood() -> void:
 	await _scene()
 	assert_eq(WorldState.quest_stage(QUEST), "night")
 	assert_true(WorldState.is_quest_done(QUEST))
+	assert_true(WorldState.has_flag("forest.night_way"), "and the way on to the south is open")
+
+
+func test_the_hut_alone_does_not_open_the_way_on_to_the_south() -> void:
+	WorldState.start_quest(QUEST)
+	WorldState.advance_quest(QUEST, "brook")
+	WorldState.advance_quest(QUEST, "wood")
+	await _scene()
+	assert_eq(WorldState.quest_stage(QUEST), "wood")
+	assert_false(WorldState.has_flag("forest.night_way"), "the trunk has not been seen")
+
+
+func test_a_game_without_the_walk_opens_no_way_from_the_hut() -> void:
+	await _scene()
+	assert_false(WorldState.has_flag("forest.night_way"), "a walk that was never started")
+	assert_push_error_count(0)
 
 
 func test_the_pipe_is_on_the_sill_until_it_is_taken() -> void:

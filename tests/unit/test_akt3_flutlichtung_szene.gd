@@ -7,7 +7,9 @@ extends GutTest
 ## the house, sitting once he has had tea), the goal "flood" of the hero's walk is done at the
 ## trunk and nowhere else, side quest B (a nest and a forked branch), the driftwood, the stones
 ## across the brook, the door back to the forest path and the way on to the south that is shut
-## until W5. What is said is tested in test_akt3_flutlichtung, the map in test_layout_akt3.py.
+## until the walk has reached the night (W5: the blocker leaves, a door behind it leads on; that is
+## tested in test_akt3_flutlichtung_nacht). What is said is tested in test_akt3_flutlichtung, the
+## map in test_layout_akt3.py.
 
 const FLUT := preload("res://world/levels/akt3/flutlichtung.tscn")
 const WALDWEG := preload("res://world/levels/akt3/waldweg.tscn")
@@ -21,6 +23,7 @@ const DOOR_CELL := Vector2i(50, 1)
 const ARRIVAL_CELL := Vector2i(50, 6)
 const START_CELL := Vector2i(50, 7)
 const BLOCKER_CELL := Vector2i(34, 50)
+const NIGHT_DOOR_CELL := Vector2i(34, 52)
 ## The cells of the ford: wet silt, the three cells of stones, the dry grass of the far bank.
 const FORD_WEST := Vector2i(58, 42)
 const FORD_EAST := Vector2i(63, 42)
@@ -534,6 +537,7 @@ func test_the_trunk_ends_one_goal_of_the_wood_and_not_the_wood_without_the_hut()
 	assert_eq(WorldState.quest_stage(QUEST), "wood", "the way goes on")
 	assert_true(WorldState.is_quest_active(QUEST), "the clearing is not the end of the way")
 	assert_true(Beat.reached("flut_mark"))
+	assert_false(WorldState.has_flag("forest.night_way"), "the way on to the south stays shut")
 
 
 func test_with_the_hut_seen_first_the_trunk_ends_the_wood() -> void:
@@ -547,6 +551,7 @@ func test_with_the_hut_seen_first_the_trunk_ends_the_wood() -> void:
 	assert_true(WorldState.is_quest_done(QUEST))
 	assert_eq(WorldState.quest_outcome(QUEST), "done")
 	assert_true(Beat.reached("flut_mark"))
+	assert_true(WorldState.has_flag("forest.night_way"), "and with the night the way on opens")
 
 
 func test_a_game_without_the_walk_gets_no_quest_and_no_error_from_the_trunk() -> void:
@@ -887,21 +892,27 @@ func test_the_stones_carry_her_across_the_brook_and_the_water_beside_them_does_n
 	assert_eq(_cell_of(scene, scene.player).y, FORD_EAST.y, "straight over, not around")
 
 
-func test_the_way_on_to_the_south_is_shut_and_holds_you_back_until_w5_opens_it() -> void:
+func test_the_way_on_to_the_south_is_shut_and_holds_you_back_before_the_night() -> void:
 	var scene := await _scene()
 	var blocker := _at(scene, BLOCKER_CELL, BLOCKER_SCRIPT)
 	assert_not_null(blocker, "a blocker across the path")
-	assert_null(_at(scene, BLOCKER_CELL, DOOR_SCRIPT), "and no door yet")
+	assert_not_null(
+		_at(scene, NIGHT_DOOR_CELL, DOOR_SCRIPT), "the door to the night wood lies behind it"
+	)
+	assert_false(WorldState.has_flag("forest.night_way"), "the way is not open")
 	await _go_to(scene, Vector2i(BLOCKER_CELL.x, BLOCKER_CELL.y - 4))
 	var stopped := func() -> bool: return false
 	await _hold(&"move_down", stopped, 240)
 	assert_lt(_cell_of(scene, scene.player).y, BLOCKER_CELL.y, "she stands before it")
-	assert_eq(SceneTravel.last_target, "", "no door to the south yet")
+	assert_eq(SceneTravel.last_target, "", "no way through to the south")
 	var flags := WorldState.state.flags.duplicate()
 	await _read(scene, blocker)
 	assert_eq(WorldState.state.flags, flags, "trying it sets nothing")
 	var doors := scene.map.entities.get_children().filter(
 		func(node: Node) -> bool: return node.get_script() == DOOR_SCRIPT
 	)
-	assert_eq(doors.size(), 1, "one door on the map, and it is the way back")
-	assert_eq(doors[0].get(&"target"), "waldweg")
+	assert_eq(
+		doors.size(), 2, "two doors on the map: the way back and the way on behind the blocker"
+	)
+	assert_eq(_doors(scene, "waldweg").size(), 1)
+	assert_eq(_doors(scene, "nachtwald").size(), 1)

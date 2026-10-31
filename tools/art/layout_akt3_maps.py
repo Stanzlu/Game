@@ -14,9 +14,15 @@ north (the door to the Waldweg), the brook runs along its east side and widens t
 (dry silt, wet silt along the water, puddles); beeches with a line of silt stand at its rim. From north to south: the
 door, the arrival, the trail of one runner in the dry silt, the bleached trunk (the mark) with the Antreiber, the camp
 (ring, kettle, blanket), then, along the brook, the driftwood and a ford of flat stones; a nest lies in the grass at the west
-rim and a forked branch stands on the bank. The path leaves through a gap in the south edge (a blocker until W5).
+rim and a forked branch stands on the bank. The path leaves through a gap in the south edge (a blocker, which is
+gone once the way is open since W5, and behind it a door to the Nachtwald).
 
-Usage: python3 tools/art/layout_akt3_maps.py waldweg|flutlichtung [--write]
+Nachtwald (W5): a night in the wood, 46 x 36 cells (class S). A path comes in from the north (the door to the
+Flutlichtung), runs south and then west for the length of a screen to a glade, in whose middle a small lantern stands
+on the ground (a flat ring of light round it, a place to sit on its east side), and goes on to the south-west to a
+door that leads home. Glow trees stand along the way, a rotten log in the glade's rim.
+
+Usage: python3 tools/art/layout_akt3_maps.py waldweg|flutlichtung|nachtwald [--write]
 Afterwards re-run tools/art/bake_ground.py content/maps/<map>.txt (once the layout is final; the Waldweg needs none
 for the door, because only cells of the path change their letter).
 """
@@ -260,6 +266,10 @@ FLUT_DRIFT_Y = 37  # the driftwood on the bank
 FLUT_FORD_Y = 42  # the flat stones across the brook (three cells of water, the stones' sprite is four cells wide)
 FLUT_SOUTH_X = 34  # the way on to the south (W5), three cells wide (33 to 35)
 FLUT_BLOCKER = (FLUT_SOUTH_X, 50)
+# W5: behind the blocker the path ends in a door to the Nachtwald (the blocker is gone once the way is open), and the
+# arrival from there lies four rows before it, north of the blocker. Both stand on cells of the path (',').
+FLUT_NIGHT_DOOR = (FLUT_SOUTH_X, FLUT_H - 2)
+FLUT_NIGHT_ARRIVAL = (FLUT_SOUTH_X, FLUT_H - 6)
 # spots with a cue: no crown may hide them (the same rule as in the Waldweg, a column wider for the beeches)
 FLUT_CUES = "SMAECokdi"
 # the big sprites and the cells around their own cell that they cover: (columns left, columns right, rows up);
@@ -409,13 +419,186 @@ def build_flut():
     scatter("R", 7, 1, lambda x, y: near(x, y, 3, "h"))
     scatter("F", 14, 1, lambda x, y: near(x, y, 3, "h"))
     scatter("g", 12, 1, lambda x, y: near(x, y, 4, "h"))
+    # W5, after the scatter so that the forest and the baked shadows stay as they were: the door to the Nachtwald and
+    # the arrival from it. Both lie on cells of the path, so that the ground (and the stamp) do not change
+    for glyph, (x, y) in (("W", FLUT_NIGHT_DOOR), ("w", FLUT_NIGHT_ARRIVAL)):
+        assert g.get(x, y) == ",", (glyph, x, y, g.get(x, y))
+        put(glyph, x, y)
     build_flut.shortfall = shortfall
     return g, named
 
 
 build_flut.shortfall = {}
 
-BUILDERS = {"waldweg": build, "flutlichtung": build_flut}
+
+# --- Nachtwald (W5) ----------------------------------------------------------------------------------------------
+NACHT_W, NACHT_H = 44, 34
+NACHT_NORTH_X = 37  # the gap in the northern forest, three cells wide (36 to 38): the way in from the Flutlichtung
+NACHT_DOOR = (NACHT_NORTH_X, 1)
+NACHT_ARRIVAL = (NACHT_NORTH_X, 6)
+NACHT_START = (NACHT_NORTH_X, 7)
+NACHT_LANTERN = (16, 21)  # on the ground in the middle of the glade
+NACHT_POOL = (16, 20)  # the ring of light is drawn one cell lower than its cell (lift), round the lantern's foot
+NACHT_FAR = (25, 20)  # the spot on the path where the little light is looked at, nine cells before the lantern
+NACHT_GLOW_CUE = (33, 12)  # the glow tree to look at, beside the way down
+NACHT_LOG = (10, 17)  # the rotten log in the glade's north-west rim
+NACHT_HOME_X = 8  # the way on to the south-west, three cells wide (7 to 9)
+NACHT_HOME_DOOR = (NACHT_HOME_X, NACHT_H - 2)
+NACHT_HOME_CUE = (9, 28)  # on the path, the last stretch before the door, five rows from it
+# the way: down from the door, then west for the length of a screen (so that the lantern shows from a good distance),
+# through the glade's south side and on to the south-west
+NACHT_PATH = [(37, 3), (37, 8), (37, 13), (34, 17), (29, 19.5), (24.5, 20.5), (21, 23), (15, 25.5), (11, 27.5), (8, 29.5),
+              (8, 33)]
+NACHT_PATH_WIDTHS = [2.0] * len(NACHT_PATH)
+NACHT_CORRIDOR = [4.0, 5.0, 6.5, 8.0, 8.0, 8.0, 8.5, 8.5, 6.0, 3.5, 3.5]  # how wide the carved way is, along it
+# spots with a cue: no crown may hide them (a beech reaches three cells to each side, eight rows up from its foot)
+NACHT_CUES = "KCYLQ"
+# the ground each named spot stands on (what the legend says): path or grass
+NACHT_GROUND = {"N": ",", "n": ",", "@": ",", "H": ",", "K": ".", "C": ",", "L": ".", "l": ".", "Y": ".", "Q": ","}
+
+
+def nacht_forest():
+    g = Grid(NACHT_W, NACHT_H, fill="h")
+    # the wood is one dense wall of trunks: the way, a glade and a few bays are carved out of it, a little wider than
+    # the path, so that trees can stand at the edge of the way (the glow trees among them)
+    g.path(NACHT_PATH[1:-1], 6.0, ".", only="h", widths=NACHT_CORRIDOR[1:-1])
+    # the glade: round, the lantern in its middle
+    g.ellipse(NACHT_LANTERN[0], NACHT_LANTERN[1] - 0.5, 7.5, 5.5, ".", only="h", wobble=0.2, seed=5)
+    # bays off the way: a nook beside the way down (the glow tree to look at), the log's corner, one in the south
+    g.ellipse(32.5, 11.5, 3.2, 2.6, ".", only="h", wobble=0.3, seed=7)
+    g.ellipse(10.5, 17.0, 3.0, 2.4, ".", only="h", wobble=0.3, seed=8)
+    g.ellipse(25.0, 26.5, 3.6, 2.4, ".", only="h", wobble=0.3, seed=9)
+    # the gap in the northern forest: the way in from the Flutlichtung
+    for y in range(0, 7):
+        for x in range(NACHT_NORTH_X - 1, NACHT_NORTH_X + 2):
+            g.set(x, y, ",")
+    # the gap in the south-west: the way home
+    for y in range(NACHT_H - 5, NACHT_H):
+        for x in range(NACHT_HOME_X - 1, NACHT_HOME_X + 2):
+            g.set(x, y, ",", only=".h")
+    # the worn path
+    g.path(NACHT_PATH, 2.0, ",", only=".h", widths=NACHT_PATH_WIDTHS)
+    return g
+
+
+def build_nacht():
+    """The Nachtwald: the named spots first, then the trees keep their distance from them and from the cues."""
+    g = nacht_forest()
+    rng = random.Random(95)
+    named = {}
+    shortfall = {}
+    reserved = []
+    placed_trees = []
+
+    def put(glyph, x, y):
+        x, y = int(round(x)), int(round(y))
+        # the glyph stands for the ground it replaces (the legend's "ground"): the baked ground does not change
+        assert g.get(x, y) == NACHT_GROUND[glyph], (glyph, x, y, g.get(x, y))
+        g.set(x, y, glyph)
+        named.setdefault(glyph, []).append((x, y))
+
+    def hidden(x, y):
+        return any(x0 <= x <= x1 and y0 <= y <= y1 for x0, x1, y0, y1 in reserved)
+
+    def free(x, y, clearance):
+        return g.get(x, y) == "." and all(
+            g.get(x + dx, y + dy) in (".", "h") for dy in range(-clearance, clearance + 1)
+            for dx in range(-clearance, clearance + 1))
+
+    def scatter(glyphs, count, clearance, test=lambda x, y: True, apart=0, tall=False):
+        """`count` placements of the glyphs in turn (a string of one glyph, or two that alternate)."""
+        placed = 0
+        tries = 0
+        while placed < count and tries < 6000:
+            tries += 1
+            x, y = rng.randint(4, NACHT_W - 5), rng.randint(4, NACHT_H - 5)
+            if not free(x, y, clearance) or not test(x, y):
+                continue
+            glyph = glyphs[placed % len(glyphs)]
+            if tall and hidden(x, y):
+                continue
+            if apart and any(abs(x - tx) < apart and abs(y - ty) < apart for tx, ty in placed_trees):
+                continue
+            g.set(x, y, glyph)
+            if tall:
+                placed_trees.append((x, y))
+            placed += 1
+        if placed < count:
+            shortfall[glyphs] = (placed, count)
+
+    # the door, the arrival and the start in the north; the way home in the south-west
+    put("N", *NACHT_DOOR)
+    put("n", *NACHT_ARRIVAL)
+    put("@", *NACHT_START)
+    put("H", *NACHT_HOME_DOOR)
+    # what there is to see: the glow tree beside the way down, the little light far off, the lantern in the glade (its
+    # ring of light one cell above it), the log in the rim of the glade, the last stretch before the door
+    put("K", *NACHT_GLOW_CUE)
+    put("C", *NACHT_FAR)
+    put("L", *NACHT_LANTERN)
+    put("l", *NACHT_POOL)
+    put("Y", *NACHT_LOG)
+    put("Q", *NACHT_HOME_CUE)
+    # a crown hides what lies behind it: no tree within three columns and eight rows south of a spot with a cue
+    for glyph in NACHT_CUES:
+        for x, y in named[glyph]:
+            reserved.append((x - 3, x + 3, y + 1, y + 8))
+    # and none over the way in
+    reserved.append((NACHT_NORTH_X - 4, NACHT_NORTH_X + 4, 0, 14))
+    lx, ly = NACHT_LANTERN
+    placed_trees.append(NACHT_GLOW_CUE)  # the glow tree to look at is one of the trees
+
+    def in_glade(x, y):
+        """Inside the lantern's room: nothing grows here, so that she can walk up to it and sit down beside it. The
+        log's corner is kept clear too (the sprite is four cells wide)."""
+        round_room = ((x - lx) / 6.3) ** 2 + ((y - ly + 0.5) / 4.4) ** 2 <= 1.0
+        return round_room or (abs(x - NACHT_LOG[0]) <= 3 and abs(y - NACHT_LOG[1]) <= 2)
+
+    def tree(glyph, x, y):
+        """A named tree: only on grass, outside the crown reserve of the cues and clear of the others."""
+        x, y = int(round(x)), int(round(y))
+        if (free(x, y, 0) and not hidden(x, y) and not in_glade(x, y)
+                and not any(abs(x - tx) < 2 and abs(y - ty) < 2 for tx, ty in placed_trees)):
+            g.set(x, y, glyph)
+            placed_trees.append((x, y))
+            named.setdefault(glyph, []).append((x, y))
+            return True
+        return False
+
+    # the glow trees are the guide: every few steps along the way, three to five cells off it, on alternating sides
+    samples = _centerline(NACHT_PATH, NACHT_PATH_WIDTHS)
+    walked, next_at, side = 0.0, 12.0, 1
+    for (x0, y0, _), (x1, y1, _) in zip(samples, samples[1:]):
+        walked += math.hypot(x1 - x0, y1 - y0)
+        if walked < next_at:
+            continue
+        dx, dy = x1 - x0, y1 - y0
+        norm = math.hypot(dx, dy) or 1.0
+        nx, ny = -dy / norm, dx / norm
+        for turn in (side, -side):
+            if any(tree("G", x1 + turn * nx * off, y1 + turn * ny * off) for off in (3.0, 3.5, 2.5, 4.0, 4.5)):
+                break
+        next_at += 5.0
+        side = -side
+    # and round the glade, on its rim, but never in the lantern's crown reserve
+    for angle in (-100, -60, 160, 130, 40, -20):
+        a = math.radians(angle)
+        for grow in (1.0, 1.1, 0.9):
+            if tree("G", lx + math.cos(a) * 6.9 * grow, ly - 0.5 + math.sin(a) * 4.9 * grow):
+                break
+    # the forest: spruce and beech keep a few cells from the cues, stones and ferns near the trees
+    outside = lambda x, y: not in_glade(x, y)
+    scatter("PT", 18, 0, outside, tall=True, apart=2)
+    scatter("R", 8, 1, outside)
+    scatter("F", 7, 1, outside)
+    scatter("g", 4, 0, outside)
+    build_nacht.shortfall = shortfall
+    return g, named
+
+
+build_nacht.shortfall = {}
+
+BUILDERS = {"waldweg": build, "flutlichtung": build_flut, "nachtwald": build_nacht}
 
 
 def text(name="waldweg"):
@@ -438,7 +621,7 @@ def write(name="waldweg"):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in BUILDERS:
-        sys.exit("usage: layout_akt3_maps.py waldweg|flutlichtung [--write]")
+        sys.exit("usage: layout_akt3_maps.py waldweg|flutlichtung|nachtwald [--write]")
     if "--write" in sys.argv:
         write(sys.argv[1])
     else:
