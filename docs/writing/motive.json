@@ -688,9 +688,78 @@
     {
      "type": "flag",
      "ref": "fragment.clothesline"
+    },
+    {
+     "type": "line",
+     "ref": "fl_stones_2"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.stepping_stones"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch."
+  },
+  {
+   "id": "antreiber-warum",
+   "kind": "vorausdeutung",
+   "title": "Das Warum des Antreibers (Dinge)",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "fl_mark_2"
+    },
+    {
+     "type": "line",
+     "ref": "fl_mark_5"
+    },
+    {
+     "type": "line",
+     "ref": "fl_camp_3"
+    },
+    {
+     "type": "line",
+     "ref": "fl_camp_4"
+    },
+    {
+     "type": "line",
+     "ref": "fl_trail_2"
+    },
+    {
+     "type": "line",
+     "ref": "fl_trail_3"
+    },
+    {
+     "type": "line",
+     "ref": "fl_antr_2"
+    },
+    {
+     "type": "line",
+     "ref": "fl_antr_3"
+    },
+    {
+     "type": "line",
+     "ref": "fl_ask_3"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.antreiber_ahead"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.flood_seen"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.flood_sat"
+    }
+   ],
+   "payoff": "Der Antreiber erklärt sich nie. Die Flutlichtung (Akt III, W4) zeigt, warum Rennen einmal sinnvoll war, und nur an Dingen: Schlick bis über Kopfhöhe an jedem Stamm, ein einziger Schnitt, zu dem kein Brett gehört (alles andere hat er beschriftet), eine steife Decke mit seinem roten Strich, die Abdrücke eines einzigen Läufers, die nach Norden laufen, den Weg zurück, und er selbst, der nachmisst, während seine Füße auf der Stelle gehen (`fl_antr_3`) und stillstehen, sobald er sitzt (`fl_ask_3`). Kein Wort nennt Ursache, Täter oder Wirkung auf die Spielerin (Bible §15, §51). Im Haus ist er später repariert und plant Freizeit (Plan 5.2).",
+   "payoff_lines": [
+    "fl_ask_3",
+    "fl_antr_3"
+   ]
   },
   {
    "id": "werte-am-feuer",
@@ -1559,7 +1628,7 @@
   {
    "flag": "forest.antreiber_met",
    "axis": "Beschützer",
-   "meaning": "Sie hat mit dem Antreiber am leeren sechsten Brett gesprochen (Akt III, W2); die Wegzeichen sind sein Gag, das Warum folgt in W4."
+   "meaning": "Sie hat mit dem Antreiber gesprochen, am leeren sechsten Brett (Akt III, W2) oder an der Flutmarke (W4); die Wegzeichen sind sein Gag, das Warum zeigen Dinge (W4). Er verlässt dann das Tal."
   },
   {
    "flag": "forest.antreiber_sat",
@@ -1625,6 +1694,41 @@
    "flag": "melody.hermit_flute",
    "axis": "Musik",
    "meaning": "Sie hat die Flöte des Einsiedlers gehört, als sie sich zu ihm setzte: die Melodie von Akt III, hörbar, kein Fragment (W3)."
+  },
+  {
+   "flag": "forest.antreiber_ahead",
+   "axis": "Beschützer",
+   "meaning": "Der Antreiber ist vorgegangen: er steht nicht mehr am leeren sechsten Brett, sondern an der Flutmarke (Akt III, W4; die Szene setzt es beim Betreten der Lichtung, nur wenn er nicht am Feuer im Haus sitzt)."
+  },
+  {
+   "flag": "forest.flood_seen",
+   "axis": "Beschützer",
+   "meaning": "Sie hat die Flutmarke gesehen: einen bleichen Stamm ohne Krone, an jeder Buche der Lichtung Schlick bis über ihren Kopf, alle gleich hoch, und in der Kruste einen einzigen Schnitt (Akt III, W4). Das Warum des Antreibers ist ein Ding, kein Grund wird genannt; die Szene erfüllt damit das Ziel Flut der Heldenquest."
+  },
+  {
+   "flag": "forest.flood_sat",
+   "axis": "Beschützer",
+   "meaning": "Sie hat dem Antreiber an der Flutmarke Tee angeboten (nur mit der Facette Fürsorge), und er hat sich auf den Boden gesetzt: seine Füße stehen still (Akt III, W4; W6 liest es). Keine Auszeichnung, keine Strafe für das Gegenteil."
+  },
+  {
+   "flag": "forest.nest_taken",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat das leere Nest im Gras am Rand der Lichtung aufgehoben (Nebenquest „Das Nest“, Akt III, W4). Das Nest ist kein Gegenstand im Beutel, nur ein Flag."
+  },
+  {
+   "flag": "forest.nest_placed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat das Nest in die Astgabel am Ufer gelegt; die Karte zeigt es (Nebenquest „Das Nest“, Akt III, W4). Leise, ohne Folge für jemanden, ohne Zähler."
+  },
+  {
+   "flag": "forest.driftwood_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das Treibholz am Ufer eingesteckt (Kuriosität, Akt III, W4)."
+  },
+  {
+   "flag": "fragment.stepping_stones",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist auf den ersten der flachen Steine quer durch den Bach getreten: jemand hat sie getragen und gelegt, und sie tragen noch (Spur der Welt, Akt III, W4; kein Bild des Kindes)."
   }
  ]
 }

@@ -114,3 +114,7 @@ QUEST_SIDE_FOREST_MARKS_TITLE,Die Wegzeichen
 QUEST_SIDE_FOREST_MARKS_FOLLOW,"Am Pfad stehen Bretter an Pfosten, in roter Kreide beschrieben, gerade Buchstaben, mit dem Lineal unterstrichen. Jemand war vor mir hier und hat eine Liste gemacht."
 QUEST_SIDE_FOREST_MARKS_BLANK,"Das sechste Brett ist leer. In einer Kerbe im Pfosten liegt ein Stummel Kreide. Das Wort, das nach dem Letzten kommt, fehlt noch."
 QUEST_SIDE_FOREST_MARKS_DONE,"Das letzte Brett bleibt leer. Ich habe den Stummel Kreide eingesteckt, falls mir das Wort einfällt."
+QUEST_SIDE_FOREST_NEST_TITLE,Das Nest
+QUEST_SIDE_FOREST_NEST_FIND,"Am Rand der Lichtung liegt ein Nest im Gras. Die Mulde ist leer, das Moos noch grün."
+QUEST_SIDE_FOREST_NEST_FORK,"Ich habe das Nest aufgehoben. Es wiegt fast nichts. Am Ufer suche ich einen Ast mit einer Gabel, in der es liegen kann."
+QUEST_SIDE_FOREST_NEST_DONE,"Ich habe das Nest in die Gabel am Ufer gelegt. Es sitzt, als wäre es immer dort gewesen."

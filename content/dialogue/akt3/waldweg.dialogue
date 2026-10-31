@@ -172,7 +172,3 @@ Unter der Fichte liegt ein Zapfen, so groß wie eine Faust, die Schuppen halb of
 ~ bach_south_wait
 Im Süden verliert sich der Bach unter dichten Zweigen. Für heute geht es dort nicht weiter. [ID:wd_bachwait_1] [#draft]
 => END
-
-~ south_wait
-Hinter dem leeren Brett läuft der Weg in Brombeeren aus. Der Bach nimmt es dort allein mit dem Wald auf. [ID:wd_south_1] [#draft]
-=> END
