@@ -187,7 +187,7 @@ func test_the_end_of_the_game_is_read_from_the_saves() -> void:
 
 
 func test_the_frozen_ends_of_the_acts_say_whether_the_game_is_over() -> void:
-	# real runs, not made-up chapters: the end of Act II goes on in the morning, the end of Act III is the end
+	# real runs, not made-up chapters: Act II's end goes on in the morning, Act III's is the end
 	var fixtures := "res://tests/fixtures/saves/"
 	_write_raw("slot_1", FileAccess.get_file_as_string(fixtures + "v2_akt2_end.json"))
 	assert_false(saves.summary("slot_1")["finished"], "the evening after the rift is not the end")
