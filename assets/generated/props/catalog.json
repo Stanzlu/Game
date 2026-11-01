@@ -1988,6 +1988,223 @@
    "res://assets/generated/props/tal/reeds_1.png"
   ]
  },
+ "tal/rh_bin": {
+  "anchor": [
+   10,
+   19
+  ],
+  "shadow": [
+   8,
+   2
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -4
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_bin.png"
+  ]
+ },
+ "tal/rh_buttons": {
+  "anchor": [
+   8,
+   16
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/rh_buttons.png"
+  ]
+ },
+ "tal/rh_chair": {
+  "anchor": [
+   8,
+   20
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    12,
+    6
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_chair.png"
+  ]
+ },
+ "tal/rh_counter": {
+  "anchor": [
+   8,
+   40
+  ],
+  "shape": {
+   "offset": [
+    136,
+    -6
+   ],
+   "rect": [
+    288,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_counter.png"
+  ]
+ },
+ "tal/rh_cup": {
+  "anchor": [
+   8,
+   16
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/rh_cup.png"
+  ]
+ },
+ "tal/rh_dents": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/rh_dents.png"
+  ]
+ },
+ "tal/rh_desk": {
+  "anchor": [
+   8,
+   40
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    16,
+    -6
+   ],
+   "rect": [
+    48,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_desk.png"
+  ]
+ },
+ "tal/rh_glove": {
+  "anchor": [
+   8,
+   16
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/rh_glove.png"
+  ]
+ },
+ "tal/rh_key": {
+  "anchor": [
+   8,
+   16
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/rh_key.png"
+  ]
+ },
+ "tal/rh_plant": {
+  "anchor": [
+   10,
+   24
+  ],
+  "shadow": [
+   8,
+   2
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_plant.png"
+  ]
+ },
+ "tal/rh_runner": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/rh_runner.png"
+  ]
+ },
+ "tal/rh_shelf_lost": {
+  "anchor": [
+   8,
+   44
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    16,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_shelf_lost.png"
+  ]
+ },
+ "tal/rh_shelf_records": {
+  "anchor": [
+   8,
+   44
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    16,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/rh_shelf_records.png"
+  ]
+ },
+ "tal/rh_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/rh_shell.png"
+  ]
+ },
  "tal/rock": {
   "anchor": [
    13,
@@ -2110,6 +2327,27 @@
    "res://assets/generated/props/tal/st_apple_2.png"
   ]
  },
+ "tal/st_barrel": {
+  "anchor": [
+   11,
+   27
+  ],
+  "shadow": [
+   10,
+   3
+  ],
+  "shape": {
+   "circle": 7,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_barrel_0.png",
+   "res://assets/generated/props/tal/st_barrel_1.png"
+  ]
+ },
  "tal/st_bell": {
   "anchor": [
    1,
@@ -2126,6 +2364,75 @@
   ],
   "textures": [
    "res://assets/generated/props/tal/st_bench.png"
+  ]
+ },
+ "tal/st_board": {
+  "anchor": [
+   40,
+   68
+  ],
+  "shadow": [
+   30,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    64,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_board.png"
+  ]
+ },
+ "tal/st_bread_table": {
+  "anchor": [
+   32,
+   38
+  ],
+  "shadow": [
+   28,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    56,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_bread_table.png"
+  ]
+ },
+ "tal/st_buckets": {
+  "anchor": [
+   28,
+   34
+  ],
+  "shadow": [
+   22,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_buckets.png"
   ]
  },
  "tal/st_cobbles": {
@@ -2149,6 +2456,97 @@
   },
   "textures": [
    "res://assets/generated/props/tal/st_cobbles.png"
+  ]
+ },
+ "tal/st_crate": {
+  "anchor": [
+   14,
+   26
+  ],
+  "shadow": [
+   11,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    20,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_crate_0.png",
+   "res://assets/generated/props/tal/st_crate_1.png"
+  ]
+ },
+ "tal/st_florist": {
+  "anchor": [
+   64,
+   88
+  ],
+  "smoke": [
+   23,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_florist.png"
+  ]
+ },
+ "tal/st_fountain": {
+  "anchor": [
+   56,
+   80
+  ],
+  "shadow": [
+   48,
+   8
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -22
+   ],
+   "rect": [
+    100,
+    60
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_fountain.png"
+  ]
+ },
+ "tal/st_fountain_rim": {
+  "anchor": [
+   26,
+   42
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_fountain_rim.png"
+  ]
+ },
+ "tal/st_gate": {
+  "anchor": [
+   112,
+   144
+  ],
+  "smoke": [
+   64,
+   -144
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_gate.png"
+  ]
+ },
+ "tal/st_guard_hut": {
+  "anchor": [
+   36,
+   64
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_guard_hut.png"
   ]
  },
  "tal/st_haybale": {
@@ -2194,6 +2592,138 @@
   "textures": [
    "res://assets/generated/props/tal/st_haystack_0.png",
    "res://assets/generated/props/tal/st_haystack_1.png"
+  ]
+ },
+ "tal/st_house_a": {
+  "anchor": [
+   48,
+   88
+  ],
+  "smoke": [
+   -11,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_a.png"
+  ]
+ },
+ "tal/st_house_b": {
+  "anchor": [
+   64,
+   88
+  ],
+  "smoke": [
+   -9,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_b.png"
+  ]
+ },
+ "tal/st_house_c": {
+  "anchor": [
+   48,
+   131
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_c.png"
+  ]
+ },
+ "tal/st_house_d": {
+  "anchor": [
+   64,
+   88
+  ],
+  "smoke": [
+   25,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_d.png"
+  ]
+ },
+ "tal/st_house_e": {
+  "anchor": [
+   64,
+   119
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_e.png"
+  ]
+ },
+ "tal/st_house_f": {
+  "anchor": [
+   48,
+   88
+  ],
+  "smoke": [
+   13,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_f.png"
+  ]
+ },
+ "tal/st_house_g": {
+  "anchor": [
+   80,
+   88
+  ],
+  "smoke": [
+   -25,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_g.png"
+  ]
+ },
+ "tal/st_lamp_post": {
+  "anchor": [
+   9,
+   68
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_lamp_post.png"
+  ]
+ },
+ "tal/st_laundry": {
+  "anchor": [
+   52,
+   52
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_laundry.png"
+  ]
+ },
+ "tal/st_lectern": {
+  "anchor": [
+   18,
+   46
+  ],
+  "shadow": [
+   12,
+   3
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_lectern.png"
   ]
  },
  "tal/st_milestone": {
@@ -2290,6 +2820,16 @@
    "res://assets/generated/props/tal/st_post.png"
   ]
  },
+ "tal/st_pots": {
+  "anchor": [
+   12,
+   19
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_pots_0.png",
+   "res://assets/generated/props/tal/st_pots_1.png"
+  ]
+ },
  "tal/st_prints": {
   "anchor": [
    24,
@@ -2366,6 +2906,29 @@
    "res://assets/generated/props/tal/st_rope_post.png"
   ]
  },
+ "tal/st_sawhorse": {
+  "anchor": [
+   24,
+   30
+  ],
+  "shadow": [
+   20,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    40,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_sawhorse.png"
+  ]
+ },
  "tal/st_scarecrow": {
   "anchor": [
    22,
@@ -2384,6 +2947,16 @@
   },
   "textures": [
    "res://assets/generated/props/tal/st_scarecrow.png"
+  ]
+ },
+ "tal/st_seat_crate": {
+  "anchor": [
+   14,
+   -7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/st_seat_crate.png"
   ]
  },
  "tal/st_sign": {
@@ -2420,6 +2993,146 @@
   },
   "textures": [
    "res://assets/generated/props/tal/st_sign_two.png"
+  ]
+ },
+ "tal/st_stall_cloth": {
+  "anchor": [
+   44,
+   72
+  ],
+  "shadow": [
+   36,
+   6
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -8
+   ],
+   "rect": [
+    76,
+    14
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_stall_cloth.png"
+  ]
+ },
+ "tal/st_stall_fruit": {
+  "anchor": [
+   44,
+   72
+  ],
+  "shadow": [
+   36,
+   6
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -8
+   ],
+   "rect": [
+    76,
+    14
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_stall_fruit.png"
+  ]
+ },
+ "tal/st_town_hall": {
+  "anchor": [
+   96,
+   144
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_town_hall.png"
+  ]
+ },
+ "tal/st_wall_h": {
+  "anchor": [
+   8,
+   40
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_wall_h_0.png",
+   "res://assets/generated/props/tal/st_wall_h_1.png",
+   "res://assets/generated/props/tal/st_wall_h_2.png"
+  ]
+ },
+ "tal/st_wall_tower": {
+  "anchor": [
+   28,
+   96
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_wall_tower.png"
+  ]
+ },
+ "tal/st_wall_v": {
+  "anchor": [
+   12,
+   84
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_wall_v.png"
+  ]
+ },
+ "tal/st_woodstack": {
+  "anchor": [
+   28,
+   38
+  ],
+  "shadow": [
+   26,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    52,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_woodstack.png"
+  ]
+ },
+ "tal/st_workshop": {
+  "anchor": [
+   80,
+   88
+  ],
+  "smoke": [
+   35,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_workshop.png"
+  ]
+ },
+ "tal/st_wreath": {
+  "anchor": [
+   18,
+   40
+  ],
+  "shadow": [
+   8,
+   3
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_wreath.png"
   ]
  },
  "tal/stone_flat": {
