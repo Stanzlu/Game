@@ -27,8 +27,11 @@ extends Node
 ## meanwhile, so the "t" of later events counts from the end of the wait. Macros, unrolled at
 ## load: "talk": "<cue>" (meet, face north, talk, click through to the end), "use": [cx, cy] with
 ## "face": "up" (the same at a cell, for things without a voice), "enter": "<scene key>" (take the
-## door with that target and wait for the scene). "quit": true ends the run. A script
-## that starts with {"relative": true} counts each "t" as the pause after the step before.
+## door with that target and wait for the scene). "quit": true ends the run. "quest": "<id>" with
+## "stage": "<stage>" puts a quest on that stage through the real calls (starts it if it has not
+## begun, then advances along its stages; a stage it cannot reach is an error in the log): the one
+## thing a script cannot play from a fresh profile when a segment starts in the middle of an act.
+## A script that starts with {"relative": true} counts each "t" as the pause after the step before.
 ## Time counts physics ticks, so runs are deterministic with --fixed-fps.
 
 const TAP_TICKS := 8
@@ -201,6 +204,8 @@ func _physics_process(_delta: float) -> void:
 			WorldState.add_item(str(event["give"]), 1, false)
 		if event.has("flag"):
 			WorldState.set_flag(str(event["flag"]))
+		if event.has("quest"):
+			_quest(str(event["quest"]), str(event.get("stage", "")))
 		if event.has("dialogue"):
 			_dialogue_until = t + float(event["dialogue"])
 		if event.has("log"):
@@ -363,6 +368,57 @@ static func event_for(token: String, pressed: bool) -> InputEvent:
 	event.action = token
 	event.pressed = pressed
 	return event
+
+
+## Puts a quest on `stage` with the game's own calls: starts it if it has not begun, then goes the
+## shortest way along the stages (`next`). A quest that stands past the stage, or a stage that
+## cannot be reached, is an error in the log and changes nothing.
+func _quest(quest_id: String, stage: String) -> void:
+	var def := ContentDB.quest(quest_id)
+	if def == null or not def.has_stage(stage):
+		Log.error(
+			Log.Category.INPUT, "autopilot quest unknown", {"quest": quest_id, "stage": stage}
+		)
+		return
+	WorldState.start_quest(quest_id)
+	var current := WorldState.quest_stage(quest_id)
+	var way := quest_way(def, current, stage)
+	if way.is_empty() and current != stage:
+		Log.error(
+			Log.Category.INPUT,
+			"autopilot quest unreachable",
+			{"quest": quest_id, "from": current, "stage": stage}
+		)
+		return
+	for step in way:
+		WorldState.advance_quest(quest_id, step)
+
+
+## The stages to go through to get from `from` to `to`, `from` left out (the shortest way along
+## `next`, the first stage found for a fork); empty when `to` is `from` or cannot be reached.
+static func quest_way(def: QuestDef, from: String, to: String) -> PackedStringArray:
+	var came_from: Dictionary[String, String] = {from: ""}
+	var queue: PackedStringArray = [from]
+	while not queue.is_empty():
+		var current := queue[0]
+		queue.remove_at(0)
+		if current == to:
+			break
+		var stage := def.stage(current)
+		if stage == null:
+			continue
+		for following in stage.next:
+			if not came_from.has(following):
+				came_from[following] = current
+				queue.append(following)
+	var way: PackedStringArray = []
+	if to == from or not came_from.has(to):
+		return way
+	var step := to
+	while step != from:
+		way.insert(0, step)
+		step = came_from[step]
+	return way
 
 
 func _teleport(cell: Array) -> void:

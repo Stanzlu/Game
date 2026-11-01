@@ -1,0 +1,127 @@
+# Die Heimkehr, Akt III, Segment W6 (docs/akt3/REGIONSBRIEFE.md, ADR-070 O5, O7, O9, O11, O15; Bible §27, §28, §42, §45). Das Haus hat sich verändert,
+# und niemand erklärt es: in der Ecke, in der nichts stand, steht eine Werkbank, der Antreiber sitzt an ihr und repariert, ein Blatt an
+# der Wand plant seine Freizeit mit Uhrzeiten, und die Katze liegt auf ihm. Wer den Einsiedler in der Hütte eingeladen hat, bekommt
+# seinen Besuch: er bringt einen Stuhl mit, sitzt, trinkt, geht wieder. Leicht und komisch (Humor 4 bis 5), nichts Schweres, nichts über
+# den Wald und nichts über Gründe. Der Akt endet still: die letzte Zeile ist ein Blick.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Brett- und Zettelinhalte stehen in » «, Uhrzeiten
+# sind ausgeschrieben. Sprecher gibt es zwei: den Antreiber (höchstens sieben Wörter im Schnitt, Zeitwörter, Wirtschaftswörter, ein Widerspruch
+# im selben Atemzug, kein Ausruf, keine Frage) und den Einsiedler (kurze Angebote, trocken an Dingen, keine Frage). Die Katze hat keine Stimme.
+# Der Text gilt in jedem Zustand: der Antreiber sitzt hier, ob er am Feuer saß oder vorausging (kein Cue liest, wie er ins Haus kam), die
+# Katze liegt auf ihm nur, wenn sie gefüttert ist (sonst sitzt sie am Fenster), Tee steht auf seinem Plan, und nur wer ihn im Wald gesetzt
+# hat (forest.antreiber_sat, forest.flood_sat) hört, wie lange er dauert; sonst wartet der Tee auf jemanden, der ihn macht. Beide Zweige sind
+# komisch, keiner straft. Ohne Gast (kein care, keine Einladung) fehlt nichts: kein Satz setzt den Einsiedler voraus, der nicht da ist.
+# Gesetzt wird nur house.cat_naming (der Name-Zweig der Katze, die Szene öffnet die Eingabe); die Szene setzt house.workbench und
+# house.guest_hermit, die Stufen der Heldenquest und die Marken, nie ein Cue.
+
+# --- Die Szene: ankommen ---------------------------------------------------------------------------------------------------
+# Läuft einmal, beim ersten Betreten des Hauses in der Stufe home. Die Werkbank (Decor haus/workbench) steht schon im Bild; der Antreiber
+# sitzt an ihrem Westende, am Schraubstock; die Katze liegt als Bild quer über seinen Knien. Er verneint, gewartet zu haben, und sagt, was ihn
+# beschäftigt hat: Dinge und Zeiten, wie immer. Die Katzenzeile gilt nur mit house.cat_fed.
+
+~ home_in
+In der Ecke, in der nichts stand, steht jetzt eine Werkbank, und am Schraubstock sitzt der Antreiber. [ID:hk_in_1] [#draft]
+if WorldState.has_flag("house.cat_fed")
+	Die Katze liegt ihm quer über den Knien. Er sitzt wie jemand, der ein volles Glas trägt. [ID:hk_in_2] [#draft]
+Antreiber: Ich hab nicht gewartet. Die Bank hat gedauert. [ID:hk_in_3] [#draft]
+=> END
+
+# --- Die Szene: der Besuch (nur wer den Einsiedler eingeladen hat) -------------------------------------------------------------
+# Der Einsiedler kommt zur Tür herein, geht zum Tischende und setzt sich; der Stuhl (Decor haus/guest_chair, eine hohe Lehne, flach unter
+# ihm) steht dann da. Er spricht in Angeboten und stellt nichts in Frage: er hat den Stuhl mitgebracht, er passt ihm. Der Antreiber misst
+# ihn und lässt ihn gelten. Der Becher ist der Becher der Hütte, der glatt am Nagel hing: er ist schon sauber, und er wischt ihn aus.
+# Die zweite Fütterung der Katze: er wirft ihr etwas zu (sie liegt drei Zellen von ihm), sie nimmt es, ohne aufzustehen. Ohne gefütterte Katze sitzt sie draußen auf dem
+# Sims (Decor haus/cat_window) und bleibt dort.
+
+~ guest_enter
+Einsiedler: Stuhl hab ich mitgebracht. [ID:hk_guest_1] [#draft]
+Antreiber: Zwei Finger zu hoch für den Tisch. [ID:hk_guest_2] [#draft]
+Einsiedler: Er passt mir. [ID:hk_guest_3] [#draft]
+Der Einsiedler wischt seinen Becher mit dem Ärmel aus, einmal rund herum. Der war schon sauber. Du füllst ihn aus der Flasche. [ID:hk_guest_4] [#draft]
+if WorldState.has_flag("house.cat_fed")
+	Der Einsiedler wirft der Katze ein Stück Räucherfisch zu. Sie frisst es, ohne die Augen zu öffnen, und bleibt, wo sie liegt. [ID:hk_guest_5] [#draft]
+else
+	Auf dem Fensterbrett sitzt die Katze. Der Einsiedler nickt ihr durch die Scheibe zu. Sie bleibt, wo sie sitzt. [ID:hk_guest_6] [#draft]
+=> END
+
+# --- Die Szene: der Schluss des Aktes -----------------------------------------------------------------------------------------------
+# Die erste Zeile gibt es nur nach dem Besuch: der Einsiedler lässt den Stuhl da, er zieht nicht ein, und er kommt, wenn es einen Grund gibt
+# (der Grund ist Tee, wie in der Hütte). Die zweite gilt für alle und ist ein Blick, kein Satz: der Antreiber sieht erst auf seine
+# Sachen, dann nirgends hin. Danach steht der Einsiedler auf und geht; die Szene setzt, was der Akt setzt, ohne dass ein Cue es tut.
+
+~ act3_close
+if WorldState.has_flag("house.guest_hermit")
+	Einsiedler: Der Stuhl bleibt. Tee ist ein Grund. [ID:hk_close_1] [#draft]
+Der Antreiber sieht zur Werkbank, zum Fenster, zum Blatt an der Wand. Dann nirgends hin. [ID:hk_close_2] [#draft]
+=> END
+
+# --- Die Werkbank -----------------------------------------------------------------------------------------------------------------
+# Decor haus/workbench (Karte, Zelle B): eine dicke Platte auf zwei Böcken mit einer Strebe. Von links der Schraubstock mit einem Brett
+# darin, ein Hammer hinter einem Lineal mit Strichen, ein Glas Nägel, ein Stapel Schindeln mit einer neuen Latte oben, in der zwei
+# Nägel stecken; der dritte liegt vor dem Stapel. An der Vorderkante läuft ein roter Kreidestrich, von Ende zu Ende gezogen; am Boden
+# liegen helle Späne. Nichts ragt über die Platte hinaus. Kein Wort über Wasser, Wald oder Gründe: die Bank ist eine Bank.
+
+~ workbench
+Auf der Werkbank sind ein Schraubstock mit einem Brett darin, ein Lineal, ein Hammer, ein Glas Nägel und ein Stapel Schindeln. [ID:hk_bench_1] [#draft]
+Auf den Schindeln liegt eine neue Latte. Zwei Nägel stecken schon, der dritte liegt vor dem Stapel. [ID:hk_bench_2] [#draft]
+An der Vorderkante läuft ein roter Kreidestrich, mit dem Lineal gezogen. Nichts ragt über den Strich hinaus. [ID:hk_bench_3] [#draft]
+Nur die Späne am Boden liegen, wie sie gefallen sind. [ID:hk_bench_4] [#draft]
+=> END
+
+# --- Das Blatt an der Wand: der Freizeitplan --------------------------------------------------------------------------------------
+# Decor haus/plan_board (Karte, Zelle Y, Wandzelle zwischen Regal und Fenster): ein Blatt mit einem roten Streifen oben und fünf Zeilen, links
+# je ein roter Block (die Uhrzeit), daneben ein Text ohne Buchstaben (der Posten), am Ende jeder Zeile ein roter Strich. Was auf dem Blatt
+# steht, sagt nur der Text; das Bild zeigt nichts Lesbares. Die fünf Posten: Tee, Aussicht, Pausen, Katze und Besuch. Die Katze und der
+# Besuch hat er nicht in der Hand, und er schreibt es hin. Ein Posten fürs Nichtstun ist es nicht: das gehört dem Nachspiel (Bible §42).
+# Gezählt werden nur die Minuten eines Tees, nie Besuche oder Tage (Bible §52). Die letzte Zeile gilt nach dem Besuch.
+
+~ plan_board
+Zwischen Regal und Fenster hängt ein Blatt mit rotem Streifen oben. Links stehen Uhrzeiten, daneben Posten. [ID:hk_plan_1] [#draft]
+Um Viertel nach drei steht »Tee, sieben Minuten«, um Viertel vor vier »Aussicht, sieben Minuten, nur bei Sicht«. [ID:hk_plan_2] [#draft]
+Am Ende jeder Zeile steht ein Strich. Auch »Pausen« hat einen, und er ist nicht ausgewischt. [ID:hk_plan_3] [#draft]
+Bei »Katze« steht als Uhrzeit »wann sie will«, bei »Besuch« steht »unangemeldet«. [ID:hk_plan_4] [#draft]
+if WorldState.has_flag("house.guest_hermit")
+	Bei »Besuch« steht jetzt ein Name dazu, »Einsiedler«, und als Dauer »offen«. [ID:hk_plan_5] [#draft]
+=> END
+
+# --- Der Antreiber an der Werkbank ---------------------------------------------------------------------------------------------------
+# Er sitzt am Schraubstock (Karte, Zelle A, Figur sitzt), in jedem Zustand und nirgends sonst. Er sagt, was er tut und plant, nie, was es
+# bedeutet. Der Tee steht auf dem Blatt: wer ihn im Wald gesetzt hat, hört seine Dauer, sonst wartet der Tee auf jemanden. Die Katzenzeile
+# gilt nur mit house.cat_fed (Bible §28: sie schläft auf ihm; er verschiebt, was er sonst täte; die Zeile klingt wie ein Eintrag auf dem Blatt). "Tee machen." ist der Leser der Facette
+# care im Haus und gibt es nur mit ihr; "Helfen." und das Schweigen gibt es immer, und jede Antwort hat ihre eigene Folge an ihm.
+
+~ antreiber_bench
+if WorldState.has_flag("forest.antreiber_sat") or WorldState.has_flag("forest.flood_sat")
+	Antreiber: Tee steht drauf. Sieben Minuten, zu zweit zehn. [ID:hk_antr_1] [#draft]
+else
+	Antreiber: Tee steht drauf. Wenn jemand welchen macht. [ID:hk_antr_2] [#draft]
+Antreiber: Zaun erledigt, bis auf die Lücke. [ID:hk_antr_3] [#draft]
+Antreiber: Am Dach ist eine Reihe vorgesehen. [ID:hk_antr_9] [#draft]
+if WorldState.has_flag("house.cat_fed")
+	Antreiber: Aufstehen, vier Uhr. Verschoben. [ID:hk_antr_4] [#draft]
+=> antreiber_bench_ask
+
+~ antreiber_bench_ask
+- Helfen. [ID:hk_antr_r1] [#draft]
+	Du hältst das Brett fest, obwohl der Schraubstock es hält. Der Antreiber lässt dich. [ID:hk_antr_5] [#draft]
+- Tee machen. [if WorldState.has_facet("care") /] [ID:hk_antr_r2] [#draft]
+	Du stellst ihm Tee hin. Er sieht zum Blatt an der Wand und wieder zu dir. [ID:hk_antr_6] [#draft]
+	Antreiber: Zu früh. Ich lass es gelten. [ID:hk_antr_7] [#draft]
+- … [ID:hk_antr_r3] [#draft]
+	Er nickt und dreht den Schraubstock eine Vierteldrehung nach. [ID:hk_antr_8] [#draft]
+=> END
+
+# --- Die Katze auf dem Antreiber ----------------------------------------------------------------------------------------------------
+# Decor haus/cat_sleep, eine Zelle südlich von ihm und hochgesetzt (sie liegt ihm quer über den Knien), nur mit house.cat_fed. Die Katze hat keine
+# Stimme und keinen Gedanken; "trocken" ist hier Untertreibung. Der Name steht nur als Paar (mit Namen / "Die Katze"). Wer sie noch nicht
+# benannt hat, kann es hier tun (die Szene öffnet die Eingabe, wie am Feuer), denn auf diesem Weg gibt es sonst keinen Cue für sie.
+
+~ cat_bench
+if WorldState.cat_name() != ""
+	{{WorldState.cat_name()}} schläft auf dem Antreiber. Die Werkbank steht genau so nah, dass seine freie Hand drankommt. [ID:hk_cat_1] [#draft]
+	=> END
+Die Katze schläft auf dem Antreiber. Die Werkbank steht genau so nah, dass seine freie Hand drankommt. [ID:hk_cat_2] [#draft]
+- Ihr einen Namen geben. [ID:hk_cat_r1] [#draft]
+	do WorldState.set_flag("house.cat_naming")
+- … [ID:hk_cat_r2] [#draft]
+	Du streichst ihr einmal über den Rücken. Der Antreiber sieht zur Wand, als sei er nicht mitgemeint. [ID:hk_cat_3] [#draft]
+=> END

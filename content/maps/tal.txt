@@ -37,7 +37,8 @@ H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "haus", "spawn": "door"}}
 F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence"}}
 E = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_post"}}
-B = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken"}}
+; das Zaunstück am Haus: gebrochen, bis der Antreiber an der Werkbank sitzt (W6, house.workbench), dann ist es geflickt; die Lücke der Ziege (I) bleibt
+B = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_broken", "sprite_when": {"house.workbench": "tal/fence"}}}
 T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
 C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
 P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}

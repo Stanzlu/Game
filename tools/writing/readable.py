@@ -33,6 +33,7 @@ PREFIX = {
     "huette": "W3-",
     "flutlichtung": "W4-",
     "nachtwald": "W5-",
+    "heimkehr": "W6-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]
@@ -61,10 +62,15 @@ def clean(text):
 
 def condition_text(expression):
     """A condition shortened to what a reader needs: the flag or memory it asks for."""
-    names = re.findall(r'"([a-z0-9_.]+)"', expression)
-    negated = " nicht" if re.search(r"\bnot\b|!=", expression) and names else ""
-    if names:
-        return "%s%s" % (" und ".join(names), negated)
+    # "a or b" stays an "or" (a reader who reads "and" for it learns a condition that needs both)
+    terms = []
+    for part in re.split(r"\bor\b", expression):
+        names = re.findall(r'"([a-z0-9_.]+)"', part)
+        if names:
+            negated = " nicht" if re.search(r"\bnot\b|!=", part) else ""
+            terms.append("%s%s" % (" und ".join(names), negated))
+    if terms:
+        return " oder ".join(terms)
     return expression.replace("WorldState.", "")
 
 

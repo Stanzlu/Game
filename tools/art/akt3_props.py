@@ -18,6 +18,10 @@ a fork, driftwood and stepping stones.
 
 Night wood (W5): glow trees, the lantern with its ring of light, a glowing log. Nothing here is a light: the glow is
 baked into the emissive layer (drawn above the night tint, unshaded), like the mushrooms and wd_rest_lit.
+
+Homecoming (W6): the house gets the Antreiber's workbench (tools, a red chalk line, shavings), a chair for a guest (a
+front view with a high back, so that it stays right when the sitter turns to the player) and a sheet with his plan for
+a free hour on the wall (rows and one stroke each, nothing to read). Style "haus", no shadow in the catalog.
 """
 import os
 import sys
@@ -1174,6 +1178,150 @@ def foxfire_log(ms, lit):
     return c, e
 
 
+# --------------------------------------------------------------------------- the house in W6 (Heimkehr)
+# Three things for the room the player comes home to (style "haus", the house of slice_props): the Antreiber's
+# workbench, the chair the hermit brings and an unreadable plan on the wall. None of them has a `shadow` in the
+# catalog: the map places them under if/unless and the baked floor of "haus" must keep its stamp. The workbench
+# paints its own contact shade (the south-east corner of the room is its darkest place: light details on dark wood).
+PAPER = ramp("#6a604c", "#9a8f74", "#c8bd9c", "#ebe2c4")
+NAIL = np.array([200, 194, 180], np.float32)
+SHAVING = np.array([214, 178, 124], np.float32)
+GLASS = ramp("#2a3438", "#46585c", "#6a8286", "#9ab4b8")
+
+
+def workbench(ms):
+    """The Antreiber's workbench: a thick plank on two trestles with a brace between them, a red chalk line along
+    the front edge (ruled, one pixel, from end to end), shavings and a contact shade at the foot. On it, from the
+    left: a vise with a board clamped in it, a hammer lying behind a ruler with ticks, a jar of nails and a stack of
+    shingles with one new lath on top that has three places for nails: two are in, the third place is a dark hole and
+    the nail for it lies in front of the stack. Nothing sticks out over the ends of the plank (the sitter at its west
+    end must keep his face). 52 x 36, anchor (26, 30)."""
+    rng = np.random.default_rng(461)
+    st = pa.STYLES["tal"]
+    wood, iron = slice_props.LOGS, BRIGHT_IRON
+    c = ms.Canvas(52, 36)
+    grain = pa.value_noise(36, 52, (1, 9), rng)
+    # two trestles: two splayed legs each; the brace runs between them, a lit top and a shaded face
+    for x0 in (5, 39):
+        for k, lx in enumerate((x0, x0 + 6)):
+            for y in range(24, 32):
+                dx = -((y - 24) // 4) if k == 0 else (y - 24) // 4
+                c.paint(c.rect(lx + dx, y, lx + dx + 4, y + 1), wood, 0.7 if k == 0 else 0.5, dither=False)
+                c.paint(c.rect(lx + dx, y, lx + dx + 1, y + 1), wood, 0.9 if k == 0 else 0.7, dither=False)
+    c.paint(c.rect(6, 27, 47, 30), wood, np.where(c.yy < 28, 0.86, np.where(c.yy < 29, 0.5, 0.26)), dither=False)
+    # the plank: a lit top that darkens towards the front, a lit front lip, the shaded face and a shadow under it
+    c.paint(c.rect(4, 12, 51, 19), wood, 0.8 + 0.2 * (1 - (c.yy - 12) / 7) + 0.14 * (grain - 0.5), contrast=2.0)
+    c.paint(c.rect(4, 19, 51, 20), wood, 0.96, dither=False)
+    c.paint(c.rect(4, 20, 51, 23), wood, np.where(c.yy < 21, 0.5, 0.32), dither=False)
+    c.paint(c.rect(4, 23, 51, 25), wood, np.where(c.yy < 24, 0.14, 0.2), dither=False)
+    c.paint(c.rect(4, 12, 5, 20), wood, 0.92, dither=False)  # the lit left end
+    c.paint(c.rect(37, 17, 40, 18), wood, 0.2, dither=False)  # a knot in the plank
+    # the chalk line along the front edge, ruled: one pixel, end to end
+    c.fill(c.rect(5, 18, 51, 19), ANTREIBER_RED[3])
+    # the hammer behind the ruler: a handle of warm wood, an iron head across its end with a lit top
+    c.paint(c.rect(18, 10, 31, 12), CLAY, np.where(c.yy < 11, 0.62, 0.3), dither=False)
+    c.paint(c.rect(18, 12, 31, 13), wood, 0.08, dither=False)  # its shade on the plank
+    c.paint(c.rect(31, 8, 35, 13), iron, np.where(c.yy < 9, 1.0, np.where(c.xx < 33, 0.8, 0.52)), dither=False)
+    c.paint(c.rect(31, 12, 35, 13), iron, 0.3, dither=False)
+    # the ruler: pale wood, a tick every second pixel, a long tick every sixth
+    c.paint(c.rect(16, 15, 34, 18), FLUTE_WOOD, np.where(c.yy < 16, 0.94, np.where(c.yy < 17, 0.78, 0.46)), dither=False)
+    for tx in range(17, 34, 2):
+        c.fill(c.rect(tx, 15, tx + 1, 17 if (tx - 17) % 6 == 0 else 16), FLUTE_WOOD[0])
+    # the vise at the west end: a foot on the plank, two jaws, a crank to the east with a ball; a board clamped in it
+    c.paint(c.rect(4, 14, 13, 18), iron, np.where(c.yy < 15, 0.95, 0.5), dither=False)
+    c.paint(c.rect(5, 8, 12, 14), iron, np.where(c.xx < 6, 0.9, np.where(c.xx < 10, 0.62, 0.36)), dither=False)
+    c.paint(c.rect(5, 8, 12, 9), iron, 1.0, dither=False)
+    c.paint(c.rect(8, 9, 9, 14), iron, 0.12, dither=False)  # the slit between the jaws
+    c.paint(c.rect(12, 11, 16, 12), iron, 0.8, dither=False)  # the crank
+    c.paint(c.rect(15, 10, 17, 13), iron, np.where(c.xx < 16, 1.0, 0.6), dither=False)  # and its ball
+    c.paint(c.rect(6, 1, 12, 9), FLUTE_WOOD, np.where(c.xx < 7, 0.96, np.where(c.xx < 10, 0.74, 0.44)), dither=False)
+    c.paint(c.rect(6, 1, 12, 2), FLUTE_WOOD, 1.0, dither=False)
+    c.fill(c.rect(8, 4, 10, 5), FLUTE_WOOD[1])  # a knot in the board
+    # the jar of nails, standing at the back
+    c.paint(c.rect(37, 6, 44, 16), GLASS, 0.34 + 0.6 * c.cylinder(37, 44), dither=False)
+    c.paint(c.rect(37, 5, 44, 7), iron, np.where(c.yy < 6, 0.95, 0.55), dither=False)
+    c.fill(c.rect(38, 8, 39, 12), GLASS[3])
+    for nx, ny in ((40, 13), (42, 14), (41, 11), (43, 12), (39, 15)):
+        c.fill(c.rect(nx, ny, nx + 1, ny + 1), NAIL)
+    # the stack of shingles: four layers, a light edge over a dark one, each a pixel off the one below; on top one new
+    # lath, pale, with its three places for nails
+    for k in range(4):
+        y, off = 9 + k * 2, (k % 2)
+        c.paint(c.rect(45 - off, y, 51 - off, y + 1), SHINGLE, 1.0, dither=False)
+        c.paint(c.rect(45 - off, y + 1, 51 - off, y + 2), SHINGLE, 0.0, dither=False)
+    c.paint(c.rect(44, 6, 51, 9), FLUTE_WOOD, np.where(c.yy < 7, 0.96, np.where(c.yy < 8, 0.74, 0.5)), dither=False)
+    c.fill(c.rect(45, 7, 46, 8), NAIL)
+    c.fill(c.rect(47, 7, 48, 8), NAIL)
+    c.fill(c.rect(49, 7, 50, 8), FLUTE_WOOD[0])  # the third place: a hole, no nail yet
+    c.fill(c.rect(45, 17, 49, 18), NAIL)  # its nail, lying in front of the stack
+    c.outline(st["outline"])
+    # contact shade and litter come after the outline, only on empty pixels: a shade the colour of the floor's own
+    # dark boards under the feet, ragged at both ends, and a few pale shavings and two curls on it
+    free = ~c.a
+    shade = c.rect(6, 32, 47, 33) | c.rect(9, 33, 43, 34) | (c.rect(4, 32, 6, 33) & (c.xx == 5)) | c.rect(47, 32, 49, 33)
+    c.fill(shade & free, np.array([88, 59, 42], np.float32))
+    for sx, sy in ((10, 34), (15, 33), (22, 35), (30, 34), (39, 35), (46, 33)):
+        c.fill(c.rect(sx, sy, sx + 1, sy + 1) & free, SHAVING)
+    for sx, sy in ((13, 33), (35, 33)):  # two curls
+        c.fill(c.rect(sx, sy, sx + 2, sy + 1) & free, SHAVING)
+    return c
+
+
+def guest_chair(ms):
+    """A plain chair seen from the front, with a high back that stands out on both shoulders of whoever sits in it:
+    two stiles, a top rail, two slats, a plank seat a little wider than the back and four short legs. It lies flat
+    under the sitter (z -5), so it also stands alone when nobody sits. General on purpose (Act IV uses it again).
+    24 x 27, anchor (12, 26): the width of a figure frame, the anchor is the cell centre, where the sitter's feet are
+    (the sitter's shoulders are 15 to 19 px wide, his hips at 5 px above the anchor)."""
+    rng = np.random.default_rng(463)
+    st = pa.STYLES["tal"]
+    wood = slice_props.LOGS
+    c = ms.Canvas(24, 27)
+    grain = pa.value_noise(27, 24, (6, 1), rng)
+    # the back: two stiles with a lit left edge, the top rail between them, two slats; open between the slats
+    for sx in (1, 20):
+        c.paint(c.rect(sx, 1, sx + 3, 24), wood, np.where(c.xx == sx, 0.86, np.where(c.xx == sx + 1, 0.64, 0.38))
+                + 0.08 * (grain - 0.5), dither=False)
+        c.paint(c.rect(sx, 1, sx + 3, 2), wood, 0.95, dither=False)  # the worn top of each stile
+    c.paint(c.rect(1, 2, 23, 6), wood, np.where(c.yy < 3, 0.95, np.where(c.yy < 5, 0.7, 0.4)), dither=False)  # rail
+    c.a[1, 1] = False  # the outer corners of the stiles are cut off
+    c.a[1, 22] = False
+    for sy in (10, 15):  # the slats
+        c.paint(c.rect(4, sy, 20, sy + 2), wood, np.where(c.yy < sy + 1, 0.76, 0.42), dither=False)
+    # the seat: a lit top, a front edge and a shaded face, a little wider than the back; four short legs
+    c.paint(c.rect(0, 19, 24, 22), wood, np.where(c.yy < 20, 0.94, 0.72), dither=False)
+    c.paint(c.rect(0, 22, 24, 24), wood, np.where(c.yy < 23, 0.42, 0.26), dither=False)
+    for lx in (1, 20):  # front legs
+        c.paint(c.rect(lx, 24, lx + 3, 27), wood, np.where(c.xx == lx, 0.6, 0.34), dither=False)
+    for lx in (6, 17):  # the back legs, further in and a pixel higher, in the shade of the seat
+        c.paint(c.rect(lx, 24, lx + 2, 26), wood, 0.18, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def plan_board(ms):
+    """A sheet pinned to the wall, ruled in the Antreiber's red: a red band across the top, then five rows, each with
+    a short red time block on the left, a broken line of text without letters in the middle and one red stroke at the
+    right end of every row. Nothing on it can be read as a digit or a word. One crease runs across it, a corner
+    curls. 22 x 22, anchor (14, 19): it hangs on the log wall in the gap between the shelf and the window."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(22, 22)
+    c.paint(c.rect(1, 1, 21, 21), PAPER, np.where(c.xx < 4, 0.88, 0.76), dither=False)
+    c.paint(c.rect(1, 1, 21, 4), ANTREIBER_RED, np.where(c.yy < 2, 0.9, 0.62), dither=False)
+    for k, ry in enumerate((6, 9, 12, 15, 18)):
+        c.paint(c.rect(3, ry, 6, ry + 2), ANTREIBER_RED, 0.55, dither=False)  # the time, a block
+        x = 8
+        for run in ((3, 2, 4), (4, 3, 2), (2, 3, 3), (4, 2, 3), (3, 3))[k]:
+            c.paint(c.rect(x, ry, x + run, ry + 1), PAPER, 0.1, dither=False)  # text without letters
+            x += run + 1
+        c.paint(c.rect(18, ry, 19, ry + 2), ANTREIBER_RED, 0.78, dither=False)  # one stroke per row
+    c.paint(c.rect(1, 11, 21, 12) & ((c.xx % 7) != 5), PAPER, 0.42, dither=False)  # the crease: smoothed flat, still there
+    c.paint(c.rect(18, 19, 21, 21), PAPER, 0.4, dither=False)  # the lower corner curls
+    c.fill(c.rect(10, 1, 12, 3), np.array([196, 200, 204], np.float32))  # the pin
+    c.fill(c.rect(11, 2, 12, 3), np.array([120, 124, 130], np.float32))
+    c.outline(st["outline"])
+    return c
+
 
 def build(ms):
     ms.save("tal", "wd_spruce", [spruce(ms, 701 + k) for k in range(3)], (28, 116),
@@ -1242,6 +1390,12 @@ def build(ms):
     ms.save("tal", "wd_foxfire_log", log, (30, 20), emissive=log_glow, shape={"rect": [40, 8], "offset": [0, -4]})
     ms.save("tal", "wd_foxfire_log_dim", foxfire_log(ms, False)[0], (30, 20),
             shape={"rect": [40, 8], "offset": [0, -4]})
+    # the house in W6 (Heimkehr): no shadow in the catalog (the map places all three under if/unless, the baked floor of
+    # haus keeps its stamp). The bench blocks the player (shape), chair and plan lie flat: the chair under whoever
+    # sits in it, the plan on the log wall
+    ms.save("haus", "workbench", workbench(ms), (26, 30), shape={"rect": [46, 8], "offset": [0, -3]})
+    ms.save("haus", "guest_chair", guest_chair(ms), (12, 26), flat=True)
+    ms.save("haus", "plan_board", plan_board(ms), (14, 19), flat=True)
 
 
 def night_strip(ms, width, height):
@@ -1271,6 +1425,62 @@ def night_strip(ms, width, height):
         if glow is not None:
             strip.alpha_composite(Image.fromarray(glow.rgba().astype(np.uint8), "RGBA"), top)
     return strip
+
+
+def house_room(ms, guest, dim=False, cells=None, seated=True):
+    """The room of the house as the map of W6 sets it (the numbers are the cells of the contract), drawn from the baked
+    floor, the shell and the furniture of the catalog and the three new things: the Antreiber sits at his bench with the
+    cat on his lap; with `guest` the chair stands in front of the table, and the hermit sits in it (`seated`) or has
+    gone and left it. `dim` lays a vignette over the room (the south-east corner is its darkest place). `cells`
+    overrides the cells of the contract. Returns the room at its own size, 256 x 192."""
+    from PIL import Image
+    root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+    props = os.path.join(root, "assets", "generated", "props", "haus")
+    chars = os.path.join(root, "assets", "generated", "characters")
+    cell = {"bench": (24, 14), "antreiber": (22, 14), "cat": (22, 15), "chair": (22, 12), "plan": (21, 8)}
+    cell.update(cells or {})
+    world = Image.open(os.path.join(root, "assets", "generated", "maps", "haus_ground.png")).convert("RGBA")
+
+    def png(name):
+        return Image.open(os.path.join(props, name + ".png")).convert("RGBA")
+
+    def canvas_img(canvas):
+        return Image.fromarray(canvas.rgba().astype(np.uint8), "RGBA")
+
+    def put(img, cx, cy, ax, ay, lift=0):
+        world.alpha_composite(img, (cx * 16 + 8 - ax, cy * 16 + 8 - ay - lift))
+
+    def person(sheet, row, at):  # a figure of the sheet: its feet are on the cell centre (feet offset of the sheets)
+        frame = Image.open(os.path.join(chars, sheet + ".png")).convert("RGBA").crop((0, row * 32, 24, row * 32 + 32))
+        put(frame, at[0], at[1], 12, 30)
+        return frame
+
+    put(png("shell"), 12, 5, 8, 8)
+    put(png("rug"), 17, 11, 22, 11)
+    put(png("shelf"), 19, 8, 17, 29)
+    put(canvas_img(plan_board(ms)), cell["plan"][0], cell["plan"][1], 14, 19)
+    if guest:
+        put(canvas_img(guest_chair(ms)), cell["chair"][0], cell["chair"][1], 12, 26)
+    put(png("fireplace_lit_0"), 16, 9, 26, 60)
+    put(png("bed"), 25, 11, 15, 40)
+    put(png("table"), 20, 12, 22, 24)
+    put(png("stool"), 16, 12, 6, 12)
+    put(png("bucket"), 14, 14, 8, 14)
+    if guest and seated:
+        person("einsiedler", 24 + 4, cell["chair"])  # sit, facing west
+    person("antreiber", 24 + 0, cell["antreiber"])  # sit, facing east
+    put(canvas_img(workbench(ms)), cell["bench"][0], cell["bench"][1], 26, 30)
+    put(png("cat_sleep"), cell["cat"][0], cell["cat"][1], 10, 10, lift=14)
+    room = world.crop((192, 80, 448, 272))
+    if dim:
+        yy, xx = np.mgrid[0:192, 0:256]
+        d = np.hypot(xx - 112, yy - 96)
+        t = np.clip((d - 70) / 80.0, 0, 1)
+        k = 1 - 0.5 * (t * t * (3 - 2 * t))
+        arr = np.array(room).astype(np.float32)
+        arr[..., :3] *= k[..., None] * np.array([0.92, 0.95, 1.0])
+        room = Image.fromarray(arr.astype(np.uint8), "RGBA")
+    return room
 
 
 def preview(path):
@@ -1319,6 +1529,21 @@ def preview(path):
             x += img.width + 8
         strips.append(strip)
     strips.append(night_strip(ms, sheet.width, strip_h + 20))
+    # the house of W6: the three new things alone (on the floor, on the log wall), then the room without and with the
+    # hermit's visit, and the same room dimmed (its south-east corner is the darkest place)
+    house = Image.new("RGBA", (sheet.width, 60 + 192 + 8), (74, 52, 36, 255))
+    x = 8
+    for item, bg in ((workbench(ms), (122, 84, 59, 255)), (guest_chair(ms), (122, 84, 59, 255)),
+                     (plan_board(ms), (62, 40, 28, 255))):
+        img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+        house.paste(Image.new("RGBA", (img.width + 8, img.height + 8), bg), (x - 4, 4))
+        house.alpha_composite(img, (x, 8))
+        x += img.width + 16
+    x = 8
+    for guest, seated, dim in ((False, False, False), (True, True, False), (True, False, True)):
+        house.alpha_composite(house_room(ms, guest, dim, seated=seated), (x, 60))
+        x += 256 + 6
+    strips.append(house)
     full = Image.new("RGBA", (sheet.width, sheet.height + sum(s.height for s in strips)))
     full.alpha_composite(sheet, (0, 0))
     y = sheet.height

@@ -435,6 +435,15 @@ class ReadableTests(unittest.TestCase):
         finally:
             os.remove(path)
 
+    def test_a_condition_with_or_stays_an_or_and_one_with_and_stays_an_and(self):
+        either = 'WorldState.has_flag("a.one") or WorldState.has_flag("a.two")'
+        both = 'WorldState.has_flag("a.one") and WorldState.has_flag("a.two")'
+        memory = 'WorldState.has_memory("mira", "x") or WorldState.has_memory("mira", "y")'
+        self.assertEqual(readable.condition_text(either), "a.one oder a.two")
+        self.assertEqual(readable.condition_text(both), "a.one und a.two")
+        self.assertEqual(readable.condition_text(memory), "mira und x oder mira und y")
+        self.assertEqual(readable.condition_text('not WorldState.has_flag("a.one")'), "a.one nicht")
+
     def test_cues_are_numbered_and_the_file_header_is_dropped(self):
         out = self.render("# Entwicklernotiz\n\n~ start\nEin Hund. [ID:a_1]\n=> END\n\n# Die Szene.\n~ later\nEin Vogel. [ID:a_2]\n")
         self.assertIn("### T1 · `start`", out)

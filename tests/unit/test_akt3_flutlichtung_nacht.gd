@@ -10,7 +10,7 @@ const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
 const DOOR_SCRIPT := preload("res://world/props/door.gd")
 const QUEST := "main_forest_way"
 const FLAG := "forest.night_way"
-const WAY: Array[String] = ["leave", "brook", "wood", "night"]
+const WAY: Array[String] = ["leave", "brook", "wood", "night", "home", "done"]
 const BLOCKER_CELL := Vector2i(34, 50)
 const DOOR_CELL := Vector2i(34, 52)
 const ARRIVAL_CELL := Vector2i(34, 48)
@@ -146,6 +146,24 @@ func test_coming_back_at_the_night_finds_no_blocker_at_all() -> void:
 	assert_eq(
 		scene.map.entities.get_children().filter(_is_blocker).size(), 0, "no blocker anywhere"
 	)
+	assert_push_error_count(0)
+
+
+func test_the_way_stays_open_at_home_and_when_the_walk_is_over() -> void:
+	_walk_to("night")
+	var first := await _scene()
+	assert_true(WorldState.has_flag(FLAG), "the night opened it")
+	first.queue_free()
+	await wait_physics_frames(2)
+	for stage: String in ["home", "done"]:
+		assert_true(WorldState.advance_quest(QUEST, stage), "to " + stage)
+		var scene := await _scene()
+		assert_true(WorldState.has_flag(FLAG), "%s: the flag stays" % stage)
+		assert_null(_at(scene, BLOCKER_CELL, BLOCKER_SCRIPT), "%s: no blocker" % stage)
+		assert_not_null(_at(scene, DOOR_CELL, DOOR_SCRIPT), "%s: the door is there" % stage)
+		assert_eq(WorldState.quest_stage(QUEST), stage, "%s: and nothing moved" % stage)
+		scene.queue_free()
+		await wait_physics_frames(2)
 	assert_push_error_count(0)
 
 

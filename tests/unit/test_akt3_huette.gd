@@ -320,7 +320,8 @@ func test_the_quest_has_two_goals_in_the_wood_and_the_night_after_them() -> void
 	var quest := ContentDB.quest(QUEST)
 	assert_true(quest.can_advance("wood", "night"))
 	assert_eq(quest.stage("wood").outcome, "", "the wood no longer ends the quest")
-	assert_eq(quest.stage("night").outcome, "done")
+	assert_eq(quest.stage("night").outcome, "", "the night is not the end any more (W6)")
+	assert_eq(quest.stage("done").outcome, "done")
 	assert_true(quest.stage("wood").objectives.has("hermit"))
 	assert_true(quest.stage("wood").objectives.has("flood"))
 	for key: String in ["NIGHT", "OBJ_HERMIT", "OBJ_FLOOD"]:

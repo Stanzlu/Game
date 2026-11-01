@@ -1,7 +1,7 @@
 # Der Antreiber
 
-**Beleg:** 59 Zeilen: im Slice 45 (Weg zum Schuppen, Haus, Abend im Tal), in Akt II 2 (Nein am Feuer), in Akt III 9 am leeren
-Brett (W2, `waldweg.dialogue`) und 3 an der Flutmarke (W4, `flutlichtung.dialogue`).
+**Beleg:** 67 Zeilen: im Slice 45 (Weg zum Schuppen, Haus, Abend im Tal), in Akt II 2 (Nein am Feuer), in Akt III 9 am leeren
+Brett (W2, `waldweg.dialogue`), 3 an der Flutmarke (W4, `flutlichtung.dialogue`) und 8 an der Werkbank im Haus (W6, `heimkehr.dialogue`).
 
 ## Funktion
 
@@ -21,6 +21,11 @@ einmal sinnvoll war (Risiko 8; `sl_antr_why_2`).
 - Akt III, W4: Die Lücke zwischen Satz und Körper sind die Füße. Sie gehen auf der Stelle, auf den Ballen, ohne dass er hinsieht
   (`fl_antr_3`), und stehen still, sobald er sitzt (`fl_ask_3`). An der Flutmarke sagt er nur, was er tut (messen, prüfen), nie,
   was es bedeutet: kein Wort über Wasser, Menschen oder Gründe, kein Wort über die Spielerin, kein „!“. Drei Zeilen, Ø 3,7 Wörter.
+- Akt III, W6: Im Haus ist die Lücke der Plan. Er plant Freizeit mit Uhrzeiten (Tee, Aussicht nur bei Sicht, Pausen) und kann doch weder die Katze noch
+  den Besuch einplanen; er verschiebt das Aufstehen, wenn sie auf ihm liegt, und lässt zu frühen Tee gelten. Was er für die Spielerin empfindet, kommt als
+  Verneinung und nie als Aussage (`hk_in_3`); die Bank, die Dinge und die Zeiten sagen den Rest. Acht Zeilen, Ø 6,5 Wörter, kein „!“, keine Frage,
+  kein Wort über das Warum und keines über den Wald. Der Text liest nie, wie er ins Haus kam (am Feuer geblieben oder vorausgegangen); nur der Tee
+  unterscheidet: wer ihn im Wald gesetzt hat, hört die Dauer, sonst wartet der Tee auf jemanden, der ihn macht.
 
 ## Verlauf
 
@@ -29,7 +34,7 @@ Müdigkeit, die er nicht zugibt → Sorge, wenn die Spielfigur langsamer wird �
 Das ist Stehen.“) → Schweigen → das Warum, kurz und ohne Erklärung → Feuer im Haus („Ich sitz nur kurz.“, die Hände
 wissen nicht wohin) → die Katze legt sich auf ihn. Akt III erzählt, woher das Rennen kommt: am Brett (W2) die Liste
 ohne das letzte Wort, an der Flutmarke (W4) nur Dinge (Schlick bis über Kopfhöhe, Lager, Spur eines Läufers) und er selbst, der nachmisst; im Haus
-ist er später repariert und plant Freizeit (Plan 5.2).
+ist er später repariert und plant Freizeit (Plan 5.2; W6: eine Werkbank, ein Blatt mit Uhrzeiten, die Katze auf dem Schoß).
 
 ## Goldzeilen
 
@@ -51,6 +56,12 @@ ist er später repariert und plant Freizeit (Plan 5.2).
 - `fl_again_2` „Der Boden hält.“
 - `tal_antr_2` „Ich hab ausgerechnet, wie lange man sitzen darf. Ich hab's vergessen.“
 - `tal_antr_busy_3` „Ich hab das Holz umgestapelt. Nass ist es immer noch. Aber ordentlich.“
+- `hk_in_3` „Ich hab nicht gewartet. Die Bank hat gedauert.“
+- `hk_guest_2` „Zwei Finger zu hoch für den Tisch.“
+- `hk_antr_1` „Tee steht drauf. Sieben Minuten, zu zweit zehn.“
+- `hk_antr_2` „Tee steht drauf. Wenn jemand welchen macht.“
+- `hk_antr_4` „Aufstehen, vier Uhr. Verschoben.“
+- `hk_antr_7` „Zu früh. Ich lass es gelten.“
 
 ## Gegenbeispiele
 
@@ -62,4 +73,7 @@ ist er später repariert und plant Freizeit (Plan 5.2).
 6. „Ich bin gerannt, weil das Wasser kam.“ — nennt Ursache und Wirkung; das Warum bleibt ein Ding (Risiko 8, §15, §51).
 7. „Seitdem renne ich. Du musst nicht rennen wie ich.“ — Mentor und Lehre; er sagt nie, was es bedeutet (STIL „Nie“ 9).
 8. Ein Freizeit-Gag nach der Marke („Ich hab die Pause schon eingeplant.“) — auf das schwere Ding folgt kein Witz (Risiko 7); der
-   Gag gehört W6.
+   Gag gehört W6 und steht im Haus, ohne ein Wort über den Wald.
+9. „Seit dem Wald plane ich Pausen ein.“ — Rückblick und Lehre; die Pausen stehen auf dem Blatt (`hk_plan_3`), und niemand sagt, warum.
+10. „Ich hab die Bank gebaut, weil ich auf dich gewartet hab.“ — nennt das Gefühl; er verneint (`hk_in_3`) und redet von der Bank.
+11. Ein „Nichts“ oder „Leerlauf“ als Posten auf dem Blatt, ein „optimaler“ Plan — der Plan fürs Nichtstun gehört dem Nachspiel (Bible §42).

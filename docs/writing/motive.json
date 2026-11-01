@@ -433,9 +433,17 @@
     {
      "type": "flag",
      "ref": "house.shelf_filled"
+    },
+    {
+     "type": "flag",
+     "ref": "house.workbench"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_hermit"
     }
    ],
-   "payoff": "Das Haus wächst mit den Akten (Plan 5.4): Werkbank, zweiter Stuhl, Regale, Garten, Gäste."
+   "payoff": "Das Haus wächst mit den Akten (Plan 5.4): die Werkbank des Antreibers und der Stuhl, den der Einsiedler mitbringt und stehen lässt (Akt III, W6), dann Regale, Garten, Gäste."
   },
   {
    "id": "betaeuber",
@@ -762,6 +770,51 @@
    ]
   },
   {
+   "id": "einsiedler-becher",
+   "kind": "vorausdeutung",
+   "title": "Der Becher und der zweite Stuhl des Einsiedlers",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hu_cup_1"
+    },
+    {
+     "type": "line",
+     "ref": "hu_cup_2"
+    },
+    {
+     "type": "line",
+     "ref": "hu_h_6"
+    },
+    {
+     "type": "line",
+     "ref": "hu_h_7"
+    },
+    {
+     "type": "line",
+     "ref": "hk_guest_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk_guest_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk_close_1"
+    },
+    {
+     "type": "flag",
+     "ref": "forest.hermit_invited"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_hermit"
+    }
+   ],
+   "payoff": "In der Hütte hängt ein zweiter Becher glatt und unbenutzt am Nagel (W3). Wer den Einsiedler ins Tal einlädt, sieht ihn im Haus: er wischt seinen Becher aus, obwohl er sauber ist, setzt sich auf den Stuhl, den er mitbrachte, und lässt ihn stehen, wenn er geht. Er zieht nie ein; er kommt, wenn es einen Grund gibt, und der Grund ist Tee (W6). Akt IV (Tess) nutzt den Stuhl wieder (Plan 5.2, „zweiter Stuhl, Besuch“)."
+  },
+  {
    "id": "werte-am-feuer",
    "kind": "vorausdeutung",
    "title": "Die Werte am Feuer",
@@ -955,9 +1008,86 @@
     {
      "type": "flag",
      "ref": "forest.antreiber_sat"
+    },
+    {
+     "type": "line",
+     "ref": "hk_plan_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk_plan_3"
+    },
+    {
+     "type": "line",
+     "ref": "hk_plan_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk_antr_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk_antr_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk_antr_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk_antr_7"
+    },
+    {
+     "type": "flag",
+     "ref": "house.workbench"
     }
    ],
-   "payoff": "Akt III und VI: er plant Freizeit; im Haus ist er repariert und plant weiter (Plan 5.2)."
+   "payoff": "Akt III, W6: er ist repariert und plant weiter. Im Haus hängt ein Blatt mit Uhrzeiten (Tee, Aussicht nur bei Sicht, Pausen mit Uhrzeit; die Katze und der Besuch hat er nicht in der Hand, und er schreibt es hin), er verschiebt das Aufstehen, wenn die Katze auf ihm liegt, und lässt zu frühen Tee gelten. Die Pausen stehen jetzt da, nicht mehr ausgewischt (wd_m3_2). Der Plan fürs Nichtstun bleibt dem Nachspiel (Bible §42, Akt VI)."
+  },
+  {
+   "id": "katze",
+   "kind": "gag",
+   "title": "Die Katze schläft auf dem Antreiber",
+   "bible": "§28, §42",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "haus_cat_antr_2"
+    },
+    {
+     "type": "line",
+     "ref": "haus_cat_antr_5"
+    },
+    {
+     "type": "line",
+     "ref": "hk_in_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk_antr_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk_cat_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk_cat_3"
+    },
+    {
+     "type": "line",
+     "ref": "hk_guest_5"
+    },
+    {
+     "type": "flag",
+     "ref": "house.cat_fed"
+    },
+    {
+     "type": "flag",
+     "ref": "house.cat_naming"
+    }
+   ],
+   "payoff": "Sie erscheint, man füttert sie, später ist sie einfach im Haus (Bible §28). Akt II: sie liegt auf dem Antreiber am Feuer. Akt III, W6: sie liegt auf ihm an der Werkbank, die so nah steht, dass seine freie Hand drankommt; er hält still, verschiebt das Aufstehen, und sie lässt sich vom Gast füttern, ohne die Augen zu öffnen (die zweite Fütterung). Auf diesem Weg ist der Cue `cat_bench` der einzige, der sie benennen lässt. Postgame: sie blockiert irgendeine wichtige Tätigkeit (Bible §42)."
   },
   {
    "id": "richter",
@@ -1371,6 +1501,16 @@
    "meaning": "Sie hat dem Antreiber am Feuer „Morgen.“ gesagt: für ihn ein Termin, er geht nachsehen, ob das Dach noch da ist (Akt II, B2)."
   },
   {
+   "flag": "house.workbench",
+   "axis": "Haus",
+   "meaning": "Im Haus steht eine Werkbank (Akt III, W6): der Antreiber sitzt an ihr, repariert (im Tal ist der Zaun geflickt) und plant Freizeit mit Uhrzeiten, ein Blatt an der Wand zeigt es; die Katze liegt auf ihm, sobald sie gefüttert ist. Die Szene setzt es beim Betreten des Hauses, sobald die Heldenquest in home oder done steht, nie davor. Er sitzt hier in jedem Zustand (am Feuer geblieben oder vorausgegangen) und nirgends sonst."
+  },
+  {
+   "flag": "house.guest_hermit",
+   "axis": "Besucher",
+   "meaning": "Der Einsiedler hat das Haus besucht (nur wer ihn in der Hütte eingeladen hat, Akt III, W6): er brachte einen Stuhl mit, saß, trank und ging wieder; der Stuhl bleibt stehen, und auf dem Blatt an der Wand steht sein Name bei »Besuch«, Dauer »offen«. Er zieht nie ein. Das Präfix house.guest_ zählt die Gäste (Plan 5.6), kein Akt endet an ihnen."
+  },
+  {
    "flag": "house.looks_closely",
    "axis": "Wahrnehmung",
    "meaning": "Die Szene des Hauses leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr im Raum (Akt II, B2)."
@@ -1653,7 +1793,7 @@
   {
    "flag": "forest.antreiber_sat",
    "axis": "Beschützer",
-   "meaning": "Sie hat dem Antreiber am leeren Brett Tee angeboten, und er hat sich gesetzt (nur mit der Facette Fürsorge; Akt III, W2). Keine Auszeichnung, keine Strafe für das Gegenteil."
+   "meaning": "Sie hat dem Antreiber am leeren Brett Tee angeboten, und er hat sich gesetzt (nur mit der Facette Fürsorge; Akt III, W2). W6 liest es wie forest.flood_sat: im Haus steht Tee auf seinem Plan, mit seiner Dauer. Keine Auszeichnung, keine Strafe für das Gegenteil."
   },
   {
    "flag": "forest.cone_taken",
@@ -1693,7 +1833,7 @@
   {
    "flag": "forest.hermit_invited",
    "axis": "Beschützer",
-   "meaning": "Sie hat dem Einsiedler Tee im Tal angeboten (nur mit der Facette Fürsorge): sein Becher ist gepackt (Akt III, W3; W6 liest es)."
+   "meaning": "Sie hat dem Einsiedler Tee im Tal angeboten (nur mit der Facette Fürsorge): sein Becher ist gepackt (Akt III, W3). W6 liest es: er kommt zu Besuch, bringt einen Stuhl mit, sitzt und geht wieder (house.guest_hermit); wer ihn nicht eingeladen hat, bekommt keinen Besuch, und der Akt endet trotzdem."
   },
   {
    "flag": "forest.pipe_taken",
@@ -1728,7 +1868,7 @@
   {
    "flag": "forest.flood_sat",
    "axis": "Beschützer",
-   "meaning": "Sie hat dem Antreiber an der Flutmarke Tee angeboten (nur mit der Facette Fürsorge), und er hat sich auf den Boden gesetzt: seine Füße stehen still (Akt III, W4; W6 liest es). Keine Auszeichnung, keine Strafe für das Gegenteil."
+   "meaning": "Sie hat dem Antreiber an der Flutmarke Tee angeboten (nur mit der Facette Fürsorge), und er hat sich auf den Boden gesetzt: seine Füße stehen still (Akt III, W4). W6 liest es: im Haus steht Tee auf seinem Plan, mit seiner Dauer (hk_antr_1); wer ihm keinen anbot, hört, dass der Tee auf jemanden wartet, der ihn macht. Keine Auszeichnung, keine Strafe für das Gegenteil."
   },
   {
    "flag": "forest.nest_taken",

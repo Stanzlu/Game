@@ -31,10 +31,13 @@ func _ready() -> void:
 	)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	player.state_changed.connect(_on_player_state)
-	# the way through the wood: the smoke over the trees was the goal, and a hut is where it comes from
-	WorldState.complete_objective("main_forest_way", "hermit")
-	if WorldState.is_objective_done("main_forest_way", "flood"):
-		WorldState.advance_quest("main_forest_way", "night")
+	# the way through the wood: the smoke over the trees was the goal, and a hut is where it comes
+	# from. Only in the stage "wood", where the goals live: in the night, at home and when the way
+	# is over (W6) the hut is only a room, and a goal asked for there would be an error
+	if WorldState.quest_stage("main_forest_way") == "wood":
+		WorldState.complete_objective("main_forest_way", "hermit")
+		if WorldState.is_objective_done("main_forest_way", "flood"):
+			WorldState.advance_quest("main_forest_way", "night")
 	# with both goals done the way on to the south lies open (the blocker of the Flutlichtung reads it)
 	if WorldState.quest_stage("main_forest_way") == "night":
 		WorldState.set_flag("forest.night_way")

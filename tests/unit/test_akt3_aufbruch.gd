@@ -91,7 +91,12 @@ func test_the_way_through_the_wood_begins_with_leaving_and_goes_along_the_stream
 	assert_true(quest.can_advance("brook", "wood"), "W2 leads the stream into the wood")
 	assert_eq(quest.stage("wood").outcome, "", "the hut no longer ends the quest")
 	assert_true(quest.can_advance("wood", "night"), "W3 leads the wood into the night")
-	assert_eq(quest.stage("night").outcome, "done", "the last stage built so far ends it")
+	assert_eq(quest.stage("night").outcome, "", "the night no longer ends the quest (W6)")
+	assert_true(quest.can_advance("night", "home"), "W6 leads the night home")
+	assert_true(quest.can_advance("home", "done"), "and the homecoming ends the way")
+	assert_eq(quest.stage("home").outcome, "")
+	assert_eq(quest.stage("done").outcome, "done", "the last stage ends it")
+	assert_eq(quest.stages.size(), 6)
 	assert_eq(quest.stage("wood").objectives, PackedStringArray(["hermit", "flood"]))
 	assert_eq(quest.stage("brook").outcome, "", "the stream no longer ends the quest")
 
@@ -104,7 +109,9 @@ func test_the_journal_has_a_title_and_a_hint_for_each_stage() -> void:
 		"QUEST_MAIN_FOREST_WAY_WOOD",
 		"QUEST_MAIN_FOREST_WAY_OBJ_HERMIT",
 		"QUEST_MAIN_FOREST_WAY_OBJ_FLOOD",
-		"QUEST_MAIN_FOREST_WAY_NIGHT"
+		"QUEST_MAIN_FOREST_WAY_NIGHT",
+		"QUEST_MAIN_FOREST_WAY_HOME",
+		"QUEST_MAIN_FOREST_WAY_DONE"
 	]:
 		assert_ne(tr(key), key, key)
 	var leave := tr("QUEST_MAIN_FOREST_WAY_LEAVE")

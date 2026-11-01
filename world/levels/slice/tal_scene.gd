@@ -68,6 +68,14 @@ func _ready() -> void:
 	# visit) would otherwise win over the scene's preset
 	elif WorldState.has_flag("house.mira_visited") and WorldState.day_preset() in ["", "regentag"]:
 		WorldState.set_day_preset("abend")
+	# the way home (W6, ADR-070): whoever walks into the valley from the night wood or the brook has
+	# come home. The step is made before super(), like the morning above: the entry save is written
+	# there and must already say it. Only out of the night, so a walk that did not get that far
+	# (no flood seen) stays where it is, and never twice.
+	var came_home := false
+	if WorldState.quest_stage("main_forest_way") == "night":
+		WorldState.advance_quest("main_forest_way", "home")
+		came_home = true
 	# the way back from the Bachlauf (B3) lands at the marker spawn_bach; super() clears the name
 	var from_bachlauf := SceneTravel.pending_spawn == "bach"
 	super()
@@ -95,6 +103,9 @@ func _ready() -> void:
 		# the empty seat across the fire is what she left; the player stands where they sat
 		player.facing = Facing.Dir.E
 		_play_morning.call_deferred()
+	elif came_home or (from_bachlauf and WorldState.quest_stage("main_forest_way") == "home"):
+		# from the hedge gap in the south she walked north and faces the house, which lies north
+		player.facing = Facing.Dir.N
 
 
 ## B1: after the first steps a gust goes through the wet leaves (the real world's wind, which the

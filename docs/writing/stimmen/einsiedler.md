@@ -1,6 +1,6 @@
 # Der Einsiedler
 
-**Beleg in Akt III (W3):** 9 Zeilen in `content/dialogue/akt3/huette.dialogue` (Ø 6,7 Wörter, keine Frage, kein Ausruf), dazu die Dinge der Hütte als Erzählung. Aus der Bible (§14) und dem Plan (Akt III).
+**Beleg in Akt III:** 9 Zeilen in `content/dialogue/akt3/huette.dialogue` (W3, Ø 6,7 Wörter, keine Frage, kein Ausruf), dazu die Dinge der Hütte als Erzählung, und 3 Zeilen im Haus in `content/dialogue/akt3/heimkehr.dialogue` (W6, Ø 4,7 Wörter, keine Frage, kein Ausruf). Aus der Bible (§14) und dem Plan (Akt III).
 
 ## Funktion
 
@@ -19,7 +19,7 @@ Danach im Haus: er kommt manchmal zu Besuch.
 ## Verlauf
 
 Akt III: die Hütte im Wald → Bleiben (das Spiel macht es möglich, ohne Fortschritt) → Aufstehen (freiwillig, ohne
-Streit) → später Besuche im Haus. Das Warum: warum Alleinsein sicher war.
+Streit) → der Besuch im Haus (W6: nur wer ihn in der Hütte eingeladen hat; er bringt Stuhl und Becher mit, sitzt, trinkt und geht, der Stuhl bleibt, und er kommt wieder, wenn es einen Grund gibt: Tee). Das Warum: warum Alleinsein sicher war.
 
 ## Goldzeilen
 
@@ -29,6 +29,9 @@ Streit) → später Besuche im Haus. Das Warum: warum Alleinsein sicher war.
 - `hu_s1_2` „Draußen ist alles wie immer. Hier auch.“
 - `hu_s2_2` „Ich frag nicht, wie lang.“
 - `hu_h_8` „Geh, wenn du gehst. Der Tee verzeiht es.“
+- `hk_guest_1` „Stuhl hab ich mitgebracht.“
+- `hk_guest_3` „Er passt mir.“
+- `hk_close_1` „Der Stuhl bleibt. Tee ist ein Grund.“
 
 Das Warum zeigen die Dinge, nie eine Zeile: der Tee steht vor der Tür und nicht am Tisch, auf dem Pfad liegen Zweige übereinander, innen hängt der Riegel offen, ein zweiter Becher hängt glatt und unbenutzt am Nagel, und das Fenster zeigt immer dasselbe.
 
@@ -44,3 +47,6 @@ Das Warum zeigen die Dinge, nie eine Zeile: der Tee steht vor der Tür und nicht
 3. „Du bist zu empfindlich für die Welt.“ — beschämt.
 4. „Alleinsein ist gesund.“ — Behauptung über Wirksamkeit.
 5. Eine lange Rede über seine Geschichte — das Warum zeigt sich in Dingen, nicht in einer Erklärung.
+6. „Hier ist es schöner als in der Hütte.“ — wertet das Alleinsein und den Ort (Bible §51); er vergleicht nie.
+7. „Ich bleibe jetzt.“ — er zieht nie ein, er kommt, wenn es einen Grund gibt.
+8. „Schön, dass du mich geholt hast.“ — Rührung und Dank; er sagt, was er mitbringt, und nichts über das, was es ihm bedeutet.

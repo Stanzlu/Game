@@ -29,7 +29,7 @@ const FORD_WEST := Vector2i(58, 42)
 const FORD_EAST := Vector2i(63, 42)
 const ABOVE_FORD := Vector2i(58, 41)
 ## The way through the wood, as far as a stage name goes.
-const WAY: Array[String] = ["leave", "brook", "wood", "night"]
+const WAY: Array[String] = ["leave", "brook", "wood", "night", "home", "done"]
 ## Spots of the clearing: the cue of each (the blocker has no cue of its own on the Decor).
 const SPOTS: Array[String] = [
 	"flood_trail",
@@ -548,8 +548,8 @@ func test_with_the_hut_seen_first_the_trunk_ends_the_wood() -> void:
 	WorldState.set_flag("forest.flood_seen")
 	await wait_physics_frames(2)
 	assert_eq(WorldState.quest_stage(QUEST), "night")
-	assert_true(WorldState.is_quest_done(QUEST))
-	assert_eq(WorldState.quest_outcome(QUEST), "done")
+	assert_true(WorldState.is_quest_active(QUEST), "the night is not the end of the way (W6)")
+	assert_eq(WorldState.quest_outcome(QUEST), "")
 	assert_true(Beat.reached("flut_mark"))
 	assert_true(WorldState.has_flag("forest.night_way"), "and with the night the way on opens")
 
@@ -565,7 +565,7 @@ func test_a_game_without_the_walk_gets_no_quest_and_no_error_from_the_trunk() ->
 
 
 func test_in_any_other_stage_the_trunk_changes_nothing_and_logs_no_error() -> void:
-	for stage: String in ["leave", "brook", "night"]:
+	for stage: String in ["leave", "brook", "night", "home", "done"]:
 		WorldState.new_game()
 		_walk_to(stage)
 		var before := WorldState.state.quests[QUEST].objectives_done.duplicate()
