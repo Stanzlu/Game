@@ -86,8 +86,12 @@ func test_from_the_end_of_act_three_a_door_leads_west_out_of_the_valley() -> voi
 	assert_eq(doors[0].get(&"spawn"), "tal", "to the place the road made for it")
 	assert_true(doors[0].get(&"auto"), "walking into it is enough: it is the rim of the map")
 	assert_eq(scene.map.world_to_cell((doors[0] as Node2D).global_position), DOOR_CELL)
-	var zone: CollisionShape2D = (doors[0] as Node).get_node("Exit/CollisionShape2D")
-	assert_eq((zone.shape as RectangleShape2D).size, Vector2(16, 144), "one cell wide, nine high")
+	var shapes := (doors[0] as Node).get_node("Exit").find_children(
+		"*", "CollisionShape2D", true, false
+	)
+	assert_eq(shapes.size(), 1)
+	var rect := (shapes[0] as CollisionShape2D).shape as RectangleShape2D
+	assert_eq(rect.size, Vector2(16, 144), "one cell wide, nine high")
 
 
 func test_the_door_stands_inside_the_old_blockers_so_it_is_met_first() -> void:
