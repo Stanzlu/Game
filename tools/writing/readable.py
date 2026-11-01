@@ -33,6 +33,7 @@ PREFIX = {
     "huette": "W3-",
     "flutlichtung": "W4-",
     "nachtwald": "W5-",
+    "heimkehr": "W6-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

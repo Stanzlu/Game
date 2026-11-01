@@ -26,6 +26,7 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 | [W3_HUETTE.md](W3_HUETTE.md) | Akt III: die Hütte des Einsiedlers (Becher, Hocker, Bleiben in drei Stufen, die Flöte, Leine, Pfeife, Kiesel) | 22 | 60 | 1.414 |
 | [W4_FLUTLICHTUNG.md](W4_FLUTLICHTUNG.md) | Akt III: die Flutlichtung (Marke, Lager und Spur, der Antreiber an der Marke, das Nest, Treibholz, Trittsteine) | 12 | 46 | 1.772 |
 | [W5_NACHTWALD.md](W5_NACHTWALD.md) | Akt III: der Nachtwald (das ferne Licht, ein Leuchtbaum, die Laterne und das Summen, das Leuchtholz, der Heimweg) | 6 | 18 | 919 |
+| [W6_HEIMKEHR.md](W6_HEIMKEHR.md) | Akt III: die Heimkehr (die Ankunft am Schraubstock. der Besuch des Einsiedlers. der Schluss. die Werkbank. der Plan. der Antreiber an der Bank. die Katze) | 7 | 32 | 1.567 |
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 

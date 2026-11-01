@@ -110,6 +110,8 @@ QUEST_MAIN_FOREST_WAY_WOOD,"Der Bach läuft jetzt durch hohen Wald, und ein Pfad
 QUEST_MAIN_FOREST_WAY_OBJ_HERMIT,Dem Rauch über den Bäumen nachgehen
 QUEST_MAIN_FOREST_WAY_OBJ_FLOOD,Dem Bach weiter nach Süden folgen
 QUEST_MAIN_FOREST_WAY_NIGHT,"Südlich der Lichtung geht der Pfad unter den Kronen weiter. Er könnte nach Hause führen. Ich gehe ihn."
+QUEST_MAIN_FOREST_WAY_HOME,"Die Hecke liegt hinter mir. Im Tal steht das Haus, wo ich es gelassen habe. Ich gehe hin."
+QUEST_MAIN_FOREST_WAY_DONE,"Im Haus riecht es nach frischen Spänen, und das Feuer brennt. Der Weg durch den Wald liegt hinter mir."
 QUEST_SIDE_FOREST_MARKS_TITLE,Die Wegzeichen
 QUEST_SIDE_FOREST_MARKS_FOLLOW,"Am Pfad stehen Bretter an Pfosten, in roter Kreide beschrieben, gerade Buchstaben, mit dem Lineal unterstrichen. Jemand war vor mir hier und hat eine Liste gemacht."
 QUEST_SIDE_FOREST_MARKS_BLANK,"Das sechste Brett ist leer. In einer Kerbe im Pfosten liegt ein Stummel Kreide. Das Wort, das nach dem Letzten kommt, fehlt noch."

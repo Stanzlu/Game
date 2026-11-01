@@ -10,14 +10,14 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | Blatt | Zeilen im Slice | Anmerkung |
 |---|---|---|
 | [Mira](mira.md) | 106 | „Die Frau“ bis zur Vorstellung |
-| [Antreiber](antreiber.md) | 59 | Weg, Haus, Abend; Akt II (Nein), Akt III (Brett, Flutmarke) |
+| [Antreiber](antreiber.md) | 66 | Weg, Haus, Abend; Akt II (Nein), Akt III (Brett, Flutmarke, Werkbank im Haus) |
 | [Elysianer](elysianer.md) | 21 | Chor von Elysia |
 | [Gärtnerin](gaertnerin.md) | 15 | Schmetterlinge, Brunnen |
 | [Gastwirt](gastwirt.md) | 17 | Gesicht des Betäubers |
 | [Kind](kind.md) | 2 | nur Fragment; wächst mit Akt II |
 | [Spielfigur](spielfigur.md) | 67 | die Antworten, nicht eine Person |
 | [Richter](richter.md) | 6 | Akt II (B4): „Stimme“ nach dem zweiten Sturz, nur über Dinge (dazu zwei Erzählzeilen) |
-| [Einsiedler](einsiedler.md) | 9 | Akt III (W3): die Hütte, Angebote statt Fragen |
+| [Einsiedler](einsiedler.md) | 12 | Akt III (W3): die Hütte, Angebote statt Fragen; (W6): der Besuch im Haus |
 
 ## Ohne Beleg (aus der Bible, Annahmen; „Probezeilen“ sind Entwürfe, nicht im Spiel)
 
