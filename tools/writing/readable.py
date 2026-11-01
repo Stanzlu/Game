@@ -34,6 +34,7 @@ PREFIX = {
     "flutlichtung": "W4-",
     "nachtwald": "W5-",
     "heimkehr": "W6-",
+    "strasse": "S1-",  # Act IV: one prefix per segment ("S1-1")
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

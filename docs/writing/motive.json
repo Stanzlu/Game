@@ -704,9 +704,17 @@
     {
      "type": "flag",
      "ref": "fragment.stepping_stones"
+    },
+    {
+     "type": "line",
+     "ref": "str_mile_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.milestone"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt."
   },
   {
    "id": "antreiber-warum",
@@ -906,9 +914,21 @@
     {
      "type": "flag",
      "ref": "valley.goat_traded"
+    },
+    {
+     "type": "line",
+     "ref": "str_hoof_2"
+    },
+    {
+     "type": "line",
+     "ref": "str_bell_1"
+    },
+    {
+     "type": "flag",
+     "ref": "city.bell_taken"
     }
    ],
-   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen."
+   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke geradeaus in der Mitte und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach, S6 auf der Bühne."
   },
   {
    "id": "kartoffel",
@@ -1904,6 +1924,21 @@
    "flag": "forest.foxfire_taken",
    "axis": "Gegenstände",
    "meaning": "Sie hat das Leuchtholz im Gras der Lichtung des Nachtwalds eingesteckt (Kuriosität, Akt III, W5); der Stamm bleibt liegen und ist danach dunkel mit einer hellen Bruchstelle."
+  },
+  {
+   "flag": "city.bell_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das Glöckchen vom Zaunpfosten an der Straße eingesteckt (Kuriosität, Akt IV, S1): die Spur der Ziege, nie die Ziege selbst. Wer es hängen lässt, verpasst nichts; der Pfosten zeigt es."
+  },
+  {
+   "flag": "fragment.milestone",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist am Meilenstein an der Straße stehen geblieben: die Zahl ist abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu (Spur der Welt, Akt IV, S1; kein Bild des Kindes)."
+  },
+  {
+   "flag": "city.view_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat am Westende der Straße den Rauch der Stadt hinter dem Hügel gesehen: viele Fäden statt des einen über dem Haus (Akt IV, S1). Die Szene liest es und markiert den Beat strasse_view."
   }
  ]
 }
