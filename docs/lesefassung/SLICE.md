@@ -350,7 +350,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Mira:** Dieses Woanders. Wie war's da?  <sub>tal_eve_ely_10</sub>
 *sonst wenn* `mira und said_dont_know`
   - **Mira:** Du weißt nicht mehr, wo du herkommst. Weißt du noch, wie es da war?  <sub>tal_eve_ely_11</sub>
-*sonst wenn* `mira und said_elysia und mira und said_hero`
+*sonst wenn* `mira und said_elysia oder mira und said_hero`
   - **Mira:** Dieses Elysia. Wie war's da?  <sub>tal_eve_ely_1</sub>
 *sonst*
   - **Mira:** Und wo warst du, bevor du hier im Regen standest?  <sub>tal_eve_ely_2</sub>
@@ -669,7 +669,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
     - *Daneben der Stein. Er glänzt nicht. Er liegt einfach gut da.*  <sub>haus_shelf_6</sub>
   *sonst*
     - *Im Regal liegt der Stein. Er glänzt nicht. Er liegt einfach gut da.*  <sub>haus_shelf_9</sub>
-*wenn* `curiosity_tiny_spoon und item_stone`
+*wenn* `curiosity_tiny_spoon oder item_stone`
   *wenn* `shelf_1 und shelf_2`
     - *Beide gerade groß genug für etwas Kleines.*  <sub>haus_shelf_8</sub>
   *sonst*

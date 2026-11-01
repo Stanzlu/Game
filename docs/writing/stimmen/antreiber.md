@@ -1,7 +1,7 @@
 # Der Antreiber
 
-**Beleg:** 66 Zeilen: im Slice 45 (Weg zum Schuppen, Haus, Abend im Tal), in Akt II 2 (Nein am Feuer), in Akt III 9 am leeren
-Brett (W2, `waldweg.dialogue`), 3 an der Flutmarke (W4, `flutlichtung.dialogue`) und 7 an der Werkbank im Haus (W6, `heimkehr.dialogue`).
+**Beleg:** 67 Zeilen: im Slice 45 (Weg zum Schuppen, Haus, Abend im Tal), in Akt II 2 (Nein am Feuer), in Akt III 9 am leeren
+Brett (W2, `waldweg.dialogue`), 3 an der Flutmarke (W4, `flutlichtung.dialogue`) und 8 an der Werkbank im Haus (W6, `heimkehr.dialogue`).
 
 ## Funktion
 
@@ -23,7 +23,7 @@ einmal sinnvoll war (Risiko 8; `sl_antr_why_2`).
   was es bedeutet: kein Wort über Wasser, Menschen oder Gründe, kein Wort über die Spielerin, kein „!“. Drei Zeilen, Ø 3,7 Wörter.
 - Akt III, W6: Im Haus ist die Lücke der Plan. Er plant Freizeit mit Uhrzeiten (Tee, Aussicht nur bei Sicht, Pausen) und kann doch weder die Katze noch
   den Besuch einplanen; er verschiebt das Aufstehen, wenn sie auf ihm liegt, und lässt zu frühen Tee gelten. Was er für die Spielerin empfindet, kommt als
-  Verneinung und nie als Aussage (`hk_in_3`); die Bank, die Dinge und die Zeiten sagen den Rest. Sieben Zeilen, Ø 6,9 Wörter, kein „!“, keine Frage,
+  Verneinung und nie als Aussage (`hk_in_3`); die Bank, die Dinge und die Zeiten sagen den Rest. Acht Zeilen, Ø 6,5 Wörter, kein „!“, keine Frage,
   kein Wort über das Warum und keines über den Wald. Der Text liest nie, wie er ins Haus kam (am Feuer geblieben oder vorausgegangen); nur der Tee
   unterscheidet: wer ihn im Wald gesetzt hat, hört die Dauer, sonst wartet der Tee auf jemanden, der ihn macht.
 

@@ -1087,7 +1087,7 @@
      "ref": "house.cat_naming"
     }
    ],
-   "payoff": "Sie erscheint, man füttert sie, später ist sie einfach im Haus (Bible §28). Akt II: sie liegt auf dem Antreiber am Feuer. Akt III, W6: sie liegt auf ihm an der Werkbank, die so nah steht, dass seine freie Hand drankommt; er hält still, verschiebt das Aufstehen, und sie lässt sich vom Gast füttern, ohne die Augen zu öffnen (die zweite Fütterung). Auf diesem Weg ist der Cue der Werkbank der einzige, der sie benennen lässt. Postgame: sie blockiert irgendeine wichtige Tätigkeit (Bible §42)."
+   "payoff": "Sie erscheint, man füttert sie, später ist sie einfach im Haus (Bible §28). Akt II: sie liegt auf dem Antreiber am Feuer. Akt III, W6: sie liegt auf ihm an der Werkbank, die so nah steht, dass seine freie Hand drankommt; er hält still, verschiebt das Aufstehen, und sie lässt sich vom Gast füttern, ohne die Augen zu öffnen (die zweite Fütterung). Auf diesem Weg ist der Cue `cat_bench` der einzige, der sie benennen lässt. Postgame: sie blockiert irgendeine wichtige Tätigkeit (Bible §42)."
   },
   {
    "id": "richter",

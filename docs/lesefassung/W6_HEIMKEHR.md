@@ -83,7 +83,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > gilt nur mit house.cat_fed (Bible §28: sie schläft auf ihm; er verschiebt, was er sonst täte; die Zeile klingt wie ein Eintrag auf dem Blatt). "Tee machen." ist der Leser der Facette
 > care im Haus und gibt es nur mit ihr; "Helfen." und das Schweigen gibt es immer, und jede Antwort hat ihre eigene Folge an ihm.
 
-*wenn* `forest.antreiber_sat und forest.flood_sat`
+*wenn* `forest.antreiber_sat oder forest.flood_sat`
   - **Antreiber:** Tee steht drauf. Sieben Minuten, zu zweit zehn. `[#draft]`  <sub>hk_antr_1</sub>
 *sonst*
   - **Antreiber:** Tee steht drauf. Wenn jemand welchen macht. `[#draft]`  <sub>hk_antr_2</sub>

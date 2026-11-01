@@ -91,7 +91,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Er spricht in Angeboten, kurz und trocken, und stellt keine Frage. "Komm doch mal ins Tal." gibt es nur mit der Facette care
 > (wer Tee machen kann, kann ihn auch anbieten); sein Becher ist dann gepackt. Wer geht, geht ohne Folge.
 
-*wenn* `forest.hut_met und melody.hermit_flute`
+*wenn* `forest.hut_met oder melody.hermit_flute`
   - *→ weiter bei* `hermit_again`
 - **Einsiedler:** Tee ist da. Sitz, wenn du magst. `[#draft]`  <sub>hu_h_1</sub>
 *wenn* `forest.hut_tea`
