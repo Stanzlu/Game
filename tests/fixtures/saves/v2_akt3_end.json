@@ -1,0 +1,381 @@
+{
+	"game_version": "0.8.4",
+	"saved_at": "2026-11-01T10:32:14Z",
+	"schema_version": 2,
+	"world_state": {
+		"day_preset": "morgen",
+		"discovered": [],
+		"elysia": {
+			"gold": 11340,
+			"xp": 51250
+		},
+		"facets": {
+			"boundaries": true,
+			"care": true,
+			"perception": true
+		},
+		"flags": {
+			"beat.act2_blick": true,
+			"beat.act2_nein": true,
+			"beat.act2_richter": true,
+			"beat.act2_safe": true,
+			"beat.act2_werte": true,
+			"beat.act3_home": true,
+			"beat.act3_morning": true,
+			"beat.act3_waiting": true,
+			"beat.arrival_echo": true,
+			"beat.bachlauf_back": true,
+			"beat.bachlauf_blick": true,
+			"beat.bachlauf_enter": true,
+			"beat.bachlauf_float": true,
+			"beat.bachlauf_freed": true,
+			"beat.bachlauf_hook": true,
+			"beat.bachlauf_weir": true,
+			"beat.butterflies_caught": true,
+			"beat.child": true,
+			"beat.child_melody": true,
+			"beat.crossed": true,
+			"beat.elysia_start": true,
+			"beat.ending": true,
+			"beat.evening": true,
+			"beat.feast": true,
+			"beat.feast_enter": true,
+			"beat.fire": true,
+			"beat.first_no": true,
+			"beat.flut_enter": true,
+			"beat.flut_mark": true,
+			"beat.forest_rest": true,
+			"beat.fountain": true,
+			"beat.hall_enter": true,
+			"beat.hall_mirror": true,
+			"beat.hall_room_1": true,
+			"beat.hall_room_2": true,
+			"beat.house_entered": true,
+			"beat.huette_enter": true,
+			"beat.huette_stay": true,
+			"beat.inn_enter": true,
+			"beat.inn_fed": true,
+			"beat.inn_room": true,
+			"beat.inn_slept": true,
+			"beat.irritation": true,
+			"beat.market_board": true,
+			"beat.market_board_done": true,
+			"beat.market_bread": true,
+			"beat.market_enter": true,
+			"beat.market_hall_open": true,
+			"beat.market_melody": true,
+			"beat.mira_visit": true,
+			"beat.nachtwald_enter": true,
+			"beat.perception": true,
+			"beat.rift_found": true,
+			"beat.shed_path": true,
+			"beat.stone": true,
+			"beat.trail_door": true,
+			"beat.trail_hallway": true,
+			"beat.trail_room": true,
+			"beat.valley_arrival": true,
+			"beat.waldweg_enter": true,
+			"beat.waldweg_marks": true,
+			"beat.wood": true,
+			"chapter.act1": true,
+			"chapter.act2": true,
+			"chapter.act3": true,
+			"chapter.slice": true,
+			"elysia.butterflies_asked": true,
+			"elysia.butterfly_first": true,
+			"elysia.butterfly_second": true,
+			"elysia.butterfly_third": true,
+			"elysia.chest_tree_opened": true,
+			"elysia.child_met": true,
+			"elysia.child_vanished": true,
+			"elysia.feast": true,
+			"elysia.feast_invited": true,
+			"elysia.feast_toast": true,
+			"elysia.hall_feather_taken": true,
+			"elysia.hall_leaf_taken": true,
+			"elysia.hall_mirror_seen": true,
+			"elysia.hall_open": true,
+			"elysia.hall_room_1": true,
+			"elysia.hall_room_2": true,
+			"elysia.hall_seen": true,
+			"elysia.inn_book_seen": true,
+			"elysia.inn_book_signed": true,
+			"elysia.inn_fed": true,
+			"elysia.inn_met": true,
+			"elysia.inn_room": true,
+			"elysia.inn_slept": true,
+			"elysia.inn_stayed": true,
+			"elysia.loops": true,
+			"elysia.loops_1": true,
+			"elysia.loops_2": true,
+			"elysia.market_greeted": true,
+			"elysia.market_seen": true,
+			"elysia.market_shop_seen": true,
+			"elysia.rift_crossed": true,
+			"elysia.rift_open": true,
+			"elysia.stone_taken": true,
+			"elysia.woke": true,
+			"encounter.antreiber_resolved": true,
+			"forest.cone_taken": true,
+			"forest.driftwood_taken": true,
+			"forest.fire_1": true,
+			"forest.fire_2": true,
+			"forest.flood_seen": true,
+			"forest.foxfire_taken": true,
+			"forest.hermit_invited": true,
+			"forest.hut_met": true,
+			"forest.hut_stay_1": true,
+			"forest.hut_stay_2": true,
+			"forest.hut_stay_3": true,
+			"forest.hut_tea": true,
+			"forest.nest_placed": true,
+			"forest.nest_taken": true,
+			"forest.night_way": true,
+			"forest.pebble_taken": true,
+			"forest.pipe_taken": true,
+			"forest.rested": true,
+			"forest.waited": true,
+			"fragment.bank_table": true,
+			"fragment.beam_herbs": true,
+			"fragment.closed_door": true,
+			"fragment.clothesline": true,
+			"fragment.dry_bed": true,
+			"fragment.empty_room": true,
+			"fragment.hallway": true,
+			"fragment.hang_steps": true,
+			"fragment.stepping_stones": true,
+			"house.antreiber_by_fire": true,
+			"house.antreiber_refused": true,
+			"house.cat_fed": true,
+			"house.fire_lit": true,
+			"house.guest_hermit": true,
+			"house.looks_closely": true,
+			"house.mira_knocked": true,
+			"house.mira_left": true,
+			"house.mira_seated": true,
+			"house.mira_visited": true,
+			"house.prints_seen": true,
+			"house.rested": true,
+			"house.shelf_both": true,
+			"house.shelf_filled": true,
+			"house.shelf_stone": true,
+			"house.spoon_found": true,
+			"house.workbench": true,
+			"melody.child_hum": true,
+			"melody.elysia_perfect": true,
+			"melody.hermit_flute": true,
+			"melody.house_hum": true,
+			"valley.antreiber_rests": true,
+			"valley.arrived": true,
+			"valley.berries_eaten": true,
+			"valley.bridge_fixed": true,
+			"valley.crossed": true,
+			"valley.ending": true,
+			"valley.fell_in": true,
+			"valley.fell_twice": true,
+			"valley.flower_smelled": true,
+			"valley.glass_taken": true,
+			"valley.goat_loose": true,
+			"valley.goat_met": true,
+			"valley.goat_prints_seen": true,
+			"valley.goat_traded": true,
+			"valley.knot_seen": true,
+			"valley.looks_closely": true,
+			"valley.mira_gone": true,
+			"valley.mira_met": true,
+			"valley.mountains_seen": true,
+			"valley.potato_taken": true,
+			"valley.reflection_seen": true,
+			"valley.shell_seen": true,
+			"valley.trap_floated": true,
+			"valley.trap_freed": true,
+			"valley.trap_hooked": true,
+			"valley.view_back_seen": true,
+			"valley.weight_taken": true,
+			"valley.wood_needed": true,
+			"valley.wood_taken": true,
+			"value.freedom": true
+		},
+		"house": {
+			"cat_name": "",
+			"curiosity_slots": {
+				"shelf_1": "curiosity_tiny_spoon",
+				"shelf_2": "item_stone"
+			},
+			"fire_lit": true
+		},
+		"inventory": {
+			"curiosity_blue_glass": 1,
+			"curiosity_chalk_stub": 1,
+			"curiosity_comb": 1,
+			"curiosity_cone": 1,
+			"curiosity_driftwood": 1,
+			"curiosity_elder_pipe": 1,
+			"curiosity_foxfire": 1,
+			"curiosity_holed_stone": 1,
+			"curiosity_lead_weight": 1,
+			"item_seed": 1
+		},
+		"player": {
+			"map": "haus",
+			"name": "",
+			"preset": 0,
+			"x": 312.0,
+			"y": 232.0
+		},
+		"playtime_seconds": 503.566666666852,
+		"quests": {
+			"main_elysia_hero": {
+				"history": [
+					"greet",
+					"butterflies",
+					"reward",
+					"celebrated",
+					"inn",
+					"market",
+					"hall",
+					"feast",
+					"repeat"
+				],
+				"objectives_done": [],
+				"stage": "repeat"
+			},
+			"main_elysia_trail": {
+				"history": [
+					"hum",
+					"trail",
+					"rift"
+				],
+				"objectives_done": [],
+				"stage": "rift"
+			},
+			"main_forest_way": {
+				"history": [
+					"leave",
+					"brook",
+					"wood",
+					"night",
+					"home",
+					"done"
+				],
+				"objectives_done": [
+					"hermit",
+					"flood"
+				],
+				"stage": "done"
+			},
+			"main_valley_shelter": {
+				"history": [
+					"cross",
+					"house",
+					"wood",
+					"fire",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_board": {
+				"history": [
+					"bread",
+					"deliver",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_butterflies": {
+				"history": [
+					"catch",
+					"return",
+					"done"
+				],
+				"objectives_done": [
+					"first",
+					"second",
+					"third"
+				],
+				"stage": "done"
+			},
+			"side_elysia_fountain": {
+				"history": [
+					"check",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_elysia_guestbook": {
+				"history": [
+					"sign",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_forest_marks": {
+				"history": [
+					"follow",
+					"blank",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_forest_nest": {
+				"history": [
+					"find",
+					"fork",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			},
+			"side_valley_goat": {
+				"history": [
+					"find",
+					"trade",
+					"return",
+					"done"
+				],
+				"objectives_done": [
+					"goat",
+					"potato"
+				],
+				"stage": "done"
+			},
+			"side_valley_trap": {
+				"history": [
+					"hook",
+					"float",
+					"weir",
+					"done"
+				],
+				"objectives_done": [],
+				"stage": "done"
+			}
+		},
+		"relationships": {
+			"mira": {
+				"memories": [
+					"said_hello",
+					"asked_shelter",
+					"stones_warned",
+					"invited_in",
+					"said_elsewhere",
+					"said_name",
+					"praised_fish",
+					"asked_boot",
+					"told_goat_story",
+					"told_berries",
+					"saw_door_ajar",
+					"told_elysia_easy",
+					"asked_shell",
+					"asked_where_to"
+				],
+				"state": "familiar"
+			}
+		},
+		"ui_mode": "REAL"
+	}
+}
