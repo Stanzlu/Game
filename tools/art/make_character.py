@@ -314,12 +314,133 @@ DESIGNS = {
         "bag": "backpack",
         "work": True,
     },
+    # --- Akt IV, the town (S2): people with bad days, full hands and a hat with a feather. None is symmetric:
+    # the keys hang on one hip, the note sits behind one ear, the hat is tilted, the basket hangs from one arm.
+    # The gatekeeper of the town: a steel-grey coat to the knee with brass buttons, a flat cap, the arms crossed
+    # over the chest and a bunch of keys on one hip; the eyebrows say the day has been long (Akt IV, O19).
+    "torwaechterin": {
+        "skin": ramp("#8a5a54", "#c48a78", "#e8b8a0", "#fbdcc8"),
+        "hair": ramp("#1c1a20", "#363440", "#585566", "#827f94", "#b4b1c4"),
+        "top": ramp("#1c2128", "#303a46", "#4e5c6c", "#7488a0"),
+        "inner": ramp("#7a6e5a", "#b0a48a", "#dcd2b8", "#f6efdc"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#16161c", "#26262e", "#3a3a46", "#52525e"),
+        "boots": ramp("#14100e", "#2c2018", "#4a3626", "#6e5440"),
+        "brass": ramp("#3e260c", "#7c5018", "#bd8a28", "#ecc050"),
+        "hat": ramp("#12161c", "#222a34", "#3a4656", "#566a80"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d08a7c"),
+        "outline": pa.hex_rgb("#161a22"),
+        "hair_style": "crew",
+        "outfit": "jacket",
+        "build": "athletic",
+        "skirt": 5,
+        "coat": True,
+        "arms_pose": "crossed",
+        "keys": True,
+        "hat_kind": "cap",
+        "brows": "stern",
+        "bag": "none",
+    },
+    # The one with the list: a dusty-blue cardigan, a cream apron, notes of every colour stuck on him and one behind
+    # his ear; his hands are never free (a stack of papers, a parcel on top).
+    "gefaelliger": {
+        "skin": ramp("#7a4a3c", "#b87a5a", "#e0a47e", "#f8cca6"),
+        "hair": ramp("#3a2a18", "#6a4e2a", "#9a7840", "#c8a460", "#e8cf8c"),
+        "top": ramp("#1e2e48", "#34507a", "#5882b0", "#8cb4dc"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#3a2412", "#6a4426", "#9a6c3e", "#c89a60"),
+        "pants": ramp("#2a2420", "#443a30", "#665848", "#887866"),
+        "boots": ramp("#2a1a14", "#4a3226", "#6e4e3a", "#94705a"),
+        "paper": ramp("#8a8678", "#bdb8a6", "#e6e2d2", "#ffffff"),
+        "parcel": ramp("#3a2412", "#6a4426", "#9a6c3e", "#c89a60"),
+        "notes": [pa.hex_rgb("#f2d24e"), pa.hex_rgb("#ee8aa4"), pa.hex_rgb("#7ac0e8")],
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#e8887a"),
+        "outline": pa.hex_rgb("#1c2438"),
+        "hair_style": "tousled",
+        "outfit": "jacket",
+        "apron": True,
+        "carry": True,
+        "ear_item": "note",
+        "bag": "none",
+    },
+    # Lio: a violet jerkin over a cream shirt, a straw-brown hat with a red feather (tilted), a lute on his back,
+    # and in the sit row the lute lies across his lap: he sits to play.
+    "lio": {
+        "skin": ramp("#6a3a2c", "#a2603e", "#cf8c60", "#f0b88a"),
+        "hair": ramp("#1a1210", "#33241c", "#553a28", "#7e583a", "#a8825a"),
+        "top": ramp("#2a1c5a", "#4a38a0", "#7a64d4", "#aea0f4"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#4a2a10", "#7a4a1c", "#b0762e", "#dca458"),
+        "pants": ramp("#4a3822", "#7a5e3a", "#a8884e", "#d0b070"),
+        "boots": ramp("#3a2418", "#5e3c28", "#8a5c3e", "#b48660"),
+        "hat": ramp("#3a2a18", "#6a4e2a", "#a07a42", "#d4aa64"),
+        "feather": ramp("#6a1210", "#b02a1e", "#e85a30", "#ffa060"),
+        "wood": ramp("#3a1e0c", "#74421c", "#b0742e", "#e0a85a"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#e8887a"),
+        "outline": pa.hex_rgb("#241040"),
+        "hair_style": "tousled",
+        "outfit": "jacket",
+        "lute": True,
+        "hat_kind": "feather",
+        "bag": "none",
+    },
+    # The clerk: a grey dress with a white collar, sleeve guards from elbow to wrist, round glasses, a pencil behind
+    # one ear and a stamp with red ink in her left hand; hair in a tight bun.
+    "beamtin": {
+        "skin": ramp("#8a5a50", "#c28a74", "#e8b498", "#fbd8c0"),
+        "hair": ramp("#2e2a2a", "#58504c", "#8a807a", "#b8aea6", "#e0d8d0"),
+        "top": ramp("#34322e", "#5a5750", "#8a8678", "#bab5a4"),
+        "inner": ramp("#9a9aa6", "#c8c8d2", "#eeeef4", "#ffffff"),
+        "belt": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "pants": ramp("#34322e", "#5a5750", "#8a8678", "#bab5a4"),
+        "boots": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "guards": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "frame": ramp("#1a1210", "#3a2a1c", "#8a6a38", "#c8a050"),
+        "wood": ramp("#3a1e0c", "#74421c", "#b0742e", "#e0a85a"),
+        "ink": ramp("#4a0e10", "#8a1c1c", "#c43030", "#ee6a58"),
+        "paper": ramp("#8a8678", "#bdb8a6", "#e6e2d2", "#ffffff"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#d89080"),
+        "outline": pa.hex_rgb("#26222a"),
+        "hair_style": "bun",
+        "outfit": "dress",
+        "skirt": 6,
+        "glasses": True,
+        "ear_item": "pencil",
+        "stamp": True,
+        "bag": "none",
+    },
+    # A citizen: an oatmeal sweater, indigo trousers, a chin-length bob with a side parting and a wicker basket
+    # on one arm with a leek and a loaf in it. Nobody in particular; that is the point.
+    "buerger": {
+        "skin": ramp("#7a4638", "#b8764f", "#dc9f72", "#f6c9a0"),
+        "hair": ramp("#2a1810", "#4e3020", "#7a5236", "#a87a52", "#d0a47c"),
+        "top": ramp("#4a3c2a", "#7a6446", "#aa9066", "#d4bc8c"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#1a2236", "#2c3858", "#445280", "#6674a0"),
+        "boots": ramp("#1e1418", "#3d2822", "#664232", "#90674a"),
+        "wicker": ramp("#4a3010", "#7e5a20", "#b88a38", "#e0b860"),
+        "leek": ramp("#173020", "#2c5a30", "#4c8a44", "#8cc460"),
+        "bread": ramp("#5a3410", "#8e5a1c", "#c48a38", "#ecc070"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#e0907e"),
+        "outline": pa.hex_rgb("#2a1e18"),
+        "hair_style": "bob",
+        "outfit": "jacket",
+        "basket": True,
+        "bag": "none",
+    },
 }
 
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
-SOFT = ("player", "mira", "child", "antreiber", "einsiedler")
+SOFT = ("player", "mira", "child", "antreiber", "einsiedler", "torwaechterin", "gefaelliger", "lio", "beamtin",
+        "buerger")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 
@@ -413,6 +534,14 @@ def limb(c, x0, y0, x1, y1, width):
         if 0 <= y < c.h:
             m[y, max(xa, 0):max(xa + width, 0)] = True
     return m
+
+
+def seg(c, x0, y0, x1, y1, r):
+    """Mask of a thick line segment from (x0, y0) to (x1, y1): every pixel whose centre lies within `r` of it."""
+    px, py = c.xx + 0.5, c.yy + 0.5
+    dx, dy = x1 - x0, y1 - y0
+    t = np.clip(((px - x0) * dx + (py - y0) * dy) / max(dx * dx + dy * dy, 1e-6), 0, 1)
+    return np.hypot(px - (x0 + t * dx), py - (y0 + t * dy)) <= r
 
 
 class Figure:
