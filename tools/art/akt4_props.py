@@ -736,75 +736,50 @@ def wall_tower(ms):
 
 
 def gate(ms):
-    """The town's gate seen from the south: two stout piers of dressed stone and, over the arch, the guard's room with
-    two windows (one shuttered, one not), a banner, a raised portcullis in the arch's crown and a slate roof with a
-    chimney. The arch is open: the passage behind it is the cobbles of the map, and whoever walks through stays in view.
-    The opening is five cells wide (80 px), its crown 64 px high. 224 x 152, anchor (112, 144): the glyph stands on the
-    passage's middle cell in the wall's south row (the foot of the wall lies 8 px under the anchor)."""
+    """The town's gate seen from the south: two stout piers of dressed stone with a battlement, joined over a flattened arch
+    by a bridge of the same wall walk; a small green flag on the keystone. The arch is open: the passage behind it is the
+    cobbles of the map, and whoever walks through stays in view; its opening is five cells wide (80 px) and 48 px high, a
+    portcullis hangs raised in the crown. Only 76 px high: nothing taller may stand over the cells north of it. 192 x 76,
+    anchor (96, 68): the glyph stands on the passage's middle cell in the wall's south row (the foot lies 8 px under it)."""
     rng = np.random.default_rng(1013)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
-    W, H = 224, 152
+    W, H = 192, 76
     c = ms.Canvas(W, H)
-    left, right = 8, 216
-    ox0, ox1 = 72, 152  # the opening
-    wall_top = 48
+    left, right = 8, 184
+    ox0, ox1 = 56, 136
     cx = (ox0 + ox1) / 2
-    body = c.rect(left, wall_top, right, H)
-    _ashlar(c, rng, left, wall_top, right, H, ex["stone_wall"], course=7, wmin=10, wmax=17, base=0.5)
-    # the arch: a flattened semicircle over the opening, its crown 64 px above the foot
-    arch = c.rect(ox0, 128, ox1, H) | (c.ellipse(cx, 128, 40, 40) & (c.yy < 128))
+    top = 26
+    _ashlar(c, rng, left, top, right, H, ex["stone_wall"], course=7, wmin=10, wmax=17, base=0.5)
+    # the battlement along the top, on a period of 16 like the wall's, and the walkway behind it
+    for mx in range(left + 3, right - 8, 16):
+        _ashlar(c, rng, mx, 14, mx + 10, top, ex["stone_wall"], course=6, wmin=5, wmax=10, base=0.52)
+        c.paint(c.rect(mx, 14, mx + 10, 16), ex["stone_wall"], np.where(c.yy < 15, 0.98, 0.8), dither=False)
+        c.paint(c.rect(mx + 8, 16, mx + 10, top), ex["stone_wall"], 0.2, dither=False)
+    c.paint(c.rect(left, 20, right, top), ex["stone_wall"], 0.44, dither=False)  # the walkway between the crenels
+    c.paint(c.rect(left, top - 2, right, top), ex["stone_wall"], 0.9, dither=False)
+    c.paint(c.rect(left, top, right, top + 1), ex["stone_wall"], 0.2, dither=False)
+    # the arch: a flattened semicircle, its crown 48 px above the foot
+    arch = c.rect(ox0, 48, ox1, H) | (c.ellipse(cx, 48, 40, 20) & (c.yy < 48))
     c.a &= ~arch
-    # voussoirs: a ring of lighter stones round the arch, with a keystone
-    ring = (c.ellipse(cx, 128, 47, 46) & ~c.ellipse(cx, 128, 40, 40)) & (c.yy < 128)
-    k = (np.arctan2(c.yy - 128, c.xx - cx) * 9).astype(int)
+    ring = (c.ellipse(cx, 48, 46, 26) & ~c.ellipse(cx, 48, 40, 20)) & (c.yy < 48)
+    k = (np.arctan2(c.yy - 48, c.xx - cx) * 9).astype(int)
     c.paint(ring, ex["stone_wall"], np.where(k % 2 == 0, 0.78, 0.6), dither=False)
     c.paint(ring & (np.abs(c.xx - cx) < 3), ex["stone_wall"], 0.97, dither=False)
-    # the jambs inside the opening are in shade, the soffit under the crown is dark
-    c.paint(c.rect(ox0 - 6, 128, ox0, H) | c.rect(ox1, 128, ox1 + 6, H), ex["stone_wall"], 0.18, dither=False)
-    # a raised portcullis in the crown: iron bars with crossbars in the dark under the arch
-    inner = c.ellipse(cx, 128, 40, 40) & ~c.ellipse(cx, 128, 40, 30) & (c.yy < 128)
+    c.paint(c.rect(ox0 - 5, 48, ox0, H) | c.rect(ox1, 48, ox1 + 5, H), ex["stone_wall"], 0.18, dither=False)  # the jambs in shade
+    inner = c.ellipse(cx, 48, 40, 20) & ~c.ellipse(cx, 48, 40, 12) & (c.yy < 48)
     c.paint(inner, ex["stone_wall"], 0.1, dither=False)  # the dark under the crown
-    bars = inner & (((c.xx.astype(int) - 72) % 7) < 2) | inner & ((c.yy.astype(int) % 8) == 0)
-    c.paint(bars, ex["iron"], 0.35, dither=False)
-    # the piers: plinth, a lit edge, moss
-    c.paint(c.rect(left, H - 6, ox0 - 6, H) | c.rect(ox1 + 6, H - 6, right, H), ex["stone_wall"],
+    bars = inner & (((c.xx.astype(int) - ox0) % 7) < 2) | inner & ((c.yy.astype(int) % 8) == 0)
+    c.paint(bars, ex["iron"], 0.35, dither=False)  # the raised portcullis
+    # the piers: a plinth, a lit edge, moss
+    c.paint(c.rect(left, H - 5, ox0 - 5, H) | c.rect(ox1 + 5, H - 5, right, H), ex["stone_wall"],
             0.26 + 0.08 * (pa.value_noise(H, W, 3, rng) - 0.5), dither=False)
-    c.paint(c.rect(left, H - 6, right, H) & (pa.value_noise(H, W, 2, rng) > 0.7) & body & ~arch, MOSS, 0.4, dither=False)
-    # the guard's room above the arch: two windows and a banner between them
-    for wx, shut in ((int(cx) - 38, False), (int(cx) + 22, True)):
-        c.paint(c.rect(wx - 1, wall_top + 8, wx + 15, wall_top + 30), PLASTER, 0.7, dither=False)
-        if shut:
-            c.paint(c.rect(wx, wall_top + 9, wx + 14, wall_top + 29), SHUTTER, np.where(((c.xx - wx) % 3) == 0, 0.32, 0.55), dither=False)
-        else:
-            c.paint(c.rect(wx, wall_top + 9, wx + 14, wall_top + 29), PANE, 0.5 - 0.15 * ((c.yy - wall_top - 9) / 20), dither=False)
-            c.paint(c.rect(wx + 6, wall_top + 9, wx + 8, wall_top + 29), PLASTER, 0.9, dither=False)
-            c.paint(c.rect(wx, wall_top + 18, wx + 14, wall_top + 20), PLASTER, 0.9, dither=False)
-            c.paint(c.rect(wx - 6, wall_top + 9, wx - 1, wall_top + 29), SHUTTER, 0.5, dither=False)  # one shutter stands open
-    bx = int(cx) - 5
-    c.paint(c.rect(bx - 1, wall_top + 2, bx + 12, wall_top + 5), ex["plank"], 0.7, dither=False)  # the beam of the banner
-    banner = c.rect(bx, wall_top + 5, bx + 11, wall_top + 36)
-    banner &= c.yy < wall_top + 36 - 4 * (np.abs(c.xx - bx - 5.5) < 3)  # a notch at the foot
-    c.paint(banner, FLAG_GREEN, np.where(c.xx < bx + 5, 0.62, 0.38), dither=False)
-    c.paint(c.rect(bx + 3, wall_top + 11, bx + 8, wall_top + 16), FLAG_GREEN, 0.92, dither=False)  # the mended patch
-    # the roof: slate, a low hip whose ridge sags a little; a crooked chimney on the right
-    ridge = 10 + 1.5 * np.sin(c.xx * 0.05) + 0.0012 * (c.xx - 112) ** 2 / 4
-    roof = (c.yy >= ridge) & (c.yy < wall_top + 3) & (c.xx >= left - 6) & (c.xx < right + 6)
-    inset = np.clip((c.yy - 10) * 0.9, 0, 40)
-    roof &= (c.xx >= left - 6 + (40 - inset) * 0.55) & (c.xx < right + 6 - (40 - inset) * 0.55)
-    rows = ((c.yy - 10) // 4).astype(int)
-    tiles = ((rows * 7919 + ((c.xx + (rows % 2) * 2) // 5) * 104729) % 97) / 97.0
-    c.paint(roof, SLATE, np.clip(0.66 - 0.32 * (c.yy - 10) / 40 + 0.28 * (tiles - 0.5) + 0.12 * (c.xx < cx), 0, 1),
-            contrast=2.0, dither=False)
-    c.paint(roof & ((c.yy - 10) % 4 == 3), SLATE, 0.05, dither=False)
-    c.paint(roof & (pa.value_noise(H, W, 3, rng) > 0.84), MOSS, 0.5, dither=False)
-    c.paint(c.rect(left - 8, wall_top - 1, right + 8, wall_top + 4), ex["stone_wall"], np.where(c.yy < wall_top + 1, 0.86, 0.3),
-            dither=False)  # the eaves
-    chx = 170
-    c.paint(c.rect(chx, 0, chx + 12, 24), ex["stone_wall"], 0.25 + 0.6 * c.cylinder(chx - 1, chx + 13), dither=False)
-    c.paint(c.rect(chx - 2, 0, chx + 14, 3), ex["stone_wall"], 0.78, dither=False)
-    c.paint(c.rect(chx + 3, 0, chx + 9, 1), ex["stone_wall"], 0.04, dither=False)
+    c.paint(c.rect(left, H - 7, right, H) & (pa.value_noise(H, W, 2, rng) > 0.7) & c.a & ~arch, MOSS, 0.4, dither=False)
+    # a pole on the keystone with a green flag that has been mended once
+    c.paint(c.rect(int(cx) - 1, 0, int(cx) + 1, 14), ex["iron"], 0.6, dither=False)
+    c.paint(c.rect(int(cx) + 1, 1, int(cx) + 13, 7), FLAG_GREEN, np.where(c.xx < cx + 6, 0.62, 0.4), dither=False)
+    c.paint(c.rect(int(cx) + 4, 2, int(cx) + 8, 5), FLAG_GREEN, 0.92, dither=False)
     c.outline(st["outline"])
-    return c, (chx + 6 - 112, 0 - 144)
+    return c
 
 
 def guard_hut(ms):
@@ -1662,27 +1637,6 @@ def sawhorse(ms):
     return c
 
 
-def laundry(ms):
-    """A line of washing between two poles, a shirt, a sheet, two stockings and a cloth, all of them patched; the pole on the
-    right leans. 104 x 56, anchor (52, 52)."""
-    rng = np.random.default_rng(1157)
-    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
-    c = ms.Canvas(104, 56)
-    c.paint(ms.limb_mask(c, 6, 52, 6, 6, 3), ex["plank"], 0.5, dither=False)
-    c.paint(ms.limb_mask(c, 96, 52, 100, 8, 3), ex["plank"], 0.5, dither=False)
-    sag = lambda x: 8 + 5 * np.sin(np.pi * (x - 6) / 92.0)  # noqa: E731
-    for x in range(6, 100):
-        c.fill(c.rect(x, int(sag(x)), x + 1, int(sag(x)) + 1), CORD[2])
-    for lx, w, h, col in ((14, 14, 16, LINEN), (34, 22, 22, CRATE_BLUE), (62, 8, 14, AWNING_RED), (74, 8, 14, LINEN), (84, 10, 12, OCHRE)):
-        top = int(sag(lx)) + 1
-        c.paint(c.rect(lx, top, lx + w, top + h), col, np.where(c.xx < lx + w / 2, 0.66, 0.46) - 0.06 * ((c.yy - top) / h), dither=False)
-        c.paint(c.rect(lx, top + h - 2, lx + w, top + h), col, 0.3, dither=False)
-        c.fill(c.rect(lx + 2, top - 1, lx + 3, top + 2), CORD[0])
-        c.paint(c.rect(lx + w - 6, top + 5, lx + w - 2, top + 9), CLOTH, 0.6, dither=False)  # a patch
-    c.outline(st["outline"])
-    return c
-
-
 def seat_crate(ms):
     """A crate that someone sits on: the map puts it on the cell NORTH of the player's seat, and the catalog anchor (which lies
     below the image) brings it under the sitter; it is `flat`, so the sitter is drawn over it. 28 x 18."""
@@ -1756,6 +1710,9 @@ HOUSES = [
     ("st_house_e", 2005, 7, 2, dict(wall=PLASTER, roof="gable", roof_colors=SLATE, shutter=SHUTTER_BLUE, door=12, boxes=True)),
     ("st_house_f", 2006, 5, 2, dict(wall=GREYBLUE, roof_colors=SLATE, shutter=SHUTTER_OCHRE, moss=True, chimney=8, door=-10)),
     ("st_house_g", 2007, 9, 2, dict(wall=OCHRE, frame=True, roof_colors=TERRACOTTA, boxes=True, door=22, laundry=True, chimney=-30)),
+    ("st_house_h", 2008, 5, 2, dict(wall=PLASTER, roof_colors=TERRACOTTA, shutter=SHUTTER_BLUE, boxes=True, chimney=14, door=10)),
+    ("st_house_i", 2009, 7, 2, dict(wall=OCHRE, frame=True, roof_colors=SLATE, moss=True, shutter=SHUTTER_BLUE, door=-20, boxes=True)),
+    ("st_house_k", 2010, 5, 2, dict(wall=ROSE, roof_colors=SLATE, shutter=SHUTTER, laundry=True, chimney=-12, door=14)),
 ]
 FLORIST = (2011, 7, 2, dict(wall=ROSE, shop=True, boxes=True, door=6, extra=_florist_extra, chimney=18))
 WORKSHOP = (2012, 9, 2, dict(wall=PLASTER, roof_colors=SLATE, shutter=SHUTTER_OCHRE, door_w=26, bar=True, arch=False, door=0,
@@ -1770,8 +1727,7 @@ def build_town(ms):
     ms.save("tal", "st_wall_h", walls, (8, 40))
     ms.save("tal", "st_wall_v", _wall_v(ms, 1104), (12, 84))
     ms.save("tal", "st_wall_tower", wall_tower(ms), (28, 96))
-    canvas, smoke = gate(ms)
-    ms.save("tal", "st_gate", canvas, (112, 144), smoke=list(smoke))
+    ms.save("tal", "st_gate", gate(ms), (96, 68))
     ms.save("tal", "st_guard_hut", guard_hut(ms), (36, 64))
     for name, seed, cells, floors, style in HOUSES:
         canvas, smoke = town_house(ms, seed, cells, floors, style)
@@ -1796,7 +1752,6 @@ def build_town(ms):
     ms.save("tal", "st_buckets", buckets(ms), (28, 34), shape={"rect": [48, 8], "offset": [0, -3]}, shadow=[22, 4])
     ms.save("tal", "st_woodstack", woodstack(ms), (28, 38), shape={"rect": [52, 10], "offset": [0, -4]}, shadow=[26, 4])
     ms.save("tal", "st_sawhorse", sawhorse(ms), (24, 30), shape={"rect": [40, 8], "offset": [0, -4]}, shadow=[20, 3])
-    ms.save("tal", "st_laundry", laundry(ms), (52, 52))
     ms.save("tal", "st_seat_crate", seat_crate(ms), (14, -7), flat=True)
     ms.save("tal", "st_pots", [pots(ms, 0), pots(ms, 1)], (12, 19))
 

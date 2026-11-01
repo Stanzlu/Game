@@ -1,0 +1,23 @@
+# Eine Dose mit Knöpfen (S2): jeder Knopf ein anderer, zwei sind herausgefallen
+name: curiosity_button_tin
+out: assets/generated/items
+size: 16x16
+palette: o=#141c2c e=#1e3050 n=#2e5084 m=#4a7cb8 a=#86b0de s=#cdd8e8 v=#f2ecda w=#3a2412 y=#f0cc48 p=#ee8aa6 g=#7cc678 r=#c43030
+outline: o
+---
+................
+.....oooooo.....
+...ooaaaaaaoo...
+..oaawwwppwaao..
+.oawwyywwwwrwao.
+.oawwwwvvwgwwao.
+.oaagwrwwywvaaeo
+.oaaaaaaaaaaneeo
+.oaammmmmmnnneeo
+.oavvvvvvvvvveeo
+.oassrssrssrseeo
+.oaammmmmmnnneeo
+.oaammmmmmnnneeo
+.oaammmmmmnyyeo.
+..ooommmmmmoopo.
+.....oooooo..o..
