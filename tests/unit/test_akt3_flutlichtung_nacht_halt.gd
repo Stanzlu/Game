@@ -10,7 +10,7 @@ const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
 const DOOR_SCRIPT := preload("res://world/props/door.gd")
 const QUEST := "main_forest_way"
 const FLAG := "forest.night_way"
-const WAY: Array[String] = ["leave", "brook", "wood", "night"]
+const WAY: Array[String] = ["leave", "brook", "wood", "night", "home", "done"]
 const BLOCKER_CELL := Vector2i(34, 50)
 const DOOR_CELL := Vector2i(34, 52)
 ## Four rows north of the blocker, on the path itself.

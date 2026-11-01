@@ -41,6 +41,8 @@ const WRITE_ONLY_FLAGS := {
 	"chapter mark of Act I (ADR-067): the save slots and the return in Act VI will read it",
 	"chapter.act2":
 	"chapter mark of Act II (ADR-067): the save slots and the return in Act VI will read it",
+	"chapter.act3":
+	"chapter mark of Act III (ADR-070): the start menu reads it as the last chapter, Act IV goes on",
 }
 
 static var _const_regex := RegEx.create_from_string(

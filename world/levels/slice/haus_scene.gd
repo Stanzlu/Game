@@ -14,12 +14,31 @@ extends LookScene
 ## Mira's visit is staged in the room, not in the dark: the door opens, she comes in, sits
 ## down by the fire, and later gets up and goes (a GuestWalker; the map's seated Mira takes
 ## her place while she talks).
+## The way home (Act III, W6, ADR-070) ends here: the room has changed (a bench stands in the
+## corner and the Antreiber sits at it, wherever he was before; the map reads house.workbench),
+## the first time she enters in the stage "home" the scene of the homecoming plays, the hermit comes
+## as a guest if she asked him, and then the act is over: quietly, with a save, and no title.
+
+## The homecoming (W6) goes from the wait for a quiet room to the end of the act, phase by phase.
+enum HomePhase {
+	OFF,
+	WAIT,
+	CALM,
+	KNOCK,
+	CHAIR,
+	SETTLE,
+	CLOSE,
+	STAND,
+	END,
+}
 
 const DIALOGUE := "res://content/dialogue/slice/haus.dialogue"
 ## The answer to the Antreiber's ideas at the fire (Act II, B2).
 const NEIN_DIALOGUE := "res://content/dialogue/akt2/nein.dialogue"
 ## The song in the house and the deeds by the fire (Act II, B5).
 const FEUER_DIALOGUE := "res://content/dialogue/akt2/feuer.dialogue"
+## The homecoming at the bench and the hermit's visit (Act III, W6).
+const HEIMKEHR_DIALOGUE := "res://content/dialogue/akt3/heimkehr.dialogue"
 ## A breath of quiet before the song, and how long the window takes to turn to evening.
 const SONG_PAUSE := 1.0
 const EVENING_FALLS_SECONDS := 4.0
@@ -61,6 +80,7 @@ const STAY_SEATED := 3.0
 const ANTREIBER_ACTOR := preload("res://encounters/antreiber/antreiber_actor.tscn")
 const ANTREIBER_SHEET := preload("res://entities/character/sheet_antreiber_look.tres")
 const MIRA_SHEET := preload("res://entities/character/sheet_mira_look.tres")
+const HERMIT_SHEET := preload("res://entities/character/sheet_einsiedler_look.tres")
 const DOOR_CELL := Vector2i(19, 15)
 ## Where Mira sits (the map's placement "M"), looking at the fire, and the way there round
 ## the rug where the player sits.
@@ -68,8 +88,26 @@ const MIRA_CELL := Vector2i(15, 10)
 const MIRA_WAY_IN: Array[Vector2i] = [Vector2i(16, 14), Vector2i(15, 12), MIRA_CELL]
 const MIRA_SPEED_IN := 40.0
 const MIRA_SPEED_OUT := 45.0
-## The cat sleeps here once fed (the map's placement "k").
+## The cat sleeps here once fed (the map's placement "k"); on the Antreiber's lap at the bench once
+## the bench stands (the map's placement "Z").
 const CAT_CELL := Vector2i(19, 10)
+const BENCH_CAT_CELL := Vector2i(22, 15)
+## The hermit's chair (the map's placement "C") and his way to it from the door, round the end of
+## the table; he sits looking at the table, and goes the same way back.
+const CHAIR_CELL := Vector2i(22, 12)
+const HERMIT_WAY_IN: Array[Vector2i] = [Vector2i(21, 14), Vector2i(21, 13), CHAIR_CELL]
+const HERMIT_SPEED_IN := 38.0
+const HERMIT_SPEED_OUT := 42.0
+## Play time (seconds) the homecoming waits between its steps: after the picture is up, after the
+## knock, after the chair is down, after he sat, before the last lines, after he stood, after the
+## door.
+const HOME_CALM := 0.8
+const HOME_KNOCK := 0.9
+const HOME_CHAIR := 0.6
+const HOME_SETTLE := 0.6
+const HOME_BEAT := 0.6
+const HOME_STAND := 0.5
+const HOME_END := 0.8
 ## After loading the picture fades in for two seconds: Mira waits that long and a moment more.
 const AFTER_LOAD_CALM := 1.5
 const ANTREIBER_BLOCK := &"antreiber_visit"
@@ -86,6 +124,12 @@ const CAT_SUGGESTIONS: PackedStringArray = [
 
 var _resting := 0.0
 var _mira_coming := false
+var _home := HomePhase.OFF
+var _home_clock := 0.0
+## True while a line or a walk of the homecoming runs by itself; the phase goes on when it ended.
+var _home_busy := false
+var _home_cut: Cutscene
+var _hermit: GuestWalker
 var _window_light: PointLight2D
 var _window_energy := WINDOW_ENERGY
 var _cat_name_seen := ""
@@ -100,6 +144,17 @@ func _ready() -> void:
 	# whoever looks closely sees one more spot in the room (the map's prop reads the flag)
 	if WorldState.has_facet("perception"):
 		WorldState.set_flag("house.looks_closely")
+	# the way home (W6): a walk that reached the night and came to the house without the valley
+	# (an old save) is home now; and whoever is home, or done, finds the bench in the corner. Both
+	# before super(): the map reads the flags when it builds, the entry save must say it
+	if WorldState.quest_stage("main_forest_way") == "night":
+		WorldState.advance_quest("main_forest_way", "home")
+	var stage := WorldState.quest_stage("main_forest_way")
+	if stage in ["home", "done"]:
+		WorldState.set_flag("house.workbench")
+	if stage == "home":
+		# a homecoming that was broken off plays again from the door: the chair comes with him
+		WorldState.clear_flag("house.guest_hermit")
 	super()
 	_add_window_light()
 	_add_night_surround()
@@ -117,6 +172,8 @@ func _ready() -> void:
 		# crossed the stream without asking Mira: the house is still the goal
 		WorldState.start_quest("main_valley_shelter")
 		WorldState.advance_quest("main_valley_shelter", "house")
+	if stage == "home":
+		_home = HomePhase.WAIT
 	if warm and not WorldState.has_flag("house.mira_visited"):
 		# loaded a save between the fire and Mira's visit: the rest by the fire (and the
 		# Antreiber, if he has not come yet) still comes first; Mira knocks in any case later
@@ -133,6 +190,147 @@ func _process(delta: float) -> void:
 	_resting = _resting + delta if player.state == Player.State.SIT else 0.0
 	if _resting >= REST_BEFORE_KNOCK:
 		_rest_by_the_fire()
+
+
+func _physics_process(delta: float) -> void:
+	if _home != HomePhase.OFF:
+		_home_step(delta)
+
+
+## True from the entry into the stage "home" until the act is over: the homecoming is waiting or
+## playing.
+func is_homecoming() -> bool:
+	return _home != HomePhase.OFF
+
+
+## The homecoming (W6), a phase of the physics step: the pauses count play time, the lines and the
+## walks run by themselves (`_home_busy`) and hand the phase on when they have ended. A scene that
+## is freed meanwhile leaves nothing behind that wakes up without it, and a game closed meanwhile
+## has saved nothing of it (the cutscene blocks saving): the stage is still "home" and it plays
+## again. Everyone gets the first and the last lines; whoever asked the hermit in the hut
+## (forest.hermit_invited, only with care) gets his visit in between, and the act never depends
+## on it.
+func _home_step(delta: float) -> void:
+	if _home_busy or player == null:
+		return
+	_home_clock += delta
+	match _home:
+		HomePhase.WAIT:
+			# nothing starts while a line is up, a menu or another scene holds the room, or the
+			# picture still comes back from the black of the door
+			if _quiet() and not player.is_locked():
+				_home_cut = Cutscene.begin(self)
+				_home_to(HomePhase.CALM)
+		HomePhase.CALM:
+			if _home_clock >= HOME_CALM:
+				_home_says_in()
+		HomePhase.KNOCK:
+			if _home_clock >= HOME_KNOCK:
+				_hermit_comes()
+		HomePhase.CHAIR:
+			if _home_clock >= HOME_CHAIR:
+				_hermit_sits()
+		HomePhase.SETTLE:
+			if _home_clock >= HOME_SETTLE:
+				_hermit_says()
+		HomePhase.CLOSE:
+			if _home_clock >= HOME_BEAT:
+				_home_says_close()
+		HomePhase.STAND:
+			if _home_clock >= HOME_STAND:
+				_hermit_goes()
+		HomePhase.END:
+			if _home_clock >= HOME_END:
+				_home_finishes()
+
+
+func _home_to(phase: HomePhase) -> void:
+	_home = phase
+	_home_clock = 0.0
+
+
+func _home_says_in() -> void:
+	var cut := _home_cut
+	_home_busy = true
+	await cut.say(HEIMKEHR_DIALOGUE, "home_in")
+	_home_busy = false
+	if WorldState.has_flag("forest.hermit_invited"):
+		AudioDirector.sfx("door_knock")
+		_home_to(HomePhase.KNOCK)
+	else:
+		_home_to(HomePhase.CLOSE)
+
+
+## The door opens and the hermit comes in with his chair, round the end of the table to where it
+## goes; he sets it down there.
+func _hermit_comes() -> void:
+	_home_busy = true
+	_hermit = _guest_at(DOOR_CELL, HERMIT_SHEET)
+	AudioDirector.sfx("door_open")
+	_glare()
+	_hermit.appear()
+	var way: Array[Vector2] = []
+	for cell in HERMIT_WAY_IN:
+		way.append(map.cell_to_world(cell))
+	await _hermit.walk_to(way, HERMIT_SPEED_IN)
+	AudioDirector.sfx("wood_drop")
+	_home_busy = false
+	_home_to(HomePhase.CHAIR)
+
+
+## He sits; the chair appears under him (the map's prop reads the flag).
+func _hermit_sits() -> void:
+	WorldState.set_flag("house.guest_hermit")
+	_hermit.sit_down(Facing.Dir.W)
+	_home_to(HomePhase.SETTLE)
+
+
+func _hermit_says() -> void:
+	var cut := _home_cut
+	_home_busy = true
+	await cut.say(HEIMKEHR_DIALOGUE, "guest_enter")
+	_home_busy = false
+	_home_to(HomePhase.CLOSE)
+
+
+## The last lines of the act, said to everyone (the first one only after the hermit's visit).
+func _home_says_close() -> void:
+	var cut := _home_cut
+	_home_busy = true
+	await cut.say(HEIMKEHR_DIALOGUE, "act3_close")
+	_home_busy = false
+	if _hermit != null:
+		_hermit.stand_up()
+		_home_to(HomePhase.STAND)
+	else:
+		_home_to(HomePhase.END)
+
+
+## He gets up and goes the way he came, the chair stays; the door closes behind him.
+func _hermit_goes() -> void:
+	_home_busy = true
+	var way: Array[Vector2] = []
+	for i in range(HERMIT_WAY_IN.size() - 2, -1, -1):
+		way.append(map.cell_to_world(HERMIT_WAY_IN[i]))
+	way.append(map.cell_to_world(DOOR_CELL))
+	await _hermit.walk_to(way, HERMIT_SPEED_OUT)
+	AudioDirector.sfx("door_close", -3.0)
+	await _hermit.vanish()
+	_hermit.queue_free()
+	_hermit = null
+	_home_busy = false
+	_home_to(HomePhase.END)
+
+
+## The act ends, quietly: no black and no title (Act IV goes on from here). One block without a
+## wait: the stage, the mark of the chapter and the beat are set together, and the autosave that
+## they ask for is written when the scene lets go of the room, with all three in it.
+func _home_finishes() -> void:
+	_home_to(HomePhase.OFF)
+	WorldState.advance_quest("main_forest_way", "done")
+	Chapter.mark("act3")
+	Beat.mark("act3_home")
+	_home_cut.end()
 
 
 ## Sitting by the fire: a moment of warmth and rain on the roof, then the knock. The moment
@@ -227,7 +425,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		_name_the_cat()
 	elif id == "house.cat_fed" and value:
 		# she comes in through the window and curls up at the fire
-		SoundBank.play_at(map.entities, "cat_meow", map.cell_to_world(CAT_CELL))
+		SoundBank.play_at(map.entities, "cat_meow", map.cell_to_world(_cat_cell()))
 	elif id == "house.prints_seen" and value:
 		Beat.mark("act2_blick")
 	elif id == "house.rested" and value:
@@ -281,7 +479,7 @@ func _on_house_changed() -> void:
 		_cat_name_seen = cat_name
 		if not cat_name.is_empty():
 			# a name is a bit of attention: she purrs without waking up
-			SoundBank.play_at(map.entities, "purr", map.cell_to_world(CAT_CELL))
+			SoundBank.play_at(map.entities, "purr", map.cell_to_world(_cat_cell()))
 
 
 ## The fire catches: the wood is laid down, a moment later it takes (the fireplace flares
@@ -399,7 +597,15 @@ func _antreiber_pending() -> bool:
 		and not WorldState.has_flag("house.antreiber_by_fire")
 		and not WorldState.has_flag("house.antreiber_left")
 		and not WorldState.has_flag("forest.antreiber_ahead")
+		# at the bench he has long since come in: he never comes to the fire again
+		and not WorldState.has_flag("house.workbench")
 	)
+
+
+## Where the fed cat lies: at the fire, or on the Antreiber's lap once the bench stands (her sound
+## follows the picture).
+func _cat_cell() -> Vector2i:
+	return BENCH_CAT_CELL if WorldState.has_flag("house.workbench") else CAT_CELL
 
 
 ## True while nothing may start: a line is open, a menu is up or the picture fades.
@@ -484,8 +690,8 @@ func _mira_goes(cut: Cutscene) -> void:
 	await cut.wait(0.8)
 
 
-func _guest_at(cell: Vector2i) -> GuestWalker:
-	var guest := GuestWalker.create(MIRA_SHEET)
+func _guest_at(cell: Vector2i, sheet: CharacterSheet = MIRA_SHEET) -> GuestWalker:
+	var guest := GuestWalker.create(sheet)
 	map.entities.add_child(guest)
 	guest.global_position = map.cell_to_world(cell)
 	return guest

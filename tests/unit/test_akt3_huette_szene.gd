@@ -8,6 +8,7 @@ extends GutTest
 
 const HUETTE := preload("res://world/levels/akt3/huette.tscn")
 const QUEST := "main_forest_way"
+const WAY: Array[String] = ["leave", "brook", "wood", "night", "home", "done"]
 const STAY_FLAGS: Array[String] = ["forest.hut_stay_1", "forest.hut_stay_2", "forest.hut_stay_3"]
 const ROOM := Rect2i(9, 5, 14, 10)
 const FORBIDDEN_IN_THE_SCENE: Array[String] = [
@@ -53,6 +54,15 @@ func _scene() -> HuetteScene:
 	add_child_autofree(scene)
 	await wait_physics_frames(3)
 	return scene
+
+
+## Starts the hero's walk and takes it up to `stage` (the stage "leave" is the start).
+func _walk_to(stage: String) -> void:
+	WorldState.start_quest(QUEST)
+	for step in WAY.size():
+		if WAY[step] == stage:
+			return
+		assert_true(WorldState.advance_quest(QUEST, WAY[step + 1]), "to " + WAY[step + 1])
 
 
 func _alive(scene: GameScene) -> Array[Node]:
@@ -167,8 +177,38 @@ func test_with_the_flood_seen_first_the_hut_ends_the_wood() -> void:
 	WorldState.complete_objective(QUEST, "flood")
 	await _scene()
 	assert_eq(WorldState.quest_stage(QUEST), "night")
-	assert_true(WorldState.is_quest_done(QUEST))
+	assert_true(WorldState.is_quest_active(QUEST), "the night is not the end of the way (W6)")
 	assert_true(WorldState.has_flag("forest.night_way"), "and the way on to the south is open")
+
+
+func test_the_hut_entered_again_in_the_night_at_home_or_when_it_is_over_asks_for_no_goal() -> void:
+	for stage: String in ["night", "home", "done"]:
+		WorldState.new_game()
+		_walk_to(stage)
+		var done_before := WorldState.state.quests[QUEST].objectives_done.duplicate()
+		var history := WorldState.quest_history(QUEST)
+		var scene := await _scene()
+		assert_eq(WorldState.quest_stage(QUEST), stage, "%s: the stage stays" % stage)
+		assert_eq(WorldState.quest_history(QUEST), history, "%s: and so does its history" % stage)
+		assert_eq(
+			WorldState.state.quests[QUEST].objectives_done, done_before, "%s: no goal" % stage
+		)
+		assert_eq(WorldState.has_flag("forest.night_way"), stage == "night", "%s: the way" % stage)
+		scene.queue_free()
+		await wait_physics_frames(2)
+	assert_push_error_count(0, "no unknown objective in a stage that has no goals")
+
+
+func test_the_hut_in_the_stages_before_the_wood_asks_for_no_goal_either() -> void:
+	for stage: String in ["leave", "brook"]:
+		WorldState.new_game()
+		_walk_to(stage)
+		var scene := await _scene()
+		assert_eq(WorldState.quest_stage(QUEST), stage)
+		assert_false(WorldState.is_objective_done(QUEST, "hermit"), "the smoke was not asked for")
+		scene.queue_free()
+		await wait_physics_frames(2)
+	assert_push_error_count(0)
 
 
 func test_the_hut_alone_does_not_open_the_way_on_to_the_south() -> void:

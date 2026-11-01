@@ -19,7 +19,7 @@ const DIALOGUE := "res://content/dialogue/akt3/nachtwald.dialogue"
 const SCENE_SOURCE := "res://world/levels/akt3/nachtwald_scene.gd"
 const SCENE_FILE := "res://world/levels/akt3/nachtwald.tscn"
 const QUEST := "main_forest_way"
-const WAY: Array[String] = ["leave", "brook", "wood", "night"]
+const WAY: Array[String] = ["leave", "brook", "wood", "night", "home", "done"]
 const NORTH_DOOR_CELL := Vector2i(37, 1)
 const ARRIVAL_CELL := Vector2i(37, 6)
 const START_CELL := Vector2i(37, 7)
@@ -846,10 +846,10 @@ func test_the_things_that_glow_are_baked_into_their_pictures_and_do_not_flicker(
 # --- The walk through the wood ---------------------------------------------------------------
 
 
-func test_the_night_is_the_end_of_the_walk_and_the_night_wood_adds_no_stage_or_goal() -> void:
+func test_the_night_wood_adds_no_stage_or_goal_and_leaves_the_walk_at_the_night() -> void:
 	_walk_to("night")
 	var before := _walk_now()
-	assert_true(WorldState.is_quest_done(QUEST))
+	assert_true(WorldState.is_quest_active(QUEST), "the night is not the end (W6)")
 	var scene := await _scene()
 	await _sit(scene)
 	await _read_through(scene)
@@ -860,10 +860,11 @@ func test_the_night_is_the_end_of_the_walk_and_the_night_wood_adds_no_stage_or_g
 	)
 	assert_eq(_walk_now(), before, "stage, history and goals as they were")
 	assert_eq(WorldState.quest_stage(QUEST), "night")
-	assert_eq(WorldState.quest_outcome(QUEST), "done")
+	assert_eq(WorldState.quest_outcome(QUEST), "", "nothing ended")
 	var def := ContentDB.quest(QUEST)
-	assert_eq(def.stages.size(), WAY.size(), "no stage for what comes after")
-	assert_true(def.stage("night").is_final(), "the night is the end")
+	assert_eq(def.stages.size(), WAY.size(), "the night wood adds no stage of its own")
+	assert_false(def.stage("night").is_final(), "the night leads on, to the way home")
+	assert_true(def.stage("done").is_final(), "and only the homecoming ends it")
 	assert_eq(def.stage("night").objectives.size(), 0, "and has no goal")
 
 
