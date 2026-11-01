@@ -221,6 +221,8 @@ PLACE_HUETTE,Die Hütte
 PLACE_FLUTLICHTUNG,Die Flutlichtung
 PLACE_NACHTWALD,Der Nachtwald
 PLACE_STRASSE,Die Straße
+PLACE_STADT,Die Stadt
+PLACE_RATHAUS,Das Rathaus
 END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text
 CAPTION_FROGS,Frösche quaken.

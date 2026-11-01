@@ -2,18 +2,22 @@ extends Node2D
 ## The goat with Mira's boot (slice, beat 7). It chews, pauses, looks around and chews on.
 ## After the trade it chews the potato instead. Talking to it uses the "goat" cue.
 ## Params: "if"/"unless" flags (MapView). Collision keeps the player from walking through.
-## "perch": pixels it stands higher (on the woodpile, Game Bible §33: the goat turns up in
-## ever more absurd places); "appear_after": seconds before it shows up when the story brings
-## it in while the scene runs. When its placement ends it trots off once the talk is over.
+## "dialogue" and "cue" (Act IV, S2): what it says elsewhere than in the valley (the goat on the
+## town hall's roof). "perch": pixels it stands higher (on the woodpile, Game Bible §33: the goat
+## turns up in ever more absurd places); "appear_after": seconds before it shows up when the story
+## brings it in while the scene runs. When its placement ends it trots off once the talk is over.
 
 const DIALOGUE := "res://content/dialogue/slice/tal.dialogue"
 const TRADED := "valley.goat_traded"
+const DEFAULT_CUE := "goat"
 
 var _frames: Array[Texture2D] = []
 var _frame := 0
 var _time := 0.0
 var _next_pause := 3.0
 var _rng := RandomNumberGenerator.new()
+var _dialogue := DIALOGUE
+var _cue := DEFAULT_CUE
 ## Seconds until the next bleat: it tells the player where the goat is.
 var _next_bleat := 2.0
 
@@ -35,11 +39,13 @@ func _ready() -> void:
 	body.add_child(shape)
 	add_child(body)
 	var area := Talk.add_area(self, "INTERACT_EXAMINE", 16.0, Vector2(0, -6), 1)
-	area.interacted.connect(func(actor: Node) -> void: Talk.present(self, DIALOGUE, "goat", actor))
+	area.interacted.connect(func(actor: Node) -> void: Talk.present(self, _dialogue, _cue, actor))
 	WorldState.flag_changed.connect(_on_flag_changed)
 
 
 func apply_params(params: Dictionary) -> void:
+	_dialogue = str(params.get("dialogue", DIALOGUE))
+	_cue = str(params.get("cue", DEFAULT_CUE))
 	var perch := float(params.get("perch", 0.0))
 	if perch > 0.0:
 		_sprite.position.y -= perch

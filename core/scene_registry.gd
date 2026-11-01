@@ -14,6 +14,8 @@ const SCENES := {
 	"flutlichtung": "res://world/levels/akt3/flutlichtung.tscn",
 	"nachtwald": "res://world/levels/akt3/nachtwald.tscn",
 	"strasse": "res://world/levels/akt4/strasse.tscn",
+	"stadt": "res://world/levels/akt4/stadt.tscn",
+	"rathaus": "res://world/levels/akt4/rathaus.tscn",
 	"gasthaus": "res://world/levels/akt1/gasthaus.tscn",
 	"markt": "res://world/levels/akt1/markt.tscn",
 	"spiegelhalle": "res://world/levels/akt1/spiegelhalle.tscn",
@@ -47,6 +49,8 @@ const SMOKE: PackedStringArray = [
 	"flutlichtung",
 	"nachtwald",
 	"strasse",
+	"stadt",
+	"rathaus",
 	"weg",
 ]
 const BENCHMARK: PackedStringArray = [
@@ -59,6 +63,8 @@ const BENCHMARK: PackedStringArray = [
 	"flutlichtung",
 	"nachtwald",
 	"strasse",
+	"stadt",
+	"rathaus",
 	"gasthaus",
 	"markt",
 	"spiegelhalle",
