@@ -1,0 +1,119 @@
+; Akt IV, S1: die Straße, die dritte große Karte der Klasse M (ADR-068, ADR-071). Ein Fuhrwerkspfad führt vom Tal nach Westen auf
+; die Stadt zu: Spurrillen und Pfützen am Rand, ein Wegweiser, Hufabdrücke im Staub, ein Feld mit Vogelscheuche und Schild, eine kleine
+; Steinbrücke über den Bach, eine Weide, deren Eckpfosten ein Glöckchen trägt, ein Meilenstein, Obstbäume, Heu und ein Hügel mit
+; einer Bank, von dem man den Rauch der Stadt hinter der Hecke sieht. Im Westen hält ein Seil den Weg zu (Pflasterarbeiten, ein
+; unsichtbarer Blocker mit dem Cue town_wait), bis S2 dort die Tür in die Stadt einsetzt. Keine Figur spricht, nur Dinge.
+; Layout: tools/art/layout_akt4_maps.py strasse --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/strasse.txt.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/strasse_ground.png"
+water = "res://assets/generated/maps/strasse_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.3, "spacing": 11, "clump": 56}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.09, "spacing": 16}, {"sprite": "tal/pebbles", "on": ",m_", "density": 0.2, "spacing": 12}, {"sprite": "tal/pebbles", "on": ".", "near": "^", "radius": 1, "density": 0.3, "spacing": 13}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}, {"sprite": "tal/leaves", "on": ".", "near": "TCOP", "radius": 1, "density": 0.3, "spacing": 10}, {"sprite": "tal/twig", "on": ".", "near": "TCOP", "radius": 1, "density": 0.15, "spacing": 15}, {"sprite": "tal/reeds", "on": ".", "near": "~", "radius": 1, "density": 0.25, "spacing": 20}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+d = {"atlas": [2, 0], "surface": "dirt", "paint": "field"}
+_ = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+; Wald, Wiese, Obstbäume (O), Heu (H Haufen, Y Ballen), Zaun (F Stück, E Pfosten)
+T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+u = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bush"}}
+O = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_apple"}}
+H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_haystack"}}
+Y = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_haybale"}}
+F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence"}}
+E = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fence_post"}}
+; die Dächer der Stadt hinter der Hecke des Hügels, jedes mit einem Schornstein und seinem Rauch
+J = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_roofs_a"}}
+L = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_roofs_b"}}
+M = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_roofs_c"}}
+; Ankunft aus dem Tal (Osten), der Start bei --start=strasse, die Tür ins Tal; Ankunft aus der Stadt vor dem Seil im Westen
+@ = {"ground": ",", "marker": "player_spawn"}
+n = {"ground": ",", "marker": "spawn_tal"}
+N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "tal", "spawn": "strasse", "auto": true, "size": [1, 7]}}
+s = {"ground": ",", "marker": "spawn_stadt"}
+; das Seil quer über den Weg (zwei Pfosten und das Seil), dahinter der unsichtbare Blocker; S2 setzt dort die Tür in die Stadt ein
+B = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [1, 7], "cue": "town_wait", "dialogue": "res://content/dialogue/akt4/strasse.dialogue"}}
+Z = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_rope"}}
+X = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_rope_post"}}
+V = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_cobbles"}}
+; die kleine Steinbrücke: Brüstung auf der Nord- und der Südkante des Belags
+q = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_parapet_n"}}
+Q = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_parapet_s"}}
+; was am Weg zu sehen ist: der Wegweiser, die Hufabdrücke, das Schild am Feld, die Vogelscheuche, das Glöckchen am Pfosten, der Meilenstein, die Aussicht
+1 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_sign_two", "cue": "signpost", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 18}}
+2 = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_prints", "cue": "goat_prints", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 16}}
+x = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_prints"}}
+a = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_prints"}}
+3 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_notice", "cue": "field_notice", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 16}}
+4 = {"ground": "d", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_scarecrow", "cue": "scarecrow", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 18}}
+5 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_milestone", "cue": "milestone", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 18}}
+S = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_post"}}
+6 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_bell", "cue": "goat_bell", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 16, "unless": "city.bell_taken"}}
+b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/st_bench"}}
+7 = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "view_town", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 22}}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh....hhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.......h~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.........~~~h..hhhhhhhhh.....hhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....hhhhhhh........P.~~~......hhhh.....g..hhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.......hhhh......R....~~~...................hhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh............g...g......~~~.......g............hhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh........................~~~..T.........g...T....hhh.hhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......P............C....~~~.......T.................hhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.............T...........~~~.................g........hhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...T.....................~~~.E.....................E..hhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh............R.....R.....~~..E.dddddddddd..........E..hhhhhh
+hhhhhhhhhhhhhhhhh....hh.g..hhhhhhhhhh.....E..........E.......~~..E.dddddddddd..ddddddd.E..hhhhhh
+hhhhhhhhhhhhhh...............ghhhhhhhh....E.H........E.......~~..E.dddddddddd..dddddddgE.hhhhhhh
+hhhhhhhhhhhh...T.P......P.......hhhhhhh...E......Y...E.......~~..E.dddddddddd..ddddddd.E.hhhhhhh
+hhhhhhhhhhh..T.....J........P.T..hhhhhhh..E.........YE..C....~~..E.dddddddddd..ddddddd.E.hhhhhhh
+hhhhhhhhhhh......................hhhhhhh..E..........E......~~~..E.dddddddddd..ddddddd.E.hhhhhhh
+hhhhhhhhhhh...........L....g.....hhhhhh...E...H......E......~~~..E.dddddddddd..ddddddd.Ehhhhhhhh
+hhhhhhhhhhhh...J............Mg..hhhhhh....E........H.E......~~~..E.ddddd4dddd..ddddddd.Ehhhhhhhh
+hhhhhhhhhhhhhhh...............hhhhhhhh....E..........E......~~~..E.dddddddddd..ddddddd.Ehhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....E.....Y....E......~~~..E.dddddddddd..dddddddgE.hhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....E..........E......~~...E.....................E.hhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....FF..FFFFFFFS......~~...FFFFFFFFFF..FFFFFFFFFFF..hhhhhh
+hhhhhhhh...u......g,7,..u...........g................6......~~............................hhhhhh
+hhhhhhhh......g..b.,,,........u..........,,,,,,,,,x........~~~.............a...............hhhhh
+hhhhhhh.......u....,,,.....u..........,,,,mmmm,,,,,,,,,....~~~........3......,,,,,,,pp.....hhhhh
+hhhhhh....^^^^^^^^^,,,^^^^^^^.....,,,,mmmm,,,,,,,,,,mm,,,,.~~~........,,,,,,,mm,,,mmmp,,,,,,,,,,
+hhhhhh....^^^^^^^^^,,,^^^^^^^.,,,,ppmm,,,,mm,pmmmm,,,,mm,,,~~~,,,,,,,,pp,,,mm2,,,,,,,mm,,,,,,,,,
+____,X,,,V,,,,,,,,,,,,,,,,,pp,,mmmmp,,,mmm,,pp,,,,mmpm,,,qqqqqq,mmmmm,,p,,,,,mmmpmmmm,,,@n,,,,N,
+_____,,,,mmmmmm,,,,,,mmmmm,,pmm,,,,,,,,,,,.....5.,,pp,mm,______,,,,,,,,mmpmmm,,pp,,,,mm,,,,,,,,,
+____BZ,,,,,s,,,,,,,,,,,,,,,,,,,mm,,,,,,...............,,,QQQQQQ,,,,,,,m,,,,,,,......1,,,,,,,,,,,
+_____,,,,m,,,,,,mmmpmmmmmmmmmmp,,x,......................,~~~,,,,,,,,,,,...................hhhhh
+___,,X,,,,,,,,,,,,pp,,,,,,,,,,,,..........................~~~.....a.........a...........g.hhhhhh
+hhhhhhhhh.................................................~~~............................hhhhhhh
+hhhhhhhh....................FFFFFFFF..FFFFFFFFF...........~~~........FFFFFFF..FFFFFFFFFFhhhhhhhh
+hhhhhhh.....................E.................E...........~~~g.......E.................hhhhhhhhh
+hhhhhhh.....................E.................E...........~~~........E.................hhhhhhhhh
+hhhhhhh.....................E......O....O...O.E...........~~~g.......E........R.......hhhhhhhhhh
+hhhhhhh.....................E.O...............E...........~~~........E................hhhhhhhhhh
+hhhhhhh.............R.......E.................E............~~g.......E..........R....hhhhhhhhhhh
+hhhhhh...T....T.............E.................E.......T....~~........E............Y..hhhhhhhhhhh
+hhhhhh......................E...........O.....E............~~........E...............hhhhhhhhhhh
+hhhhh..............T........E........O........E............~~~.......E...H............hhhhhhhhhh
+hhhhh....g..................E...O.............E............~~~.......E..........Y...P.hhhhhhhhhh
+hhhhh.......................E.................E..........R..~~.......E.................hhhhhhhhh
+hhhhhh....g...R.........C...E.........g.....P.E......P......~~~......E.................hhhhhhhhh
+hhhhhhhh..........R.........E...O..g..Og..O...E...P......hhhh~~~.....E.........Pg.......hhhhhhhh
+hhhhhhhhh...................E......Ohhhhhhh...E........hhhhhh~~~h....E.ghhhhhh..........hhhhhhhh
+hhhhhhhhhh......P...hhhhhh..E.....hhhhhhhhhhh.E......hhhhhhhhh~~~hhhhhhhhhhhhhhh.....P...hhhhhhh
+hhhhhhhhhh........hhhhhhhhhhhhhhhhhhhhhhhhhhhhh....hhhhhhhhhhhh~~hhhhhhhhhhhhhhhh........hhhhhhh
+hhhhhhhhhhhh...hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhh.....hhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhh
