@@ -1,0 +1,54 @@
+{
+ "_comment": "The Akt III run of the autopilot (tools/autopilot/akt3_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt3. The run starts from tests/fixtures/saves/v2_akt2_end.json, which carries 374 s of play: taken off here, so the numbers are the act's.",
+ "seconds": 130,
+ "dialogue_seconds": 62,
+ "clicks": 120,
+ "route_px": 7143,
+ "beats": [
+  {
+   "beat": "act3_morning",
+   "seconds": 6
+  },
+  {
+   "beat": "waldweg_enter",
+   "seconds": 9
+  },
+  {
+   "beat": "forest_rest",
+   "seconds": 20
+  },
+  {
+   "beat": "waldweg_marks",
+   "seconds": 38
+  },
+  {
+   "beat": "huette_enter",
+   "seconds": 51
+  },
+  {
+   "beat": "huette_stay",
+   "seconds": 70
+  },
+  {
+   "beat": "flut_enter",
+   "seconds": 73
+  },
+  {
+   "beat": "flut_mark",
+   "seconds": 80
+  },
+  {
+   "beat": "nachtwald_enter",
+   "seconds": 96
+  },
+  {
+   "beat": "act3_waiting",
+   "seconds": 107
+  },
+  {
+   "beat": "act3_home",
+   "seconds": 130
+  }
+ ],
+ "start_seconds": 374
+}

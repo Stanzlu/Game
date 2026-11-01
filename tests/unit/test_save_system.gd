@@ -186,6 +186,19 @@ func test_the_end_of_the_game_is_read_from_the_saves() -> void:
 	assert_true(saves.slice_finished(), "the newest save has reached the last chapter")
 
 
+func test_the_frozen_ends_of_the_acts_say_whether_the_game_is_over() -> void:
+	# real runs, not made-up chapters: Act II's end goes on in the morning, Act III's is the end
+	var fixtures := "res://tests/fixtures/saves/"
+	_write_raw("slot_1", FileAccess.get_file_as_string(fixtures + "v2_akt2_end.json"))
+	assert_false(saves.summary("slot_1")["finished"], "the evening after the rift is not the end")
+	assert_false(saves.slice_finished())
+	_write_raw("slot_2", FileAccess.get_file_as_string(fixtures + "v2_akt3_end.json"))
+	assert_true(
+		saves.summary("slot_2")["finished"], "the way home is the end of the last act built"
+	)
+	assert_true(saves.slice_finished(), "and the newer save of the two says it")
+
+
 func test_the_closing_line_follows_the_newest_save_only() -> void:
 	_write_chapter("slot_1", "2026-10-01T10:00:00Z", Chapter.LAST)
 	_write_chapter("slot_2", "2026-10-02T10:00:00Z")

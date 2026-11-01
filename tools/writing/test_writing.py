@@ -415,6 +415,15 @@ class ActCalibrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             calibrate.per_beat_act("akt2", beats)
 
+    def test_act_three_runs_from_the_end_of_act_two_and_begins_with_the_morning(self):
+        self.assertEqual(calibrate.ACT_STARTS["akt3"], "act3_morning")
+        self.assertGreater(calibrate.start_seconds("akt3"), 300)
+        data = calibrate.act_baseline("akt3")["data"]
+        self.assertEqual(data["beats"][0]["beat"], "act3_morning")
+        self.assertEqual(data["start_seconds"], calibrate.start_seconds("akt3"))
+        beats = [("act2_werte", 3000), ("act3_morning", 4000), ("act3_home", 4600)]
+        self.assertEqual(calibrate.act_origin("akt3", beats), 4000)
+
     def test_the_baselines_are_real_runs_with_more_clicks_than_a_third_of_nothing(self):
         for act in calibrate.BASELINES:
             floor = calibrate.act_baseline(act)
@@ -422,7 +431,7 @@ class ActCalibrationTests(unittest.TestCase):
             self.assertGreater(floor["data"]["clicks"], 50)
             minutes, lines = calibrate.act_estimate(act, 1)
             self.assertTrue(8.0 < minutes < 45.0, "%s: %.1f" % (act, minutes))
-            self.assertGreater(lines, 300)
+            self.assertGreater(lines, 250)
 
 
 class ReadableTests(unittest.TestCase):

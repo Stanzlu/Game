@@ -94,16 +94,51 @@ Der Weg ohne Lesen ist damit 143 Sekunden plus 113 für die Sprünge, **4,3 Minu
 - **Der Slice-Wert (`calibrate.py` ohne Schalter) zählt seit Akt II die 38 Zeilen von Akt II in den Slice-Dateien mit:** 484 statt 446 Zeilen, 21,7 statt 20,7 Minuten bei normalem Tempo. Die Tabelle
   „Der Slice nach dem Modell“ oben bleibt der Stand von P6.6; die Akt-Werte zählen jede Zeile genau einmal (ein Test prüft, dass keine Story-Datei zu keinem Akt gehört).
 
+## Akt III nach dem Lauf des Autopiloten (P6.15, W7, ADR-070)
+
+`tools/autopilot/akt3_full.json` spielt Akt III vom Morgen nach dem Ende von Akt II bis zum Ende des Weges nach Hause: der Morgen im Tal, der Bachlauf, der Waldweg
+(die Wegzeichen, die Rasten, der Zapfen, die Stufen im Hohlweg, das leere Brett), die Hütte (Tee, Kiesel, Leine, Hocker, Flöte, das Bleiben in drei Stufen), die
+Flutlichtung (Marke, Lager, Nest, Treibholz, Trittsteine), der Nachtwald (das ferne Licht, ein Leuchtbaum, das Leuchtholz, die Laterne und das Summen) und die Heimkehr
+(das Tal, das Haus mit der Werkbank, der Besuch des Einsiedlers, das stille Ende mit der Kapitelmarke `act3`). Er setzt kein Flag und gibt keinen Gegenstand (die Quest
+läuft von selbst durch ihre Stufen: der Morgen beginnt sie, die Türen, die Marke und die Hütte schalten sie weiter); er beginnt im eingefrorenen Stand
+`tests/fixtures/saves/v2_akt2_end.json` (der Antreiber sitzt dort am Feuer: seine Plätze im Wald bleiben leer, die Segmentskripte spielen sie von einem frischen Profil)
+und endet im Haus, nach dem Ende des Aktes. `check.sh` spielt den Lauf bei jedem Durchgang (rund 8 Sekunden) und verlangt 38 Marken (11 Beats, 27 Flags).
+
+Das Log gibt den Weg: **130 Sekunden** Spielzeit (der Stand trägt 374 davon schon), 62 mit offenem Gespräch, 120 geklickte Zeilen (**44 %** der 272 Zeilen von Akt III, wie
+`calibrate.py` zählt: auch Zweige, die der Lauf nicht nimmt) und 7.143 Pixel Luftlinie, die der Autopilot springt statt geht. Der Weg ohne Lesen ist damit 68 Sekunden plus 81 für die Sprünge,
+**2,5 Minuten**.
+
+| Tempo | Akt III |
+|---|---|
+| langsam | 14,3 min |
+| normal | 11,2 min |
+| schnell | 9,1 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 27,0 min |
+
+`python3 tools/writing/calibrate.py --akt3` zeigt die Tabelle, `--record-akt3 <Log>` schreibt `calibration_akt3.json` neu (nach einem neuen Segment den Lauf wiederholen),
+`--akt3 --log <Log>` passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `act3_morning`). Dazu vier Befunde:
+
+- **Der Plan rechnet mit 90 Minuten für Akt III, das Modell mit 9 bis 14.** Der Weg ist mit 2,5 Minuten kürzer als der von Akt II (4,3): die Karten sind groß, aber
+  der Autopilot springt von Ding zu Ding, und das Gehen eines Menschen ist der Umweg (×1,6), den das Modell erst im Schätzen zugibt. Die Lücke zu 90 Minuten ist wie bei den Akten davor größer als jede Annahme des Modells
+  (der äußerste Eckfall gibt 27); dein Durchlauf legt Anteil, Pause und Umweg fest.
+- **Der Autopilot sieht 44 % der Zeilen** (Akt I: 33 %, Akt II: 41 %). Er nimmt in jedem Gespräch die erste Antwort; was der Lauf nicht sieht, steht unter GUT-Tests: der Antreiber an den Brettern und an der Marke
+  (er sitzt im Stand am Feuer und fehlt im Wald), seine Tee-Antworten, die Zweige ohne `care`, der Besuch ohne Einladung, die Katze mit und ohne Namen.
+- **Die Textdichte liegt bei 24,4 Zeilen je Minute** (Akt I: 24,0; Akt II: 25,9; Plan 9.6: 6). Auch Akt III trägt seine Länge nicht aus Text: wer das Bleiben in der Hütte, das Sitzen an der Laterne und das Warten
+  nicht abkürzt, braucht länger als der Autopilot, der nichts davon tut als klicken.
+- **Der Lauf ist der eingefrorene Stand `v2_akt3_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act3`, Quest `done`, Facette `care`, 180 Flags, zehn Gegenstände). Der Stand wird nie von Hand
+  geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn als Ende zählt, und Akt IV beginnt in ihm.
+
 ## Benutzen
 
 ```
 python3 tools/writing/calibrate.py                                   den Slice bei jedem Tempo
 python3 tools/writing/calibrate.py --akt1                            Akt I bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt2                            Akt II bei jedem Tempo (eigener Weg)
-python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2 für Akt II)
+python3 tools/writing/calibrate.py --akt3                            Akt III bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2, --record-akt3 für Akt II, III)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
-python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2 für Akt II)
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2, --akt3 für Akt II, III)
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.

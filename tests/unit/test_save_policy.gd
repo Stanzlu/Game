@@ -122,6 +122,41 @@ func test_the_frozen_v2_end_of_act_two_keeps_its_story() -> void:
 	assert_gt(s.playtime_seconds, 300.0)
 
 
+func test_the_frozen_v2_end_of_act_three_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt3_full.json from v2_akt2_end.json, frozen where it ends: the
+	# house, with the bench in the corner and the act over (W7, ADR-070)
+	var result := SaveCodec.decode(_fixture("v2_akt3_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "haus")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL)
+	assert_eq(s.day_preset, "morgen")
+	for chapter: String in ["act1", "act2", "slice", "act3"]:
+		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
+	assert_true(Chapter.in_flags(s.flags, Chapter.LAST), "it is the last chapter this build tells")
+	assert_true(s.facets.has("care"), "the first rest in the wood was her own will")
+	assert_true(s.facets.has("perception") and s.facets.has("boundaries"))
+	var way: GameState.QuestProgress = s.quests["main_forest_way"]
+	assert_eq(way.stage, "done")
+	assert_eq(way.history, PackedStringArray(["leave", "brook", "wood", "night", "home", "done"]))
+	for quest_id: String in ["side_forest_marks", "side_forest_nest"]:
+		assert_true(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage).is_final(), quest_id)
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+	for flag: String in [
+		"house.workbench",
+		"house.guest_hermit",
+		"forest.night_way",
+		"forest.waited",
+		"forest.hermit_invited"
+	]:
+		assert_true(s.flags.has(flag), "%s was set on the way" % flag)
+	assert_true(s.inventory.has("curiosity_foxfire"), "the piece of glowing wood came home")
+	assert_gt(s.playtime_seconds, 480.0, "Act II's 375 seconds and the act's own")
+
+
 func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	var result := SaveCodec.decode(_fixture("v2_slice_end.json"))
 	assert_true(result.ok, result.error)
