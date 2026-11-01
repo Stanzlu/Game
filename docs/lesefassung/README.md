@@ -30,7 +30,7 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 
-Akt I hat keine eigenen Dateien für A7 (Wiederholung) und A9 (Anschluss): ihre Zeilen stehen in `A3_MARKT.md`, `A2_GASTHAUS.md` (die Schleifen des Gastwirts) und `SLICE.md`. Akt II hat keine Datei für B7 (keine neuen Zeilen).
+Akt I hat keine eigenen Dateien für A7 (Wiederholung) und A9 (Anschluss): ihre Zeilen stehen in `A3_MARKT.md`, `A2_GASTHAUS.md` (die Schleifen des Gastwirts) und `SLICE.md`. Akt II hat keine Datei für B7 (keine neuen Zeilen), Akt III keine für W7 (der Durchlauf schreibt nichts).
 
 **Zur Nummerierung.** Die Nummer eines Cues ist seine Stelle in seiner Datei zum Zeitpunkt der Erzeugung (`T9`, `H20`). Weil Akt II Cues in die Dateien des Slice eingefügt hat,
 tragen zwei Cues von `tal.dialogue` in verschiedenen Lesefassungen die Nummer T9 (`evening_elysia` in `SLICE.md` und `B2_NEIN.md`, `evening_values` in `B6_ABEND.md`); eine neue Erzeugung zählt `evening_elysia` als T10. Antworte darum mit dem Namen des Cues und der Datei („B6, `evening_values`: OK“), nicht nur mit der Nummer.
