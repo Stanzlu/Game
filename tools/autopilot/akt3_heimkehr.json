@@ -1,0 +1,21 @@
+[
+  {"relative": true},
+  {"log": "Act III, W6: the way home ends at the house; a run from the end of Act II has no walk behind it, so the quest is put on the stage 'home' and the hermit is asked in", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "log": "the frozen end of Act II: the valley", "t": 0.1},
+  {"wait_for": {"beat": "act3_morning"}, "timeout": 60, "log": "the morning is told and the way begins", "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 0.1},
+  {"quest": "main_forest_way", "stage": "home", "log": "the walk is made: leave, brook, wood, night and home, by the quest's own steps", "t": 0.2},
+  {"wait_for": {"quest": "main_forest_way", "stage": "home"}, "timeout": 10, "t": 0.1},
+  {"flag": "forest.hermit_invited", "log": "she asked him in the hut (only with care, which a run cannot choose)", "t": 0.1},
+  {"enter": "haus", "log": "through the hedge to the house: the bench stands in the corner", "t": 0.5},
+  {"wait_for": {"scene": "haus"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"flag": "house.workbench"}, "timeout": 10, "log": "the bench is there from the first picture", "t": 0.1},
+  {"wait_for": {"flag": "house.guest_hermit"}, "timeout": 90, "log": "the lines are clicked through; the hermit comes in, sits, speaks", "t": 0.1},
+  {"wait_for": {"beat": "act3_home"}, "timeout": 120, "log": "the last lines, he gets up and goes; the act is over", "t": 0.1},
+  {"wait_for": {"flag": "chapter.act3"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"quest": "main_forest_way", "stage": "done"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "log": "nothing holds her: the door out is not locked", "t": 0.1},
+  {"enter": "tal", "log": "out into the valley, where the fence by the house is mended", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "t": 0.1},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]
