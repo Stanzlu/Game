@@ -1,6 +1,11 @@
 ; Vertical Slice: das Haus von innen (Beat 6, docs/PHASE4_PLAN.md). Klein und von Hand gesetzt.
 ; Wände und Fenster malt das Requisit haus/shell, den Dielenboden backt tools/art/bake_ground.py
 ; content/maps/haus.txt. Kamin, Regal, Katze und Mira reagieren auf den Zustand des Hauses.
+; Akt III, W6 (Heimkehr): Ist die Heimkehr da (house.workbench), steht in der Südostecke eine Werkbank (B), an ihrem
+; Westende sitzt der Antreiber (A, in jedem Zustand, auch wenn er am Feuer saß: a, z und k räumen dafür das Feld) und die
+; Katze liegt als Bild quer über seinen Knien (Z, nur wenn sie gefüttert ist); zwischen Regal und Fenster hängt sein Plan (Y).
+; Den Stuhl (C) bringt der Einsiedler mit, wenn er zu Besuch war (house.guest_hermit); er geht, der Stuhl bleibt.
+; Alles Neue ist bedingt und ohne Katalogschatten, der Dielenboden bleibt so, wie er gebacken ist (kein Bake).
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/haus_ground.png"
@@ -20,12 +25,13 @@ u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; das Fenster (vor dem Feuer leer), die Katze draußen auf dem Sims und später drinnen am Feuer
 w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20}}
 c = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_window", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20, "sound": "cat_meow_muffled", "if": "house.fire_lit", "unless": "house.cat_fed"}}
-k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "sound": "purr", "if": "house.cat_fed", "unless": "house.antreiber_by_fire"}}
+k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "cue": "cat", "dialogue": "res://content/dialogue/slice/haus.dialogue", "sound": "purr", "if": "house.cat_fed", "unless": ["house.antreiber_by_fire", "house.workbench"]}}
 ; Abdrücke im Staub: ein Punkt im Raum, den nur sieht, wer genau hinsieht (die Szene setzt house.looks_closely aus der Facette)
 p = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "haus_prints", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 14, "if": "house.looks_closely"}}
-; der Antreiber, wenn man am Feuer sitzen geblieben ist; später schläft die Katze auf ihm (Bible §28)
-a = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "antreiber_rest", "sit": true, "face": "w", "if": "house.antreiber_by_fire"}}
-z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "lift": 14, "if": ["house.cat_fed", "house.antreiber_by_fire"]}}
+; der Antreiber, wenn man am Feuer sitzen geblieben ist; später schläft die Katze auf ihm (Bible §28); nach der Heimkehr
+; (house.workbench) sitzt er an der Werkbank (A, Z) und diese beiden Plätze sind leer: er steht nie an zwei Orten
+a = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "antreiber_rest", "sit": true, "face": "w", "if": "house.antreiber_by_fire", "unless": "house.workbench"}}
+z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "lift": 14, "if": ["house.cat_fed", "house.antreiber_by_fire"], "unless": "house.workbench"}}
 ; Mira kommt, wenn das Feuer brennt, und geht wieder: die Szene lässt sie hereinkommen und sich
 ; setzen (GuestWalker), dann übernimmt diese Platzierung; zum Gehen steht sie wieder auf
 M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/slice/haus.dialogue", "cue": "mira", "glance": true, "sit": true, "face": "e", "if": "house.mira_seated", "unless": "house.mira_left"}}
@@ -34,6 +40,15 @@ Q = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size":
 ; B5: die Kräuter unter dem Balken (ein Punkt an der Wand, ohne Sprite: das Bild hängt schon in der Hülle) und der zweite Hocker am Feuer
 h = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "herbs", "dialogue": "res://content/dialogue/slice/haus.dialogue", "radius": 20, "if": "house.fire_lit"}}
 s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/stool", "if": "value.closeness"}}
+; W6 Heimkehr: die Werkbank in der Südostecke (die Spielerin läuft nicht durch sie: das Requisit trägt eine Form), der Antreiber an
+; ihrem Westende (sitzt, sieht nach Osten auf seine Arbeit), die Katze auf seinem Schoß (eine Zelle südlich, hochgesetzt, wie z)
+; und das Blatt mit seinem Plan in der Wand zwischen Regal und Fenster (eine Wandzelle wie R und w). Der Stuhl des Gastes liegt flach
+; unter ihm am Tischende. Alles bedingt, kein Sprite mit Katalogschatten: der gebackene Boden bleibt gültig.
+B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/workbench", "cue": "workbench", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "radius": 22, "if": "house.workbench"}}
+A = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_antreiber_look.tres", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "cue": "antreiber_bench", "sit": true, "face": "e", "if": "house.workbench"}}
+Z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "lift": 14, "cue": "cat_bench", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "if": ["house.cat_fed", "house.workbench"]}}
+Y = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/plan_board", "cue": "plan_board", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "radius": 20, "if": "house.workbench"}}
+C = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/guest_chair", "if": "house.guest_hermit"}}
 [map]
 ########################################
 ########################################
@@ -43,14 +58,14 @@ s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ############SWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
-############WWWWWWWRWWcwWhWW############
+############WWWWWWWRWYcwWhWW############
 ############W___K__________W############
 ############W__M__ak__p____W############
 ############W____rz______b_W############
-############W___s___T______W############
+############W___s___T_C____W############
 ############W______@_______W############
-############W_u____1_______W############
-############W______Q_______W############
+############W_u____1__A_B__W############
+############W______Q__Z____W############
 ############WWWWWWWDWWWWWWWW############
 ########################################
 ########################################

@@ -1112,6 +1112,16 @@
    "res://assets/generated/props/haus/fireplace_lit_2.png"
   ]
  },
+ "haus/guest_chair": {
+  "anchor": [
+   12,
+   26
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/guest_chair.png"
+  ]
+ },
  "haus/hut_bed": {
   "anchor": [
    15,
@@ -1227,6 +1237,16 @@
   },
   "textures": [
    "res://assets/generated/props/haus/hut_table.png"
+  ]
+ },
+ "haus/plan_board": {
+  "anchor": [
+   14,
+   19
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/plan_board.png"
   ]
  },
  "haus/rug": {
@@ -1364,6 +1384,25 @@
   },
   "textures": [
    "res://assets/generated/props/haus/table_one.png"
+  ]
+ },
+ "haus/workbench": {
+  "anchor": [
+   26,
+   30
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    46,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/haus/workbench.png"
   ]
  },
  "tal/barrel": {

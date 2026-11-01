@@ -397,10 +397,11 @@ class FlutlichtungLayoutTests(unittest.TestCase):
         stands, sits = symbols["A"]["params"], symbols["E"]["params"]
         self.assertEqual(stands["cue"], "antreiber_flood")
         self.assertEqual(sits["cue"], "antreiber_flood")
-        self.assertEqual(set(stands["unless"]), {"house.antreiber_by_fire", "forest.flood_sat"})
+        # W6: nor at home at his bench, where he sits in every state (house.workbench)
+        self.assertEqual(set(stands["unless"]), {"house.antreiber_by_fire", "house.workbench", "forest.flood_sat"})
         self.assertTrue(sits["sit"])
         self.assertEqual(sits["if"], "forest.flood_sat")
-        self.assertEqual(sits["unless"], "house.antreiber_by_fire")
+        self.assertEqual(set(sits["unless"]), {"house.antreiber_by_fire", "house.workbench"})
         for key in ("A", "E"):
             self.assertEqual(symbols[key]["params"]["dialogue"], "res://content/dialogue/akt3/flutlichtung.dialogue")
         _, wald, _ = _map()
