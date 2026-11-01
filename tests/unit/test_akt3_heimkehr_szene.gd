@@ -400,7 +400,7 @@ func _walk_out(scene: HausScene) -> bool:
 
 
 ## What the autosave on the disk says of the end: the stage, the mark of the chapter, the beat, the
-## bench; and the build counts the game as finished.
+## bench; the build does not count the game as finished: the way goes on to the west (Act IV).
 func _assert_the_end_on_the_disk(label: String) -> void:
 	var disk := SaveSystem.read_slot(SaveSystem.AUTOSAVE)
 	assert_true(disk.ok, "readable: " + label)
@@ -408,7 +408,7 @@ func _assert_the_end_on_the_disk(label: String) -> void:
 	assert_true(Chapter.in_flags(disk.state.flags, "act3"), "the mark of the chapter: " + label)
 	assert_true(disk.state.flags.has("beat.act3_home"), "the beat: " + label)
 	assert_true(disk.state.flags.has("house.workbench"), "the bench: " + label)
-	assert_true(SaveSystem.summary(SaveSystem.AUTOSAVE)["finished"], "finished: " + label)
+	assert_false(SaveSystem.summary(SaveSystem.AUTOSAVE)["finished"], "the way goes on: " + label)
 
 
 func test_without_the_hermit_the_act_ends_quietly_and_nothing_plays_again() -> void:

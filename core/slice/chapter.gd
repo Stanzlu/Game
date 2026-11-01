@@ -6,11 +6,12 @@ extends RefCounted
 ## A mark is set once and never cleared; `Beat` marks the steps inside a chapter.
 ## The last chapter this build tells is LAST: a save that has reached it counts as finished (the
 ## start menu says so under the logo, "Neues Spiel" no longer asks). The end of Act II is not that
-## any more: "Weiter" goes on with the morning after (ADR-070). LAST moves with the act that ends
-## the build; game code never asks for a chapter by its id before an act sets it (StoryLint).
+## any more: "Weiter" goes on with the morning after (ADR-070); nor is the end of Act III: the
+## way west out of the valley goes on (ADR-071). LAST moves with the act that ends the build;
+## game code never asks for a chapter by its id before an act sets it (StoryLint).
 
 const PREFIX := "chapter."
-const LAST := "act3"
+const LAST := "act4"
 ## Flags that older builds set for a chapter: chapter id -> flag. Still read, never set again.
 const LEGACY := {"slice": "slice.finished"}
 

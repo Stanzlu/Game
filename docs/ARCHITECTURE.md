@@ -76,12 +76,12 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   Einstellungen, Tastenbelegung, Zum Startmenü, Spiel beenden. „Bewegungsgefühl“ und „Richtungen“
   stehen in den Einstellungen nur in Debug-Builds (Gruppe „Entwicklung“).
 - Startmenü: Fortsetzen (neuester lesbarer Stand), Neues Spiel (Namenswahl `NameEntry`, dann Elysia; nach
-  dem Ende des Spiels, `Chapter.LAST`, ohne Rückfrage, am Ende von Akt II mit), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
+  dem Ende des Spiels, `Chapter.LAST`, ohne Rückfrage, am Ende von Akt II und Akt III mit), Laden (nur mit Stand), Prototypen (Debug-Builds; in Release-Builds stattdessen
   der Leistungstest), Einstellungen, Mitwirkende (`CreditsMenu`, im Elysia-Titel „Die Helden hinter dem
   Helden“), Beenden. Die Fußzeile trägt den Tastenhinweis des benutzten Geräts und die Version. Unter dem
   Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald der neueste lesbare Stand das letzte Kapitel trägt
   (`SaveSystem.slice_finished()`, liest `Chapter.LAST`; seit Akt III, W1, ist das Ende von Akt II nicht mehr das
-  Ende: „Weiter“ beginnt den Morgen danach, ADR-070; seit Akt III, W6, setzt die Heimkehr im Haus `chapter.act3`, und das ist das Ende des Builds). `--start=<schlüssel>` und
+  Ende: „Weiter“ beginnt den Morgen danach, ADR-070; seit Akt III, W6, setzt die Heimkehr im Haus `chapter.act3`, und das war bis Akt IV, S1, das Ende des Builds; seit S1 ist es `chapter.act4`, das Akt IV am Ende von S8 setzt, ADR-071). `--start=<schlüssel>` und
   `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
   `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
 

@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt4/strasse_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+
+[node name="Strasse" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/strasse.txt"
+player_sheet = ExtResource("2_sheet")
+wind_leaves = true
+reflect_player = true
+day_preset = "morgen"
+water_ripples = 0.4
+cloud_shadows = 0.012
+water_glints = 0.6
+fog_banks = 8
+fog_color = Color(0.9, 0.93, 0.95, 0.12)
+swimmers = 2
+dragonflies = 2

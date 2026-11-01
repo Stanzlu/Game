@@ -15,6 +15,7 @@ const STORY_DIALOGUES: PackedStringArray = [
 	"res://content/dialogue/akt1/",
 	"res://content/dialogue/akt2/",
 	"res://content/dialogue/akt3/",
+	"res://content/dialogue/akt4/",
 ]
 const CODE_DIRS: PackedStringArray = [
 	"res://core", "res://entities", "res://world", "res://ui", "res://encounters"

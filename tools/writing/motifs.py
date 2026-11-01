@@ -72,7 +72,7 @@ def story_flags(sites):
     found = []
     for flag, entry in sorted(sites.items()):
         if entry["set"] and not flag.startswith(SKIPPED_PREFIXES) and flag.split(".")[0] in (
-            "elysia", "valley", "house", "forest", "encounter", "slice", "fragment", "melody", "value"
+            "elysia", "valley", "house", "forest", "city", "encounter", "slice", "fragment", "melody", "value"
         ):
             found.append(flag)
     return found

@@ -1,0 +1,92 @@
+# Die Straße, Akt IV, Segment S1 (docs/akt4/REGIONSBRIEFE.md). Der Westweg öffnet sich, sobald Akt III zu Ende ist, und führt aus dem
+# Tal auf eine Straße nach Westen, bis kurz vor die Stadt. Leicht, Erkunden, Humor aus den Dingen: zwei Wegweiser, ein Feld mit
+# Vogelscheuche und Schild, ein Meilenstein, eine Aussicht. Keine Figur spricht und keine ist zu sehen. Die Ziege tritt nur als
+# Spur auf (Hufabdrücke, ein Glöckchen am Pfosten), nie selbst, und niemand erklärt, was sie will (Brief O13; Akt II zeigte sie
+# ahnungslos auf dem Balken des Wehrs, hier hat sie etwas vor, und das Rathaus ist das Nachspiel). Der Meilenstein ist eine
+# Spur der Welt (Fragment, kein Bild des Kindes): ein Ding, das gedient hat, ohne Grund und ohne Figur. Die Schnur über die
+# Straße am Westende ist ein Platzhalter bis S2: frisch gepflastert, kein Versprechen. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt).
+# Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Die Wegweiser -----------------------------------------------------------------------------------------------------
+# Der Wegweiser im Tal steht am Westrand und gibt es erst, wenn Akt III vorbei ist (die Karte zeigt ihn nur dann); sein Gag ist,
+# dass er so tut, als stünde er schon immer dort. Der Wegweiser am Anfang der Straße kennt beide Richtungen und sichert sich ab.
+
+~ signpost_tal
+Am Westrand des Tals steht ein Wegweiser, als hätte er immer dort gestanden. Er riecht noch nach Farbe. [ID:str_tal_1] [#draft]
+Der Pfeil zeigt nach Westen. Darunter ein einziges Wort, »Stadt«, in Buchstaben, die nicht zweifeln. [ID:str_tal_2] [#draft]
+=> END
+
+~ signpost
+Ein Wegweiser mit zwei Pfeilen. Der nach Osten heißt »Tal« und ist kurz. Mehr gibt es dazu nicht zu sagen. [ID:str_sign_1] [#draft]
+Der nach Westen heißt »Stadt« und ist länger. Darunter steht klein, mit Bleistift, »Ohne Gewähr«. [ID:str_sign_2] [#draft]
+=> END
+
+# --- Die Spuren der Ziege ----------------------------------------------------------------------------------------------
+# Hufabdrücke auf der Straße (sie schlagen Haken um die Pfützen, aber alle gehen nach Westen) und ein Glöckchen am Zaunpfosten. Beides ist nur ein Hinweis; die Ziege selbst kommt in S2
+# (auf einem Dach) und in S6 (auf der Bühne). Die Abdrücke tun nichts, das Glöckchen ist eine Kuriosität: Einstecken gibt den
+# Gegenstand und das Flag, Hängen lassen gibt nichts und kostet nichts. Der Pfosten ohne Glöckchen ist ein anderes Bild der Karte.
+
+~ goat_prints
+Im Staub der Straße stehen Hufabdrücke, zweigeteilt, mal links, mal rechts der Mitte, aber alle nach Westen. [ID:str_hoof_1] [#draft]
+Sie schlagen einen Haken um jede Pfütze und kommen doch voran. Wer hier ging, hatte etwas vor. [ID:str_hoof_2] [#draft]
+=> END
+
+~ goat_bell
+Am Zaunpfosten hängt ein Glöckchen, die angekaute Schnur ordentlich über den Nagel gelegt, so wie man einen Hut aufhängt. [ID:str_bell_1] [#draft]
+- Einstecken. [ID:str_bell_r1] [#draft]
+	Du steckst es ein. Es klingt einmal in der Tasche, fast höflich. [ID:str_bell_2] [#draft]
+	do WorldState.add_item("curiosity_goat_bell")
+	do WorldState.set_flag("city.bell_taken")
+- Hängen lassen. [ID:str_bell_r2] [#draft]
+	Du lässt es hängen. Es klingt hinter dir einmal, knapp, wie ein letztes Wort. [ID:str_bell_3] [#draft]
+=> END
+
+# --- Das Feld ----------------------------------------------------------------------------------------------------------
+# Humor aus Dingen, nie auf Kosten einer Person: eine Vogelscheuche, die ihre Krähen duldet, und ein Schild, das eine Ausnahme
+# für sie enthält. Nichts wird gesetzt, nichts gelehrt.
+
+~ scarecrow
+Mitten im Feld steht eine Vogelscheuche, die Arme weit ausgebreitet, als wolle sie gleich etwas Wichtiges verkünden. [ID:str_crow_1] [#draft]
+Auf dem einen Arm sitzt eine Krähe und hört zu. Sie wirkt nicht beunruhigt. [ID:str_crow_2] [#draft]
+Nur der Topf auf dem Kopf sitzt fest, mit Stroh, das aus einem Loch quillt. Der Rest hat sich mit der Krähe abgefunden. [ID:str_crow_3] [#draft]
+=> END
+
+~ field_notice
+Am Feldrand steht ein Schild, in Eile gemalt, mit einem Klecks Vogelmist in der Ecke. »Bitte nicht betreten. Auch nicht zum Nachsehen.« [ID:str_note_1] [#draft]
+Darunter hat jemand mit anderem Stift nachgetragen »Ausgenommen die Vogelscheuche«. Sie macht davon Gebrauch. [ID:str_note_2] [#draft]
+=> END
+
+# --- Der Meilenstein ---------------------------------------------------------------------------------------------------
+# Ein Fragment, eine Spur der Welt (kein Bild des Kindes): ein Stein, der gezählt hat, ohne dass jemand danach fragte. Die Zahl
+# darauf ist abgetragen, die Kante von Füßen blank geschliffen; kein Grund, keine Figur. Das erste Mal setzt das Flag, danach
+# gibt es nur noch eine kurze Zeile.
+
+~ milestone
+if WorldState.has_flag("fragment.milestone")
+	Der Meilenstein, die Oberkante blank geschliffen. Er zählt weiter. [ID:str_mile_4] [#draft]
+else
+	Am Straßenrand steht ein Meilenstein, hüfthoch, die Zahl so weit abgetragen, dass nur eine flache Mulde bleibt. [ID:str_mile_1] [#draft]
+	Die Oberkante ist rund und blank, an einer Stelle geschliffen, die genau zu einem Fuß passt. [ID:str_mile_2] [#draft]
+	Für einen Atemzug ist er neu, die Zahl scharf. Dann ist er wieder alt und zählt weiter, ohne dass jemand fragt. [ID:str_mile_3] [#draft]
+	do WorldState.set_flag("fragment.milestone")
+=> END
+
+# --- Die Aussicht und das Ende der Straße ------------------------------------------------------------------------------
+# Der Blick am Westende: kein Haus, keine Figur, nur Dächer und Rauch hinter einer Hecke, viele Fäden statt des einen über dem Haus
+# (bl_back_1). Das Flag city.view_seen liest die Szene (Beat strasse_view). Der Blocker davor (town_wait) ist ein Platzhalter für
+# die Tür der Stadt in S2 und verspricht nichts; S2 legt ihn still, wie W4 es mit south_wait tat.
+
+~ view_town
+if WorldState.has_flag("city.view_seen")
+	Hinter der Hecke die Dächer, darüber der Rauch, viele Fäden durcheinander. [ID:str_view_4] [#draft]
+else
+	Von hier aus geht der Blick über Wiesen bis zu einer Hecke. Dahinter stehen Dächer, und über den Dächern steigt Rauch auf. [ID:str_view_1] [#draft]
+	Nicht ein Faden, gerade nach oben, wie über dem Haus, sondern viele, die sich im Himmel nicht einig werden. [ID:str_view_2] [#draft]
+	Die Stadt selbst bleibt hinter der Hecke. Ihren Rauch hat sie schon vorgeschickt. [ID:str_view_3] [#draft]
+	do WorldState.set_flag("city.view_seen")
+=> END
+
+~ town_wait
+Quer über die Straße ist eine Schnur zwischen zwei Pfosten gespannt. Am Rand liegt ein Haufen Pflastersteine, ein Hammer obenauf. [ID:str_wait_1] [#draft]
+Hinter der Schnur ist frisch gepflastert, die Fugen noch hell. Die Steine liegen in ordentlichen Reihen und haben es nicht eilig. [ID:str_wait_2] [#draft]
+=> END

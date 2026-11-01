@@ -100,6 +100,11 @@ t = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 7 = {"ground": ".", "marker": "spawn_bach"}
 9 = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "bach_wait", "dialogue": "res://content/dialogue/akt2/bachlauf.dialogue", "unless": "house.mira_visited"}}
 8 = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "bachlauf", "spawn": "tal", "auto": true, "size": [3, 1], "if": "house.mira_visited"}}
+; Akt IV (S1): nach dem Ende von Akt III (chapter.act3) öffnet sich der Westweg: eine Tür (<) auf dem Pfad vor dem Blocker V führt auf die Straße, die Ankunft von dort liegt zwei Zellen
+; weiter östlich (%), und ein Wegweiser (st_sign) steht am Pfad. Alles auf Zellen mit dem Boden der alten Zelle, ohne Schatten im Katalog: der Stempel von tal bleibt, kein Bake.
+< = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "strasse", "spawn": "tal", "auto": true, "size": [1, 9], "if": "chapter.act3"}}
+% = {"ground": ",", "marker": "spawn_strasse"}
+$ = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_sign", "cue": "signpost_tal", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 16, "if": "chapter.act3"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhh^^^^hhhhhhhhhhhhhhhhhhhh~~hhhhhhhhhhhhh^^^hhhhhhhhhh
@@ -124,9 +129,9 @@ hhhhh...gg.C........mmm..,,............ssSSS4..,,..cz,..........hhhh
 hhhh.....g.........,,,,,,,,p.............~~~~....,..M...........hhhh
 hhhh..P.........,,,,p,,,,,,,,,,,,.......qyyyqq...,,mm.......A...hhhh
 hhhh.........,,,,,,,mm....,,,,,p,,,,p,,,=kLn==i,,e,m@mm.........hhhh
-......t...,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
+......t.$.,,,p,,................,,,,,,,,QyyyQQ,,.....m..........hhhh
 .,,,,,,,,,,,,.,....................mm.....~~~...........R........hhh
-XZV3,,,,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
+XZV3<,%,p,mm.,,.gg...........gg...........~~~............R.T.....hhh
 .......mmmm..,C..g............g...^^^^.....~~..^^.....g....^^^^^^hhh
 ...........m,,..T..............R.^^^^^^^^^^vvv^^^^^^.....^^^^^^^^^hh
 hhh.........,...................R^....^^^^^vvv^..^^^^^^^^^^......^hh

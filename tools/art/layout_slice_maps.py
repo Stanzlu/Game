@@ -191,6 +191,11 @@ def tal():
         "7": [(42, 33)],
         "9": [(42, 35)],
         "8": [(42, 37)],
+        # Akt IV (S1): after the end of Act III the west path leads on to the road: a door (<) east of the blocker V, the
+        # place one arrives at from there (%) and a signpost (the cells keep their ground, so the baked tal stays)
+        "<": [(4, 25)],
+        "%": [(6, 25)],
+        "$": [(8, 23)],
     }
     for c, pts in props.items():
         for x, y in pts:

@@ -21,6 +21,7 @@ import pixelart as pa  # noqa: E402
 import akt1_props  # noqa: E402
 import akt2_props  # noqa: E402
 import akt3_props  # noqa: E402
+import akt4_props  # noqa: E402
 import slice_props  # noqa: E402
 from pixelart import ramp  # noqa: E402
 
@@ -1505,6 +1506,7 @@ def build():
     akt1_props.build(sys.modules[__name__])
     akt2_props.build(sys.modules[__name__])
     akt3_props.build(sys.modules[__name__])
+    akt4_props.build(sys.modules[__name__])
     # remove sprites (and their .import files) that are no longer part of the catalog
     used = {t[len(RES) + 1:] for e in CATALOG.values() for t in e["textures"] + e.get("emissive", [])}
     for style in ("elysia", "tal", "wald", "haus"):
