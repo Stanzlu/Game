@@ -83,8 +83,9 @@ def slice_sources():
 def act_sources(act):
     """The story dialogue of an act. Act I: the segments (akt1/) and Elysia's garden (the Slice's
     elysia.dialogue). Act II: its segments (akt2/) and the real world's files of the Slice, which
-    the segments extend (tal, haus) or the run plays (antreiber). Act III: its segments (akt3/) only;
-    its lines for the house are cues of their own in akt3/, so that they are never counted as Act II."""
+    the segments extend (tal, haus) or the run plays (antreiber). Acts III and IV: their segments
+    (akt3/, akt4/) only; their lines for the house are cues of their own there, so that they are never
+    counted as Act II."""
     found = []
     for source in dialogue.sources(story_only=True):
         path = source.path.replace(os.sep, "/")
@@ -94,6 +95,8 @@ def act_sources(act):
         elif act == "akt2" and ("/akt2/" in path or ("/slice/" in path and not name.startswith("elysia"))):
             found.append(source)
         elif act == "akt3" and "/akt3/" in path:
+            found.append(source)
+        elif act == "akt4" and "/akt4/" in path:
             found.append(source)
     return found
 
