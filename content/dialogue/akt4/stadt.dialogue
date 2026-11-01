@@ -1,0 +1,170 @@
+# Der Platz, Akt IV, Segment S2 (docs/akt4/REGIONSBRIEFE.md). Die Stadt ist Elysias Markt mit Widerspruch (O19): nichts wiederholt sich
+# wörtlich, niemand ist immer erfreut, Leute haben schlechte Tage und sagen Nein. Hier steht, was am Tor, auf dem Platz und an den Läden zu
+# sprechen ist; das Rathaus (das Fundbüro, "Ein perfekter Tag") hat seine eigene Datei, rathaus.dialogue. Leicht, Neugier, Humor aus Figuren
+# und Dingen (Ziel 7 von 10), nie auf Kosten einer Person. Die Torwächterin ist der Gegensatz zu Elysias Torwächter ("Willkommen in der
+# Stadt!"): sie begrüßt niemanden, sie zählt auf, was heute nicht geht, und lässt dich hinein. Mira sitzt am Brunnenrand, zwei Tage Vorsprung, und
+# wartet auf nichts (O11, erster von drei Beats; keine neue Erinnerung, die letzte Variante gehört dem Streit in S7). Der Gefällige steht am
+# Zettelbrett und bittet nicht; sein Brett mit den sechzehn offenen Zetteln ist die Vorausdeutung auf S5, seine Signature-Begegnung. Die
+# Ziege steht auf dem Rathausdach und sagt nichts Verständliches (Bible §33), niemand erklärt ihre Forderungen.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Schilder und Zettel stehen in » «.
+# Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Das Tor -----------------------------------------------------------------------------------------------------------
+# Die Torwächterin hat einen schlechten Tag, der nicht ihre Schuld ist und nicht deine. Sie sagt Nein zu Fuhrwerken und Ziegen, nicht zu dir.
+# Keine Wirkung; beide Antworten lassen dich hinein. Die Ziege, die sie erwähnt, steht später auf dem Dach des Rathauses.
+
+~ gate
+Im Torbogen steht eine Frau im Mantel, den Schlüsselbund in der Faust. Sie sieht an dir vorbei, ob noch jemand kommt. [ID:stadt_gate_1] [#draft]
+Torwächterin: Fuhrwerke nicht vor zehn. Hunde an die Leine. Ziegen gar nicht. [ID:stadt_gate_2] [#draft]
+- Ziegen? [ID:stadt_gate_r1] [#draft]
+	Torwächterin: Heute früh war eine da. Ich habe Nein gesagt. Sie hat es sich in Ruhe angehört. [ID:stadt_gate_3] [#draft]
+	Torwächterin: Dann ist sie über die Mauer. Die Mauer ist nicht meine Abteilung. [ID:stadt_gate_4] [#draft]
+	Ihr Blick geht kurz hinauf zu den Dächern und sofort wieder zurück, als gehöre das nicht zu ihrem Dienst. [ID:stadt_gate_5] [#draft]
+	Torwächterin: Du hast keine dabei? Dann geh rein. [ID:stadt_gate_6] [#draft]
+- … [ID:stadt_gate_r2] [#draft]
+	Du sagst nichts. Sie nickt, als hättest du etwas unterschrieben, und tritt einen Schritt zur Seite. [ID:stadt_gate_7] [#draft]
+=> END
+
+# --- Mira am Brunnen ---------------------------------------------------------------------------------------------------
+# Das Wiedersehen (O11, erster Beat): trocken, sie hat zwei Tage Vorsprung und wartet auf nichts. Kein Trost, keine Frage nach dir, kein
+# Ausrufezeichen, keine Romanze. Die Antworten sind Themen; wer nur schweigt, bekommt den Satz vom ersten Mal zurück. Die Ziege kommt als
+# Echo von "Ich frag nicht, wie" (tal_mira_eve_9b), jetzt mit "nicht mehr". Keine Erinnerung, kein Flag, die Beziehung bleibt familiar.
+
+~ mira_square
+Auf dem Brunnenrand sitzt Mira, ein Bein angezogen, das Netz auf dem Knie. Sie sieht nicht auf. [ID:stadt_mira_1] [#draft]
+Mira: Zwei Tage Vorsprung. Das ist der Stand. [ID:stadt_mira_2] [#draft]
+- Du hast auf mich gewartet. [ID:stadt_mira_r1] [#draft]
+	Mira: Ich warte nicht. Ich sitze. [ID:stadt_mira_3] [#draft]
+	Mira: Der Rand hat die richtige Höhe. Das ist alles. [ID:stadt_mira_4] [#draft]
+- Wie ist die Stadt? [ID:stadt_mira_r2] [#draft]
+	Mira: Hier sagt man Nein, noch bevor man fragt. Mir gefällt's. [ID:stadt_mira_5] [#draft]
+- Hast du die Ziege gesehen? [ID:stadt_mira_r3] [#draft]
+	Mira: Auf dem Rathausdach. Ich frag nicht mehr, wie. [ID:stadt_mira_6] [#draft]
+- … [ID:stadt_mira_r4] [#draft]
+	Mira: Dann sind wir uns noch immer einig. [ID:stadt_mira_7] [#draft]
+=> END
+
+# --- Das Zettelbrett und der Gefällige ---------------------------------------------------------------------------------
+# Sechzehn Zettel sind offen; die Nummern liegen schon, 17, 18 und 19 wachsen erst in S5 dazu. Das Brett ist das Gesicht, das zu allem nickt.
+# Der Gefällige entschuldigt sich, bevor er bittet, reiht Sätze mit "und" und "noch eben" und bricht ab ("— also, nur falls"). Er fragt dich
+# nichts Konkretes und hat noch keine Aufgabe für dich (das ist S5). Der Text lacht nie über ihn; nicken darf nur das Brett.
+# Das Flag city.gef_met setzt und liest dieser Cue.
+
+~ list_board
+Das Brett ist so voll, dass die Zettel einander halten, jeder in einer anderen Handschrift, manche mit Nadel, manche mit Wachs. [ID:stadt_board_1] [#draft]
+Sechzehn Zettel, nummeriert, alle offen. »Leiter halten.« »Strauß abholen.« »Bühne, wer kann.« »Irgendwas mit Brot.« [ID:stadt_board_2] [#draft]
+Andere sind durchgestrichen. Daneben steht in kleiner, runder Schrift immer dasselbe, »Tut mir leid«. [ID:stadt_board_3] [#draft]
+Ein Zettel ist ganz leer und hängt trotzdem da. Das Brett sieht aus wie ein Gesicht, das zu allem nickt. [ID:stadt_board_4] [#draft]
+=> END
+
+~ gef_square
+if WorldState.has_flag("city.gef_met")
+	=> gef_again
+Ein Mann in Schürze steht am Brett, die Taschen voll, in jeder Hand ein Zettel. Er lächelt, bevor er dich ansieht. [ID:stadt_gef_1] [#draft]
+Gefälliger: Oh, Entschuldigung, ich stehe im Weg. Nein, bleib, ich geh gleich, ich wollte nur noch eben — [ID:stadt_gef_2] [#draft]
+Gefälliger: Du bist neu hier, oder? Willkommen. Ich will dich auf keinen Fall bitten, du bist ja gerade erst angekommen. [ID:stadt_gef_3] [#draft]
+Gefälliger: Es sind nur ein paar Kleinigkeiten. Sechzehn, ich habe zweimal gezählt. Aber kleine. Meistens. [ID:stadt_gef_4] [#draft]
+Er zeigt mit dem Stift aufs Brett, nimmt die Hand zurück und zeigt dann doch noch einmal. [ID:stadt_gef_5] [#draft]
+Gefälliger: — also, nur falls. Du musst nicht. Wirklich nicht. [ID:stadt_gef_6] [#draft]
+do WorldState.set_flag("city.gef_met")
+=> gef_ask
+
+~ gef_ask
+- Kann ich helfen? [ID:stadt_gef_r1] [#draft]
+	Gefälliger: Helfen? Nein, auf keinen Fall — also, doch, aber nicht heute. Heute bist du Gast. [ID:stadt_gef_7] [#draft]
+- … [ID:stadt_gef_r2] [#draft]
+	Gefälliger: Schön, dass du da bist. Wirklich. Ich muss nur — da sind noch Zettel. [ID:stadt_gef_8] [#draft]
+=> END
+
+~ gef_again
+Gefälliger: Ach, du bist es! Entschuldige, ich bin noch dabei. Es ist gleich — es wird gleich. [ID:stadt_gef_9] [#draft]
+=> END
+
+# --- Eine Bürgerin ------------------------------------------------------------------------------------------------------
+# Ein schlechter Tag: knapp, nicht freundlich, nicht feindlich. Beide Zeilen stehen für sich, eine davon wählt der Zufall.
+
+~ citizen_1
+% Bürgerin: Der Brunnen ist geradeaus. Ich habe es heute nicht mit Reden. [ID:stadt_cit_1] [#draft]
+% Bürgerin: Nichts gegen dich. Der Korb ist schwer, und der Tag auch. [ID:stadt_cit_2] [#draft]
+=> END
+
+# --- Lio -----------------------------------------------------------------------------------------------------------------
+# Straßenmusik: er kündigt an und liefert mit Verspätung (die Szene spielt den Klang, sobald melody.lio_street gesetzt ist, also nach der
+# Ankündigung), ein Ton geht daneben, und er lacht über den Ablauf, nicht über sich. Kein Selbsthass, kein Elysia-Lob. Wer wiederkommt,
+# bekommt eine von zwei kurzen Zeilen.
+
+~ lio_street
+if WorldState.has_flag("melody.lio_street")
+	=> lio_again
+Auf einer Kiste sitzt ein Mann mit Laute, Hut und Feder. Die Haltung gehört einem, vor dem gleich alle stehen bleiben. [ID:stadt_lio_1] [#draft]
+Lio: Gleich! Gleich kommt der Teil, an dem es gut wird. Das Stück heißt »Ankunft«. Oder »Anlauf«, das entscheidet sich beim Spielen. [ID:stadt_lio_2] [#draft]
+do WorldState.set_flag("melody.lio_street")
+Er stimmt die Laute, stimmt noch einmal und legt los. Sie klingt wie ein Bach, der noch nicht weiß, wohin. [ID:stadt_lio_3] [#draft]
+Lio: Den Ton habe ich nicht verfehlt. Den hat's woandershin gezogen. [ID:stadt_lio_4] [#draft]
+Lio: Aber der Rest war gut, oder? Sag Ja. Oder klatsch. Ich bin da flexibel. [ID:stadt_lio_5] [#draft]
+=> END
+
+~ lio_again
+% Lio: Der Ton von vorhin ist übrigens noch unterwegs. Wenn du ihn siehst, sag ihm, wir fangen gleich an. [ID:stadt_lio_6] [#draft]
+% Lio: Ich lege eine Pause ein. Das ist Teil des Stücks. Das Stück heißt »Pause«. [ID:stadt_lio_7] [#draft]
+=> END
+
+# --- Der Brunnenrand ---------------------------------------------------------------------------------------------------
+# Ein Fragment, eine Spur der Welt (kein Bild des Kindes, keine Figur, kein Grund): Mulden im Stein, wo Eimer, Krüge und Hände standen. Das
+# erste Mal setzt das Flag, danach gibt es nur noch eine kurze Zeile ohne Wirkung.
+
+~ fountain_rim
+if WorldState.has_flag("fragment.fountain_rim")
+	Der Brunnenrand, die Mulden glatt. Er hat viel getragen und nichts behalten. [ID:stadt_rim_4] [#draft]
+	=> END
+Der Brunnenrand ist breit, und oben sind Mulden in den Stein gewetzt, tief und glatt, eine neben der anderen. [ID:stadt_rim_1] [#draft]
+Eine für den Eimer, eine für den Krug, und eine, die genau eine Hand fasst. Werkzeug war das nicht. [ID:stadt_rim_2] [#draft]
+Für einen Atemzug glänzt jede Mulde nass, als hätte eben jemand abgesetzt. Dann ist es wieder Stein. [ID:stadt_rim_3] [#draft]
+do WorldState.set_flag("fragment.fountain_rim")
+=> END
+
+# --- Die Läden -----------------------------------------------------------------------------------------------------------
+# Fassaden, die S3 (Blumenladen) und S4 (Werkstatt) öffnen; hier sind sie zu und versprechen nichts.
+
+~ florist_wait
+Der Blumenladen hat die Läden zu. Vor der Tür stehen Eimer voller Pfingstrosen, dicht an dicht, und sehen auf die Straße. [ID:stadt_florist_1] [#draft]
+Die Tür bleibt zu. Dahinter raschelt Papier, einmal, und dann ist es still. [ID:stadt_florist_2] [#draft]
+=> END
+
+~ workshop_wait
+Die Tür der Werkstatt sitzt fest im Rahmen. In Kniehöhe ist sie eingedellt, und sie scheint daran gewöhnt. [ID:stadt_shop_1] [#draft]
+Von drinnen kommt das Geräusch eines Hobels, ruhig und genau. Es hört nicht auf und erklärt sich nicht. [ID:stadt_shop_2] [#draft]
+=> END
+
+# --- Ein perfekter Tag: die drei Stationen -----------------------------------------------------------------------------
+# Die Beamtin im Rathaus (rathaus.dialogue) hat den Besuch des Bürgermeisters auf die Minute geplant: Kranz am Brunnen, Pult vor dem
+# Rathaus, Brot und Salz am Tisch. Die Stationen sind immer lesbar, mit oder ohne Plan; jede setzt ihr Flag, und die Beamtin liest alle drei.
+# Der Humor sitzt in den Dingen und in der Pünktlichkeit, nicht in einer Person.
+
+~ day_wreath
+Am Brunnen lehnt ein Kranz aus Tannengrün, so groß wie ein Wagenrad. Auf einer Seite ist er bis auf die Drähte abgefressen. [ID:stadt_wreath_1] [#draft]
+Auf dem Band steht noch »Willkommen, hochverehrter«. Der Rest des Satzes ist im Magen von etwas, das nicht eingeladen war. [ID:stadt_wreath_2] [#draft]
+do WorldState.set_flag("city.day_wreath")
+=> END
+
+~ day_lectern
+Vor dem Rathaus steht ein Rednerpult und neigt sich nach links, wie jemand, der gleich etwas zugibt. [ID:stadt_lectern_1] [#draft]
+Ein Bein ist kürzer. Man hat es mit Büchern unterlegt, »Wegerecht«, »Wegerecht, Nachtrag« und »Wegerecht, Nachtrag zum Nachtrag«. [ID:stadt_lectern_2] [#draft]
+do WorldState.set_flag("city.day_lectern")
+=> END
+
+~ day_table
+Auf einem Tisch am Rathaus liegen ein Laib Brot und ein Schälchen Salz auf einem frisch gebügelten Tuch. [ID:stadt_table_1] [#draft]
+Auf dem Brot sitzen Spatzen, ein gutes Dutzend, und arbeiten sich von innen nach außen. Das Salz haben sie nicht angerührt. [ID:stadt_table_2] [#draft]
+do WorldState.set_flag("city.day_table")
+=> END
+
+# --- Die Ziege ---------------------------------------------------------------------------------------------------------
+# Sie steht auf dem First des Rathauses (Bible §33: taucht zunehmend absurd auf; Nachspiel: besetzt das Rathaus, niemand kennt die
+# Forderungen). Sie sagt nichts Verständliches, und niemand, auch der Text nicht, erklärt, was sie will.
+
+~ goat_roof
+Auf dem First des Rathauses steht eine Ziege und sieht auf den Platz hinab, als wolle sie gleich etwas bekannt geben. [ID:stadt_goat_1] [#draft]
+Ziege: Mäh. Mäh-äh. Mäh. [ID:stadt_goat_2] [#draft]
+Es klingt nach einer Liste. Welche, steht nirgends. [ID:stadt_goat_3] [#draft]
+=> END

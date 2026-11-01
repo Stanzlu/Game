@@ -1,0 +1,63 @@
+; Akt IV, S2: das Rathaus von innen (Klasse S, Zoom 1,5 wie das Haus und die Hütte). Von Hand gesetzt, kein Generator.
+; Wände, Fenster, Banner, Uhr, Plantafel, die offene Tür zum Büro des Bürgermeisters (zu weit offen) und die Wandkarte malt das Requisit
+; tal/rh_shell, den Dielenboden backt tools/art/bake_ground.py content/maps/rathaus.txt. Der Raum liegt in den Zellen 4 bis 23 und 3 bis 15
+; (20 x 13): Rückwand die Zeilen 3 bis 5, Boden die Zeilen 6 bis 14, die Tür (D) in der Vorderwand. Die Achse ist die Spalte 13: Tür, Läufer (u),
+; Schalterfenster im Tresen (K, die Spalten 12 bis 14), die Beamtin (C), das Banner darüber.
+; Dinge statt Erklärung (Humor aus Ordnung): die Zettel auf der Plantafel nach Farbe sortiert, die Stempel in einer Reihe, die Ordner nach Farbe,
+; ein Stuhl in der Reihe fehlt (n: vier Dellen im Boden, vgl. Bible §42, das Rathaus bereitet die Besetzung vor), eine Tür steht zu weit offen,
+; der Farn (p) ist das Einzige hier, das nicht in Ordnung ist.
+; Der Personalbereich hinter dem Tresen (Zeilen 6 bis 8) ist mit dem Tresen zu: die Beamtin steht im Schalterfenster, Gespräch über den Tresen.
+; Fundbüro: das Regal a (Zellen 5 bis 7) trägt vier Fundstücke als eigene Requisiten, die liegen auf ihrem Brett (lift zieht sie von der Zelle in
+; Zeile 7 oder 8 auf die Bretthöhe: Brett oben 44/45, Brett Mitte 29, Brett unten 32) und verschwinden mit `unless`, wenn die Beamtin sie gibt.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/rathaus_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_stadt"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_shell"}}
+; die Tür zurück auf den Platz (wie in der Hütte: zwei Zellen vor ihr kommt man an)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "stadt", "spawn": "rathaus", "auto": true, "sound": "door_close"}}
+; die Beamtin im Schalterfenster, sie blinzelt und sieht nach der Uhr und der Plantafel (glance)
+C = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_beamtin_look.tres", "dialogue": "res://content/dialogue/akt4/rathaus.dialogue", "cue": "clerk", "face": "s", "glance": true}}
+; der Tresen steht mit dem linken Ende in der Zelle (5, 9) und reicht 18 Zellen weit; sein Fenster liegt über den Spalten 12 bis 14
+K = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_counter"}}
+; die Regale (drei Zellen breit, das Bild steht mit dem linken Ende in der markierten Zelle)
+a = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_shelf_lost"}}
+r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_shelf_records"}}
+d = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_desk"}}
+; der Läufer von der Tür zum Tresen (fünf Zellen, flach), die Wartestühle an der Ostwand (Blick nach Westen), die Dellen des vierten, Papierkorb und Farn
+u = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_runner"}}
+h = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_chair"}}
+n = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_dents"}}
+b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_bin"}}
+p = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_plant"}}
+; die vier Fundstücke auf dem Regal a (jedes verschwindet, sobald die Beamtin es gegeben hat: das Flag setzt ihr Cue)
+g = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_glove", "lift": 44, "unless": "city.lost_glove"}}
+k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_key", "lift": 29, "unless": "city.lost_key"}}
+t = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_buttons", "lift": 45, "unless": "city.lost_buttons"}}
+c = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rh_cup", "lift": 32, "unless": "city.lost_cup"}}
+[map]
+############################
+############################
+############################
+####SWWWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWWWW####
+####Wa______________r__W####
+####Wgk________________W####
+####Wtc______C__d______W####
+####WK_________________W####
+####W________u_________W####
+####W_p_______________hW####
+####W______@__________hW####
+####W________1________nW####
+####W_b_______________hW####
+####WWWWWWWWWDWWWWWWWWWW####
+############################
+############################
+############################
+############################
