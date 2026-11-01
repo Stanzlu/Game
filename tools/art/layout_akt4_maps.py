@@ -31,8 +31,8 @@ ROAD_W = 5.2
 # The brook crosses the road at x of about 59 (a small stone bridge, three cells wide).
 STREAM = [(62, 0), (62, 10), (61, 20), (60, 28), (59, 36), (60, 45), (63, 50), (66, 55)]
 STREAM_W = [2.4, 2.4, 2.5, 2.6, 2.6, 2.5, 2.4, 2.4]
-DOOR_X = 94  # the door to the valley, one cell from the edge; the arrival five cells before it, the start six
-ARRIVAL_X, START_X = 89, 88
+DOOR_X = 94  # the door to the valley, one cell from the edge; the arrival five cells before it; the start lies mid-road east of the bridge (the benchmark walks right first)
+ARRIVAL_X, START_X = 89, 66
 WEST_GAP = 4  # the blocker, with the rope one cell east of it; the arrival from the town seven cells east of it
 ROPE_X = 5
 CITY_X = 11

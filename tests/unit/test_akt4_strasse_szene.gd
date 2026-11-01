@@ -9,7 +9,7 @@ const STRASSE := preload("res://world/levels/akt4/strasse.tscn")
 const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
 const QUEST := "main_city_way"
 const SIZE := Vector2i(96, 56)
-const START := Vector2i(88, 30)
+const START := Vector2i(66, 31)
 const FROM_VALLEY := Vector2i(89, 30)
 const FROM_CITY := Vector2i(11, 32)
 const DOOR_CELL := Vector2i(94, 30)
@@ -116,7 +116,8 @@ func test_the_road_is_a_map_of_class_m_with_its_places_and_markers() -> void:
 	assert_eq(data.find_marker("player_spawn")[0]["cell"], START)
 	assert_eq(data.find_marker("spawn_tal")[0]["cell"], FROM_VALLEY)
 	assert_eq(data.find_marker("spawn_stadt")[0]["cell"], FROM_CITY)
-	assert_eq(_cell(scene), START, "a game begun here stands at the east end")
+	assert_eq(_cell(scene), START, "a game begun here stands mid-road, east of the bridge")
+	assert_gt(DOOR_CELL.x - START.x, 20, "far from the door: the benchmark walks right first")
 
 
 func test_every_thing_of_the_road_is_there_with_its_cue() -> void:

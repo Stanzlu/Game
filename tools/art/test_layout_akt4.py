@@ -86,9 +86,12 @@ class StrasseLayoutTests(unittest.TestCase):
 
     def test_the_spots_come_in_the_order_of_the_walk_from_east_to_west(self):
         _, _, _, spots = _strasse()
-        order = ["N", "n", "@", "1", "2", "6", "5", "b", "B"]
+        # the start lies mid-road east of the bridge, since the benchmark walks right first and a start near
+        # the door would take it back into the valley
+        order = ["N", "n", "1", "2", "@", "6", "5", "b", "B"]
         xs = [spots[glyph][0][0] for glyph in order]
-        self.assertEqual(xs, sorted(xs, reverse=True), "door, arrival, start, sign, prints, bell, milestone, bench, rope")
+        self.assertEqual(xs, sorted(xs, reverse=True), "door, arrival, sign, prints, start, bell, milestone, bench, rope")
+        self.assertGreater(spots["N"][0][0] - spots["@"][0][0], 20, "the start is far from the door")
         self.assertGreater(spots["n"][0][0], spots["@"][0][0], "the arrival is the one nearer to the door")
         self.assertLess(spots["B"][0][0], spots["s"][0][0], "the arrival from the town lies before the blocker")
         milestone = spots["5"][0][0]
