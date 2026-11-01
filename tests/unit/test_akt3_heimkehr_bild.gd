@@ -21,6 +21,9 @@ const STANDING_COVER_LIMIT := 0.15
 ## What she may hide of what she talks to, and what may hide of her when she stands behind it (a
 ## bench in front of her reaches her waist): never most of it.
 const HALF := 0.5
+## The plan hangs on the wall right above the cell she reads it from: raised eight pixels, her head
+## reaches the lowest line of it and no more.
+const PLAN_LIMIT := 0.25
 ## How far from a thing (in cells) she can stand to talk to it.
 const TALK_REACH := 2
 ## The cells the earlier runs of the autopilot (slice, Act II) put her on in this room: whether she
@@ -381,7 +384,7 @@ func test_she_can_talk_to_each_of_them_and_neither_hides_nor_is_hidden_there() -
 			var hidden := _hidden_share(scene, _thing(scene, name), true, cat)
 			assert_lte(
 				hidden[0] as float,
-				HALF,
+				PLAN_LIMIT if name == "plan" else HALF,
 				"she at %s: '%s' is %s" % [cell, name, _share_text(hidden)]
 			)
 			var herself := _hidden_share(scene, _pic(scene, scene.player.sprite, "she"), false)

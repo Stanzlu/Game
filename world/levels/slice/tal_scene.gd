@@ -104,7 +104,7 @@ func _ready() -> void:
 		player.facing = Facing.Dir.E
 		_play_morning.call_deferred()
 	elif came_home or (from_bachlauf and WorldState.quest_stage("main_forest_way") == "home"):
-		# out of the night wood she walked south and stands with her back to the house: it lies north
+		# from the hedge gap in the south she walked north and faces the house, which lies north
 		player.facing = Facing.Dir.N
 
 

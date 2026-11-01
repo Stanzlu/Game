@@ -682,11 +682,11 @@ func test_the_tea_answer_is_offered_only_with_care_and_changes_nothing_else() ->
 		_end_of_act_two()
 		if care:
 			WorldState.set_facet("care")
-		_walk_to("home")
+		# the act is over (the room as she finds it afterwards: free to speak to everybody)
+		_walk_to("done")
 		var scene := await _house()
 		var man := _first(scene, "antreiber_bench")
 		assert_not_null(man)
-		# the scene has not begun yet: speak to him first (the line is the player's)
 		var flags_before: Dictionary = WorldState.state.flags.duplicate()
 		var asked := await _talk_through(
 			scene, man, PackedStringArray([LineText.of("hk_antr_r2") if care else "…"])
@@ -704,7 +704,7 @@ func test_the_tea_answer_is_offered_only_with_care_and_changes_nothing_else() ->
 
 func test_the_cat_on_his_lap_can_be_named_where_the_fire_has_no_cat_to_speak_to() -> void:
 	_end_of_act_two()
-	_walk_to("home")
+	_walk_to("done")
 	var scene := await _house()
 	# the way of the frozen state: at the fire and fed. The cat of the fire (cue "cat") is gone from
 	# the room, the only cat to speak to lies on his lap
@@ -724,10 +724,20 @@ func test_the_cat_on_his_lap_can_be_named_where_the_fire_has_no_cat_to_speak_to(
 	assert_eq(WorldState.cat_name(), "Ofenkatze")
 	assert_false(WorldState.has_flag("house.cat_naming"))
 	assert_false(get_tree().paused)
-	await wait_until(func() -> bool: return not scene.dialogue_box.is_open(), 30.0)
-	# once she has a name the cue offers nothing to name
+	# the name is answered by a line of the room (cue cat_named): read it to its end
+	var closed: bool = await wait_until(
+		func() -> bool:
+			_move_on(scene)
+			return not scene.dialogue_box.is_open(),
+		30.0
+	)
+	assert_true(closed, "the line that answers the naming closed")
+	# once she has a name the cue offers nothing to name, and speaks of her by it
 	var again := await _talk_through(scene, cat, PackedStringArray())
 	assert_eq(again.size(), 0, "no answer group")
+	var named := await DialogueWalk.play(HEIMKEHR, "cat_bench")
+	assert_eq(named.size(), 1, "one line for a named cat")
+	assert_string_contains(named[0], "Ofenkatze", "and it is her name that stands in it")
 	assert_push_error_count(0)
 
 

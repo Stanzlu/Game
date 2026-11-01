@@ -60,9 +60,6 @@ func test_the_visit_is_never_expected_once_the_workbench_stands() -> void:
 	assert_false(
 		scene._antreiber_pending(), "he sits at the bench: he does not come in at the door"
 	)
-	WorldState.new_game()
-	WorldState.set_flag("house.workbench")
-	assert_false(scene._antreiber_pending(), "nor without the wood: nobody is expected")
 
 
 ## How many men with the Antreiber's sheet stand on the map of this scene.

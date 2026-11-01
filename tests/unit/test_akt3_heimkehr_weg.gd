@@ -347,10 +347,17 @@ func test_the_hut_entered_again_after_the_visit_has_the_hermit_in_it_and_no_erro
 
 
 func test_the_way_on_to_the_night_wood_stays_open_at_home_and_when_it_is_over() -> void:
+	# the clearing itself opens the way while the walk stands in the night (this test sets nothing),
+	# and the way stays open when the walk goes on to home and done
+	_walk_to("night")
+	var first: GameScene = FLUTLICHTUNG.instantiate()
+	add_child_autofree(first)
+	await wait_physics_frames(3)
+	assert_true(WorldState.has_flag("forest.night_way"), "the clearing opens the way in the night")
+	await _gone(first)
 	for stage: String in ["night", "home", "done"]:
-		WorldState.new_game()
-		_walk_to(stage)
-		WorldState.set_flag("forest.night_way")
+		if stage != "night":
+			assert_true(WorldState.advance_quest(QUEST, stage), "on to " + stage)
 		var scene: GameScene = FLUTLICHTUNG.instantiate()
 		add_child_autofree(scene)
 		await wait_physics_frames(3)
