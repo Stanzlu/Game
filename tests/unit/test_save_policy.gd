@@ -135,7 +135,9 @@ func test_the_frozen_v2_end_of_act_three_keeps_its_story() -> void:
 	assert_eq(s.day_preset, "morgen")
 	for chapter: String in ["act1", "act2", "slice", "act3"]:
 		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
-	assert_false(Chapter.in_flags(s.flags, Chapter.LAST), "but the way west goes on (Act IV, ADR-071)")
+	assert_false(
+		Chapter.in_flags(s.flags, Chapter.LAST), "but the way west goes on (Act IV, ADR-071)"
+	)
 	assert_true(s.facets.has("care"), "the first rest in the wood was her own will")
 	assert_true(s.facets.has("perception") and s.facets.has("boundaries"))
 	var way: GameState.QuestProgress = s.quests["main_forest_way"]
