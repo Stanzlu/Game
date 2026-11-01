@@ -19,5 +19,5 @@ func _ready() -> void:
 
 func _on_flag_changed(id: String, value: bool) -> void:
 	if value and id == "melody.lio_street":
-		AudioDirector.sfx("lio_street_0", -4.0, 1.0)
+		AudioDirector.sfx("lio_street", -2.0, 1.0)
 		Beat.mark("stadt_lio")

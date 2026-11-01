@@ -70,6 +70,7 @@ SFX_GROUPS = [
     (r"child_hum_", make_slice_sfx.GROUPS["child_hum"]),
     (r"house_hum_", make_slice_sfx.GROUPS["house_hum"]),
     (r"hermit_flute_", make_slice_sfx.GROUPS["flute"]),
+    (r"lio_street_", make_slice_sfx.GROUPS["lute"]),
     (r"purr$", make_slice_sfx.GROUPS["purr"]),
     (r"sit$|stand$", make_slice_sfx.GROUPS["cloth"]),
     (r"bird$", make_slice_sfx.GROUPS["bird"]),
@@ -129,6 +130,9 @@ CLASSES = [
     ("purr", ["purr"], 0.0, "SFX", "haus_feuer", 0.0, 8.0),
     ("song in the house", ["house_hum_0"], -2.0, "SFX", "haus_feuer", 0.0, 6.0),
     ("flute in the hut", ["hermit_flute_0"], -2.0, "SFX", "haus_abend", 0.0, 6.0),
+    # Lio's street music (Act IV, S2): the town's morning bed, like the valley's (tal_morgen). Heard over the
+    # bed, as the flute is, but a plucked tune with all its peaks: at -4 dB it would sink under the bed.
+    ("lute on the street", ["lio_street_0"], -2.0, "SFX", "tal_morgen", 0.0, 6.0),
     # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
     # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
     ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),
