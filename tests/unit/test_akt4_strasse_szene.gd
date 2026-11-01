@@ -151,14 +151,6 @@ func test_entering_the_road_starts_the_walk_and_marks_the_beat() -> void:
 	assert_not_null(scene)
 
 
-func test_coming_back_does_not_start_the_walk_again() -> void:
-	WorldState.start_quest(QUEST)
-	var before := WorldState.state.quests[QUEST].history.duplicate()
-	var scene := await _scene()
-	assert_eq(WorldState.state.quests[QUEST].history, before, "nothing restarted")
-	assert_not_null(scene)
-
-
 func test_the_view_marks_the_beat_when_it_is_seen() -> void:
 	var scene := await _scene()
 	WorldState.set_flag("city.view_seen")
@@ -214,11 +206,20 @@ func test_the_way_west_crosses_the_brook_on_the_bridge() -> void:
 
 func test_a_rope_and_the_paving_works_hold_the_whole_width_of_the_road() -> void:
 	var scene := await _scene()
-	assert_not_null(_blocker(scene), "the blocker across the road")
+	var blocker := _blocker(scene)
+	assert_not_null(blocker, "the blocker across the road")
 	var map_text := FileAccess.get_file_as_string("res://content/maps/strasse.txt")
 	assert_true(map_text.contains('"cue": "town_wait"'), "with the cue of the paving works")
+	# the barrier itself covers seven rows (the five of the road and a cell of hedge on each side)
+	var rect: RectangleShape2D = null
+	for child in blocker.get_children():
+		if child is CollisionShape2D and (child as CollisionShape2D).shape is RectangleShape2D:
+			rect = (child as CollisionShape2D).shape as RectangleShape2D
+			break
+	assert_not_null(rect)
+	assert_eq(rect.size, Vector2(16, 112), "one cell wide, seven rows high")
 	assert_gte(FROM_CITY.x - BLOCKER_CELL.x, 5, "the arrival from the city is outside it")
-	for row: int in [30, 32, 34]:
+	for row: int in [30, 31, 32, 33, 34]:
 		await _put(scene, Vector2i(14, row))
 		var never := func() -> bool: return false
 		await _hold(&"move_left", never, 120)

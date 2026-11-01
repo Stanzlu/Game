@@ -17,18 +17,18 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S1-2 · `signpost`
 
-- *Ein Wegweiser mit zwei Pfeilen. Der nach Osten heißt »Tal« und ist kurz. Mehr gab es dazu nicht zu sagen.* `[#draft]`  <sub>str_sign_1</sub>
+- *Ein Wegweiser mit zwei Pfeilen. Der nach Osten heißt »Tal« und ist kurz. Mehr gibt es dazu nicht zu sagen.* `[#draft]`  <sub>str_sign_1</sub>
 - *Der nach Westen heißt »Stadt« und ist länger. Darunter steht klein, mit Bleistift, »Ohne Gewähr«.* `[#draft]`  <sub>str_sign_2</sub>
 
 ### S1-3 · `goat_prints`
 
 > --- Die Spuren der Ziege ----------------------------------------------------------------------------------------------
-> Hufabdrücke in der Mitte der Straße und ein Glöckchen am Zaunpfosten. Beides ist nur ein Hinweis; die Ziege selbst kommt in S2
+> Hufabdrücke auf der Straße (sie schlagen Haken um die Pfützen, aber alle gehen nach Westen) und ein Glöckchen am Zaunpfosten. Beides ist nur ein Hinweis; die Ziege selbst kommt in S2
 > (auf einem Dach) und in S6 (auf der Bühne). Die Abdrücke tun nichts, das Glöckchen ist eine Kuriosität: Einstecken gibt den
 > Gegenstand und das Flag, Hängen lassen gibt nichts und kostet nichts. Der Pfosten ohne Glöckchen ist ein anderes Bild der Karte.
 
-- *Im Staub der Straße stehen Hufabdrücke, zweigeteilt, in einer Reihe nach Westen.* `[#draft]`  <sub>str_hoof_1</sub>
-- *Sie gehen geradeaus, mitten auf der Straße, ohne einen Schritt zur Seite. Wer hier ging, hatte etwas vor.* `[#draft]`  <sub>str_hoof_2</sub>
+- *Im Staub der Straße stehen Hufabdrücke, zweigeteilt, mal links, mal rechts der Mitte, aber alle nach Westen.* `[#draft]`  <sub>str_hoof_1</sub>
+- *Sie schlagen einen Haken um jede Pfütze und kommen doch voran. Wer hier ging, hatte etwas vor.* `[#draft]`  <sub>str_hoof_2</sub>
 
 ### S1-4 · `goat_bell`
 
@@ -45,12 +45,12 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > für sie enthält. Nichts wird gesetzt, nichts gelehrt.
 
 - *Mitten im Feld steht eine Vogelscheuche, die Arme weit ausgebreitet, als wolle sie gleich etwas Wichtiges verkünden.* `[#draft]`  <sub>str_crow_1</sub>
-- *Auf jedem Arm sitzt eine Krähe und hört zu. Keine wirkt beunruhigt.* `[#draft]`  <sub>str_crow_2</sub>
-- *Nur der Hut sitzt gerade und ist neu. Der Rest hat sich mit den Krähen abgefunden.* `[#draft]`  <sub>str_crow_3</sub>
+- *Auf dem einen Arm sitzt eine Krähe und hört zu. Sie wirkt nicht beunruhigt.* `[#draft]`  <sub>str_crow_2</sub>
+- *Nur der Topf auf dem Kopf sitzt fest, mit Stroh, das aus einem Loch quillt. Der Rest hat sich mit der Krähe abgefunden.* `[#draft]`  <sub>str_crow_3</sub>
 
 ### S1-6 · `field_notice`
 
-- *Am Feldrand steht ein Schild in sorgfältiger Schrift. »Bitte nicht betreten. Auch nicht zum Nachsehen.«* `[#draft]`  <sub>str_note_1</sub>
+- *Am Feldrand steht ein Schild, in Eile gemalt, mit einem Klecks Vogelmist in der Ecke. »Bitte nicht betreten. Auch nicht zum Nachsehen.«* `[#draft]`  <sub>str_note_1</sub>
 - *Darunter hat jemand mit anderem Stift nachgetragen »Ausgenommen die Vogelscheuche«. Sie macht davon Gebrauch.* `[#draft]`  <sub>str_note_2</sub>
 
 ### S1-7 · `milestone`
@@ -70,18 +70,18 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S1-8 · `view_town`
 
 > --- Die Aussicht und das Ende der Straße ------------------------------------------------------------------------------
-> Der Blick am Westende: kein Haus, keine Figur, nur Rauch hinter einem Hügel, viele Fäden statt des einen über dem Haus
+> Der Blick am Westende: kein Haus, keine Figur, nur Dächer und Rauch hinter einer Hecke, viele Fäden statt des einen über dem Haus
 > (bl_back_1). Das Flag city.view_seen liest die Szene (Beat strasse_view). Der Blocker davor (town_wait) ist ein Platzhalter für
 > die Tür der Stadt in S2 und verspricht nichts; S2 legt ihn still, wie W4 es mit south_wait tat.
 
 *wenn* `city.view_seen`
-  - *Hinter dem Hügel der Rauch, viele Fäden durcheinander.* `[#draft]`  <sub>str_view_4</sub>
+  - *Hinter der Hecke die Dächer, darüber der Rauch, viele Fäden durcheinander.* `[#draft]`  <sub>str_view_4</sub>
 *sonst*
-  - *Von hier aus geht der Blick über die letzten Felder bis zu einem Hügel. Dahinter steigt Rauch auf.* `[#draft]`  <sub>str_view_1</sub>
+  - *Von hier aus geht der Blick über Wiesen bis zu einer Hecke. Dahinter stehen Dächer, und über den Dächern steigt Rauch auf.* `[#draft]`  <sub>str_view_1</sub>
   - *Nicht ein Faden, gerade nach oben, wie über dem Haus, sondern viele, die sich im Himmel nicht einig werden.* `[#draft]`  <sub>str_view_2</sub>
-  - *Die Stadt selbst liegt noch hinter dem Hügel. Sie hat ihren Rauch vorgeschickt.* `[#draft]`  <sub>str_view_3</sub>
+  - *Die Stadt selbst bleibt hinter der Hecke. Ihren Rauch hat sie schon vorgeschickt.* `[#draft]`  <sub>str_view_3</sub>
 
 ### S1-9 · `town_wait`
 
-- *Quer über die Straße liegen Sand, Pflastersteine und eine Schnur zwischen zwei Stäben. Das Schild sagt »Pflasterarbeiten«, sonst nichts.* `[#draft]`  <sub>str_wait_1</sub>
-- *Weiter geht es hier nicht. Die Steine liegen in ordentlichen Reihen und haben es nicht eilig.* `[#draft]`  <sub>str_wait_2</sub>
+- *Quer über die Straße ist eine Schnur zwischen zwei Pfosten gespannt. Am Rand liegt ein Haufen Pflastersteine, ein Hammer obenauf.* `[#draft]`  <sub>str_wait_1</sub>
+- *Hinter der Schnur ist frisch gepflastert, die Fugen noch hell. Die Steine liegen in ordentlichen Reihen und haben es nicht eilig.* `[#draft]`  <sub>str_wait_2</sub>

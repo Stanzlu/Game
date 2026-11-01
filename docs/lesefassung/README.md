@@ -27,7 +27,7 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 | [W4_FLUTLICHTUNG.md](W4_FLUTLICHTUNG.md) | Akt III: die Flutlichtung (Marke, Lager und Spur, der Antreiber an der Marke, das Nest, Treibholz, Trittsteine) | 12 | 46 | 1.772 |
 | [W5_NACHTWALD.md](W5_NACHTWALD.md) | Akt III: der Nachtwald (das ferne Licht, ein Leuchtbaum, die Laterne und das Summen, das Leuchtholz, der Heimweg) | 6 | 18 | 919 |
 | [W6_HEIMKEHR.md](W6_HEIMKEHR.md) | Akt III: die Heimkehr (die Ankunft am Schraubstock, der Besuch des Einsiedlers, der Schluss, die Werkbank, der Plan, der Antreiber an der Bank, die Katze) | 8 | 32 | 1.567 |
-| [S1_STRASSE.md](S1_STRASSE.md) | Akt IV: die Straße (Wegweiser, Spuren der Ziege, Feld, Meilenstein, Aussicht, Pflasterarbeiten) | 9 | 24 | 933 |
+| [S1_STRASSE.md](S1_STRASSE.md) | Akt IV: die Straße (Wegweiser, Spuren der Ziege, Feld, Meilenstein, Aussicht, Seil über der Straße) | 9 | 24 | 845 |
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 

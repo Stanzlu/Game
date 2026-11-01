@@ -928,7 +928,7 @@
      "ref": "city.bell_taken"
     }
    ],
-   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke geradeaus in der Mitte und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach, S6 auf der Bühne."
+   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke, die Haken um die Pfützen schlagen und doch nach Westen gehen, und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach, S6 auf der Bühne."
   },
   {
    "id": "kartoffel",
@@ -1938,7 +1938,7 @@
   {
    "flag": "city.view_seen",
    "axis": "Wahrnehmung",
-   "meaning": "Sie hat am Westende der Straße den Rauch der Stadt hinter dem Hügel gesehen: viele Fäden statt des einen über dem Haus (Akt IV, S1). Die Szene liest es und markiert den Beat strasse_view."
+   "meaning": "Sie hat am Westende der Straße den Rauch der Stadt hinter der Hecke gesehen: viele Fäden statt des einen über dem Haus (Akt IV, S1). Die Szene liest es und markiert den Beat strasse_view."
   }
  ]
 }

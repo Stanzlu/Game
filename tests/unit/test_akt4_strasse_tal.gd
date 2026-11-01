@@ -94,7 +94,7 @@ func test_from_the_end_of_act_three_a_door_leads_west_out_of_the_valley() -> voi
 	assert_eq(rect.size, Vector2(16, 144), "one cell wide, nine high")
 
 
-func test_the_door_stands_inside_the_old_blockers_so_it_is_met_first() -> void:
+func test_the_door_stands_east_of_the_old_blockers_so_it_is_met_first() -> void:
 	# the west path has three strips (cells 0 to 2 of row 25: the door to the Antreiber's run and
 	# its two blockers); the new door is east of them, so nobody reaches the old pieces on the way out
 	var text := FileAccess.get_file_as_string("res://content/maps/tal.txt")
@@ -116,7 +116,7 @@ func test_a_signpost_names_the_way_from_the_end_of_act_three() -> void:
 	)
 
 
-func test_the_way_back_arrives_inside_the_door_zone_and_walking_west_reaches_it() -> void:
+func test_the_way_back_arrives_outside_the_door_zone_and_walking_west_reaches_it() -> void:
 	_load(END_OF_ACT_THREE)
 	SceneTravel.stay = true
 	SceneTravel.pending_spawn = "strasse"
