@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bcgowux7rajx5"
+path="res://.godot/imported/strasse.dialogue-bc9425fc7a2dc7f18ac75617d6507284.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/strasse.dialogue"
+dest_files=["res://.godot/imported/strasse.dialogue-bc9425fc7a2dc7f18ac75617d6507284.tres"]
+
+[params]
+
+defaults=true
