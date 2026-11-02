@@ -148,7 +148,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S2-15 · `day_table`
 
-- *Auf einem Tisch am Rathaus liegen ein Laib Brot und ein Schälchen Salz auf einem frisch gebügelten Tuch.* `[#draft]`  <sub>stadt_table_1</sub>
+- *Auf einem Tisch auf dem Platz liegen ein Laib Brot und ein Schälchen Salz auf einem frisch gebügelten Tuch.* `[#draft]`  <sub>stadt_table_1</sub>
 - *Auf dem Brot sitzen Spatzen, ein gutes Dutzend, und arbeiten sich von innen nach außen. Das Salz haben sie nicht angerührt.* `[#draft]`  <sub>stadt_table_2</sub>
 
 ### S2-16 · `goat_roof`

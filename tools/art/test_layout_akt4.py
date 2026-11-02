@@ -546,7 +546,7 @@ class StadtLayoutTests(unittest.TestCase):
     def test_the_square_has_room_for_a_small_stage_before_the_town_hall(self):
         _, symbols, rows, spots = _stadt()
         door = spots["D"][0]
-        stage = [(x, y) for x in range(door[0] - 4, door[0] + 5) for y in range(door[1] + 1, door[1] + 6)]
+        stage = [(x, y) for x in range(door[0] - 4, door[0] + 5) for y in range(door[1] + 1, door[1] + 7)]
         for x, y in stage:
             self.assertIn(_ground(symbols, rows[y][x]), STANDABLE, "the stage's floor at %d,%d" % (x, y))
         pult = spots["2"][0]

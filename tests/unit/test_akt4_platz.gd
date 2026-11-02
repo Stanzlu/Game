@@ -9,6 +9,20 @@ extends GutTest
 
 const STADT := "res://content/dialogue/akt4/stadt.dialogue"
 const RATHAUS := "res://content/dialogue/akt4/rathaus.dialogue"
+const RATHAUS_CUES: PackedStringArray = [
+	"clerk",
+	"clerk_again",
+	"clerk_ask",
+	"clerk_lost",
+	"clerk_lost_pick",
+	"clerk_lost_glove",
+	"clerk_lost_key",
+	"clerk_lost_buttons",
+	"clerk_lost_cup",
+	"clerk_lost_given",
+	"clerk_day",
+	"clerk_day_end",
+]
 const STADT_CUES: PackedStringArray = [
 	"gate",
 	"mira_square",
@@ -69,9 +83,7 @@ func _has(seen: PackedStringArray, id: String) -> bool:
 
 func test_the_two_files_tell_their_cues_in_draft_with_unique_ids() -> void:
 	assert_eq(_cues(STADT), STADT_CUES, "the cues of the contract, in this order")
-	var rathaus := _cues(RATHAUS)
-	for cue: String in ["clerk", "clerk_again", "clerk_ask", "clerk_lost", "clerk_day"]:
-		assert_true(cue in rathaus, cue)
+	assert_eq(_cues(RATHAUS), RATHAUS_CUES, "the clerk's twelve cues, in this order")
 	for pair: Array in [[STADT, "stadt"], [RATHAUS, "rath"]]:
 		var path: String = pair[0]
 		var ids := _ids(path, pair[1])
@@ -196,7 +208,10 @@ func test_each_station_of_the_perfect_day_is_read_again_and_sets_its_own_flag() 
 		assert_eq(first.size(), 2, cue)
 		assert_true(WorldState.has_flag(stations[cue]), cue)
 		assert_eq(await DialogueWalk.play(STADT, cue), first, "%s: the same twice" % cue)
-	assert_false(WorldState.has_flag("melody.lio_street"), "and nothing else is set")
+	assert_false(WorldState.has_flag("melody.lio_street"), "the lute is Lio's alone")
+	var allowed: Array = stations.values()
+	for id: String in WorldState.state.flags:
+		assert_true(id in allowed, "nothing is set but the three stations: " + id)
 
 
 func test_the_goat_on_the_roof_says_nothing_anyone_can_use() -> void:
@@ -259,14 +274,14 @@ func test_whoever_sees_the_stations_before_the_plan_still_gets_the_end() -> void
 	assert_true(WorldState.is_quest_done("side_city_day"), "the end starts the quest itself")
 
 
-func test_the_clerk_uses_the_formal_you_and_never_the_player_name() -> void:
+func test_the_clerk_uses_the_formal_you_and_never_a_familiar_form() -> void:
 	var spoken := ""
 	for line in FileAccess.get_file_as_string(RATHAUS).split("\n"):
 		if line.contains("Beamtin:") and line.contains("[ID:rath_"):
 			spoken += line + "\n"
 	assert_true(spoken.contains("Sie "))
-	assert_false(spoken.contains("Du "), "she says Sie to everyone")
-	assert_false(spoken.contains(" du "), "she says Sie to everyone")
+	var familiar := RegEx.create_from_string("(?i)\\b(du|dir|dich|dein\\w*)\\b")
+	assert_null(familiar.search(spoken), "she says Sie to everyone")
 
 
 # --- Quests, journal and things ---------------------------------------------------------

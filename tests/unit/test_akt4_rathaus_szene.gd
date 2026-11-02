@@ -94,7 +94,7 @@ func test_the_town_hall_is_a_room_with_its_markers_and_one_door() -> void:
 func test_it_is_an_interior_at_the_zoom_of_the_house_and_the_camera_keeps_to_the_room() -> void:
 	var scene := await _scene()
 	assert_eq(scene.view_zoom, 1.5)
-	assert_eq(scene.view.bounds.size, Vector2(RathausScene.ROOM.size * scene.map.data.tile_size))
+	assert_eq(scene.view.bounds.size, Vector2(320, 208), "20 by 13 cells of 16 pixels")
 	assert_eq(scene.find_children("*", "PointLight2D", true, false).size(), 0)
 	assert_eq(get_tree().get_nodes_in_group(&"cutscene").size(), 0)
 	assert_false(scene.player.is_locked())
