@@ -1,7 +1,8 @@
 # Der Platz, Akt IV, Segment S2 (docs/akt4/REGIONSBRIEFE.md). Die Stadt ist Elysias Markt mit Widerspruch (O19): Gefälliger, Lio und Bürgerin
-# variieren, niemand ist immer erfreut, Leute haben schlechte Tage und sagen Nein. Hier steht, was am Tor, auf dem Platz und an den Läden zu
-# sprechen ist; das Rathaus (das Fundbüro, "Ein perfekter Tag") hat seine eigene Datei, rathaus.dialogue. Leicht, Neugier, Humor aus Figuren
-# und Dingen (Ziel 7 von 10), nie auf Kosten einer Person. Die Torwächterin ist der Gegensatz zu Elysias Torwächter ("Willkommen in der
+# variieren, niemand ist immer erfreut, Leute haben schlechte Tage und sagen Nein. Hier steht, was am Tor, auf dem Platz und an der Werkstatt zu
+# sprechen ist; das Rathaus (das Fundbüro, "Ein perfekter Tag") hat seine eigene Datei, rathaus.dialogue, der Blumenladen (Orin, die Ente, der Brief)
+# blumenladen.dialogue. Leicht, Neugier, Humor aus Figuren und Dingen (Ziel 7 von 10), nie auf Kosten einer Person.
+# Die Torwächterin ist der Gegensatz zu Elysias Torwächter ("Willkommen in der
 # Stadt!"): sie begrüßt niemanden, sie zählt auf, was heute nicht geht, und lässt dich hinein. Mira sitzt am Brunnenrand, zwei Tage Vorsprung, und
 # wartet auf nichts (O11, erster von drei Beats; keine neue Erinnerung, die letzte Variante gehört dem Streit in S7). Der Gefällige steht am
 # Zettelbrett und bittet nicht; sein Brett mit den sechzehn offenen Zetteln ist die Vorausdeutung auf S5, seine Signature-Begegnung. Die
@@ -123,13 +124,8 @@ Für einen Atemzug glänzt jede Mulde nass, als hätte eben jemand abgesetzt. Da
 do WorldState.set_flag("fragment.fountain_rim")
 => END
 
-# --- Die Läden -----------------------------------------------------------------------------------------------------------
-# Fassaden, die S3 (Blumenladen) und S4 (Werkstatt) öffnen; hier sind sie zu und versprechen nichts.
-
-~ florist_wait
-Der Blumenladen hat die Läden zu. Vor der Tür stehen Eimer voller Pfingstrosen, dicht an dicht, und sehen auf die Straße. [ID:stadt_florist_1] [#draft]
-Die Tür bleibt zu. Dahinter raschelt Papier, einmal, und dann ist es still. [ID:stadt_florist_2] [#draft]
-=> END
+# --- Die Werkstatt -------------------------------------------------------------------------------------------------------
+# Eine Fassade, die S4 (Werkstatt) öffnet; hier ist sie zu und verspricht nichts. Der Blumenladen ist seit S3 offen (blumenladen.dialogue).
 
 ~ workshop_wait
 Die Tür der Werkstatt sitzt fest im Rahmen. In Kniehöhe ist sie eingedellt, und sie scheint daran gewöhnt. [ID:stadt_shop_1] [#draft]

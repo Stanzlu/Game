@@ -28,7 +28,8 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 | [W5_NACHTWALD.md](W5_NACHTWALD.md) | Akt III: der Nachtwald (das ferne Licht, ein Leuchtbaum, die Laterne und das Summen, das Leuchtholz, der Heimweg) | 6 | 18 | 919 |
 | [W6_HEIMKEHR.md](W6_HEIMKEHR.md) | Akt III: die Heimkehr (die Ankunft am Schraubstock, der Besuch des Einsiedlers, der Schluss, die Werkbank, der Plan, der Antreiber an der Bank, die Katze) | 8 | 32 | 1.567 |
 | [S1_STRASSE.md](S1_STRASSE.md) | Akt IV: die Straße (Wegweiser, Spuren der Ziege, Feld, Meilenstein, Aussicht; das Seil am Westende ist seit S2 die Tür in die Stadt) | 8 | 22 | 796 |
-| [S2_PLATZ.md](S2_PLATZ.md) | Akt IV: der Platz und das Rathaus (Tor und Torwächterin, Mira am Brunnen, Zettelbrett und Gefälliger, Lio, Brunnenrand, Läden, die drei Stationen von „Ein perfekter Tag“, die Ziege; Fundbüro und Plan der Beamtin) | 28 | 77 | 2.380 |
+| [S2_PLATZ.md](S2_PLATZ.md) | Akt IV: der Platz und das Rathaus (Tor und Torwächterin, Mira am Brunnen, Zettelbrett und Gefälliger, Lio, Brunnenrand, die Werkstatt von außen, die drei Stationen von „Ein perfekter Tag“, die Ziege; Fundbüro und Plan der Beamtin) | 27 | 75 | 2.343 |
+| [S3_BLUMENLADEN.md](S3_BLUMENLADEN.md) | Akt IV: der Blumenladen (Orin hinter dem Bindetisch, die Bitte und die Ente vor der Tür, der Bericht und die Töpfe, der Brief und der Strauß, danach; Bindetisch, Regal, getrockneter Strauß) | 16 | 63 | 1.922 |
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 

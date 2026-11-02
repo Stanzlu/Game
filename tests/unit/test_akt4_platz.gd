@@ -34,7 +34,6 @@ const STADT_CUES: PackedStringArray = [
 	"lio_street",
 	"lio_again",
 	"fountain_rim",
-	"florist_wait",
 	"workshop_wait",
 	"day_wreath",
 	"day_lectern",
@@ -188,13 +187,13 @@ func test_the_rim_of_the_fountain_is_a_trace_of_the_world() -> void:
 		assert_false(joined.contains(word), "the rim gives no reason: " + word)
 
 
-func test_the_shops_are_shut_and_promise_nothing() -> void:
-	for cue: String in ["florist_wait", "workshop_wait"]:
-		var seen := await DialogueWalk.play(STADT, cue)
-		assert_eq(seen.size(), 2, cue)
-		for line in seen:
-			for word: String in ["bald", "morgen", "gleich", "später", "wieder"]:
-				assert_false(line.to_lower().contains(word), "%s: no promise: %s" % [cue, word])
+func test_the_workshop_is_shut_and_promises_nothing() -> void:
+	# the florist's blocker is gone since S3: its door opens (test_akt4_blumenladen_szene)
+	var seen := await DialogueWalk.play(STADT, "workshop_wait")
+	assert_eq(seen.size(), 2)
+	for line in seen:
+		for word: String in ["bald", "morgen", "gleich", "später", "wieder"]:
+			assert_false(line.to_lower().contains(word), "no promise: %s" % word)
 
 
 func test_each_station_of_the_perfect_day_is_read_again_and_sets_its_own_flag() -> void:

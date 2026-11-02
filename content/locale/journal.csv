@@ -95,6 +95,8 @@ MEMORY_MIRA_LEFT_SHELL,"Ich habe nicht nach der Muschel gefragt."
 MEMORY_MIRA_ASKED_WHERE_TO,"Sie geht morgen weiter. Zum Meer."
 MEMORY_MIRA_GUESSED_SEA,"Sie geht morgen weiter. Ich wusste es vorher. Zum Meer."
 MEMORY_MIRA_END_SILENCE,"Sie geht morgen weiter. Ich musste nicht fragen. Zum Meer."
+MEMORY_ORIN_DUCK,"Orin hat mich gebeten, nach einer Ente zu sehen. Sie stand vor der Tür und tat nichts. Das sei das Beunruhigende, sagt er."
+MEMORY_ORIN_LETTER,"Über Orins Tisch hängt ein Strauß, kopfüber, mit Bast. Der Brief dazu hat keine Anschrift. Er liest ihn nicht vor, er wollte nur, dass ich weiß, dass es ihn gibt."
 QUEST_SIDE_ELYSIA_BOARD_TITLE,Die Auftragstafel
 QUEST_SIDE_ELYSIA_BOARD_BREAD,"Auf der Tafel sucht jemand einen Helden. Das Brot für die Schneiderin wartet bei der Bäckerin."
 QUEST_SIDE_ELYSIA_BOARD_DELIVER,"Der Laib ist noch warm. Er soll zur Schneiderin."
@@ -123,9 +125,16 @@ QUEST_SIDE_FOREST_NEST_DONE,"Ich habe das Nest in die Gabel am Ufer gelegt. Es s
 QUEST_MAIN_CITY_WAY_TITLE,Der Weg in die Stadt
 QUEST_MAIN_CITY_WAY_WEST,"Am Westrand des Tals steht ein neuer Wegweiser. Die Straße dahinter führt zur Stadt, sagt er. Ich folge ihr."
 QUEST_MAIN_CITY_WAY_TOWN,"Die Stadt hat ein Tor, eine Torwächterin und einen Brunnen. Niemand hat mich als Helden begrüßt. Ich sehe mich um."
+QUEST_MAIN_CITY_WAY_HELP,"Hier fragt man einander um Hilfe, nicht nach Heldentaten. Ich fange dort an, wo jemand fragt."
 QUEST_SIDE_CITY_LOST_TITLE,Das Fundbüro
 QUEST_SIDE_CITY_LOST_ASK,"Im Rathaus gibt es ein Fundbüro. Es gibt zurück, was niemandem mehr gehört. Die Beamtin will nur wissen, was ich verloren habe."
 QUEST_SIDE_CITY_LOST_DONE,"Das Regal ist leer, bis auf eine Spinne, die dort wohnt. Ich habe einen Handschuh, einen Schlüssel, eine Dose mit Knöpfen und eine Tasse mit Sprung. Verloren habe ich nichts davon."
 QUEST_SIDE_CITY_DAY_TITLE,Ein perfekter Tag
 QUEST_SIDE_CITY_DAY_PLAN,"Die Beamtin im Rathaus hat den Besuch des Bürgermeisters auf die Minute geplant. Ich soll nachsehen, ob Kranz, Pult und Brot auf dem Platz stehen."
 QUEST_SIDE_CITY_DAY_DONE,"Nichts stand, wie es geplant war. Der Kranz ist angefressen, das Pult wackelt, das Brot gehört den Spatzen. Der Bürgermeister kommt nicht, und die Beamtin sagt, es sei ein schöner Tag. Ich glaube ihr."
+QUEST_SIDE_CITY_DUCK_TITLE,Die Ente
+QUEST_SIDE_CITY_DUCK_LOOK,"Orin, der Florist am Platz, hat mich gebeten nachzusehen, ob draußen eine Ente ist. Er schaut so lange zu seinen Rosen."
+QUEST_SIDE_CITY_DUCK_DONE,"Ich habe Orin gesagt, was ich gesehen habe, und wir haben entschieden, was mit den Töpfen geschieht. Die Ente hat nicht aufgesehen."
+QUEST_SIDE_CITY_LETTER_TITLE,Der Brief
+QUEST_SIDE_CITY_LETTER_LISTEN,"Über Orins Tisch hängt ein Strauß aus getrockneten Pfingstrosen, ohne Karte. Er hat einen Brief dazu geschrieben und fängt an, davon zu sprechen."
+QUEST_SIDE_CITY_LETTER_DONE,"Der Brief bleibt zu, der Strauß bleibt hängen. Orin hat davon gesprochen, und ich habe nichts gefragt."

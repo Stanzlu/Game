@@ -434,13 +434,42 @@ DESIGNS = {
         "basket": True,
         "bag": "none",
     },
+    # Orin (Akt IV, S3): looks like a warrior and keeps flowers. Broad shoulders under leather pauldrons, a short beard, the
+    # hair in a knot, a calm stance and no weapon; over the charcoal tunic he wears a green gardener's apron, and a few
+    # threads of bast hang from his wrists and hands (he ties bouquets).
+    "orin": {
+        "skin": ramp("#7a4638", "#b8764f", "#dc9f72", "#f6c9a0"),
+        "hair": ramp("#1c120e", "#3a2418", "#5e3e28", "#845a3c", "#b08660"),
+        "top": ramp("#1c1e24", "#32363f", "#4d5462", "#737c8c"),
+        "inner": ramp("#7a6e5a", "#b0a48a", "#dcd2b8", "#f6efdc"),
+        "belt": ramp("#1e120c", "#3e2616", "#6a4428", "#98683e"),
+        "pants": ramp("#2a2018", "#463628", "#6a5640", "#8c7860"),
+        "boots": ramp("#1e1418", "#3d2822", "#664232", "#90674a"),
+        "leather": ramp("#2a1608", "#5a3414", "#8e5c2c", "#c08a4e"),
+        "whisker": ramp("#2a180e", "#58361e", "#855630", "#b08052"),
+        "smock": ramp("#14301c", "#22562e", "#3a844a", "#68b472"),
+        "raffia": ramp("#6a5a34", "#a08c58", "#cdb97c", "#efe3b4"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d97a68"),
+        "outline": pa.hex_rgb("#1c1410"),
+        "hair_style": "bun",
+        "outfit": "jacket",
+        "build": "athletic",
+        "bulk": True,
+        "apron": True,
+        "apron_mat": "smock",
+        "pauldrons": True,
+        "beard": True,
+        "bast": True,
+        "bag": "none",
+    },
 }
 
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
 SOFT = ("player", "mira", "child", "antreiber", "einsiedler", "torwaechterin", "gefaelliger", "lio", "beamtin",
-        "buerger")
+        "buerger", "orin")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 
@@ -559,6 +588,7 @@ class Figure:
         # cheek and ear show at its edge, the near arm swings in front of the body
         self.back3 = facing == "NE"
         self.drawn = np.zeros((FH, FW), bool)
+        self.hands = []  # (x, y) under each visible hand, for what hangs from it (bast)
 
     def part(self, mask, mat, value, line=False):
         c = self.c
@@ -811,6 +841,52 @@ class Figure:
         self.part(feather, "feather", 0.35 + 0.6 * c.sphere(x0, y0 - 4, 9, 9), line=True)
         self.part(seg(c, x0, y0, x1, y1, 0.3) & feather, "feather", 0.95)  # the shaft catches the light
 
+    # --- Akt IV, S3: Orin's leather pauldrons, bast threads and short beard ---
+    def pauldrons(self, cx, tx0, tx1, ty0, lean):
+        """Domes of leather over the shoulders, standing out to the sides of the trunk: the near one in profile, both from
+        the front and the back. A lit crown, a lame across them, a dark rim and one rivet."""
+        c = self.c
+        if self.side:
+            spots = [(cx + 0.3 + lean, 3.2)]
+        else:
+            sh = 0.5 if self.three else 0.0
+            spots = [(tx0 - 1.6 + sh, 3.2), (tx1 + 1.6 + sh, 3.2)]
+        for px, rx in spots:
+            dome = c.ellipse(px, ty0 + 2.4, rx, 3.4) & (c.yy >= ty0 - 0.5)
+            self.part(dome, "leather", 0.4 + 0.55 * c.sphere(px - 1.5, ty0 - 0.5, rx * 1.7, 5.5), line=True)
+            self.part(dome & (c.yy == ty0 + 2), "leather", 0.18)  # the lame between the plates
+            self.part(dome & (c.yy >= ty0 + 4), "leather", 0.1)  # the rim
+            c.fill(c.rect(round(px - 1.5), ty0 + 0.5, round(px - 1.5) + 1, ty0 + 1.5) & dome, self.d["leather"][3])  # a rivet
+
+    def bast_threads(self):
+        """A band of bast round each wrist and a few threads hanging from the hands."""
+        c, d = self.c, self.d
+        for hx_, hy_ in self.hands:
+            x = int(round(hx_))
+            band = c.rect(x - 1, hy_ - 3, x + 1, hy_ - 2)
+            c.fill(band & self.drawn, d["raffia"][2])
+            for dx, ln, tone in ((-1, 3, 2), (0, 2, 3)):
+                c.fill(c.rect(x + dx, hy_, x + dx + 1, hy_ + ln), d["raffia"][tone])
+
+    def beard(self, hx, hy):
+        """A short beard, a shade lighter than the hair: a cap over the chin and jaw with sideburns down the cheeks; the
+        eyes and the blush (rows hy + 1 to hy + 3) stay clear and the mouth is a skin pixel in the middle."""
+        c = self.c
+        head = c.ellipse(hx, hy, 6.3, 6.0)
+        if self.side:
+            jaw = head & (c.yy >= hy + 4) & (c.xx + 0.5 >= hx - 2.5)
+            burn = head & (c.yy >= hy) & (c.yy < hy + 4) & (c.xx + 0.5 >= hx - 3.5) & (c.xx + 0.5 < hx - 1.5)
+            chin = c.rect(hx + 0.5, hy + 6, hx + 3.5, hy + 7)
+            gap = c.rect(hx + 3, hy + 4, hx + 5, hy + 5)
+        else:
+            shift = 0.5 if self.three else 0.0
+            jaw = head & (c.yy >= hy + 4)
+            burn = head & (c.yy >= hy) & (c.yy < hy + 4) & (np.abs(c.xx + 0.5 - hx - shift) > 4.7)
+            chin = c.rect(hx - 2 + shift, hy + 6, hx + 2 + shift, hy + 7)
+            gap = c.rect(hx - 1 + shift, hy + 4, hx + 1 + shift, hy + 5)
+        beard = (jaw | burn | chin) & ~gap
+        self.part(beard, "whisker", 0.3 + 0.6 * c.sphere(hx - 2.5, hy - 1.0, 9, 8), line=False)
+
     def face_extras(self, hx, hy, ey, eyes):
         """Brows, glasses: what sits on the face after the eyes."""
         d, c = self.d, self.c
@@ -928,6 +1004,8 @@ class Figure:
                 tx1 += 1
             else:
                 tx0, tx1 = tx0 - 1, tx1 + 1
+        if d.get("bulk"):  # a mighty trunk: a pixel wider on both sides
+            tx0, tx1 = tx0 - 1, tx1 + 1
         torso = c.rect(tx0, ty0, tx1, ty1)
         torso &= ~((c.yy == ty0) & ((c.xx < tx0 + 1) | (c.xx >= tx1 - 1)))
         if build == "round" and side:
@@ -984,7 +1062,8 @@ class Figure:
             apron = c.rect(ax0, ty0 + 3, tx1 - (1 if not side else 0), ty1 + 1)
             if side:
                 apron = c.rect(tx1 - 3, ty0 + 3, tx1 + 0.5, ty1 + 1)
-            self.part(apron, "inner", self.cyl(tx0, tx1, 0.45, 0.5), line=True)
+            apron_mat = d.get("apron_mat", "inner")
+            self.part(apron, apron_mat, self.cyl(tx0, tx1, 0.45, 0.5), line=True)
             if not side:
                 self.part(c.rect(ax0 - 1, ty0 + 3, tx1 - 0, ty0 + 4), "belt", 0.6)
         if d.get("keys") and not back:
@@ -1031,6 +1110,7 @@ class Figure:
                 hand_y = ty0 + 6 - 2 * work
             self.sleeve(near, 0.65, guard_from=ty0 + 4)
             self.part(near & (c.yy >= hand_y), "skin", 0.65)
+            self.hands.append((cx - 0.5 + lean + sw + 1, hand_y + 1))
         else:
             for k, ax in enumerate((tx0 - 1 - arm_out, tx1 + 1 + arm_out)):
                 sw = swing[k]
@@ -1064,7 +1144,12 @@ class Figure:
                     self.part(hand & (c.yy == end), "top", tone + 0.2)
                     hand = hand & (c.yy > end)
                 self.part(hand, "skin", tone)
+                self.hands.append((ax + 1, end + 1))
 
+        if d.get("pauldrons"):
+            self.pauldrons(cx, tx0, tx1, ty0, lean)
+        if d.get("bast"):
+            self.bast_threads()
         if lap and not back:
             self.lute_lap(cx, ty0, ty1, lean)
         if d.get("basket"):
@@ -1218,6 +1303,8 @@ class Figure:
             band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & inside
             self.part(band, "inner", 0.6)
             self.part(band & (c.yy >= hy - 2.8), "top", 0.75)
+        if d.get("beard") and not back:
+            self.beard(hx, hy)
         if d.get("hat_kind"):
             self.hat(hx, hy)
         item = d.get("ear_item")

@@ -118,20 +118,15 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - *Eine für den Eimer, eine für den Krug, und eine, die genau eine Hand fasst. Werkzeug war das nicht.* `[#draft]`  <sub>stadt_rim_2</sub>
 - *Für einen Atemzug glänzt jede Mulde nass, als hätte eben jemand abgesetzt. Dann ist es wieder Stein.* `[#draft]`  <sub>stadt_rim_3</sub>
 
-### S2-11 · `florist_wait`
+### S2-11 · `workshop_wait`
 
-> --- Die Läden -----------------------------------------------------------------------------------------------------------
-> Fassaden, die S3 (Blumenladen) und S4 (Werkstatt) öffnen; hier sind sie zu und versprechen nichts.
-
-- *Der Blumenladen hat die Läden zu. Vor der Tür stehen Eimer voller Pfingstrosen, dicht an dicht, und sehen auf die Straße.* `[#draft]`  <sub>stadt_florist_1</sub>
-- *Die Tür bleibt zu. Dahinter raschelt Papier, einmal, und dann ist es still.* `[#draft]`  <sub>stadt_florist_2</sub>
-
-### S2-12 · `workshop_wait`
+> --- Die Werkstatt -------------------------------------------------------------------------------------------------------
+> Eine Fassade, die S4 (Werkstatt) öffnet; hier ist sie zu und verspricht nichts. Der Blumenladen ist seit S3 offen (blumenladen.dialogue).
 
 - *Die Tür der Werkstatt sitzt fest im Rahmen. In Kniehöhe ist sie eingedellt, und sie scheint daran gewöhnt.* `[#draft]`  <sub>stadt_shop_1</sub>
 - *Von drinnen kommt das Geräusch eines Hobels, ruhig und genau. Es hört nicht auf und erklärt sich nicht.* `[#draft]`  <sub>stadt_shop_2</sub>
 
-### S2-13 · `day_wreath`
+### S2-12 · `day_wreath`
 
 > --- Ein perfekter Tag: die drei Stationen -----------------------------------------------------------------------------
 > Die Beamtin im Rathaus (rathaus.dialogue) hat den Besuch des Bürgermeisters auf die Minute geplant: Kranz am Brunnen, Pult vor dem
@@ -141,17 +136,17 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - *Am Brunnen lehnt ein Kranz aus Tannengrün, so groß wie ein Wagenrad. Auf einer Seite ist er bis auf die Drähte abgefressen.* `[#draft]`  <sub>stadt_wreath_1</sub>
 - *Auf dem Band steht noch »Willkommen, hochverehrter«. Der Rest des Satzes ist im Magen von etwas, das nicht eingeladen war.* `[#draft]`  <sub>stadt_wreath_2</sub>
 
-### S2-14 · `day_lectern`
+### S2-13 · `day_lectern`
 
 - *Vor dem Rathaus steht ein Rednerpult und neigt sich nach links, wie jemand, der gleich etwas zugibt.* `[#draft]`  <sub>stadt_lectern_1</sub>
 - *Ein Bein ist kürzer. Man hat es mit Büchern unterlegt, »Wegerecht«, »Wegerecht, Nachtrag« und »Wegerecht, Nachtrag zum Nachtrag«.* `[#draft]`  <sub>stadt_lectern_2</sub>
 
-### S2-15 · `day_table`
+### S2-14 · `day_table`
 
 - *Auf einem Tisch auf dem Platz liegen ein Laib Brot und ein Schälchen Salz auf einem frisch gebügelten Tuch.* `[#draft]`  <sub>stadt_table_1</sub>
 - *Auf dem Brot sitzen Spatzen, ein gutes Dutzend, und arbeiten sich von innen nach außen. Das Salz haben sie nicht angerührt.* `[#draft]`  <sub>stadt_table_2</sub>
 
-### S2-16 · `goat_roof`
+### S2-15 · `goat_roof`
 
 > --- Die Ziege ---------------------------------------------------------------------------------------------------------
 > Sie steht auf dem First des Rathauses (Bible §33: taucht zunehmend absurd auf; Nachspiel: besetzt das Rathaus, niemand kennt die

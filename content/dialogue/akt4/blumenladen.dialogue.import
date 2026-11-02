@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bjnmxi6jxks5q"
+path="res://.godot/imported/blumenladen.dialogue-803a7f56ae9285d80c870c90b047f8e3.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/blumenladen.dialogue"
+dest_files=["res://.godot/imported/blumenladen.dialogue-803a7f56ae9285d80c870c90b047f8e3.tres"]
+
+[params]
+
+defaults=true

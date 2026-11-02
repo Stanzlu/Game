@@ -832,6 +832,63 @@
    "payoff": "Offen: der Zettel am Ring nennt kein Schloss (Fundbüro, Akt IV, S2). Das Nachspiel (Bible §42, das Rathaus ist besetzt) darf ihn einlösen oder nicht; Kuriositäten sind teilweise bedeutungsvoll, teilweise kompletter Unsinn (Bible §31)."
   },
   {
+   "id": "orin-brief",
+   "kind": "vorausdeutung",
+   "title": "Orins Strauß und der Brief ohne Anschrift",
+   "bible": "§13, §44, §45",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "flo_dried_1"
+    },
+    {
+     "type": "line",
+     "ref": "flo_dried_2"
+    },
+    {
+     "type": "line",
+     "ref": "flo_table_2"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_4"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_6"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_7"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_8"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_10"
+    },
+    {
+     "type": "line",
+     "ref": "flo_let_14"
+    },
+    {
+     "type": "line",
+     "ref": "flo_afl_3"
+    },
+    {
+     "type": "flag",
+     "ref": "city.letter_told"
+    },
+    {
+     "type": "flag",
+     "ref": "city.letter_held"
+    }
+   ],
+   "payoff": "Offen, mit Absicht (Bible §44: etwas lange Unausgesprochenes, keine garantierte perfekte Auflösung). Ein Strauß getrockneter Pfingstrosen hängt kopfüber über dem Bindetisch, ohne Karte, die Blütenblätter darunter ungekehrt; ein Umschlag steckt weich vom Tragen in Orins Schürze, ohne Anschrift, und wird nicht vorgelesen. Orin sagt Dinge, nie einen Namen, einen Anlass oder einen Rat; die Spielerin hört zu, hält den Strauß oder geht, und keine der drei Antworten ist besser. Danach steht kein Witz mehr, auch nicht an den Dingen im Laden (Bible §45, Risiko 7). Ein späteres Segment darf den Brief wieder aufnehmen (Orins Lieferung auf dem Zettelbrett, S5), muss ihn aber nicht auflösen."
+  },
+  {
    "id": "antreiber-warum",
    "kind": "vorausdeutung",
    "title": "Das Warum des Antreibers (Dinge)",
@@ -1091,8 +1148,53 @@
    "kind": "gag",
    "title": "Die Ente",
    "bible": "§33",
-   "appears": [],
-   "payoff": "Orins Erzfeind (Akt IV). Die Ente verhält sich vollkommen normal. Kein Auftritt im Slice."
+   "appears": [
+    {
+     "type": "line",
+     "ref": "flo_orin_6"
+    },
+    {
+     "type": "line",
+     "ref": "flo_orin_7"
+    },
+    {
+     "type": "line",
+     "ref": "flo_duck_1"
+    },
+    {
+     "type": "line",
+     "ref": "flo_duck_3"
+    },
+    {
+     "type": "line",
+     "ref": "flo_rep_3"
+    },
+    {
+     "type": "line",
+     "ref": "flo_rep_7"
+    },
+    {
+     "type": "line",
+     "ref": "flo_rep_10"
+    },
+    {
+     "type": "flag",
+     "ref": "city.duck_seen"
+    },
+    {
+     "type": "flag",
+     "ref": "city.duck_passed"
+    },
+    {
+     "type": "flag",
+     "ref": "city.duck_stayed"
+    },
+    {
+     "type": "flag",
+     "ref": "city.feather_taken"
+    }
+   ],
+   "payoff": "Orins Erzfeind (Akt IV, S3). Die Ente verhält sich vollkommen normal: sie steht vor dem Laden, pickt, sieht einen mit einem Auge an und hat zu allem keine Meinung; kein Quak, keine Herkunft, kein Wort über Orin, der nur bittet nachzusehen und auf „Warum?“ keinen Grund nennt (`flo_orin_7`). Die Nebenquest „Die Ente“ hat zwei gleichwertige Ausgänge: die Spielerin steht neben ihm, und die Töpfe mit den Pfingstrosen kommen hinaus (`city.duck_passed`), oder sie bleiben drinnen, „Dann morgen“ (`city.duck_stayed`); die Ente schaut in beiden Fällen unbeteiligt (`flo_rep_7`, `flo_rep_10`). Neben ihr liegt eine Feder (Kuriosität). Nach dem Brief gibt es keinen Witz um sie (Bible §45). Die Ente kehrt wieder: im Nachspiel weigert sich Orin weiterhin (Bible §42)."
   },
   {
    "id": "antreiber-freizeit",
@@ -2124,6 +2226,41 @@
    "flag": "city.lost_cup",
    "axis": "Gegenstände",
    "meaning": "Sie hat im Fundbüro die Tasse mit dem Sprung genommen (Kuriosität, Akt IV, S2). Sind alle vier genommen, ist die Nebenquest „Das Fundbüro“ fertig und das Regal leer."
+  },
+  {
+   "flag": "city.orin_met",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat im Blumenladen Orin getroffen (Akt IV, S3): im Aussehen ein Krieger, im Sprechen ein Florist, der Läuse an Rosen jagt. Die Vorstellung rückt die Heldenquest in die Stufe Hilfe, die Beziehung zu Orin ist vorsichtig. Er bittet, nach einer Ente zu sehen, ohne zu sagen, warum."
+  },
+  {
+   "flag": "city.duck_seen",
+   "axis": "Gag",
+   "meaning": "Sie hat die Ente vor dem Laden gesehen (Nebenquest „Die Ente“, Akt IV, S3): sie pickt, sieht einen mit einem Auge an und hat nichts vor. Orin liest es und fragt, was sie gesehen hat; die Ente wird nie erklärt."
+  },
+  {
+   "flag": "city.duck_passed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat gesagt, dass sie neben Orin steht, und er hat die Töpfe mit den Pfingstrosen vor die Tür gestellt (Akt IV, S3). Die Karte zeigt die Töpfe draußen, die Ente schaut unbeteiligt. Gleichwertig mit city.duck_stayed, keine Wertung."
+  },
+  {
+   "flag": "city.duck_stayed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat gesagt, dass die Töpfe drinnen bleiben dürfen: „Dann morgen.“ (Akt IV, S3). Die Töpfe stehen gedreht im Fensterlicht. Gleichwertig mit city.duck_passed, keine Wertung."
+  },
+  {
+   "flag": "city.feather_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat die Feder neben der Ente aufgehoben (Kuriosität, Akt IV, S3): eine Feder, die zu einer ganz gewöhnlichen Ente gehört."
+  },
+  {
+   "flag": "city.letter_told",
+   "axis": "Entscheidungen",
+   "meaning": "Sie ist geblieben, als Orin vom Brief sprach (Nebenquest „Der Brief“, Akt IV, S3): ein getrockneter Strauß ohne Karte, ein Umschlag ohne Anschrift, der nicht vorgelesen wird. Wer zuhört oder den Strauß hält, setzt es; wer geht, setzt nichts und kann wiederkommen. Die Beziehung zu Orin wird vertraut, die Erinnerung letter entsteht. Danach kein Witz."
+  },
+  {
+   "flag": "city.letter_held",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat den Strauß gehalten, während Orin den Brief zwischen die Stiele legte (Akt IV, S3): er hängt danach wieder am Balken, und Orin rückt ihn gerade. Eine Zeile mehr, kein Wert."
   }
  ]
 }
