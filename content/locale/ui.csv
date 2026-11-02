@@ -224,6 +224,7 @@ PLACE_STRASSE,Die Straße
 PLACE_STADT,Die Stadt
 PLACE_RATHAUS,Das Rathaus
 PLACE_BLUMENLADEN,Der Blumenladen
+PLACE_WERKSTATT,Die Werkstatt
 END_OF_SLICE,"Hier endet der Prototyp. Danke fürs Spielen."
 SETTINGS_CAPTIONS,Geräusche als Text
 CAPTION_FROGS,Frösche quaken.

@@ -61,9 +61,9 @@ q = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 E = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_woodstack"}}
 H = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_sawhorse"}}
 Y = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate"}}
-; die Läden: % die Tür des Blumenladens (S3, auf der Zelle des früheren Blockers), & vor der Werkstatt noch zu (S4 setzt an die Stelle des Blockers die Tür ein)
+; die Läden: % die Tür des Blumenladens (S3) und & die der Werkstatt (S4), je auf der Zelle des früheren Blockers
 % = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "blumenladen", "spawn": "stadt"}}
-& = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "workshop_wait", "dialogue": "res://content/dialogue/akt4/stadt.dialogue"}}
+& = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "werkstatt", "spawn": "stadt"}}
 ; Menschen: I die Torwächterin im Bogen, M Mira am Brunnenrand, y der Gefällige an seinem Brett, v eine Bürgerin an ihrem Stand, L Lio an der Ecke der Torstraße; J die Ziege (die Glyphe steht unter dem linken Ende des Rathausdaches, das Bild ist auf den Dachrand gehoben)
 I = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_torwaechterin_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "gate", "face": "s"}}
 M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "mira_square", "face": "s", "sit": true}}
@@ -74,6 +74,10 @@ J = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue"
 ; vor dem Blumenladen (S3): 4 die Ente bei den Töpfen (immer da, vollkommen normal), 5 Töpfe mit Pfingstrosen, die Orin vor die Tür stellt, wenn er an der Ente vorbei war
 4 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_duck", "cue": "duck", "dialogue": "res://content/dialogue/akt4/blumenladen.dialogue"}}
 5 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_pots", "if": "city.duck_passed"}}
+; vor der Werkstatt (S4): 6 die Bank (zwei Zellen, man setzt sich, "Nichts"), 7 die Kiste und 8 Tess darauf, sobald das Brett gesägt ist (dann steht sie nicht mehr in der Werkstatt)
+6 = {"ground": "_", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/st_bench"}}
+7 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate", "if": "city.board_done"}}
+8 = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "cue": "bench", "face": "w", "sit": true, "if": "city.board_done"}}
 ; Türen: D ins Rathaus, N das Tor an der Straße (Rand der Karte); Marken: der Start auf dem Platz, die Ankünfte (Herkunft Straße: vor dem Tor draußen; Herkunft Rathaus: vor der Tür; Blumenladen und Werkstatt: vor den Läden)
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "rathaus", "spawn": "stadt"}}
 N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "strasse", "spawn": "stadt", "auto": true, "size": [1, 7]}}
@@ -123,8 +127,8 @@ hhhhThhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhL
 hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhThhhhhhhhhhhh
 hhhhhhhhhhhhh____hhhhhKhhhhhhhhdhhhhhahhhhhuhhhhhhhjhhhhhhhhwhhhhhhzhhhhhhbhhhhX____hhhhfhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hh_________&_____________________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhh_x____E______H_________________________________________________________hhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhh_________!_____________________________________________________________hhhhhhhhhhhhhhhhhhhThhhh
+hhhhhhhhhhhhh_x____E______H_7_______________________________________________________hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh_________!__6__8_______________________________________________________hhhhhhhhhhhhhhhhhhhThhhh
 hhhThhhhhhhhh______________l____________l_______________l_____________l______X______hhUhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh
