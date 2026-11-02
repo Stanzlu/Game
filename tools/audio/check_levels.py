@@ -71,6 +71,7 @@ SFX_GROUPS = [
     (r"house_hum_", make_slice_sfx.GROUPS["house_hum"]),
     (r"hermit_flute_", make_slice_sfx.GROUPS["flute"]),
     (r"lio_street_", make_slice_sfx.GROUPS["lute"]),
+    (r"tess_whistle_", make_slice_sfx.GROUPS["whistle"]),
     (r"purr$", make_slice_sfx.GROUPS["purr"]),
     (r"sit$|stand$", make_slice_sfx.GROUPS["cloth"]),
     (r"bird$", make_slice_sfx.GROUPS["bird"]),
@@ -133,6 +134,11 @@ CLASSES = [
     # Lio's street music (Act IV, S2): the town's morning bed, like the valley's (tal_morgen). Heard over the
     # bed, as the flute is, but a plucked tune with all its peaks: at -4 dB it would sink under the bed.
     ("lute on the street", ["lio_street_0"], -2.0, "SFX", "tal_morgen", 0.0, 6.0),
+    # Tess's whistling (Act IV, S4): in the workshop, under the town's morning bed (the interiors play no music, only
+    # the bed, a little lower). A whistle is a pure tone with no peaks: against a broad bed it stands out by far more
+    # than its loudness says, and Tess whistles to herself. So it sits at the lute's gain but a group lower (-21 LUFS),
+    # a hair over the bed (about +1 LU) and well under the lute (+2).
+    ("whistle in the workshop", ["tess_whistle_0"], -2.0, "SFX", "tal_morgen", 0.0, 4.0),
     # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
     # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
     ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),
