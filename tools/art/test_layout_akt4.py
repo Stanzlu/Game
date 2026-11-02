@@ -344,14 +344,16 @@ STADT = os.path.join(mapfile.ROOT, "content", "maps", "stadt.txt")
 STADT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "stadt.dialogue")
 STADT_DIALOGUE_RES = "res://content/dialogue/akt4/stadt.dialogue"
 FLORIST_DIALOGUE_RES = "res://content/dialogue/akt4/blumenladen.dialogue"
+WORKSHOP_DIALOGUE_RES = "res://content/dialogue/akt4/werkstatt.dialogue"
 # the cues of the town by glyph (the contract of S2)
 STADT_CUES = {"Z": "list_board", "y": "gef_square", "I": "gate", "M": "mira_square", "v": "citizen_1", "L": "lio_street",
-              "Q": "fountain_rim", "&": "workshop_wait", "1": "day_wreath", "2": "day_lectern",
+              "Q": "fountain_rim", "1": "day_wreath", "2": "day_lectern",
               "3": "day_table", "J": "goat_roof"}
 STADT_SHEETS = {"I": "torwaechterin", "M": "mira", "y": "gefaelliger", "v": "buerger", "L": "lio"}
 # what is there once and only once
 # S3: 4 the duck, 5 the pots she stands by once Orin has been past her
-STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45" + "s"
+# S4: 6 the bench before the workshop, 7 the crate and 8 Tess on it
+STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s"
 FACADE_GLYPHS = "RFKabcdefjuwzGUt"
 TREES = {"T": (3, 7), "C": (3, 7), "P": (2, 5)}
 
@@ -433,8 +435,10 @@ class StadtLayoutTests(unittest.TestCase):
         for glyph in set("".join(rows)):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
-                if glyph == "4":
-                    self.assertEqual((params["cue"], params["dialogue"]), ("duck", FLORIST_DIALOGUE_RES), "the duck's lines are the florist's")
+                if glyph in ("4", "8"):
+                    # the duck's lines are the florist's, Tess's the workshop's
+                    expected = ("duck", FLORIST_DIALOGUE_RES) if glyph == "4" else ("bench", WORKSHOP_DIALOGUE_RES)
+                    self.assertEqual((params["cue"], params["dialogue"]), expected, glyph)
                     continue
                 used[glyph] = params["cue"]
                 self.assertEqual(params["dialogue"], STADT_DIALOGUE_RES, glyph)
@@ -473,13 +477,11 @@ class StadtLayoutTests(unittest.TestCase):
         self.assertEqual((florist["params"]["target"], florist["params"]["spawn"]), ("blumenladen", "stadt"))
         self.assertNotIn("auto", florist["params"], "a shop's door is used with a key press like the town hall's")
         self.assertEqual(_ground(symbols, "%"), "_", "no bake needed")
-        params = symbols["&"]["params"]
-        self.assertTrue(symbols["&"]["prop"].endswith("blocker.tscn"), "the workshop is still shut (S4)")
-        self.assertEqual(params["cue"], "workshop_wait")
-        self.assertNotIn("if", params)
-        self.assertNotIn("unless", params, "nothing opens a blocker but the segment that puts the door there")
-        self.assertEqual(params["size"][1], 1)
-        self.assertIn(_ground(symbols, "&"), "_,", "S4 puts a door on this cell: no bake needed")
+        workshop = symbols["&"]
+        self.assertTrue(workshop["prop"].endswith("door.tscn"), "S4 put the workshop's door on the cell of its blocker")
+        self.assertEqual((workshop["params"]["target"], workshop["params"]["spawn"]), ("werkstatt", "stadt"))
+        self.assertNotIn("auto", workshop["params"], "a shop's door is used with a key press like the town hall's")
+        self.assertEqual(_ground(symbols, "&"), "_", "no bake needed")
         for glyph, marker in (("@", "player_spawn"), ("n", "spawn_strasse"), ("i", "spawn_rathaus"), ("$", "spawn_blumenladen"),
                               ("!", "spawn_werkstatt")):
             self.assertEqual(symbols[glyph]["marker"], marker)
@@ -523,6 +525,23 @@ class StadtLayoutTests(unittest.TestCase):
         for glyph in "45":
             self.assertEqual(_ground(symbols, glyph), "_", "no bake needed")
         self.assertTrue(all(rows[y][door[0]] in "_$" for y in range(door[1] + 1, arrival[1] + 1)), "the way from the arrival to the door stays free")
+
+    def test_the_bench_the_crate_and_tess_stand_before_the_workshop_and_leave_its_way_free(self):
+        _, symbols, rows, spots = _stadt()
+        door, arrival = spots["&"][0], spots["!"][0]
+        bench, crate, tess = spots["6"][0], spots["7"][0], spots["8"][0]
+        self.assertEqual((bench[1], tess[1]), (door[1] + 2, door[1] + 2), "two rows before the door, on the street")
+        self.assertEqual(crate, (tess[0], tess[1] - 1), "the flat crate lies one cell above her, as Lio's does")
+        self.assertGreaterEqual(tess[0] - bench[0], 2, "she sits beside the bench, not on it")
+        self.assertLessEqual(tess[0] - bench[0], 4, "close enough to sit with her")
+        self.assertGreaterEqual(bench[0] - door[0], 2, "the bench stands aside from the way to the door")
+        for glyph in "678":
+            self.assertEqual(_ground(symbols, glyph), "_", "no bake needed")
+        self.assertEqual(symbols["7"]["params"].get("if"), "city.board_done")
+        self.assertEqual(symbols["8"]["params"].get("if"), "city.board_done")
+        self.assertTrue(symbols["8"]["params"].get("sit"), "she sits")
+        self.assertNotIn("if", symbols["6"]["params"], "the bench is there from the first day")
+        self.assertTrue(all(rows[y][door[0]] in "_!" for y in range(door[1] + 1, arrival[1] + 1)), "the way from the arrival to the door stays free")
 
     def test_everything_is_reachable_on_foot_from_the_start_and_the_gate_is_the_only_way_in(self):
         _, symbols, rows, spots = _stadt()

@@ -9,6 +9,7 @@ extends GutTest
 
 const STADT := preload("res://world/levels/akt4/stadt.tscn")
 const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
+const BENCH_SCRIPT := preload("res://world/props/bench.gd")
 const GOAT_SCRIPT := preload("res://world/props/goat.gd")
 const QUEST := "main_city_way"
 const SIZE := Vector2i(108, 62)
@@ -37,8 +38,11 @@ const PROPS: PackedStringArray = [
 	"day_lectern",
 	"day_table",
 ]
-const SHUT_SHOPS := {"workshop_wait": Vector2i(22, 39)}
 const FLORIST_DOOR := Vector2i(30, 27)
+const WORKSHOP_DOOR := Vector2i(22, 39)
+const BENCH_CELL := Vector2i(25, 41)
+const TESS_CELL := Vector2i(28, 41)
+const CRATE_CELL := Vector2i(28, 40)
 const DUCK_CELL := Vector2i(33, 28)
 const POTS_CELL := Vector2i(31, 28)
 
@@ -114,18 +118,6 @@ func _doors_to(scene: GameScene, target: String) -> Array:
 	)
 
 
-func _blocker_at(scene: GameScene, cell: Vector2i) -> Node:
-	var spot := scene.map.cell_to_world(cell)
-	for node in scene.map.entities.get_children():
-		if (
-			not node.is_queued_for_deletion()
-			and node.get_script() == BLOCKER_SCRIPT
-			and node.global_position.distance_to(spot) < 2.0
-		):
-			return node
-	return null
-
-
 # --- The map ------------------------------------------------------------------------------------
 
 
@@ -172,17 +164,18 @@ func test_the_things_of_the_square_are_there_with_their_cues() -> void:
 	assert_eq(_cell_of(scene, goat), Vector2i(40, 19))
 
 
-func test_the_workshop_is_shut_by_a_blocker_and_the_florist_has_a_door_on_the_blockers_cell(
-) -> void:
+func test_both_shops_have_a_door_on_the_cell_of_their_former_blocker() -> void:
 	var scene := await _scene()
-	for cue: String in SHUT_SHOPS:
-		assert_not_null(_blocker_at(scene, SHUT_SHOPS[cue]), cue)
-	assert_null(_blocker_at(scene, FLORIST_DOOR), "S3 put the door where the blocker stood")
-	var doors := _doors_to(scene, "blumenladen")
-	assert_eq(doors.size(), 1)
-	assert_eq(doors[0].get(&"spawn"), "stadt", "to the place the shop made for it")
-	assert_eq(_cell_of(scene, doors[0]), FLORIST_DOOR)
-	assert_eq(_doors_to(scene, "werkstatt").size(), 0, "S4 sets the door in")
+	for pair: Array in [
+		["blumenladen", FLORIST_DOOR, "to the place the florist made for it"],
+		["werkstatt", WORKSHOP_DOOR, "to the place the workshop made for it"],
+	]:
+		var doors := _doors_to(scene, pair[0])
+		assert_eq(doors.size(), 1, pair[0])
+		assert_eq(doors[0].get(&"spawn"), "stadt", pair[2])
+		assert_eq(_cell_of(scene, doors[0]), pair[1], pair[0])
+	for node in scene.map.entities.get_children():
+		assert_ne(node.get_script(), BLOCKER_SCRIPT, "no blocker is left in the city")
 
 
 func _decor_at(scene: GameScene, sprite: String, cell: Vector2i) -> Array:
@@ -213,6 +206,29 @@ func test_a_duck_stands_before_the_florist_in_both_endings_and_the_pots_come_out
 		var pots := _decor_at(later, "tal/st_pots", POTS_CELL).size()
 		assert_eq(pots, 1 if flag == "city.duck_passed" else 0, flag)
 		later.free()
+
+
+func test_before_the_board_is_sawn_the_bench_stands_alone_and_tess_is_not_outside() -> void:
+	var scene := await _scene()
+	var benches := scene.map.entities.get_children().filter(
+		func(node: Node) -> bool:
+			return node.get_script() == BENCH_SCRIPT and _cell_of(scene, node) == BENCH_CELL
+	)
+	assert_eq(benches.size(), 1, "the bench before the workshop is there from the first day")
+	assert_null(_walker(scene, "bench"), "Tess works inside")
+	assert_eq(
+		_decor_at(scene, "tal/st_seat_crate", CRATE_CELL).size(), 0, "and has no crate out here"
+	)
+
+
+func test_once_the_board_is_sawn_tess_sits_on_her_crate_beside_the_bench() -> void:
+	WorldState.set_flag("city.board_done")
+	var scene := await _scene()
+	var tess := _walker(scene, "bench")
+	assert_not_null(tess)
+	assert_eq(_cell_of(scene, tess), TESS_CELL)
+	assert_eq(_decor_at(scene, "tal/st_seat_crate", CRATE_CELL).size(), 1, "the crate she sits on")
+	assert_eq(scene.find_children("*", "NpcWalker", true, false).size(), 6, "five and she")
 
 
 func test_it_is_a_morning_without_lights_and_without_a_cutscene() -> void:
