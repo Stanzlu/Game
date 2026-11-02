@@ -78,6 +78,19 @@ J = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue"
 6 = {"ground": "_", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/st_bench"}}
 7 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate", "if": "city.board_done"}}
 8 = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "cue": "bench", "face": "w", "sit": true, "if": "city.board_done"}}
+; die Liste (S5): je Aufgabe am Ort ein frischer Zettel (genommen und noch nicht getan: das Brett nennt ihn, sie tut ihn dort) und ein durchgestrichener (die Liste ist geschlossen und sie hat die Aufgabe nicht genommen); flach, ohne Katalogschatten (der Stempel bleibt)
+ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bouquet", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bouquet", "unless": "list.done_bouquet"}}
+ß = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_bouquet"}}
+ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_ladder", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_ladder", "unless": "list.done_ladder"}}
+æ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_ladder"}}
+ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_stage", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_stage", "unless": "list.done_stage"}}
+ø = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_stage"}}
+Ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_goat", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_goat", "unless": "list.done_goat"}}
+å = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_goat"}}
+Ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bread", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bread", "unless": "list.done_bread"}}
+Æ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_bread"}}
+Ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_lost", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_lost", "unless": "list.done_lost"}}
+Ø = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_lost"}}
 ; Türen: D ins Rathaus, N das Tor an der Straße (Rand der Karte); Marken: der Start auf dem Platz, die Ankünfte (Herkunft Straße: vor dem Tor draußen; Herkunft Rathaus: vor der Tür; Blumenladen und Werkstatt: vor den Läden)
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "rathaus", "spawn": "stadt"}}
 N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "strasse", "spawn": "stadt", "auto": true, "size": [1, 7]}}
@@ -106,15 +119,15 @@ hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhfhhhhhhhhRhhhhhhhhhdhhhhhhchhhhhahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhh_J___D________hhhhh___hhhhh____hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhh_JØÜ_D_Äå_____hhhhh___hhhhh____hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_s__________________Z_______S_____lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh________________________x______X___hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh__v__2___i__________y______________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhh___________________________________hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_________________________________3_hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____x______________________________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhahhhhhhbhhhhhhhFhhhhl__________________________l_______hhhchhhhhhhehhhhhhfhhhhhhhhThhhhhhhhhh
-hhhhhhhhhh|hh______________B__%__q__________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhahhhhhhbhhhhhhhFhhhhl________üø________________l____ÆÖ_hhhchhhhhhhehhhhhhfhhhhhhhhThhhhhhhhhh
+hhhhhhhhhh|hh______________B__%ßäq__________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
 hThhhhhhhhhhh__________________5_4______________________________@___________________hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh_________________$_____________________________________________________hhhhhhhhhhhhhhhhhhhhhThh
 hhhhhhhhPhhhh___________l______________________________O___1__________________l_____hhhhhhhhhhhhhhhhhhhhhhhh
@@ -126,7 +139,7 @@ hhhhhhhhhh|hh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhY
 hhhhThhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhL____hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhThhhhhhhhhhhh
 hhhhhhhhhhhhh____hhhhhKhhhhhhhhdhhhhhahhhhhuhhhhhhhjhhhhhhhhwhhhhhhzhhhhhhbhhhhX____hhhhfhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhh|hh_________&_____________________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhh|hh_________&_öæ__________________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh_x____E______H_7_______________________________________________________hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh_________!__6__8_______________________________________________________hhhhhhhhhhhhhhhhhhhThhhh
 hhhThhhhhhhhh______________l____________l_______________l_____________l______X______hhUhhhhhhhhhhhhhhhhhhhhh
