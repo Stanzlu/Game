@@ -1,0 +1,232 @@
+# Der Blumenladen, Akt IV, Segment S3 (docs/akt4/REGIONSBRIEFE.md, O8). Orin sieht aus wie ein Krieger und ist Florist: breit wie ein Türrahmen, Schulterpanzer
+# aus Leder, grüne Schürze, Bast an den Händen. Er spricht leise, höflich und in vollständigen Sätzen mit Fachwörtern (Pfingstrosen morgens gießen, Läuse an
+# Rosen) und duzt dich. Er fürchtet eine Ente; die Ente verhält sich vollkommen normal, und kein Satz, keine Geste und kein Ding erklärt, warum (Bible §33,
+# §44; Stilblatt orin.md, Gegenbeispiele 1 bis 5). Gewicht: leicht, am Ende schwer. Der Brief (Bible §44: "etwas lange Unausgesprochenes, keine garantierte
+# perfekte Auflösung") sagt nicht, für wen und warum; Orin nennt Dinge (Pfingstrosen, Bast, einen Umschlag ohne Anschrift) und fragt nie um Rat. Nach dem
+# Brief gibt es keinen Witz (Bible §45, Risiko 7): weder bei Orin noch an den Dingen im Laden, und die Ente steht davon unberührt draußen.
+# Der Cue "orin" wählt nach Zustand und springt: erstes Mal, die Ente ist noch nicht gesehen, Bericht, danach, nach dem Brief. Die Antworten der Spielerin
+# sind kurz; das Schweigen "…" ist immer eine volle Antwort und die letzte. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und
+# Auslassung); Schilder, Zettel und Namen stehen in » «. Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Orin: der Zustand wählt ------------------------------------------------------------------------------------------------
+# Ein Gespräch über den Bindetisch. Ist der Brief erledigt, spricht er ruhig und ohne Witz; ist die Ente erledigt, leicht und kurz; steht sie noch offen,
+# entweder als Bericht (du hast sie gesehen) oder als Erinnerung (noch nicht). Wer ihn zum ersten Mal trifft, bekommt die Vorstellung: der Krieger gegen die
+# Blumen. Sie setzt, dass ihr euch kennt (city.orin_met), und rückt die Heldenquest in die Stufe "Hilfe", sobald sie in der Stadt steht.
+
+~ orin
+if WorldState.is_quest_done("side_city_letter")
+	=> orin_after_letter
+if WorldState.is_quest_done("side_city_duck")
+	=> orin_after
+if WorldState.is_quest_started("side_city_duck") and WorldState.has_flag("city.duck_seen")
+	=> orin_report
+if WorldState.is_quest_started("side_city_duck")
+	=> orin_wait
+if WorldState.has_flag("city.orin_met")
+	=> orin_ask_again
+Hinter dem Bindetisch steht ein Mann, breit wie der Türrahmen. Schulterpanzer aus Leder, Bart, das Haar im Knoten. [ID:flo_orin_1] [#draft]
+Eine grüne Schürze, ein Schildchen »Orin«, Bast um beide Hände. Dein Blick geht vom Panzer zur Schürze und zurück. [ID:flo_orin_2] [#draft]
+Orin: Ja, ich sehe aus wie jemand, der Drachen jagt. Ich jage Läuse an Rosen. [ID:flo_orin_3] [#draft]
+Orin: Willkommen. Pfingstrosen brauchen Wasser. Morgens. Nicht abends. Morgens. [ID:flo_orin_4] [#draft]
+Er sieht zur Tür, dann zu den Rosen, dann wieder zur Tür. [ID:flo_orin_5] [#draft]
+do WorldState.set_relationship("orin", "cautious")
+if WorldState.quest_stage("main_city_way") == "town"
+	do WorldState.advance_quest("main_city_way", "help")
+do WorldState.set_flag("city.orin_met")
+=> orin_ask
+
+# --- Die Bitte --------------------------------------------------------------------------------------------------------------
+# Er bittet um eine Kleinigkeit und erklärt sie nicht. "Warum?" bekommt keine Erklärung, nur die Auskunft, dass es keine gäbe, die taugt; danach steht
+# dieselbe Bitte noch einmal da, ohne das Warum. Das Schweigen nimmt er an, ohne dass etwas beginnt. Wer zurückkommt, ohne zugesagt zu haben, hört die
+# Bitte noch einmal.
+
+~ orin_ask
+Orin: Bitte sieh nach, ob draußen eine Ente ist. Ich schaue so lange zu den Rosen. [ID:flo_orin_6] [#draft]
+- Ich sehe nach. [ID:flo_orin_r1] [#draft]
+	=> orin_take
+- Warum? [ID:flo_orin_r2] [#draft]
+	Orin: Weil ich es nicht weiß, wäre eine Antwort. Es ist keine gute. [ID:flo_orin_7] [#draft]
+	=> orin_ask_again
+- … [ID:flo_orin_r3] [#draft]
+	=> orin_decline
+=> END
+
+~ orin_ask_again
+Orin: Die Bitte bleibt. Sieh bitte nach, ob draußen eine Ente ist. [ID:flo_orin_8] [#draft]
+- Ich sehe nach. [ID:flo_orin_r4] [#draft]
+	=> orin_take
+- … [ID:flo_orin_r5] [#draft]
+	=> orin_decline
+=> END
+
+~ orin_take
+Orin: Danke. Ich bin bei den Rosen. [ID:flo_orin_9] [#draft]
+Er dreht dir den Rücken zu und beugt sich über einen Rosenstock, den er längst auf Läuse geprüft hat. [ID:flo_orin_10] [#draft]
+do WorldState.start_quest("side_city_duck")
+=> END
+
+~ orin_decline
+Orin: Nur, wenn es dir nichts ausmacht. Ich frage ungern. [ID:flo_orin_11] [#draft]
+=> END
+
+# Die Aufgabe läuft, die Ente hast du noch nicht gesehen: eine Erinnerung, eine Zeile.
+
+~ orin_wait
+Orin: Draußen, vor der Tür, bitte. Ich schaue weiter zu den Rosen. [ID:flo_orin_12] [#draft]
+=> END
+
+# --- Die Ente ---------------------------------------------------------------------------------------------------------------
+# Sie steht vor der Ladentür und tut, was Enten tun. Sie ist keine Figur: ein Tier ohne Absicht. Kein "Quak", keine Pointe auf Orins Kosten, kein Wort über
+# ihn. Die Feder gehört zur Ente und zu nichts sonst; wer sie nimmt, nimmt eine Kuriosität, sonst nichts. Das Betrachten setzt city.duck_seen (der Bericht
+# bei Orin liest es); wer wiederkommt, bekommt eine kurze Zeile.
+
+~ duck
+if WorldState.has_flag("city.duck_seen")
+	=> duck_again
+Vor der Ladentür steht eine Ente. Weiß, orangefarbener Schnabel, ein Gesicht, das nichts vorhat. [ID:flo_duck_1] [#draft]
+Sie pickt zwischen den Pflastersteinen nach etwas, das nur sie sieht, und findet es offenbar. [ID:flo_duck_2] [#draft]
+Sie sieht dich mit einem Auge an, nicht lange. Der Laden hinter ihr ist ihr keine Bemerkung wert. [ID:flo_duck_3] [#draft]
+do WorldState.set_flag("city.duck_seen")
+=> duck_feather
+
+~ duck_again
+Die Ente steht noch vor der Tür und tut, was Enten tun. [ID:flo_duck_4] [#draft]
+=> duck_feather
+
+~ duck_feather
+if WorldState.has_flag("city.feather_taken")
+	=> END
+Neben ihr auf dem Pflaster liegt eine Feder, noch ganz glatt. [ID:flo_duck_5] [#draft]
+- Aufheben. [ID:flo_duck_r1] [#draft]
+	Du bückst dich. Die Ente sieht dir dabei zu, ohne Einwände. [ID:flo_duck_6] [#draft]
+	do WorldState.add_item("curiosity_duck_feather")
+	do WorldState.set_flag("city.feather_taken")
+- Liegen lassen. [ID:flo_duck_r2] [#draft]
+	Du lässt sie liegen. Die Ente hat dazu keine Meinung. [ID:flo_duck_7] [#draft]
+=> END
+
+# --- Der Bericht: die Töpfe -----------------------------------------------------------------------------------------------------
+# Du sagst ihm, was du gesehen hast, und er sagt die eine Zeile, die er schon hatte. Dann die Entscheidung, und beide Ausgänge sind gleichwertig:
+# du stehst neben ihm, und er trägt die Pfingstrosen hinaus ans Licht (city.duck_passed), oder du lässt sie drinnen, und er sagt "Dann morgen"
+# (city.duck_stayed). Keiner ist besser, keiner schwächer, niemand wird gelobt und niemand beschämt; die Ente schaut in beiden Fällen unbeteiligt.
+# Das Schweigen ist ein Aufschub: nichts wird gesetzt, die Aufgabe bleibt offen, und er fragt beim nächsten Mal wieder.
+
+~ orin_report
+Orin: Und? [ID:flo_rep_1] [#draft]
+Du sagst ihm, was du gesehen hast. Die Ente hat gepickt und dich angesehen. Sonst nichts. [ID:flo_rep_2] [#draft]
+Orin: Die Ente tut nichts. Das ist ja das Beunruhigende. [ID:flo_rep_3] [#draft]
+An der Wand stehen die Töpfe, Pfingstrosen in Knospen. Seine Hand liegt auf dem ersten und rührt ihn nicht. [ID:flo_rep_4] [#draft]
+Orin: Sie gehören hinaus ans Licht, wie jeden Morgen. [ID:flo_rep_5] [#draft]
+- Ich stehe neben dir. [ID:flo_rep_r1] [#draft]
+	Orin: Danke. Dann langsam. Pfingstrosen mögen es nicht, wenn man sie hetzt. [ID:flo_rep_6] [#draft]
+	Er trägt die Töpfe hinaus, einen nach dem anderen. Die Ente sieht zu, wie man dem Wetter zusieht. [ID:flo_rep_7] [#draft]
+	Am letzten Topf bleibt seine Hand länger liegen, als nötig wäre. [ID:flo_rep_8] [#draft]
+	do WorldState.advance_quest("side_city_duck", "done")
+	do WorldState.add_memory("orin", "duck")
+	do WorldState.set_flag("city.duck_passed")
+- Lass sie drinnen. [ID:flo_rep_r2] [#draft]
+	Orin: Dann morgen. Die Rosen sind geduldig. [ID:flo_rep_9] [#draft]
+	Seine Schultern sinken um einen Fingerbreit. Draußen sieht die Ente nicht herein. [ID:flo_rep_10] [#draft]
+	do WorldState.advance_quest("side_city_duck", "done")
+	do WorldState.add_memory("orin", "duck")
+	do WorldState.set_flag("city.duck_stayed")
+- … [ID:flo_rep_r3] [#draft]
+	Er lässt die Hand auf dem Topf liegen und wartet, ohne zu drängen. [ID:flo_rep_11] [#draft]
+=> END
+
+# --- Danach (die Ente ist erledigt, der Brief nicht) ------------------------------------------------------------------------------
+# Eine Zeile, leicht, je nach Ausgang: die Pfingstrosen draußen, die Töpfe drinnen. Der Humor sitzt in den Blumen und in der Ordnung, nicht in Orin.
+# Wer nach dem Strauß über dem Tisch fragt, kommt in den Brief; wer nichts sagt, nickt ihm zu und geht.
+
+~ orin_after
+if WorldState.has_flag("city.duck_passed")
+	Orin: Die Pfingstrosen stehen draußen in der Sonne. Ich habe schon dreimal nachgesehen. Das macht sie nervös. [ID:flo_aft_1] [#draft]
+elif WorldState.has_flag("city.duck_stayed")
+	Orin: Die Töpfe stehen noch drinnen. Ich habe sie gedreht, für gleich viel Fensterlicht. Pfingstrosen halten nichts von Kompromissen. [ID:flo_aft_2] [#draft]
+- Der Strauß dort oben. [ID:flo_aft_r1] [#draft]
+	=> orin_letter
+- … [ID:flo_aft_r2] [#draft]
+	Du nickst ihm zu. Er nickt zurück und bindet weiter. [ID:flo_aft_3] [#draft]
+=> END
+
+# --- Der Brief ---------------------------------------------------------------------------------------------------------------
+# Der getrocknete Strauß über dem Tisch, kopfüber, mit Bast gebunden, ohne Karte. Orin sagt Dinge, keine Gründe: Pfingstrosen, die er geschnitten hat,
+# die Art, sie zu trocknen, einen Brief, der dazu gehört, einen Umschlag ohne Anschrift. Er nennt keinen Namen und keinen Anlass, er fragt nicht
+# um Rat und er liest den Brief nicht vor ("Ich wollte nur, dass du weißt, dass es ihn gibt"). Drei Antworten, keine bessere: zuhören (er sagt noch ein
+# paar Tatsachen, dann ist es still), den Strauß halten (er legt den Brief zwischen die Stiele), oder gehen (nichts wird gesetzt, die Aufgabe bleibt
+# offen, er kann wieder angesprochen werden). Nach den ersten beiden endet der Cue leise, ohne Pointe. Das erste Mal beginnt die Aufgabe "Der Brief".
+
+~ orin_letter
+if WorldState.is_quest_started("side_city_letter")
+	Orin sieht nicht hinauf. Die Hand liegt auf dem Umschlag in der Schürzentasche. [ID:flo_let_1] [#draft]
+	Orin: Er hängt noch. Der Brief ist noch zu. [ID:flo_let_2] [#draft]
+else
+	Du siehst hinauf zu dem Strauß über dem Tisch. Orin sieht nicht hinauf. [ID:flo_let_3] [#draft]
+	Orin: Pfingstrosen. Ich habe sie geschnitten, an einem Morgen, an dem ich eigentlich gießen wollte. [ID:flo_let_4] [#draft]
+	Orin: Man trocknet sie kopfüber, dunkel, mit etwas Luft. Drei Wochen. Danach halten sie, solange man sie nicht anfasst. [ID:flo_let_5] [#draft]
+	Aus der Schürzentasche schaut ein Umschlag, die Ecken weich vom Tragen. Er legt die Hand darauf. [ID:flo_let_6] [#draft]
+	Orin: Ich habe einen Brief dazu geschrieben. Auf dem Umschlag steht keine Anschrift. Ich weiß sie nicht. Oder ich weiß sie, und der Umschlag nicht. [ID:flo_let_7] [#draft]
+	Orin: Ich lese ihn nicht vor. Ich wollte nur, dass du weißt, dass es ihn gibt. [ID:flo_let_8] [#draft]
+	do WorldState.start_quest("side_city_letter")
+- Ich höre zu. [ID:flo_let_r1] [#draft]
+	Orin: Es wollte schon jemand den Strauß kaufen. Ich habe gesagt, er sei nicht zu haben. [ID:flo_let_9] [#draft]
+	Orin: Die zwei Stunden vor dem Öffnen gehören den Blumen. Eine halbe davon dem Strauß. Ich sehe ihn an. Mehr tue ich nicht. [ID:flo_let_10] [#draft]
+	Du sagst nichts. Er auch nicht. Über euch dreht sich der Strauß ein wenig und steht still. [ID:flo_let_11] [#draft]
+	do WorldState.set_relationship("orin", "familiar")
+	do WorldState.add_memory("orin", "letter")
+	do WorldState.advance_quest("side_city_letter", "done")
+	do WorldState.set_flag("city.letter_told")
+- Gib ihn mir. [ID:flo_let_r2] [#draft]
+	Orin hält einen Atemzug lang still. Dann löst er den Bast vom Balken und legt dir den Strauß in die Arme. [ID:flo_let_12] [#draft]
+	Der Strauß ist leichter, als er aussieht. [ID:flo_let_13] [#draft]
+	Orin zieht den Umschlag aus der Tasche und schiebt ihn zwischen die Stiele, bis nur eine Ecke herausschaut. [ID:flo_let_14] [#draft]
+	Orin: Danke. [ID:flo_let_15] [#draft]
+	Er sieht auf seine leeren Hände. Du hältst den Strauß, bis er die Arme hebt, und gibst ihn zurück. [ID:flo_let_16] [#draft]
+	do WorldState.set_relationship("orin", "familiar")
+	do WorldState.add_memory("orin", "letter")
+	do WorldState.advance_quest("side_city_letter", "done")
+	do WorldState.set_flag("city.letter_told")
+	do WorldState.set_flag("city.letter_held")
+- … [ID:flo_let_r3] [#draft]
+	Du nickst ihm zu. Er bindet weiter, langsamer als vorher. [ID:flo_let_17] [#draft]
+=> END
+
+# --- Nach dem Brief ------------------------------------------------------------------------------------------------------------
+# Zwei ruhige Zeilen, kein Witz, keine Rückkehr zur Ente. Wer den Strauß gehalten hat, sieht eine Zeile mehr: er hängt wieder am Balken, und Orin
+# rückt ihn gerade. Er sagt es nicht, er tut es.
+
+~ orin_after_letter
+Orin: Ich binde gerade einen Strauß für morgen. Rittersporn, Gräser, etwas Salbei. Es ist kein besonderer Anlass. [ID:flo_afl_1] [#draft]
+Er bindet weiter. Der Bast liegt ruhig in seinen großen Händen. [ID:flo_afl_2] [#draft]
+if WorldState.has_flag("city.letter_held")
+	Der Strauß hängt wieder am Balken. Orin rückt ihn mit einem Finger gerade und lässt die Hand dort. [ID:flo_afl_3] [#draft]
+=> END
+
+# --- Die Dinge im Laden ----------------------------------------------------------------------------------------------------------
+# Der getrocknete Strauß, der Bindetisch und das Regal: Dinge, kein Gespräch. Vor dem Brief sind die Zeilen leicht (das Regal darf ein wenig lachen),
+# danach dieselbe Ordnung ohne Witz: ein Satz, der nichts erklärt. Die Blütenblätter unter dem Strauß liegen, wo sie lagen.
+
+~ dried
+if WorldState.has_flag("city.letter_told")
+	Der Strauß hängt still, den Kopf nach unten. Die Blütenblätter darunter liegen, wo sie lagen. [ID:flo_dried_3] [#draft]
+	=> END
+Über dem Tisch hängt ein Strauß kopfüber am Balken, mit Bast gebunden. Pfingstrosen, getrocknet, papierdünn und dunkel an den Rändern. [ID:flo_dried_1] [#draft]
+Eine Karte hängt nicht daran. Am Boden darunter liegen ein paar Blütenblätter. Der Rest des Ladens ist gekehrt. [ID:flo_dried_2] [#draft]
+=> END
+
+~ table
+if WorldState.has_flag("city.letter_told")
+	Der Bindetisch ist aufgeräumt. Schere, Bast und Papierrolle liegen gerade nebeneinander. [ID:flo_table_3] [#draft]
+	=> END
+Auf dem Bindetisch liegen Schere, Bast und Papierrolle im rechten Winkel zueinander. Quer darüber liegt eine Pfingstrose. Sie darf. [ID:flo_table_1] [#draft]
+Daneben liegt ein Quittungsblock, in Druckschrift beschrieben. Auf der obersten Quittung steht »Ein Strauß, nicht zu groß, ohne Anlass.« [ID:flo_table_2] [#draft]
+=> END
+
+~ shelf
+if WorldState.has_flag("city.letter_told")
+	Im Regal stehen die Töpfe in Reihen, jeder mit einem Schild in Druckschrift. Die Erde ist überall feucht. [ID:flo_shelf_4] [#draft]
+	=> END
+Im Regal stehen Töpfe in Reihen, jeder mit einem Schild in sauberer Druckschrift. »Paeonia lactiflora«. »Rosa gallica«. »Lavandula, wartet noch«. [ID:flo_shelf_1] [#draft]
+An einem Rosenstock steckt ein Schild, »Läuse besiegt. Vorerst.«, zweimal unterstrichen. [ID:flo_shelf_2] [#draft]
+Auf einem Topf ohne Pflanze steht »Salvia, kommt noch«. Die Erde darin ist feucht. [ID:flo_shelf_3] [#draft]
+=> END

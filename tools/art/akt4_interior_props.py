@@ -621,6 +621,495 @@ def cracked_cup(ms):
     return c
 
 
+# =========================================================================== S3: the florist's shop (prefix `fo_`)
+# A small warm room where a man who looks like a warrior keeps flowers: cream plaster over a sage-green wainscot, honey wood, zinc
+# and terracotta, a window to the lane with the house across it. Nothing here is a weapon and nothing is explained.
+FO_W, FO_H = 288, 192  # 18 x 12 cells; the room's top left cell is the map cell (4, 3)
+
+SAGE = ramp("#1c2e26", "#30503f", "#4c7658", "#74a27c")  # the painted wainscot
+LEAF = ramp("#16301c", "#24502a", "#388040", "#5ca458")
+LEAF_PALE = ramp("#2a4a30", "#4a7448", "#78a468", "#a8cc88")
+ZINC = ramp("#2a2e34", "#4a5058", "#7a828c", "#aab2bc", "#d4dae0")
+DRIED_ROSE = ramp("#4e2c34", "#84525c", "#b4838c", "#d9b0b6", "#f2dadc")
+RAFFIA = ramp("#6a5a34", "#a08c58", "#cdb97c", "#efe3b4")
+KRAFT = ramp("#4a3220", "#7a5a38", "#a88252", "#d0aa74")
+LAVENDER = ramp("#3a2e5a", "#6a58a0", "#9a88d0", "#c8bcf0")
+WHITE_BLOOM = ramp("#7a7480", "#b8b2bc", "#e8e4ec", "#ffffff")
+TULIP = ramp("#5a1410", "#a02a1e", "#d8503a", "#f58c6a")
+OCHRE = ramp("#4a3a1e", "#7a6234", "#a88a4e", "#cdb06e", "#e8d498")
+SOIL = ramp("#1e140e", "#33241a", "#4e3a28", "#6e5640")
+SHUTTER_DARK = ramp("#14221e", "#223e36", "#366256", "#548a76")
+STRAW_S = ramp("#4e3a14", "#80601e", "#b48c30", "#dcb84e")
+
+
+def _wood_tal(c, mask, v, contrast=2.0):
+    """Honey wood of the valley: the shelves, the table, the chest."""
+    c.paint(mask, pa.STYLES["tal"]["wood"], v, contrast=contrast, dither=False)
+
+
+def _fo_window(c, x0, y0, x1, y1):
+    """The window to the lane: morning light, across the lane an ochre house with a terracotta roof edge and a shuttered window,
+    a strip of cobbles below, a mullion cross in cream-painted wood and a sill with three small pots on it."""
+    pane = c.rect(x0, y0, x1, y1)
+    t = np.clip((c.yy - y0) / (y1 - y0), 0, 1)
+    c.paint(pane, GLASS, 0.98 - 0.35 * t, contrast=1.6, dither=False)
+    c.paint(c.ellipse(x0 + 17, y0 + 4, 4.5, 1.5) & pane, GLASS, 1.0, dither=False)  # a smudge of cloud
+    house = pane & (c.yy >= y0 + 7)
+    c.paint(house, OCHRE, 0.5 + 0.14 * (c.xx < x0 + 12), dither=False)
+    roof = pane & (c.yy >= y0 + 5) & (c.yy < y0 + 9) & (c.yy >= y0 + 5 + np.clip((c.xx - x0) * 0.04, 0, 2))
+    c.paint(roof, TERRACOTTA, 0.62 - 0.18 * (c.yy >= y0 + 7), dither=False)
+    c.paint(c.rect(x0 + 6, y0 + 10, x0 + 12, y0 + 17) & pane, SHUTTER_DARK, 0.5, dither=False)  # the window across the lane
+    c.paint(c.rect(x0 + 7, y0 + 11, x0 + 11, y0 + 16) & pane, GLASS, 0.5, dither=False)
+    c.paint(c.rect(x0 + 5, y0 + 10, x0 + 6, y0 + 17) & pane, SHUTTER_DARK, 0.9, dither=False)
+    c.paint(c.rect(x0 + 12, y0 + 10, x0 + 13, y0 + 17) & pane, SHUTTER_DARK, 0.9, dither=False)
+    c.paint(pane & (c.yy >= y1 - 4), ramp("#38363a", "#535056", "#716d70", "#94908c"), 0.35 + 0.2 * (((c.xx.astype(int) // 3) + (c.yy.astype(int) // 2)) % 2), dither=False)
+    mid_x, mid_y = (x0 + x1) // 2, (y0 + y1) // 2
+    frame = pa.STYLES["tal"]["wood"]
+    c.paint(c.rect(x0 - 2, y0 - 2, x1 + 2, y0), CREAM, 0.95, dither=False)  # the frame, painted cream
+    c.paint(c.rect(x0 - 2, y1, x1 + 2, y1 + 2), CREAM, 0.6, dither=False)
+    c.paint(c.rect(x0 - 2, y0, x0, y1), CREAM, 0.8, dither=False)
+    c.paint(c.rect(x1, y0, x1 + 2, y1), CREAM, 0.5, dither=False)
+    c.paint(c.rect(mid_x - 1, y0, mid_x + 1, y1), CREAM, np.where(c.xx < mid_x, 0.85, 0.5), dither=False)
+    c.paint(c.rect(x0, mid_y - 1, x1, mid_y + 1), CREAM, np.where(c.yy < mid_y, 0.9, 0.5), dither=False)
+    c.paint(c.rect(x0 - 4, y1 + 2, x1 + 4, y1 + 5), frame, np.where(c.yy < y1 + 3, 0.95, 0.5), dither=False)  # the sill
+    for k, (px, kind) in enumerate(((x0 + 1, 0), (x0 + 10, 1), (x0 + 19, 0))):  # three small pots on the sill
+        c.paint(c.rect(px, y1 - 1, px + 6, y1 + 2), TERRACOTTA, np.where(c.xx < px + 3, 0.75, 0.4), dither=False)
+        c.paint(c.rect(px - 1, y1 - 2, px + 7, y1 - 1), TERRACOTTA, 0.9, dither=False)
+        for j in range(3):
+            c.paint(seg(c, px + 3, y1 - 2, px + 3 + (j - 1) * 3, y1 - 6 - (j % 2), 0.8), LEAF, 0.5 + 0.2 * j, dither=False)
+        if kind:
+            c.fill(c.rect(px + 2, y1 - 8, px + 5, y1 - 6), PINK[2])
+
+
+def _bunch(c, x, y, rng, tones):
+    """A small bunch of herbs drying on the rail, hanging head down: a cord, a bast tie, a fan of stems and a few heads."""
+    c.fill(c.rect(x, y, x + 1, y + 3), RAFFIA[1])
+    c.fill(c.rect(x - 1, y + 3, x + 2, y + 4), RAFFIA[3])
+    for k in range(5):
+        sx = x - 2 + k
+        c.fill(c.rect(sx, y + 4, sx + 1, y + 10 + (k % 2)), STRAW_S[2])
+    for k, tone in enumerate(tones):
+        hx = x - 3 + k * 2
+        hy = y + 10 + (k % 2) * 2
+        c.paint(c.ellipse(hx + 0.5, hy + 1.5, 1.7, 2.4), tone, 0.55 + 0.25 * (k % 2), dither=False)
+        c.fill(c.rect(hx, hy, hx + 1, hy + 1), tone[3])
+
+
+def _plaque(c, x0, y0, x1, y1):
+    """A small hanging sign: a board with rounded corners on two short cords from nails, a pink peony painted on it. No letters."""
+    for nx in (x0 + 3, x1 - 3):
+        c.fill(c.rect(nx, y0 - 5, nx + 1, y0), CORD_ROPE[2])
+        c.fill(c.rect(nx, y0 - 6, nx + 1, y0 - 5), IRON[3])
+    board = c.rect(x0, y0, x1, y1) & ~(((c.xx < x0 + 1) | (c.xx >= x1 - 1)) & ((c.yy < y0 + 1) | (c.yy >= y1 - 1)))
+    _wood_tal(c, board, np.where(c.yy < y0 + 1, 0.95, 0.66 - 0.12 * ((c.yy - y0) / (y1 - y0))))
+    c.paint(c.rect(x0 + 1, y0 + 1, x1 - 1, y1 - 1), CREAM, 0.7 - 0.08 * ((c.yy - y0) / (y1 - y0)), dither=False)  # the painted field
+    mx, my = (x0 + x1) // 2, (y0 + y1) // 2
+    c.paint(c.ellipse(mx + 0.5, my, 4.2, 3.4), PINK, 0.6 + 0.3 * c.sphere(mx - 1, my - 1.5, 6, 5), dither=False)  # the peony
+    c.paint(c.ellipse(mx + 0.5, my, 2.2, 1.8), PINK, 0.3, dither=False)
+    c.fill(c.rect(mx, my - 1, mx + 1, my), PINK[3])
+    c.paint(c.rect(x0 + 2, my + 3, mx - 1, my + 4), LEAF, 0.6, dither=False)
+    c.paint(c.rect(mx + 3, my + 3, x1 - 2, my + 4), LEAF, 0.5, dither=False)
+
+
+def _drying_rail(c, x0, x1, y):
+    """A wooden pole on two brackets along the wall, with five small bunches hanging from it (the sixth is the prop fo_dried)."""
+    rng = np.random.default_rng(611)
+    for bx in (x0, x1 - 2):
+        _wood_tal(c, c.rect(bx, y - 1, bx + 2, y + 5), 0.4)
+    _wood_tal(c, c.rect(x0, y, x1, y + 2), np.where(c.yy < y + 1, 0.95, 0.5))
+    for bx, tones in ((x0 + 8, (LAVENDER, LAVENDER, DRIED_ROSE)), (x0 + 20, (STRAW_S, DRIED_ROSE, STRAW_S)),
+                      (x0 + 32, (LAVENDER, STRAW_S, LAVENDER)), (x0 + 70, (DRIED_ROSE, LAVENDER, DRIED_ROSE)),
+                      (x0 + 82, (STRAW_S, STRAW_S, LAVENDER))):
+        _bunch(c, bx, y + 2, rng, tones)
+
+
+def fo_shell(ms):
+    """The shop seen from the front, lying under everything (the floor is baked from the map): the back wall, cream plaster over a
+    sage-green wainscot, with the window to the lane (map cells 8 and 9), a small sign (11), a drying rail with five little bunches
+    (12 to 17; the prop fo_dried hangs from it in the cell 15), the beams above; the shelves (5 to 7 and 18 to 20) are props of
+    their own. The side walls as dark timber, the front wall with the door in the cell 13. 288 x 192, anchor (8, 8): the room's
+    top left cell is the map cell (4, 3)."""
+    c = ms.Canvas(FO_W, FO_H)
+    top, bottom = 8, 48
+    xl, xr = 10, FO_W - 10
+    grain = pa.value_noise(FO_H, FO_W, (2, 14), np.random.default_rng(601))
+    stain = pa.value_noise(FO_H, FO_W, 9, np.random.default_rng(602))
+    c.paint(c.rect(xl, top, xr, 30), CREAM, 0.88 - 0.22 * np.clip((c.yy - top) / 22.0, 0, 1) ** 1.4 + 0.08 * (grain - 0.5) - 0.1 * (stain > 0.74),
+            contrast=1.8, dither=False)
+    board = ((c.xx - xl) // 8).astype(int)
+    wv = 0.52 + 0.06 * ((board * 7 + 3) % 5 - 2) / 2.0 + 0.1 * (grain - 0.5) - 0.18 * ((c.yy - 32) / 16.0)
+    wv = np.where(((c.xx - xl) % 8) == 7, 0.06, np.where(((c.xx - xl) % 8) == 0, wv + 0.14, wv))
+    c.paint(c.rect(xl, 32, xr, bottom), SAGE, wv, contrast=2.0, dither=False)
+    c.paint(c.rect(xl, 30, xr, 32), CREAM, np.where(c.yy < 31, 0.98, 0.45), dither=False)  # the rail
+    c.paint(c.rect(xl, bottom - 3, xr, bottom), SAGE, np.where(c.yy < bottom - 2, 0.6, 0.12), dither=False)  # the baseboard
+    c.paint(c.rect(xl, bottom, xr, bottom + 3), BEAM, np.where(c.yy < bottom + 1, 0.2, 0.5), dither=False)  # the wall's shadow on the floor row
+    c.a[(c.yy >= bottom + 1) & (c.yy < bottom + 3) & (c.xx >= xl) & (c.xx < xr)] = True
+    c.paint(c.rect(0, 0, FO_W, top - 4), BEAM, 0.05, dither=False)
+    c.paint(c.rect(4, top - 4, FO_W - 4, top), BEAM, np.where(c.yy < top - 2, 0.85, 0.45), dither=False)
+    _fo_window(c, 72, 14, 98, 34)
+    _plaque(c, 109, 16, 129, 32)
+    _drying_rail(c, 134, 222, 12)
+    for x0, x1, face, lit in ((0, 12, (4, 9), 0.7), (FO_W - 12, FO_W, (FO_W - 9, FO_W - 4), 0.5)):
+        c.paint(c.rect(x0, top, x1, FO_H), BEAM, 0.05, dither=False)
+        edge = 10 if x0 == 0 else FO_W - 12
+        c.paint(c.rect(face[0], top, face[1], FO_H - 4), BEAM, lit - 0.3 * np.clip((c.yy - top) / (FO_H - 16.0 - top), 0.0, 1.0), dither=False)
+        c.paint(c.rect(edge, top, edge + 2, FO_H - 4), BEAM, 0.3, dither=False)
+    fy = FO_H - 16
+    c.paint(c.rect(4, fy, FO_W - 4, FO_H), BEAM, np.where(c.yy < fy + 3, 0.8, 0.05), dither=False)
+    face = c.rect(4, fy + 3, FO_W - 4, FO_H - 3)
+    c.paint(face, CREAM, np.where(c.yy < fy + 8, 0.34, 0.26) + 0.08 * (grain - 0.5) + 0.05, contrast=2.0, dither=False)
+    c.paint(face & (c.yy >= fy + 8), SAGE, 0.36 + 0.1 * (grain - 0.5) - 0.14 * (((c.xx - 4) % 8) == 7), dither=False)
+    dx0, dx1 = 144, 160  # the doorway: room column 9 (the map cell 13)
+    c.paint(c.rect(dx0 - 2, fy, dx0, FO_H), BEAM, 0.6, dither=False)
+    c.paint(c.rect(dx1, fy, dx1 + 2, FO_H), BEAM, 0.6, dither=False)
+    c.paint(c.rect(dx0 - 2, fy, dx1 + 2, fy + 3), BEAM, 0.8, dither=False)
+    leaf = c.rect(dx0, fy + 3, dx1, FO_H - 1)
+    plank = ((c.xx - dx0) // 4).astype(int)
+    pv = 0.55 + 0.08 * (((plank * 7 + 3) % 5) / 4.0 - 0.5) + 0.16 * (grain - 0.5)
+    pv = np.where(((c.xx - dx0) % 4) == 3, 0.1, np.where(((c.xx - dx0) % 4) == 0, pv + 0.1, pv))
+    _wood_tal(c, leaf, pv)
+    c.paint(c.rect(dx0 + 3, fy + 5, dx1 - 3, fy + 11), GLASS, 0.82 - 0.4 * ((c.yy - fy - 5) / 6.0), dither=False)  # a pane of glass in the door
+    c.paint(c.rect(dx0 + 7, fy + 5, dx0 + 9, fy + 11), CREAM, 0.7, dither=False)
+    c.paint(c.rect(dx1 - 5, fy + 9, dx1 - 2, fy + 12), BRASS, 0.8, dither=False)  # a round handle
+    return c
+
+
+# --------------------------------------------------------------------------- the florist's furniture
+def _pot(c, cx, base, w, h, colors=TERRACOTTA, tone=0.7):
+    """A flowerpot with its foot on `base`, `w` wide at the rim, `h` high, a lit rim and a lit left side."""
+    x0 = cx - w // 2
+    body = c.rect(x0 + 1, base - h + 2, x0 + w - 1, base) & (np.abs(c.xx + 0.5 - cx) <= (w / 2.0 - 1.0 - (base - c.yy) * 0.1))
+    c.paint(body, colors, np.where(c.xx < cx, tone, tone - 0.35), dither=False)
+    c.paint(c.rect(x0, base - h, x0 + w, base - h + 2), colors, 0.9, dither=False)
+
+
+def _fan(c, cx, base, count, length, colors, spread=1.2, seed=0):
+    """A fan of leaves or stems growing up from (cx, base)."""
+    for k in range(count):
+        ang = (k - (count - 1) / 2.0) / max(count - 1, 1) * spread * 2
+        ln = length * (0.75 + 0.25 * ((k * 5 + seed) % 3) / 2.0)
+        x1, y1 = cx + np.sin(ang) * ln * 0.8, base - np.cos(ang) * ln
+        c.paint(seg(c, cx, base, x1, y1, 0.8), colors, 0.45 + 0.1 * (k % 3) + 0.25 * (x1 < cx), dither=False)
+
+
+def _tag(c, x, y, w=6, h=5, lines=2):
+    """A paper tag with a scribble of a Latin name on it (two or three dark strokes, no letters)."""
+    c.paint(c.rect(x, y, x + w, y + h), PAPER, 0.9 - 0.1 * (c.yy > y + h - 2), dither=False)
+    for k in range(lines):
+        c.fill(c.rect(x + 1, y + 1 + k * 2, x + w - 1 - (k % 2), y + 2 + k * 2), IRON[1])
+
+
+def _bloom(c, cx, cy, r, colors, tone=0.6):
+    """A round flower head, lit from the top left, with a darker heart."""
+    c.paint(c.ellipse(cx, cy, r, r * 0.92), colors, tone + 0.3 * c.sphere(cx - r * 0.4, cy - r * 0.5, r * 1.6, r * 1.6), dither=False)
+    c.paint(c.ellipse(cx + 0.3, cy + 0.2, r * 0.45, r * 0.4), colors, 0.28, dither=False)
+    c.fill(c.rect(round(cx - r * 0.5), round(cy - r * 0.6), round(cx - r * 0.5) + 1, round(cy - r * 0.6) + 1), colors[-1])
+
+
+def fo_table(ms):
+    """The binding table, four cells wide: a honey-wood front with two drawers and a hank of bast hanging from a nail, a lit top with a
+    roll of kraft paper standing on it, a coil of bast, open shears, a receipt block with a pencil, a few cut stems and a glass with one
+    peony in it. Orin stands behind it (the cell above the second one); the front's lower edge lies on the centre line of the cell.
+    64 x 44, anchor (8, 40): the prop stands in the left cell of its row."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(621)
+    c = ms.Canvas(64, 44)
+    grain = pa.value_noise(44, 64, (1, 8), rng)
+    _wood_tal(c, c.rect(0, 29, 64, 40), 0.5 + 0.1 * (grain - 0.5) - 0.2 * ((c.yy - 29) / 11.0))
+    _wood_tal(c, c.rect(0, 22, 64, 29), np.where(c.yy < 24, 0.98, 0.8))
+    _wood_tal(c, c.rect(0, 28, 64, 29), 0.3)
+    for dx0 in (3, 31):  # two drawers with brass knobs
+        c.paint(c.rect(dx0, 31, dx0 + 24, 38), st["wood"], 0.58 - 0.22 * ((c.yy - 31) / 7.0), dither=False)
+        c.paint(c.rect(dx0, 31, dx0 + 24, 32), st["wood"], 0.92, dither=False)
+        c.paint(c.rect(dx0 + 10, 33, dx0 + 14, 35), BRASS, 0.85, dither=False)
+    c.paint(c.rect(0, 40, 64, 42), st["wood"], 0.1, dither=False)
+    c.fill(c.rect(59, 29, 60, 32), IRON[3])  # a nail with a hank of bast on it
+    hank = c.rect(57, 31, 62, 41) & ~((c.yy > 38) & (((c.xx.astype(int) * 3 + 1) % 4) == 0))  # a bundle of strands, frayed at the foot
+    c.paint(hank, RAFFIA, np.where(((c.xx.astype(int) - 57) % 2) == 0, 0.8, 0.5) + 0.12 * (c.xx < 59), dither=False)
+    c.paint(c.rect(57, 34, 62, 35), RAFFIA, 0.1, dither=False)  # the tie
+    # on top: the roll of kraft paper, the coil of bast, the shears, the receipt block, a glass with a peony, stems at the front edge
+    c.paint(c.rect(3, 12, 11, 26), KRAFT, 0.45 + 0.5 * c.cylinder(2, 12), dither=False)
+    c.paint(c.ellipse(7, 12.5, 4.0, 1.4), KRAFT, 0.95, dither=False)
+    c.paint(c.ellipse(7, 12.5, 1.4, 0.6), KRAFT, 0.25, dither=False)
+    c.paint(c.ellipse(19.5, 21.0, 4.8, 2.6), RAFFIA, 0.6 + 0.35 * c.sphere(17, 18, 6, 4), dither=False)
+    c.paint(c.ellipse(19.5, 20.5, 2.4, 1.1), RAFFIA, 0.2, dither=False)
+    for k in range(3):
+        c.fill(c.rect(15 + k * 3, 22 - (k % 2), 17 + k * 3, 23 - (k % 2)), RAFFIA[1])
+    c.fill(c.rect(24, 23, 28, 24), RAFFIA[3])  # a loose end
+    c.paint(seg(c, 31, 22, 39, 25, 0.7), ZINC, 0.85, dither=False)  # the shears: two blades crossing, red handles
+    c.paint(seg(c, 31, 25, 39, 22, 0.7), ZINC, 0.5, dither=False)
+    c.paint(seg(c, 39, 25, 42, 26, 1.0) | seg(c, 39, 22, 42, 21, 1.0), TERRACOTTA, 0.7, dither=False)
+    c.paint(c.rect(45, 19, 51, 24), PAPER, 0.92, dither=False)  # the receipt block
+    c.paint(c.rect(45, 23, 51, 25), PAPER, 0.4, dither=False)
+    c.paint(c.rect(45, 19, 46, 24), TERRACOTTA, 0.6, dither=False)
+    c.fill(c.rect(47, 20, 50, 21), IRON[1])
+    c.paint(seg(c, 48, 18, 50, 21, 0.6), ramp("#8a6a10", "#c8a022", "#f0cc48", "#fff0a2"), 0.7, dither=False)  # the pencil
+    c.paint(c.rect(54, 19, 59, 26), GLASS, 0.55 + 0.3 * (c.xx < 56), dither=False)  # a glass of water with one peony in it
+    c.paint(c.rect(55, 22, 58, 26), GLASS, 0.3, dither=False)
+    c.paint(seg(c, 56.5, 22, 56.5, 14, 0.5), LEAF, 0.5, dither=False)
+    c.paint(c.ellipse(56.5, 12.5, 3.4, 3.0), PINK, 0.55 + 0.3 * c.sphere(55, 11, 5, 5), dither=False)
+    c.paint(c.ellipse(56.8, 12.8, 1.4, 1.2), PINK, 0.25, dither=False)
+    for sx, sy, ex, ey, col in ((12, 26, 25, 25, LEAF), (13, 27, 28, 26, LEAF_PALE)):  # cut stems at the front edge, with a leaf
+        c.paint(seg(c, sx, sy, ex, ey, 0.6), col, 0.55, dither=False)
+    c.paint(c.ellipse(27, 25.5, 2.2, 1.0), LEAF, 0.7, dither=False)
+    c.paint(c.ellipse(13.5, 26.5, 1.8, 0.9), PINK, 0.8, dither=False)  # a fallen petal or two
+    c.paint(c.ellipse(30.5, 26.8, 1.4, 0.7), PINK, 0.6, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def fo_dried(ms):
+    """The dried bunch of peonies, hanging head down from the drying rail on a cord: the cut stems stick out above a bast tie (no card on
+    it, nothing written), thin dry stems fan out under it and the dusty heads hang at the bottom in a cluster; three petals have come
+    down. 24 x 64, anchor (12, 64): the map lifts it onto the rail (cell (15, 8), lift 14), so that the lowest petal lies on the table."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(24, 64)
+    stem = ramp("#2e2a14", "#5a5028", "#8a7c44", "#b8a868")
+    c.fill(c.rect(11, 1, 12, 10), CORD_ROPE[2])  # the cord from the rail, with a loop at its end
+    c.fill(c.rect(10, 0, 13, 1), CORD_ROPE[3])
+    for k, (x, ln) in enumerate(((9, 4), (12, 6), (14, 5))):  # the cut ends of the stems above the tie
+        c.paint(seg(c, 10.5 + k, 15, x + 0.5, 15 - ln, 0.5), stem, 0.6 + 0.1 * k, dither=False)
+    for k, dx in enumerate((-6.5, -4, -1.5, 1, 3.5, 6)):  # the stems, fanning from the tie down to the heads
+        c.paint(seg(c, 12, 17, 12 + dx, 33 - abs(dx) * 0.25, 0.5), stem, 0.35 + 0.12 * (k % 3) + 0.2 * (dx < 0), dither=False)
+    for lx, ly, rot in ((6, 26, -0.6), (18, 27, 0.6), (9, 30, -0.3)):  # a few dried leaves caught between them
+        c.paint(seg(c, lx, ly, lx + rot * 4, ly + 4, 1.0), ramp("#3a2410", "#6a4a20", "#9a7a38", "#c4a45a"), 0.5 + 0.1 * rot, dither=False)
+    c.paint(c.rect(9, 14, 15, 18), RAFFIA, 0.55 + 0.35 * (c.yy < 15), dither=False)  # the bast tie
+    c.paint(c.rect(9, 17, 15, 18), RAFFIA, 0.2, dither=False)
+    c.paint(seg(c, 9, 17, 5.5, 23, 0.6), RAFFIA, 0.75, dither=False)  # the ends of the tie hang down: no card
+    c.paint(seg(c, 15, 17, 18.5, 22, 0.6), RAFFIA, 0.55, dither=False)
+    # the heads: dried peonies, faded to dusty rose, the middle one in front; rings and folds for the petals
+    for hx, hy, r, tone in ((6.5, 36, 4.6, 0.42), (17.5, 36.5, 4.6, 0.38), (9, 44, 4.0, 0.34), (15.5, 44.5, 3.8, 0.4), (12, 39.5, 5.6, 0.62)):
+        dist = np.hypot(c.xx + 0.5 - hx, (c.yy + 0.5 - hy) * 1.1)
+        rings = (np.floor(dist * 0.95).astype(int) % 2) * 0.1
+        head = c.ellipse(hx, hy, r, r * 0.92)
+        c.paint(head, DRIED_ROSE, tone + rings + 0.3 * c.sphere(hx - 1.5, hy - 2, r * 1.5, r * 1.5), dither=False)
+        c.paint(head & ~c.ellipse(hx, hy, r - 0.9, r * 0.92 - 0.9), DRIED_ROSE, 0.1, dither=False)  # a darker edge where it overlaps the next
+        c.paint(c.ellipse(hx + 0.3, hy + 0.8, r * 0.38, r * 0.34), DRIED_ROSE, 0.14, dither=False)  # the dark heart
+        for k in range(3):  # the edge of one petal over the next
+            ang = k * 2.1 + hx
+            c.paint(seg(c, hx + np.cos(ang) * r * 0.3, hy + np.sin(ang) * r * 0.3, hx + np.cos(ang) * r * 0.9, hy + np.sin(ang) * r * 0.8, 0.3),
+                    DRIED_ROSE, 0.12, dither=False)
+    c.outline(st["outline"])
+    for px, py in ((5, 53), (18, 57), (11, 62)):  # petals that have come down, drawn after the outline so they stay small and loose
+        c.paint(c.ellipse(px, py, 1.7, 1.0), DRIED_ROSE, 0.7, dither=False)
+        c.fill(c.rect(px - 1, py, px, py + 1), DRIED_ROSE[1])
+    return c
+
+
+def fo_shelf(ms, kind=0):
+    """A shelf of pots and tags against the back wall, three cells wide, three boards of honey wood (surfaces at y 14, 27 and 40).
+    kind 0: a cactus whose sign is taller than it is, a pot of ivy trailing over the board, two succulents; a tray of seed packets,
+    a row of seedlings, a plant that droops on its stick; a stack of nested pots, a fern, a sack of soil. kind 1: the same boards
+    with other pots. Every pot has a tag with a Latin name in it (strokes). 48 x 44, anchor (8, 40): the prop stands in the left
+    cell of its row."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(641 + kind)
+    c = ms.Canvas(48, 44)
+    _wood_tal(c, c.rect(0, 0, 48, 42), 0.3)
+    _wood_tal(c, c.rect(3, 3, 45, 41), 0.12 + 0.05 * (pa.value_noise(44, 48, (1, 6), rng) - 0.5))  # the dark back
+    for y in (14, 27, 40):
+        _wood_tal(c, c.rect(0, y, 48, y + 3), np.where(c.yy < y + 1, 0.96, 0.55))
+    _wood_tal(c, c.rect(0, 0, 48, 3), np.where(c.yy < 1, 0.98, 0.7))
+    for px in (0, 45):
+        _wood_tal(c, c.rect(px, 0, px + 3, 42), np.where((c.xx - px) < 1, 0.8, 0.5))
+    _wood_tal(c, c.rect(0, 42, 48, 44), 0.1)
+    if kind == 0:
+        # top board: a cactus, its sign taller than it is, a pot of ivy, two succulents
+        _pot(c, 8, 14, 7, 5)
+        c.paint(c.ellipse(8, 7.5, 3.0, 3.6), ramp("#16301c", "#2a5a34", "#4a8a4a", "#8cc474"), 0.55 + 0.3 * c.sphere(7, 6, 5, 6), dither=False)
+        for sy in (5, 7, 9):
+            c.fill(c.rect(5, sy, 6, sy + 1), PAPER[2])
+            c.fill(c.rect(10, sy - 1, 11, sy), PAPER[2])
+        c.fill(c.rect(13, 2, 14, 14), PAPER[1])  # the stick of its sign
+        _tag(c, 11, 3, 8, 6, 3)
+        _pot(c, 25, 14, 9, 7)
+        for k in range(7):  # the ivy
+            x1 = 25 + (k - 3) * 2.2
+            c.paint(seg(c, 25, 8, x1, 5 + (k % 2) * 2, 0.7), LEAF, 0.55 + 0.1 * (k % 3), dither=False)
+        for k in range(4):  # and the tendrils trailing over the board's edge
+            tx = 21 + k * 3
+            c.paint(c.rect(tx, 14, tx + 1, 20 + (k * 3) % 5), LEAF, 0.45 + 0.1 * (k % 2), dither=False)
+            c.paint(c.ellipse(tx + 0.5, 20 + (k * 3) % 5, 1.2, 1.2), LEAF_PALE, 0.7, dither=False)
+        _pot(c, 36, 14, 6, 4)
+        _pot(c, 43, 14, 6, 4, ZINC, 0.7)
+        c.paint(c.ellipse(36, 8.5, 2.8, 2.2), LEAF_PALE, 0.6 + 0.3 * c.sphere(35, 7, 4, 3), dither=False)
+        c.paint(c.ellipse(43, 9.5, 2.4, 2.0), PINK, 0.55 + 0.3 * c.sphere(42, 8, 3.6, 3), dither=False)
+        _tag(c, 33, 15, 5, 5, 2)
+        # middle board: a tray of seed packets, a row of seedlings, a plant on a stick that droops
+        _wood_tal(c, c.rect(3, 22, 17, 27), 0.5, contrast=1.6)
+        for k, col in enumerate((YELLOW, PINK, BLUE, GREEN, YELLOW, PINK, GREEN)):
+            c.paint(c.rect(4 + k * 2, 17 + (k % 3), 6 + k * 2, 25), col, np.where(c.xx % 2 == 0, 0.85, 0.5), dither=False)
+            c.fill(c.rect(4 + k * 2, 19 + (k % 3), 6 + k * 2, 20 + (k % 3)), PAPER[3])
+        for k in range(4):
+            _pot(c, 21 + k * 5, 27, 4, 3)
+            c.paint(seg(c, 21 + k * 5, 24, 20 + k * 5, 20 - (k % 2), 0.5), LEAF, 0.6, dither=False)
+            c.paint(seg(c, 21 + k * 5, 24, 23 + k * 5, 20 - (k % 2), 0.5), LEAF_PALE, 0.7, dither=False)
+        _pot(c, 43, 27, 8, 6)
+        c.fill(c.rect(40, 15, 41, 24), PAPER[1])  # the stick
+        for k in range(4):  # the leaves hang down
+            c.paint(seg(c, 41, 17 + k, 36 + k * 2, 23 + k * 0.5, 0.7), LEAF, 0.4 + 0.08 * k, dither=False)
+        _tag(c, 40, 28, 5, 5, 2)
+        # bottom board: nested pots leaning, a fern, a sack of soil with its top rolled down
+        for k in range(3):
+            _pot(c, 8 + (k % 2), 40 - k * 3, 9 - k, 4)
+        c.paint(c.rect(6, 28, 11, 29), TERRACOTTA, 0.5, dither=False)
+        _pot(c, 24, 40, 10, 8, TERRACOTTA, 0.75)
+        for k in range(7):
+            ang = (k - 3) * 0.42
+            c.paint(seg(c, 24, 35, 24 + np.sin(ang) * 10, 35 - np.cos(ang) * 6, 0.7), ramp("#12301c", "#1f4c2a", "#33743a", "#58a050"), 0.5 + 0.08 * k, dither=False)
+        _tag(c, 17, 41, 6, 4, 2)
+        c.paint(c.rect(34, 30, 44, 40), KRAFT, 0.5 + 0.4 * c.cylinder(33, 45), dither=False)
+        c.paint(c.rect(34, 29, 44, 32), KRAFT, 0.85 - 0.3 * (c.xx > 40), dither=False)
+        c.paint(c.rect(37, 35, 41, 37), SOIL, 0.6, dither=False)
+    else:
+        for k, (x, w) in enumerate(((6, 8), (17, 10), (30, 8), (41, 6))):
+            _pot(c, x, 14, w, 5 + (k % 2) * 2, TERRACOTTA if k % 2 == 0 else ZINC, 0.7)
+            _fan(c, x, 9 - (k % 2) * 2, 5, 5 + k, LEAF, 1.0, k)
+            _tag(c, x - 2, 15, 5, 5, 2)
+        for k in range(5):
+            _pot(c, 6 + k * 8, 27, 6, 4)
+            _fan(c, 6 + k * 8, 23, 3, 5, LEAF_PALE, 0.9, k)
+        _pot(c, 14, 40, 12, 9)
+        _fan(c, 14, 31, 8, 12, LEAF, 1.3, 2)
+        _pot(c, 36, 40, 8, 5, ZINC, 0.7)
+    c.outline(st["outline"])
+    return c
+
+
+def _cut_flowers(c, cx, mouth, kind, seed):
+    """Cut flowers standing in a bucket whose mouth is at y `mouth`: stems and leaves, then the heads. kind: peony pink, peony white,
+    tulips (red and yellow), lavender, delphinium (blue spikes), daisies."""
+    rng = np.random.default_rng(seed)
+    n = {"peony": 4, "white": 4, "tulip": 5, "lavender": 6, "delphinium": 4, "daisy": 5}[kind]
+    for k in range(n):
+        dx = (k - (n - 1) / 2.0) * (6.0 / max(n - 1, 1)) * 1.4
+        top = mouth - 14 - rng.integers(0, 6) - (3 if k % 2 else 0)
+        c.paint(seg(c, cx + dx * 0.3, mouth, cx + dx, top, 0.55), LEAF, 0.45 + 0.12 * (k % 3), dither=False)
+        if kind in ("peony", "white", "daisy", "tulip") and k % 2 == 0:  # a leaf on the stem
+            c.paint(c.ellipse(cx + dx * 0.7 + (2 if k % 4 == 0 else -2), mouth - 6, 2.2, 1.0), LEAF_PALE, 0.55, dither=False)
+        hx, hy = cx + dx, top
+        if kind == "peony":
+            _bloom(c, hx, hy, 3.6, PINK, 0.55)
+        elif kind == "white":
+            _bloom(c, hx, hy, 3.6, WHITE_BLOOM, 0.6)
+        elif kind == "tulip":
+            col = TULIP if k % 2 == 0 else YELLOW
+            c.paint(c.ellipse(hx, hy, 2.0, 2.8), col, 0.6 + 0.3 * c.sphere(hx - 1, hy - 1.5, 3, 4), dither=False)
+            c.paint(c.rect(hx - 1, hy - 3, hx, hy - 2), col, 0.9, dither=False)
+            c.paint(c.rect(hx + 1, hy - 3, hx + 2, hy - 2), col, 0.4, dither=False)
+        elif kind == "lavender":
+            for j in range(5):
+                c.paint(c.ellipse(hx + (j % 2) * 0.4, hy + j * 1.8, 1.1, 1.0), LAVENDER, 0.5 + 0.12 * j, dither=False)
+        elif kind == "delphinium":
+            for j in range(5):
+                c.paint(c.ellipse(hx, hy + j * 2.2, 1.8 - j * 0.12, 1.3), BLUE, 0.5 + 0.1 * j, dither=False)
+        else:
+            for j in range(6):
+                a = j * 1.047
+                px, py = round(hx + np.cos(a) * 1.9), round(hy + np.sin(a) * 1.9)
+                c.fill(c.rect(px, py, px + 1, py + 1), WHITE_BLOOM[3])
+            c.fill(c.rect(round(hx), round(hy), round(hx) + 1, round(hy) + 1), YELLOW[2])
+
+
+def fo_buckets(ms, kind=0):
+    """A row of three buckets with cut flowers, three cells wide: a zinc pail, a wooden one with iron hoops and a cracked crock, each
+    with its own flowers (kind 0: tulips, white peonies, lavender; kind 1: pink peonies, delphinium, daisies), a few petals on the
+    floor. 48 x 44, anchor (8, 38): the prop stands in the left cell of its row."""
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(48, 44)
+    kinds = (("tulip", "white", "lavender"), ("peony", "delphinium", "daisy"))[kind]
+    for k, (bx, fl) in enumerate(zip((0, 16, 32), kinds)):
+        cx = bx + 8
+        _cut_flowers(c, cx, 26, fl, 650 + kind * 10 + k)
+        body = c.rect(bx + 1, 24, bx + 15, 39) & (np.abs(c.xx + 0.5 - cx) <= 6.4 + (c.yy - 24) * -0.06)
+        if k == 0:
+            c.paint(body, ZINC, 0.3 + 0.7 * c.cylinder(bx, bx + 16), dither=False)
+            c.paint(c.rect(bx + 2, 29, bx + 6, 33), ZINC, 0.95, dither=False)  # a dent
+        elif k == 1:
+            c.paint(body, ex["plank"], np.where(((c.xx.astype(int) - bx) % 3) == 2, 0.1, 0.24 + 0.55 * c.cylinder(bx, bx + 16)), dither=False)
+            c.paint(c.rect(bx + 1, 28, bx + 15, 30) & body, ex["hoop"], 0.6, dither=False)
+            c.paint(c.rect(bx + 1, 35, bx + 15, 37) & body, ex["hoop"], 0.6, dither=False)
+        else:
+            c.paint(body, TERRACOTTA, 0.3 + 0.6 * c.cylinder(bx, bx + 16), dither=False)
+            c.paint(seg(c, bx + 9, 26, bx + 7, 38, 0.5), TERRACOTTA, 0.05, dither=False)  # the crack
+        c.paint(c.rect(bx, 24, bx + 16, 26), ZINC if k == 0 else ex["plank"], 0.85, dither=False)
+        c.paint(c.ellipse(cx, 39, 7, 1.4) & (c.yy > 38), st["stone"], 0.25, dither=False)
+    for px, py in ((15, 42), (31, 42), (46, 41)):  # a petal or two in the gaps
+        c.paint(c.ellipse(px, py, 1.3, 0.7), PINK if kind else WHITE_BLOOM, 0.75, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def fo_plant(ms):
+    """A big plant in a big terracotta pot, the one thing in the shop that has grown too large: a fiddle-leaf fig with a thick stem and
+    nine leaves, a stick with a tag in the soil. 32 x 56, anchor (16, 52)."""
+    st = pa.STYLES["tal"]
+    bark = ms.EXTRA["tal"]["bark"]
+    c = ms.Canvas(32, 56)
+    c.paint(seg(c, 16, 38, 16, 18, 1.1), bark, 0.45, dither=False)
+    for x0, y0, ang in ((16, 36, -1.1), (16, 32, 1.0), (16, 28, -0.9), (16, 25, 0.8), (16, 22, -0.5), (16, 19, 0.45), (16, 16, -0.2),
+                        (16, 14, 0.2), (16, 12, 0.0)):
+        lx, ly = x0 + np.sin(ang) * 8.5, y0 - 3.5 - abs(np.cos(ang)) * 3.5
+        c.paint(seg(c, x0, y0 + 2, lx, ly, 0.5), bark, 0.4, dither=False)
+        leaf = c.ellipse(lx + np.sin(ang) * 3.2, ly - 1.0, 4.6, 3.4) if abs(ang) > 0.45 else c.ellipse(lx + np.sin(ang) * 1.6, ly - 3.0, 3.4, 4.4)
+        c.paint(leaf, LEAF, 0.42 + 0.46 * c.sphere(lx - 1.5, ly - 3, 8, 8) + 0.06 * (x0 % 2), dither=False)
+        c.paint(seg(c, lx, ly, lx + np.sin(ang) * 5.5, ly - 1.2, 0.35) & leaf, LEAF_PALE, 0.85, dither=False)  # the pale vein
+    _pot(c, 16, 52, 18, 14, TERRACOTTA, 0.72)
+    c.paint(c.rect(9, 38, 23, 40), SOIL, 0.5, dither=False)
+    c.fill(c.rect(21, 34, 22, 40), PAPER[1])  # the stick with its tag
+    _tag(c, 19, 32, 6, 5, 2)
+    c.outline(st["outline"])
+    return c
+
+
+def fo_can(ms):
+    """A zinc watering can on the floor, spout to the west: a round body with a lip, a long spout with a rose, a handle over the back and
+    a drop of water at the rose. 24 x 20, anchor (12, 17)."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(24, 20)
+    body = c.rect(8, 7, 19, 17) & ~((c.yy > 15) & ((c.xx < 9) | (c.xx > 17)))
+    c.paint(body, ZINC, 0.25 + 0.75 * c.cylinder(7, 20), dither=False)
+    c.paint(c.ellipse(13.5, 7.5, 5.8, 1.6), ZINC, 0.95, dither=False)  # the lip
+    c.paint(c.ellipse(13.5, 7.5, 3.8, 0.9), ZINC, 0.1, dither=False)
+    c.paint(c.rect(8, 11, 19, 12), ZINC, 0.2, dither=False)  # a seam
+    c.paint(seg(c, 9, 15, 3, 7, 1.0), ZINC, 0.55, dither=False)  # the spout, rising to the west
+    c.paint(seg(c, 3, 7, 1.5, 4.5, 1.5), ZINC, 0.85, dither=False)  # the rose
+    c.fill(c.rect(0, 6, 1, 7), ZINC[1])
+    handle = (np.abs(np.hypot(c.xx + 0.5 - 19, (c.yy + 0.5 - 11) * 0.8) - 5.0) < 0.9) & (c.xx > 18)
+    c.paint(handle, ZINC, 0.7, dither=False)
+    c.paint(seg(c, 12, 5, 19, 6, 0.8), ZINC, 0.8, dither=False)  # the carrying bar over the top
+    c.fill(c.rect(1, 8, 2, 9), GLASS[3])  # a drop of water
+    c.outline(st["outline"])
+    return c
+
+
+def fo_chest(ms):
+    """A small chest of drawers, two cells wide, honey wood with three drawers and brass knobs, a jar of twine on top, a little vase with one
+    dried stem and a pair of gloves; short feet. 32 x 38, anchor (8, 34): the prop stands in the left cell of its row."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(32, 38)
+    _wood_tal(c, c.rect(0, 14, 32, 34), 0.5 - 0.2 * ((c.yy - 14) / 20.0))
+    _wood_tal(c, c.rect(0, 10, 32, 14), np.where(c.yy < 11, 0.98, 0.8))
+    for k in range(3):
+        y0 = 16 + k * 6
+        _wood_tal(c, c.rect(2, y0, 30, y0 + 5), 0.6 - 0.2 * ((c.yy - y0) / 5.0))
+        _wood_tal(c, c.rect(2, y0, 30, y0 + 1), 0.92)
+        c.paint(c.rect(14, y0 + 2, 18, y0 + 4), BRASS, 0.85, dither=False)
+    for fx in (2, 26):
+        _wood_tal(c, c.rect(fx, 34, fx + 4, 37), 0.3)
+    c.paint(c.rect(4, 4, 11, 10), GLASS, 0.5, dither=False)  # a jar of twine
+    c.paint(c.ellipse(7.5, 7.5, 2.8, 2.4), RAFFIA, 0.7, dither=False)
+    c.paint(c.rect(4, 3, 11, 5), ZINC, 0.8, dither=False)
+    c.paint(c.rect(21, 5, 25, 10), CLAY, 0.6 + 0.3 * (c.xx < 23), dither=False)  # a little vase with one dried stem
+    c.paint(c.rect(20, 4, 26, 6), CLAY, 0.9, dither=False)
+    c.paint(seg(c, 23, 5, 26, 2, 0.5), STRAW_S, 0.6, dither=False)
+    c.paint(c.ellipse(26.5, 2.4, 1.6, 1.4), DRIED_ROSE, 0.55, dither=False)
+    c.paint(c.rect(13, 7, 19, 10), LEATHER, 0.55, dither=False)  # gardening gloves, lying flat
+    c.paint(c.rect(13, 9, 19, 10), LEATHER, 0.25, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
 # --------------------------------------------------------------------------- registration
 def build(ms):
     """Registers the sprites of the town hall in the catalog. The shell is flat; the furniture stands with the lower edge
@@ -640,6 +1129,21 @@ def build(ms):
     ms.save("tal", "rh_key", brass_key(ms), (8, 16))
     ms.save("tal", "rh_buttons", button_tin(ms), (8, 16))
     ms.save("tal", "rh_cup", cracked_cup(ms), (8, 16))
+    build_florist(ms)
+
+
+def build_florist(ms):
+    """Registers the florist's shop (S3, prefix fo_). The shell is flat; the furniture stands with the lower edge of its front on the centre
+    line of its cell and casts a baked shadow on the shop's own floor (the map blumenladen is baked after it); the dried bunch hangs from
+    the rail and has neither a shape nor a shadow: the map lifts it (lift 14) onto the rail above the table's right end."""
+    ms.save("tal", "fo_shell", fo_shell(ms), (8, 8), flat=True)
+    ms.save("tal", "fo_table", fo_table(ms), (8, 40), shape={"rect": [64, 12], "offset": [24, -6]}, shadow=[32, 3])
+    ms.save("tal", "fo_dried", fo_dried(ms), (12, 64))
+    ms.save("tal", "fo_shelf", [fo_shelf(ms, 0), fo_shelf(ms, 1)], (8, 40), shape={"rect": [48, 8], "offset": [16, -4]}, shadow=[24, 3])
+    ms.save("tal", "fo_buckets", [fo_buckets(ms, 0), fo_buckets(ms, 1)], (8, 38), shape={"rect": [48, 8], "offset": [16, -3]}, shadow=[22, 4])
+    ms.save("tal", "fo_plant", fo_plant(ms), (16, 52), shape={"circle": 6, "offset": [0, -3]}, shadow=[9, 3])
+    ms.save("tal", "fo_can", fo_can(ms), (12, 17), shape={"circle": 4, "offset": [0, -2]}, shadow=[7, 2])
+    ms.save("tal", "fo_chest", fo_chest(ms), (8, 34), shape={"rect": [32, 10], "offset": [8, -5]}, shadow=[16, 3])
 
 
 def preview(path):
@@ -662,6 +1166,27 @@ def preview(path):
     sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
 
 
+def preview_florist(path):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_sprites as ms
+    from PIL import Image
+    sheet = Image.new("RGBA", (FO_W + 20, FO_H + 130), (96, 120, 100, 255))
+    floor = Image.new("RGBA", (FO_W, FO_H), (150, 104, 66, 255))
+    sheet.alpha_composite(floor, (10, 10))
+    sheet.alpha_composite(Image.fromarray(fo_shell(ms).rgba().astype(np.uint8), "RGBA"), (10, 10))
+    x, y = 10, FO_H + 20
+    for item in (fo_table(ms), fo_dried(ms), fo_shelf(ms, 0), fo_shelf(ms, 1), fo_buckets(ms, 0), fo_buckets(ms, 1), fo_plant(ms), fo_can(ms),
+                 fo_chest(ms)):
+        img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+        if x + img.width > sheet.width:
+            x, y = 10, y + 66
+        sheet.alpha_composite(img, (x, y))
+        x += img.width + 8
+    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == "--preview-florist":
+        preview_florist(sys.argv[2])

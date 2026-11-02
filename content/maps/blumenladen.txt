@@ -1,0 +1,53 @@
+; Akt IV, S3: der Blumenladen von innen (Klasse S, Zoom 1,5 wie das Rathaus, das Haus und die Hütte). Von Hand gesetzt, kein Generator.
+; Wände, das Fenster zur Gasse, das kleine Schild, die Trockenstange mit ihren Sträußchen und die Vorderwand malt das Requisit tal/fo_shell,
+; den Dielenboden backt tools/art/bake_ground.py content/maps/blumenladen.txt. Der Raum liegt in den Zellen 4 bis 21 und 3 bis 14 (18 x 12):
+; Rückwand die Zeilen 3 bis 5, Boden die Zeilen 6 bis 13 (die Spalten 5 bis 20), die Tür (D) in der Vorderwand, Zeile 14, Spalte 13.
+; Orin (O) steht hinter dem Bindetisch (T, vier Zellen, die Spalten 12 bis 15, Zeile 8): Gespräch über den Tisch wie bei der Beamtin. Die Zeile 8 ist von
+; den Eimern (b, Spalten 9 bis 11) über den Tisch und die Kommode (c, Spalten 16 und 17) hinweg ganz zu: Orins Platz erreicht man nur von den Seiten.
+; Der getrocknete Strauß (d) hängt kopfüber an der Trockenstange über dem rechten Ende des Tisches (Spalte 15; das Bild ist auf die Stange gehoben).
+; Dinge statt Erklärung: die Gießkanne steht bei den Eimern, der Farn ist größer als der Topf, das Schild über dem Kaktus ist größer als der Kaktus.
+; Die Ankunft aus der Stadt (1) liegt zwei Zellen vor der Tür, der Start (@) daneben.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/blumenladen_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_stadt"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_shell"}}
+; die Tür zurück in die Stadt (wie im Rathaus: zwei Zellen vor ihr kommt man an)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "stadt", "spawn": "blumenladen", "auto": true, "sound": "door_close"}}
+; Orin hinter dem Bindetisch: er sieht zur Tür und zu den Rosen (glance)
+O = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_orin_look.tres", "dialogue": "res://content/dialogue/akt4/blumenladen.dialogue", "cue": "orin", "face": "s", "glance": true}}
+; der Bindetisch (vier Zellen breit, das Bild steht mit dem linken Ende in der markierten Zelle) und der getrocknete Strauß darüber (lift: auf die Stange)
+T = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_table", "cue": "table", "dialogue": "res://content/dialogue/akt4/blumenladen.dialogue"}}
+d = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_dried", "lift": 14, "cue": "dried", "dialogue": "res://content/dialogue/akt4/blumenladen.dialogue"}}
+; die Regale (drei Zellen breit): s das linke mit dem Kaktus und dem Schild, r das rechte
+s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_shelf", "cue": "shelf", "dialogue": "res://content/dialogue/akt4/blumenladen.dialogue"}}
+r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_shelf"}}
+; Eimer mit Schnittblumen (drei Zellen), die Kommode (zwei Zellen), der große Topf, die Gießkanne
+b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_buckets"}}
+c = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_chest"}}
+p = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_plant"}}
+k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/fo_can"}}
+[map]
+##########################
+##########################
+##########################
+####SWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWW####
+####Ws____________r__W####
+####W________O_______W####
+####W____b__T__dc____W####
+####W_p______________W####
+####W______k_________W####
+####W____________b___W####
+####W______@_1_______W####
+####W________________W####
+####WWWWWWWWWDWWWWWWWW####
+##########################
+##########################
+##########################

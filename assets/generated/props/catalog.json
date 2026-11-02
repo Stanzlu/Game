@@ -1686,6 +1686,159 @@
    "res://assets/generated/props/tal/fence_post.png"
   ]
  },
+ "tal/fo_buckets": {
+  "anchor": [
+   8,
+   38
+  ],
+  "shadow": [
+   22,
+   4
+  ],
+  "shape": {
+   "offset": [
+    16,
+    -3
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_buckets_0.png",
+   "res://assets/generated/props/tal/fo_buckets_1.png"
+  ]
+ },
+ "tal/fo_can": {
+  "anchor": [
+   12,
+   17
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_can.png"
+  ]
+ },
+ "tal/fo_chest": {
+  "anchor": [
+   8,
+   34
+  ],
+  "shadow": [
+   16,
+   3
+  ],
+  "shape": {
+   "offset": [
+    8,
+    -5
+   ],
+   "rect": [
+    32,
+    10
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_chest.png"
+  ]
+ },
+ "tal/fo_dried": {
+  "anchor": [
+   12,
+   64
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/fo_dried.png"
+  ]
+ },
+ "tal/fo_plant": {
+  "anchor": [
+   16,
+   52
+  ],
+  "shadow": [
+   9,
+   3
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_plant.png"
+  ]
+ },
+ "tal/fo_shelf": {
+  "anchor": [
+   8,
+   40
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    16,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_shelf_0.png",
+   "res://assets/generated/props/tal/fo_shelf_1.png"
+  ]
+ },
+ "tal/fo_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/fo_shell.png"
+  ]
+ },
+ "tal/fo_table": {
+  "anchor": [
+   8,
+   40
+  ],
+  "shadow": [
+   32,
+   3
+  ],
+  "shape": {
+   "offset": [
+    24,
+    -6
+   ],
+   "rect": [
+    64,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/fo_table.png"
+  ]
+ },
  "tal/goat_boot": {
   "anchor": [
    17,
@@ -2480,6 +2633,22 @@
   "textures": [
    "res://assets/generated/props/tal/st_crate_0.png",
    "res://assets/generated/props/tal/st_crate_1.png"
+  ]
+ },
+ "tal/st_duck": {
+  "anchor": [
+   8,
+   14
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_duck.png"
   ]
  },
  "tal/st_florist": {

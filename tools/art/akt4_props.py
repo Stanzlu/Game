@@ -49,6 +49,8 @@ SHUTTER = ramp("#1a2c2a", "#2a4a44", "#3e6a5e", "#5e9078")
 PANE = ramp("#16222c", "#243646", "#3a5468", "#6890a8")
 CLOTH = ramp("#6a5a3a", "#a08c58", "#cdb97c", "#efe3b4")
 BIRD = ramp("#0a0a10", "#1a1a24", "#2c2c3c", "#464658")
+DUCK = ramp("#7a8096", "#b2b8cc", "#e2e6f0", "#ffffff")
+DUCK_BILL = ramp("#7a3a10", "#c8641c", "#f09a2c", "#ffc860")
 SPLAT = ramp("#8c8a80", "#c4c2b6", "#e6e4d8", "#fbfaf2")
 CRATE_BLUE = ramp("#1e2c3e", "#34506e", "#4f7498", "#7aa0c0")
 
@@ -1674,6 +1676,46 @@ def pots(ms, kind):
     return c
 
 
+def duck(ms):
+    """An ordinary white duck in profile, standing on the cobbles and looking west: a plump body with a pointed tail, a short neck,
+    an orange bill and two orange legs with flat feet, one dark eye. It does what ducks do, nothing else (Akt IV, S3: nobody
+    explains it). The shadow is part of the picture (a flat patch of darker cobble under the feet): the catalog gives it no
+    shadow, so the baked stamp of the town stays as it is. Canvas 16 x 16 (the duck itself is 14 x 13), anchor (8, 14)."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(16, 16)
+    c.paint(c.ellipse(7.5, 13.6, 6.4, 1.5) & (c.yy > 12.4), st["stone"], 0.26, dither=False)  # the shadow, under everything
+    d = ms.Canvas(16, 16)
+    # the body as a grid (x 0 to 15, y 0 to 13; the outline comes round it): head, a thin neck, a round body with the breast to
+    # the front (west), the back rising to a pointed tail, then the legs and the flat feet below
+    grid = ("................",
+            ".....##.........",
+            "....####........",
+            "....####........",
+            "....####........",
+            ".....###........",
+            ".....####.....#.",
+            "....#########.##",
+            "...###########..",
+            "...###########..",
+            "....##########..",
+            ".....########...",
+            "................")
+    body = np.zeros((16, 16), bool)
+    for y, row in enumerate(grid):
+        for x, ch in enumerate(row):
+            body[y, x] = ch == "#"
+    light = 0.62 + 0.38 * d.sphere(6.0, 3.5, 11, 8.5)
+    d.paint(body, DUCK, np.where(d.yy >= 10, light - 0.2, light), dither=False)
+    d.paint(d.rect(6, 12, 7, 13) | d.rect(9, 12, 10, 13), DUCK_BILL, 0.6, dither=False)  # the legs
+    d.paint(d.rect(4, 13, 8, 14) | d.rect(7, 13, 11, 14), DUCK_BILL, 0.85, dither=False)  # the flat feet
+    d.paint(d.rect(1, 3, 4, 5), DUCK_BILL, np.where(d.yy < 4, 0.85, 0.5), dither=False)  # the bill
+    d.fill(d.rect(5, 2, 6, 3), np.array([20, 18, 30], np.float32))  # the eye
+    d.paint(d.rect(5, 9, 12, 10) & body, DUCK, 0.3, dither=False)  # the folded wing: its lower edge in shade
+    d.outline(st["outline"])
+    c.blit(d, 0, 0)
+    return c
+
+
 # --------------------------------------------------------------------------- catalog
 def build(ms):
     """Registers the sprites of Act IV in the catalog (no light anywhere). The post and the bell are two props; the
@@ -1759,6 +1801,8 @@ def build_town(ms):
     ms.save("tal", "st_sawhorse", sawhorse(ms), (24, 30), shape={"rect": [40, 8], "offset": [0, -4]}, shadow=[20, 3])
     ms.save("tal", "st_seat_crate", seat_crate(ms), (14, -7), flat=True)
     ms.save("tal", "st_pots", [pots(ms, 0), pots(ms, 1)], (12, 19))
+    # S3: the duck by the florist's pots; its shadow is painted into the picture (no catalog shadow: the town's stamp stays)
+    ms.save("tal", "st_duck", duck(ms), (8, 14), shape={"circle": 4, "offset": [0, -3]})
 
 
 def preview(path):
@@ -1795,7 +1839,7 @@ def preview_town(path):
     pieces += [town_house(ms, *FLORIST)[0], town_house(ms, *WORKSHOP)[0]]
     pieces += [board(ms), fountain(ms), fountain_rim(ms), stall(ms, 0), stall(ms, 1), wreath(ms), lectern(ms), bread_table(ms),
                crate(ms, 0), crate(ms, 1), barrel(ms, 0), barrel(ms, 1), lamp_post(ms), buckets(ms), woodstack(ms), sawhorse(ms),
-               seat_crate(ms), pots(ms, 0), pots(ms, 1)]
+               seat_crate(ms), pots(ms, 0), pots(ms, 1), duck(ms)]
     width, x, y, row_h = 1000, 6, 6, 0
     placed = []
     for item in pieces:

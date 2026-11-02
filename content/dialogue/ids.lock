@@ -224,6 +224,84 @@ fl_trail_1	akt3/flutlichtung.dialogue	-
 fl_trail_2	akt3/flutlichtung.dialogue	-
 fl_trail_3	akt3/flutlichtung.dialogue	-
 fl_trail_4	akt3/flutlichtung.dialogue	-
+flo_afl_1	akt4/blumenladen.dialogue	-
+flo_afl_2	akt4/blumenladen.dialogue	-
+flo_afl_3	akt4/blumenladen.dialogue	-
+flo_aft_1	akt4/blumenladen.dialogue	-
+flo_aft_2	akt4/blumenladen.dialogue	-
+flo_aft_3	akt4/blumenladen.dialogue	-
+flo_aft_r1	akt4/blumenladen.dialogue	-
+flo_aft_r2	akt4/blumenladen.dialogue	-
+flo_dried_1	akt4/blumenladen.dialogue	-
+flo_dried_2	akt4/blumenladen.dialogue	-
+flo_dried_3	akt4/blumenladen.dialogue	-
+flo_duck_1	akt4/blumenladen.dialogue	-
+flo_duck_2	akt4/blumenladen.dialogue	-
+flo_duck_3	akt4/blumenladen.dialogue	-
+flo_duck_4	akt4/blumenladen.dialogue	-
+flo_duck_5	akt4/blumenladen.dialogue	-
+flo_duck_6	akt4/blumenladen.dialogue	-
+flo_duck_7	akt4/blumenladen.dialogue	-
+flo_duck_r1	akt4/blumenladen.dialogue	-
+flo_duck_r2	akt4/blumenladen.dialogue	-
+flo_let_1	akt4/blumenladen.dialogue	-
+flo_let_10	akt4/blumenladen.dialogue	-
+flo_let_11	akt4/blumenladen.dialogue	-
+flo_let_12	akt4/blumenladen.dialogue	-
+flo_let_13	akt4/blumenladen.dialogue	-
+flo_let_14	akt4/blumenladen.dialogue	-
+flo_let_15	akt4/blumenladen.dialogue	-
+flo_let_16	akt4/blumenladen.dialogue	-
+flo_let_17	akt4/blumenladen.dialogue	-
+flo_let_2	akt4/blumenladen.dialogue	-
+flo_let_3	akt4/blumenladen.dialogue	-
+flo_let_4	akt4/blumenladen.dialogue	-
+flo_let_5	akt4/blumenladen.dialogue	-
+flo_let_6	akt4/blumenladen.dialogue	-
+flo_let_7	akt4/blumenladen.dialogue	-
+flo_let_8	akt4/blumenladen.dialogue	-
+flo_let_9	akt4/blumenladen.dialogue	-
+flo_let_r1	akt4/blumenladen.dialogue	-
+flo_let_r2	akt4/blumenladen.dialogue	-
+flo_let_r3	akt4/blumenladen.dialogue	-
+flo_orin_1	akt4/blumenladen.dialogue	-
+flo_orin_10	akt4/blumenladen.dialogue	-
+flo_orin_11	akt4/blumenladen.dialogue	-
+flo_orin_12	akt4/blumenladen.dialogue	-
+flo_orin_2	akt4/blumenladen.dialogue	-
+flo_orin_3	akt4/blumenladen.dialogue	-
+flo_orin_4	akt4/blumenladen.dialogue	-
+flo_orin_5	akt4/blumenladen.dialogue	-
+flo_orin_6	akt4/blumenladen.dialogue	-
+flo_orin_7	akt4/blumenladen.dialogue	-
+flo_orin_8	akt4/blumenladen.dialogue	-
+flo_orin_9	akt4/blumenladen.dialogue	-
+flo_orin_r1	akt4/blumenladen.dialogue	-
+flo_orin_r2	akt4/blumenladen.dialogue	-
+flo_orin_r3	akt4/blumenladen.dialogue	-
+flo_orin_r4	akt4/blumenladen.dialogue	-
+flo_orin_r5	akt4/blumenladen.dialogue	-
+flo_rep_1	akt4/blumenladen.dialogue	-
+flo_rep_10	akt4/blumenladen.dialogue	-
+flo_rep_11	akt4/blumenladen.dialogue	-
+flo_rep_2	akt4/blumenladen.dialogue	-
+flo_rep_3	akt4/blumenladen.dialogue	-
+flo_rep_4	akt4/blumenladen.dialogue	-
+flo_rep_5	akt4/blumenladen.dialogue	-
+flo_rep_6	akt4/blumenladen.dialogue	-
+flo_rep_7	akt4/blumenladen.dialogue	-
+flo_rep_8	akt4/blumenladen.dialogue	-
+flo_rep_9	akt4/blumenladen.dialogue	-
+flo_rep_r1	akt4/blumenladen.dialogue	-
+flo_rep_r2	akt4/blumenladen.dialogue	-
+flo_rep_r3	akt4/blumenladen.dialogue	-
+flo_shelf_1	akt4/blumenladen.dialogue	-
+flo_shelf_2	akt4/blumenladen.dialogue	-
+flo_shelf_3	akt4/blumenladen.dialogue	-
+flo_shelf_4	akt4/blumenladen.dialogue	-
+flo_table_1	akt4/blumenladen.dialogue	-
+flo_table_2	akt4/blumenladen.dialogue	-
+flo_table_3	akt4/blumenladen.dialogue	-
 gh_back_1	akt1/gasthaus.dialogue	-
 gh_bed_1	akt1/gasthaus.dialogue	-
 gh_bed_2	akt1/gasthaus.dialogue	-
@@ -846,8 +924,6 @@ stadt_board_3	akt4/stadt.dialogue	-
 stadt_board_4	akt4/stadt.dialogue	-
 stadt_cit_1	akt4/stadt.dialogue	-
 stadt_cit_2	akt4/stadt.dialogue	-
-stadt_florist_1	akt4/stadt.dialogue	-
-stadt_florist_2	akt4/stadt.dialogue	-
 stadt_gate_1	akt4/stadt.dialogue	-
 stadt_gate_2	akt4/stadt.dialogue	-
 stadt_gate_3	akt4/stadt.dialogue	-
@@ -1200,6 +1276,8 @@ wd_steps_5	akt3/waldweg.dialogue	-
 retired	gh_bar_1	der Tresen hat keine Zeile: der Wirt steht dahinter, die Zeile stand ihm im Weg
 retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen
 retired	mk_fest_10	A7: nach dem Hoch gibt es eine feste Zeile statt zweier wechselnder (die Schleife ist wortgleich)
+retired	stadt_florist_1	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
+retired	stadt_florist_2	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
 retired	str_wait_1	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
 retired	str_wait_2	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
 retired	wd_hut_1	W3: die Hütte hat ihre Zeilen in huette.dialogue (door_tea)
