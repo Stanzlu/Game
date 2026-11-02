@@ -4,14 +4,14 @@
 ; liegt in den Zellen 4 bis 21 und 3 bis 14 (18 x 12): Rückwand die Zeilen 3 bis 5, Boden die Zeilen 6 bis 13 (die Spalten 5 bis 20), die Tür (D) in der Vorderwand,
 ; Zeile 14, Spalte 13. Die Ankunft aus der Stadt (1) liegt zwei Zellen vor der Tür, der Start (@) daneben.
 ; Tess (t) steht hinter dem Arbeitstisch (B, fünf Zellen, die Spalten 9 bis 13, Zeile 8, die Glyphe in der Mitte): Gespräch über den Tisch wie bei Orin. Sie steht nur
-; da, solange das Brett nicht gesägt ist (`unless city.board_done`): danach sitzt sie draußen auf der Kiste (stadt.txt, Glyphe 8), nie an zwei Orten. Die Zeile 8 ist von der
+; da, bis du den Raum nach dem Brett verlässt (die Szene schickt sie beim Laden fort, wenn `city.board_done` gilt, damit sie im Gespräch nach dem Brett nicht mitten im Satz verschwindet und die Leiter noch zu haben ist): danach sitzt sie draußen auf der Kiste (stadt.txt, Glyphe 8), nie an zwei Orten. Die Zeile 8 ist von der
 ; Spalte 9 bis 13 zu, links und rechts davon kommt man herum.
 ; Das Brett (b) liegt auf zwei Böcken (H, drei Zellen breit, die Glyphe in der Mitte, Spalte 7, Cue board: davor ein angezeichnetes Brett, danach nur noch die Späne); die Glyphe
 ; des Bretts steht in der Zelle rechts davon (Spalte 8, es sortiert dahinter nach vorn) und das Bild ist um 16 Pixel auf die Balken gehoben. Es fehlt, sobald es gesägt ist
 ; (`unless city.board_done`), die Böcke bleiben. Ein zweites Paar (K, Spalte 17) steht ohne Brett und ohne Cue herum.
 ; Die Leiter (L, Spalte 6, Cue ladder) lehnt halbfertig an der Rückwand unter dem Balken, an dem das Maßband hängt; die Sägen (s, drei Zellen, die Glyphe in der Mitte, Spalte 16,
 ; Cue saws) hängen auf einem Brett an der Wand über einer niedrigen Kiste, jede in ihrem Kreideumriss, der der größten ist leer; das Regal mit Brettern (r, Spalte 19) steht in der
-; Ecke rechts. Das Sägemehl (m, flach, Cue dust) liegt zwischen den Böcken und der Tür mit den Fußspuren zweier Größen (n: noch ein Haufen ohne Cue vor dem Tisch). Der Hocker (h).
+; Ecke rechts. Das Sägemehl (m, flach, Cue dust) liegt rechts neben den Böcken mit den Fußspuren zweier Größen. Der Hocker (h).
 ; Prüfhinweise: die Spalten sind abgezählt (Zeile 12: der Start in der Spalte 11, die Ankunft in der Spalte 13, die Tür darunter in der Zeile 14); die Böcke (Spalten 6 bis 8, Zeile 10)
 ; lassen die Zeile 11 frei, von dort sieht man sie an (Cue board, Radius 28) und vom Sägemehl (Spalte 10, Zeile 11, Radius 22) so weit, dass beide einzeln zu erreichen sind;
 ; die Werkzeugwand der Schale reicht über die Spalten 13 bis 15, die Sägen darunter über die Spalten 15 bis 17 (Bild 48 Pixel breit, an der Wand die Zeilen 4 und 5).
@@ -28,7 +28,7 @@ S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; die Tür zurück in die Stadt (wie im Blumenladen: zwei Zellen vor ihr kommt man an)
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "stadt", "spawn": "werkstatt", "auto": true, "sound": "door_close"}}
 ; Tess hinter dem Arbeitstisch: sie misst gerade ein Brett und sieht nicht auf, dann doch zur Tür und zum Fenster (glance); mit dem gesägten Brett steht sie draußen
-t = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "cue": "tess", "face": "s", "glance": true, "unless": "city.board_done"}}
+t = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "cue": "tess", "face": "s", "glance": true}}
 ; der Arbeitstisch (fünf Zellen breit, das Bild steht mit der Mitte in der markierten Zelle), ohne Cue: man spricht Tess über ihn an
 B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_bench"}}
 ; die Böcke (drei Zellen, die Mitte markiert) mit dem Cue board, das Brett darauf (eine Zelle rechts davon, um 16 Pixel gehoben, es fehlt mit dem gesägten Brett), ein zweites Paar ohne alles
@@ -40,9 +40,8 @@ L = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_saws", "cue": "saws", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "radius": 28}}
 r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_rack"}}
 h = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_stool"}}
-; das Sägemehl (flach): m mit den Fußspuren und dem Cue dust, n ohne Cue vor dem Tisch
+; das Sägemehl (flach) mit den Fußspuren zweier Größen und dem Cue dust
 m = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_dust", "cue": "dust", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "radius": 22}}
-n = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/wk_dust"}}
 [map]
 ##########################
 ##########################
@@ -53,7 +52,7 @@ n = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ####W_L_________s__r_W####
 ####W______t_________W####
 ####W______B___h_____W####
-####W______n_________W####
+####W________________W####
 ####W__Hb________K___W####
 ####W_____m__________W####
 ####W______@_1_______W####

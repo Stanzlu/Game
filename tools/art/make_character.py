@@ -972,7 +972,7 @@ class Figure:
         """A kerchief over the crown and the knot of hair under it (a bulge at the back of the head): it ends in a straight
         band across the brow, the grey hair shows at the temples and the nape; in profile and from behind it is tied at the
         back with two short tails."""
-        c, d = self.c, self.d
+        c = self.c
         dome = c.ellipse(hx - (0.5 if self.side else 0.0), hy - 1.0, 7.0, 6.9)
         if self.back:
             region = (dome | hair | head) & (c.yy < hy + 1.2) & c.ellipse(hx, hy - 0.4, 7.2, 7.6)

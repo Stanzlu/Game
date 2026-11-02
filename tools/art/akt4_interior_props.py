@@ -22,6 +22,13 @@ plaster over a sage-green wainscot, honey wood, zinc and terracotta; the shell w
 bunch of peonies that hangs head down from the drying rail, two shelves, two rows of buckets with cut flowers, a big plant, a watering
 can and a chest of drawers. The map content/maps/blumenladen.txt is 26 x 18 cells, the room are the cells 4 to 21 and 3 to 14 (18 x 12).
 `--preview-florist out.png` draws the shell and all eight pieces (3x).
+
+Akt IV, S4 adds the workshop (prefix `wk_`, below the florist's pieces, registered by `build_workshop`): raw pine, weathered boards, iron and
+leather, sawdust; the shell with a window to the lane, a crossbeam with a tape measure, the plan of the house and the wall of small tools, the
+work bench (five cells), two trestles with the board across them (the board is a prop of its own: it is gone once it is sawn), the unfinished
+ladder, the saws on their board (the largest one is missing from its chalk outline), the rack of boards, a stool and the sawdust with two
+kinds of footprints in it. The map content/maps/werkstatt.txt is 26 x 18 cells, the room are the cells 4 to 21 and 3 to 14 (18 x 12).
+`--preview-workshop out.png` draws the shell and all nine pieces (3x).
 """
 import os
 import sys
@@ -1331,9 +1338,10 @@ def wk_bench(ms):
     c.paint(c.rect(0, 25, 5, 27), STEEL, 0.7, dither=False)  # the screw
     c.fill(c.rect(0, 23, 2, 29), STEEL[3])  # the handle bar
     c.fill(c.rect(0, 23, 2, 24), STEEL[4])
-    _pine(c, c.rect(7, 5, 11, 18), np.where(c.xx < 9, 0.85, 0.5))  # an offcut clamped upright in the jaws
-    _pine(c, c.rect(7, 5, 11, 7), 1.0)
-    c.paint(c.rect(7, 9, 11, 10), PINE, 0.1, dither=False)  # a pencil mark on it
+    offcut = c.rect(6, 8, 13, 18) & ~((c.xx - 6) * 0.9 + (c.yy - 8) < 2.5 - 2.0)  # an offcut clamped upright in the jaws, cut aslant at the top
+    _pine(c, offcut, np.where(c.xx < 9, 0.9, 0.55))
+    c.paint(c.rect(6, 12, 13, 13) & offcut, PINE, 0.12, dither=False)  # a pencil mark on it
+    c.paint(c.rect(12, 9, 13, 18) & offcut, PINE, 0.2, dither=False)
     # the plane: a pale beech body, the iron sole, a tote handle behind it, the wedge; a curl of shaving at its mouth
     c.paint(c.rect(24, 17, 42, 23), PINE, np.where(c.yy < 19, 1.0, 0.7), dither=False)
     c.paint(c.rect(24, 22, 42, 23), STEEL, 0.5, dither=False)
@@ -1437,8 +1445,8 @@ def wk_ladder(ms):
         _pine(c, m, tone + 0.12 * (grain - 0.5), contrast=2.0)
         return m
 
-    left = rail(5, 8, 4, 0.78)
-    right = rail(22, 19.5, 13, 0.46)
+    rail(5, 8, 4, 0.78)
+    rail(22, 19.5, 13, 0.46)
     c.paint(c.rect(2, 47, 9, 49), PINE, 0.18, dither=False)  # the feet
     c.paint(c.rect(18, 47, 25, 49), PINE, 0.18, dither=False)
     for y_ in (41, 33, 25, 17):  # the four rungs that are in
@@ -1701,8 +1709,28 @@ def preview_florist(path):
     sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
 
 
+def preview_workshop(path):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_sprites as ms
+    from PIL import Image
+    sheet = Image.new("RGBA", (WK_W + 20, WK_H + 150), (96, 120, 100, 255))
+    floor = Image.new("RGBA", (WK_W, WK_H), (150, 104, 66, 255))
+    sheet.alpha_composite(floor, (10, 10))
+    sheet.alpha_composite(Image.fromarray(wk_shell(ms).rgba().astype(np.uint8), "RGBA"), (10, 10))
+    x, y = 10, WK_H + 20
+    for item in (wk_bench(ms), wk_trestle(ms), wk_board(ms), wk_ladder(ms), wk_rack(ms), wk_saws(ms), wk_dust(ms), wk_stool(ms)):
+        img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+        if x + img.width > sheet.width:
+            x, y = 10, y + 50
+        sheet.alpha_composite(img, (x, y))
+        x += img.width + 8
+    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
     elif len(sys.argv) == 3 and sys.argv[1] == "--preview-florist":
         preview_florist(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == "--preview-workshop":
+        preview_workshop(sys.argv[2])

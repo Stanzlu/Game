@@ -3,9 +3,9 @@ extends LookScene
 ## Act IV, S4: the workshop from inside (docs/akt4/REGIONSBRIEFE.md). Tess, an older craftswoman,
 ## at her bench: she measures, she whistles, she shows it once and then it is her visitor's turn.
 ## Her dialogue tells all of it (the board, the asking for help); this script plays her whistle
-## once she has whistled it and marks the beats. Once the board is sawn she is not here any more
-## but outside on her crate (the map decides: `unless city.board_done`). No cutscene, no lock,
-## nothing here is needed to go on.
+## once she has whistled it and marks the beats. Once the board is sawn she is not here at the next
+## visit but outside on her crate (this script sends her away at load, see `_ready`). No cutscene,
+## no lock, nothing here is needed to go on.
 
 ## The room's cells: the camera stays centred on it (it fits whole at the zoom of an interior).
 const ROOM := Rect2i(4, 3, 18, 12)
@@ -17,6 +17,13 @@ func _ready() -> void:
 	view.bounds = Rect2(
 		Vector2(ROOM.position * map.data.tile_size), Vector2(ROOM.size * map.data.tile_size)
 	)
+	# Once the board is sawn she sits outside (the city's map puts her on her crate), so from the
+	# next visit on she is not here. Not live: she stays through the talk that ends the board, so
+	# she is not gone in the middle of a sentence and the ladder is still hers to hold.
+	if WorldState.has_flag("city.board_done"):
+		for node in map.entities.get_children():
+			if node is NpcWalker and (node as NpcWalker).cue == "tess":
+				node.queue_free()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	Beat.mark("werkstatt_enter")
 
