@@ -44,22 +44,15 @@ func _scene() -> StadtScene:
 
 ## How many slips of this look stand on this cell.
 func _slips(scene: GameScene, sprite: String, cell: Vector2i) -> int:
-	return (
-		scene
-		. map
-		. entities
-		. get_children()
-		. filter(
-			func(node: Node) -> bool:
-				return (
-					node is Decor
-					and (node as Decor).sprite_id == sprite
-					and not node.is_queued_for_deletion()
-					and scene.map.world_to_cell((node as Node2D).global_position) == cell
-				)
-		)
-		. size()
-	)
+	var found := 0
+	for node in scene.map.entities.get_children():
+		if not (node is Decor) or node.is_queued_for_deletion():
+			continue
+		if (node as Decor).sprite_id != sprite:
+			continue
+		if scene.map.world_to_cell((node as Node2D).global_position) == cell:
+			found += 1
+	return found
 
 
 func _every_slip(scene: GameScene) -> int:

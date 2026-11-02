@@ -38,6 +38,26 @@ const STADT_CUES: PackedStringArray = [
 	"day_lectern",
 	"day_table",
 	"goat_roof",
+	# S5: the list (test_akt4_liste), added at the end of the file
+	"mira_list",
+	"gef_list",
+	"list_pick_1",
+	"list_pick_2",
+	"list_pick_3",
+	"list_none",
+	"list_enough",
+	"list_wait",
+	"list_close",
+	"list_sit",
+	"list_kitchen",
+	"gef_after",
+	"do_bouquet",
+	"do_ladder",
+	"do_stage",
+	"do_goat",
+	"do_bread",
+	"do_lost",
+	"slip_struck",
 ]
 const THINGS: PackedStringArray = [
 	"curiosity_lost_glove",
@@ -142,12 +162,20 @@ func test_the_board_is_the_gefaelliges_list_and_says_how_many_are_open() -> void
 	assert_eq(await DialogueWalk.play(STADT, "list_board"), seen, "a board says the same twice")
 
 
-func test_the_gefaellige_is_met_once_in_full_and_then_in_one_line() -> void:
+func test_the_gefaellige_is_met_once_in_full_and_greets_shortly_before_the_list_opens() -> void:
 	var first := await DialogueWalk.play(STADT, "gef_square")
 	assert_gte(first.size(), 6)
 	assert_true(WorldState.has_flag("city.gef_met"))
+	assert_false(WorldState.has_flag("list.opened"), "the first meeting asks nothing (S2)")
 	var again := await DialogueWalk.play(STADT, "gef_square")
-	assert_eq(again, PackedStringArray([LineText.of("stadt_gef_9")]), "one short line")
+	assert_eq(again[0], LineText.of("stadt_gef_9"), "a short greeting first")
+	assert_true(WorldState.has_flag("list.opened"), "and then the list opens (S5)")
+	WorldState.set_flag("list.closed")
+	assert_eq(
+		(await DialogueWalk.play(STADT, "gef_square")).size(),
+		2,
+		"once the list is closed he has a line or two"
+	)
 	var asks := await DialogueWalk.answers(STADT, "gef_ask")
 	assert_eq(asks.size(), 2)
 	assert_eq(asks[1], "…")
