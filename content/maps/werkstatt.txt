@@ -1,5 +1,5 @@
 ; Akt IV, S4: die Werkstatt von innen (Klasse S, Zoom 1,5 wie das Rathaus, der Blumenladen, das Haus und die Hütte). Von Hand gesetzt, kein Generator.
-; Wände aus verwitterten Brettern, der Balken mit dem Maßband (Spalte 6), der Plan des Hauses (Spalte 8), das Fenster zur Gasse (Spalten 10 bis 12), die Wand der kleinen
+; Wände aus verwitterten Brettern, der Balken mit dem Maßband (Spalte 5), der Plan des Hauses (Spalte 8), das Fenster zur Gasse (Spalten 10 bis 12), die Wand der kleinen
 ; Werkzeuge (Spalten 13 bis 15) und die Vorderwand malt das Requisit tal/wk_shell, den Dielenboden backt tools/art/bake_ground.py content/maps/werkstatt.txt. Der Raum
 ; liegt in den Zellen 4 bis 21 und 3 bis 14 (18 x 12): Rückwand die Zeilen 3 bis 5, Boden die Zeilen 6 bis 13 (die Spalten 5 bis 20), die Tür (D) in der Vorderwand,
 ; Zeile 14, Spalte 13. Die Ankunft aus der Stadt (1) liegt zwei Zellen vor der Tür, der Start (@) daneben.

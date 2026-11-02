@@ -117,9 +117,9 @@ else
 	Tess: Steh nicht im Licht. [ID:wer_again_5] [#draft]
 	Der Span kommt in einem Stück und rollt sich auf dem Boden ein. Tess sieht nicht hin. Es ist der dritte heute. [ID:wer_again_6] [#draft]
 - Hältst du mir die Leiter? [if WorldState.has_facet("connection") /] [ID:wer_again_r3] [#draft]
-	Tess stellt den Fuß auf den untersten Holm und packt beide Seiten. Die Leiter hat zwei Sprossen und sonst nur die Löcher dafür. [ID:wer_again_7] [#draft]
+	Tess stellt den Fuß auf den untersten Holm und packt beide Seiten. Die Leiter hat vier Sprossen und sonst nur die Löcher dafür. [ID:wer_again_7] [#draft]
 	Tess: Halt dich an den Holmen. [ID:wer_again_8] [#draft]
-	Du steigst die zwei Sprossen hinauf und holst ein Maßband vom Balken, grau von Staub. [ID:wer_again_9] [#draft]
+	Du steigst die Sprossen hinauf und holst ein Maßband vom Balken, grau von Staub. [ID:wer_again_9] [#draft]
 	Tess lässt erst los, als beide Füße wieder auf dem Boden stehen. [ID:wer_again_10] [#draft]
 	Tess: Da ist es ja. Seit gestern such ich's. [ID:wer_again_11] [#draft]
 - … [ID:wer_again_r4] [#draft]
@@ -161,13 +161,13 @@ Der Spatz ist fort. Die Späne liegen noch. [ID:wer_nothing_5] [#draft]
 # Tess. Das Brett kennt zwei Zustände: vor dem Sägen ein angezeichnetes Brett, danach nur noch die Späne.
 
 ~ saws
-Die Sägen hängen der Größe nach an der Wand, jede vor ihrem Umriss in Kreide. Die Umrisse stimmen. [ID:wer_saws_1] [#draft]
-Darunter hängen die Zwingen, zu einem Klumpen verhakt. Ihr Umriss wartet seit Jahren auf sie. [ID:wer_saws_2] [#draft]
+Die Sägen hängen der Größe nach an der Wand, jede vor ihrem Umriss in Kreide. Nur bei der größten ist der Umriss leer. [ID:wer_saws_1] [#draft]
+Darunter hängen die Zwingen, jede in ihrem eigenen Umriss. Die leere Stelle der großen Säge ist die einzige Unordnung in der Reihe. [ID:wer_saws_2] [#draft]
 => END
 
 ~ ladder
-Eine Leiter lehnt an der Wand, zwei Holme aus hellem Holz, unten zwei Sprossen, oben nur die Löcher dafür. [ID:wer_ladder_1] [#draft]
-Auf dem linken Holm steht in Bleistift ein einzelnes Wort, »Zuerst.« [ID:wer_ladder_2] [#draft]
+Eine Leiter lehnt an der Wand, zwei Holme aus hellem Holz, unten vier Sprossen, oben nur zwei leere Löcher dafür. [ID:wer_ladder_1] [#draft]
+Auf beiden Holmen stehen Bleistiftstriche, genau dort, wo die nächsten Sprossen hinkommen. [ID:wer_ladder_2] [#draft]
 => END
 
 ~ dust
@@ -180,6 +180,6 @@ if WorldState.has_flag("city.board_done")
 	Auf dem Bock liegen nur noch Späne, hell und gekräuselt. [ID:wer_board_3] [#draft]
 	Auf einem davon steht noch ein Stück Bleistiftlinie. [ID:wer_board_4] [#draft]
 	=> END
-Auf dem Bock liegt ein Brett aus Kiefer mit einer Bleistiftlinie über die ganze Länge. [ID:wer_board_1] [#draft]
-Auf einer Seite der Linie steht ein Kreuz, für den Teil, der Abfall wird. Der Rest ist Brett. [ID:wer_board_2] [#draft]
+Auf dem Bock liegt ein Brett aus Kiefer, quer darüber ein Bleistiftstrich. [ID:wer_board_1] [#draft]
+Auf der einen Seite des Strichs steht ein Haken, für den Teil, der bleibt. Der Rest wird Abfall. [ID:wer_board_2] [#draft]
 => END

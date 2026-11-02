@@ -133,3 +133,14 @@ func test_the_second_sitting_is_the_shorter_version_and_ends_again_without_ado()
 	scene.player.stand_up()
 	await wait_physics_frames(5)
 	assert_eq(WorldState.quest_stage(QUEST), "done", "still done, nothing is counted")
+
+
+func test_a_game_loaded_from_a_sitting_comes_back_standing_with_the_quest_done() -> void:
+	# saving is allowed while she sits; she is standing when it loads, so nobody gets up later
+	WorldState.set_flag("city.board_done")
+	WorldState.start_quest(QUEST)
+	assert_eq(WorldState.quest_stage(QUEST), "sit")
+	var scene := await _scene()
+	assert_ne(scene.player.state, Player.State.SIT)
+	assert_eq(WorldState.quest_stage(QUEST), "done", "the quest does not stay open in the journal")
+	assert_true(WorldState.has_flag("city.sat_with_tess"))

@@ -2,7 +2,7 @@ class_name StadtScene
 extends LookScene
 ## Act IV, S2: the city (docs/akt4/REGIONSBRIEFE.md). Elysia's market with a contradiction: a
 ## gate whose keeper has a bad day, a square with a fountain (Mira sits at its rim), the board with
-## the Gefällige's slips, the town hall, two shops that are still shut, Lio playing in a corner,
+## the Gefällige's slips, the town hall, two shops with their doors, Lio playing in a corner,
 ## three stations of a perfect day that did not go to plan and a goat on a roof. The map and the
 ## dialogue tell all of it; this script only goes on with the hero's walk to the town, plays Lio's
 ## tune once he has played it and marks the beats. Since S4 it also keeps "Nichts" (Bible §44): once
@@ -24,6 +24,10 @@ func _ready() -> void:
 	super()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	player.state_changed.connect(_on_player_state)
+	# saving is allowed while she sits: a game loaded from then stands again, so "Nichts" is over
+	if WorldState.quest_stage("side_city_nothing") == "sit":
+		WorldState.set_flag("city.sat_with_tess")
+		WorldState.advance_quest("side_city_nothing", "done")
 	# the road ends here: the walk of the hero goes on from the road to the town
 	if WorldState.quest_stage("main_city_way") == "west":
 		WorldState.advance_quest("main_city_way", "town")

@@ -108,11 +108,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Tess:** Steh nicht im Licht. `[#draft]`  <sub>wer_again_5</sub>
   - *Der Span kommt in einem Stück und rollt sich auf dem Boden ein. Tess sieht nicht hin. Es ist der dritte heute.* `[#draft]`  <sub>wer_again_6</sub>
 - ▸ **Hältst du mir die Leiter?** *(wenn `connection`)*
-  - *Tess stellt den Fuß auf den untersten Holm und packt beide Seiten. Die Leiter hat zwei Sprossen und sonst nur die Löcher dafür.* `[#draft]`  <sub>wer_again_7</sub>
+  - *Tess stellt den Fuß auf den untersten Holm und packt beide Seiten. Die Leiter hat vier Sprossen und sonst nur die Löcher dafür.* `[#draft]`  <sub>wer_again_7</sub>
   - **Tess:** Halt dich an den Holmen. `[#draft]`  <sub>wer_again_8</sub>
-  - *Du steigst die zwei Sprossen hinauf und holst ein Maßband vom Balken, grau von Staub.* `[#draft]`  <sub>wer_again_9</sub>
+  - *Du steigst die Sprossen hinauf und holst ein Maßband vom Balken, grau von Staub.* `[#draft]`  <sub>wer_again_9</sub>
   - *Tess lässt erst los, als beide Füße wieder auf dem Boden stehen.* `[#draft]`  <sub>wer_again_10</sub>
-  - **Tess:** Da ist es ja. Seit Montag such ich's. `[#draft]`  <sub>wer_again_11</sub>
+  - **Tess:** Da ist es ja. Seit gestern such ich's. `[#draft]`  <sub>wer_again_11</sub>
 - ▸ **…**
   - *Tess hobelt weiter, und der Span rollt sich auf dem Boden ein.* `[#draft]`  <sub>wer_again_12</sub>
 
@@ -152,13 +152,13 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Sägen und Zwingen, die halbfertige Leiter, das Sägemehl, das Brett auf dem Bock: Dinge, kein Gespräch. Der Humor sitzt in der Ordnung und im Gebrauch; keine Zeile erklärt
 > Tess. Das Brett kennt zwei Zustände: vor dem Sägen ein angezeichnetes Brett, danach nur noch die Späne.
 
-- *Die Sägen hängen der Größe nach an der Wand, jede vor ihrem Umriss in Kreide. Die Umrisse stimmen.* `[#draft]`  <sub>wer_saws_1</sub>
-- *Darunter hängen die Zwingen, zu einem Klumpen verhakt. Ihr Umriss wartet seit Jahren auf sie.* `[#draft]`  <sub>wer_saws_2</sub>
+- *Die Sägen hängen der Größe nach an der Wand, jede vor ihrem Umriss in Kreide. Nur bei der größten ist der Umriss leer.* `[#draft]`  <sub>wer_saws_1</sub>
+- *Darunter hängen die Zwingen, jede in ihrem eigenen Umriss. Die leere Stelle der großen Säge ist die einzige Unordnung in der Reihe.* `[#draft]`  <sub>wer_saws_2</sub>
 
 ### S4-13 · `ladder`
 
-- *Eine Leiter lehnt an der Wand, zwei Holme aus hellem Holz, unten zwei Sprossen, oben nur die Löcher dafür.* `[#draft]`  <sub>wer_ladder_1</sub>
-- *Auf dem linken Holm steht in Bleistift ein einzelnes Wort, »Zuerst.«* `[#draft]`  <sub>wer_ladder_2</sub>
+- *Eine Leiter lehnt an der Wand, zwei Holme aus hellem Holz, unten vier Sprossen, oben nur zwei leere Löcher dafür.* `[#draft]`  <sub>wer_ladder_1</sub>
+- *Auf beiden Holmen stehen Bleistiftstriche, genau dort, wo die nächsten Sprossen hinkommen.* `[#draft]`  <sub>wer_ladder_2</sub>
 
 ### S4-14 · `dust`
 
@@ -171,5 +171,5 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Auf dem Bock liegen nur noch Späne, hell und gekräuselt.* `[#draft]`  <sub>wer_board_3</sub>
   - *Auf einem davon steht noch ein Stück Bleistiftlinie.* `[#draft]`  <sub>wer_board_4</sub>
   - *→ Ende des Szenenstücks*
-- *Auf dem Bock liegt ein Brett aus Kiefer mit einer Bleistiftlinie über die ganze Länge.* `[#draft]`  <sub>wer_board_1</sub>
-- *Auf einer Seite der Linie steht ein Kreuz, für den Teil, der Abfall wird. Der Rest ist Brett.* `[#draft]`  <sub>wer_board_2</sub>
+- *Auf dem Bock liegt ein Brett aus Kiefer, quer darüber ein Bleistiftstrich.* `[#draft]`  <sub>wer_board_1</sub>
+- *Auf der einen Seite des Strichs steht ein Haken, für den Teil, der bleibt. Der Rest wird Abfall.* `[#draft]`  <sub>wer_board_2</sub>
