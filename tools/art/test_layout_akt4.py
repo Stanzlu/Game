@@ -552,9 +552,17 @@ class StadtLayoutTests(unittest.TestCase):
 
     def test_each_task_of_the_list_has_a_fresh_and_a_struck_slip_on_cells_that_block_nothing(self):
         _, symbols, rows, spots = _stadt()
-        values = {"bouquet": "closeness", "ladder": "closeness", "stage": "freedom", "goat": "freedom", "bread": "calm", "lost": "calm"}
-        for value in set(values.values()):
-            self.assertEqual(sum(1 for v in values.values() if v == value), 2, "every value has two tasks")
+        with open(STADT_DIALOGUE, encoding="utf-8") as f:
+            source = f.read()
+        pick = source[source.index("~ list_pick_1"):source.index("~ list_pick_2")]
+        answers = {"bouquet": "Den Strauß", "ladder": "Die Leiter", "stage": "Die Bühne", "goat": "Die Ziege", "bread": "Das Brot", "lost": "Das Fundbüro"}
+        values = {}
+        for task, text in answers.items():
+            block = pick[pick.index("- " + text + "."):]
+            block = block[:block.index("=> list_pick_2")]
+            values[task] = re.search(r'has_flag\("value\.([a-z]+)"\)', block).group(1)
+        for value in ("closeness", "freedom", "calm"):
+            self.assertEqual(sum(1 for v in values.values() if v == value), 2, "every value has two tasks: " + value)
         stage_zone = {(x, y) for x in range(40, 49) for y in range(20, 26)}
         for task, (fresh, struck) in SLIPS.items():
             f, s = spots[fresh][0], spots[struck][0]

@@ -17,6 +17,7 @@ const NEW_CUES: PackedStringArray = [
 	"list_none",
 	"list_enough",
 	"list_wait",
+	"list_thanks",
 	"list_close",
 	"list_sit",
 	"list_kitchen",
@@ -65,7 +66,7 @@ func _cue_source(cue: String) -> String:
 ## Everything the new cues say in lines and answers (not the comments), for word checks.
 func _list_text() -> String:
 	var spoken := ""
-	for cue in NEW_CUES:
+	for cue in NEW_CUES + PackedStringArray(["list_board"]):
 		for hit in (
 			RegEx
 			. create_from_string("(?m)^[ \\t]*(?:- )?([^#\\n][^\\n]*?)[ \\t]*\\[ID:stadt_list_")
@@ -78,7 +79,7 @@ func _list_text() -> String:
 # --- The file ---------------------------------------------------------------------------------
 
 
-func test_the_new_cues_end_the_file_and_tell_sixty_six_lines_and_thirty_answers_in_draft() -> void:
+func test_the_new_cues_are_in_the_file_with_sixty_seven_lines_and_thirty_answers_in_draft() -> void:
 	var source := FileAccess.get_file_as_string(STADT)
 	var names: PackedStringArray = []
 	for hit in RegEx.create_from_string("(?m)^~ ([a-z0-9_]+)$").search_all(source):
@@ -86,7 +87,7 @@ func test_the_new_cues_end_the_file_and_tell_sixty_six_lines_and_thirty_answers_
 	for cue in NEW_CUES:
 		assert_true(cue in names, cue)
 	var ids := RegEx.create_from_string("\\[ID:(stadt_list_[a-z0-9_]+)\\]").search_all(source)
-	assert_eq(ids.size(), 96, "sixty-six lines and thirty answers")
+	assert_eq(ids.size(), 97, "sixty-seven lines and thirty answers")
 	var unique := {}
 	for hit in ids:
 		unique[hit.get_string(1)] = true
@@ -176,6 +177,15 @@ func test_a_taken_task_leaves_the_next_group_and_up_to_three_can_be_taken() -> v
 	)
 
 
+func test_the_third_task_is_answered_like_the_first_two_before_the_no() -> void:
+	var picks := PackedStringArray(["Den Strauß", "Die Bühne", "Das Brot", "…"])
+	var seen := await DialogueWalk.play(STADT, "list_pick_1", picks)
+	assert_true(_has(seen, "stadt_list_16"), "after the first")
+	assert_true(_has(seen, "stadt_list_17"), "after the second")
+	assert_true(_has(seen, "stadt_list_67"), "and after the third: three is enough")
+	assert_true(WorldState.has_flag("list.closed"))
+
+
 func test_that_is_enough_takes_two_and_none_takes_nothing_and_both_go_to_the_no() -> void:
 	var two := await DialogueWalk.play(
 		STADT, "list_pick_1", PackedStringArray(["Das Brot", "Die Ziege", "Das reicht", "…"])
@@ -200,14 +210,25 @@ func test_that_is_enough_takes_two_and_none_takes_nothing_and_both_go_to_the_no(
 # --- The values and the facet -----------------------------------------------------------------
 
 
-func test_each_task_carries_one_value_and_each_value_has_two_tasks() -> void:
+func test_the_dialogue_ties_each_task_to_one_value_and_each_value_to_two_tasks() -> void:
+	# read from the answers of the first group: "- <task>." followed by its condition on a value
+	var source := _cue_source("list_pick_1")
+	var found := {}
 	var counts := {}
 	for task: String in TASKS:
-		var value: String = TASKS[task][1]
-		counts[value] = int(counts.get(value, 0)) + 1
-	assert_eq(counts.size(), 3)
+		var start := source.find("- %s." % TASKS[task][0])
+		assert_ne(start, -1, task)
+		var block := source.substr(start, source.find("=> list_pick_2", start) - start)
+		var value := RegEx.create_from_string('has_flag\\("value\\.([a-z]+)"\\)').search(block)
+		assert_not_null(value, "%s carries a value" % task)
+		found[task] = value.get_string(1)
+		counts[found[task]] = int(counts.get(found[task], 0)) + 1
+		assert_eq(block.count("value."), 1, "%s carries exactly one" % task)
+	for task: String in TASKS:
+		assert_eq(found[task], TASKS[task][1], task)
+	assert_eq(counts.size(), 3, "all three values of Act II")
 	for value: String in counts:
-		assert_eq(counts[value], 2, value)
+		assert_eq(counts[value], 2, "two tasks for " + value)
 
 
 func test_taking_a_task_of_her_value_sets_integrity_and_any_other_task_does_not() -> void:

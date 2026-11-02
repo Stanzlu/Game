@@ -199,7 +199,7 @@ Auf dem Sims unter dem Brett liegen drei Zettel, die Tinte noch nass. Den ersten
 Gefälliger: Entschuldige. Der ist eben noch dazugekommen, ich konnte nicht — es sind jetzt siebzehn. [ID:stadt_list_8] [#draft]
 Er heftet ihn ans Brett, »Ziege, vom Dach.«, und streicht ihn zweimal glatt. [ID:stadt_list_9] [#draft]
 Gefälliger: Und der. Entschuldige. Achtzehn. Das Fundbüro hat gefragt, wohin damit, und ich habe gesagt, ich sehe nach. [ID:stadt_list_10] [#draft]
-Die Nadel für »Fundbüro, wohin damit.« geht schief hinein. Er zieht sie heraus und steckt sie noch einmal. [ID:stadt_list_11] [#draft]
+Die Nadel für »Fundbüro, wohin damit.« geht hinein. Er zieht sie wieder heraus und steckt sie noch einmal, zwei Finger weiter links. [ID:stadt_list_11] [#draft]
 Gefälliger: Der neunzehnte ist noch leer. Falls etwas kommt. Entschuldige. [ID:stadt_list_12] [#draft]
 Er hängt ihn neben den leeren, der schon da war. Das Brett nickt dazu, wie es zu allem nickt. [ID:stadt_list_13] [#draft]
 Dann zeigt er auf sechs Zettel, einen nach dem anderen, ohne einen zu berühren. [ID:stadt_list_14] [#draft]
@@ -298,32 +298,32 @@ Gefälliger: Danke. Das sind zwei. Eine noch, wenn du magst, und dann ist es gen
 	if WorldState.has_flag("value.closeness")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_bouquet")
-	=> list_close
+	=> list_thanks
 - Die Bühne. [if not WorldState.has_flag("list.take_stage") /] [ID:stadt_list_r18] [#draft]
 	if WorldState.has_flag("value.freedom")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_stage")
-	=> list_close
+	=> list_thanks
 - Das Brot. [if not WorldState.has_flag("list.take_bread") /] [ID:stadt_list_r19] [#draft]
 	if WorldState.has_flag("value.calm")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_bread")
-	=> list_close
+	=> list_thanks
 - Die Leiter. [if not WorldState.has_flag("list.take_ladder") /] [ID:stadt_list_r20] [#draft]
 	if WorldState.has_flag("value.closeness")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_ladder")
-	=> list_close
+	=> list_thanks
 - Die Ziege. [if not WorldState.has_flag("list.take_goat") /] [ID:stadt_list_r21] [#draft]
 	if WorldState.has_flag("value.freedom")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_goat")
-	=> list_close
+	=> list_thanks
 - Das Fundbüro. [if not WorldState.has_flag("list.take_lost") /] [ID:stadt_list_r22] [#draft]
 	if WorldState.has_flag("value.calm")
 		do WorldState.set_facet("integrity")
 	do WorldState.set_flag("list.take_lost")
-	=> list_close
+	=> list_thanks
 - Das reicht. [ID:stadt_list_r23] [#draft]
 	=> list_enough
 - … [ID:stadt_list_r24] [#draft]
@@ -345,6 +345,12 @@ Gefälliger: Ja. Das reicht. Das reicht sogar sehr. [ID:stadt_list_19] [#draft]
 Du sagst nichts. Er wartet, die Nadel still zwischen den Fingern, und fängt keinen Satz an. [ID:stadt_list_20] [#draft]
 => list_close
 
+# Nach der dritten Aufgabe: wie nach der ersten und zweiten antwortet er auf die Wahl (dort ist es die erste Zeile der nächsten Gruppe), dann kommt das Nein.
+
+~ list_thanks
+Gefälliger: Danke. Drei. Das ist genug, wirklich. Entschuldige, ich sage es zu oft. [ID:stadt_list_67] [#draft]
+=> list_close
+
 # --- Das Nein -----------------------------------------------------------------------------------------------------------------------
 # "Die anderen nicht." ist die ganze Antwort, ohne Grund (Grenzen II). Er zuckt, entschuldigt sich einmal und hält es aus. Wer mit einem Wert gewählt hat (Facette integrity),
 # hat daneben "Das sind meine."; das Schweigen bleibt die letzte Antwort. Jeder Ausgang schließt die Liste (Quest und Flag list.closed): ab hier hängen die nicht genommenen
@@ -353,15 +359,15 @@ Du sagst nichts. Er wartet, die Nadel still zwischen den Fingern, und fängt kei
 ~ list_close
 Gefälliger: Und die übrigen Zettel? Ich frage nur, damit ich weiß, was ich sage, wenn jemand fragt. [ID:stadt_list_21] [#draft]
 - Die anderen nicht. [ID:stadt_list_r25] [#draft]
-	Er zuckt, kaum sichtbar, wie bei einem Geräusch hinter ihm. Die Nadel bleibt in der Luft stehen. [ID:stadt_list_22] [#draft]
+	Er zuckt, kaum sichtbar. Die Nadel bleibt in der Luft stehen. [ID:stadt_list_22] [#draft]
 	Gefälliger: Entschuldige. Das war — ich wollte nur — [ID:stadt_list_23] [#draft]
 	Er hört auf. Er atmet aus, lässt die Hand sinken und sagt nichts mehr dazu. [ID:stadt_list_24] [#draft]
 	do WorldState.advance_quest("side_city_list", "closed")
 	do WorldState.set_flag("list.closed")
 	=> list_sit
 - Das sind meine. [if WorldState.has_facet("integrity") /] [ID:stadt_list_r26] [#draft]
-	Gefälliger: Deine. Ja. [ID:stadt_list_25] [#draft]
-	Er nickt langsam. Sein Blick geht zu den Zetteln, die du nicht genommen hast. Er lässt ihn dort. [ID:stadt_list_26] [#draft]
+	Gefälliger: Deine. Ja. Entschuldige. [ID:stadt_list_25] [#draft]
+	Er zuckt, kaum sichtbar, und nickt dann langsam. Sein Blick geht zu den Zetteln, die du nicht genommen hast. Er lässt ihn dort. [ID:stadt_list_26] [#draft]
 	do WorldState.advance_quest("side_city_list", "closed")
 	do WorldState.set_flag("list.closed")
 	=> list_sit
@@ -429,42 +435,42 @@ elif WorldState.has_flag("list.sat")
 # ohne Lob, ohne dass jemand zusieht; am Ende steht list.done_<kennung>, das die Karte liest. Der Humor sitzt in den Dingen (der Hall, das Salz, die Spinne), nie im Gefälligen.
 
 ~ do_bouquet
-Vor der Ladentür steht ein Eimer mit einem Strauß, am Faden ein frischer Zettel, »Strauß abholen.« [ID:stadt_list_48] [#draft]
+Vor der Ladentür liegt ein frischer Zettel auf dem Pflaster, »Strauß abholen.« Daneben steht ein Eimer mit einem Strauß. [ID:stadt_list_48] [#draft]
 Auf der Rückseite steht klein »Für den vom Brett.« Du hebst den Strauß heraus, das Wasser läuft dir in den Ärmel. [ID:stadt_list_49] [#draft]
 Am Brett legst du ihn auf den Sims. Er ist nass und riecht gegen die Tinte an. [ID:stadt_list_50] [#draft]
 do WorldState.set_flag("list.done_bouquet")
 => END
 
 ~ do_ladder
-Vor der Werkstatt lehnt eine Leiter, am Holm ein frischer Zettel, »Leiter halten.« Oben klopft jemand, den du nicht siehst. [ID:stadt_list_51] [#draft]
+Vor der Werkstatt liegt ein frischer Zettel auf dem Pflaster, »Leiter halten.« Eine Leiter lehnt an der Wand, und oben klopft jemand, den du nicht siehst. [ID:stadt_list_51] [#draft]
 Bei jedem Schlag rutscht der Fuß. Du stellst den Schuh davor und hältst die Holme, und das Klopfen wird gleichmäßiger. [ID:stadt_list_52] [#draft]
 Irgendwann hört es auf, und die Leiter zieht sich dir aus den Händen, nach oben. Niemand ruft etwas herunter. [ID:stadt_list_53] [#draft]
 do WorldState.set_flag("list.done_ladder")
 => END
 
 ~ do_stage
-Am Rand des Platzes liegen Bretter auf Böcken, ein Hammer, eine Tasse voller Nägel und ein frischer Zettel, »Bühne, wer kann.« [ID:stadt_list_54] [#draft]
+Am Rand des Platzes liegt ein frischer Zettel auf dem Pflaster, »Bühne, wer kann.« Daneben Bretter auf Böcken, ein Hammer und eine Tasse voller Nägel. [ID:stadt_list_54] [#draft]
 Du schlägst zwei Nägel in die Fuge zwischen zwei Brettern. Das ist ein halber Meter Boden, mehr nicht. [ID:stadt_list_55] [#draft]
 Es hallt über den Platz, hohl und ziemlich laut. Niemand sieht her. [ID:stadt_list_56] [#draft]
 do WorldState.set_flag("list.done_stage")
 => END
 
 ~ do_goat
-Am Fuß des Rathauses liegt ein Bündel Heu, darauf ein frischer Zettel, »Ziege, vom Dach.« [ID:stadt_list_57] [#draft]
+Am Fuß des Rathauses liegt ein frischer Zettel auf dem Pflaster, »Ziege, vom Dach.« Daneben ein Bündel Heu. [ID:stadt_list_57] [#draft]
 Oben auf dem First sieht die Ziege dir zu. Du rufst nicht, du legst das Heu in den Schatten der Traufe. [ID:stadt_list_58] [#draft]
 Sie kaut, ohne den Blick zu senken. Sie bleibt oben, das Heu bleibt unten, und keiner hat es eilig. [ID:stadt_list_59] [#draft]
 do WorldState.set_flag("list.done_goat")
 => END
 
 ~ do_bread
-Auf dem Tisch am Platz liegt das Brot, noch unter Spatzen, am Rand ein frischer Zettel, »Irgendwas mit Brot.« [ID:stadt_list_60] [#draft]
+Beim Tisch am Platz liegt ein frischer Zettel auf dem Pflaster, »Irgendwas mit Brot.« Auf dem Tisch liegt das Brot, noch unter Spatzen. [ID:stadt_list_60] [#draft]
 Du schneidest die Seite ab, auf der keiner sitzt, und legst sie neben das Salz. Den Rest lässt du ihnen. [ID:stadt_list_61] [#draft]
 Das Salz haben sie wieder nicht angerührt. [ID:stadt_list_62] [#draft]
 do WorldState.set_flag("list.done_bread")
 => END
 
 ~ do_lost
-An der Rathaustür weht ein grauer Schal im Zug, am Knoten ein frischer Zettel, »Fundbüro, wohin damit.« [ID:stadt_list_63] [#draft]
+An der Rathaustür liegt ein frischer Zettel auf dem Pflaster, »Fundbüro, wohin damit.« Daneben weht ein grauer Schal im Zug. [ID:stadt_list_63] [#draft]
 Du trägst den Schal hinein und legst ihn aufs unterste Brett der Fundstücke. Die Spinne dort rückt ein Stück zur Seite. [ID:stadt_list_64] [#draft]
 do WorldState.set_flag("list.done_lost")
 => END

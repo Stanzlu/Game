@@ -66,7 +66,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Gefälliger:** Entschuldige. Der ist eben noch dazugekommen, ich konnte nicht — es sind jetzt siebzehn. `[#draft]`  <sub>stadt_list_8</sub>
 - *Er heftet ihn ans Brett, »Ziege, vom Dach.«, und streicht ihn zweimal glatt.* `[#draft]`  <sub>stadt_list_9</sub>
 - **Gefälliger:** Und der. Entschuldige. Achtzehn. Das Fundbüro hat gefragt, wohin damit, und ich habe gesagt, ich sehe nach. `[#draft]`  <sub>stadt_list_10</sub>
-- *Die Nadel für »Fundbüro, wohin damit.« geht schief hinein. Er zieht sie heraus und steckt sie noch einmal.* `[#draft]`  <sub>stadt_list_11</sub>
+- *Die Nadel für »Fundbüro, wohin damit.« geht hinein. Er zieht sie wieder heraus und steckt sie noch einmal, zwei Finger weiter links.* `[#draft]`  <sub>stadt_list_11</sub>
 - **Gefälliger:** Der neunzehnte ist noch leer. Falls etwas kommt. Entschuldige. `[#draft]`  <sub>stadt_list_12</sub>
 - *Er hängt ihn neben den leeren, der schon da war. Das Brett nickt dazu, wie es zu allem nickt.* `[#draft]`  <sub>stadt_list_13</sub>
 - *Dann zeigt er auf sechs Zettel, einen nach dem anderen, ohne einen zu berühren.* `[#draft]`  <sub>stadt_list_14</sub>
@@ -136,22 +136,22 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Gefälliger:** Danke. Das sind zwei. Eine noch, wenn du magst, und dann ist es genug. Wirklich. `[#draft]`  <sub>stadt_list_17</sub>
 - ▸ **Den Strauß.** *(wenn `list.take_bouquet nicht`)*
   *wenn* `value.closeness`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Die Bühne.** *(wenn `list.take_stage nicht`)*
   *wenn* `value.freedom`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Das Brot.** *(wenn `list.take_bread nicht`)*
   *wenn* `value.calm`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Die Leiter.** *(wenn `list.take_ladder nicht`)*
   *wenn* `value.closeness`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Die Ziege.** *(wenn `list.take_goat nicht`)*
   *wenn* `value.freedom`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Das Fundbüro.** *(wenn `list.take_lost nicht`)*
   *wenn* `value.calm`
-  - *→ weiter bei* `list_close`
+  - *→ weiter bei* `list_thanks`
 - ▸ **Das reicht.**
   - *→ weiter bei* `list_enough`
 - ▸ **…**
@@ -175,7 +175,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - *Du sagst nichts. Er wartet, die Nadel still zwischen den Fingern, und fängt keinen Satz an.* `[#draft]`  <sub>stadt_list_20</sub>
 - *→ weiter bei* `list_close`
 
-### S2-23 · `list_close`
+### S2-23 · `list_thanks`
+
+> Nach der dritten Aufgabe: wie nach der ersten und zweiten antwortet er auf die Wahl (dort ist es die erste Zeile der nächsten Gruppe), dann kommt das Nein.
+
+- **Gefälliger:** Danke. Drei. Das ist genug, wirklich. Entschuldige, ich sage es zu oft. `[#draft]`  <sub>stadt_list_67</sub>
+- *→ weiter bei* `list_close`
+
+### S2-24 · `list_close`
 
 > --- Das Nein -----------------------------------------------------------------------------------------------------------------------
 > "Die anderen nicht." ist die ganze Antwort, ohne Grund (Grenzen II). Er zuckt, entschuldigt sich einmal und hält es aus. Wer mit einem Wert gewählt hat (Facette integrity),
@@ -184,20 +191,20 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 - **Gefälliger:** Und die übrigen Zettel? Ich frage nur, damit ich weiß, was ich sage, wenn jemand fragt. `[#draft]`  <sub>stadt_list_21</sub>
 - ▸ **Die anderen nicht.**
-  - *Er zuckt, kaum sichtbar, wie bei einem Geräusch hinter ihm. Die Nadel bleibt in der Luft stehen.* `[#draft]`  <sub>stadt_list_22</sub>
+  - *Er zuckt, kaum sichtbar. Die Nadel bleibt in der Luft stehen.* `[#draft]`  <sub>stadt_list_22</sub>
   - **Gefälliger:** Entschuldige. Das war — ich wollte nur — `[#draft]`  <sub>stadt_list_23</sub>
   - *Er hört auf. Er atmet aus, lässt die Hand sinken und sagt nichts mehr dazu.* `[#draft]`  <sub>stadt_list_24</sub>
   - *→ weiter bei* `list_sit`
 - ▸ **Das sind meine.** *(wenn `integrity`)*
-  - **Gefälliger:** Deine. Ja. `[#draft]`  <sub>stadt_list_25</sub>
-  - *Er nickt langsam. Sein Blick geht zu den Zetteln, die du nicht genommen hast. Er lässt ihn dort.* `[#draft]`  <sub>stadt_list_26</sub>
+  - **Gefälliger:** Deine. Ja. Entschuldige. `[#draft]`  <sub>stadt_list_25</sub>
+  - *Er zuckt, kaum sichtbar, und nickt dann langsam. Sein Blick geht zu den Zetteln, die du nicht genommen hast. Er lässt ihn dort.* `[#draft]`  <sub>stadt_list_26</sub>
   - *→ weiter bei* `list_sit`
 - ▸ **…**
   - *Du schweigst. Er wartet, ob noch etwas kommt, und es kommt nichts.* `[#draft]`  <sub>stadt_list_27</sub>
   - **Gefälliger:** Dann bleiben sie hängen. Das ist — in Ordnung. Entschuldige. `[#draft]`  <sub>stadt_list_28</sub>
   - *→ weiter bei* `list_sit`
 
-### S2-24 · `list_sit`
+### S2-25 · `list_sit`
 
 > --- Das Brot (Grenzen III) ---------------------------------------------------------------------------------------------------------
 > Nach dem Nein setzt er sich zu dir (eine Erzählzeile, die Szene bewegt ihn nicht: er bleibt am Brett). Das Brot ist ein Geschenk, kein Handel: "Nehmen." führt in die
@@ -216,7 +223,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - ▸ **…**
   - *Du sagst nichts. Er hält das Brot noch einen Atemzug hin, dann bricht er ein Stück ab und isst.* `[#draft]`  <sub>stadt_list_36</sub>
 
-### S2-25 · `list_kitchen`
+### S2-26 · `list_kitchen`
 
 > --- Das Warum, als Ding ----------------------------------------------------------------------------------------------------------------
 > Wer das Brot nimmt, folgt ihm in die Küche (Erzählung, kein Ort). Über dem Herd hängt eine Reihe Zettel in fremder Handschrift; der älteste ist verblasst und trägt keinen
@@ -232,7 +239,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Gefälliger:** Nimm den. Er liest sich eh nicht mehr. `[#draft]`  <sub>stadt_list_43</sub>
 - *Wo er hing, hängt die Klammer leer an der Schnur.* `[#draft]`  <sub>stadt_list_44</sub>
 
-### S2-26 · `gef_after`
+### S2-27 · `gef_after`
 
 > --- Danach -----------------------------------------------------------------------------------------------------------------------------------
 > Wer ihn nach der Liste anspricht, hört eine kurze Zeile ohne Erklärung und ohne Lehre. Er entschuldigt sich weniger, aber nicht gar nicht; list.kitchen_seen und list.sat
@@ -244,46 +251,46 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *sonst wenn* `list.sat`
   - **Gefälliger:** Ich backe morgen wieder. Es wird zu viel werden, wie immer. `[#draft]`  <sub>stadt_list_47</sub>
 
-### S2-27 · `do_bouquet`
+### S2-28 · `do_bouquet`
 
 > --- Die Gänge --------------------------------------------------------------------------------------------------------------------------------
 > Jede genommene Aufgabe hat am Ort einen frischen Zettel (die Karte liest list.take_<kennung>). Wer ihn liest, tut die Kleinigkeit: zwei oder drei Erzählzeilen, ohne Wert,
 > ohne Lob, ohne dass jemand zusieht; am Ende steht list.done_<kennung>, das die Karte liest. Der Humor sitzt in den Dingen (der Hall, das Salz, die Spinne), nie im Gefälligen.
 
-- *Vor der Ladentür steht ein Eimer mit einem Strauß, am Faden ein frischer Zettel, »Strauß abholen.«* `[#draft]`  <sub>stadt_list_48</sub>
+- *Vor der Ladentür liegt ein frischer Zettel auf dem Pflaster, »Strauß abholen.« Daneben steht ein Eimer mit einem Strauß.* `[#draft]`  <sub>stadt_list_48</sub>
 - *Auf der Rückseite steht klein »Für den vom Brett.« Du hebst den Strauß heraus, das Wasser läuft dir in den Ärmel.* `[#draft]`  <sub>stadt_list_49</sub>
 - *Am Brett legst du ihn auf den Sims. Er ist nass und riecht gegen die Tinte an.* `[#draft]`  <sub>stadt_list_50</sub>
 
-### S2-28 · `do_ladder`
+### S2-29 · `do_ladder`
 
-- *Vor der Werkstatt lehnt eine Leiter, am Holm ein frischer Zettel, »Leiter halten.« Oben klopft jemand, den du nicht siehst.* `[#draft]`  <sub>stadt_list_51</sub>
+- *Vor der Werkstatt liegt ein frischer Zettel auf dem Pflaster, »Leiter halten.« Eine Leiter lehnt an der Wand, und oben klopft jemand, den du nicht siehst.* `[#draft]`  <sub>stadt_list_51</sub>
 - *Bei jedem Schlag rutscht der Fuß. Du stellst den Schuh davor und hältst die Holme, und das Klopfen wird gleichmäßiger.* `[#draft]`  <sub>stadt_list_52</sub>
 - *Irgendwann hört es auf, und die Leiter zieht sich dir aus den Händen, nach oben. Niemand ruft etwas herunter.* `[#draft]`  <sub>stadt_list_53</sub>
 
-### S2-29 · `do_stage`
+### S2-30 · `do_stage`
 
-- *Am Rand des Platzes liegen Bretter auf Böcken, ein Hammer, eine Tasse voller Nägel und ein frischer Zettel, »Bühne, wer kann.«* `[#draft]`  <sub>stadt_list_54</sub>
+- *Am Rand des Platzes liegt ein frischer Zettel auf dem Pflaster, »Bühne, wer kann.« Daneben Bretter auf Böcken, ein Hammer und eine Tasse voller Nägel.* `[#draft]`  <sub>stadt_list_54</sub>
 - *Du schlägst zwei Nägel in die Fuge zwischen zwei Brettern. Das ist ein halber Meter Boden, mehr nicht.* `[#draft]`  <sub>stadt_list_55</sub>
 - *Es hallt über den Platz, hohl und ziemlich laut. Niemand sieht her.* `[#draft]`  <sub>stadt_list_56</sub>
 
-### S2-30 · `do_goat`
+### S2-31 · `do_goat`
 
-- *Am Fuß des Rathauses liegt ein Bündel Heu, darauf ein frischer Zettel, »Ziege, vom Dach.«* `[#draft]`  <sub>stadt_list_57</sub>
+- *Am Fuß des Rathauses liegt ein frischer Zettel auf dem Pflaster, »Ziege, vom Dach.« Daneben ein Bündel Heu.* `[#draft]`  <sub>stadt_list_57</sub>
 - *Oben auf dem First sieht die Ziege dir zu. Du rufst nicht, du legst das Heu in den Schatten der Traufe.* `[#draft]`  <sub>stadt_list_58</sub>
 - *Sie kaut, ohne den Blick zu senken. Sie bleibt oben, das Heu bleibt unten, und keiner hat es eilig.* `[#draft]`  <sub>stadt_list_59</sub>
 
-### S2-31 · `do_bread`
+### S2-32 · `do_bread`
 
-- *Auf dem Tisch am Platz liegt das Brot, noch unter Spatzen, am Rand ein frischer Zettel, »Irgendwas mit Brot.«* `[#draft]`  <sub>stadt_list_60</sub>
+- *Beim Tisch am Platz liegt ein frischer Zettel auf dem Pflaster, »Irgendwas mit Brot.« Auf dem Tisch liegt das Brot, noch unter Spatzen.* `[#draft]`  <sub>stadt_list_60</sub>
 - *Du schneidest die Seite ab, auf der keiner sitzt, und legst sie neben das Salz. Den Rest lässt du ihnen.* `[#draft]`  <sub>stadt_list_61</sub>
 - *Das Salz haben sie wieder nicht angerührt.* `[#draft]`  <sub>stadt_list_62</sub>
 
-### S2-32 · `do_lost`
+### S2-33 · `do_lost`
 
-- *An der Rathaustür weht ein grauer Schal im Zug, am Knoten ein frischer Zettel, »Fundbüro, wohin damit.«* `[#draft]`  <sub>stadt_list_63</sub>
+- *An der Rathaustür liegt ein frischer Zettel auf dem Pflaster, »Fundbüro, wohin damit.« Daneben weht ein grauer Schal im Zug.* `[#draft]`  <sub>stadt_list_63</sub>
 - *Du trägst den Schal hinein und legst ihn aufs unterste Brett der Fundstücke. Die Spinne dort rückt ein Stück zur Seite.* `[#draft]`  <sub>stadt_list_64</sub>
 
-### S2-33 · `slip_struck`
+### S2-34 · `slip_struck`
 
 > Alle durchgestrichenen Zettel (die nicht genommenen Aufgaben, ab list.closed) lesen sich gleich: ein Strich ohne Druck, daneben klein und rund die Entschuldigung. Er hängt noch,
 > falls sich jemand umentscheidet; nichts geschieht, niemand wird gemahnt.

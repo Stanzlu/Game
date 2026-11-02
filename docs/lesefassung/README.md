@@ -31,7 +31,7 @@ Antwort kommt. Hinter jeder Zeile steht ihre ID klein.
 | [S2_PLATZ.md](S2_PLATZ.md) | Akt IV: der Platz und das Rathaus (Tor und Torwächterin, Mira am Brunnen, Zettelbrett und Gefälliger, Lio, Brunnenrand, die drei Stationen von „Ein perfekter Tag“, die Ziege; Fundbüro und Plan der Beamtin) | 26 | 76 | 2.375 |
 | [S3_BLUMENLADEN.md](S3_BLUMENLADEN.md) | Akt IV: der Blumenladen (Orin hinter dem Bindetisch, die Bitte und die Ente vor der Tür, der Bericht und die Töpfe, der Brief und der Strauß, danach; Bindetisch, Regal, getrockneter Strauß) | 16 | 63 | 1.922 |
 | [S4_WERKSTATT.md](S4_WERKSTATT.md) | Akt IV: die Werkstatt (Tess am Zollstock, das Angebot und das Sägen, das fertige Brett, Hobel und Leiter; draußen die Bank, „Nichts“ und die Zeile danach; Sägen, Leiter, Sägemehl, Brett) | 15 | 56 | 1.714 |
-| [S5_LISTE.md](S5_LISTE.md) | Akt IV: die Liste (Mira am Rand, das Brett nach der Liste, der Gefällige mit siebzehn, achtzehn und neunzehn, die Wahl der Aufgaben, das Nein, das Brot, seine Küche und der verblasste Zettel; die Gänge der sechs Aufgaben und der durchgestrichene Zettel; `list_board` und `gef_again` stehen als geänderte Cues auch in S2) | 21 | 71 | 2.753 |
+| [S5_LISTE.md](S5_LISTE.md) | Akt IV: die Liste (Mira am Rand, das Brett nach der Liste, der Gefällige mit siebzehn, achtzehn und neunzehn, die Wahl der Aufgaben, das Nein, das Brot, seine Küche und der verblasste Zettel; die Gänge der sechs Aufgaben und der durchgestrichene Zettel; `list_board` und `gef_again` stehen als geänderte Cues auch in S2) | 22 | 72 | 2.833 |
 
 „Zeilen mit ID“ zählt die Zeilen mit einer ID ohne die ▸ Antworten; die Kalibrierung (`calibrate.py`, 475 Zeilen für Akt II) zählt anders.
 

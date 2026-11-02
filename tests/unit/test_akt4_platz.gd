@@ -47,6 +47,7 @@ const STADT_CUES: PackedStringArray = [
 	"list_none",
 	"list_enough",
 	"list_wait",
+	"list_thanks",
 	"list_close",
 	"list_sit",
 	"list_kitchen",

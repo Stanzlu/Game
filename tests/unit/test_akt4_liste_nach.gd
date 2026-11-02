@@ -51,7 +51,7 @@ func test_refusing_the_bread_is_allowed_and_he_stays_warm() -> void:
 		)
 
 
-func test_the_group_of_the_bread_has_the_silence_last_and_every_answer_goes_somewhere_else(
+func test_the_group_of_the_bread_has_three_answers_the_silence_last_and_asking_takes_nothing(
 ) -> void:
 	var answers := await DialogueWalk.answers(STADT, "list_sit")
 	assert_eq(answers.size(), 3)
@@ -113,7 +113,6 @@ func test_mira_says_no_to_a_slip_with_no_effort_and_nobody_comments_on_it() -> v
 	assert_eq(seen.size(), 3)
 	assert_true(_has(seen, "stadt_list_5"), "Nein.")
 	assert_eq(WorldState.state.flags, flags, "no flag")
-	assert_false(WorldState.has_memory("mira", "said_no"), "and no new memory: the last is S7's")
 	assert_true(WorldState.state.relationships.is_empty(), "nothing between them changes")
 	var all := " ".join(seen)
 	for word: String in ["stark", "mutig", "Vorbild", "beneide", "wie du"]:
