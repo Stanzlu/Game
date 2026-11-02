@@ -62,6 +62,18 @@ func _said_by(who: String) -> String:
 	return spoken
 
 
+## Everything the file says in its lines and answers (not its comments), for word checks.
+func _all_text() -> String:
+	var spoken := ""
+	for hit in (
+		RegEx
+		. create_from_string("(?m)^[ \\t]*(?:- )?([^#\\n][^\\n]*?)[ \\t]*\\[ID:flo_")
+		. search_all(FileAccess.get_file_as_string(FILE))
+	):
+		spoken += hit.get_string(1) + "\n"
+	return spoken
+
+
 ## She has been sent and has seen the duck: the state in which Orin hears the report.
 func _sent_and_seen() -> void:
 	WorldState.start_quest(DUCK)
@@ -97,7 +109,9 @@ func test_the_file_tells_sixteen_cues_in_draft_with_unique_ids() -> void:
 
 func test_the_speakers_are_orin_and_the_narrator() -> void:
 	var source := FileAccess.get_file_as_string(FILE)
-	for hit in RegEx.create_from_string("(?m)^\\s*([A-ZÄÖÜ][a-zäöüß]+): ").search_all(source):
+	var speakers := RegEx.create_from_string("(?m)^\\s*([A-ZÄÖÜ][a-zäöüß]+): ").search_all(source)
+	assert_gt(speakers.size(), 20, "Orin speaks in many lines")
+	for hit in speakers:
 		assert_eq(hit.get_string(1), "Orin", "only one person speaks in this file")
 
 
@@ -132,9 +146,10 @@ func test_why_is_not_answered_and_the_request_stands_again() -> void:
 	assert_true(_has(seen, "flo_orin_7"), "he says there is no good answer")
 	assert_true(_has(seen, "flo_orin_8"), "and asks again, without the question")
 	assert_true(WorldState.is_quest_started(DUCK), "the second answer took it")
-	var orin := _said_by("Orin")
-	for word: String in ["Trauma", "damals", "als Kind", "gebissen", "Erlebnis", "Angst"]:
-		assert_false(orin.contains(word), "nothing explains the duck: " + word)
+	var all := _all_text()
+	assert_gt(all.length(), 4000, "the whole text of the shop, lines and answers, is read")
+	for word: String in ["Trauma", "damals", "als Kind", "gebissen", "Erlebnis", "Angst", "Quak"]:
+		assert_false(all.contains(word), "nothing explains the duck, in no line: " + word)
 
 
 func test_silence_takes_nothing_and_he_asks_again_at_the_next_visit() -> void:
@@ -218,6 +233,7 @@ func test_the_report_ends_the_quest_just_as_well_when_the_pots_stay_inside() -> 
 	assert_eq(WorldState.quest_stage(DUCK), "done", "an ending as well as the other")
 	assert_true(WorldState.has_memory("orin", "duck"))
 	var orin := _said_by("Orin")
+	assert_gt(orin.length(), 1000, "all of Orin's speech is read")
 	for word: String in ["mutig", "feige", "stolz", "schwach", "besser"]:
 		assert_false(orin.contains(word), "neither ending is graded: " + word)
 

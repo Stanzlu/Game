@@ -66,9 +66,10 @@ func test_going_leaves_the_letter_open_and_nothing_is_set() -> void:
 	assert_eq(WorldState.quest_stage(LETTER), "listen", "no ending is promised")
 	assert_false(WorldState.has_flag("city.letter_told"))
 	assert_false(WorldState.has_memory("orin", "letter"))
-	var again := await DialogueWalk.play(FILE, "orin", PackedStringArray(["Strauß", "Ich höre zu"]))
-	assert_true(_has(again, "flo_let_1"), "the second time he is short")
+	var again := await DialogueWalk.play(FILE, "orin", PackedStringArray(["Ich höre zu"]))
+	assert_true(_has(again, "flo_let_1"), "the second time he is short and goes back to the quiet")
 	assert_false(_has(again, "flo_let_7"), "the letter is not described twice")
+	assert_false(_has(again, "flo_aft_1") or _has(again, "flo_aft_2"), "no joke while it is open")
 	assert_eq(WorldState.quest_stage(LETTER), "done", "and she can still listen")
 
 

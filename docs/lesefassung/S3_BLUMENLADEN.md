@@ -125,8 +125,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 > --- Danach (die Ente ist erledigt, der Brief nicht) ------------------------------------------------------------------------------
 > Eine Zeile, leicht, je nach Ausgang: die Pfingstrosen draußen, die Töpfe drinnen. Der Humor sitzt in den Blumen und in der Ordnung, nicht in Orin.
+> Hat er den Strauß schon gezeigt und der Brief ist noch zu (die Spielerin ist gegangen), kommt kein Witz mehr: er steht wieder in der leisen Szene.
 > Wer nach dem Strauß über dem Tisch fragt, kommt in den Brief; wer nichts sagt, nickt ihm zu und geht.
 
+*wenn* `side_city_letter`
+  - *→ weiter bei* `orin_letter`
 *wenn* `city.duck_passed`
   - **Orin:** Die Pfingstrosen stehen draußen in der Sonne. Ich habe schon dreimal nachgesehen. Das macht sie nervös. `[#draft]`  <sub>flo_aft_1</sub>
 *sonst wenn* `city.duck_stayed`

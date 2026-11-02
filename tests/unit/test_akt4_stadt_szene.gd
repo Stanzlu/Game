@@ -204,6 +204,7 @@ func test_a_duck_stands_before_the_florist_in_both_endings_and_the_pots_come_out
 	assert_eq(_cell_of(scene, duck), DUCK_CELL)
 	assert_eq((duck as Decor).sprite_id, "tal/st_duck")
 	assert_eq(_decor_at(scene, "tal/st_pots", POTS_CELL).size(), 0, "no pots before the report")
+	scene.free()
 	for flag: String in ["city.duck_passed", "city.duck_stayed"]:
 		WorldState.new_game()
 		WorldState.set_flag(flag)
@@ -211,6 +212,7 @@ func test_a_duck_stands_before_the_florist_in_both_endings_and_the_pots_come_out
 		assert_not_null(_prop(later, "duck"), "unmoved: " + flag)
 		var pots := _decor_at(later, "tal/st_pots", POTS_CELL).size()
 		assert_eq(pots, 1 if flag == "city.duck_passed" else 0, flag)
+		later.free()
 
 
 func test_it_is_a_morning_without_lights_and_without_a_cutscene() -> void:

@@ -95,7 +95,7 @@ func test_it_is_an_interior_at_the_zoom_of_the_house_and_the_camera_keeps_to_the
 	assert_false(scene.player.is_locked())
 
 
-func test_orin_stands_behind_the_table_and_looks_at_whoever_comes() -> void:
+func test_orin_stands_behind_the_table_facing_the_door() -> void:
 	var scene := await _scene()
 	var orin := _orin(scene)
 	assert_not_null(orin)
@@ -113,7 +113,7 @@ func test_the_table_the_bunch_and_the_shelf_can_be_looked_at() -> void:
 
 
 func test_the_end_of_each_side_quest_marks_its_beat() -> void:
-	var scene := await _scene()
+	await _scene()
 	assert_true(Beat.reached("blumenladen_enter"))
 	assert_false(Beat.reached("blumenladen_duck"))
 	WorldState.start_quest("side_city_duck")
@@ -125,7 +125,6 @@ func test_the_end_of_each_side_quest_marks_its_beat() -> void:
 	WorldState.advance_quest("side_city_letter", "done")
 	await wait_physics_frames(2)
 	assert_true(Beat.reached("blumenladen_letter"))
-	assert_not_null(scene)
 
 
 func test_from_the_city_she_arrives_inside_and_walking_down_reaches_the_door() -> void:
