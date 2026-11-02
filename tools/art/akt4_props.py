@@ -19,7 +19,8 @@ house leans a little and every wall is patched with another stone). Fronts of te
 the wall (four-cell runs, a run for the side walls, corner towers), the gate with its low open arch and the guard's hut,
 the fountain (and a patch with the worn hollows that lies over its rim), the notice board with its sixteen sheets, two
 stalls, the three stations of "Ein perfekter Tag" (wreath, lectern, table with bread and salt and sparrows), crates,
-barrels, dark lamp posts, pails of peonies, a woodstack, a sawhorse, pots and the crate Lio sits on. Houses and shops carry no
+barrels, dark lamp posts, pails of peonies, a woodstack, a sawhorse, pots and the crate Lio sits on. S3 adds one more: an ordinary
+white duck in profile that stands by the florist's pots (its shadow is painted into the picture, the catalog gives it none). Houses and shops carry no
 shadow in the catalog (their foot is the map's solid ground); a few things stand outside the image grid on purpose
 (anchors below the picture: the rim patch and the seat crate sit over or under something that lies on another cell).
 Called from make_sprites.build(); `--preview out.png` draws Act IV's pieces, `--preview-town out.png` the town's.

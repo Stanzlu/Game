@@ -39,7 +39,7 @@ func _duck_done(passed: bool) -> void:
 func test_listening_ends_the_quest_and_leaves_the_letter_closed() -> void:
 	_duck_done(true)
 	var seen := await DialogueWalk.play(FILE, "orin", PackedStringArray(["Strauß", "Ich höre zu"]))
-	for id in ["flo_let_7", "flo_let_8", "flo_let_9", "flo_let_11"]:
+	for id: String in ["flo_let_7", "flo_let_8", "flo_let_9", "flo_let_11"]:
 		assert_true(_has(seen, id), id)
 	assert_true(WorldState.has_flag("city.letter_told"))
 	assert_false(WorldState.has_flag("city.letter_held"))

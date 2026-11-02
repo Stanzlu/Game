@@ -16,6 +16,12 @@ mayor's door, a map and a fire bucket; the side walls and the front wall with th
 rh_cup: 16 x 16 canvases, anchor (8, 16), the map lifts them onto the board they lie on and hides them with `unless`);
 they carry no shadow in the catalog (a baked shadow would stay under nothing). The map is 28 x 20 cells, the room are the
 cells 4 to 23 and 3 to 15 (20 x 13): the back wall rows 3 to 5, the floor rows 6 to 14, the front wall row 15.
+
+Akt IV, S3 adds the florist's shop (prefix `fo_`, below the town hall's pieces, registered by `build_florist`): a small warm room, cream
+plaster over a sage-green wainscot, honey wood, zinc and terracotta; the shell with a window to the lane, the binding table, the dried
+bunch of peonies that hangs head down from the drying rail, two shelves, two rows of buckets with cut flowers, a big plant, a watering
+can and a chest of drawers. The map content/maps/blumenladen.txt is 26 x 18 cells, the room are the cells 4 to 21 and 3 to 14 (18 x 12).
+`--preview-florist out.png` draws the shell and all eight pieces (3x).
 """
 import os
 import sys
@@ -1013,8 +1019,7 @@ def _cut_flowers(c, cx, mouth, kind, seed):
 
 def fo_buckets(ms, kind=0):
     """A row of three buckets with cut flowers, three cells wide: a zinc pail, a wooden one with iron hoops and a cracked crock, each
-    with its own flowers (kind 0: tulips, white peonies, lavender; kind 1: pink peonies, delphinium, daisies), a few petals on the
-    floor. 48 x 44, anchor (8, 38): the prop stands in the left cell of its row."""
+    with its own flowers (kind 0: tulips, white peonies, lavender; kind 1: pink peonies, delphinium, daisies). 48 x 44, anchor (8, 38): the prop stands in the left cell of its row."""
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(48, 44)
     kinds = (("tulip", "white", "lavender"), ("peony", "delphinium", "daisy"))[kind]
@@ -1034,8 +1039,6 @@ def fo_buckets(ms, kind=0):
             c.paint(seg(c, bx + 9, 26, bx + 7, 38, 0.5), TERRACOTTA, 0.05, dither=False)  # the crack
         c.paint(c.rect(bx, 24, bx + 16, 26), ZINC if k == 0 else ex["plank"], 0.85, dither=False)
         c.paint(c.ellipse(cx, 39, 7, 1.4) & (c.yy > 38), st["stone"], 0.25, dither=False)
-    for px, py in ((15, 42), (31, 42), (46, 41)):  # a petal or two in the gaps
-        c.paint(c.ellipse(px, py, 1.3, 0.7), PINK if kind else WHITE_BLOOM, 0.75, dither=False)
     c.outline(st["outline"])
     return c
 

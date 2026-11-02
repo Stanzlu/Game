@@ -108,7 +108,7 @@ func test_the_first_meeting_introduces_him_asks_and_moves_the_walk_on() -> void:
 	WorldState.start_quest("main_city_way")
 	WorldState.advance_quest("main_city_way", "town")
 	var seen := await DialogueWalk.play(FILE, "orin", PackedStringArray(["Ich sehe nach"]))
-	for id in ["flo_orin_1", "flo_orin_3", "flo_orin_6", "flo_orin_9"]:
+	for id: String in ["flo_orin_1", "flo_orin_3", "flo_orin_6", "flo_orin_9"]:
 		assert_true(_has(seen, id), id)
 	assert_true(WorldState.has_flag("city.orin_met"))
 	assert_eq(WorldState.relationship_state("orin"), "cautious")
@@ -125,7 +125,7 @@ func test_the_walk_moves_on_only_from_the_town() -> void:
 
 
 func test_why_is_not_answered_and_the_request_stands_again() -> void:
-	var answers := await DialogueWalk.answers(FILE, "orin")
+	var answers := await DialogueWalk.answers(FILE, "orin_ask")
 	assert_eq(answers.size(), 3, "I look, why, silence")
 	assert_eq(answers[answers.size() - 1], "…", "the silence is the last answer")
 	var seen := await DialogueWalk.play(FILE, "orin", PackedStringArray(["Warum", "Ich sehe nach"]))

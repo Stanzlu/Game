@@ -1,0 +1,48 @@
+[
+  {"relative": true},
+  {"log": "Act IV, S3: the florist, from the frozen end of Act III (she stands free in the house)", "t": 0.5},
+  {"wait_for": {"scene": "haus"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 0.1},
+  {"enter": "tal", "log": "out into the valley", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "t": 0.1},
+  {"enter": "strasse", "log": "the west path leads onto the road", "t": 0.5},
+  {"wait_for": {"scene": "strasse"}, "timeout": 30, "t": 0.1},
+  {"enter": "stadt", "log": "the road runs into the city", "t": 0.5},
+  {"wait_for": {"scene": "stadt"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "stadt_enter"}, "timeout": 30, "t": 0.1},
+
+  {"log": "the florist's door stands where the blocker stood", "t": 0.1},
+  {"enter": "blumenladen", "t": 0.5},
+  {"wait_for": {"scene": "blumenladen"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "blumenladen_enter"}, "timeout": 30, "t": 0.1},
+  {"talk": "orin", "log": "Orin looks like a warrior and keeps flowers; he asks her to look for a duck", "t": 0.5},
+  {"wait_for": {"quest": "side_city_duck", "stage": "look"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "city.orin_met"}, "timeout": 10, "t": 0.1},
+
+  {"log": "outside: a duck, perfectly normal, and her feather", "t": 0.1},
+  {"enter": "stadt", "t": 0.5},
+  {"wait_for": {"scene": "stadt"}, "timeout": 30, "t": 0.1},
+  {"use": [33, 29], "face": "up", "t": 0.5},
+  {"wait_for": {"flag": "city.duck_seen"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"flag": "city.feather_taken"}, "timeout": 30, "t": 0.1},
+
+  {"log": "back inside: the report, and she stands beside him while the pots go out", "t": 0.1},
+  {"enter": "blumenladen", "t": 0.5},
+  {"wait_for": {"scene": "blumenladen"}, "timeout": 30, "t": 0.1},
+  {"talk": "orin", "t": 0.5},
+  {"wait_for": {"quest": "side_city_duck", "stage": "done"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "city.duck_passed"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"beat": "blumenladen_duck"}, "timeout": 30, "t": 0.1},
+
+  {"log": "the things in the shop: the dried bunch over the table, the table, the shelf", "t": 0.1},
+  {"use": [15, 9], "face": "up", "t": 0.5},
+  {"use": [12, 9], "face": "up", "t": 0.5},
+  {"use": [5, 7], "face": "up", "t": 0.5},
+
+  {"log": "the bunch, the letter without an address: she listens", "t": 0.1},
+  {"talk": "orin", "t": 0.5},
+  {"wait_for": {"quest": "side_city_letter", "stage": "done"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "city.letter_told"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"beat": "blumenladen_letter"}, "timeout": 30, "t": 0.1},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]
