@@ -398,7 +398,7 @@ STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d":
                 "s": "_", "1": "_", "2": "_", "3": "_", "l": "_", "x": "_", "X": "_", "B": "_", "E": "_", "H": "_", "q": "_",
                 "r": "_", "Y": "_", "T": "h", "C": "h", "P": "h", "*": ".", "o": ".", "g": ".", "I": "_", "M": "_", "y": "_",
                 "v": "_", "L": "_", "J": "_", "%": "_", "&": "_", "D": "_", "N": ",", "@": "_", "n": ",", "i": "_", "$": "_",
-                "!": "_"}
+                "!": "_", "4": "_", "5": "_"}
 
 
 def hall_perch(row):
@@ -514,10 +514,12 @@ def build_stadt():
         put("l", x, y)
     for x, y in ((66, 21), (59, 21), (39, 25), (79, 38), (14, 40), (77, 42)):
         put("X" if (x + y) % 2 else "x", x, y)
-    # ---- the shops: pails and pots before the florist, wood and a sawhorse at the workshop; a blocker before each door
+    # ---- the shops: pails and pots before the florist, wood and a sawhorse at the workshop; a door before the florist (S3), a blocker before the workshop
     put("B", 27, 27)
     put("q", 33, 27)
     put("%", 30, 27)
+    put("4", 33, 28)  # the duck, by the pots
+    put("5", 31, 28)  # the pots Orin sets out once he has been past her
     put("$", 30, 29)
     put("E", 19, 40)
     put("H", 26, 40)

@@ -37,7 +37,10 @@ const PROPS: PackedStringArray = [
 	"day_lectern",
 	"day_table",
 ]
-const SHUT_SHOPS := {"florist_wait": Vector2i(30, 27), "workshop_wait": Vector2i(22, 39)}
+const SHUT_SHOPS := {"workshop_wait": Vector2i(22, 39)}
+const FLORIST_DOOR := Vector2i(30, 27)
+const DUCK_CELL := Vector2i(33, 28)
+const POTS_CELL := Vector2i(31, 28)
 
 
 func before_each() -> void:
@@ -169,11 +172,15 @@ func test_the_things_of_the_square_are_there_with_their_cues() -> void:
 	assert_eq(_cell_of(scene, goat), Vector2i(40, 19))
 
 
-func test_the_two_shops_are_shut_by_a_blocker_before_their_doors() -> void:
+func test_the_workshop_is_shut_by_a_blocker_and_the_florist_has_a_door_on_the_blockers_cell() -> void:
 	var scene := await _scene()
 	for cue: String in SHUT_SHOPS:
 		assert_not_null(_blocker_at(scene, SHUT_SHOPS[cue]), cue)
-	assert_eq(_doors_to(scene, "blumenladen").size(), 0, "S3 sets the door in")
+	assert_null(_blocker_at(scene, FLORIST_DOOR), "S3 put the door where the blocker stood")
+	var doors := _doors_to(scene, "blumenladen")
+	assert_eq(doors.size(), 1)
+	assert_eq(doors[0].get(&"spawn"), "stadt", "to the place the shop made for it")
+	assert_eq(_cell_of(scene, doors[0]), FLORIST_DOOR)
 	assert_eq(_doors_to(scene, "werkstatt").size(), 0, "S4 sets the door in")
 
 
