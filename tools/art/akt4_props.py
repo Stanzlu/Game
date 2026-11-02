@@ -20,7 +20,7 @@ the wall (four-cell runs, a run for the side walls, corner towers), the gate wit
 the fountain (and a patch with the worn hollows that lies over its rim), the notice board with its sixteen sheets, two
 stalls, the three stations of "Ein perfekter Tag" (wreath, lectern, table with bread and salt and sparrows), crates,
 barrels, dark lamp posts, pails of peonies, a woodstack, a sawhorse, pots and the crate Lio sits on. S3 adds one more: an ordinary
-white duck in profile that stands by the florist's pots (its shadow is painted into the picture, the catalog gives it none). Houses and shops carry no
+white duck in profile that stands by the florist's pots (its shadow is painted into the picture, the catalog gives it none). S5 adds the slips of the list (a fresh one with a pin and one crossed out, flat on the cobbles, no letter, no digit, no catalog shadow). Houses and shops carry no
 shadow in the catalog (their foot is the map's solid ground); a few things stand outside the image grid on purpose
 (anchors below the picture: the rim patch and the seat crate sit over or under something that lies on another cell).
 Called from make_sprites.build(); `--preview out.png` draws Act IV's pieces, `--preview-town out.png` the town's.
@@ -1280,6 +1280,53 @@ def board(ms):
     return c
 
 
+SLIP_PAPER = ramp("#8c8678", "#c4bfae", "#e8e4d6", "#fbfaf2")
+GRAPHITE = ramp("#2e2e38", "#4e4e5a", "#6e6e7c", "#8e8e9c")
+SLIP_INK = ramp("#2a1410", "#5a2018", "#8e3024", "#b44a3a")
+
+
+def _line(c, x0, y0, x1, y1, color):
+    """A one-pixel line (Bresenham) in `color`."""
+    dx, dy = abs(x1 - x0), -abs(y1 - y0)
+    sx, sy = (1 if x0 < x1 else -1), (1 if y0 < y1 else -1)
+    err = dx + dy
+    while True:
+        c.fill(c.rect(x0, y0, x0 + 1, y0 + 1), color)
+        if x0 == x1 and y0 == y1:
+            return
+        e2 = 2 * err
+        if e2 >= dy:
+            err += dy
+            x0 += sx
+        if e2 <= dx:
+            err += dx
+            y0 += sy
+
+
+def slip(ms, struck=False):
+    """One slip of the list, lying on the cobbles at the place of its task: white paper with two corners cut off a little
+    crooked, a red pin through the top and two pencil lines, no letter and no digit. With `struck` it is the same slip
+    crossed out with one hard stroke of dark red ink and, below the lines, a small round scribble in pencil (the apology,
+    without a word). Flat; 12 x 14, anchor (6, 7), the middle of the cell."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(12, 14)
+    paper = c.rect(1, 1, 11, 13) & ~((c.xx == 10) & (c.yy == 1)) & ~((c.xx == 1) & (c.yy == 12))
+    tone = np.where(c.xx == 1, 1.0, np.where(c.xx == 10, 0.5, 0.82)) - np.where(c.yy == 12, 0.22, 0.0)
+    c.paint(paper, SLIP_PAPER, tone, dither=False)
+    c.fill(c.rect(5, 2, 7, 4), np.array([200, 70, 60], np.float32))  # the pin's head
+    c.fill(c.rect(5, 2, 6, 3), np.array([244, 140, 120], np.float32))
+    for x in range(3, 9):  # the first pencil line, a little uneven
+        c.fill(c.rect(x, 5 if x < 6 else 6, x + 1, 6 if x < 6 else 7), GRAPHITE[1])
+    for x in range(3, 8):  # and a second one
+        c.fill(c.rect(x, 8, x + 1, 9), GRAPHITE[1])
+    if struck:
+        _line(c, 3, 4, 9, 9, SLIP_INK[2])  # one hard stroke across both lines
+        for x, y in ((6, 10), (7, 10), (5, 11), (8, 11), (6, 12), (7, 12)):  # a small round scribble below
+            c.fill(c.rect(x, y, x + 1, y + 1), GRAPHITE[2])
+    c.outline(st["outline"])
+    return c
+
+
 def _fountain_canvas(ms, worn):
     """The fountain: a wide basin of dressed stone on a plinth, the water in it, a stout column with a bowl and two iron
     spouts (the water falls in two thin threads), moss and a chip. With `worn`, the front-left rim has three smooth,
@@ -1804,6 +1851,10 @@ def build_town(ms):
     ms.save("tal", "st_pots", [pots(ms, 0), pots(ms, 1)], (12, 19))
     # S3: the duck by the florist's pots; its shadow is painted into the picture (no catalog shadow: the town's stamp stays)
     ms.save("tal", "st_duck", duck(ms), (8, 14), shape={"circle": 4, "offset": [0, -3]})
+    # S5: the slips of the list on the cobbles at the places of the tasks, fresh or crossed out; flat, no catalog shadow
+    # (the map puts them on the cells of the town's stamp)
+    ms.save("tal", "st_slip_open", slip(ms), (6, 7), flat=True)
+    ms.save("tal", "st_slip_struck", slip(ms, struck=True), (6, 7), flat=True)
 
 
 def preview(path):
@@ -1840,7 +1891,7 @@ def preview_town(path):
     pieces += [town_house(ms, *FLORIST)[0], town_house(ms, *WORKSHOP)[0]]
     pieces += [board(ms), fountain(ms), fountain_rim(ms), stall(ms, 0), stall(ms, 1), wreath(ms), lectern(ms), bread_table(ms),
                crate(ms, 0), crate(ms, 1), barrel(ms, 0), barrel(ms, 1), lamp_post(ms), buckets(ms), woodstack(ms), sawhorse(ms),
-               seat_crate(ms), pots(ms, 0), pots(ms, 1), duck(ms)]
+               seat_crate(ms), pots(ms, 0), pots(ms, 1), duck(ms), slip(ms), slip(ms, True)]
     width, x, y, row_h = 1000, 6, 6, 0
     placed = []
     for item in pieces:

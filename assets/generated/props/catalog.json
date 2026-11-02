@@ -3190,6 +3190,26 @@
    "res://assets/generated/props/tal/st_sign_two.png"
   ]
  },
+ "tal/st_slip_open": {
+  "anchor": [
+   6,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/st_slip_open.png"
+  ]
+ },
+ "tal/st_slip_struck": {
+  "anchor": [
+   6,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/st_slip_struck.png"
+  ]
+ },
  "tal/st_stall_cloth": {
   "anchor": [
    44,
