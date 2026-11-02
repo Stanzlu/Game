@@ -12,6 +12,17 @@ stump and a stack of stones, apple trees, hay, the parapet of a stone bridge, th
 with the smoke of its chimney), and the roadworks at the end of the way: a rope across it on two posts and a heap of
 cobbles with a hammer. No prop has a light. The ones that the map places under `if`/`unless` carry no shadow in the
 catalog (shadow cells feed the baked stamp of the map).
+
+Stadt (S2): the town of the real world, Elysia's market with a contradiction (nothing repeats, nothing is symmetric, every
+house leans a little and every wall is patched with another stone). Fronts of ten houses, a florist's and a workshop's
+(each shop with its own extras: awning, sign, pots; saw, hoist, sawdust), the town hall with a parapet a goat can stand on,
+the wall (four-cell runs, a run for the side walls, corner towers), the gate with its low open arch and the guard's hut,
+the fountain (and a patch with the worn hollows that lies over its rim), the notice board with its sixteen sheets, two
+stalls, the three stations of "Ein perfekter Tag" (wreath, lectern, table with bread and salt and sparrows), crates,
+barrels, dark lamp posts, pails of peonies, a woodstack, a sawhorse, pots and the crate Lio sits on. Houses and shops carry no
+shadow in the catalog (their foot is the map's solid ground); a few things stand outside the image grid on purpose
+(anchors below the picture: the rim patch and the seat crate sit over or under something that lies on another cell).
+Called from make_sprites.build(); `--preview out.png` draws Act IV's pieces, `--preview-town out.png` the town's.
 """
 import os
 import sys
@@ -1774,6 +1785,34 @@ def preview(path):
     sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
 
 
+def preview_town(path):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_sprites as ms
+    from PIL import Image
+    pieces = [town_hall(ms), gate(ms), guard_hut(ms), wall_tower(ms), _wall_h(ms, 1101, 0), _wall_h(ms, 1102, 1), _wall_h(ms, 1103, 2),
+              _wall_v(ms, 1104)]
+    pieces += [town_house(ms, seed, cells, floors, style)[0] for _, seed, cells, floors, style in HOUSES]
+    pieces += [town_house(ms, *FLORIST)[0], town_house(ms, *WORKSHOP)[0]]
+    pieces += [board(ms), fountain(ms), fountain_rim(ms), stall(ms, 0), stall(ms, 1), wreath(ms), lectern(ms), bread_table(ms),
+               crate(ms, 0), crate(ms, 1), barrel(ms, 0), barrel(ms, 1), lamp_post(ms), buckets(ms), woodstack(ms), sawhorse(ms),
+               seat_crate(ms), pots(ms, 0), pots(ms, 1)]
+    width, x, y, row_h = 1000, 6, 6, 0
+    placed = []
+    for item in pieces:
+        img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+        if x + img.width + 6 > width:
+            x, y, row_h = 6, y + row_h + 6, 0
+        placed.append((img, x, y))
+        x += img.width + 6
+        row_h = max(row_h, img.height)
+    sheet = Image.new("RGBA", (width, y + row_h + 6), (92, 120, 84, 255))
+    for img, px, py in placed:
+        sheet.alpha_composite(img, (px, py))
+    sheet.resize((sheet.width * 2, sheet.height * 2), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == "--preview-town":
+        preview_town(sys.argv[2])

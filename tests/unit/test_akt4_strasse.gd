@@ -16,7 +16,6 @@ const CUES: PackedStringArray = [
 	"field_notice",
 	"milestone",
 	"view_town",
-	"town_wait",
 ]
 
 
@@ -41,7 +40,7 @@ func _ids() -> PackedStringArray:
 	return found
 
 
-func test_the_file_tells_nine_cues_in_draft_with_unique_ids() -> void:
+func test_the_file_tells_eight_cues_in_draft_with_unique_ids() -> void:
 	var source := FileAccess.get_file_as_string(FILE)
 	var cues := RegEx.create_from_string("(?m)^~ ([a-z_]+)$").search_all(source)
 	var names: PackedStringArray = []
@@ -49,7 +48,7 @@ func test_the_file_tells_nine_cues_in_draft_with_unique_ids() -> void:
 		names.append(hit.get_string(1))
 	assert_eq(names, CUES, "the cues of the contract, in this order")
 	var ids := _ids()
-	assert_eq(ids.size(), 26, "twenty-four lines and two answers")
+	assert_eq(ids.size(), 24, "twenty-two lines and two answers")
 	var unique := {}
 	for id in ids:
 		unique[id] = true
@@ -59,9 +58,7 @@ func test_the_file_tells_nine_cues_in_draft_with_unique_ids() -> void:
 
 
 func test_every_cue_can_be_read_again_and_says_the_same_twice() -> void:
-	for cue: String in [
-		"signpost_tal", "signpost", "goat_prints", "scarecrow", "field_notice", "town_wait"
-	]:
+	for cue: String in ["signpost_tal", "signpost", "goat_prints", "scarecrow", "field_notice"]:
 		var before := WorldState.state.flags.duplicate()
 		var first := await DialogueWalk.play(FILE, cue)
 		assert_gte(first.size(), 2, "%s: two lines at least" % cue)
@@ -119,22 +116,16 @@ func test_the_goat_is_a_trace_and_the_stone_is_a_trace_of_the_world() -> void:
 		assert_false(stone.contains(word), "the stone gives no reason: " + word)
 
 
-func test_the_paving_works_only_hold_the_way_and_promise_nothing() -> void:
-	var lines := await DialogueWalk.play(FILE, "town_wait")
-	assert_eq(lines.size(), 2)
-	for line in lines:
-		for word: String in ["bald", "morgen", "gleich", "später", "wieder"]:
-			assert_false(line.to_lower().contains(word), "no promise: " + word)
-
-
 # --- Quest, journal and the bell --------------------------------------------------------------
 
 
-func test_the_quest_has_one_stage_that_counts_as_the_walk_so_far() -> void:
+func test_the_quest_starts_on_the_road_and_goes_on_to_the_town() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_not_null(quest)
 	assert_eq(quest.first_stage().id, "west")
-	assert_true(quest.first_stage().is_final(), "S2 hangs the next stage on it")
+	assert_false(quest.first_stage().is_final(), "the town is the next stage (S2)")
+	assert_true(quest.can_advance("west", "town"))
+	assert_true(quest.stage("town").is_final())
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_TITLE"), "QUEST_MAIN_CITY_WAY_TITLE")
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_WEST"), "QUEST_MAIN_CITY_WAY_WEST")
 	assert_true(WorldState.start_quest(QUEST))

@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt4/stadt_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+
+[node name="Stadt" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/stadt.txt"
+player_sheet = ExtResource("2_sheet")
+wind_leaves = true
+day_preset = "morgen"
+cloud_shadows = 0.012
+dust = true

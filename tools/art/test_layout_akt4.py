@@ -445,6 +445,7 @@ class StadtLayoutTests(unittest.TestCase):
             params = symbols[glyph]["params"]
             self.assertTrue(symbols[glyph]["prop"].endswith("npc_walker.tscn"), glyph)
             self.assertEqual(params["sheet"], "res://entities/character/sheet_%s_look.tres" % sheet)
+            self.assertTrue(os.path.exists(mapfile.res_path(params["sheet"])), "the figure's sheet: " + sheet)
             self.assertIn(params["face"], "nesw")
             self.assertEqual(bool(params.get("sit")), glyph in "ML", "Mira sits on the fountain's rim and Lio on his crate: " + glyph)
             self.assertIn(_ground(symbols, glyph), "_,", glyph)
