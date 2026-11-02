@@ -163,7 +163,12 @@
      "ref": "Elysianer-Routen gespiegelt (ADR-031)"
     }
    ],
-   "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife."
+   "payoff": "Die Wirklichkeit wiederholt sich nie wörtlich; in Akt VI (Rückkehr nach Elysia) erkennt die Spielerin die Schleife. In der Stadt (Akt IV, S2) wechseln Lio, die Bürgerin und die Beamtin ihre Zeilen bei jedem Ansprechen (`stadt_lio_6`, `stadt_cit_1`, `rath_clerk_3`): nichts wiederholt sich wörtlich (Brief O19).",
+   "payoff_lines": [
+    "stadt_lio_6",
+    "stadt_cit_1",
+    "rath_clerk_3"
+   ]
   },
   {
    "id": "loop-musik",
@@ -273,11 +278,14 @@
      "ref": "elysia.asked_for_no"
     }
    ],
-   "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`).",
+   "payoff": "Miras erstes Nein (`tal_mira_7`) und der Satz, der danach hängen bleibt (`tal_mira_no_2`); das Haus, das einem geschenkt wird (`haus_bed_5`). In der Stadt (Akt IV, S2) ist es umgekehrt: man sagt Nein, noch bevor man fragt (`stadt_mira_5`), die Torwächterin hat Ziegen verboten und einer Ziege Nein gesagt (`stadt_gate_3`), die Bürgerin hat einen schlechten Tag (`stadt_cit_2`), und niemand wird dafür beschämt.",
    "payoff_lines": [
     "tal_mira_7",
     "tal_mira_no_2",
-    "haus_bed_5"
+    "haus_bed_5",
+    "stadt_mira_5",
+    "stadt_gate_3",
+    "stadt_cit_2"
    ]
   },
   {
@@ -639,9 +647,17 @@
     {
      "type": "flag",
      "ref": "melody.hermit_flute"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_lio_3"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.lio_street"
     }
    ],
-   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich)."
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31), das Konzert (S6) bringt die dritte Melodie, `melody.lio_concert`."
   },
   {
    "id": "spuren-der-welt",
@@ -712,9 +728,108 @@
     {
      "type": "flag",
      "ref": "fragment.milestone"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_rim_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.fountain_rim"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht."
+  },
+  {
+   "id": "gefaelliger-liste",
+   "kind": "vorausdeutung",
+   "title": "Die Liste des Gefälligen (Zettel am Brett)",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "stadt_board_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_board_3"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_board_4"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_gef_3"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_gef_4"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_gef_6"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_gef_7"
+    },
+    {
+     "type": "flag",
+     "ref": "city.gef_met"
+    }
+   ],
+   "payoff": "Das Brett am Platz hat sechzehn offene Zettel in vielen Handschriften, durchgestrichene mit einem »Tut mir leid« daneben und einen leeren, der trotzdem hängt; der Gefällige entschuldigt sich, bevor er bittet, und hat noch keine Aufgabe für sie (Akt IV, S2). Die Signature-Begegnung in S5 lässt siebzehn, achtzehn und neunzehn dazuwachsen; Fortschritt entsteht durch Priorisieren und Ablehnen (Bible §14), und das Brot am Ende ist die Antwort auf ein Nein. Sein Warum zeigen Dinge in seiner Küche (Zettel in fremder Handschrift), keine Zeile erklärt es (Bible §51).",
+   "payoff_lines": [
+    "stadt_gef_4",
+    "stadt_board_4"
+   ]
+  },
+  {
+   "id": "mira-stadt",
+   "kind": "vorausdeutung",
+   "title": "Mira in der Stadt",
+   "bible": "§13, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "stadt_mira_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_mira_3"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_mira_5"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_mira_6"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_mira_7"
+    }
+   ],
+   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste, die ohne Mühe Nein sagt (S5); der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus."
+  },
+  {
+   "id": "schluessel-passt",
+   "kind": "vorausdeutung",
+   "title": "Der Schlüssel, der »Passt« sagt",
+   "bible": "§31, §42",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "rath_lost_3"
+    },
+    {
+     "type": "flag",
+     "ref": "city.lost_key"
+    }
+   ],
+   "payoff": "Offen: der Zettel am Ring nennt kein Schloss (Fundbüro, Akt IV, S2). Das Nachspiel (Bible §42, das Rathaus ist besetzt) darf ihn einlösen oder nicht; Kuriositäten sind teilweise bedeutungsvoll, teilweise kompletter Unsinn (Bible §31)."
   },
   {
    "id": "antreiber-warum",
@@ -926,9 +1041,29 @@
     {
      "type": "flag",
      "ref": "city.bell_taken"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_gate_3"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_mira_6"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_goat_1"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_goat_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_goat_3"
     }
    ],
-   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke, die Haken um die Pfützen schlagen und doch nach Westen gehen, und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach, S6 auf der Bühne."
+   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke, die Haken um die Pfützen schlagen und doch nach Westen gehen, und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach: die Torwächterin hat ihr Nein gesagt, und sie ist über die Mauer gegangen (`stadt_gate_3`), Mira fragt nicht mehr, wie sie auf das Rathausdach kam (`stadt_mira_6`), und die Ziege steht auf dem First und meckert in einem Rhythmus, der nach einer Liste klingt, welche, steht nirgends (`stadt_goat_3`). Die Stationen von „Ein perfekter Tag“ zeigen nur, was sie angefressen oder umgestoßen hat, nie sie dabei. S6 sieht sie auf der Bühne."
   },
   {
    "id": "kartoffel",
@@ -1939,6 +2074,56 @@
    "flag": "city.view_seen",
    "axis": "Wahrnehmung",
    "meaning": "Sie hat am Westende der Straße den Rauch der Stadt hinter der Hecke gesehen: viele Fäden statt des einen über dem Haus (Akt IV, S1). Die Szene liest es und markiert den Beat strasse_view."
+  },
+  {
+   "flag": "city.gef_met",
+   "axis": "Beschützer",
+   "meaning": "Sie hat am Zettelbrett den Gefälligen getroffen: er entschuldigt sich, bevor er bittet, hat sechzehn Kleinigkeiten und noch keine Aufgabe für sie (Akt IV, S2). Die Signature-Begegnung mit der Liste folgt in S5; die Spielerin hat nichts zugesagt."
+  },
+  {
+   "flag": "melody.lio_street",
+   "axis": "Musik",
+   "meaning": "Sie hat Lio auf seiner Kiste spielen gehört: die erste Melodie von Akt IV, ein Ton geht daneben und die Phrase läuft trotzdem zu Ende (S2, hörbar, kein Fragment, Brief O10). Das Konzert (S6) hat seine eigene Melodie, `melody.lio_concert`."
+  },
+  {
+   "flag": "fragment.fountain_rim",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat die Mulden im Brunnenrand gesehen: für einen Atemzug glänzen sie nass, als hätte eben jemand abgesetzt (Spur der Welt, Akt IV, S2; kein Bild des Kindes)."
+  },
+  {
+   "flag": "city.day_wreath",
+   "axis": "Gag",
+   "meaning": "Sie hat am Brunnen den angefressenen Kranz gesehen (Station 1 von „Ein perfekter Tag“, Akt IV, S2). Die Beamtin im Rathaus liest alle drei Stationen."
+  },
+  {
+   "flag": "city.day_lectern",
+   "axis": "Gag",
+   "meaning": "Sie hat vor dem Rathaus das Rednerpult mit dem kurzen Bein gesehen, das mit Büchern unterlegt ist (Station 2 von „Ein perfekter Tag“, Akt IV, S2)."
+  },
+  {
+   "flag": "city.day_table",
+   "axis": "Gag",
+   "meaning": "Sie hat den Tisch mit Brot und Salz gesehen, auf dem Spatzen sitzen (Station 3 von „Ein perfekter Tag“, Akt IV, S2). Sind alle drei Stationen gesehen, beschließt die Beamtin den Tag: der Bürgermeister kommt nicht, und es ist ein schöner Tag."
+  },
+  {
+   "flag": "city.lost_glove",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat im Fundbüro des Rathauses den einzelnen Handschuh genommen (Kuriosität, Akt IV, S2): „Das gehört niemandem mehr.“ Jedes der vier Dinge gibt es einmal."
+  },
+  {
+   "flag": "city.lost_key",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat im Fundbüro den Messingschlüssel mit dem Zettel »Passt« genommen (Kuriosität, Akt IV, S2); wohin er passt, steht nirgends."
+  },
+  {
+   "flag": "city.lost_buttons",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat im Fundbüro die Dose mit Knöpfen genommen, von denen keiner dem anderen gleicht (Kuriosität, Akt IV, S2)."
+  },
+  {
+   "flag": "city.lost_cup",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat im Fundbüro die Tasse mit dem Sprung genommen (Kuriosität, Akt IV, S2). Sind alle vier genommen, ist die Nebenquest „Das Fundbüro“ fertig und das Regal leer."
   }
  ]
 }

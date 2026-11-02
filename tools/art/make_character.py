@@ -314,12 +314,133 @@ DESIGNS = {
         "bag": "backpack",
         "work": True,
     },
+    # --- Akt IV, the town (S2): people with bad days, full hands and a hat with a feather. None is symmetric:
+    # the keys hang on one hip, the note sits behind one ear, the hat is tilted, the basket hangs from one arm.
+    # The gatekeeper of the town: a steel-grey coat to the knee with brass buttons, a flat cap, the arms crossed
+    # over the chest and a bunch of keys on one hip; the eyebrows say the day has been long (Akt IV, O19).
+    "torwaechterin": {
+        "skin": ramp("#8a5a54", "#c48a78", "#e8b8a0", "#fbdcc8"),
+        "hair": ramp("#1c1a20", "#363440", "#585566", "#827f94", "#b4b1c4"),
+        "top": ramp("#1c2128", "#303a46", "#4e5c6c", "#7488a0"),
+        "inner": ramp("#7a6e5a", "#b0a48a", "#dcd2b8", "#f6efdc"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#16161c", "#26262e", "#3a3a46", "#52525e"),
+        "boots": ramp("#14100e", "#2c2018", "#4a3626", "#6e5440"),
+        "brass": ramp("#3e260c", "#7c5018", "#bd8a28", "#ecc050"),
+        "hat": ramp("#12161c", "#222a34", "#3a4656", "#566a80"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d08a7c"),
+        "outline": pa.hex_rgb("#161a22"),
+        "hair_style": "crew",
+        "outfit": "jacket",
+        "build": "athletic",
+        "skirt": 5,
+        "coat": True,
+        "arms_pose": "crossed",
+        "keys": True,
+        "hat_kind": "cap",
+        "brows": "stern",
+        "bag": "none",
+    },
+    # The one with the list: a dusty-blue cardigan, a cream apron, notes of every colour stuck on him and one behind
+    # his ear; his hands are never free (a stack of papers, a parcel on top).
+    "gefaelliger": {
+        "skin": ramp("#7a4a3c", "#b87a5a", "#e0a47e", "#f8cca6"),
+        "hair": ramp("#3a2a18", "#6a4e2a", "#9a7840", "#c8a460", "#e8cf8c"),
+        "top": ramp("#1e2e48", "#34507a", "#5882b0", "#8cb4dc"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#3a2412", "#6a4426", "#9a6c3e", "#c89a60"),
+        "pants": ramp("#2a2420", "#443a30", "#665848", "#887866"),
+        "boots": ramp("#2a1a14", "#4a3226", "#6e4e3a", "#94705a"),
+        "paper": ramp("#8a8678", "#bdb8a6", "#e6e2d2", "#ffffff"),
+        "parcel": ramp("#3a2412", "#6a4426", "#9a6c3e", "#c89a60"),
+        "notes": [pa.hex_rgb("#f2d24e"), pa.hex_rgb("#ee8aa4"), pa.hex_rgb("#7ac0e8")],
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#e8887a"),
+        "outline": pa.hex_rgb("#1c2438"),
+        "hair_style": "tousled",
+        "outfit": "jacket",
+        "carry": True,
+        "apron_long": True,
+        "ear_item": "note",
+        "bag": "none",
+    },
+    # Lio: a violet jerkin over a cream shirt, a straw-brown hat with a red feather (tilted), a lute on his back,
+    # and in the sit row the lute lies across his lap: he sits to play.
+    "lio": {
+        "skin": ramp("#6a3a2c", "#a2603e", "#cf8c60", "#f0b88a"),
+        "hair": ramp("#1a1210", "#33241c", "#553a28", "#7e583a", "#a8825a"),
+        "top": ramp("#2a1c5a", "#4a38a0", "#7a64d4", "#aea0f4"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#4a2a10", "#7a4a1c", "#b0762e", "#dca458"),
+        "pants": ramp("#4a3822", "#7a5e3a", "#a8884e", "#d0b070"),
+        "boots": ramp("#3a2418", "#5e3c28", "#8a5c3e", "#b48660"),
+        "hat": ramp("#3a2a18", "#6a4e2a", "#a07a42", "#d4aa64"),
+        "feather": ramp("#6a1210", "#b02a1e", "#e85a30", "#ffa060"),
+        "wood": ramp("#3a1e0c", "#74421c", "#b0742e", "#e0a85a"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#e8887a"),
+        "outline": pa.hex_rgb("#241040"),
+        "hair_style": "tousled",
+        "outfit": "jacket",
+        "lute": True,
+        "hat_kind": "feather",
+        "bag": "none",
+    },
+    # The clerk: a grey dress with a white collar, sleeve guards from elbow to wrist, round glasses, a pencil behind
+    # one ear and a stamp with red ink in her left hand; hair in a tight bun.
+    "beamtin": {
+        "skin": ramp("#8a5a50", "#c28a74", "#e8b498", "#fbd8c0"),
+        "hair": ramp("#2e2a2a", "#58504c", "#8a807a", "#b8aea6", "#e0d8d0"),
+        "top": ramp("#34322e", "#5a5750", "#8a8678", "#bab5a4"),
+        "inner": ramp("#9a9aa6", "#c8c8d2", "#eeeef4", "#ffffff"),
+        "belt": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "pants": ramp("#34322e", "#5a5750", "#8a8678", "#bab5a4"),
+        "boots": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "guards": ramp("#14100e", "#2a2220", "#443832", "#625248"),
+        "frame": ramp("#1a1210", "#3a2a1c", "#8a6a38", "#c8a050"),
+        "wood": ramp("#3a1e0c", "#74421c", "#b0742e", "#e0a85a"),
+        "ink": ramp("#4a0e10", "#8a1c1c", "#c43030", "#ee6a58"),
+        "paper": ramp("#8a8678", "#bdb8a6", "#e6e2d2", "#ffffff"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#d89080"),
+        "outline": pa.hex_rgb("#26222a"),
+        "hair_style": "bun",
+        "outfit": "dress",
+        "skirt": 6,
+        "glasses": True,
+        "ear_item": "pencil",
+        "stamp": True,
+        "bag": "none",
+    },
+    # A citizen: an oatmeal sweater, indigo trousers, a chin-length bob with a side parting and a wicker basket
+    # on one arm with a leek and a loaf in it. Nobody in particular; that is the point.
+    "buerger": {
+        "skin": ramp("#7a4638", "#b8764f", "#dc9f72", "#f6c9a0"),
+        "hair": ramp("#2a1810", "#4e3020", "#7a5236", "#a87a52", "#d0a47c"),
+        "top": ramp("#4a3c2a", "#7a6446", "#aa9066", "#d4bc8c"),
+        "inner": ramp("#9a9284", "#cfc6b4", "#f0e8d6", "#ffffff"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#1a2236", "#2c3858", "#445280", "#6674a0"),
+        "boots": ramp("#1e1418", "#3d2822", "#664232", "#90674a"),
+        "wicker": ramp("#4a3010", "#7e5a20", "#b88a38", "#e0b860"),
+        "leek": ramp("#173020", "#2c5a30", "#4c8a44", "#8cc460"),
+        "bread": ramp("#5a3410", "#8e5a1c", "#c48a38", "#ecc070"),
+        "eye": pa.hex_rgb("#1e1630"),
+        "blush": pa.hex_rgb("#e0907e"),
+        "outline": pa.hex_rgb("#2a1e18"),
+        "hair_style": "bob",
+        "outfit": "jacket",
+        "basket": True,
+        "bag": "none",
+    },
 }
 
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
-SOFT = ("player", "mira", "child", "antreiber", "einsiedler")
+SOFT = ("player", "mira", "child", "antreiber", "einsiedler", "torwaechterin", "gefaelliger", "lio", "beamtin",
+        "buerger")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 
@@ -415,6 +536,14 @@ def limb(c, x0, y0, x1, y1, width):
     return m
 
 
+def seg(c, x0, y0, x1, y1, r):
+    """Mask of a thick line segment from (x0, y0) to (x1, y1): every pixel whose centre lies within `r` of it."""
+    px, py = c.xx + 0.5, c.yy + 0.5
+    dx, dy = x1 - x0, y1 - y0
+    t = np.clip(((px - x0) * dx + (py - y0) * dy) / max(dx * dx + dy * dy, 1e-6), 0, 1)
+    return np.hypot(px - (x0 + t * dx), py - (y0 + t * dy)) <= r
+
+
 class Figure:
     """Draws one frame of a design. Parts go back to front; `line=True` adds inner contours."""
 
@@ -449,6 +578,263 @@ class Figure:
     def cyl(self, x0, x1, base=0.18, amt=0.78):
         return base + amt * self.c.cylinder(x0, x1)
 
+    # --- Akt IV: skirts and coats, crossed arms, carried things, the lute, the basket and the stamp ---
+    def skirt(self, tx0, tx1, ty1):
+        """A skirt or the tail of a long coat: from the waist down to the knee, flaring, swinging with the front leg."""
+        d, c, p = self.d, self.c, self.p
+        rows = d["skirt"]
+        top = ty1 - 1
+        bottom = ty1 + rows
+        swing = p["legs"][0][0] * 0.4 if (p["gait"] and self.side) else 0.0
+        mid = (tx0 + tx1) / 2.0 + swing * np.clip((c.yy - top) / rows, 0, 1)
+        half = (tx1 - tx0) / 2.0 + 0.2
+        flare = np.clip((c.yy - top) * (0.5 if self.side else 0.45), 0, 4)
+        skirt = (np.abs(c.xx + 0.5 - mid) <= half + flare) & (c.yy >= top) & (c.yy < bottom)
+        self.part(skirt, "top", self.cyl(tx0 - 3, tx1 + 3, 0.12, 0.8), line=True)
+        self.part(skirt & (c.yy == bottom - 1), "top", 0.14)  # the hem, a darker line
+        if d.get("coat") and not self.back and not self.side:
+            # the front seam of the coat and its brass buttons
+            seam = (np.abs(c.xx + 0.5 - (mid + (1 if self.three else 0))) < 0.6) & (c.yy >= ty1 - 4) & (c.yy < bottom - 1)
+            self.part(seam, "top", 0.06)
+            for by in (ty1 - 2, ty1 + 1):
+                dot = c.rect(mid - 0.5 + (1 if self.three else 0), by, mid + 0.5 + (1 if self.three else 0), by + 1)
+                self.part(dot, "brass", 0.85)
+
+    def apron_long(self, tx0, tx1, ty1):
+        """A long apron down to the knees over the trousers, with one big pocket and notes sticking out of it."""
+        c, d = self.c, self.d
+        if self.side:
+            ap = c.rect(tx1 - 4.5, ty1 - 2, tx1 + 1.0, ty1 + 4)
+        else:
+            sh = 1 if self.three else 0
+            ap = c.rect(tx0 + 1 + sh, ty1 - 2, tx1 - 0.5, ty1 + 4)
+        self.part(ap, "inner", self.cyl(tx0, tx1, 0.45, 0.5), line=True)
+        self.part(ap & (c.yy == ty1 + 3), "inner", 0.3)
+        if not self.side:
+            pocket = c.rect(tx0 + 2.5, ty1 + 0.5, tx0 + 6.5, ty1 + 2.5)
+            self.part(pocket, "inner", 0.3)
+            self.part(c.rect(tx0 + 2.5, ty1 + 0.5, tx0 + 6.5, ty1 + 1.0), "inner", 0.9)
+            c.fill(c.rect(tx0 + 3, ty1 - 0.5, tx0 + 4, ty1 + 0.5), d["notes"][1])
+            c.fill(c.rect(tx0 + 5, ty1 - 1, tx0 + 6, ty1 + 0.5), d["notes"][0])
+
+    def keys(self, tx0, tx1, ty1, side):
+        """A ring with a few keys on one hip."""
+        c = self.c
+        x = (tx0 + (3 if side else 1)) if not self.three else tx0 + 1
+        ring = c.rect(x, ty1 - 2, x + 2, ty1 - 1) | c.rect(x, ty1 - 1, x + 1, ty1)
+        self.part(ring, "brass", 0.9)
+        for k, (dx, ln) in enumerate(((0, 4), (2, 3))):
+            key = c.rect(x + dx, ty1, x + dx + 1, ty1 + ln)
+            self.part(key, "brass", 0.85 - 0.3 * k)
+            self.part(c.rect(x + dx + 1, ty1 + ln - 1, x + dx + 2, ty1 + ln), "brass", 0.5)
+
+    def sleeve(self, mask, tone, hand=None, guard_from=None):
+        """An arm of the coat; with `guards` the part from `guard_from` down is the sleeve guard."""
+        d, c = self.d, self.c
+        self.part(mask, "top", tone, line=True)
+        if ("guards" in d) and guard_from is not None:
+            self.part(mask & (c.yy >= guard_from), "guards", tone - 0.05, line=True)
+        if hand is not None:
+            self.part(hand, "skin", tone)
+
+    def arms_crossed(self, cx, tx0, tx1, ty0, lean, ox):
+        """Arms folded over the chest. Front: the upper arms hang from the shoulders and the forearms lie across,
+        the right one over the left, its hand tucked under the other arm. Side: one forearm lies across the chest."""
+        c = self.c
+        if self.side:
+            x0 = cx - 0.5 + lean
+            upper = limb(c, x0, ty0 + 1, x0 - 0.5, ty0 + 5, 2)
+            fore = c.rect(x0 - 2, ty0 + 4, x0 + 4.5, ty0 + 6.5)
+            self.sleeve(upper | fore, 0.65, guard_from=ty0 + 4)
+            self.part(c.rect(x0 + 3.5, ty0 + 4, x0 + 5.5, ty0 + 6.5), "skin", 0.65)
+            return
+        shift = 1 if self.three else 0
+        left_upper = c.rect(tx0 - 2 - ox, ty0 + 1, tx0 - ox, ty0 + 6)
+        left_fore = c.rect(tx0 - 2 - ox, ty0 + 5, tx1 - 3 + shift, ty0 + 7.5)
+        right_upper = c.rect(tx1 + ox, ty0 + 1, tx1 + 2 + ox, ty0 + 5)
+        right_fore = c.rect(tx0 + 2, ty0 + 4, tx1 + 2 + ox, ty0 + 6.5)
+        self.sleeve(left_upper | left_fore, 0.72, guard_from=ty0 + 4)
+        self.sleeve(right_upper, 0.4, guard_from=ty0 + 4)
+        self.sleeve(right_fore, 0.56, guard_from=ty0 + 4)
+        self.part(c.rect(tx0 + 0.5, ty0 + 4, tx0 + 2.5, ty0 + 6.5), "skin", 0.6)
+
+    def arms_carry(self, cx, tx0, tx1, ty0, lean):
+        """Both arms hold a stack of papers with a parcel on top, notes of every colour sticking out of it."""
+        d, c = self.d, self.c
+        if self.side:
+            x0 = cx - 0.5 + lean
+            arm = limb(c, x0, ty0 + 1, x0 + 1, ty0 + 6, 2)
+            bx0, bx1 = x0 + 1.5, x0 + 7.5
+            by0 = ty0 + 3
+            far = False
+        else:
+            shift = 1 if self.three else 0
+            for ax, tone in ((tx0 - 1, 0.72), (tx1 + 1, 0.4)):
+                self.sleeve(limb(c, ax, ty0 + 1, ax, ty0 + 7, 2), tone, guard_from=ty0 + 4)
+            bx0, bx1 = cx - 4.5 + shift, cx + 4.5 + shift
+            by0 = ty0 + 3
+            far = True
+        # the stack: sheets (light rows with a darker edge), a cord, a parcel on top with a string
+        stack = c.rect(bx0, by0 + 2, bx1, by0 + 6)
+        rows = ((c.yy - by0 - 2) % 2) == 1
+        self.part(stack, "paper", np.where(rows, 0.5, 0.9), line=True)
+        self.part(stack & (c.yy == by0 + 5), "paper", 0.18)
+        parcel = c.rect(bx0 + 1, by0, bx1 - 1.5, by0 + 2)
+        self.part(parcel, "parcel", np.where(c.yy == by0, 0.9, 0.55), line=True)
+        self.part(c.rect((bx0 + bx1) / 2 - 0.5, by0, (bx0 + bx1) / 2 + 0.5, by0 + 2), "belt", 0.25)
+        for k, col in enumerate(d["notes"]):  # the notes: little coloured corners along the edge of the stack
+            nx = bx0 + 1 + k * (bx1 - bx0 - 3) / 2.0
+            c.fill(c.rect(round(nx), by0 + 3, round(nx) + 2, by0 + 4), col)
+        # the hands at the ends of the stack
+        if far:
+            self.part(c.rect(bx0 - 1, by0 + 4, bx0 + 1, by0 + 6.5), "skin", 0.7)
+            self.part(c.rect(bx1 - 1, by0 + 4, bx1 + 1, by0 + 6.5), "skin", 0.4)
+        else:
+            self.part(c.rect(bx0 - 1.5, by0 + 4, bx0 + 1, by0 + 6.5), "skin", 0.65)
+
+    def lute_shape(self, bx, by, rx, ry, nx, ny, head, hands=()):
+        """A lute: neck, body with a sound hole and a bridge, a bent head."""
+        c = self.c
+        body = c.ellipse(bx, by, rx, ry)
+        neck = seg(c, bx, by, nx, ny, 1.0)
+        self.part(neck & ~body, "wood", 0.2 + 0.2 * (c.xx < bx), line=True)
+        self.part(seg(c, nx, ny, head[0], head[1], 1.0), "wood", 0.1, line=True)
+        self.part(body, "wood", 0.3 + 0.7 * c.sphere(bx - 1.2, by - 1.4, rx * 1.2, ry * 1.2), line=True)
+        self.part(body & ~c.ellipse(bx, by, rx - 0.9, ry - 0.9), "wood", 0.18)  # the rim
+        c.fill(c.ellipse(bx + 0.4, by - 0.4, 1.2, 1.2), self.d["wood"][0])  # the sound hole
+        for hx, hy in hands:
+            self.part(c.rect(hx, hy, hx + 2, hy + 2), "skin", 0.6, line=True)
+
+    def lute_back(self, cx, ty0, ty1, lean):
+        """Slung on the back: from the front only the bulge of the body at the hip and the neck over the shoulder;
+        in profile the body hangs behind the back and the neck rises behind the head."""
+        if self.side:
+            self.lute_shape(cx - 4.0 + lean, ty0 + 5.5, 2.6, 4.6, cx - 5.5 + lean, ty0 - 4.5, (cx - 7.5 + lean, ty0 - 6))
+        else:
+            sh = 1 if self.three else 0
+            self.lute_shape(cx - 3.2 + sh, ty1 - 1.5, 3.8, 4.4, cx + 7.0 + sh, ty0 - 4.5, (cx + 9.0 + sh, ty0 - 5.5))
+
+    def strap(self, tx0, tx1, ty0, ty1, torso):
+        c = self.c
+        strap = np.abs((c.xx + 0.5 - (tx1 - 1)) + (c.yy - ty0) * 0.9) <= 0.7
+        strap &= (c.yy >= ty0) & (c.yy < ty1 - 1) & torso
+        self.part(strap, "belt", 0.55)
+
+    def lute_back_view(self, cx, ty0, ty1):
+        """Seen from behind the lute lies across the back, its neck up over one shoulder."""
+        sh = 1 if self.back3 else 0
+        self.lute_shape(cx - 0.5 + sh, ty0 + 5.5, 4.6, 4.8, cx + 4.5 + sh, ty0 - 4.5, (cx + 6.5 + sh, ty0 - 5.5))
+
+    def lute_lap(self, cx, ty0, ty1, lean):
+        """Played sitting down: the body in the lap, the neck pointing out to one side, a hand on it and one over the strings."""
+        if self.side:
+            self.lute_shape(cx + 2.0 + lean, ty1 - 1.5, 4.4, 3.4, cx + 8.5 + lean, ty0 + 2.5, (cx + 9.0 + lean, ty0 + 0.5),
+                            hands=((cx + 6.0 + lean, ty0 + 5), (cx + 1.0 + lean, ty1 - 4)))
+        elif self.back:
+            self.lute_shape(cx - 7.5, ty0 + 6, 3.8, 3.0, cx - 10, ty0 + 2, (cx - 10.5, ty0 + 0.5))
+        else:
+            sh = 1 if self.three else 0
+            self.lute_shape(cx + 2.5 + sh, ty1 - 1.5, 4.8, 3.6, cx - 9.0 + sh, ty0 + 1.5, (cx - 10.0 + sh, ty0 - 1.0),
+                            hands=((cx - 6.0 + sh, ty0 + 3), (cx + 0.5 + sh, ty1 - 4)))
+
+    def basket(self, cx, tx0, tx1, ty0, lean):
+        """A wicker basket hanging from the near hand, a leek and a loaf sticking out of it."""
+        c = self.c
+        if self.side:
+            x = cx - 0.5 + lean
+        else:
+            x = tx1 + 1.5 + (1 if self.three else 0)
+        top = ty0 + 8
+        body = c.rect(x - 3.5, top, x + 3.5, top + 4)
+        body &= ~((c.yy == top + 3) & ((c.xx < x - 3) | (c.xx >= x + 2.5)))
+        weave = ((c.xx.astype(int) + c.yy.astype(int)) % 2) == 0
+        self.part(c.rect(x - 1.5, top - 3, x + 0.5, top), "leek", 0.7, line=True)  # a leek
+        self.part(c.rect(x - 0.5, top - 4, x + 0.5, top - 2), "leek", 0.35)
+        loaf = c.ellipse(x + 1.8, top - 0.2, 2.2, 1.5)
+        self.part(loaf, "bread", 0.2 + 0.7 * c.sphere(x + 1, top - 1, 2.6, 2.0), line=True)
+        self.part(body, "wicker", np.where(weave, 0.62, 0.42) + 0.2 * (c.yy < top + 1), line=True)
+        handle = (np.abs(np.hypot(c.xx + 0.5 - x, (c.yy + 0.5 - top) * 1.4) - 3.0) < 0.7) & (c.yy < top)
+        self.part(handle, "wicker", 0.85)
+
+    def stamp(self, tx0, ty0, lean, ox, swing):
+        """A rubber stamp in the near hand: a wooden handle, a pad with red ink below it."""
+        c = self.c
+        if self.side:
+            x = int(round(0.5 + 12.5 + lean + swing[0]))  # the near hand of the side view
+            y = ty0 + 6
+        else:
+            x = tx0 - 1 - ox
+            y = ty0 + 6 + int(np.clip(swing[0], -1, 2))
+        self.part(c.rect(x - 1, y - 2, x + 1, y), "wood", 0.8, line=True)  # the knob
+        self.part(c.rect(x - 2, y + 2, x + 2, y + 3), "wood", 0.5)  # the plate
+        self.part(c.rect(x - 2, y + 3, x + 2, y + 4), "ink", 0.7, line=True)  # the pad with red ink
+        self.part(c.rect(x - 1, y, x + 1, y + 2), "skin", 0.65)  # the hand around the handle
+
+    def hat(self, hx, hy):
+        """A hat on top of the hair: a cap with a visor or a brimmed hat with a feather."""
+        d, c = self.d, self.c
+        kind = d["hat_kind"]
+        side, back, three = self.side, self.back, self.three
+        sh = 0.5 if (three or self.back3) else 0
+        if kind == "cap":
+            crown = c.ellipse(hx - 0.5 + sh, hy - 4.6, 6.0, 3.2) & (c.yy < hy - 2.6)
+            self.part(crown, "hat", 0.3 + 0.6 * c.sphere(hx - 2, hy - 7, 8, 5), line=True)
+            if side:
+                visor = c.rect(hx + 1, hy - 3.0, hx + 8, hy - 1.8)
+            elif back:
+                visor = c.rect(hx - 6, hy - 3.0, hx + 6, hy - 2.0)
+            else:
+                visor = c.rect(hx - 6.2 + sh, hy - 3.0, hx + 6.2 + sh, hy - 1.8)
+            self.part(visor, "hat", np.where(c.yy < hy - 2.4, 0.62, 0.15), line=True)
+            if not back:
+                badge = c.rect(hx + (2.5 if side else -0.5) + sh, hy - 5.8, hx + (4 if side else 1.5) + sh, hy - 4.2)
+                self.part(badge, "belt", 0.9)
+            return
+        # a brimmed hat, tilted: lower on one side
+        tilt = 0.14
+        cxh = hx - (0.5 if side else 0) + sh
+        crown = c.ellipse(cxh, hy - 4.8, 5.6, 4.0) & (c.yy < hy - 3)
+        brim_rx = 7.6 if side else 8.8
+        centre = hy - 3.2 + (c.xx + 0.5 - hx) * tilt
+        brim = (((c.xx + 0.5 - (hx + (1.0 if side else 0))) / brim_rx) ** 2 + ((c.yy + 0.5 - centre) / 1.9) ** 2) <= 1.0
+        self.part(brim, "hat", 0.55 + 0.3 * c.sphere(hx - 3, hy - 4, 10, 4), line=True)
+        self.part(crown, "hat", 0.35 + 0.6 * c.sphere(cxh - 2, hy - 7, 7, 5), line=True)
+        band = crown & (c.yy >= hy - 5.0 + (c.xx + 0.5 - hx) * tilt)
+        self.part(band, "hat", 0.1)
+        self.part(band & (c.yy < hy - 4.0 + (c.xx + 0.5 - hx) * tilt), "belt", 0.7)
+        # the feather: stuck in the band, sweeping out and back with a droop at the tip
+        if side:
+            x0, y0, x1, y1 = hx - 3.0, hy - 4.6, hx - 8.4, hy - 7.4
+        else:
+            x0, y0, x1, y1 = hx + 3.2, hy - 4.8, hx + 8.2, hy - 8.2
+        feather = seg(c, x0, y0, (x0 + x1) / 2, (y0 + y1) / 2 - 1.0, 1.0) | seg(c, (x0 + x1) / 2, (y0 + y1) / 2 - 1.0, x1, y1, 0.9)
+        self.part(feather, "feather", 0.35 + 0.6 * c.sphere(x0, y0 - 4, 9, 9), line=True)
+        self.part(seg(c, x0, y0, x1, y1, 0.3) & feather, "feather", 0.95)  # the shaft catches the light
+
+    def face_extras(self, hx, hy, ey, eyes):
+        """Brows, glasses: what sits on the face after the eyes."""
+        d, c = self.d, self.c
+        if d.get("brows") == "stern":
+            brow = d["hair"][0]
+            if self.side:
+                c.fill(c.rect(eyes[0] - 1, ey - 1, eyes[0] + 2, ey), brow)
+            else:
+                for k, ex in enumerate(eyes):
+                    inner = 1 if k == 0 else -1  # towards the nose: the inner end is lower
+                    c.fill(c.rect(ex - (0 if inner > 0 else 1), ey - 1, ex + 1 + (1 if inner > 0 else 0), ey), brow)
+                    c.fill(c.rect(ex - inner, ey - 2, ex - inner + 1, ey - 1), brow)
+        if d.get("glasses"):
+            frame = d["frame"]
+            lens = [(eyes[0],)] if self.side else [(e,) for e in eyes]
+            for (ex,) in lens:
+                c.fill(c.rect(ex - 1, ey - 1, ex + 2, ey), frame[3])
+                c.fill(c.rect(ex - 1, ey + 2, ex + 2, ey + 3), frame[2])
+                c.fill(c.rect(ex - 1, ey, ex, ey + 2) | c.rect(ex + 1, ey, ex + 2, ey + 2), frame[2])
+            if self.side:
+                c.fill(c.rect(eyes[0] - 4, ey, eyes[0] - 1, ey + 1), frame[2])  # the temple
+            elif len(eyes) == 2:
+                c.fill(c.rect(eyes[0] + 2, ey, eyes[1] - 1, ey + 1), frame[2])  # the bridge
+
     def draw(self):
         d, c, p = self.d, self.c, self.p
         side, back, three = self.side, self.back, self.three
@@ -458,6 +844,13 @@ class Figure:
         kid = 5 if d.get("child") else 0  # a child: same head, shorter body
         hip = 23 + b + (2 if kid else 0)
         ty0, ty1 = 15 + b + kid, 23 + b + (2 if kid else 0)
+        # Akt IV: crossed arms only while standing or sitting, carried things keep the arms still, the lute
+        # changes from the back to the lap when he sits
+        crossed = d.get("arms_pose") == "crossed" and not p["gait"]
+        carry = d.get("carry", False)
+        lute = d.get("lute", False)
+        lap = lute and p["sit"]
+        swing = (0, 0) if (carry or d.get("basket")) else p["arms"]
 
         # backpack behind the body (front views) / ponytail behind the head
         if d["bag"] == "backpack" and not back:
@@ -503,10 +896,15 @@ class Figure:
                 self.part(leg & ~boot, "pants", self.cyl(hx - 2, hx + 2) + tint - 0.1)
                 self.part(boot, "boots", 0.5 + tint + 0.25 * (c.yy == FEET - lift - 2))
 
+        if lute and not back and not lap:
+            self.lute_back(cx, ty0, ty1, lean)
+        if lute and back and lap:
+            self.lute_lap(cx, ty0, ty1, lean)
+
         # far arm (side view) behind the torso
         work = p["work"]
-        if side:
-            sw = p["arms"][1]
+        if side and not (crossed or carry):
+            sw = swing[1]
             if work is None:
                 far = limb(c, cx + lean, ty0 + 1, cx + lean + sw, ty0 + 7, 2)
                 hand_y = ty0 + 6
@@ -553,6 +951,15 @@ class Figure:
         if jumper:  # a jumper a size too big: long and wide at the hem
             hem = c.rect(tx0 - 1, ty1 - 1, tx1 + 1, ty1 + 1)
         self.part(torso | hem, "top", self.cyl(tx0 - 1, tx1 + 1, 0.15, 0.8), line=True)
+        if d.get("skirt"):
+            self.skirt(tx0, tx1, ty1)
+        if d.get("outfit") == "dress" and not back:
+            # a plain round collar in white, a small brooch under it
+            mid = cx + (1 if three else 0) + (1 if side else 0)
+            collar = (np.abs(c.xx + 0.5 - mid) <= (2.6 if not side else 1.6)) & (c.yy >= ty0) & (c.yy < ty0 + 2)
+            self.part(collar, "inner", 0.75)
+            self.part(c.rect(mid - 0.5, ty0 + 2, mid + 0.5, ty0 + 3), "belt", 0.9)
+            self.part(c.rect(tx0, ty1 - 3, tx1, ty1 - 2), "belt", 0.5)
         if not back and d["outfit"] == "jacket":
             # open collar with a light shirt, jacket seam, belt with buckle
             if side:
@@ -580,6 +987,10 @@ class Figure:
             self.part(apron, "inner", self.cyl(tx0, tx1, 0.45, 0.5), line=True)
             if not side:
                 self.part(c.rect(ax0 - 1, ty0 + 3, tx1 - 0, ty0 + 4), "belt", 0.6)
+        if d.get("keys") and not back:
+            self.keys(tx0, tx1, ty1, side)
+        if d.get("apron_long") and not back:
+            self.apron_long(tx0, tx1, ty1)
         if d["outfit"] == "cape" and not back:
             # cape clasp and a dark inner lining at the opening
             mid = cx + (1 if three else 0)
@@ -597,24 +1008,32 @@ class Figure:
                     self.part(c.rect(tx0 - 2, ty1 - 4, tx0 + 1, ty1), "belt", 0.6, line=True)
             else:
                 self.part(c.rect(tx0 - 2, ty1 - 5, tx0 + 1, ty1 - 1), "belt", 0.55, line=True)
+        if lute and not lap and not back and not side:
+            self.strap(tx0, tx1, ty0, ty1, torso)
+        if lute and not lap and back:
+            self.lute_back_view(cx, ty0, ty1)
         if d["bag"] == "backpack" and back:
             self.part(c.rect(cx - 4, ty0 + 1, cx + 4, ty0 + 8), "belt", self.cyl(cx - 5, cx + 5, 0.2, 0.6), line=True)
             self.part(c.rect(cx - 3, ty0 + 2, cx + 3, ty0 + 3), "belt", 0.8)
 
         # near arms
-        if side:
-            sw = p["arms"][0]
+        if crossed and not back:
+            self.arms_crossed(cx, tx0, tx1, ty0, lean, arm_out)
+        elif carry and not back:
+            self.arms_carry(cx, tx0, tx1, ty0, lean)
+        elif side:
+            sw = swing[0]
             if work is None:
                 near = limb(c, cx - 0.5 + lean, ty0 + 1, cx - 0.5 + lean + sw, ty0 + 7, 2)
                 hand_y = ty0 + (7 if jumper else 6)
             else:
                 near = limb(c, cx - 0.5 + lean, ty0 + 1, cx + 3.5 + lean, ty0 + 6 - 2 * work, 2)
                 hand_y = ty0 + 6 - 2 * work
-            self.part(near, "top", 0.65, line=True)
+            self.sleeve(near, 0.65, guard_from=ty0 + 4)
             self.part(near & (c.yy >= hand_y), "skin", 0.65)
         else:
             for k, ax in enumerate((tx0 - 1 - arm_out, tx1 + 1 + arm_out)):
-                sw = p["arms"][k]
+                sw = swing[k]
                 # seen from the front a swing only shortens or lengthens the arm a little
                 end = ty0 + (4 if d.get("child") else 6) + int(np.clip(sw, -1, 2))
                 arm = limb(c, ax, ty0 + 1, ax, end, 2)
@@ -639,12 +1058,19 @@ class Figure:
                         arm = limb(c, ax + 1, ty0 + 2, ax + 1, end, 2)
                         hand = limb(c, ax + 1, end, ax + 1, end + 1, 2)
                 cuff = arm & (c.yy == end - 1)
-                self.part(arm, "top", tone, line=True)
-                self.part(cuff, "top", tone + 0.2)
+                self.sleeve(arm, tone, guard_from=ty0 + 4)
+                self.part(cuff, "guards" if ("guards" in d) else "top", tone + 0.2)
                 if jumper:  # the sleeve hangs over the hand
                     self.part(hand & (c.yy == end), "top", tone + 0.2)
                     hand = hand & (c.yy > end)
                 self.part(hand, "skin", tone)
+
+        if lap and not back:
+            self.lute_lap(cx, ty0, ty1, lean)
+        if d.get("basket"):
+            self.basket(cx, tx0, tx1, ty0, lean)
+        if d.get("stamp") and not back:
+            self.stamp(tx0, ty0, lean, arm_out, swing)
 
         self.head(cx, lean, b)
         c.outline(d["outline"])
@@ -677,7 +1103,7 @@ class Figure:
         elif side:
             cap = c.ellipse(hx - 0.5, hy - 1.2, 7.3, 6.5) & ((c.yy < hy - 1.0) | (c.xx < hx - 0.5))
             back_hair = c.rect(hx - 6.5, hy - 2, hx - 1.5, hy + nape + hb) & c.ellipse(hx - 1, hy + 0.5, 7.2, 7.2)
-            if style == "neat":
+            if style in ("neat", "bob"):
                 fringe = c.rect(hx + 1, hy - 2.5, hx + 6.3, hy - 0.8)
             elif style == "swept":
                 # fringe swept forward over the brow, ending in a point
@@ -713,6 +1139,11 @@ class Figure:
             elif style == "bun":
                 bangs = np.zeros_like(cap)
                 locks = c.rect(hx - 7, hy - 2.5, hx - 5.4, hy + 1.5) | c.rect(hx + 5.4, hy - 2.5, hx + 7, hy + 1.5)
+            elif style == "bob":
+                # a side parting: the fringe falls over the left brow a pixel lower, the left lock is a pixel longer
+                bangs = c.rect(hx - 5.8, hy - 2.5, hx + 5.5, hy - 0.8) | c.rect(hx - 5.8, hy - 0.8, hx - 2, hy + 0.2)
+                locks = c.rect(hx - 7, hy - 2, hx - 4.6, hy + 4) | c.rect(hx + 4.6, hy - 2, hx + 7, hy + 2.5)
+                locks |= c.rect(hx - 7.6, hy + 3, hx - 6.4, hy + 5)  # the left lock flicks out at its end
             else:
                 # pointed bangs: a zigzag edge over the forehead
                 zig = ((c.xx.astype(int) + (1 if three else 0)) % 3)
@@ -770,6 +1201,10 @@ class Figure:
             strand = hair & (np.abs((c.xx + 0.5 - hx) * 0.32 + (c.yy + 0.5 - (hy - 2.2))) < 0.5)
             strand &= (c.xx >= hx - 4) & (c.xx < hx + 4) & (c.yy >= hy - 4)
             c.rgb[strand] = d["hair"][3]
+        if style == "bob" and not side and not back:
+            # the side parting: a light line from the crown down over the left brow
+            part = hair & (np.abs((c.xx + 0.5 - (hx - 2.0)) - (c.yy - (hy - 7.0)) * -0.35) < 0.55) & (c.yy < hy - 1) & (c.yy >= hy - 7)
+            c.rgb[part] = d["hair"][4]
         if style == "neat" and not side:
             # the perfect center parting
             part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
@@ -783,6 +1218,19 @@ class Figure:
             band = (c.yy >= hy - 3.6) & (c.yy < hy - 2.2) & inside
             self.part(band, "inner", 0.6)
             self.part(band & (c.yy >= hy - 2.8), "top", 0.75)
+        if d.get("hat_kind"):
+            self.hat(hx, hy)
+        item = d.get("ear_item")
+        if item:
+            # a note or a pencil tucked behind one ear (the character's left: right of the picture from the front)
+            ex = hx - (2.5 if side else (-6 if back else 5.2))
+            if item == "note":
+                self.part(c.rect(ex, hy - 1, ex + 2.5, hy + 2.5), "paper", 0.85, line=True)
+                c.fill(c.rect(ex + 0.5, hy, ex + 2, hy + 0.5), d["notes"][0])
+            else:
+                self.part(c.rect(ex + 0.5, hy - 3, ex + 1.5, hy + 1), "belt", 0.2)
+                c.fill(c.rect(ex + 0.5, hy - 3, ex + 1.5, hy - 1), np.array([230, 190, 70], np.float32))
+                c.fill(c.rect(ex + 0.5, hy - 1, ex + 1.5, hy), np.array([230, 150, 150], np.float32))
         if self.back3:
             c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
         if not back:
@@ -807,6 +1255,8 @@ class Figure:
             if not side:
                 c.fill(c.rect(eyes[0] - 1, ey + 2, eyes[0], ey + 3), d["blush"])
                 c.fill(c.rect(eyes[-1] + 1, ey + 2, eyes[-1] + 2, ey + 3), d["blush"])
+            if d.get("brows") or d.get("glasses"):
+                self.face_extras(hx, hy, ey, eyes)
 
 
 def states_of(design):

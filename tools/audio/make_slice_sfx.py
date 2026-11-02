@@ -2,8 +2,9 @@
 """Procedural sound effects for the vertical slice (Phase 4, 0 €): the Real world's foley.
 A door that creaks, knocking, falling into the stream, a stepping stone that rocks, a match
 and a fire catching, a cat (meowing, behind a door, purring), a goat, dry wood, sitting down
-and standing up, a bird landing, the drover's call; and the child in Elysia humming the motif
-of the later main theme. The fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
+and standing up, a bird landing, the drover's call; the child in Elysia humming the motif
+of the later main theme; the hermit's flute (Act III) and Lio's lute in the street (Act IV). The
+fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
 per group (LUFS, see GROUPS), written with .import files to assets/generated/sfx/. The Real world is quiet and a
@@ -401,12 +402,118 @@ def hermit_flute(rng, unit=HERMIT_UNIT, space=None):
     return room(dry, 0.22, 0.40) if space is None else space(dry)
 
 
+# --- Lio -----------------------------------------------------------------------------------
+
+# Lio plays in the street (Act IV, S2): a small lute, plucked with the thumb, in the key of the
+# valley (D dorian) and cheerful rather than glossy. The rising figure 3-5-6-8 is what the ear
+# can follow: he sets in with it twice (the first time he stops the third note before it can
+# ring), then the tune goes round, the high note of the first round is pulled somewhere else
+# (sharp, a bend that does not get back) and the phrase goes on as if nothing had happened; a
+# second round, where the high note sits, and a cadence (3-2-1) bring it home.
+LIO_ROOT = 62  # D4, as in the hermit's tune
+LIO_UNIT = 0.30  # seconds per eighth: brisker than the child (0.48) and the hermit (0.45)
+# (degree, eighths); degrees above 7 continue upwards (8 is the D above the root). Together
+# about 7.9 s with LIO_UNIT, a breath between the rounds and a held end.
+LIO_TUNE = [(3, 1), (5, 1), (6, 1), (8, 2), (6, 1), (5, 1), (3, 2),
+            (3, 1), (5, 1), (6, 1), (8, 1), (9, 2), (8, 1), (6, 1), (5, 2),
+            (3, 1), (2, 1), (1, 4)]
+LIO_MISS = 3  # the note of LIO_TUNE that gets away
+LIO_BREATH = 7  # the note after which he takes a breath (the second round)
+LIO_END = len(LIO_TUNE) - 1
+# The bass strings: (index of the melody note it sounds with, MIDI note, seconds after it).
+LIO_BASS = [(0, 50, -0.10), (4, 45, 0.0), (6, 50, 0.0), (11, 43, 0.0), (14, 45, 0.0),
+            (15, 50, 0.0), (17, 50, 0.0), (17, 57, 0.09)]
+
+
+def lute_note(freq, seconds, rng, velocity=0.85, tau=0.95, bend=None, cut=None):
+    """One note of a small gut-strung lute: a plucked string (partials with a thumb's comb of
+    missing ones, the high ones dying first, a hair of inharmonicity), two strings of a course
+    a few cents apart so that the note shimmers slowly, a chiff of the thumb and the knock of
+    the wooden body at the start. `tau` is how long the fundamental rings; `bend` is a function
+    of time (cents) for a string that is pulled; `cut` stops the string with the hand after that
+    many seconds. The peak of the first moments is `velocity`."""
+    n = int(RATE * seconds)
+    t = np.arange(n) / RATE
+    base = freq if bend is None else freq * 2 ** (bend(t) / 1200)
+    place = rng.uniform(0.15, 0.21)  # where along the string the thumb plucks
+    bright = 0.40 + 0.60 * velocity
+    out = np.zeros(n)
+    for side in (-1, 1):
+        spread = 1 + side * rng.uniform(0.0005, 0.0012)
+        for k in range(1, 15):
+            ratio = k * np.sqrt(1 + 0.00015 * k * k)
+            if np.max(base) * ratio * spread > 9000:
+                break
+            amp = abs(np.sin(np.pi * k * place)) / k**1.1 * bright ** (k - 1)
+            hz_k = np.broadcast_to(base * ratio * spread, (n,))
+            phase = 2 * np.pi * np.cumsum(hz_k) / RATE + rng.uniform(0, 2 * np.pi)
+            out += amp * np.exp(-t * (1 + 0.55 * (k - 1)) / tau) * np.sin(phase)
+    out *= np.minimum(1.0, t / 0.002)
+    out = out / (np.max(np.abs(out[: int(RATE * 0.12)])) + 1e-9)
+    m = int(RATE * 0.03)
+    tm = np.arange(m) / RATE
+    chiff = fft_band(noise(m, rng), 1500, 5500, 2) * np.exp(-tm / 0.004)
+    thump = np.sin(2 * np.pi * rng.uniform(170, 210) * tm) * np.exp(-tm / 0.03)
+    out[:m] += 0.28 * chiff / (np.max(np.abs(chiff)) + 1e-9) + 0.22 * thump
+    if cut is None:
+        out *= np.clip((seconds - t) / 0.08, 0, 1)
+    else:
+        out *= np.where(t > cut, np.exp(-(t - cut) / 0.012), 1.0)
+    return out * velocity
+
+
+def lio_street(rng, unit=LIO_UNIT, space=None):
+    """Lio's street music (Act IV, S2): see LIO_TUNE. Not a loop; no pitch spread when it is
+    played (AudioDirector.sfx(..., 1.0)): a tune stays a tune, and the one wrong note is its own."""
+
+    def pitch(deg):
+        return midi_hz(degree(LIO_ROOT, DORIAN, deg)) * rng.uniform(0.998, 1.002)
+
+    parts = []
+    # the first attempt: two notes, then the third is stopped before it can ring
+    for when, deg, vel, cut in ((0.35, 3, 0.78, None), (0.68, 5, 0.80, None), (1.03, 6, 0.70, 0.08)):
+        note = lute_note(pitch(deg), 0.5 if cut else 2.4, rng, vel, cut=cut)
+        parts.append(at(note, when + rng.normal(0, 0.008)))
+    # a knuckle on the wood: again, from the top
+    parts.append(at(knock(190, 0.12, rng, 0.2) * 0.10, 1.62))
+    # the second attempt carries through
+    pos = 2.20
+    onsets = []
+    for i, (deg, eighths) in enumerate(LIO_TUNE):
+        stretch = 1.0
+        if i in (LIO_MISS + 1, LIO_MISS + 2):
+            stretch = 0.93  # on he goes, a little quicker
+        elif i == LIO_END - 1:
+            stretch = 1.15  # the cadence settles
+        if i == LIO_BREATH:
+            pos += 0.38
+        onsets.append(pos)
+        length = eighths * unit * stretch * rng.uniform(0.97, 1.04)
+        vel = rng.uniform(0.76, 0.92)
+        if i == LIO_MISS:
+            # meant to be the high D: lands a semitone sharp and is pulled half-way back
+            def pulled(t):
+                return 105 - 55 * np.clip(t / 0.45, 0, 1) + 5 * np.sin(2 * np.pi * 5.5 * t)
+
+            note = lute_note(pitch(deg), 2.4, rng, 0.95, bend=pulled)
+        else:
+            note = lute_note(pitch(deg), 3.4 if i == LIO_END else 2.4, rng, vel)
+        parts.append(at(note, pos + rng.normal(0, 0.010)))
+        pos += length
+    for index, midi, late in LIO_BASS:
+        note = lute_note(midi_hz(midi) * rng.uniform(0.998, 1.002), 3.0, rng, 0.62, tau=1.5)
+        parts.append(at(note, onsets[index] + late + rng.normal(0, 0.008)))
+    dry = mix(*parts)
+    dry = mix(dry, 0.3 * fft_band(dry, 110, 320, 2))  # the wooden body
+    return reverb(dry, 0.5, 0.18, seed=19, bright=3800) if space is None else space(dry)
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
-          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0}
+          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0}
 LOOPS = set()
 
 
@@ -448,6 +555,9 @@ def build(only=None):
     # the hermit's flute (Act III, W3): its own random stream again
     flute_rng = np.random.default_rng(47)
     sounds["hermit_flute_0"] = (hermit_flute(flute_rng), "flute")
+    # Lio's lute (Act IV, S2): its own random stream again
+    lute_rng = np.random.default_rng(53)
+    sounds["lio_street_0"] = (lio_street(lute_rng), "lute")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

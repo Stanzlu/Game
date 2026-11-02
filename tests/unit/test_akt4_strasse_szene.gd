@@ -1,19 +1,18 @@
 extends GutTest
 ## Act IV, segment S1: the road west (docs/akt4/REGIONSBRIEFE.md). A cart road from the valley
 ## through fields and an orchard, over a brook, to a hill from which the city's smoke is seen; at
-## its end a rope and paving works hold the way until S2. The map is the third of class M (96 x 56
+## its end a door leads into the city (S2). The map is the third of class M (96 x 56
 ## cells), a morning without lights. The scene only starts the hero's walk and marks two beats. What
 ## the cues say is tested in test_akt4_strasse, the valley's door in test_akt4_strasse_tal.
 
 const STRASSE := preload("res://world/levels/akt4/strasse.tscn")
-const BLOCKER_SCRIPT := preload("res://world/props/blocker.gd")
 const QUEST := "main_city_way"
 const SIZE := Vector2i(96, 56)
 const START := Vector2i(66, 31)
 const FROM_VALLEY := Vector2i(89, 30)
 const FROM_CITY := Vector2i(11, 32)
 const DOOR_CELL := Vector2i(94, 30)
-const BLOCKER_CELL := Vector2i(4, 32)
+const CITY_DOOR_CELL := Vector2i(4, 32)
 const BRIDGE_ROW := 31
 const CUES: PackedStringArray = [
 	"signpost",
@@ -93,18 +92,6 @@ func _first(scene: GameScene, cue: String) -> Node:
 	return null
 
 
-func _blocker(scene: GameScene) -> Node:
-	var spot := scene.map.cell_to_world(BLOCKER_CELL)
-	for node in scene.map.entities.get_children():
-		if (
-			not node.is_queued_for_deletion()
-			and node.get_script() == BLOCKER_SCRIPT
-			and node.global_position.distance_to(spot) < 2.0
-		):
-			return node
-	return null
-
-
 # --- The map ------------------------------------------------------------------------------------
 
 
@@ -174,15 +161,24 @@ func test_the_bell_hangs_until_it_is_taken_and_the_post_stays() -> void:
 # --- The doors and the end of the road ---------------------------------------------------------
 
 
-func test_the_only_door_leads_back_to_the_valley() -> void:
-	var scene := await _scene()
-	var doors := scene.map.entities.get_children().filter(
-		func(node: Node) -> bool: return node.get(&"target") != null
+func _doors_to(scene: GameScene, target: String) -> Array:
+	return scene.map.entities.get_children().filter(
+		func(node: Node) -> bool:
+			return node.get(&"target") == target and not node.is_queued_for_deletion()
 	)
-	assert_eq(doors.size(), 1, "the city has no door yet: S2 sets it in")
-	assert_eq(doors[0].get(&"target"), "tal")
-	assert_eq(doors[0].get(&"spawn"), "strasse")
-	assert_eq(scene.map.world_to_cell((doors[0] as Node2D).global_position), DOOR_CELL)
+
+
+func test_the_road_has_two_doors_one_to_the_valley_and_one_to_the_city() -> void:
+	var scene := await _scene()
+	var valley := _doors_to(scene, "tal")
+	assert_eq(valley.size(), 1)
+	assert_eq(valley[0].get(&"spawn"), "strasse")
+	assert_eq(scene.map.world_to_cell((valley[0] as Node2D).global_position), DOOR_CELL)
+	var city := _doors_to(scene, "stadt")
+	assert_eq(city.size(), 1, "the rope is gone: the road runs into the city")
+	assert_eq(city[0].get(&"spawn"), "strasse")
+	assert_eq(scene.map.world_to_cell((city[0] as Node2D).global_position), CITY_DOOR_CELL)
+	assert_true(city[0].get(&"auto"), "walking into it is enough: it is the end of the map")
 
 
 func test_from_the_valley_she_arrives_at_the_east_end_and_walking_east_returns() -> void:
@@ -204,25 +200,25 @@ func test_the_way_west_crosses_the_brook_on_the_bridge() -> void:
 	assert_eq(SceneTravel.last_target, "", "no scene change on the way")
 
 
-func test_a_rope_and_the_paving_works_hold_the_whole_width_of_the_road() -> void:
+func test_from_the_city_she_arrives_before_the_door_and_walking_west_returns_to_it() -> void:
+	SceneTravel.stay = true
+	SceneTravel.pending_spawn = "stadt"
 	var scene := await _scene()
-	var blocker := _blocker(scene)
-	assert_not_null(blocker, "the blocker across the road")
-	var map_text := FileAccess.get_file_as_string("res://content/maps/strasse.txt")
-	assert_true(map_text.contains('"cue": "town_wait"'), "with the cue of the paving works")
-	# the barrier itself covers seven rows (the five of the road and a cell of hedge on each side)
-	var rect: RectangleShape2D = null
-	for child in blocker.get_children():
-		if child is CollisionShape2D and (child as CollisionShape2D).shape is RectangleShape2D:
-			rect = (child as CollisionShape2D).shape as RectangleShape2D
-			break
-	assert_not_null(rect)
-	assert_eq(rect.size, Vector2(16, 112), "one cell wide, seven rows high")
-	assert_gte(FROM_CITY.x - BLOCKER_CELL.x, 5, "the arrival from the city is outside it")
-	for row: int in [30, 31, 32, 33, 34]:
+	assert_eq(_cell(scene), FROM_CITY)
+	assert_gte(FROM_CITY.x - CITY_DOOR_CELL.x, 5, "an arrival outside the door's zone")
+	assert_eq(SceneTravel.last_target, "", "nothing has travelled yet")
+	var gone := func() -> bool: return SceneTravel.last_target == "stadt"
+	assert_true(await _hold(&"move_left", gone, 300), "west from the arrival reaches the door")
+
+
+func test_the_road_reaches_the_city_door_in_every_row_of_its_width() -> void:
+	SceneTravel.stay = true
+	# the pile of cobbles at the north edge (9, 30) holds that row; the four rows south of it are open
+	for row: int in [31, 32, 33, 34]:
+		SceneTravel.last_target = ""
+		var scene := await _scene()
 		await _put(scene, Vector2i(14, row))
-		var never := func() -> bool: return false
-		await _hold(&"move_left", never, 120)
-		assert_gt(_cell(scene).x, BLOCKER_CELL.x, "row %d is held in front of the rope" % row)
-		assert_lt(_cell(scene).x, 12, "and she did walk west on it")
-	assert_eq(SceneTravel.last_target, "", "and there is no way on")
+		var gone := func() -> bool: return SceneTravel.last_target == "stadt"
+		assert_true(await _hold(&"move_left", gone, 200), "row %d leads into the city" % row)
+		scene.queue_free()
+		await wait_physics_frames(2)

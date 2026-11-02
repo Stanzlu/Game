@@ -1,0 +1,119 @@
+# Das Rathaus, Akt IV, Segment S2 (docs/akt4/REGIONSBRIEFE.md, O13). Eine Beamtin im Fenster des Tresens ist die einzige Figur, und sie siezt dich:
+# das ist ihr Humor, und sie weiß es nicht. Ein Cue mit Unterzweigen. Erstens das Fundbüro (Nebenquest "Das Fundbüro", side_city_lost):
+# sie fragt, was du verloren hast, und gibt jedes Ding mit dem Satz "Das gehört niemandem mehr. Nehmen Sie." (vier Kuriositäten, jede nur
+# einmal; wer alle vier hat, schließt die Quest). Zweitens "Ein perfekter Tag" (side_city_day): sie hat den Besuch des Bürgermeisters
+# auf die Minute geplant (Kranz am Brunnen, Pult, Brot und Salz) und schickt dich nachsehen; die drei Stationen auf dem Platz (stadt.dialogue)
+# setzen city.day_wreath, city.day_lectern und city.day_table, und beim nächsten Ansprechen weiß sie: nichts ist geworden wie geplant, der
+# Bürgermeister kommt nicht, und es ist ein schöner Tag. Der Humor sitzt im Plan und in seiner Pünktlichkeit, nie in der Beamtin. Ein Stuhl
+# fehlt, ohne dass es erklärt wird (Vorbereitung auf das Nachspiel, O13). Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage,
+# Ausruf und Auslassung); Zettel stehen in » «. Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Der Tresen -----------------------------------------------------------------------------------------------------------
+# Wer die Beamtin zum ersten Mal sieht (keine der beiden Quests läuft), bekommt die kurze Begrüßung; wer wiederkommt, eine von drei Zeilen.
+# Sind die drei Stationen gesehen und der Tag noch offen, geht es sofort zum Ende des Tages.
+
+~ clerk
+if WorldState.has_flag("city.day_wreath") and WorldState.has_flag("city.day_lectern") and WorldState.has_flag("city.day_table") and not WorldState.is_quest_done("side_city_day")
+	=> clerk_day_end
+if WorldState.is_quest_started("side_city_lost") or WorldState.is_quest_started("side_city_day")
+	=> clerk_again
+Im Fenster des Tresens steht eine Frau mit Ärmelschonern und Brille. Sie stempelt etwas, das schon gestempelt ist. [ID:rath_clerk_1] [#draft]
+Beamtin: Ja? [ID:rath_clerk_2] [#draft]
+=> clerk_ask
+
+~ clerk_again
+% Beamtin: Ja? Bitte der Reihe nach. Sie sind die Reihe. [ID:rath_clerk_3] [#draft]
+% Beamtin: Der Stuhl dort fehlt. Fragen Sie nicht. Ich habe gefragt. [ID:rath_clerk_4] [#draft]
+% [if WorldState.is_quest_done("side_city_day") /] Beamtin: Den Tag habe ich unter »Sonstiges« abgelegt. Dort ist er gut aufgehoben. [ID:rath_clerk_5] [#draft]
+=> clerk_ask
+
+~ clerk_ask
+- Ich suche etwas. [if not WorldState.is_quest_done("side_city_lost") /] [ID:rath_clerk_r1] [#draft]
+	=> clerk_lost
+- Gibt es heute etwas zu tun? [if not WorldState.is_quest_started("side_city_day") /] [ID:rath_clerk_r2] [#draft]
+	=> clerk_day
+- … [ID:rath_clerk_r3] [#draft]
+	Sie stempelt, ohne hinzusehen. Es klingt wie eine Antwort. [ID:rath_clerk_6] [#draft]
+=> END
+
+# --- Das Fundbüro ---------------------------------------------------------------------------------------------------------
+# Du nennst, was du verloren hast; sie bringt es. Jedes Ding gibt es einmal (die Antwort verschwindet, sobald sie genommen ist), jedes mit
+# dem Satz der Beamtin. Das letzte schließt die Quest. Wer nichts nennt, verliert nichts, das Regal bleibt, wie es ist.
+
+~ clerk_lost
+do WorldState.start_quest("side_city_lost")
+Beamtin: Was haben Sie verloren? Beschreiben Sie es. Ich gleiche es mit dem Regal ab. [ID:rath_lost_1] [#draft]
+=> clerk_lost_pick
+
+~ clerk_lost_pick
+- Einen Handschuh. [if not WorldState.has_flag("city.lost_glove") /] [ID:rath_lost_r1] [#draft]
+	=> clerk_lost_glove
+- Einen Schlüssel. [if not WorldState.has_flag("city.lost_key") /] [ID:rath_lost_r2] [#draft]
+	=> clerk_lost_key
+- Eine Dose mit Knöpfen. [if not WorldState.has_flag("city.lost_buttons") /] [ID:rath_lost_r3] [#draft]
+	=> clerk_lost_buttons
+- Eine Tasse mit Sprung. [if not WorldState.has_flag("city.lost_cup") /] [ID:rath_lost_r4] [#draft]
+	=> clerk_lost_cup
+- … [ID:rath_lost_r5] [#draft]
+	Beamtin: Nichts zu melden ist auch eine Meldung. Ich vermerke es. [ID:rath_lost_6] [#draft]
+=> END
+
+# Die Wahl steht oben, jedes Ding hat seinen eigenen Cue: er setzt sein Flag und liest keines, und wer die Flags liest (das Menü, der Schluss),
+# setzt keines. Das Menü zeigt die Folge, sobald die Beamtin wieder fragt (gleich danach oder beim nächsten Ansprechen): das genommene
+# Ding steht nicht mehr zur Wahl.
+
+~ clerk_lost_glove
+Sie bringt einen Handschuh, grün gestrickt, der Daumen zu lang. Am Handgelenk hängt ein Zettel, »rechts«. [ID:rath_lost_2] [#draft]
+do WorldState.add_item("curiosity_lost_glove")
+do WorldState.set_flag("city.lost_glove")
+=> clerk_lost_given
+
+~ clerk_lost_key
+Sie bringt einen Messingschlüssel. Am Ring hängt ein Zettel, darauf ein einziges Wort, »Passt«. Sie hält das für eine ausreichende Angabe. [ID:rath_lost_3] [#draft]
+do WorldState.add_item("curiosity_brass_key")
+do WorldState.set_flag("city.lost_key")
+=> clerk_lost_given
+
+~ clerk_lost_buttons
+Sie stellt eine Blechdose auf den Tresen und hebt den Deckel an. Knöpfe, und kein einziger gleicht dem anderen. [ID:rath_lost_4] [#draft]
+do WorldState.add_item("curiosity_button_tin")
+do WorldState.set_flag("city.lost_buttons")
+=> clerk_lost_given
+
+~ clerk_lost_cup
+Sie bringt eine Tasse mit durchgehendem Sprung und hält sie mit zwei Fingern, damit er nicht auf Gedanken kommt. [ID:rath_lost_5] [#draft]
+do WorldState.add_item("curiosity_cracked_cup")
+do WorldState.set_flag("city.lost_cup")
+=> clerk_lost_given
+
+~ clerk_lost_given
+Beamtin: Das gehört niemandem mehr. Nehmen Sie. [ID:rath_lost_7] [#draft]
+if WorldState.has_flag("city.lost_glove") and WorldState.has_flag("city.lost_key") and WorldState.has_flag("city.lost_buttons") and WorldState.has_flag("city.lost_cup")
+	Das Regal mit den Fundstücken ist leer. Auf dem untersten Brett sitzt eine Spinne und sieht aus, als wohne sie dort. [ID:rath_lost_8] [#draft]
+	Beamtin: Damit ist das Fundbüro geleert. Es füllt sich von selbst, hat man mir gesagt. Ich habe nicht nachgefragt. [ID:rath_lost_9] [#draft]
+	do WorldState.advance_quest("side_city_lost", "done")
+	=> END
+Beamtin: Sonst noch etwas? [ID:rath_lost_10] [#draft]
+=> clerk_lost_pick
+
+# --- Ein perfekter Tag ----------------------------------------------------------------------------------------------------
+# Der Plan: drei Zeilen mit Uhrzeiten (ausgeschrieben). Die Beamtin darf den Tresen nicht verlassen, also gehst du nachsehen. Nichts steht,
+# wie es geplant war; die Stationen auf dem Platz zeigen es. Am Ende ist der ungeplante Tag der bessere, und sie weiß nicht, wo sie ihn
+# eintragen soll. Kopfschmerzen sind kein Urteil über den Bürgermeister, nur über den Plan.
+
+~ clerk_day
+Beamtin: Der Bürgermeister kommt heute, von neun Uhr bis neun Uhr fünfzehn. Ich habe ihn auf die Minute geplant. [ID:rath_day_1] [#draft]
+Sie schiebt dir einen Zettel hin. Neun Uhr, Kranz am Brunnen. Neun Uhr fünf, Pult. Neun Uhr zehn, Brot und Salz. [ID:rath_day_2] [#draft]
+Beamtin: Sogar das Winken ist drin, dreimal. Sehen Sie nach, ob alles steht. Ich darf den Tresen nicht verlassen. [ID:rath_day_3] [#draft]
+do WorldState.start_quest("side_city_day")
+=> END
+
+~ clerk_day_end
+do WorldState.start_quest("side_city_day")
+Die Beamtin hat einen Plan vor sich liegen und den Stift in der Hand. Sie streicht nichts durch. [ID:rath_day_4] [#draft]
+Beamtin: Der Bürgermeister kommt nicht. Kopfschmerzen. Nur sein Bote war pünktlich. [ID:rath_day_5] [#draft]
+Beamtin: Ich habe aus dem Fenster gesehen. Kranz, Pult, Brot. Nichts ist geworden, wie geplant. [ID:rath_day_6] [#draft]
+Beamtin: Und es ist ein schöner Tag. Ich weiß nicht, wo ich den eintragen soll. [ID:rath_day_7] [#draft]
+Durch das Fenster siehst du den Platz. Leute sitzen am Brunnen in der Sonne, ohne dass ein Zettel es verlangt. [ID:rath_day_8] [#draft]
+do WorldState.advance_quest("side_city_day", "done")
+=> END

@@ -71,8 +71,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 > --- Die Aussicht und das Ende der Straße ------------------------------------------------------------------------------
 > Der Blick am Westende: kein Haus, keine Figur, nur Dächer und Rauch hinter einer Hecke, viele Fäden statt des einen über dem Haus
-> (bl_back_1). Das Flag city.view_seen liest die Szene (Beat strasse_view). Der Blocker davor (town_wait) ist ein Platzhalter für
-> die Tür der Stadt in S2 und verspricht nichts; S2 legt ihn still, wie W4 es mit south_wait tat.
+> (bl_back_1). Das Flag city.view_seen liest die Szene (Beat strasse_view). Am Westende der Straße stand bis S1 ein Seil (Cue
+> town_wait, str_wait_1 und str_wait_2); S2 hat es durch die Tür in die Stadt ersetzt und die Zeilen stillgelegt.
 
 *wenn* `city.view_seen`
   - *Hinter der Hecke die Dächer, darüber der Rauch, viele Fäden durcheinander.* `[#draft]`  <sub>str_view_4</sub>
@@ -80,8 +80,3 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Von hier aus geht der Blick über Wiesen bis zu einer Hecke. Dahinter stehen Dächer, und über den Dächern steigt Rauch auf.* `[#draft]`  <sub>str_view_1</sub>
   - *Nicht ein Faden, gerade nach oben, wie über dem Haus, sondern viele, die sich im Himmel nicht einig werden.* `[#draft]`  <sub>str_view_2</sub>
   - *Die Stadt selbst bleibt hinter der Hecke. Ihren Rauch hat sie schon vorgeschickt.* `[#draft]`  <sub>str_view_3</sub>
-
-### S1-9 · `town_wait`
-
-- *Quer über die Straße ist eine Schnur zwischen zwei Pfosten gespannt. Am Rand liegt ein Haufen Pflastersteine, ein Hammer obenauf.* `[#draft]`  <sub>str_wait_1</sub>
-- *Hinter der Schnur ist frisch gepflastert, die Fugen noch hell. Die Steine liegen in ordentlichen Reihen und haben es nicht eilig.* `[#draft]`  <sub>str_wait_2</sub>

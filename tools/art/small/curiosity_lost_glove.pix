@@ -1,0 +1,23 @@
+# Ein verlorener Handschuh (S2): rote Wolle, ein Finger noch halb gestreckt, vom Fundbüro der Stadt ohne Besitzer aufbewahrt
+name: curiosity_lost_glove
+out: assets/generated/items
+size: 16x16
+palette: o=#2a1210 d=#6e2420 b=#a0402e l=#cc6a48 h=#e89a78 c=#8a3626 k=#3e1210
+outline: o
+---
+.......oo.......
+......olbooo....
+....ooolbolbo...
+...olbolbolbooo.
+...olbolbolbolbo
+...olbolbolbolbo
+...olbolbolbolbo
+...olbolbolboldo
+..olhbbbbbbbbbdo
+.ollbbbbbbbbbbdo
+ollbbbbbbbbbbddo
+ollbbbbbbbbbbddo
+.oolbbbbbbbbdddo
+...okckckckckco.
+...ockckckckcko.
+....oooooooooo..

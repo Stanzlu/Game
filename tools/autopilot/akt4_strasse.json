@@ -20,6 +20,8 @@
   {"use": [20, 26], "face": "up", "log": "the view from the hill: the city's smoke", "t": 0.5},
   {"wait_for": {"flag": "city.view_seen"}, "timeout": 30, "t": 0.1},
   {"wait_for": {"beat": "strasse_view"}, "timeout": 30, "t": 0.1},
-  {"use": [6, 32], "face": "left", "log": "the rope and the paving works hold the way until the city's door is set in", "t": 0.5},
+  {"enter": "stadt", "log": "the road runs into the city: the door at its west end", "t": 0.5},
+  {"wait_for": {"scene": "stadt"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "stadt_enter"}, "timeout": 30, "t": 0.1},
   {"log": "segment finished", "quit": true, "t": 0.5}
 ]

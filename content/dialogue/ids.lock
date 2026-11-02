@@ -713,6 +713,38 @@ nw_wait_2	akt3/nachtwald.dialogue	-
 nw_wait_3	akt3/nachtwald.dialogue	-
 nw_wait_4	akt3/nachtwald.dialogue	-
 nw_wait_5	akt3/nachtwald.dialogue	-
+rath_clerk_1	akt4/rathaus.dialogue	-
+rath_clerk_2	akt4/rathaus.dialogue	-
+rath_clerk_3	akt4/rathaus.dialogue	-
+rath_clerk_4	akt4/rathaus.dialogue	-
+rath_clerk_5	akt4/rathaus.dialogue	-
+rath_clerk_6	akt4/rathaus.dialogue	-
+rath_clerk_r1	akt4/rathaus.dialogue	-
+rath_clerk_r2	akt4/rathaus.dialogue	-
+rath_clerk_r3	akt4/rathaus.dialogue	-
+rath_day_1	akt4/rathaus.dialogue	-
+rath_day_2	akt4/rathaus.dialogue	-
+rath_day_3	akt4/rathaus.dialogue	-
+rath_day_4	akt4/rathaus.dialogue	-
+rath_day_5	akt4/rathaus.dialogue	-
+rath_day_6	akt4/rathaus.dialogue	-
+rath_day_7	akt4/rathaus.dialogue	-
+rath_day_8	akt4/rathaus.dialogue	-
+rath_lost_1	akt4/rathaus.dialogue	-
+rath_lost_10	akt4/rathaus.dialogue	-
+rath_lost_2	akt4/rathaus.dialogue	-
+rath_lost_3	akt4/rathaus.dialogue	-
+rath_lost_4	akt4/rathaus.dialogue	-
+rath_lost_5	akt4/rathaus.dialogue	-
+rath_lost_6	akt4/rathaus.dialogue	-
+rath_lost_7	akt4/rathaus.dialogue	-
+rath_lost_8	akt4/rathaus.dialogue	-
+rath_lost_9	akt4/rathaus.dialogue	-
+rath_lost_r1	akt4/rathaus.dialogue	-
+rath_lost_r2	akt4/rathaus.dialogue	-
+rath_lost_r3	akt4/rathaus.dialogue	-
+rath_lost_r4	akt4/rathaus.dialogue	-
+rath_lost_r5	akt4/rathaus.dialogue	-
 ric_1	akt2/richter.dialogue	-
 ric_2	akt2/richter.dialogue	-
 ric_3	akt2/richter.dialogue	-
@@ -808,6 +840,67 @@ sl_antr_wood_1	slice/antreiber.dialogue	-
 sl_antr_wood_2	slice/antreiber.dialogue	-
 sl_antr_worry_1	slice/antreiber.dialogue	-
 sl_antr_worry_2	slice/antreiber.dialogue	-
+stadt_board_1	akt4/stadt.dialogue	-
+stadt_board_2	akt4/stadt.dialogue	-
+stadt_board_3	akt4/stadt.dialogue	-
+stadt_board_4	akt4/stadt.dialogue	-
+stadt_cit_1	akt4/stadt.dialogue	-
+stadt_cit_2	akt4/stadt.dialogue	-
+stadt_florist_1	akt4/stadt.dialogue	-
+stadt_florist_2	akt4/stadt.dialogue	-
+stadt_gate_1	akt4/stadt.dialogue	-
+stadt_gate_2	akt4/stadt.dialogue	-
+stadt_gate_3	akt4/stadt.dialogue	-
+stadt_gate_4	akt4/stadt.dialogue	-
+stadt_gate_5	akt4/stadt.dialogue	-
+stadt_gate_6	akt4/stadt.dialogue	-
+stadt_gate_7	akt4/stadt.dialogue	-
+stadt_gate_r1	akt4/stadt.dialogue	-
+stadt_gate_r2	akt4/stadt.dialogue	-
+stadt_gef_1	akt4/stadt.dialogue	-
+stadt_gef_2	akt4/stadt.dialogue	-
+stadt_gef_3	akt4/stadt.dialogue	-
+stadt_gef_4	akt4/stadt.dialogue	-
+stadt_gef_5	akt4/stadt.dialogue	-
+stadt_gef_6	akt4/stadt.dialogue	-
+stadt_gef_7	akt4/stadt.dialogue	-
+stadt_gef_8	akt4/stadt.dialogue	-
+stadt_gef_9	akt4/stadt.dialogue	-
+stadt_gef_r1	akt4/stadt.dialogue	-
+stadt_gef_r2	akt4/stadt.dialogue	-
+stadt_goat_1	akt4/stadt.dialogue	-
+stadt_goat_2	akt4/stadt.dialogue	-
+stadt_goat_3	akt4/stadt.dialogue	-
+stadt_lectern_1	akt4/stadt.dialogue	-
+stadt_lectern_2	akt4/stadt.dialogue	-
+stadt_lio_1	akt4/stadt.dialogue	-
+stadt_lio_2	akt4/stadt.dialogue	-
+stadt_lio_3	akt4/stadt.dialogue	-
+stadt_lio_4	akt4/stadt.dialogue	-
+stadt_lio_5	akt4/stadt.dialogue	-
+stadt_lio_6	akt4/stadt.dialogue	-
+stadt_lio_7	akt4/stadt.dialogue	-
+stadt_mira_1	akt4/stadt.dialogue	-
+stadt_mira_2	akt4/stadt.dialogue	-
+stadt_mira_3	akt4/stadt.dialogue	-
+stadt_mira_4	akt4/stadt.dialogue	-
+stadt_mira_5	akt4/stadt.dialogue	-
+stadt_mira_6	akt4/stadt.dialogue	-
+stadt_mira_7	akt4/stadt.dialogue	-
+stadt_mira_r1	akt4/stadt.dialogue	-
+stadt_mira_r2	akt4/stadt.dialogue	-
+stadt_mira_r3	akt4/stadt.dialogue	-
+stadt_mira_r4	akt4/stadt.dialogue	-
+stadt_rim_1	akt4/stadt.dialogue	-
+stadt_rim_2	akt4/stadt.dialogue	-
+stadt_rim_3	akt4/stadt.dialogue	-
+stadt_rim_4	akt4/stadt.dialogue	-
+stadt_shop_1	akt4/stadt.dialogue	-
+stadt_shop_2	akt4/stadt.dialogue	-
+stadt_table_1	akt4/stadt.dialogue	-
+stadt_table_2	akt4/stadt.dialogue	-
+stadt_wreath_1	akt4/stadt.dialogue	-
+stadt_wreath_2	akt4/stadt.dialogue	-
 str_bell_1	akt4/strasse.dialogue	-
 str_bell_2	akt4/strasse.dialogue	-
 str_bell_3	akt4/strasse.dialogue	-
@@ -832,8 +925,6 @@ str_view_1	akt4/strasse.dialogue	-
 str_view_2	akt4/strasse.dialogue	-
 str_view_3	akt4/strasse.dialogue	-
 str_view_4	akt4/strasse.dialogue	-
-str_wait_1	akt4/strasse.dialogue	-
-str_wait_2	akt4/strasse.dialogue	-
 tal_antr_1	slice/tal.dialogue	-
 tal_antr_2	slice/tal.dialogue	-
 tal_antr_3	slice/tal.dialogue	-
@@ -1109,6 +1200,8 @@ wd_steps_5	akt3/waldweg.dialogue	-
 retired	gh_bar_1	der Tresen hat keine Zeile: der Wirt steht dahinter, die Zeile stand ihm im Weg
 retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen
 retired	mk_fest_10	A7: nach dem Hoch gibt es eine feste Zeile statt zweier wechselnder (die Schleife ist wortgleich)
+retired	str_wait_1	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
+retired	str_wait_2	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
 retired	wd_hut_1	W3: die Hütte hat ihre Zeilen in huette.dialogue (door_tea)
 retired	wd_hut_2	W3: die Hütte hat ihre Zeilen in huette.dialogue (door_tea)
 retired	wd_hut_3	W3: die Tür ist verdrahtet, der Satz stimmt nicht mehr

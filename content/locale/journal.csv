@@ -122,3 +122,10 @@ QUEST_SIDE_FOREST_NEST_FORK,"Ich habe das Nest aufgehoben. Es wiegt fast nichts.
 QUEST_SIDE_FOREST_NEST_DONE,"Ich habe das Nest in die Gabel am Ufer gelegt. Es sitzt, als wäre es immer dort gewesen."
 QUEST_MAIN_CITY_WAY_TITLE,Der Weg in die Stadt
 QUEST_MAIN_CITY_WAY_WEST,"Am Westrand des Tals steht ein neuer Wegweiser. Die Straße dahinter führt zur Stadt, sagt er. Ich folge ihr."
+QUEST_MAIN_CITY_WAY_TOWN,"Die Stadt hat ein Tor, eine Torwächterin und einen Brunnen. Niemand hat mich als Helden begrüßt. Ich sehe mich um."
+QUEST_SIDE_CITY_LOST_TITLE,Das Fundbüro
+QUEST_SIDE_CITY_LOST_ASK,"Im Rathaus gibt es ein Fundbüro. Es gibt zurück, was niemandem mehr gehört. Die Beamtin will nur wissen, was ich verloren habe."
+QUEST_SIDE_CITY_LOST_DONE,"Das Regal ist leer, bis auf eine Spinne, die dort wohnt. Ich habe einen Handschuh, einen Schlüssel, eine Dose mit Knöpfen und eine Tasse mit Sprung. Verloren habe ich nichts davon."
+QUEST_SIDE_CITY_DAY_TITLE,Ein perfekter Tag
+QUEST_SIDE_CITY_DAY_PLAN,"Die Beamtin im Rathaus hat den Besuch des Bürgermeisters auf die Minute geplant. Ich soll nachsehen, ob Kranz, Pult und Brot auf dem Platz stehen."
+QUEST_SIDE_CITY_DAY_DONE,"Nichts stand, wie es geplant war. Der Kranz ist angefressen, das Pult wackelt, das Brot gehört den Spatzen. Der Bürgermeister kommt nicht, und die Beamtin sagt, es sei ein schöner Tag. Ich glaube ihr."

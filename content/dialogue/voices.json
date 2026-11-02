@@ -19,5 +19,10 @@
 	"Kind": "neutral",
 	"Stimme": "neutral",
 	"Ziege": "low",
-	"Einsiedler": "low"
+	"Einsiedler": "low",
+	"Torwächterin": "low",
+	"Gefälliger": "warm",
+	"Lio": "neutral",
+	"Beamtin": "neutral",
+	"Bürgerin": "low"
 }
