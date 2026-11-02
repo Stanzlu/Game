@@ -2529,12 +2529,8 @@
  },
  "tal/st_gate": {
   "anchor": [
-   112,
-   144
-  ],
-  "smoke": [
-   64,
-   -144
+   96,
+   68
   ],
   "textures": [
    "res://assets/generated/props/tal/st_gate.png"
@@ -2677,6 +2673,45 @@
    "res://assets/generated/props/tal/st_house_g.png"
   ]
  },
+ "tal/st_house_h": {
+  "anchor": [
+   48,
+   88
+  ],
+  "smoke": [
+   19,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_h.png"
+  ]
+ },
+ "tal/st_house_i": {
+  "anchor": [
+   64,
+   88
+  ],
+  "smoke": [
+   -9,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_i.png"
+  ]
+ },
+ "tal/st_house_k": {
+  "anchor": [
+   48,
+   88
+  ],
+  "smoke": [
+   -7,
+   -86
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_house_k.png"
+  ]
+ },
  "tal/st_lamp_post": {
   "anchor": [
    9,
@@ -2695,15 +2730,6 @@
   },
   "textures": [
    "res://assets/generated/props/tal/st_lamp_post.png"
-  ]
- },
- "tal/st_laundry": {
-  "anchor": [
-   52,
-   52
-  ],
-  "textures": [
-   "res://assets/generated/props/tal/st_laundry.png"
   ]
  },
  "tal/st_lectern": {

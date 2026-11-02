@@ -737,7 +737,7 @@ def wall_tower(ms):
 
 def gate(ms):
     """The town's gate seen from the south: two stout piers of dressed stone with a battlement, joined over a flattened arch
-    by a bridge of the same wall walk; a small green flag on the keystone. The arch is open: the passage behind it is the
+    by a bridge of the same wall walk; a small green flag on the east pier. The arch is open: the passage behind it is the
     cobbles of the map, and whoever walks through stays in view; its opening is five cells wide (80 px) and 48 px high, a
     portcullis hangs raised in the crown. Only 76 px high: nothing taller may stand over the cells north of it. 192 x 76,
     anchor (96, 68): the glyph stands on the passage's middle cell in the wall's south row (the foot lies 8 px under it)."""
@@ -774,10 +774,11 @@ def gate(ms):
     c.paint(c.rect(left, H - 5, ox0 - 5, H) | c.rect(ox1 + 5, H - 5, right, H), ex["stone_wall"],
             0.26 + 0.08 * (pa.value_noise(H, W, 3, rng) - 0.5), dither=False)
     c.paint(c.rect(left, H - 7, right, H) & (pa.value_noise(H, W, 2, rng) > 0.7) & c.a & ~arch, MOSS, 0.4, dither=False)
-    # a pole on the keystone with a green flag that has been mended once
-    c.paint(c.rect(int(cx) - 1, 0, int(cx) + 1, 14), ex["iron"], 0.6, dither=False)
-    c.paint(c.rect(int(cx) + 1, 1, int(cx) + 13, 7), FLAG_GREEN, np.where(c.xx < cx + 6, 0.62, 0.4), dither=False)
-    c.paint(c.rect(int(cx) + 4, 2, int(cx) + 8, 5), FLAG_GREEN, 0.92, dither=False)
+    # a pole on the east pier with a green flag that has been mended once
+    px = 164  # on the east pier: the cells north of it are solid, none of them is walked on
+    c.paint(c.rect(px, 0, px + 2, 14), ex["iron"], 0.6, dither=False)
+    c.paint(c.rect(px + 2, 1, px + 14, 7), FLAG_GREEN, np.where(c.xx < px + 8, 0.62, 0.4), dither=False)
+    c.paint(c.rect(px + 5, 2, px + 9, 5), FLAG_GREEN, 0.92, dither=False)
     c.outline(st["outline"])
     return c
 
@@ -1022,7 +1023,6 @@ def town_house(ms, seed, cells, floors, style):
     kinds = ["open", "open", "shut", "curtain", "open", "dark", "curtain"]
     for fl in range(floors):
         fy = foot - sum(floor_h[:fl + 1]) + 6
-        fh = floor_h[fl]
         slots = max(2, cells - 2) if fl else max(2, cells - 2)
         for k in range(slots):
             wx = x0 + 6 + int((fw - 12 - 9) * (k + 0.5) / slots) - 4 + int(rng.integers(-2, 3))
@@ -1429,7 +1429,6 @@ def lectern(ms):
         c.paint(ms.limb_mask(c, x0, 22, x1, y1, 3), ex["plank"], 0.45, dither=False)
     c.paint(c.rect(17, 22, 20, 44), ex["plank"], np.where(c.xx < 18, 0.62, 0.28), dither=False)
     c.paint(c.rect(9, 33, 29, 36), ex["plank"], 0.55, dither=False)  # the shelf
-    top = (c.xx >= 3) & (c.xx < 33) & (c.yy >= 6 + (c.xx - 3) * 0.0) & (c.yy < 22 - (c.yy * 0))
     slope = c.rect(3, 8, 33, 22) & (c.yy >= 8 + (33 - c.xx) * 0.06)
     c.paint(slope, ex["plank"], 0.7 - 0.25 * (c.yy - 8) / 14 + 0.1 * (pa.value_noise(52, 36, 2, rng) - 0.5), dither=False)
     c.paint(c.rect(3, 20, 33, 23), ex["plank"], 0.3, dither=False)
@@ -1451,7 +1450,6 @@ def bread_table(ms):
     """A trestle table under a white cloth (one corner trails on the ground), a round loaf on a board, a small bowl of salt and
     four sparrows: two on the table's edge, one on the loaf, one on the ground in front of it; their crumbs. 64 x 44,
     anchor (32, 38)."""
-    rng = np.random.default_rng(1127)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(64, 44)
     for x0 in (8, 50):  # the trestles
@@ -1541,7 +1539,6 @@ def barrel(ms, kind):
 def lamp_post(ms):
     """An iron lamp post with a scrolled bracket and a lantern whose glass is dark: nothing burns in it by day. 18 x 72,
     anchor (9, 68)."""
-    rng = np.random.default_rng(1141)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(18, 72)
     c.paint(c.rect(7, 18, 11, 66), ex["iron"], np.where(c.xx < 9, 0.7, 0.25), dither=False)
@@ -1563,7 +1560,6 @@ def lamp_post(ms):
 def buckets(ms):
     """Three pails in front of a shop, full of peonies (pink, white, a deep one) with a few petals on the ground; one pail is
     dented tin, one wood, one a cracked crock. 56 x 40, anchor (28, 34)."""
-    rng = np.random.default_rng(1147)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(56, 40)
     for bx, col, kind in ((3, PEONY, "tin"), (20, PEONY_WHITE, "wood"), (37, ramp("#3a0e22", "#701c40", "#a83860", "#d870a0", "#f2b0cc"), "crock")):
@@ -1618,7 +1614,6 @@ def woodstack(ms):
 def sawhorse(ms):
     """A sawhorse (two crossed pairs of legs and a beam) with a plank across it, half sawn through, the saw still in the kerf and
     a drift of sawdust under it. 48 x 34, anchor (24, 30)."""
-    rng = np.random.default_rng(1153)
     st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
     c = ms.Canvas(48, 34)
     for x0 in (10, 34):
@@ -1656,8 +1651,7 @@ def seat_crate(ms):
 def pots(ms, kind):
     """A flowerpot or two at a doorstep: kind 0 a clay pot with a green fan, kind 1 two pots, one with something dried. 24 x 22,
     anchor (12, 19)."""
-    rng = np.random.default_rng(1167 + kind)
-    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    st = pa.STYLES["tal"]
     c = ms.Canvas(24, 22)
     spots = ((8, 7),) if kind == 0 else ((6, 7), (16, 5))
     for k, (px, ph) in enumerate(spots):

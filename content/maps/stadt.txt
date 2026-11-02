@@ -1,0 +1,144 @@
+; Akt IV, S2: die Stadt, die vierte große Karte der Klasse M (ADR-068, ADR-071): Elysias Markt mit Widerspruch (O19). Eine Stadt mit Mauer, von Süden
+; gesehen: die Straße kommt von der Tür im Osten, läuft vor der Südmauer entlang und biegt nach Norden in den Torbogen. Innen führt die Torstraße
+; zur Hauptstraße und auf den Platz (Brunnen, Zettelbrett, Marktstände, im Norden das Rathaus), eine Gasse nach Westen zum Blumenladen, um den
+; Block zur Werkstatt und an der Südmauer zurück. Alle Häuser sind Vorderansichten auf einer festen Reihe mit festem Grundstück dahinter, damit
+; man nie hinter einem Haus geht. Bei Tag, kein Licht (O3). Kein Seil mehr: das Layout ist gebacken und ändert sich nicht (ADR-068).
+; Layout: tools/art/layout_akt4_maps.py stadt --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/stadt.txt.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/stadt_ground.png"
+scatter = [{"sprite": "tal/pebbles", "on": "_", "density": 0.1, "spacing": 14}, {"sprite": "tal/grass_tuft", "on": "_", "near": "h", "radius": 1, "density": 0.18, "spacing": 12}, {"sprite": "tal/leaves", "on": "_", "near": "h", "radius": 1, "density": 0.12, "spacing": 13}, {"sprite": "tal/grass_tuft", "on": ".", "density": 0.3, "spacing": 11, "clump": 56}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.1, "spacing": 16}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.2, "spacing": 12}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.25, "spacing": 10}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.12, "spacing": 22}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+_ = {"atlas": [3, 0], "surface": "stone", "paint": "cobble"}
+; Wald außerhalb der Mauer und in den Gärten hinter den Häusern (T Eiche, C krumme Eiche, P Kiefer), Büsche, Fels und hohes Gras auf der Wiese vor dem Tor
+T = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree"}}
+C = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tree_crooked"}}
+P = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/pine"}}
+* = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bush"}}
+o = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+; die Mauer: W ein Stück Mauer, vier Zellen lang (die Glyphe steht auf der westlichen Zelle), | ein Stück der Mauer von Norden nach Süden (die Glyphe steht auf der südlichen von vier Zellen), t ein Eckturm; G das Tor (ein niedriger Bogen, der Durchgang liegt auf Pflaster), U das Wachhäuschen daneben
+W = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_wall_h"}}
+| = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_wall_v"}}
+t = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_wall_tower"}}
+G = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_gate"}}
+U = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_guard_hut"}}
+; die Häuser (jede Glyphe steht auf der mittleren Zelle des Grundrisses in der letzten, festen Reihe; dahinter ist der Platz fest): R Rathaus (elf Zellen), F Blumenladen, K Werkstatt, a bis z Wohnhäuser
+R = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_town_hall"}}
+F = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_florist"}}
+K = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_workshop"}}
+a = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_a"}}
+b = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_b"}}
+c = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_c"}}
+d = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_d"}}
+e = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_e"}}
+f = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_f"}}
+j = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_g"}}
+u = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_h"}}
+w = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_i"}}
+z = {"ground": "h", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_house_k"}}
+; auf dem Platz: der Brunnen (O) mit der abgenutzten Stelle am Rand (Q, der Cue ist ein Fragment), das Zettelbrett (Z), zwei Marktstände (S Obst, s Stoff), die drei Stationen von „Ein perfekter Tag“ (1 Kranz, 2 Pult, 3 Tisch mit Brot und Salz), Laternenpfosten ohne Licht (l), Fass (x), Kiste (X), Bank (r)
+O = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_fountain"}}
+Q = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_fountain_rim", "cue": "fountain_rim", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "radius": 16}}
+Z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_board", "cue": "list_board", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "radius": 26}}
+S = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stall_fruit"}}
+s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stall_cloth"}}
+1 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_wreath", "cue": "day_wreath", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "radius": 16}}
+2 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_lectern", "cue": "day_lectern", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "radius": 18}}
+3 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_bread_table", "cue": "day_table", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "radius": 22}}
+l = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_lamp_post"}}
+x = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_barrel"}}
+X = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_crate"}}
+r = {"ground": "_", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/st_bench"}}
+; vor den Läden: Eimer mit Pfingstrosen und Töpfe beim Blumenladen (B, q), Holzstapel und Sägebock bei der Werkstatt (E, H); die Kiste, auf der Lio sitzt, liegt eine Zelle über ihm und flach unter ihm (Y)
+B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_buckets"}}
+q = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_pots"}}
+E = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_woodstack"}}
+H = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_sawhorse"}}
+Y = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate"}}
+; die Läden sind zu (S3 und S4 setzen an die Stelle der Blocker die Türen ein): % vor dem Blumenladen, & vor der Werkstatt
+% = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "florist_wait", "dialogue": "res://content/dialogue/akt4/stadt.dialogue"}}
+& = {"ground": "_", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "cue": "workshop_wait", "dialogue": "res://content/dialogue/akt4/stadt.dialogue"}}
+; Menschen: I die Torwächterin im Bogen, M Mira am Brunnenrand, y der Gefällige an seinem Brett, v eine Bürgerin an ihrem Stand, L Lio an der Ecke der Torstraße; J die Ziege (die Glyphe steht unter dem linken Ende des Rathausdaches, das Bild ist auf den Dachrand gehoben)
+I = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_torwaechterin_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "gate", "face": "s"}}
+M = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "mira_square", "face": "s", "sit": true}}
+y = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_gefaelliger_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "gef_square", "face": "n"}}
+v = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_buerger_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "citizen_1", "face": "n"}}
+L = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_lio_look.tres", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "lio_street", "face": "e", "sit": true}}
+J = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue": "res://content/dialogue/akt4/stadt.dialogue", "cue": "goat_roof", "perch": 149}}
+; Türen: D ins Rathaus, N das Tor an der Straße (Rand der Karte); Marken: der Start auf dem Platz, die Ankünfte (Herkunft Straße: vor dem Tor draußen; Herkunft Rathaus: vor der Tür; Blumenladen und Werkstatt: vor den Läden)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "rathaus", "spawn": "stadt"}}
+N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "strasse", "spawn": "stadt", "auto": true, "size": [1, 7]}}
+@ = {"ground": "_", "marker": "player_spawn"}
+n = {"ground": ",", "marker": "spawn_strasse"}
+i = {"ground": "_", "marker": "spawn_rathaus"}
+$ = {"ground": "_", "marker": "spawn_blumenladen"}
+! = {"ground": "_", "marker": "spawn_werkstatt"}
+[map]
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hThhhhhThhhhhhhhThhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhChhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhThhhhhhChhhhhhhhhhhhhThh
+hhhhhhhhhhhhhhhhhhhhPhhhhhhhhhhhhThhhhhhThhhhhChhhhhhhhhhhChhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhthWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhthhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhPhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhPhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhChhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhChhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhChhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|hhhThhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhfhhhhhhhhRhhhhhhhhhdhhhhhhchhhhhahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhh_J___D________hhhhh___hhhhh____hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_s__________________Z_______S_____lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh________________________x______X___hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh__v__2___i__________y______________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhh___________________________________hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_________________________________3_hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____x______________________________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhahhhhhhbhhhhhhhFhhhhl__________________________l_______hhhchhhhhhhehhhhhhfhhhhhhhhThhhhhhhhhh
+hhhhhhhhhh|hh______________B__%__q__________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
+hThhhhhhhhhhh___________________________________________________@___________________hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh_________________$_____________________________________________________hhhhhhhhhhhhhhhhhhhhhThh
+hhhhhhhhPhhhh___________l______________________________O___1__________________l_____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hh____hhhhhhhhhhhhhhhhhh__r_________l________M__________r___hhhhhhhh_____hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhh__________________Q________________hhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh__l_hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____lhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhY____hhhhhhh|hhhhhhhhhhhhThhh
+hhhhThhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhL____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhThhhhhhhhhhhh
+hhhhhhhhhhhhh____hhhhhKhhhhhhhhdhhhhhahhhhhuhhhhhhhjhhhhhhhhwhhhhhhzhhhhhhbhhhhX____hhhhfhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hh_________&_____________________________________________________________hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh_x____E______H_________________________________________________________hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhh_________!_____________________________________________________________hhhhhhhhhhhhhhhhhhhThhhh
+hhhThhhhhhhhh______________l____________l_______________l_____________l______X______hhUhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____Ihhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhthWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhhhh__G__hhhWhhhthhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_______hhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_______............g....hhhhhh
+hhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...,,,,,..g............g...hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhPhhhhhhThhhhhhhhhhhhhhhhhhhhhhh.....,,,,,o...*..............hhhhh
+hhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhg...g..,,,,,,......g...*.......hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...g....,,,,,,,,,............,,,,,,,,
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhPh..g.......,,,,,,,,,,mmmmm,,,,,,,,,,,,,
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....g.....,,,,,,,mm,,,,,m,,,n,mmmmmN,
+hhhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhhhhhhhhhhhhhhhhThhhhhhhh.g.........,,,,,,,,,,,mm,,,,,,,,,,,,,
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..g.g.......,,,,,,pp,,,,,,,,,,,,p,,,
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....g.......,,,,,,,,,,,,,,,,.hhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...............o.,,,,.....*.hhhhh
+hhhhhhhhhhhhhhhhhhhhPhhhhThhhhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhg.g.g....................hhhhh
+hhhhhhhhhhhhhhhhPhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh................hhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..hhhhhhhhhhhh

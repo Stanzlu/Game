@@ -2,6 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
+uid="uid://dcy7bmb2r0qeh"
+path="res://.godot/imported/lio_street_0.wav-2e27bc691ade450a679ac8b4548a0e2d.sample"
+
+[deps]
+
+source_file="res://assets/generated/sfx/lio_street_0.wav"
+dest_files=["res://.godot/imported/lio_street_0.wav-2e27bc691ade450a679ac8b4548a0e2d.sample"]
 
 [params]
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://btn1wn7nvdp1j"
+path="res://.godot/imported/rathaus.dialogue-b9f8e85909f7ad0c38a0bfd203be8852.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/rathaus.dialogue"
+dest_files=["res://.godot/imported/rathaus.dialogue-b9f8e85909f7ad0c38a0bfd203be8852.tres"]
+
+[params]
+
+defaults=true

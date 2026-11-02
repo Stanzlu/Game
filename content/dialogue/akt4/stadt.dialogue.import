@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cqx63omwhk68u"
+path="res://.godot/imported/stadt.dialogue-f3cf2c4e80411b234d628ff21ae83ca1.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/stadt.dialogue"
+dest_files=["res://.godot/imported/stadt.dialogue-f3cf2c4e80411b234d628ff21ae83ca1.tres"]
+
+[params]
+
+defaults=true
