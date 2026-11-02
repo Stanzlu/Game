@@ -785,12 +785,164 @@
     {
      "type": "flag",
      "ref": "city.gef_met"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_1"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_3"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_8"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_10"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_12"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_15"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_21"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_23"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_65"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_66"
+    },
+    {
+     "type": "flag",
+     "ref": "list.opened"
+    },
+    {
+     "type": "flag",
+     "ref": "list.closed"
     }
    ],
-   "payoff": "Das Brett am Platz hat sechzehn offene Zettel in vielen Handschriften, durchgestrichene mit einem »Tut mir leid« daneben und einen leeren, der trotzdem hängt; der Gefällige entschuldigt sich, bevor er bittet, und hat noch keine Aufgabe für sie (Akt IV, S2). Die Signature-Begegnung in S5 lässt siebzehn, achtzehn und neunzehn dazuwachsen; Fortschritt entsteht durch Priorisieren und Ablehnen (Bible §14), und das Brot am Ende ist die Antwort auf ein Nein. Sein Warum zeigen Dinge in seiner Küche (Zettel in fremder Handschrift), keine Zeile erklärt es (Bible §51).",
+   "payoff": "Das Brett am Platz hat sechzehn offene Zettel in vielen Handschriften, durchgestrichene mit einem »Tut mir leid« daneben und einen leeren, der trotzdem hängt; der Gefällige entschuldigt sich, bevor er bittet, und hat in S2 noch keine Aufgabe für sie. Die Signature-Begegnung (Akt IV, S5) lässt siebzehn, achtzehn und neunzehn dazuwachsen, er entschuldigt sich vor jedem (`stadt_list_8`, `stadt_list_10`, `stadt_list_12`) und bittet nicht, er fragt nur (`stadt_list_15`). Fortschritt entsteht durch Priorisieren und Ablehnen (Bible §14): sie wählt bis zu drei von sechs Aufgaben und sagt zu den übrigen Nein, ohne Grund (`stadt_list_r25`); kein Zeitlimit, kein Scheitern, niemand stirbt. Jedes Nein hat eine Folge im Raum, einen durchgestrichenen Zettel an seinem Ort mit dem kleinen runden »Tut mir leid« (`stadt_list_65`), jedes Ja einen Gang (`do_*`: ein frischer Zettel, eine Kleinigkeit, kein Lob). Das Nein tut ihm weh, er zuckt, entschuldigt sich einmal und hält es aus (`stadt_list_22` bis `stadt_list_24`). Zwei leere Zettel hängen am Ende am Brett (`stadt_list_3`): der leere von S2 und der neunzehnte, für den Fall. Das Brot am Ende ist die Antwort auf ein Nein (Motiv „Das Brot nach dem Nein“), sein Warum zeigen Dinge in seiner Küche (Motiv „Das Warum des Gefälligen“), keine Zeile erklärt es (Bible §51).",
    "payoff_lines": [
     "stadt_gef_4",
-    "stadt_board_4"
+    "stadt_board_4",
+    "stadt_list_3",
+    "stadt_list_12"
+   ]
+  },
+  {
+   "id": "grenzen-brot",
+   "kind": "vorausdeutung",
+   "title": "Das Brot nach dem Nein (Grenzen III)",
+   "bible": "§14, §16, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "stadt_list_29"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_30"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_31"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_32"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_33"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_34"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_35"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_36"
+    },
+    {
+     "type": "flag",
+     "ref": "list.sat"
+    }
+   ],
+   "payoff": "Bible §14: „Später muss der Gefällige erst lernen, dass Grenzen nicht bedeuten, jedes Brot aggressiv abzulehnen.“ Nach dem Nein setzt sich der Gefällige zu ihr, schweigt eine Weile und hält ihr ein Brot hin: „Ich habe zu viel gebacken. Immer. Du musst nicht.“ (`stadt_list_31`). Eine Grenze kann Nähe ermöglichen (Plan 5.2): sie darf es nehmen oder warm ablehnen, beides ist gleichwertig. „Nein, danke.“ und das Schweigen kränken ihn nicht, er isst es selbst, und es ist das erste Mal, dass sie ihn essen sieht (`stadt_list_35`); „Nehmen.“ führt in seine Küche. Das Brot ist `item_loaf` aus Akt I, kein zweiter Gegenstand (Brief O18); im Haus (S8, Nachspiel) kocht er zu viel, ein Gast und ein Tisch, kein Rezeptsystem. Die Zeile danach (`stadt_list_46`, `stadt_list_47`) entschuldigt sich weniger, aber nicht gar nicht.",
+   "payoff_lines": [
+    "stadt_list_31",
+    "stadt_list_35"
+   ]
+  },
+  {
+   "id": "gefaelliger-warum",
+   "kind": "vorausdeutung",
+   "title": "Das Warum des Gefälligen (Zettel über dem Herd)",
+   "bible": "§14, §46, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "stadt_list_37"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_38"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_39"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_40"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_41"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_42"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_43"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_44"
+    },
+    {
+     "type": "flag",
+     "ref": "list.kitchen_seen"
+    }
+   ],
+   "payoff": "Plan 5.2: „wem er gefallen musste“. Wer sein Brot nimmt, sieht in seiner Küche über dem Herd eine Schnur mit Zetteln in verschiedenen Handschriften, »Kein Salz.«, »Nur das Weiche.«, »Nicht vor acht.«; der erste ist so verblasst, dass man ihn eher fühlt als liest, und trägt keinen Namen (`stadt_list_38`, `stadt_list_39`). Es erklärt nichts: kein Elternteil, kein Täter, keine Ursache, keine Wirkung auf die Spielerin (Bible §15, §51); er sagt nur „Die hängen da schon lange.“ (`stadt_list_40`) und gibt ihr den blassesten mit, wie das Brot, „Er liest sich eh nicht mehr.“ (`stadt_list_43`). Der Zettel (`curiosity_old_slip`, „Ein verblasster Zettel“) ist eine Kuriosität und wandert in die Taschen; die leere Klammer an der Schnur (`stadt_list_44`) bleibt. Die Dinge können später wieder auftauchen (das Haus, das Nachspiel), ohne dass jemand sie deutet.",
+   "payoff_lines": [
+    "stadt_list_39",
+    "stadt_list_44"
    ]
   },
   {
@@ -818,9 +970,21 @@
     {
      "type": "line",
      "ref": "stadt_mira_7"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_4"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_5"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_list_6"
     }
    ],
-   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste, die ohne Mühe Nein sagt (S5); der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus."
+   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste (S5, gebaut): ein Zettel steckt in ihrem Netz, sie liest ihn einmal und sagt „Nein.“ (`stadt_list_5`), faltet ihn und knotet weiter; der Text kommentiert es nicht, sie fragt nichts, es gibt kein Flag und keine neue Erinnerung; der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus."
   },
   {
    "id": "schluessel-passt",
@@ -1115,7 +1279,7 @@
      "ref": "value.calm"
     }
    ],
-   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend am Lagerfeuer, als Spur über das Wasser und nie als Wert (`tal_eve_val_2` bis `tal_eve_val_12`), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6).",
+   "payoff": "Drei Handgriffe und ein Schweigen am Feuer, nie mit dem Wertwort genannt: Der Raum antwortet später an einem anderen Ort (`haus_fire_10`, `haus_table_5`, `haus_table_6`, `haus_bucket_3`), Mira liest es am Abend am Lagerfeuer, als Spur über das Wasser und nie als Wert (`tal_eve_val_2` bis `tal_eve_val_12`), das Ende liest die Achse Entscheidungen, nie eine Zahl (Plan 5.6). In Akt IV, S5 trägt jede der sechs Aufgaben der Liste einen der drei Werte (Nähe: Strauß, Leiter; Freiheit: Bühne, Ziege; Ruhe: Brot, Fundbüro), nie genannt und in gemischter Reihenfolge; wer die passende Aufgabe wählt, setzt die Facette Integrität und bekommt im Nein die zusätzliche Antwort „Das sind meine.“ (`stadt_list_r26`), neben den unbedingten. Wer am Feuer geschwiegen hat, bekommt dieselben Aufgaben ohne die Facette: kein Wert ist der bessere (Bible §16).",
    "payoff_lines": [
     "haus_fire_10",
     "haus_table_5",
@@ -2376,6 +2540,86 @@
    "flag": "melody.tess_whistle",
    "axis": "Musik",
    "meaning": "Sie hat Tess beim Messen pfeifen gehört (Akt IV, S4): die zweite Melodie der Stadt, ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief; hörbar, kein Fragment (Brief O10). Das Konzert (S6) hat die dritte, `melody.lio_concert`."
+  },
+  {
+   "flag": "list.opened",
+   "axis": "Beschützer",
+   "meaning": "Der Gefällige hat die Liste geöffnet (Akt IV, S5, Bible §14): er hängt siebzehn, achtzehn und neunzehn dazu, entschuldigt sich vor jedem und bittet nicht, er fragt nur. Das Brett zählt von da an neunzehn (`stadt_list_1`), Mira am Brunnen sagt einem Zettel Nein (`stadt_list_5`), die Heldenquest rückt auf die Stufe „list“ und die Nebenquest „Die Liste“ beginnt."
+  },
+  {
+   "flag": "list.closed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat zu den übrigen Zetteln der Liste Nein gesagt (Akt IV, S5, Grenzen II): ohne Grund, mit „Die anderen nicht.“, mit „Das sind meine.“ (nur mit der Facette Integrität) oder im Schweigen. Die nicht genommenen Aufgaben hängen am Ort durchgestrichen (`slip_struck`), nichts geschieht, niemand stirbt; er zuckt, entschuldigt sich einmal und hält es aus. Die Nebenquest „Die Liste“ ist beendet."
+  },
+  {
+   "flag": "list.sat",
+   "axis": "Beschützer",
+   "meaning": "Der Gefällige hat sich nach dem Nein zu ihr gesetzt und ein Brot hingehalten (Akt IV, S5, Grenzen III). Nehmen, „Nein, danke.“ und Schweigen sind gleichwertig; seine Zeile danach hängt daran (`stadt_list_47`)."
+  },
+  {
+   "flag": "list.kitchen_seen",
+   "axis": "Beschützer",
+   "meaning": "Sie hat sein Brot genommen und seine Küche gesehen (Akt IV, S5): über dem Herd eine Schnur mit Zetteln in fremden Handschriften, der älteste verblasst und ohne Namen, den sie als Kuriosität mitnimmt. Keine Zeile erklärt etwas (Bible §51); das Brot ist `item_loaf`, der Zettel `curiosity_old_slip`."
+  },
+  {
+   "flag": "list.take_bouquet",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Den Strauß.“ aus der Liste gewählt (Akt IV, S5, Wert Nähe, nie genannt): am Ort (vor dem Blumenladen) hängt ein frischer Zettel, den Gang tut sie dort (`do_bouquet`). Mit `value.closeness` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.take_stage",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Die Bühne.“ aus der Liste gewählt (Akt IV, S5, Wert Freiheit, nie genannt): am Ort (am Rand des Platzes vor dem Rathaus) hängt ein frischer Zettel, den Gang tut sie dort (`do_stage`). Mit `value.freedom` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.take_bread",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Das Brot.“ aus der Liste gewählt (Akt IV, S5, Wert Ruhe, nie genannt): am Ort (am Tisch mit Brot und Salz) hängt ein frischer Zettel, den Gang tut sie dort (`do_bread`). Mit `value.calm` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.take_ladder",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Die Leiter.“ aus der Liste gewählt (Akt IV, S5, Wert Nähe, nie genannt): am Ort (vor der Werkstatt) hängt ein frischer Zettel, den Gang tut sie dort (`do_ladder`). Mit `value.closeness` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.take_goat",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Die Ziege.“ aus der Liste gewählt (Akt IV, S5, Wert Freiheit, nie genannt): am Ort (am Fuß des Rathauses) hängt ein frischer Zettel, den Gang tut sie dort (`do_goat`). Mit `value.freedom` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.take_lost",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat „Das Fundbüro.“ aus der Liste gewählt (Akt IV, S5, Wert Ruhe, nie genannt): am Ort (an der Rathaustür) hängt ein frischer Zettel, den Gang tut sie dort (`do_lost`). Mit `value.calm` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+  },
+  {
+   "flag": "list.done_bouquet",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Den Strauß.“ getan (Akt IV, S5): der Strauß aus dem Eimer mit der Karte »Für den vom Brett.«, den sie zum Brett trägt. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "list.done_stage",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Die Bühne.“ getan (Akt IV, S5): zwei Nägel in eine Fuge auf den Böcken, der Hall über den Platz. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "list.done_bread",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Das Brot.“ getan (Akt IV, S5): die unberührte Seite des Brotes neben das Salz, den Rest den Spatzen. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "list.done_ladder",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Die Leiter.“ getan (Akt IV, S5): sie hält die Leiter, bis das Klopfen oben aufhört. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "list.done_goat",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Die Ziege.“ getan (Akt IV, S5): Heu in den Schatten der Traufe, die Ziege bleibt oben. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "list.done_lost",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat den Gang für „Das Fundbüro.“ getan (Akt IV, S5): ein grauer Schal aufs unterste Brett der Fundstücke. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
   }
  ]
 }

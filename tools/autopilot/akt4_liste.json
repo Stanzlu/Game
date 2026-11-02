@@ -1,0 +1,43 @@
+[
+  {"relative": true},
+  {"log": "Act IV, S5: the Gefällige's list, from the frozen end of Act III (she stands free in the house)", "t": 0.5},
+  {"wait_for": {"scene": "haus"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 0.1},
+  {"enter": "tal", "log": "out into the valley", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "t": 0.1},
+  {"enter": "strasse", "log": "the west path leads onto the road", "t": 0.5},
+  {"wait_for": {"scene": "strasse"}, "timeout": 30, "t": 0.1},
+  {"enter": "stadt", "log": "the road runs into the city", "t": 0.5},
+  {"wait_for": {"scene": "stadt"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "stadt_enter"}, "timeout": 30, "t": 0.1},
+
+  {"talk": "gef_square", "log": "the first meeting: he does not want to ask", "t": 0.5},
+  {"wait_for": {"flag": "city.gef_met"}, "timeout": 30, "t": 0.1},
+  {"talk": "mira_square", "log": "Mira at the rim, before the list: her own words", "t": 0.5},
+
+  {"talk": "gef_square", "log": "the second time the list grows to nineteen, he asks only; the first answers take three tasks, the no, the bread and his kitchen", "t": 0.5},
+  {"wait_for": {"flag": "list.opened"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"quest": "main_city_way", "stage": "list"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"flag": "list.take_bouquet"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "list.take_stage"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "list.take_bread"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "list.closed"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "list.sat"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"flag": "list.kitchen_seen"}, "timeout": 60, "t": 0.1},
+  {"wait_for": {"dialogue_closed": true}, "timeout": 60, "t": 0.1},
+
+  {"log": "Mira at the edge says no to a slip", "t": 0.1},
+  {"talk": "mira_square", "t": 0.5},
+
+  {"log": "the three tasks she took, each at its place: the bouquet, the stage, the bread", "t": 0.1},
+  {"use": [32, 28], "face": "up", "t": 0.5},
+  {"wait_for": {"flag": "list.done_bouquet"}, "timeout": 30, "t": 0.1},
+  {"use": [44, 27], "face": "up", "t": 0.5},
+  {"wait_for": {"flag": "list.done_stage"}, "timeout": 30, "t": 0.1},
+  {"use": [68, 27], "face": "up", "t": 0.5},
+  {"wait_for": {"flag": "list.done_bread"}, "timeout": 30, "t": 0.1},
+
+  {"log": "a struck slip: the ladder she did not take, with the sorry beside it", "t": 0.1},
+  {"use": [25, 40], "face": "up", "t": 0.5},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]

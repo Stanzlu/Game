@@ -398,7 +398,8 @@ STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d":
                 "s": "_", "1": "_", "2": "_", "3": "_", "l": "_", "x": "_", "X": "_", "B": "_", "E": "_", "H": "_", "q": "_",
                 "r": "_", "Y": "_", "T": "h", "C": "h", "P": "h", "*": ".", "o": ".", "g": ".", "I": "_", "M": "_", "y": "_",
                 "v": "_", "L": "_", "J": "_", "%": "_", "&": "_", "D": "_", "N": ",", "@": "_", "n": ",", "i": "_", "$": "_",
-                "!": "_", "4": "_", "5": "_", "6": "_", "7": "_", "8": "_"}
+                "!": "_", "4": "_", "5": "_", "6": "_", "7": "_", "8": "_",
+                "ä": "_", "ß": "_", "ö": "_", "æ": "_", "ü": "_", "ø": "_", "Ä": "_", "å": "_", "Ö": "_", "Æ": "_", "Ü": "_", "Ø": "_"}
 
 
 def hall_perch(row):
@@ -527,6 +528,19 @@ def build_stadt():
     put("6", 25, 41)  # the bench before the workshop
     put("7", 28, 40)  # the crate Tess sits on once the board is sawn (flat, one cell above her)
     put("8", 28, 41)  # Tess on it
+    # ---- the list (S5): on each task's place a fresh slip and, one cell beside it, a struck one (the map shows one or the other)
+    put("ä", 32, 27)  # bouquet: fresh (taken, not yet done)
+    put("ß", 31, 27)  # bouquet: struck (the list is closed and she did not take it)
+    put("ö", 24, 39)  # ladder: fresh (taken, not yet done)
+    put("æ", 25, 39)  # ladder: struck (the list is closed and she did not take it)
+    put("ü", 44, 26)  # stage: fresh (taken, not yet done)
+    put("ø", 45, 26)  # stage: struck (the list is closed and she did not take it)
+    put("Ä", 46, 19)  # goat: fresh (taken, not yet done)
+    put("å", 47, 19)  # goat: struck (the list is closed and she did not take it)
+    put("Ö", 68, 26)  # bread: fresh (taken, not yet done)
+    put("Æ", 67, 26)  # bread: struck (the list is closed and she did not take it)
+    put("Ü", 42, 19)  # lost: fresh (taken, not yet done)
+    put("Ø", 41, 19)  # lost: struck (the list is closed and she did not take it)
     put("!", 22, 41)
     # ---- the gate: the guard in the arch, Lio in the corner of the gate street with the crate he sits on
     put("I", GATE_X + 2, GATE_ROWS[0] + 1)

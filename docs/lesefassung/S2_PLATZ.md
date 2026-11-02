@@ -29,6 +29,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Ausrufezeichen, keine Romanze. Die Antworten sind Themen; wer nur schweigt, bekommt den Satz vom ersten Mal zurück. Die Ziege kommt als
 > Echo von "Ich frag nicht, wie" (tal_mira_eve_9b), jetzt mit "nicht mehr". Keine Erinnerung, kein Flag, die Beziehung bleibt familiar.
 
+*wenn* `list.opened`
+  - *→ weiter bei* `mira_list`
 - *Auf dem Brunnenrand sitzt Mira, ein Bein angezogen, das Netz auf dem Knie. Sie sieht nicht auf.* `[#draft]`  <sub>stadt_mira_1</sub>
 - **Mira:** Zwei Tage Vorsprung. Das ist der Stand. `[#draft]`  <sub>stadt_mira_2</sub>
 - ▸ **Du hast auf mich gewartet.**
@@ -44,11 +46,17 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S2-3 · `list_board`
 
 > --- Das Zettelbrett und der Gefällige ---------------------------------------------------------------------------------
-> Sechzehn Zettel sind offen; die Nummern liegen schon, 17, 18 und 19 wachsen erst in S5 dazu. Das Brett ist das Gesicht, das zu allem nickt.
+> Sechzehn Zettel sind offen (S2); siebzehn, achtzehn und neunzehn wachsen in S5 dazu (gef_list). Das Brett ist das Gesicht, das zu allem nickt.
 > Der Gefällige entschuldigt sich, bevor er bittet, reiht Sätze mit "und" und "noch eben" und bricht ab ("— also, nur falls"). Er fragt dich
-> nichts Konkretes und hat noch keine Aufgabe für dich (das ist S5). Der Text lacht nie über ihn; nicken darf nur das Brett.
+> nichts Konkretes und hat beim ersten Treffen keine Aufgabe für dich (die Liste beginnt beim zweiten Besuch, S5). Der Text lacht nie über ihn; nicken darf nur das Brett.
 > Das Flag city.gef_met setzt und liest dieser Cue.
+> Ab list.opened (S5) zählt das Brett neunzehn und zeigt, was fehlt und was durchgestrichen ist; ohne das Flag bleibt der Wortlaut von S2, Zeichen für Zeichen.
 
+*wenn* `list.opened`
+  - *Neunzehn Zettel, nummeriert, nicht mehr alle offen. Wo einer fehlt, steckt die Nadel allein im Kork.* `[#draft]`  <sub>stadt_list_1</sub>
+  - *Die durchgestrichenen hängen weiter, jeder mit dem kleinen runden »Tut mir leid« daneben.* `[#draft]`  <sub>stadt_list_2</sub>
+  - *Zwei Zettel sind ganz leer und hängen trotzdem da.* `[#draft]`  <sub>stadt_list_3</sub>
+  - *→ Ende des Szenenstücks*
 - *Das Brett ist so voll, dass die Zettel einander halten, jeder in einer anderen Handschrift, manche mit Nadel, manche mit Wachs.* `[#draft]`  <sub>stadt_board_1</sub>
 - *Sechzehn Zettel, nummeriert, alle offen. »Leiter halten.« »Strauß abholen.« »Bühne, wer kann.« »Irgendwas mit Brot.«* `[#draft]`  <sub>stadt_board_2</sub>
 - *Andere sind durchgestrichen. Daneben steht in kleiner, runder Schrift immer dasselbe, »Tut mir leid«.* `[#draft]`  <sub>stadt_board_3</sub>
@@ -75,7 +83,10 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S2-6 · `gef_again`
 
+*wenn* `list.closed`
+  - *→ weiter bei* `gef_after`
 - **Gefälliger:** Ach, du bist es! Entschuldige, ich bin noch dabei. Es ist gleich — es wird gleich. `[#draft]`  <sub>stadt_gef_9</sub>
+- *→ weiter bei* `gef_list`
 
 ### S2-7 · `citizen_1`
 

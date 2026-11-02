@@ -127,6 +127,7 @@ QUEST_MAIN_CITY_WAY_TITLE,Der Weg in die Stadt
 QUEST_MAIN_CITY_WAY_WEST,"Am Westrand des Tals steht ein neuer Wegweiser. Die Straße dahinter führt zur Stadt, sagt er. Ich folge ihr."
 QUEST_MAIN_CITY_WAY_TOWN,"Die Stadt hat ein Tor, eine Torwächterin und einen Brunnen. Niemand hat mich als Helden begrüßt. Ich sehe mich um."
 QUEST_MAIN_CITY_WAY_HELP,"Hier fragt man einander um Hilfe, nicht nach Heldentaten. Ich fange dort an, wo jemand fragt."
+QUEST_MAIN_CITY_WAY_LIST,"Am Brett auf dem Platz hängen mehr Zettel, als ein Mensch tun kann, und der Gefällige entschuldigt sich für jeden einzelnen. Ich muss nicht alle tun."
 QUEST_SIDE_CITY_LOST_TITLE,Das Fundbüro
 QUEST_SIDE_CITY_LOST_ASK,"Im Rathaus gibt es ein Fundbüro. Es gibt zurück, was niemandem mehr gehört. Die Beamtin will nur wissen, was ich verloren habe."
 QUEST_SIDE_CITY_LOST_DONE,"Das Regal ist leer, bis auf eine Spinne, die dort wohnt. Ich habe einen Handschuh, einen Schlüssel, eine Dose mit Knöpfen und eine Tasse mit Sprung. Verloren habe ich nichts davon."
@@ -142,3 +143,6 @@ QUEST_SIDE_CITY_LETTER_DONE,"Der Brief bleibt zu, der Strauß bleibt hängen. Or
 QUEST_SIDE_CITY_NOTHING_TITLE,Nichts
 QUEST_SIDE_CITY_NOTHING_SIT,"Ich sitze auf der Bank vor der Werkstatt, Tess auf ihrer Kiste daneben. Das Licht liegt auf dem Holzstapel."
 QUEST_SIDE_CITY_NOTHING_DONE,"Ich habe mit Tess vor der Werkstatt gesessen. Das Licht ist auf dem Holzstapel ein Stück weitergerückt. Dann bin ich aufgestanden."
+QUEST_SIDE_CITY_LIST_TITLE,Die Liste
+QUEST_SIDE_CITY_LIST_OPEN,"Der Gefällige hat neue Zettel an das Brett gehängt und fragt mich, ob etwas davon passt. Er bittet nicht, er fragt nur. Falls."
+QUEST_SIDE_CITY_LIST_CLOSED,"Ich habe gesagt, was ich tue und was nicht. Die anderen Zettel hängen weiter am Brett, durchgestrichen. Der Gefällige hat sich zu mir gesetzt."

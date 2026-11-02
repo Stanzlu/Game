@@ -353,7 +353,10 @@ STADT_SHEETS = {"I": "torwaechterin", "M": "mira", "y": "gefaelliger", "v": "bue
 # what is there once and only once
 # S3: 4 the duck, 5 the pots she stands by once Orin has been past her
 # S4: 6 the bench before the workshop, 7 the crate and 8 Tess on it
-STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s"
+# S5: the six tasks of the list, a fresh slip and a struck one each (the struck one stands one cell aside)
+SLIPS = {"bouquet": ("ä", "ß"), "ladder": ("ö", "æ"), "stage": ("ü", "ø"), "goat": ("Ä", "å"), "bread": ("Ö", "Æ"), "lost": ("Ü", "Ø")}
+SLIP_GLYPHS = "".join(a + b for a, b in SLIPS.values())
+STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s" + SLIP_GLYPHS
 FACADE_GLYPHS = "RFKabcdefjuwzGUt"
 TREES = {"T": (3, 7), "C": (3, 7), "P": (2, 5)}
 
@@ -435,6 +438,10 @@ class StadtLayoutTests(unittest.TestCase):
         for glyph in set("".join(rows)):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
+                if glyph in SLIP_GLYPHS:
+                    # the list's slips: "do_<task>" for the fresh one, "slip_struck" for the struck one, both in the city's file
+                    self.assertEqual(params["dialogue"], STADT_DIALOGUE_RES, glyph)
+                    continue
                 if glyph in ("4", "8"):
                     # the duck's lines are the florist's, Tess's the workshop's
                     expected = ("duck", FLORIST_DIALOGUE_RES) if glyph == "4" else ("bench", WORKSHOP_DIALOGUE_RES)
@@ -542,6 +549,34 @@ class StadtLayoutTests(unittest.TestCase):
         self.assertTrue(symbols["8"]["params"].get("sit"), "she sits")
         self.assertNotIn("if", symbols["6"]["params"], "the bench is there from the first day")
         self.assertTrue(all(rows[y][door[0]] in "_!" for y in range(door[1] + 1, arrival[1] + 1)), "the way from the arrival to the door stays free")
+
+    def test_each_task_of_the_list_has_a_fresh_and_a_struck_slip_on_cells_that_block_nothing(self):
+        _, symbols, rows, spots = _stadt()
+        with open(STADT_DIALOGUE, encoding="utf-8") as f:
+            source = f.read()
+        pick = source[source.index("~ list_pick_1"):source.index("~ list_pick_2")]
+        answers = {"bouquet": "Den Strauß", "ladder": "Die Leiter", "stage": "Die Bühne", "goat": "Die Ziege", "bread": "Das Brot", "lost": "Das Fundbüro"}
+        values = {}
+        for task, text in answers.items():
+            block = pick[pick.index("- " + text + "."):]
+            block = block[:block.index("=> list_pick_2")]
+            values[task] = re.search(r'has_flag\("value\.([a-z]+)"\)', block).group(1)
+        for value in ("closeness", "freedom", "calm"):
+            self.assertEqual(sum(1 for v in values.values() if v == value), 2, "every value has two tasks: " + value)
+        stage_zone = {(x, y) for x in range(40, 49) for y in range(20, 26)}
+        for task, (fresh, struck) in SLIPS.items():
+            f, s = spots[fresh][0], spots[struck][0]
+            self.assertEqual(f[1], s[1], task + ": side by side")
+            self.assertEqual(abs(f[0] - s[0]), 1, task + ": one cell aside, so the two never overlap")
+            self.assertNotIn(f, stage_zone, task + ": the stage of S6 stays free")
+            self.assertNotIn(s, stage_zone, task + ": the stage of S6 stays free")
+            fp, sp = symbols[fresh]["params"], symbols[struck]["params"]
+            self.assertEqual(fp["sprite"], "tal/st_slip_open")
+            self.assertEqual(sp["sprite"], "tal/st_slip_struck")
+            self.assertEqual((fp["cue"], fp["if"], fp["unless"]), ("do_" + task, "list.take_" + task, "list.done_" + task), "taken, not yet done")
+            self.assertEqual((sp["cue"], sp["if"], sp["unless"]), ("slip_struck", "list.closed", "list.take_" + task), "closed and not taken")
+            for g in (fresh, struck):
+                self.assertEqual(_ground(symbols, g), "_", "no bake needed")
 
     def test_everything_is_reachable_on_foot_from_the_start_and_the_gate_is_the_only_way_in(self):
         _, symbols, rows, spots = _stadt()

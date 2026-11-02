@@ -150,7 +150,8 @@ func test_the_two_quests_and_the_help_stage_have_their_stages_and_texts() -> voi
 	var way := ContentDB.quest("main_city_way")
 	assert_true(way.can_advance("town", "help"))
 	assert_false(way.stage("town").is_final(), "the town leads on")
-	assert_true(way.stage("help").is_final(), "and this is as far as S3 goes")
+	assert_false(way.stage("help").is_final(), "and the list leads on (S5)")
+	assert_true(way.can_advance("help", "list"))
 	for key: String in [
 		"QUEST_SIDE_CITY_DUCK_TITLE",
 		"QUEST_SIDE_CITY_DUCK_LOOK",
