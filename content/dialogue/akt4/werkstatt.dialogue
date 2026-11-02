@@ -70,7 +70,7 @@ Tess misst weiter. Auf dem Bock liegt das Brett mit seiner Bleistiftlinie und l�
 ~ tess_saw
 Tess tritt an den Bock, setzt die Säge in die Bleistiftlinie und zieht sie in langen Zügen bis zur Mitte. [ID:wer_saw_1] [#draft]
 Die Späne fallen in einer Reihe, als hätte sie sie gezählt. [ID:wer_saw_2] [#draft]
-Tess: Auf die Linie schauen, nicht auf die Säge. Nicht drücken, ziehen. Jetzt du. [ID:wer_saw_3] [#draft]
+Tess: Daumen als Führung. Nicht drücken, ziehen. Jetzt du. [ID:wer_saw_3] [#draft]
 Du nimmst die Säge. Das Brett rutscht schon, wenn du es nur ansiehst. Tess steckt die Daumen in die Schürze. [ID:wer_saw_4] [#draft]
 - Hältst du das Brett? [ID:wer_saw_r1] [#draft]
 	Tess tritt neben dich und legt beide Hände flach auf das Brett, rechts und links der Linie. Sie sagt nichts. [ID:wer_saw_5] [#draft]
@@ -121,7 +121,7 @@ else
 	Tess: Halt dich an den Holmen. [ID:wer_again_8] [#draft]
 	Du steigst die zwei Sprossen hinauf und holst ein Maßband vom Balken, grau von Staub. [ID:wer_again_9] [#draft]
 	Tess lässt erst los, als beide Füße wieder auf dem Boden stehen. [ID:wer_again_10] [#draft]
-	Tess: Da ist es ja. Seit Montag such ich's. [ID:wer_again_11] [#draft]
+	Tess: Da ist es ja. Seit gestern such ich's. [ID:wer_again_11] [#draft]
 - … [ID:wer_again_r4] [#draft]
 	Tess hobelt weiter, und der Span rollt sich auf dem Boden ein. [ID:wer_again_12] [#draft]
 => END
@@ -129,8 +129,9 @@ else
 # --- Draußen: die Bank und "Nichts" ----------------------------------------------------------------------------------------------
 # Ist das Brett fertig, sitzt sie auf der Kiste neben der Bank vor der Werkstatt (in der Werkstatt steht sie dann nicht mehr: sie ist nie an zwei Orten). Wer sie anspricht,
 # hört genau eine Zeile, "Setz dich." (Bible §44), und sonst nichts. Setzt sich die Spielerin auf die Bank, spielt "nothing" einmal je Sitzen: zwei oder drei Erzählzeilen, kein
-# Dialog, keine Lehre, keine Sache über Ruhe, Pausen oder Gefühle; die Dinge reichen (Licht auf dem Holzstapel, ein Spatz). Das erste Mal setzt city.sat_with_tess; die Quest
-# endet beim Aufstehen. Danach kein Beat, kein Lob, kein Zähler. Wer Tess nach dem Sitzen anspricht, hört eine Zeile, die nichts erklärt.
+# Dialog, keine Lehre, keine Sache über Ruhe, Pausen oder Gefühle; die Dinge reichen (Licht auf dem Holzstapel, ein Spatz). Der Cue setzt nichts: die Szene (stadt_scene.gd)
+# startet die Quest beim Sitzen und beendet sie beim Aufstehen, dann fällt city.sat_with_tess. Danach kein Beat, kein Lob, kein Zähler. Wer Tess nach dem Sitzen anspricht,
+# hört eine Zeile, die nichts erklärt; wer sich noch einmal setzt, bekommt die kürzere Fassung.
 
 ~ bench
 if WorldState.has_flag("city.sat_with_tess")
@@ -148,7 +149,6 @@ if WorldState.has_flag("city.sat_with_tess")
 Die Bank ist gerade breit genug. Tess sitzt auf ihrer Kiste daneben, die Hände auf den Knien, ohne Werkzeug darin. [ID:wer_nothing_1] [#draft]
 Auf dem Holzstapel liegt ein Streifen Licht. Siehst du hin, steht er still. Siehst du weg, ist er ein Stück weiter. [ID:wer_nothing_2] [#draft]
 Ein Spatz landet auf dem Sägebock, sieht sich die Späne an und lässt sie liegen. [ID:wer_nothing_3] [#draft]
-do WorldState.set_flag("city.sat_with_tess")
 => END
 
 ~ nothing_again

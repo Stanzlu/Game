@@ -971,8 +971,6 @@ stadt_rim_1	akt4/stadt.dialogue	-
 stadt_rim_2	akt4/stadt.dialogue	-
 stadt_rim_3	akt4/stadt.dialogue	-
 stadt_rim_4	akt4/stadt.dialogue	-
-stadt_shop_1	akt4/stadt.dialogue	-
-stadt_shop_2	akt4/stadt.dialogue	-
 stadt_table_1	akt4/stadt.dialogue	-
 stadt_table_2	akt4/stadt.dialogue	-
 stadt_wreath_1	akt4/stadt.dialogue	-
@@ -1273,11 +1271,81 @@ wd_steps_2	akt3/waldweg.dialogue	-
 wd_steps_3	akt3/waldweg.dialogue	-
 wd_steps_4	akt3/waldweg.dialogue	-
 wd_steps_5	akt3/waldweg.dialogue	-
+wer_after_1	akt4/werkstatt.dialogue	-
+wer_again_1	akt4/werkstatt.dialogue	-
+wer_again_10	akt4/werkstatt.dialogue	-
+wer_again_11	akt4/werkstatt.dialogue	-
+wer_again_12	akt4/werkstatt.dialogue	-
+wer_again_2	akt4/werkstatt.dialogue	-
+wer_again_3	akt4/werkstatt.dialogue	-
+wer_again_4	akt4/werkstatt.dialogue	-
+wer_again_5	akt4/werkstatt.dialogue	-
+wer_again_6	akt4/werkstatt.dialogue	-
+wer_again_7	akt4/werkstatt.dialogue	-
+wer_again_8	akt4/werkstatt.dialogue	-
+wer_again_9	akt4/werkstatt.dialogue	-
+wer_again_r1	akt4/werkstatt.dialogue	-
+wer_again_r2	akt4/werkstatt.dialogue	-
+wer_again_r3	akt4/werkstatt.dialogue	-
+wer_again_r4	akt4/werkstatt.dialogue	-
+wer_bench_1	akt4/werkstatt.dialogue	-
+wer_board_1	akt4/werkstatt.dialogue	-
+wer_board_2	akt4/werkstatt.dialogue	-
+wer_board_3	akt4/werkstatt.dialogue	-
+wer_board_4	akt4/werkstatt.dialogue	-
+wer_done_1	akt4/werkstatt.dialogue	-
+wer_done_2	akt4/werkstatt.dialogue	-
+wer_done_3	akt4/werkstatt.dialogue	-
+wer_dust_1	akt4/werkstatt.dialogue	-
+wer_dust_2	akt4/werkstatt.dialogue	-
+wer_ladder_1	akt4/werkstatt.dialogue	-
+wer_ladder_2	akt4/werkstatt.dialogue	-
+wer_nothing_1	akt4/werkstatt.dialogue	-
+wer_nothing_2	akt4/werkstatt.dialogue	-
+wer_nothing_3	akt4/werkstatt.dialogue	-
+wer_nothing_4	akt4/werkstatt.dialogue	-
+wer_nothing_5	akt4/werkstatt.dialogue	-
+wer_offer_1	akt4/werkstatt.dialogue	-
+wer_offer_2	akt4/werkstatt.dialogue	-
+wer_offer_3	akt4/werkstatt.dialogue	-
+wer_offer_r1	akt4/werkstatt.dialogue	-
+wer_offer_r2	akt4/werkstatt.dialogue	-
+wer_offer_r3	akt4/werkstatt.dialogue	-
+wer_offer_r4	akt4/werkstatt.dialogue	-
+wer_offer_r5	akt4/werkstatt.dialogue	-
+wer_quiet_1	akt4/werkstatt.dialogue	-
+wer_saw_1	akt4/werkstatt.dialogue	-
+wer_saw_10	akt4/werkstatt.dialogue	-
+wer_saw_2	akt4/werkstatt.dialogue	-
+wer_saw_3	akt4/werkstatt.dialogue	-
+wer_saw_4	akt4/werkstatt.dialogue	-
+wer_saw_5	akt4/werkstatt.dialogue	-
+wer_saw_6	akt4/werkstatt.dialogue	-
+wer_saw_7	akt4/werkstatt.dialogue	-
+wer_saw_8	akt4/werkstatt.dialogue	-
+wer_saw_9	akt4/werkstatt.dialogue	-
+wer_saw_r1	akt4/werkstatt.dialogue	-
+wer_saw_r2	akt4/werkstatt.dialogue	-
+wer_saw_r3	akt4/werkstatt.dialogue	-
+wer_saws_1	akt4/werkstatt.dialogue	-
+wer_saws_2	akt4/werkstatt.dialogue	-
+wer_tess_1	akt4/werkstatt.dialogue	-
+wer_tess_10	akt4/werkstatt.dialogue	-
+wer_tess_2	akt4/werkstatt.dialogue	-
+wer_tess_3	akt4/werkstatt.dialogue	-
+wer_tess_4	akt4/werkstatt.dialogue	-
+wer_tess_5	akt4/werkstatt.dialogue	-
+wer_tess_6	akt4/werkstatt.dialogue	-
+wer_tess_7	akt4/werkstatt.dialogue	-
+wer_tess_8	akt4/werkstatt.dialogue	-
+wer_tess_9	akt4/werkstatt.dialogue	-
 retired	gh_bar_1	der Tresen hat keine Zeile: der Wirt steht dahinter, die Zeile stand ihm im Weg
 retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen
 retired	mk_fest_10	A7: nach dem Hoch gibt es eine feste Zeile statt zweier wechselnder (die Schleife ist wortgleich)
 retired	stadt_florist_1	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
 retired	stadt_florist_2	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
+retired	stadt_shop_1	S4: die Tür der Werkstatt ersetzt den Blocker (Cue workshop_wait gelöscht, die Zeilen stehen in werkstatt.dialogue)
+retired	stadt_shop_2	S4: die Tür der Werkstatt ersetzt den Blocker (Cue workshop_wait gelöscht, die Zeilen stehen in werkstatt.dialogue)
 retired	str_wait_1	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
 retired	str_wait_2	S2: das Seil über der Straße entfällt, die Tür in die Stadt steht an seiner Stelle (Cue town_wait gelöscht)
 retired	wd_hut_1	W3: die Hütte hat ihre Zeilen in huette.dialogue (door_tea)
