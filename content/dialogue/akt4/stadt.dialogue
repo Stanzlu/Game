@@ -1,7 +1,7 @@
 # Der Platz, Akt IV, Segment S2 (docs/akt4/REGIONSBRIEFE.md). Die Stadt ist Elysias Markt mit Widerspruch (O19): Gefälliger, Lio und Bürgerin
-# variieren, niemand ist immer erfreut, Leute haben schlechte Tage und sagen Nein. Hier steht, was am Tor, auf dem Platz und an der Werkstatt zu
+# variieren, niemand ist immer erfreut, Leute haben schlechte Tage und sagen Nein. Hier steht, was am Tor und auf dem Platz zu
 # sprechen ist; das Rathaus (das Fundbüro, "Ein perfekter Tag") hat seine eigene Datei, rathaus.dialogue, der Blumenladen (Orin, die Ente, der Brief)
-# blumenladen.dialogue. Leicht, Neugier, Humor aus Figuren und Dingen (Ziel 7 von 10), nie auf Kosten einer Person.
+# blumenladen.dialogue, die Werkstatt (Tess, das Brett, die Bank) werkstatt.dialogue. Leicht, Neugier, Humor aus Figuren und Dingen (Ziel 7 von 10), nie auf Kosten einer Person.
 # Die Torwächterin ist der Gegensatz zu Elysias Torwächter ("Willkommen in der
 # Stadt!"): sie begrüßt niemanden, sie zählt auf, was heute nicht geht, und lässt dich hinein. Mira sitzt am Brunnenrand, zwei Tage Vorsprung, und
 # wartet auf nichts (O11, erster von drei Beats; keine neue Erinnerung, die letzte Variante gehört dem Streit in S7). Der Gefällige steht am
@@ -122,14 +122,6 @@ Der Brunnenrand ist breit, und oben sind Mulden in den Stein gewetzt, tief und g
 Eine für den Eimer, eine für den Krug, und eine, die genau eine Hand fasst. Werkzeug war das nicht. [ID:stadt_rim_2] [#draft]
 Für einen Atemzug glänzt jede Mulde nass, als hätte eben jemand abgesetzt. Dann ist es wieder Stein. [ID:stadt_rim_3] [#draft]
 do WorldState.set_flag("fragment.fountain_rim")
-=> END
-
-# --- Die Werkstatt -------------------------------------------------------------------------------------------------------
-# Eine Fassade, die S4 (Werkstatt) öffnet; hier ist sie zu und verspricht nichts. Der Blumenladen ist seit S3 offen (blumenladen.dialogue).
-
-~ workshop_wait
-Die Tür der Werkstatt sitzt fest im Rahmen. In Kniehöhe ist sie eingedellt, und sie scheint daran gewöhnt. [ID:stadt_shop_1] [#draft]
-Von drinnen kommt das Geräusch eines Hobels, ruhig und genau. Es hört nicht auf und erklärt sich nicht. [ID:stadt_shop_2] [#draft]
 => END
 
 # --- Ein perfekter Tag: die drei Stationen -----------------------------------------------------------------------------
