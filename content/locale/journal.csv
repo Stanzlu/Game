@@ -97,6 +97,7 @@ MEMORY_MIRA_GUESSED_SEA,"Sie geht morgen weiter. Ich wusste es vorher. Zum Meer.
 MEMORY_MIRA_END_SILENCE,"Sie geht morgen weiter. Ich musste nicht fragen. Zum Meer."
 MEMORY_ORIN_DUCK,"Orin hat mich gebeten, nach einer Ente zu sehen. Sie stand vor der Tür und tat nichts. Das sei das Beunruhigende, sagt er."
 MEMORY_ORIN_LETTER,"Über Orins Tisch hängt ein Strauß, kopfüber, mit Bast. Der Brief dazu hat keine Anschrift. Er liest ihn nicht vor, er wollte nur, dass ich weiß, dass es ihn gibt."
+MEMORY_TESS_BOARD,"Tess hat mir gezeigt, wie man eine Säge zieht, nicht drückt. Mein Brett ist krumm geworden. Es bleibt stehen, sagt sie."
 QUEST_SIDE_ELYSIA_BOARD_TITLE,Die Auftragstafel
 QUEST_SIDE_ELYSIA_BOARD_BREAD,"Auf der Tafel sucht jemand einen Helden. Das Brot für die Schneiderin wartet bei der Bäckerin."
 QUEST_SIDE_ELYSIA_BOARD_DELIVER,"Der Laib ist noch warm. Er soll zur Schneiderin."
@@ -138,3 +139,6 @@ QUEST_SIDE_CITY_DUCK_DONE,"Ich habe Orin gesagt, was ich gesehen habe, und wir h
 QUEST_SIDE_CITY_LETTER_TITLE,Der Brief
 QUEST_SIDE_CITY_LETTER_LISTEN,"Über Orins Tisch hängt ein Strauß aus getrockneten Pfingstrosen, ohne Karte. Er hat einen Brief dazu geschrieben und fängt an, davon zu sprechen."
 QUEST_SIDE_CITY_LETTER_DONE,"Der Brief bleibt zu, der Strauß bleibt hängen. Orin hat davon gesprochen, und ich habe nichts gefragt."
+QUEST_SIDE_CITY_NOTHING_TITLE,Nichts
+QUEST_SIDE_CITY_NOTHING_SIT,"Ich sitze auf der Bank vor der Werkstatt, Tess auf ihrer Kiste daneben. Das Licht liegt auf dem Holzstapel."
+QUEST_SIDE_CITY_NOTHING_DONE,"Ich habe mit Tess vor der Werkstatt gesessen. Das Licht ist auf dem Holzstapel ein Stück weitergerückt. Dann bin ich aufgestanden."

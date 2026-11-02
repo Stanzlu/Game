@@ -67,6 +67,7 @@ const CAPTIONS := {
 	"house_hum": "CAPTION_HUM",
 	"hermit_flute": "CAPTION_FLUTE",
 	"lio_street": "CAPTION_LUTE",
+	"tess_whistle": "CAPTION_WHISTLE",
 	"rift_hum": "CAPTION_RIFT",
 	"stone_wobble": "CAPTION_WOBBLE",
 	"bird": "CAPTION_BIRD",

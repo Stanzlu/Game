@@ -463,13 +463,42 @@ DESIGNS = {
         "bast": True,
         "bag": "none",
     },
+    # Tess (Akt IV, S4): an older craftswoman, sturdy and calm, no pose: she looks like someone who is about to say "Halt mal".
+    # Grey hair in a knot under a terracotta kerchief, a pencil behind one ear, a faded blue shirt with the sleeves rolled up, a
+    # leather apron down to the knee with a folding rule in its pocket, heavy boots; there is sawdust on her.
+    "tess": {
+        "skin": ramp("#85493c", "#bd7a58", "#dea17a", "#f5c8a4"),
+        "hair": ramp("#85818f", "#a19dad", "#bfbbca", "#dad7e2", "#f4f3f8"),
+        "top": ramp("#26384e", "#3f5a78", "#6283a2", "#92b0c8"),
+        "inner": ramp("#8a8274", "#bdb4a0", "#e6dcc4", "#faf3dc"),
+        "belt": ramp("#1e120c", "#3e2616", "#6a4428", "#98683e"),
+        "pants": ramp("#241e14", "#3c3222", "#5a4a34", "#7c6a4c"),
+        "boots": ramp("#1a1210", "#33231a", "#54382a", "#7a5440"),
+        "hide": ramp("#2a1608", "#5a3414", "#8e5c2c", "#c08a4e"),
+        "cloth": ramp("#4a1a12", "#8a3420", "#c05a34", "#ec9460"),
+        "rule": ramp("#3a2a08", "#9a7a1c", "#dcb83a", "#f8e07a"),
+        "sawdust": ramp("#8a6a3a", "#b8905a", "#dcb87c", "#f4dfa6"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d98270"),
+        "outline": pa.hex_rgb("#22160f"),
+        "hair_style": "bun",
+        "outfit": "jacket",
+        "bulk": True,
+        "apron_craft": True,
+        "rolled": True,
+        "kerchief": True,
+        "age_lines": True,
+        "sawdust_on": True,
+        "ear_item": "pencil",
+        "bag": "none",
+    },
 }
 
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
 SOFT = ("player", "mira", "child", "antreiber", "einsiedler", "torwaechterin", "gefaelliger", "lio", "beamtin",
-        "buerger", "orin")
+        "buerger", "orin", "tess")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 
@@ -589,6 +618,7 @@ class Figure:
         self.back3 = facing == "NE"
         self.drawn = np.zeros((FH, FW), bool)
         self.hands = []  # (x, y) under each visible hand, for what hangs from it (bast)
+        self.arms = []  # (mask, tone, hand row) of each visible near arm, for the sleeves rolled up (Tess)
 
     def part(self, mask, mat, value, line=False):
         c = self.c
@@ -887,6 +917,94 @@ class Figure:
         beard = (jaw | burn | chin) & ~gap
         self.part(beard, "whisker", 0.3 + 0.6 * c.sphere(hx - 2.5, hy - 1.0, 9, 8), line=False)
 
+    # --- Akt IV, S4: Tess's leather apron, rolled sleeves, sawdust and kerchief ---
+    def apron_craft(self, tx0, tx1, ty0, ty1):
+        """A craftswoman's leather apron: a bib from the chest on two straps over the shoulders, down to the knee, with a
+        deep pocket at the hip and a folding rule sticking out of it (a few segments, yellow with a dark joint)."""
+        c, d = self.c, self.d
+        sh = 1 if self.three else 0
+        if self.side:
+            apron = c.rect(tx1 - 3.5, ty0 + 2, tx1 + 1.0, ty1 + 4)
+            self.part(apron, "hide", self.cyl(tx0, tx1, 0.4, 0.5), line=True)
+            self.part(apron & (c.yy == ty1 + 3), "hide", 0.15)
+            self.part(c.rect(tx1 - 2.5, ty1 - 1, tx1 + 0.5, ty1 + 1), "hide", 0.22)  # the pocket seen from the side
+            c.fill(c.rect(tx1 - 1.5, ty1 - 3, tx1 - 0.5, ty1 - 1), d["rule"][3])
+            return
+        if self.back:
+            # from behind only the straps, crossing between the shoulder blades, and the tie of the waist
+            for k in range(2):
+                strap = np.abs((c.xx + 0.5 - (cx_ := (tx0 + tx1) / 2.0 + sh)) + (1 - 2 * k) * (c.yy - ty0) * 0.8) <= 0.7
+                self.part(strap & (c.yy >= ty0) & (c.yy < ty0 + 5) & (np.abs(c.xx + 0.5 - cx_) < 4.5), "belt", 0.4 + 0.1 * k)
+            self.part(c.rect(tx0 + sh, ty0 + 5, tx1 + sh, ty0 + 6), "belt", 0.5)
+            c.fill(c.rect(cx_ - 1.5, ty0 + 6, cx_ - 0.5, ty0 + 8), d["belt"][2])
+            c.fill(c.rect(cx_ + 0.5, ty0 + 6, cx_ + 1.5, ty0 + 7.5), d["belt"][1])
+            return
+        bib = c.rect(tx0 + 2.5 + sh, ty0 + 2, tx1 - 2.5 + sh, ty0 + 5)
+        skirt = c.rect(tx0 + 0.5 + sh, ty0 + 5, tx1 - 0.0 + sh, ty1 + 4)
+        apron = bib | skirt
+        self.part(apron, "hide", self.cyl(tx0, tx1, 0.4, 0.5), line=True)
+        self.part(apron & (c.yy == ty1 + 3), "hide", 0.15)  # the hem
+        self.part(c.rect(tx0 + 0.5 + sh, ty0 + 5, tx1 + sh, ty0 + 6), "belt", 0.55)  # the tie round the waist
+        for sx in (tx0 + 3 + sh, tx1 - 3 + sh):  # the two straps up to the shoulders
+            self.part(c.rect(sx, ty0, sx + 1, ty0 + 3), "belt", 0.35)
+        pocket = c.rect(tx1 - 5.5 + sh, ty1 - 1, tx1 - 1.0 + sh, ty1 + 2)
+        self.part(pocket, "hide", 0.24, line=True)
+        self.part(c.rect(tx1 - 5.5 + sh, ty1 - 1, tx1 - 1.0 + sh, ty1), "hide", 0.7)  # its lit edge
+        for k, (dx, tone) in enumerate(((0, 3), (1, 1))):  # the folding rule: two segments sticking out at an angle
+            c.fill(c.rect(tx1 - 4.5 + sh + dx, ty1 - 3 - (k == 0), tx1 - 3.5 + sh + dx, ty1 - 1 + (k == 1)), d["rule"][tone])
+
+    def rolled_sleeves(self, ty0):
+        """The sleeves rolled up above the elbow: a lit roll, then bare forearms."""
+        c = self.c
+        for arm, tone, _end in self.arms:
+            self.part(arm & (c.yy == ty0 + 3), "top", min(tone + 0.3, 1.0))  # the roll
+            self.part(arm & (c.yy >= ty0 + 4), "skin", tone)
+
+    def sawdust(self, ty0, ty1):
+        """Sawdust on the shoulders and the forearms, a few specks on the apron: single pale pixels that move with the trunk."""
+        c = self.c
+        xs, ys = c.xx.astype(int), c.yy.astype(int) - ty0
+        top = (((xs * 5 + ys * 3) % 9) == 0) & (ys >= 0) & (ys < 4)
+        low = (((xs * 7 + ys * 2) % 29) == 3) & (ys >= 4) & (ys < ty1 - ty0 + 1)
+        c.fill((top | low) & c.a, self.d["sawdust"][3])
+
+    def kerchief(self, hx, hy, hair, head):
+        """A kerchief over the crown and the knot of hair under it (a bulge at the back of the head): it ends in a straight
+        band across the brow, the grey hair shows at the temples and the nape; in profile and from behind it is tied at the
+        back with two short tails."""
+        c = self.c
+        dome = c.ellipse(hx - (0.5 if self.side else 0.0), hy - 1.0, 7.0, 6.9)
+        if self.back:
+            region = (dome | hair | head) & (c.yy < hy + 1.2) & c.ellipse(hx, hy - 0.4, 7.2, 7.6)
+            region |= c.ellipse(hx, hy - 5.6, 3.6, 2.6)
+        elif self.side:
+            region = (dome & (c.yy < hy - 1.6)) | ((hair | head) & (c.xx + 0.5 < hx - 2.5) & (c.yy < hy + 0.8))
+            region |= c.ellipse(hx - 4.4, hy - 4.4, 3.0, 3.0)
+        else:
+            region = dome & (c.yy < hy - 1.6)
+        v = 0.45 + 0.5 * c.sphere(hx - 2.5, hy - 5, 10, 8)
+        self.part(region, "cloth", v, line=True)
+        # the lower edge of the band is a shade darker; a fold runs back from the temple
+        lower = region & ~np.roll(region, -1, 0) & (c.yy > hy - 5)
+        hem = region & np.roll(lower, -1, 0) & ~lower  # the folded hem: a lit line over the dark edge
+        self.part(hem, "cloth", 0.82)
+        self.part(lower, "cloth", 0.14)
+        if not self.back:
+            fold = region & (np.abs((c.xx + 0.5 - hx) * 0.55 - (c.yy + 0.5 - (hy - 3.6))) < 0.5) & (c.xx + 0.5 > hx - 1.0)
+            self.part(fold, "cloth", 0.22)
+        if self.back or self.side:
+            kx = hx - (6.4 if self.side else 0.0)
+            ky = hy - (1.6 if self.side else 0.2)
+            self.part(c.rect(kx - 1.5, ky - 1, kx + 1.5, ky + 1.5), "cloth", 0.55, line=True)  # the knot
+            self.part(c.rect(kx - 1.5, ky + 1.5, kx - 0.5, ky + 4.5), "cloth", 0.3)  # and its two tails
+            self.part(c.rect(kx + 0.5, ky + 1.5, kx + 1.5, ky + 3.5), "cloth", 0.5)
+        else:
+            # a small tie at the temple, the two ends sticking out
+            kx = hx + 5.4 + (0.5 if self.three else 0.0)
+            self.part(c.rect(kx - 1.5, hy - 3.6, kx + 1.5, hy - 1.6), "cloth", 0.6, line=True)
+            self.part(c.rect(kx + 1.5, hy - 4.4, kx + 3.0, hy - 3.0), "cloth", 0.5, line=True)
+            self.part(c.rect(kx + 0.5, hy - 1.6, kx + 2.0, hy + 0.4), "cloth", 0.3, line=True)
+
     def face_extras(self, hx, hy, ey, eyes):
         """Brows, glasses: what sits on the face after the eyes."""
         d, c = self.d, self.c
@@ -1070,6 +1188,8 @@ class Figure:
             self.keys(tx0, tx1, ty1, side)
         if d.get("apron_long") and not back:
             self.apron_long(tx0, tx1, ty1)
+        if d.get("apron_craft"):
+            self.apron_craft(tx0, tx1, ty0, ty1)
         if d["outfit"] == "cape" and not back:
             # cape clasp and a dark inner lining at the opening
             mid = cx + (1 if three else 0)
@@ -1111,6 +1231,7 @@ class Figure:
             self.sleeve(near, 0.65, guard_from=ty0 + 4)
             self.part(near & (c.yy >= hand_y), "skin", 0.65)
             self.hands.append((cx - 0.5 + lean + sw + 1, hand_y + 1))
+            self.arms.append((near, 0.65, hand_y))
         else:
             for k, ax in enumerate((tx0 - 1 - arm_out, tx1 + 1 + arm_out)):
                 sw = swing[k]
@@ -1145,11 +1266,16 @@ class Figure:
                     hand = hand & (c.yy > end)
                 self.part(hand, "skin", tone)
                 self.hands.append((ax + 1, end + 1))
+                self.arms.append((arm, tone, end))
 
         if d.get("pauldrons"):
             self.pauldrons(cx, tx0, tx1, ty0, lean)
         if d.get("bast"):
             self.bast_threads()
+        if d.get("rolled"):
+            self.rolled_sleeves(ty0)
+        if d.get("sawdust_on"):
+            self.sawdust(ty0, ty1)
         if lap and not back:
             self.lute_lap(cx, ty0, ty1, lean)
         if d.get("basket"):
@@ -1260,7 +1386,7 @@ class Figure:
             top &= ~((c.yy < hy - 7.6) & ((c.xx < x0 + 1) | (c.xx >= hx + 4.5)))
             hair |= top
         bun = np.zeros_like(hair)
-        if style == "bun":
+        if style == "bun" and not d.get("kerchief"):  # under a kerchief the knot is not a bump of its own
             # a round bun on the top of the head, a little back, tied off (see below)
             bx = hx - (2.5 if side else 0)
             bun = c.ellipse(bx, hy - 7.9, 2.4, 1.8)
@@ -1294,6 +1420,8 @@ class Figure:
             # the perfect center parting
             part = hair & (np.abs(c.xx + 0.5 - hx) < 0.6) & (c.yy < hy - 3) & (c.yy >= hy - 7)
             c.rgb[part] = d["hair"][1]
+        if d.get("kerchief"):
+            self.kerchief(hx, hy, hair, head)
         if d.get("headband"):
             # a sweatband across the brow, all the way round, but one pixel inside the head:
             # the head's own edge pixels (and the outline around them) stay, so the band never
@@ -1342,6 +1470,10 @@ class Figure:
             if not side:
                 c.fill(c.rect(eyes[0] - 1, ey + 2, eyes[0], ey + 3), d["blush"])
                 c.fill(c.rect(eyes[-1] + 1, ey + 2, eyes[-1] + 2, ey + 3), d["blush"])
+            if d.get("age_lines") and not side:
+                # the lines of a face that has laughed outdoors for sixty years: one at the outer corner of each eye
+                for ex, out in ((eyes[0], -1), (eyes[-1], 1)):
+                    c.fill(c.rect(ex + 2 * out - (out < 0), ey + 1, ex + 2 * out - (out < 0) + 1, ey + 2), d["skin"][1])
             if d.get("brows") or d.get("glasses"):
                 self.face_extras(hx, hy, ey, eyes)
 

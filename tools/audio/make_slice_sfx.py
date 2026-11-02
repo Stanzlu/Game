@@ -3,8 +3,8 @@
 A door that creaks, knocking, falling into the stream, a stepping stone that rocks, a match
 and a fire catching, a cat (meowing, behind a door, purring), a goat, dry wood, sitting down
 and standing up, a bird landing, the drover's call; the child in Elysia humming the motif
-of the later main theme; the hermit's flute (Act III) and Lio's lute in the street (Act IV). The
-fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
+of the later main theme; the hermit's flute (Act III), Lio's lute in the street and Tess's
+whistling in the workshop (Act IV). The fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
 per group (LUFS, see GROUPS), written with .import files to assets/generated/sfx/. The Real world is quiet and a
@@ -508,12 +508,137 @@ def lio_street(rng, unit=LIO_UNIT, space=None):
     return reverb(dry, 0.5, 0.18, seed=19, bright=3800) if space is None else space(dry)
 
 
+# --- Tess ------------------------------------------------------------------------------------
+
+# Tess whistles while she measures (Act IV, S4): to herself, between the work, not for anyone. Not
+# the valley's D dorian but F mixolydian, high (F5 is the root, a whistle lives between 600 and
+# 1300 Hz), and a line that only goes down: from the D above, in two sighs, the second one
+# leaves its last note a third of a semitone low and does not mind, then a trill (G and A,
+# nine turns) and the root, held, that sags at the end as a breath does.
+TESS_ROOT = 77  # F5
+
+
+def workshop(x):
+    """The workshop: wood, sawdust and tools, so a dry room. A pure tone meets a random room as a
+    room mode, a note at one pitch comes out several dB louder than its neighbour; the seed was
+    picked (of 200) for the flattest response on the notes of the tune, and the tail is thin."""
+    return reverb(x, 0.34, 0.14, seed=42, bright=2800)
+# (semitones over the root, units, cents off (0: a few cents at random), a rest after in units);
+# the trill and the last note are added in tess_whistle.
+TESS_TUNE = [(9, 1.5, 0, 0.0), (7, 0.5, 0, 0.0), (5, 1.0, 0, 0.0), (4, 1.5, 0, 0.0), (2, 1.5, 0, 1.6),
+             (5, 1.0, 0, 0.0), (4, 1.0, 0, 0.0), (2, 1.5, -38, 0.0)]
+TESS_UNIT = 0.42  # seconds per unit
+TESS_TRILL = (2, 4)  # the two notes of the trill (semitones over the root)
+TESS_TURNS = 9  # notes of the trill (it begins on the lower one)
+TESS_TURN = 0.113  # seconds per note of the trill
+
+
+def tess_whistle(rng, unit=TESS_UNIT, space=None):
+    """Tess's whistling (Act IV, S4): see TESS_TUNE. One breath, one oscillator: the pitch is a
+    curve (notes slide into each other, a note after a rest is scooped up from a hair under, the
+    long ones carry a shallow late vibrato, the last one sags), the tone is nearly a sine with a
+    faint second partial, and the air is noise around the tone (it follows the pitch) and a hiss
+    above it that comes with the start of a note. Not a loop; no pitch spread when it is played
+    (AudioDirector.sfx(..., 1.0)): a tune stays a tune, and the low note is its own."""
+    notes = []  # (start, end, semitones, cents off, after a rest)
+    pos = 0.35
+    after_rest = True
+    for semis, units, off, rest in TESS_TUNE:
+        length = units * unit * rng.uniform(0.97, 1.05)
+        if off == 0:
+            off = float(np.clip(rng.normal(0, 6), -11, 11))  # a whistle is never quite on the note
+        notes.append((pos, pos + length, semis, off, after_rest))
+        pos += length + rest * unit
+        after_rest = rest > 0
+    for k in range(TESS_TURNS):
+        length = TESS_TURN * rng.uniform(0.94, 1.06)
+        notes.append((pos, pos + length, TESS_TRILL[k % 2], float(rng.normal(-8, 4)), False))
+        pos += length
+    final = (pos, pos + 1.5, 0, -4.0, False)  # the root, held and let go
+    notes.append(final)
+    total = final[1] + 0.12
+
+    # the pitch curve in cents over the root, built from breakpoints: (time, cents)
+    knots = []
+    for i, (s, e, semis, off, rested) in enumerate(notes):
+        cents = 100.0 * semis + off
+        glide = 0.018 if i >= len(TESS_TUNE) and i < len(notes) - 1 else 0.06
+        if rested:
+            knots += [(s, cents - 45), (s + 0.09, cents)]  # scooped up from under
+        else:
+            knots += [(s + glide, cents)]
+        knots += [(e - 0.02, cents)] if i < len(notes) - 1 else [(e - 0.60, cents), (e, cents - 130)]
+    ts = np.array([k[0] for k in knots])
+    cs = np.array([k[1] for k in knots])
+    order = np.argsort(ts, kind="stable")
+    t = np.arange(int(RATE * total)) / RATE
+    cents = np.interp(t, ts[order], cs[order])
+    # long notes carry a late, shallow vibrato; the pitch wanders a few cents on its own
+    depth = np.zeros_like(t)
+    for s, e, semis, off, rested in notes:
+        if e - s >= 0.8:
+            ramp = np.interp(t, [s, s + 0.35, s + 0.75, e - 0.10, e], [0, 0, 1, 1, 0])
+            depth = np.maximum(depth, ramp)
+    cents = cents + depth * 11 * np.sin(2 * np.pi * rng.uniform(5.0, 5.6) * t)
+    wander_t = np.linspace(0, total, int(total / 0.4) + 2)
+    cents = cents + np.interp(t, wander_t, rng.normal(0, 3.0, len(wander_t)))
+    smooth = int(RATE * 0.012)
+    cents = np.convolve(np.pad(cents, smooth, mode="edge"), np.ones(smooth) / smooth, mode="same")[smooth:-smooth]
+    freq = midi_hz(TESS_ROOT) * 2 ** (cents / 1200)
+    phase = 2 * np.pi * np.cumsum(freq) / RATE
+
+    # the breath: up quickly, a little swell, down; a rest is silence. Between the turns of the
+    # trill the breath dips but does not stop.
+    breaks = [(0.0, 0.0)]
+    for i, (s, e, semis, off, rested) in enumerate(notes):
+        trill = len(TESS_TUNE) <= i < len(notes) - 1
+        level = rng.uniform(0.86, 1.0) if not trill else 0.80 + 0.12 * np.sin(np.pi * (i - len(TESS_TUNE) + 0.5) / TESS_TURNS)
+        last = i == len(notes) - 1
+        next_rest = (not last) and i + 1 < len(notes) and notes[i + 1][0] - e > 0.2
+        if rested or i == 0:
+            breaks += [(s - 0.03, 0.0), (s + 0.045, level)]
+        elif trill:
+            breaks += [(s + 0.006, level * 0.80), (s + 0.04, level)]
+        else:
+            breaks += [(s + 0.02, level * 0.72), (s + 0.07, level)]  # a soft dip where one note takes the next
+        if last:
+            breaks += [(e - 0.70, level * 0.9), (e - 0.05, level * 0.25), (e, 0.0)]
+        elif next_rest:
+            breaks += [(e - 0.12, level * 0.9), (e + 0.03, 0.0)]
+        else:
+            breaks += [(e - 0.03, level)]
+    breaks.append((total, 0.0))
+    bt = np.array([b[0] for b in breaks])
+    bv = np.array([b[1] for b in breaks])
+    order = np.argsort(bt, kind="stable")
+    amp = np.interp(t, bt[order], bv[order])
+    amp = amp * (1 + 0.04 * np.sin(2 * np.pi * 0.7 * t + rng.uniform(0, 6.28)))
+
+    tone = np.sin(phase) + 0.045 * np.sin(2 * phase + 0.7) + 0.012 * np.sin(3 * phase + 1.9)
+    # air around the tone: low noise carried up to the pitch by the oscillator, so it follows it
+    carrier = fft_band(noise(len(t), rng), 20, 240, 2)
+    carrier = carrier / (np.std(carrier) + 1e-9)
+    near = carrier * np.sin(phase + 0.4) * 1.4
+    hiss = fft_band(noise(len(t), rng), 2200, 6500, 2)
+    hiss = hiss / (np.std(hiss) + 1e-9)
+    sig_std = float(np.std(tone * amp)) + 1e-9
+    breath = amp**0.8
+    puff = np.zeros_like(t)
+    for s, e, semis, off, rested in notes:
+        if rested:
+            m = (t >= s - 0.02) & (t < s + 0.12)
+            puff[m] = np.exp(-(t[m] - (s - 0.02)) / 0.03)
+    out = tone * amp + sig_std * (0.085 * near * breath + 0.020 * hiss * breath + 0.060 * hiss * puff)
+    out = out * np.minimum(1.0, t / 0.01)
+    return workshop(out) if space is None else space(out)
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
-          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0}
+          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0, "whistle": -21.0}
 LOOPS = set()
 
 
@@ -558,6 +683,9 @@ def build(only=None):
     # Lio's lute (Act IV, S2): its own random stream again
     lute_rng = np.random.default_rng(53)
     sounds["lio_street_0"] = (lio_street(lute_rng), "lute")
+    # Tess's whistling (Act IV, S4): its own random stream again
+    whistle_rng = np.random.default_rng(59)
+    sounds["tess_whistle_0"] = (tess_whistle(whistle_rng), "whistle")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

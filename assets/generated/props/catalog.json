@@ -4011,6 +4011,170 @@
    "res://assets/generated/props/tal/wildflowers_5.png"
   ]
  },
+ "tal/wk_bench": {
+  "anchor": [
+   40,
+   40
+  ],
+  "shadow": [
+   40,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -6
+   ],
+   "rect": [
+    80,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_bench.png"
+  ]
+ },
+ "tal/wk_board": {
+  "anchor": [
+   40,
+   11
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/wk_board.png"
+  ]
+ },
+ "tal/wk_dust": {
+  "anchor": [
+   32,
+   24
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/wk_dust.png"
+  ]
+ },
+ "tal/wk_ladder": {
+  "anchor": [
+   14,
+   48
+  ],
+  "shadow": [
+   12,
+   2
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    22,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_ladder.png"
+  ]
+ },
+ "tal/wk_rack": {
+  "anchor": [
+   24,
+   40
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_rack.png"
+  ]
+ },
+ "tal/wk_saws": {
+  "anchor": [
+   24,
+   40
+  ],
+  "shadow": [
+   24,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_saws.png"
+  ]
+ },
+ "tal/wk_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/wk_shell.png"
+  ]
+ },
+ "tal/wk_stool": {
+  "anchor": [
+   8,
+   19
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 5,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_stool.png"
+  ]
+ },
+ "tal/wk_trestle": {
+  "anchor": [
+   24,
+   24
+  ],
+  "shadow": [
+   22,
+   3
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    44,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/wk_trestle.png"
+  ]
+ },
  "tal/wood_bundle": {
   "anchor": [
    11,

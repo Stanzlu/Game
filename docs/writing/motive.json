@@ -655,9 +655,17 @@
     {
      "type": "flag",
      "ref": "melody.lio_street"
+    },
+    {
+     "type": "line",
+     "ref": "wer_tess_6"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.tess_whistle"
     }
    ],
-   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31), das Konzert (S6) bringt die dritte Melodie, `melody.lio_concert`."
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31). Tess pfeift beim Messen, ohne es zu merken (Akt IV, S4): ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief, die zweite Melodie der Stadt, hörbar und kein Fragment. Das Konzert (S6) bringt die dritte Melodie, `melody.lio_concert`."
   },
   {
    "id": "spuren-der-welt",
@@ -887,6 +895,88 @@
     }
    ],
    "payoff": "Offen, mit Absicht (Bible §44: etwas lange Unausgesprochenes, keine garantierte perfekte Auflösung). Ein Strauß getrockneter Pfingstrosen hängt kopfüber über dem Bindetisch, ohne Karte, die Blütenblätter darunter ungekehrt; ein Umschlag steckt weich vom Tragen in Orins Schürze, ohne Anschrift, und wird nicht vorgelesen. Orin sagt Dinge, nie einen Namen, einen Anlass oder einen Rat; die Spielerin hört zu, hält den Strauß oder geht, und keine der drei Antworten ist besser. Danach steht kein Witz mehr, auch nicht an den Dingen im Laden (Bible §45, Risiko 7). Ein späteres Segment darf den Brief wieder aufnehmen (Orins Lieferung auf dem Zettelbrett, S5), muss ihn aber nicht auflösen."
+  },
+  {
+   "id": "tess-brett",
+   "kind": "vorausdeutung",
+   "title": "Das krumme Brett und die Leiter (Tess)",
+   "bible": "§13, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "wer_tess_10"
+    },
+    {
+     "type": "line",
+     "ref": "wer_offer_1"
+    },
+    {
+     "type": "line",
+     "ref": "wer_saw_6"
+    },
+    {
+     "type": "line",
+     "ref": "wer_saw_8"
+    },
+    {
+     "type": "line",
+     "ref": "wer_done_2"
+    },
+    {
+     "type": "line",
+     "ref": "wer_ladder_1"
+    },
+    {
+     "type": "line",
+     "ref": "wer_ladder_2"
+    },
+    {
+     "type": "line",
+     "ref": "wer_again_7"
+    },
+    {
+     "type": "flag",
+     "ref": "city.board_done"
+    },
+    {
+     "type": "flag",
+     "ref": "city.asked_help"
+    }
+   ],
+   "payoff": "Das Haus wird gebaut, nicht geschenkt (Bible §13, Brief O9). Das erste Brett, das die Spielerin sägt, wird krumm, auf beiden Wegen, mit Tess’ Händen am Holz oder ohne, und Tess nennt es, wie es ist: krumm, es bleibt stehen. Sie lobt nicht und tadelt nicht, sie nimmt es als Maß; es wandert als Kuriosität in die Taschen der Spielerin und wartet auf ein Fach im Haus. In S8 kommt Tess als Gast mit Absicht, baut mit der Spielerin zwei Regale und eine Wandleiste und sagt über die Arbeit des Antreibers an der Werkbank „Schief. Aber dicht.“ (Brief O9); die Leiter mit den Bleistiftstrichen am Holm, die in der Werkstatt noch vier Sprossen und zwei leere Löcher hat, ist dann das erste Stück am Dach. Wer um Hilfe gebeten hat (`city.asked_help`), bekommt kürzere Zeilen und die Antwort „Hältst du mir die Leiter?“, wer es allein gesägt hat, dasselbe Brett: kein Weg ist der bessere."
+  },
+  {
+   "id": "nichts",
+   "kind": "vorausdeutung",
+   "title": "Nichts (die Bank vor der Werkstatt)",
+   "bible": "§42, §44, §45",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "wer_bench_1"
+    },
+    {
+     "type": "line",
+     "ref": "wer_nothing_1"
+    },
+    {
+     "type": "line",
+     "ref": "wer_nothing_2"
+    },
+    {
+     "type": "line",
+     "ref": "wer_nothing_3"
+    },
+    {
+     "type": "line",
+     "ref": "wer_after_1"
+    },
+    {
+     "type": "flag",
+     "ref": "city.sat_with_tess"
+    }
+   ],
+   "payoff": "Die Nebenquest „Nichts“ ist ein Sitzen (Bible §44: Tess sagt „Setz dich.“, Questziel mit Tess sitzen, fertig). Kein Beat, kein Lob, kein Zähler, keine Lehre: Tess sagt nichts über Ruhe, Pausen oder Gefühle, die Dinge reichen (ein Streifen Licht auf dem Holzstapel, ein Spatz auf dem Sägebock). Die Quest endet beim Aufstehen. Das Gegenstück ist der Plan des Antreibers fürs Nichtstun, der im Nachspiel steht (Bible §42, `hk_plan_4`): derselbe Platz, einmal mit Uhrzeit, einmal ohne."
   },
   {
    "id": "antreiber-warum",
@@ -2261,6 +2351,31 @@
    "flag": "city.letter_held",
    "axis": "Entscheidungen",
    "meaning": "Sie hat den Strauß gehalten, während Orin den Brief zwischen die Stiele legte (Akt IV, S3): er hängt danach wieder am Balken, und Orin rückt ihn gerade. Eine Zeile mehr, kein Wert."
+  },
+  {
+   "flag": "city.tess_met",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat in der Werkstatt Tess getroffen (Akt IV, S4): eine Handwerkerin, die „Halt mal“ sagt, bevor sie aufsieht, und dann nur nennt, was das Haus im Tal braucht, Dach, Regal, Leiter. Die Beziehung ist vorsichtig; das Angebot ist ein Brett fürs Haus, „Ich zeig’s dir einmal. Dann bist du dran.“"
+  },
+  {
+   "flag": "city.asked_help",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat Tess aus eigenem Willen gebeten, das Brett zu halten (Akt IV, S4): das erste Mal, dass sie um Hilfe fragt, und der Setzer der Facette Verbindung. Wer das Brett allein sägt, bekommt dasselbe Brett und dieselbe Zeile, nur nicht die Facette; Tess lobt keinen der beiden Wege. Leser: Tess’ kürzere Zeile und die Antwort „Hältst du mir die Leiter?“ in der Werkstatt; weitere Leser nennt Brief O6 (S5, S6, S8)."
+  },
+  {
+   "flag": "city.board_done",
+   "axis": "Haus",
+   "meaning": "Das Brett fürs Haus ist gesägt (Akt IV, S4): krumm, es bleibt stehen, und es wandert als Kuriosität („Ein krummes Brett“) zur Spielerin, später ins Haus (Regalfach, Brief O14). Tess sitzt von da an draußen auf der Kiste neben der Bank statt in der Werkstatt, nie an zwei Orten; die Erinnerung board entsteht, die Beziehung wird vertraut."
+  },
+  {
+   "flag": "city.sat_with_tess",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat sich zu Tess auf die Bank vor der Werkstatt gesetzt (Nebenquest „Nichts“, Akt IV, S4, Bible §44). Das Sitzen ist das Questziel, die Quest endet beim Aufstehen; es gibt keinen Beat, kein Lob und keinen Zähler. Tess sagt danach nur eine Zeile, die nichts erklärt."
+  },
+  {
+   "flag": "melody.tess_whistle",
+   "axis": "Musik",
+   "meaning": "Sie hat Tess beim Messen pfeifen gehört (Akt IV, S4): die zweite Melodie der Stadt, ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief; hörbar, kein Fragment (Brief O10). Das Konzert (S6) hat die dritte, `melody.lio_concert`."
   }
  ]
 }

@@ -38,6 +38,7 @@ PREFIX = {
     "stadt": "S2-",  # S2 has two files: the square and the town hall
     "rathaus": "S2R-",
     "blumenladen": "S3-",
+    "werkstatt": "S4-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

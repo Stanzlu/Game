@@ -398,7 +398,7 @@ STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d":
                 "s": "_", "1": "_", "2": "_", "3": "_", "l": "_", "x": "_", "X": "_", "B": "_", "E": "_", "H": "_", "q": "_",
                 "r": "_", "Y": "_", "T": "h", "C": "h", "P": "h", "*": ".", "o": ".", "g": ".", "I": "_", "M": "_", "y": "_",
                 "v": "_", "L": "_", "J": "_", "%": "_", "&": "_", "D": "_", "N": ",", "@": "_", "n": ",", "i": "_", "$": "_",
-                "!": "_", "4": "_", "5": "_"}
+                "!": "_", "4": "_", "5": "_", "6": "_", "7": "_", "8": "_"}
 
 
 def hall_perch(row):
@@ -514,7 +514,7 @@ def build_stadt():
         put("l", x, y)
     for x, y in ((66, 21), (59, 21), (39, 25), (79, 38), (14, 40), (77, 42)):
         put("X" if (x + y) % 2 else "x", x, y)
-    # ---- the shops: pails and pots before the florist, wood and a sawhorse at the workshop; a door before the florist (S3), a blocker before the workshop
+    # ---- the shops: pails and pots before the florist, wood and a sawhorse at the workshop; a door before the florist (S3) and one before the workshop (S4), the bench, the crate and Tess outside
     put("B", 27, 27)
     put("q", 33, 27)
     put("%", 30, 27)
@@ -524,6 +524,9 @@ def build_stadt():
     put("E", 19, 40)
     put("H", 26, 40)
     put("&", 22, 39)
+    put("6", 25, 41)  # the bench before the workshop
+    put("7", 28, 40)  # the crate Tess sits on once the board is sawn (flat, one cell above her)
+    put("8", 28, 41)  # Tess on it
     put("!", 22, 41)
     # ---- the gate: the guard in the arch, Lio in the corner of the gate street with the crate he sits on
     put("I", GATE_X + 2, GATE_ROWS[0] + 1)

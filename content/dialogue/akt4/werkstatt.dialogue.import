@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ki6fn5a02fja"
+path="res://.godot/imported/werkstatt.dialogue-e418017140d76c1b36ddab084087587f.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/werkstatt.dialogue"
+dest_files=["res://.godot/imported/werkstatt.dialogue-e418017140d76c1b36ddab084087587f.tres"]
+
+[params]
+
+defaults=true

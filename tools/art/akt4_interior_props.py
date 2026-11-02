@@ -22,6 +22,13 @@ plaster over a sage-green wainscot, honey wood, zinc and terracotta; the shell w
 bunch of peonies that hangs head down from the drying rail, two shelves, two rows of buckets with cut flowers, a big plant, a watering
 can and a chest of drawers. The map content/maps/blumenladen.txt is 26 x 18 cells, the room are the cells 4 to 21 and 3 to 14 (18 x 12).
 `--preview-florist out.png` draws the shell and all eight pieces (3x).
+
+Akt IV, S4 adds the workshop (prefix `wk_`, below the florist's pieces, registered by `build_workshop`): raw pine, weathered boards, iron and
+leather, sawdust; the shell with a window to the lane, a crossbeam with a tape measure, the plan of the house and the wall of small tools, the
+work bench (five cells), two trestles with the board across them (the board is a prop of its own: it is gone once it is sawn), the unfinished
+ladder, the saws on their board (the largest one is missing from its chalk outline), the rack of boards, a stool and the sawdust with two
+kinds of footprints in it. The map content/maps/werkstatt.txt is 26 x 18 cells, the room are the cells 4 to 21 and 3 to 14 (18 x 12).
+`--preview-workshop out.png` draws the shell and all nine pieces (3x).
 """
 import os
 import sys
@@ -1113,6 +1120,503 @@ def fo_chest(ms):
     return c
 
 
+# =========================================================================== S4: the workshop (prefix `wk_`)
+# Tess's workshop: raw pine and weathered boards, iron and leather, sawdust everywhere. A room that is used: every tool has its place and
+# its outline on the wall, and one of the outlines is empty because the tool is in use. Nothing here explains Tess.
+WK_W, WK_H = 288, 192  # 18 x 12 cells; the room's top left cell is the map cell (4, 3)
+
+PINE = ramp("#4a3418", "#82602c", "#b88e48", "#dcb468", "#f4d890")  # raw pine, dusty
+WEATHER = ramp("#2e241a", "#4e3e2c", "#76603f", "#9c8660", "#bca884")  # the weathered boards of the walls
+STAIN = ramp("#1c130c", "#32241a", "#4e3822", "#6e4e30")  # the dark stained board behind the tools
+STEEL = ramp("#16181c", "#2c3036", "#4c525c", "#7e8692", "#b4bcc6")
+SAWDUST = ramp("#6e5230", "#a07e4c", "#cfae74", "#ecd6a2", "#faedc6")
+RULE_Y = ramp("#4a3a0c", "#a88a1c", "#e2c23c", "#faea86")  # the folding rule and the tape: yellow
+ENAMEL = ramp("#8c9098", "#bcc2ca", "#e6eaee", "#ffffff")
+
+
+def _pine(c, mask, v, contrast=2.0):
+    c.paint(mask, PINE, v, contrast=contrast, dither=False)
+
+
+def _wk_window(c, x0, y0, x1, y1):
+    """The window to the lane: a pale sky, two roofs and a chimney across the lane, a bar cross in raw pine and a sill on which a jar of
+    pencils and a pair of gloves have been left."""
+    pane = c.rect(x0, y0, x1, y1)
+    t = np.clip((c.yy - y0) / (y1 - y0), 0, 1)
+    c.paint(pane, GLASS, 0.98 - 0.4 * t, contrast=1.6, dither=False)
+    c.paint(c.ellipse(x0 + 20, y0 + 4, 4.5, 1.4) & pane, GLASS, 1.0, dither=False)  # a smudge of cloud
+    ridge = y1 - 7 - 3.0 * np.abs(np.sin((c.xx - x0) * 0.23 + 0.9))
+    c.paint(pane & (c.yy > ridge), ramp("#3a2e26", "#58483a", "#7a6650"), 0.4 + 0.25 * (c.xx > (x0 + x1) / 2), dither=False)
+    c.paint(c.rect(x0 + 18, y1 - 14, x0 + 20, y1 - 9) & pane, ramp("#3a2e26", "#58483a", "#7a6650"), 0.3, dither=False)  # a chimney
+    mid_x, mid_y = (x0 + x1) // 2, (y0 + y1) // 2 + 1
+    _pine(c, c.rect(x0 - 2, y0 - 2, x1 + 2, y0), np.where(c.yy < y0 - 1, 0.95, 0.6))  # the frame, raw pine
+    _pine(c, c.rect(x0 - 2, y1, x1 + 2, y1 + 2), 0.45)
+    _pine(c, c.rect(x0 - 2, y0, x0, y1), 0.8)
+    _pine(c, c.rect(x1, y0, x1 + 2, y1), 0.4)
+    _pine(c, c.rect(mid_x - 1, y0, mid_x + 1, y1), np.where(c.xx < mid_x, 0.85, 0.5))
+    _pine(c, c.rect(x0, mid_y - 1, x1, mid_y + 1), np.where(c.yy < mid_y, 0.9, 0.5))
+    _pine(c, c.rect(x0 - 4, y1 + 2, x1 + 4, y1 + 5), np.where(c.yy < y1 + 3, 0.98, 0.5))  # the sill
+    # on the sill: a jar of pencils (glass, three stubs) and a pair of work gloves, one on top of the other
+    c.paint(c.rect(x0 + 2, y1 - 6, x0 + 8, y1 + 2), GLASS, 0.5 + 0.3 * (c.xx < x0 + 5), dither=False)
+    for k, tone in enumerate((RULE_Y[2], TERRACOTTA[3], PAPER[3])):
+        c.fill(c.rect(x0 + 3 + k * 2, y1 - 9 - (k % 2), x0 + 4 + k * 2, y1 - 6), tone)
+    c.paint(c.rect(x1 - 12, y1 - 1, x1 - 3, y1 + 2), LEATHER, 0.55 + 0.3 * (c.yy < y1), dither=False)
+    c.paint(c.rect(x1 - 10, y1 - 3, x1 - 4, y1 - 1), LEATHER, 0.35, dither=False)
+
+
+def _tool_wall(c, x0, y0, x1, y1):
+    """The wall of small tools: a dark stained board, a rail with pegs, and on it a hammer, a try square, three chisels, a pair of pliers
+    and a brace, each hung on its own nail."""
+    c.paint(c.rect(x0 - 2, y0 - 2, x1 + 2, y1 + 2), PINE, np.where(c.yy < y0, 0.9, 0.4), dither=False)
+    grain = pa.value_noise(c.h, c.w, (1, 8), np.random.default_rng(702))
+    c.paint(c.rect(x0, y0, x1, y1), STAIN, 0.42 + 0.14 * (grain - 0.5) - 0.12 * ((c.yy - y0) / (y1 - y0)), dither=False)
+    for gx in range(x0 + 11, x1, 11):  # plank joints
+        c.paint(c.rect(gx, y0, gx + 1, y1), STAIN, 0.05, dither=False)
+    # the hammer: a round-ended head, a handle of pale pine
+    c.paint(c.rect(x0 + 5, y0 + 6, x0 + 7, y0 + 24), PINE, 0.6 + 0.3 * (c.xx < x0 + 6), dither=False)
+    c.paint(c.rect(x0 + 2, y0 + 3, x0 + 11, y0 + 7), STEEL, 0.4 + 0.5 * (c.yy < y0 + 5), dither=False)
+    c.paint(c.rect(x0 + 2, y0 + 3, x0 + 4, y0 + 7), STEEL, 0.85, dither=False)
+    # the try square: a long blade and a short stock, a brass edge on the stock
+    c.paint(c.rect(x0 + 15, y0 + 4, x0 + 17, y0 + 24), STEEL, 0.55 + 0.35 * (c.xx < x0 + 16), dither=False)
+    c.paint(c.rect(x0 + 15, y0 + 4, x0 + 22, y0 + 8), PINE, np.where(c.yy < y0 + 5, 0.9, 0.35), dither=False)
+    c.paint(c.rect(x0 + 21, y0 + 4, x0 + 22, y0 + 8), BRASS, 0.8, dither=False)
+    # three chisels in a row: steel blade up, a handle with a leather ring
+    for k in range(3):
+        cx = x0 + 26 + k * 4
+        c.paint(c.rect(cx, y0 + 3, cx + 2, y0 + 12), STEEL, 0.5 + 0.4 * (k % 2), dither=False)
+        c.paint(c.rect(cx - 1, y0 + 12, cx + 3, y0 + 22), PINE if k != 1 else LEATHER, 0.55 + 0.3 * (k == 0), dither=False)
+        c.fill(c.rect(cx - 1, y0 + 12, cx + 3, y0 + 13), STEEL[2])
+    # pliers hanging by one handle below the hammer, a brace (a bent crank) below the chisels
+    c.paint(seg(c, x0 + 6, y0 + 28, x0 + 4, y0 + 40, 1.0), STEEL, 0.6, dither=False)
+    c.paint(seg(c, x0 + 6, y0 + 28, x0 + 9, y0 + 40, 1.0), STEEL, 0.4, dither=False)
+    c.paint(c.rect(x0 + 3, y0 + 36, x0 + 11, y0 + 40), RED_WOOL, 0.55, dither=False)
+    c.paint(seg(c, x0 + 22, y0 + 30, x0 + 22, y0 + 40, 0.9), STEEL, 0.55, dither=False)
+    c.paint(seg(c, x0 + 22, y0 + 30, x0 + 30, y0 + 30, 0.9), STEEL, 0.55, dither=False)
+    c.paint(seg(c, x0 + 30, y0 + 30, x0 + 30, y0 + 36, 0.9), STEEL, 0.55, dither=False)
+    c.paint(c.ellipse(x0 + 30, y0 + 38, 2.4, 2.4), PINE, 0.7, dither=False)
+    for nx, ny in ((x0 + 6, y0 + 3), (x0 + 16, y0 + 3), (x0 + 28, y0 + 3), (x0 + 6, y0 + 27), (x0 + 22, y0 + 29)):
+        c.fill(c.rect(nx, ny, nx + 1, ny + 1), STEEL[4])  # the nails
+
+
+def _plan(c, x0, y0, x1, y1):
+    """A plan pinned to the wall: a house in elevation (a box, a roof, a chimney, a door) in ink on pale paper, a dimension line under it
+    with a tick at each end, two more along the side, and a red pencil ring round the roof. No letters, no figures."""
+    c.paint(c.rect(x0, y0, x1, y1), PAPER, 0.84 - 0.12 * ((c.yy - y0) / (y1 - y0)), dither=False)
+    c.paint(c.rect(x0, y0, x1, y0 + 1), PAPER, 0.98, dither=False)
+    ink = IRON[1]
+    bx0, bx1, by0, by1 = x0 + 5, x1 - 7, y0 + 11, y1 - 7
+    for rx0, ry0, rx1, ry1 in ((bx0, by0, bx1, by0 + 1), (bx0, by1 - 1, bx1, by1), (bx0, by0, bx0 + 1, by1), (bx1 - 1, by0, bx1, by1)):
+        c.fill(c.rect(rx0, ry0, rx1, ry1), ink)
+    mx = (bx0 + bx1) // 2
+    for k in range(int((bx1 - bx0) / 2) + 1):  # the roof: two slopes
+        c.fill(c.rect(bx0 + k, by0 - 1 - k * 2 // 3, bx0 + k + 1, by0 - k * 2 // 3), ink)
+        c.fill(c.rect(bx1 - 1 - k, by0 - 1 - k * 2 // 3, bx1 - k, by0 - k * 2 // 3), ink)
+    c.fill(c.rect(mx - 4, by1 - 7, mx - 2, by1), ink)  # a door
+    c.fill(c.rect(mx - 2, by1 - 7, mx + 2, by1 - 6), ink)
+    c.fill(c.rect(mx + 2, by1 - 7, mx + 4, by1), ink)
+    c.fill(c.rect(bx1 - 5, by0 - 8, bx1 - 3, by0 - 3), ink)  # a chimney
+    for x in range(bx0, bx1, 2):  # the dimension line under the house: dashes with a tick at each end
+        c.fill(c.rect(x, by1 + 3, x + 1, by1 + 4), ink)
+    for x in (bx0, bx1 - 1):
+        c.fill(c.rect(x, by1 + 2, x + 1, by1 + 6), ink)
+    for y in range(by0, by1, 2):  # and along the side
+        c.fill(c.rect(bx1 + 3, y, bx1 + 4, y + 1), ink)
+    for y in (by0, by1 - 1):
+        c.fill(c.rect(bx1 + 2, y, bx1 + 6, y + 1), ink)
+    ring = np.abs(np.hypot((c.xx + 0.5 - mx) / 1.0, (c.yy + 0.5 - (by0 - 5)) * 1.4) - 8.5) < 0.6
+    c.paint(ring & (c.yy < by0 + 1) & (c.xx > bx0 - 2) & (c.xx < bx1 + 1) & (np.arange(c.w)[None, :] % 5 != 2), STAMP_RED, 0.55, dither=False)  # the pencil ring
+    for px, py in ((x0 + 1, y0 + 1), (x1 - 2, y0 + 1)):
+        c.fill(c.rect(px, py, px + 1, py + 1), STEEL[3])
+
+
+def _tape(c, x, y):
+    """A tape measure on a nail in the beam, hanging down with its end curled up a little: a yellow band with a dark tick on both edges."""
+    c.fill(c.rect(x + 1, y - 1, x + 3, y + 1), STEEL[4])  # the nail
+    band = c.rect(x, y + 1, x + 4, y + 21) | c.rect(x, y + 21, x + 4, y + 23) & ~c.rect(x, y + 22, x + 1, y + 23)
+    c.paint(band, RULE_Y, np.where(c.xx < x + 2, 0.85, 0.55), dither=False)
+    for ty in range(y + 2, y + 22, 2):
+        c.fill(c.rect(x, ty, x + 1, ty + 1), RULE_Y[0])
+        c.fill(c.rect(x + 3, ty, x + 4, ty + 1), RULE_Y[0])
+    c.fill(c.rect(x + 1, y + 6, x + 3, y + 7), RULE_Y[0])  # a long tick at the foot
+    c.fill(c.rect(x + 1, y + 14, x + 3, y + 15), RULE_Y[0])
+    c.paint(c.rect(x + 4, y + 20, x + 7, y + 22), RULE_Y, 0.7, dither=False)  # the end curls up
+    c.fill(c.rect(x + 6, y + 19, x + 7, y + 20), RULE_Y[3])
+
+
+def wk_shell(ms):
+    """The workshop seen from the front, lying under everything (the floor is baked from the map): the back wall of weathered boards with a
+    crossbeam on which a tape measure hangs (map cell 6), the plan of the house (8), the window to the lane (10 to 12), the wall of small
+    tools (13 to 15); the saws (15 to 17), the ladder (6) and the rack of boards (18 to 20) are props of their own. The side walls as dark
+    timber, the front wall with the door in the cell 13. 288 x 192, anchor (8, 8): the room's top left cell is the map cell (4, 3)."""
+    c = ms.Canvas(WK_W, WK_H)
+    top, bottom = 8, 48
+    xl, xr = 10, WK_W - 10
+    grain = pa.value_noise(WK_H, WK_W, (2, 14), np.random.default_rng(701))
+    stain = pa.value_noise(WK_H, WK_W, 9, np.random.default_rng(703))
+    board = ((c.xx - xl) // 9).astype(int)
+    bv = 0.6 + 0.06 * ((board * 7 + 3) % 5 - 2) / 2.0 + 0.12 * (grain - 0.5) - 0.26 * np.clip((c.yy - top) / 40.0, 0, 1) ** 1.3
+    bv += 0.12 * np.exp(-((c.xx - 112.0) / 48.0) ** 2) * (1 - np.clip((c.yy - top) / 40.0, 0, 1))  # the light of the window
+    bv = np.where(((c.xx - xl) % 9) == 8, 0.05, np.where(((c.xx - xl) % 9) == 0, bv + 0.12, bv)) - 0.1 * (stain > 0.76)
+    c.paint(c.rect(xl, top, xr, bottom), WEATHER, bv, contrast=2.0, dither=False)
+    c.paint(c.rect(xl, 31, xr, 33), PINE, np.where(c.yy < 32, 0.62, 0.22), dither=False)  # a batten across the boards
+    c.paint(c.rect(xl, bottom - 3, xr, bottom), WEATHER, np.where(c.yy < bottom - 2, 0.5, 0.08), dither=False)  # the baseboard
+    c.paint(c.rect(xl, bottom, xr, bottom + 3), BEAM, np.where(c.yy < bottom + 1, 0.2, 0.5), dither=False)  # the wall's shadow on the floor row
+    c.a[(c.yy >= bottom + 1) & (c.yy < bottom + 3) & (c.xx >= xl) & (c.xx < xr)] = True
+    c.paint(c.rect(0, 0, WK_W, top - 4), BEAM, 0.05, dither=False)
+    c.paint(c.rect(4, top - 4, WK_W - 4, top), BEAM, np.where(c.yy < top - 2, 0.85, 0.45), dither=False)
+    # the crossbeam under the roof, with its nail heads
+    c.paint(c.rect(xl, top, xr, top + 7), BEAM, np.where(c.yy < top + 2, 0.9, 0.5 - 0.1 * ((c.yy - top) / 7.0)), dither=False)
+    c.paint(c.rect(xl, top + 6, xr, top + 8), BEAM, 0.12, dither=False)
+    for nx in range(24, xr, 40):
+        c.fill(c.rect(nx, top + 3, nx + 1, top + 4), STEEL[3])
+    _tape(c, 21, top + 7)
+    _plan(c, 56, 14, 86, 42)
+    _wk_window(c, 98, 16, 126, 36)
+    _tool_wall(c, 136, 14, 174, 46)
+    for x0, x1, face, lit in ((0, 12, (4, 9), 0.7), (WK_W - 12, WK_W, (WK_W - 9, WK_W - 4), 0.5)):
+        c.paint(c.rect(x0, top, x1, WK_H), BEAM, 0.05, dither=False)
+        edge = 10 if x0 == 0 else WK_W - 12
+        c.paint(c.rect(face[0], top, face[1], WK_H - 4), BEAM, lit - 0.3 * np.clip((c.yy - top) / (WK_H - 16.0 - top), 0.0, 1.0), dither=False)
+        c.paint(c.rect(edge, top, edge + 2, WK_H - 4), BEAM, 0.3, dither=False)
+    fy = WK_H - 16
+    c.paint(c.rect(4, fy, WK_W - 4, WK_H), BEAM, np.where(c.yy < fy + 3, 0.8, 0.05), dither=False)
+    face = c.rect(4, fy + 3, WK_W - 4, WK_H - 3)
+    fv = np.where(c.yy < fy + 8, 0.3, 0.22) + 0.08 * (grain - 0.5)
+    c.paint(face, WEATHER, fv + 0.05, contrast=2.0, dither=False)
+    c.paint(face & (c.yy >= fy + 8), WEATHER, 0.2 + 0.08 * (grain - 0.5) - 0.12 * (((c.xx - 4) % 9) == 8), dither=False)
+    dx0, dx1 = 144, 160  # the doorway: room column 9 (the map cell 13)
+    c.paint(c.rect(dx0 - 2, fy, dx0, WK_H), BEAM, 0.6, dither=False)
+    c.paint(c.rect(dx1, fy, dx1 + 2, WK_H), BEAM, 0.6, dither=False)
+    c.paint(c.rect(dx0 - 2, fy, dx1 + 2, fy + 3), BEAM, 0.8, dither=False)
+    leaf = c.rect(dx0, fy + 3, dx1, WK_H - 1)
+    plank = ((c.xx - dx0) // 4).astype(int)
+    pv = 0.55 + 0.08 * (((plank * 7 + 3) % 5) / 4.0 - 0.5) + 0.16 * (grain - 0.5)
+    pv = np.where(((c.xx - dx0) % 4) == 3, 0.1, np.where(((c.xx - dx0) % 4) == 0, pv + 0.1, pv))
+    _pine(c, leaf, pv)
+    for sy in (fy + 5, fy + 12):  # two iron straps and a latch
+        c.paint(c.rect(dx0, sy, dx0 + 9, sy + 2), STEEL, 0.55, dither=False)
+    c.paint(c.rect(dx1 - 5, fy + 8, dx1 - 2, fy + 11), STEEL, 0.8, dither=False)
+    return c
+
+
+def wk_bench(ms):
+    """The work bench, five cells long: a thick top of pine with its worn middle, a heavy front board over a dark open space with a low
+    shelf (a bucket of shavings, a sack), a vise at the left end with an offcut clamped upright in it, the plane with a curl of shaving
+    beside it, the folding rule unfolded in a zigzag across the front, a tin of nails with a pencil and a mug at the right end. Tess
+    stands behind the middle (the cell above the third one): in front of her it is all low. 80 x 44, anchor (40, 40): the prop stands
+    in the middle cell of its row and the front's lower edge lies on that cell's centre line."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(711)
+    c = ms.Canvas(80, 44)
+    grain = pa.value_noise(44, 80, (1, 8), rng)
+    # under the top: the dark open space, the legs and the low shelf
+    c.paint(c.rect(0, 34, 80, 41), PINE, 0.12, dither=False)
+    for lx in (1, 71):
+        _pine(c, c.rect(lx, 30, lx + 8, 41), np.where(c.xx < lx + 2, 0.55, 0.3) + 0.1 * (grain - 0.5))
+    c.paint(c.rect(9, 35, 71, 40), STAIN, 0.1, dither=False)
+    _pine(c, c.rect(9, 37, 71, 39), np.where(c.yy < 38, 0.6, 0.22))  # the low shelf
+    c.paint(c.rect(28, 31, 43, 38) & ((c.xx > 28) & (c.xx < 42)), STEEL, 0.3 + 0.4 * c.cylinder(27, 43), dither=False)  # a bucket of shavings
+    c.paint(c.rect(27, 30, 44, 33), STEEL, 0.7, dither=False)
+    for k in range(5):
+        c.paint(c.ellipse(30 + k * 2.6, 30.5 - (k % 2), 2.0, 1.4), SAWDUST, 0.7 + 0.1 * (k % 2), dither=False)
+    c.paint(c.rect(50, 32, 63, 38), CREAM, 0.45 + 0.3 * (c.xx < 56), dither=False)  # a sack, tied
+    c.paint(c.rect(55, 30, 58, 33), CREAM, 0.3, dither=False)
+    # the front board and the top
+    _pine(c, c.rect(0, 29, 80, 35), 0.5 + 0.12 * (grain - 0.5) - 0.2 * ((c.yy - 29) / 6.0))
+    c.paint(c.rect(0, 33, 80, 35), PINE, 0.1, dither=False)
+    for kx in (19, 52):  # a knot in the board
+        c.paint(c.ellipse(kx, 31.5, 2.2, 1.2), PINE, 0.2, dither=False)
+    _pine(c, c.rect(0, 22, 80, 29), np.where(c.yy < 24, 0.98, 0.78) - 0.1 * np.exp(-((c.xx - 40.0) / 18.0) ** 2) * (c.yy > 23))
+    _pine(c, c.rect(0, 28, 80, 29), 0.3)
+    c.paint(c.rect(0, 22, 80, 23), PINE, 1.0, dither=False)  # the lit edge
+    for gy in (24, 26):  # the grain along the top
+        c.paint(c.rect(6, gy, 74, gy + 1) & (grain > 0.45), PINE, 0.66, dither=False)
+    # the vise at the left end: an iron block on the front edge, a wooden jaw, a long screw with a handle pointing left
+    c.paint(c.rect(4, 15, 15, 28), STEEL, 0.3 + 0.6 * c.cylinder(3, 16), dither=False)
+    c.paint(c.rect(4, 15, 15, 17), STEEL, 0.9, dither=False)
+    _pine(c, c.rect(5, 17, 14, 22), 0.45)
+    c.paint(c.rect(0, 25, 5, 27), STEEL, 0.7, dither=False)  # the screw
+    c.fill(c.rect(0, 23, 2, 29), STEEL[3])  # the handle bar
+    c.fill(c.rect(0, 23, 2, 24), STEEL[4])
+    offcut = c.rect(6, 8, 13, 18) & ~((c.xx - 6) * 0.9 + (c.yy - 8) < 2.5 - 2.0)  # an offcut clamped upright in the jaws, cut aslant at the top
+    _pine(c, offcut, np.where(c.xx < 9, 0.9, 0.55))
+    c.paint(c.rect(6, 12, 13, 13) & offcut, PINE, 0.12, dither=False)  # a pencil mark on it
+    c.paint(c.rect(12, 9, 13, 18) & offcut, PINE, 0.2, dither=False)
+    # the plane: a pale beech body, the iron sole, a tote handle behind it, the wedge; a curl of shaving at its mouth
+    c.paint(c.rect(24, 17, 42, 23), PINE, np.where(c.yy < 19, 1.0, 0.7), dither=False)
+    c.paint(c.rect(24, 22, 42, 23), STEEL, 0.5, dither=False)
+    c.paint(c.rect(23, 18, 26, 22), PINE, 0.5, dither=False)
+    c.paint(c.rect(34, 15, 37, 19), PINE, 0.85, dither=False)  # the wedge
+    c.paint(c.rect(27, 14, 30, 19), LEATHER, 0.55 + 0.3 * (c.xx < 28), dither=False)  # the tote
+    for r_, x_ in ((2.6, 46.5), (1.8, 49.0)):
+        ring = np.abs(np.hypot(c.xx + 0.5 - x_, (c.yy + 0.5 - 18.5) * 1.1) - r_) < 0.7
+        c.paint(ring & (c.xx > x_ - r_ - 1), SAWDUST, 0.9, dither=False)
+    # the folding rule, unfolded in a zigzag across the front of the top
+    pts = [(24, 26), (33, 24), (42, 26.5), (51, 24), (60, 26)]
+    for (ax, ay), (bx, by) in zip(pts, pts[1:]):
+        c.paint(seg(c, ax, ay, bx, by, 0.8), RULE_Y, 0.8 - 0.3 * (ay < by), dither=False)
+        for t_ in (0.25, 0.5, 0.75):
+            c.fill(c.rect(round(ax + (bx - ax) * t_), round(ay + (by - ay) * t_), round(ax + (bx - ax) * t_) + 1, round(ay + (by - ay) * t_) + 1), RULE_Y[0])
+    for jx, jy in pts[1:-1]:
+        c.fill(c.rect(jx, round(jy), jx + 1, round(jy) + 1), STEEL[3])  # the brass joints
+    # at the right end: a tin of nails with a few nails on the top beside it, a carpenter's pencil, a mug
+    c.paint(c.rect(60, 17, 69, 24), STEEL, 0.4 + 0.5 * c.cylinder(59, 70), dither=False)
+    c.paint(c.ellipse(64.5, 17.5, 4.6, 1.3), STEEL, 0.85, dither=False)
+    c.paint(c.ellipse(64.5, 17.5, 3.4, 0.8), STEEL, 0.1, dither=False)
+    for k in range(5):
+        c.fill(c.rect(62 + k * 1.2, 15 - (k % 2), 63 + k * 1.2, 17), STEEL[4] if k % 2 else STEEL[3])  # nails sticking out of the tin
+    for nx, ny in ((70, 24), (73, 25)):
+        c.fill(c.rect(nx, ny, nx + 2, ny + 1), STEEL[3])
+    c.paint(seg(c, 70, 20, 74, 17, 0.7), RULE_Y, 0.7, dither=False)  # the pencil
+    c.fill(c.rect(74, 16, 75, 18), STEEL[4])
+    c.paint(c.rect(74, 14, 79, 23), ENAMEL, 0.45 + 0.4 * (c.xx < 76), dither=False)  # the enamel mug
+    c.paint(c.rect(74, 14, 79, 15), BLUE, 0.7, dither=False)
+    c.paint(c.ellipse(76.5, 14.4, 2.6, 0.8), BEAM, 0.3, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def wk_trestle(ms):
+    """A pair of trestles for sawing, old and much used: each is a beam of dark seasoned wood on two splayed legs with a cross rail, a deep saw
+    kerf in the top of the beam (pale where it is new), a few curls of shavings on it and on the floor under it; the board lies across both (the
+    prop wk_board). 48 x 28, anchor (24, 24): the prop stands in the middle cell of its row, the feet lie on that cell's centre line, the tops of
+    the beams are 18 pixels above it."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(721)
+    c = ms.Canvas(48, 28)
+    grain = pa.value_noise(28, 48, (1, 6), rng)
+    old = ramp("#22160e", "#3c2a1a", "#5c4228", "#82603a")
+    for cx in (12, 36):
+        for side in (-1, 1):  # the legs: splayed, a cross rail between them
+            c.paint(seg(c, cx + side * 5, 11, cx + side * 8.5, 24, 1.5), old, np.where(side < 0, 0.72, 0.38), dither=False)
+        c.paint(seg(c, cx - 6.6, 18, cx + 6.6, 18, 1.0), old, 0.4, dither=False)
+        c.paint(c.rect(cx - 9, 6, cx + 9, 11), old, np.where(c.yy < 8, 0.95, 0.55) + 0.12 * (grain - 0.5), dither=False)  # the beam
+        c.paint(c.rect(cx - 9, 10, cx + 9, 11), old, 0.1, dither=False)
+        c.paint(c.rect(cx - 9, 6, cx + 9, 7), old, 1.0, dither=False)
+        c.paint(c.rect(cx - 1, 6, cx + 1, 10), PINE, 0.2, dither=False)  # the saw kerf, pale at the bottom where it is new
+        c.paint(c.rect(cx - 1, 9, cx + 1, 10), PINE, 0.7, dither=False)
+        c.paint(c.rect(cx - 7, 7, cx - 3, 9) & (grain > 0.5), old, 0.25, dither=False)  # old marks of the saw
+        c.fill(c.rect(cx - 8, 24, cx - 6, 25), old[1])  # the feet
+        c.fill(c.rect(cx + 6, 24, cx + 8, 25), old[1])
+    for x_, y_, r_ in ((18, 5.2, 1.8), (31, 6.2, 1.5), (7, 25.5, 1.8), (41, 26, 1.6)):  # curls of shavings
+        ring = np.abs(np.hypot(c.xx + 0.5 - x_, (c.yy + 0.5 - y_) * 1.2) - r_) < 0.65
+        c.paint(ring & (c.xx > x_ - r_ - 1), SAWDUST, 0.95, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def wk_board(ms):
+    """The board for the house, lying across the two trestles: a fresh pine board three cells long, pale and a little proud of the old beams
+    (a dark knot, the grain), a pencil line right across it where it is to be cut with a tick on the side that is wanted, and a first line,
+    crooked, rubbed out. 48 x 12, anchor (40, 11): the map puts the glyph in the cell right of the trestles' middle cell and lifts the picture
+    by 16 so that its lower edge lies on the beams."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(731)
+    c = ms.Canvas(48, 12)
+    grain = pa.value_noise(12, 48, (1, 7), rng)
+    _pine(c, c.rect(1, 3, 47, 8), 0.92 + 0.12 * (grain - 0.5))  # the face, fresh and pale
+    _pine(c, c.rect(1, 7, 47, 10), 0.5 + 0.12 * (grain - 0.5))  # the edge in front
+    c.paint(c.rect(1, 3, 47, 4), PINE, 1.0, dither=False)
+    c.paint(c.rect(1, 9, 47, 10), PINE, 0.14, dither=False)
+    for gy in (5, 6):
+        c.paint(c.rect(3, gy, 45, gy + 1) & (grain > 0.42), PINE, 0.7, dither=False)
+    c.paint(c.ellipse(12, 5.5, 2.2, 1.1), PINE, 0.2, dither=False)  # a knot
+    c.paint(c.rect(29, 3, 30, 10), STEEL, 0.15, dither=False)  # the pencil line across face and edge
+    c.fill(c.rect(30, 3, 31, 4), STEEL[1])  # the tick on the side that is wanted
+    c.fill(c.rect(31, 4, 32, 5), STEEL[1])
+    c.fill(c.rect(32, 5, 33, 6), STEEL[1])
+    c.paint(seg(c, 21, 3.5, 23, 7.5, 0.5), PINE, 0.55, dither=False)  # a first try, rubbed out
+    c.outline(st["outline"])
+    return c
+
+
+def wk_ladder(ms):
+    """A ladder that is not finished, leaning on the back wall: both rails are cut, the left one runs to the beam and the right one stops
+    below it with two empty mortises above the last rung, four rungs are in, the places of the next two are marked with a pencil tick on
+    both rails and two finished rungs lie on the floor at the foot. 38 x 52, anchor (14, 48): the foot stands on the cell's centre line,
+    the top reaches the crossbeam."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(741)
+    c = ms.Canvas(38, 52)
+    grain = pa.value_noise(52, 38, (6, 1), rng)
+
+    def rail(x_bottom, x_top, y_top, tone):
+        m = seg(c, x_bottom, 48, x_top, y_top, 1.6)
+        _pine(c, m, tone + 0.12 * (grain - 0.5), contrast=2.0)
+        return m
+
+    rail(5, 8, 4, 0.78)
+    rail(22, 19.5, 13, 0.46)
+    c.paint(c.rect(2, 47, 9, 49), PINE, 0.18, dither=False)  # the feet
+    c.paint(c.rect(18, 47, 25, 49), PINE, 0.18, dither=False)
+    for y_ in (41, 33, 25, 17):  # the four rungs that are in
+        t_ = (48 - y_) / 44.0
+        lx, rx = 5 + 3 * t_, 22 - 2.5 * t_
+        _pine(c, c.rect(lx, y_, rx, y_ + 2), np.where(c.yy < y_ + 1, 0.95, 0.5))
+        c.fill(c.rect(lx - 0.5, y_, lx + 0.5, y_ + 2), PINE[0])  # the joint
+        c.fill(c.rect(rx - 0.5, y_, rx + 0.5, y_ + 2), PINE[0])
+    for y_ in (9, 5):  # the empty mortises above the last rung on the right rail, and the ticks on both rails for the next rungs
+        c.fill(c.rect(19, y_ + 5, 21, y_ + 7), PINE[0])
+    for y_ in (13, 9):
+        c.fill(c.rect(6, y_, 8, y_ + 1), STEEL[1])
+        c.fill(c.rect(19, y_ + 4, 21, y_ + 5), STEEL[1])
+    for y_, x_ in ((46, 26), (44, 28)):  # the two finished rungs on the floor
+        _pine(c, c.rect(x_, y_, x_ + 11, y_ + 2), np.where(c.yy < y_ + 1, 0.95, 0.5))
+        c.fill(c.rect(x_ + 1, y_, x_ + 2, y_ + 2), PINE[3])
+    c.outline(st["outline"])
+    return c
+
+
+def wk_rack(ms):
+    """A rack of boards against the back wall, three cells wide: two uprights of stained oak, three levels of boards lying in it, their long
+    sides in front in strips of different tones and lengths, with the dark back showing where a board is shorter; the ends that stick out show
+    the rings of the year; tall planks lean at the left; a tally on the right upright in strokes (four and a slash, twice) and a paper tag on a
+    nail. 48 x 44, anchor (24, 40)."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(751)
+    c = ms.Canvas(48, 44)
+    grain = pa.value_noise(44, 48, (1, 6), rng)
+    c.paint(c.rect(0, 0, 48, 42), STAIN, 0.2, dither=False)
+    c.paint(c.rect(3, 3, 45, 41), STAIN, 0.06 + 0.05 * (grain - 0.5), dither=False)
+    for y in (14, 27, 40):  # the supports
+        c.paint(c.rect(0, y, 48, y + 3), STAIN, np.where(c.yy < y + 1, 0.9, 0.4), dither=False)
+    # the boards: per level strips from the support upwards, (height, start, end, tone); tones from raw to dusty
+    levels = ((14, ((3, 4, 41, 0.62), (3, 6, 36, 0.4), (4, 3, 42, 0.74))),
+              (27, ((3, 5, 40, 0.5), (3, 4, 31, 0.7), (3, 8, 41, 0.38), (3, 3, 38, 0.6))),
+              (40, ((5, 4, 42, 0.46), (5, 3, 36, 0.66), (2, 6, 40, 0.34))))
+    for base, strips in levels:
+        y = base
+        for k, (h, x0, x1, tone) in enumerate(strips):
+            top = y - h
+            _pine(c, c.rect(x0, top, x1, y), tone + 0.16 * (grain - 0.5))
+            c.paint(c.rect(x0, y - 1, x1, y), PINE, 0.08, dither=False)
+            if k == len(strips) - 1:
+                c.paint(c.rect(x0, top, x1, top + 1), PINE, 0.9, dither=False)
+            ring = c.rect(x1, top, x1 + 1, y)  # the end grain
+            c.paint(ring, PINE, 0.28, dither=False)
+            if h >= 4:
+                c.fill(c.rect(x1 - 1, top + 1, x1, top + 2), PINE[3])  # a ring catching the light
+            y = top
+    for k in range(3):  # tall planks leaning at the left edge
+        x = 5 + k * 4
+        _pine(c, c.rect(x, 3 + k, x + 3, 14), np.where(c.xx == x, 0.8, 0.46) - 0.08 * k)
+        c.paint(c.rect(x + 2, 3 + k, x + 3, 14), PINE, 0.1, dither=False)
+    for px in (0, 45):  # the uprights in front of everything
+        c.paint(c.rect(px, 0, px + 3, 42), STAIN, np.where((c.xx - px) < 1, 0.82, 0.5), dither=False)
+    for k in range(4):  # tally strokes on the right upright: four and a slash, twice
+        c.fill(c.rect(36 + k * 2, 17, 37 + k * 2, 22), PAPER[3])
+    c.fill(seg(c, 35, 21, 44, 18, 0.5), PAPER[3])
+    for k in range(4):
+        c.fill(c.rect(36 + k * 2, 30, 37 + k * 2, 35), PAPER[3])
+    c.fill(c.rect(10, 29, 11, 31), STEEL[3])  # a nail with a paper tag on it
+    c.paint(c.rect(8, 31, 14, 37), PAPER, 0.8, dither=False)
+    c.fill(c.rect(9, 33, 13, 34), IRON[1])
+    c.outline(st["outline"])
+    return c
+
+
+def wk_saws(ms):
+    """The saws: a stained board on the wall with three saws (a hand saw with a worn handle, a back saw with a brass spine, a bow saw) and
+    two clamps, each hanging inside its own outline drawn in chalk; the largest saw's outline is empty, because it is in use. Under it a low box
+    of pine with clamps lying in it and a tin cup holding a pencil. 48 x 40, anchor (24, 40): the prop stands in the middle cell of the three,
+    its box stands on that row's centre line, the board hangs two cells above."""
+    st = pa.STYLES["tal"]
+    rng = np.random.default_rng(761)
+    c = ms.Canvas(48, 40)
+    grain = pa.value_noise(40, 48, (1, 8), rng)
+    # the board with a frame of pine
+    _pine(c, c.rect(1, 1, 47, 30), np.where((c.yy < 3) | (c.xx < 3), 0.75, 0.3) - 0.1 * (c.yy > 27))
+    c.paint(c.rect(3, 3, 45, 28), STAIN, 0.4 + 0.14 * (grain - 0.5), dither=False)
+    # the chalk outline of the largest saw, which is not there (it is in use): a long tapered shape across the top of the board
+    c.paint(seg(c, 5, 5, 31, 6, 0.6) | seg(c, 5, 10, 31, 8, 0.6) | seg(c, 31, 6, 31, 8, 0.6) | seg(c, 5, 5, 5, 10, 0.6), PAPER, 0.5, dither=False)
+    # hand saw (second row of the board): a tapered blade, teeth along the lower edge, a worn dark handle with a hole for the hand
+    blade = (c.xx >= 14) & (c.xx < 42) & (c.yy >= 12) & (c.yy < 20 - (c.xx - 14) * 0.12 + 0.0) & (c.yy >= 12 + (c.xx - 14) * 0.08)
+    c.paint(blade, STEEL, 0.6 + 0.3 * (c.yy < 14), dither=False)
+    teeth = (c.xx >= 15) & (c.xx < 41) & (c.yy >= 19.5 - (c.xx - 14) * 0.12) & (c.yy < 21.5 - (c.xx - 14) * 0.12) & (((c.xx.astype(int)) % 2) == 0)
+    c.paint(teeth, STEEL, 0.5, dither=False)
+    c.paint(c.rect(6, 12, 15, 22), LEATHER, 0.3 + 0.5 * (c.yy < 14), dither=False)
+    c.paint(c.rect(8, 15, 12, 19), STAIN, 0.1, dither=False)  # the hole of the handle
+    c.paint(c.rect(6, 12, 15, 13), LEATHER, 0.95, dither=False)
+    # back saw: a short rectangular blade with a brass spine
+    c.paint(c.rect(25, 22, 44, 28), STEEL, 0.55 + 0.35 * (c.yy < 24), dither=False)
+    c.paint(c.rect(25, 22, 44, 24), BRASS, 0.7, dither=False)
+    c.paint(c.rect(13, 22, 25, 28), LEATHER, 0.35 + 0.4 * (c.yy < 24), dither=False)
+    c.paint(c.rect(15, 24, 21, 26), STAIN, 0.1, dither=False)
+    # chalk outline of the back saw is hidden by the saw itself; the two clamps hang at the right of the first row: an iron bar, a fixed jaw,
+    # a sliding jaw and a screw with a wooden handle
+    for cx, tone in ((38, 0.5), (44, 0.72)):
+        c.paint(c.rect(cx, 4, cx + 2, 20), STEEL, tone, dither=False)
+        c.paint(c.rect(cx - 2, 4, cx + 4, 6), STEEL, 0.4, dither=False)
+        c.paint(c.rect(cx - 2, 15, cx + 4, 17), STEEL, 0.85, dither=False)
+        c.paint(c.rect(cx - 1, 19, cx + 3, 21), PINE, 0.7, dither=False)
+    for nx, ny in ((7, 4), (30, 4), (15, 24), (36, 24), (38, 3), (44, 3)):
+        c.fill(c.rect(nx, ny, nx + 1, ny + 1), STEEL[4])
+    # the low box under the board: front, top edge, clamps lying in it, a tin cup with a pencil
+    _pine(c, c.rect(0, 31, 48, 40), np.where(c.yy < 33, 0.9, 0.46) - 0.12 * ((c.yy - 31) / 9.0))
+    c.paint(c.rect(0, 39, 48, 40), PINE, 0.08, dither=False)
+    c.paint(c.rect(3, 34, 45, 38), STAIN, 0.12, dither=False)  # the dark opening of the box
+    c.paint(seg(c, 6, 36, 20, 35, 0.9), STEEL, 0.6, dither=False)
+    c.paint(seg(c, 22, 36.5, 33, 35.5, 0.9), STEEL, 0.45, dither=False)
+    c.paint(c.rect(36, 27, 43, 33), STEEL, 0.4 + 0.5 * c.cylinder(35, 44), dither=False)  # the tin cup on the edge
+    c.paint(c.ellipse(39.5, 27.4, 3.6, 1.0), STEEL, 0.85, dither=False)
+    c.paint(seg(c, 39, 28, 41, 21.5, 0.6), RULE_Y, 0.7, dither=False)  # a pencil in it
+    c.outline(st["outline"])
+    return c
+
+
+def wk_dust(ms):
+    """Sawdust on the floor with the footprints of two people in it: a low, ragged heap with a few curls, a long trail of big boots with
+    strides of seven pixels going west and, beside it, the shorter steps of someone in smaller shoes. The prints show the planks through the
+    dust. 64 x 32, anchor (32, 24); flat, no shadow, no outline."""
+    rng = np.random.default_rng(771)
+    c = ms.Canvas(64, 32)
+    n = pa.value_noise(32, 64, 4, rng)
+    n2 = pa.value_noise(32, 64, 2, rng)
+    dist = np.hypot((c.xx + 0.5 - 32) / 30.0, (c.yy + 0.5 - 17) / 11.5)
+    heap = dist + 0.34 * (n - 0.5) < 1.0
+    c.paint(heap, SAWDUST, 0.34 + 0.24 * (1 - dist) + 0.16 * (n2 - 0.5), dither=True)
+    c.paint(heap & (dist < 0.5) & (n2 > 0.5), SAWDUST, 0.7, dither=False)
+    for sx, sy in ((58, 28), (4, 9), (50, 6), (11, 27)):  # a few specks outside the heap
+        c.fill(c.rect(sx, sy, sx + 1, sy + 1), SAWDUST[1])
+
+    def rot_ellipse(x, y, ang, rl, rw):
+        dx, dy = c.xx + 0.5 - x, c.yy + 0.5 - y
+        u = dx * np.cos(ang) + dy * np.sin(ang)
+        v = -dx * np.sin(ang) + dy * np.cos(ang)
+        return (u / rl) ** 2 + (v / rw) ** 2 <= 1.0
+
+    floor = ramp("#5a3f28", "#7a583a", "#94704a")
+
+    def print_(x, y, ang, big):
+        """A footprint: a sole and a heel with a gap between them, the toe towards `ang` (0 = east)."""
+        rl, rw, gap = (2.7, 1.6, 4.4) if big else (1.9, 1.15, 3.2)
+        dx, dy = np.cos(ang), np.sin(ang)
+        sole = rot_ellipse(x, y, ang, rl, rw)
+        heel = rot_ellipse(x - dx * gap, y - dy * gap, ang, rw * 0.9, rw * 0.9)
+        c.paint((sole | heel) & heap, floor, 0.3, dither=False)
+
+    for k, x in enumerate((52, 45, 38, 31, 24, 17)):  # the big boots, going west, left and right foot a little apart
+        print_(x, 15 + (k % 2) * 4 - 1, np.pi, True)
+    for k, x in enumerate((49, 44, 39, 34, 29)):  # the smaller steps close behind, a little further down
+        print_(x, 24 + (k % 2) * 3, np.pi, False)
+    return c
+
+
+def wk_stool(ms):
+    """A round three-legged stool of pine, its seat worn dark in the middle. 16 x 22, anchor (8, 19)."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(16, 22)
+    for lx, tone in ((3.5, 0.62), (12.5, 0.34), (8, 0.46)):
+        c.paint(seg(c, lx + (8 - lx) * 0.3, 11, lx + (lx - 8) * 0.25, 19, 1.1), PINE, tone, dither=False)
+    c.paint(seg(c, 4.5, 15.5, 11.5, 15.5, 0.6), PINE, 0.25, dither=False)  # the rung
+    c.paint(c.rect(2, 9, 14, 12) & (np.hypot((c.xx + 0.5 - 8) / 6.4, (c.yy + 0.5 - 9.5) / 3.0) <= 1.0), PINE, 0.42, dither=False)  # the thickness
+    c.paint(c.ellipse(8, 8.8, 6.4, 3.0) & (c.yy < 11), PINE, 0.96, dither=False)  # the seat
+    c.paint(c.ellipse(8, 8.8, 3.8, 1.5), PINE, 0.52, dither=False)  # worn dark in the middle
+    c.outline(st["outline"])
+    return c
+
+
+
 # --------------------------------------------------------------------------- registration
 def build(ms):
     """Registers the sprites of the town hall in the catalog. The shell is flat; the furniture stands with the lower edge
@@ -1133,6 +1637,7 @@ def build(ms):
     ms.save("tal", "rh_buttons", button_tin(ms), (8, 16))
     ms.save("tal", "rh_cup", cracked_cup(ms), (8, 16))
     build_florist(ms)
+    build_workshop(ms)
 
 
 def build_florist(ms):
@@ -1147,6 +1652,22 @@ def build_florist(ms):
     ms.save("tal", "fo_plant", fo_plant(ms), (16, 52), shape={"circle": 6, "offset": [0, -3]}, shadow=[9, 3])
     ms.save("tal", "fo_can", fo_can(ms), (12, 17), shape={"circle": 4, "offset": [0, -2]}, shadow=[7, 2])
     ms.save("tal", "fo_chest", fo_chest(ms), (8, 34), shape={"rect": [32, 10], "offset": [8, -5]}, shadow=[16, 3])
+
+
+def build_workshop(ms):
+    """Registers the workshop (S4, prefix wk_). The shell, the floor dust and the board are flat or hang over the furniture and have neither a
+    shape nor a shadow; the furniture stands with the lower edge of its front on the centre line of its cell and, standing in the middle cell
+    of its width, casts a baked shadow on the workshop's own floor (the map werkstatt is baked after it; no other map uses the prefix wk_,
+    so no other stamp changes). The board lies on the trestles: the map puts its glyph in the cell right of the trestles' and lifts it by 16."""
+    ms.save("tal", "wk_shell", wk_shell(ms), (8, 8), flat=True)
+    ms.save("tal", "wk_bench", wk_bench(ms), (40, 40), shape={"rect": [80, 12], "offset": [0, -6]}, shadow=[40, 3])
+    ms.save("tal", "wk_trestle", wk_trestle(ms), (24, 24), shape={"rect": [44, 8], "offset": [0, -4]}, shadow=[22, 3])
+    ms.save("tal", "wk_board", wk_board(ms), (40, 11))
+    ms.save("tal", "wk_ladder", wk_ladder(ms), (14, 48), shape={"rect": [22, 8], "offset": [0, -4]}, shadow=[12, 2])
+    ms.save("tal", "wk_rack", wk_rack(ms), (24, 40), shape={"rect": [48, 8], "offset": [0, -4]}, shadow=[24, 3])
+    ms.save("tal", "wk_saws", wk_saws(ms), (24, 40), shape={"rect": [48, 8], "offset": [0, -4]}, shadow=[24, 3])
+    ms.save("tal", "wk_dust", wk_dust(ms), (32, 24), flat=True)
+    ms.save("tal", "wk_stool", wk_stool(ms), (8, 19), shape={"circle": 5, "offset": [0, -3]}, shadow=[7, 2])
 
 
 def preview(path):
@@ -1188,8 +1709,28 @@ def preview_florist(path):
     sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
 
 
+def preview_workshop(path):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_sprites as ms
+    from PIL import Image
+    sheet = Image.new("RGBA", (WK_W + 20, WK_H + 150), (96, 120, 100, 255))
+    floor = Image.new("RGBA", (WK_W, WK_H), (150, 104, 66, 255))
+    sheet.alpha_composite(floor, (10, 10))
+    sheet.alpha_composite(Image.fromarray(wk_shell(ms).rgba().astype(np.uint8), "RGBA"), (10, 10))
+    x, y = 10, WK_H + 20
+    for item in (wk_bench(ms), wk_trestle(ms), wk_board(ms), wk_ladder(ms), wk_rack(ms), wk_saws(ms), wk_dust(ms), wk_stool(ms)):
+        img = Image.fromarray(item.rgba().astype(np.uint8), "RGBA")
+        if x + img.width > sheet.width:
+            x, y = 10, y + 50
+        sheet.alpha_composite(img, (x, y))
+        x += img.width + 8
+    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
     elif len(sys.argv) == 3 and sys.argv[1] == "--preview-florist":
         preview_florist(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == "--preview-workshop":
+        preview_workshop(sys.argv[2])
