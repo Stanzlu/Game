@@ -41,6 +41,8 @@ INTERACT_PULL,Ziehen
 INTERACT_OPEN,Öffnen
 INTERACT_TAKE,Aufheben
 INTERACT_TOUCH,Berühren
+SHELF_TITLE,Was kommt hierher?
+SHELF_TAKE,Wieder mitnehmen
 KEY_SPACE,Leertaste
 KEY_SHIFT,Umschalt
 MENU_CONTINUE,Fortsetzen

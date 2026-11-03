@@ -339,6 +339,18 @@ func place_curiosity(slot_id: String, item_id: String) -> bool:
 	return true
 
 
+## Takes a curiosity off its slot back into the inventory (Act IV, S8: the shelves and the wall).
+func take_curiosity(slot_id: String) -> bool:
+	var item := curiosity_in(slot_id)
+	if item.is_empty():
+		return false
+	state.house.curiosity_slots.erase(slot_id)
+	add_item(item)
+	Log.info(Log.Category.WORLD_STATE, "curiosity taken", {"slot": slot_id, "item": item})
+	house_changed.emit()
+	return true
+
+
 func cat_name() -> String:
 	return state.house.cat_name
 

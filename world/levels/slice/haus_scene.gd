@@ -155,7 +155,17 @@ func _ready() -> void:
 	if stage == "home":
 		# a homecoming that was broken off plays again from the door: the chair comes with him
 		WorldState.clear_flag("house.guest_hermit")
+	# the way home from the city (Act IV, S8): the same, for Tess: the shelves, the loaf and her chair
+	var city_home := (
+		WorldState.quest_stage(CityHomecoming.QUEST) == "home"
+		and not Beat.reached(CityHomecoming.BEAT)
+	)
+	if city_home:
+		for flag: String in ["house.shelves", "house.bread", "house.guest_tess"]:
+			WorldState.clear_flag(flag)
 	super()
+	if city_home:
+		CityHomecoming.attach(self)
 	_add_window_light()
 	_add_night_surround()
 	view.bounds = Rect2(
@@ -606,6 +616,19 @@ func _antreiber_pending() -> bool:
 ## follows the picture).
 func _cat_cell() -> Vector2i:
 	return BENCH_CAT_CELL if WorldState.has_flag("house.workbench") else CAT_CELL
+
+
+## The helpers of a homecoming that another script stages (Act IV, S8: Tess).
+func stage_guest(cell: Vector2i, sheet: CharacterSheet) -> GuestWalker:
+	return _guest_at(cell, sheet)
+
+
+func door_glare() -> void:
+	_glare()
+
+
+func is_quiet() -> bool:
+	return _quiet()
 
 
 ## True while nothing may start: a line is open, a menu is up or the picture fades.

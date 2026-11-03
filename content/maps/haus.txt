@@ -49,6 +49,13 @@ A = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 Z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/cat_sleep", "lift": 14, "cue": "cat_bench", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "if": ["house.cat_fed", "house.workbench"]}}
 Y = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/plan_board", "lift": 8, "cue": "plan_board", "dialogue": "res://content/dialogue/akt3/heimkehr.dialogue", "radius": 20, "if": "house.workbench"}}
 C = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/guest_chair", "if": "house.guest_hermit"}}
+; Akt IV, S8 (Heimkehr): Tess kommt als Gast mit Absicht (nach dem Einsiedler): zwei Regale (α, β) und eine Leiste mit zwei Haken (γ, δ) an der Nordwand (Plätze für Kuriositäten: shelf_3, shelf_4, wall_1, wall_2, house.shelves), ein Brot auf dem Tisch (L, house.bread), ihr Stuhl (G, house.guest_tess; sie geht, der Stuhl bleibt). Alles flach, bedingt und ohne Katalogschatten (kein Bake).
+α = {"ground": "W", "prop": "res://world/props/curiosity_slot.tscn", "params": {"sprite": "haus/slot_shelf", "slot": "shelf_3", "radius": 22, "hang": 14, "if": "house.shelves"}}
+β = {"ground": "W", "prop": "res://world/props/curiosity_slot.tscn", "params": {"sprite": "haus/slot_shelf", "slot": "shelf_4", "radius": 22, "hang": 14, "if": "house.shelves"}}
+γ = {"ground": "W", "prop": "res://world/props/curiosity_slot.tscn", "params": {"sprite": "haus/slot_peg", "slot": "wall_1", "radius": 22, "hang": 6, "if": "house.shelves"}}
+δ = {"ground": "W", "prop": "res://world/props/curiosity_slot.tscn", "params": {"sprite": "haus/slot_peg", "slot": "wall_2", "radius": 22, "hang": 6, "if": "house.shelves"}}
+L = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/loaf", "lift": 8, "if": "house.bread"}}
+G = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/guest_chair", "if": "house.guest_tess"}}
 [map]
 ########################################
 ########################################
@@ -58,11 +65,11 @@ C = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ############SWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
 ############WWWWWWWWWWWWWWWW############
-############WWWWWWWRWYcwWhWW############
+############WαWβWγδRWYcwWhWW############
 ############W___K__________W############
 ############W__M__ak__p____W############
 ############W____rz______b_W############
-############W___s___T_C____W############
+############W___s_G_TLC____W############
 ############W______@_______W############
 ############W_u____1__A_B__W############
 ############W______Q__Z____W############
