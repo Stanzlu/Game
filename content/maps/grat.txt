@@ -1,11 +1,12 @@
 ; Akt V, G2: das Hochtal, die zweite Karte des Gebirges (Klasse M, 96 × 56, ADR-068, ADR-073). Von der Tür im Süden (sie führt zurück auf den Pass) öffnet sich ein Becken zwischen den Wänden:
 ; in der Mitte ein Bergsee mit flachem Ufer, Matten und Geröll, Latschenkiefern, im Osten ein Murmeltierhang, dazu drei Steinmännchen (je eines vom vorigen aus zu sehen), die den Weg am Südufer
-; entlang nach Nordosten zeigen: dort steht die Anlage, ein Haus mit Schornstein in einer Nische des Felsens, vor ihm ein Zaun mit einem Tor (zu, bis G3 die Tür in die Maschine setzt) und ein Platz aus
+; entlang nach Nordosten zeigen: dort steht die Anlage, ein Haus mit Schornstein in einer Nische des Felsens, vor ihm ein Zaun mit einem Tor (zu, bis man geklopft hat, G3: dann steht eine Tür in die Halle da) und ein Platz aus
 ; festgetretener Erde. Über dem Tal liegt der Grat hinter dem Blocker am Fuß der Rampe im Nordwesten (G6 öffnet ihn): ein Absatz an der Nordwand, darüber hinweg ein Weg nach Osten, eine
 ; Spalte über der Anlage (drei Zellen breit, mit einem Umweg über den Absatz daneben) und am Ostende ein Plateau (frei, für die Tür des ursprünglichen Hauses, G8).
 ; Keine Figur: Dinge, kleine Scherze und die Hand auf dem Stein am Ufer (die erste Rückblende). Der Layoutstand ist endgültig (ADR-068): Änderungen nur an der Legende.
 ; Layout: tools/art/layout_akt5_maps.py grat --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/grat.txt. Streuregeln sind Laufzeit-Meta und brauchen keinen neuen Bake.
 ; Was später weicht oder an einen Zustand gebunden ist (der Stein, der Kristall, der Fingerhut, das Tor, der Haufen am Fuß der Rampe, die beiden Blocker), trägt keinen gebackenen Schatten.
+; G3 hat nur Buchstaben geändert (E und e im Hof), keinen Boden: der Bake bleibt, `tools/art/map_stamp.py --check` meldet es.
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/grat_ground.png"
@@ -46,12 +47,16 @@ H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 Q = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_quartz", "cue": "quartz", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 14, "unless": "grat.quartz_taken"}}
 M = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_marmot_den", "cue": "marmot_den", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 22}}
 t = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_thimble", "lift": 2, "unless": "grat.thimble_taken"}}
-; die Anlage: das Haus am Ende seiner Nische (der Schornstein steht zwei Zellen östlich der Mitte), der Rauch über ihm, der Zaun von Fels zu Fels, das Tor in seiner Mitte (zu) und davor der Blocker plant_gate (G3 ersetzt ihn durch die Tür in die Maschine)
+; die Anlage: das Haus am Ende seiner Nische (der Schornstein steht zwei Zellen östlich der Mitte), der Rauch über ihm, der Zaun von Fels zu Fels, das Tor in seiner Mitte und davor der Blocker plant_gate
+; (G3: der Cue gate in anlage.dialogue; man kann klopfen, dann setzt der Text grat.gate_open: das Tor steht offen (sprite_when), der Blocker weicht (unless), und die Tür E in die Halle erscheint)
 A = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_hall"}}
 Z = {"ground": "^", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_smoke_plant"}}
 f = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_fence"}}
-G = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_gate"}}
-X = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "offset": [0, -1], "cue": "plant_gate", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue"}}
+G = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_gate", "sprite_when": {"grat.gate_open": "tal/gb_plant_gate_open"}}}
+X = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "offset": [0, -1], "cue": "gate", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "unless": "grat.gate_open"}}
+; G3: die Tür in die Halle `maschine` (nur mit offenem Tor; auto, drei Zellen breit und zwei Zellen tief über der Tür des Hauses, die Ankunft von dort e = spawn_maschine liegt zwei Zellen davor im Hof)
+E = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "maschine", "spawn": "grat", "auto": true, "size": [3, 2], "sound": "door_open", "if": "grat.gate_open"}}
+e = {"ground": ",", "marker": "spawn_maschine"}
 ; der Aufgang zum Grat im Nordwesten: Holzstufen, davor ein Haufen Geröll und der Blocker ramp_wait am Fuß (G6 öffnet ihn und nimmt den Haufen weg; beide ohne gebackenen Schatten)
 s = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_steps"}}
 F = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_rockfall"}}
@@ -92,9 +97,9 @@ Y = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size":
 ^^^^^^^^^.gL..,,,...gw~~~~~~~~~~~~~~~~~~~~~~~~.L.........hhhh^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
 ^^^^^^^^^.....,,,.....w~~~~~~~~~~~~~~~~~~~~~~~g..........hhhh^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
 ^^^^^^^^^....,,,..L.O.w~~~~~~~~~~~~~~~~~~~~~~~..O........hh^^^^^^^^^^,,,,,,,A,,,,,,,^^^^^^^^^^^^
-^^^^^^^^h....,,,......w~~~~~~~~~~~~~~~~~~~~~~........L....^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h....,,,......w~~~~~~~~~~~~~~~~~~~~~~........L....^^^^^^^^^^^,,,,,,,E,,,,,,,^^^^^^^^^^^^
 ^^^^^^^^h....,,,.......w~~~~~~~~~~~~~~~~~~~~w...L.O....Ou.^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
-^^^^^^^^h....,,,.....R.w~~~~~~~~~~~~~~~~~~~w..............^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h....,,,.....R.w~~~~~~~~~~~~~~~~~~~w..............^^^^^^^^^^^,,,,,,,e,,,,,,,^^^^^^^^^^^^
 ^^^^^^^^h..L..,,,.L.....w~~~~~~~~~~~~~~~~ww...g...........^^^^^^^^^^^ffffff,G,ffffff^^^^^^^^^^^^
 ^^^^^^^^^h....,,,.....L..w~~~~~~~~~~~~~wwg............................,,,,,,X,,,,,,....mhhh^^^^^
 ^^^^^^^^^h.....,,,........www~~wwwwwwww........L.R.L...3..........,,,,,,,,,,,,,,,,,,,,.hhhhh^^^^

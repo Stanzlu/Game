@@ -492,13 +492,43 @@ DESIGNS = {
         "ear_item": "pencil",
         "bag": "none",
     },
+    # The Wächter (Akt V, G3): an older man in a long grey-green work coat with brass buttons down the front, a flat cap, round glasses and a
+    # clipboard held against his chest; he looks down at what he writes. Nothing about him is threatening: he is a man who counts.
+    "waechter": {
+        "skin": ramp("#8a5a50", "#c28a74", "#e8b498", "#fbd8c0"),
+        "hair": ramp("#5c5c64", "#85858f", "#b0b0ba", "#d4d4dc", "#f0f0f6"),
+        "top": ramp("#1e241c", "#323a2c", "#4e5a42", "#76856a"),
+        "inner": ramp("#7a7466", "#aaa28e", "#d6cfba", "#f2ecda"),
+        "belt": ramp("#2a1a14", "#4a3220", "#765036", "#a07a50"),
+        "pants": ramp("#1c1c20", "#2e2e36", "#46464f", "#66666f"),
+        "boots": ramp("#14100e", "#2c2018", "#4a3626", "#6e5440"),
+        "brass": ramp("#3e260c", "#7c5018", "#bd8a28", "#ecc050"),
+        "hat": ramp("#1c1e22", "#32363e", "#4e5460", "#727a88"),
+        "frame": ramp("#1a1210", "#3a2a1c", "#8a6a38", "#c8a050"),
+        "board": ramp("#2a1608", "#5a3414", "#8e5c2c", "#c08a4e"),
+        "paper": ramp("#8a8678", "#bdb8a6", "#e6e2d2", "#ffffff"),
+        "eye": pa.hex_rgb("#1a1226"),
+        "blush": pa.hex_rgb("#d09080"),
+        "outline": pa.hex_rgb("#1c1a1a"),
+        "hair_style": "crew",
+        "outfit": "jacket",
+        "skirt": 6,
+        "coat": True,
+        "buttons": True,
+        "hat_kind": "cap",
+        "glasses": True,
+        "age_lines": True,
+        "clipboard": True,
+        "lookdown": True,
+        "bag": "none",
+    },
 }
 
 # People of the real world in softer colours (ADR-041): the darkest tones lifted and warmed,
 # a little less contrast, outlines a warm brown instead of near black. The Elysians and the
 # host keep their crisp, bright perfection on purpose.
 SOFT = ("player", "mira", "child", "antreiber", "einsiedler", "torwaechterin", "gefaelliger", "lio", "beamtin",
-        "buerger", "orin", "tess")
+        "buerger", "orin", "tess", "waechter")
 WARM_DARK = pa.hex_rgb("#4a3028")
 
 
@@ -637,6 +667,35 @@ class Figure:
 
     def cyl(self, x0, x1, base=0.18, amt=0.78):
         return base + amt * self.c.cylinder(x0, x1)
+
+    # --- Akt V, G3: the clipboard of the Wächter ---
+    def arms_clipboard(self, cx, tx0, tx1, ty0, lean):
+        """The arms of a man who writes while he stands: the near arm bends up to hold a clipboard against his chest, the far arm hangs; the board
+        is dark wood with a sheet on it, a brass clip, three lines of writing and a pencil. Seen from the side the board is a thin slab in front
+        of his chest. (Not from behind: there he has two plain arms.)"""
+        c = self.c
+        if self.side:
+            x0 = cx + 2.5 + lean
+            self.part(limb(c, cx - 0.5 + lean, ty0 + 1, x0, ty0 + 8, 2), "top", 0.65, line=True)
+            self.part(c.rect(x0 - 0.5, ty0 + 2, x0 + 2.5, ty0 + 11), "board", 0.6, line=True)
+            self.part(c.rect(x0 + 1, ty0 + 3, x0 + 2.5, ty0 + 10), "paper", 0.9)
+            self.part(c.rect(x0 - 0.5, ty0 + 1, x0 + 2, ty0 + 3), "brass", 0.8)
+            self.part(c.rect(x0 - 1, ty0 + 8, x0 + 1, ty0 + 10), "skin", 0.65)
+            return
+        sh = 1 if self.three else 0
+        # the far arm hangs
+        self.sleeve(limb(c, tx1 + 1, ty0 + 1, tx1 + 1, ty0 + 7, 2), 0.4, hand=limb(c, tx1 + 1, ty0 + 7, tx1 + 1, ty0 + 8, 2))
+        # the near arm: down from the shoulder, then in to the board's lower corner
+        bx = cx - 3 + sh
+        self.sleeve(limb(c, tx0 - 1, ty0 + 1, tx0 - 1, ty0 + 6, 2) | limb(c, tx0 - 1, ty0 + 6, bx + 1, ty0 + 10, 2), 0.72)
+        board = c.rect(bx, ty0 + 3, bx + 7, ty0 + 12)
+        self.part(board, "board", 0.55, line=True)
+        self.part(c.rect(bx + 1, ty0 + 5, bx + 6, ty0 + 11), "paper", np.where(c.yy < ty0 + 6, 0.95, 0.8))
+        for k, ly in enumerate((7, 9)):  # lines of writing
+            c.fill(c.rect(bx + 2, ty0 + ly, bx + 5 - k, ty0 + ly + 1), self.d["paper"][0])
+        self.part(c.rect(bx + 2, ty0 + 3, bx + 5, ty0 + 5), "brass", 0.8)  # the clip
+        self.part(c.rect(bx - 1, ty0 + 10, bx + 2, ty0 + 12), "skin", 0.68)  # the hand at the lower corner
+        c.fill(c.rect(bx + 6, ty0 + 7, bx + 7, ty0 + 12), self.d["brass"][2])  # a pencil along the right edge
 
     # --- Akt IV: skirts and coats, crossed arms, carried things, the lute, the basket and the stamp ---
     def skirt(self, tx0, tx1, ty1):
@@ -1044,7 +1103,7 @@ class Figure:
         carry = d.get("carry", False)
         lute = d.get("lute", False)
         lap = lute and p["sit"]
-        swing = (0, 0) if (carry or d.get("basket")) else p["arms"]
+        swing = (0, 0) if (carry or d.get("basket") or d.get("clipboard")) else p["arms"]
 
         # backpack behind the body (front views) / ponytail behind the head
         if d["bag"] == "backpack" and not back:
@@ -1186,6 +1245,11 @@ class Figure:
                 self.part(c.rect(ax0 - 1, ty0 + 3, tx1 - 0, ty0 + 4), "belt", 0.6)
         if d.get("keys") and not back:
             self.keys(tx0, tx1, ty1, side)
+        if d.get("buttons") and not back and not side:
+            # the brass buttons of the coat, in a row down the middle: one on the chest, one low on the skirt (the skirt's own come with `coat`)
+            mid = cx + (1 if three else 0)
+            for by in (ty0 + 5, ty1 + 3):
+                self.part(c.rect(mid - 0.5, by, mid + 0.5, by + 1), "brass", 0.85)
         if d.get("apron_long") and not back:
             self.apron_long(tx0, tx1, ty1)
         if d.get("apron_craft"):
@@ -1220,6 +1284,8 @@ class Figure:
             self.arms_crossed(cx, tx0, tx1, ty0, lean, arm_out)
         elif carry and not back:
             self.arms_carry(cx, tx0, tx1, ty0, lean)
+        elif d.get("clipboard") and not back:
+            self.arms_clipboard(cx, tx0, tx1, ty0, lean)
         elif side:
             sw = swing[0]
             if work is None:
@@ -1449,7 +1515,7 @@ class Figure:
         if self.back3:
             c.fill(c.rect(hx + 3.5, hy + 0.5, hx + 4.5, hy + 2.5), d["skin"][1])  # ear
         if not back:
-            ey = int(round(hy + 1))
+            ey = int(round(hy + 1)) + (1 if d.get("lookdown") else 0)  # eyes lowered: he looks at what he writes
             if side:
                 eyes = [int(round(hx + 3))]
             elif three:

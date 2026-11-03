@@ -263,7 +263,11 @@ func test_the_valley_has_one_door_back_to_the_pass_and_two_closed_places() -> vo
 	assert_eq(back[0].get(&"spawn"), "grat")
 	assert_true(back[0].get(&"auto"))
 	assert_eq(scene.map.world_to_cell((back[0] as Node2D).global_position), DOOR_CELL)
-	assert_eq(_doors_to(scene, "maschine").size(), 0, "the Anlage is the next segment (G3)")
+	assert_eq(
+		_doors_to(scene, "maschine").size(),
+		0,
+		"the Anlage has its own scene (G3): no door here without the open gate"
+	)
 	assert_eq(_blockers(scene).size(), 2, "the gate of the Anlage and the foot of the way up")
 
 

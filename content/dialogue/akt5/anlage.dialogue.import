@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bmo55blv0rlss"
+path="res://.godot/imported/anlage.dialogue-2f5c1ca03b6bed86867ea9b15ce34a20.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/anlage.dialogue"
+dest_files=["res://.godot/imported/anlage.dialogue-2f5c1ca03b6bed86867ea9b15ce34a20.tres"]
+
+[params]
+
+defaults=true

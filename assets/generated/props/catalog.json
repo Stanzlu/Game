@@ -2142,6 +2142,15 @@
    "res://assets/generated/props/tal/gb_plant_gate.png"
   ]
  },
+ "tal/gb_plant_gate_open": {
+  "anchor": [
+   24,
+   38
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_plant_gate_open.png"
+  ]
+ },
  "tal/gb_plant_hall": {
   "anchor": [
    96,
@@ -2468,6 +2477,485 @@
    "res://assets/generated/props/tal/leaves_1.png",
    "res://assets/generated/props/tal/leaves_2.png",
    "res://assets/generated/props/tal/leaves_3.png"
+  ]
+ },
+ "tal/ma_bolt": {
+  "anchor": [
+   8,
+   16
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_bolt.png"
+  ]
+ },
+ "tal/ma_console": {
+  "anchor": [
+   120,
+   24
+  ],
+  "flat": true,
+  "shape": {
+   "offset": [
+    0,
+    -9
+   ],
+   "rect": [
+    240,
+    30
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/ma_console.png"
+  ]
+ },
+ "tal/ma_gauge_1": {
+  "anchor": [
+   6,
+   36
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_gauge_1.png"
+  ]
+ },
+ "tal/ma_gauge_2": {
+  "anchor": [
+   6,
+   36
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_gauge_2.png"
+  ]
+ },
+ "tal/ma_gauge_3": {
+  "anchor": [
+   22,
+   36
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_gauge_3.png"
+  ]
+ },
+ "tal/ma_gauge_4": {
+  "anchor": [
+   22,
+   36
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_gauge_4.png"
+  ]
+ },
+ "tal/ma_hiss_pipe": {
+  "anchor": [
+   8,
+   46
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/ma_hiss_pipe.png"
+  ]
+ },
+ "tal/ma_lamp": {
+  "anchor": [
+   8,
+   44
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/ma_lamp_emit.png"
+  ],
+  "lights": [
+   {
+    "color": "#ffd9a0",
+    "energy": 0.85,
+    "offset": [
+     0,
+     -34
+    ],
+    "range": 88
+   }
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/ma_lamp.png"
+  ]
+ },
+ "tal/ma_lamp_hang": {
+  "anchor": [
+   8,
+   30
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/ma_lamp_hang_emit.png"
+  ],
+  "lights": [
+   {
+    "color": "#ffd9a0",
+    "energy": 0.9,
+    "offset": [
+     0,
+     -16
+    ],
+    "range": 96
+   }
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lamp_hang.png"
+  ]
+ },
+ "tal/ma_lever_10_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_10_down.png"
+  ]
+ },
+ "tal/ma_lever_10_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_10_up.png"
+  ]
+ },
+ "tal/ma_lever_11_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_11_down.png"
+  ]
+ },
+ "tal/ma_lever_11_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_11_up.png"
+  ]
+ },
+ "tal/ma_lever_12_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_12_down.png"
+  ]
+ },
+ "tal/ma_lever_12_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_12_up.png"
+  ]
+ },
+ "tal/ma_lever_1_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_1_down.png"
+  ]
+ },
+ "tal/ma_lever_1_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_1_up.png"
+  ]
+ },
+ "tal/ma_lever_2_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_2_down.png"
+  ]
+ },
+ "tal/ma_lever_2_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_2_up.png"
+  ]
+ },
+ "tal/ma_lever_3_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_3_down.png"
+  ]
+ },
+ "tal/ma_lever_3_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_3_up.png"
+  ]
+ },
+ "tal/ma_lever_4_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_4_down.png"
+  ]
+ },
+ "tal/ma_lever_4_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_4_up.png"
+  ]
+ },
+ "tal/ma_lever_5_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_5_down.png"
+  ]
+ },
+ "tal/ma_lever_5_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_5_up.png"
+  ]
+ },
+ "tal/ma_lever_6_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_6_down.png"
+  ]
+ },
+ "tal/ma_lever_6_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_6_up.png"
+  ]
+ },
+ "tal/ma_lever_7_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_7_down.png"
+  ]
+ },
+ "tal/ma_lever_7_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_7_up.png"
+  ]
+ },
+ "tal/ma_lever_8_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_8_down.png"
+  ]
+ },
+ "tal/ma_lever_8_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_8_up.png"
+  ]
+ },
+ "tal/ma_lever_9_down": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_9_down.png"
+  ]
+ },
+ "tal/ma_lever_9_up": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_9_up.png"
+  ]
+ },
+ "tal/ma_lever_cover": {
+  "anchor": [
+   8,
+   36
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lever_cover.png"
+  ]
+ },
+ "tal/ma_needle_1": {
+  "anchor": [
+   3,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_needle_1.png"
+  ]
+ },
+ "tal/ma_needle_2": {
+  "anchor": [
+   3,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_needle_2.png"
+  ]
+ },
+ "tal/ma_needle_3": {
+  "anchor": [
+   3,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_needle_3.png"
+  ]
+ },
+ "tal/ma_needle_4": {
+  "anchor": [
+   3,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_needle_4.png"
+  ]
+ },
+ "tal/ma_pipe_run": {
+  "anchor": [
+   8,
+   14
+  ],
+  "shadow": [
+   40,
+   2
+  ],
+  "shape": {
+   "offset": [
+    32,
+    -4
+   ],
+   "rect": [
+    80,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/ma_pipe_run.png"
+  ]
+ },
+ "tal/ma_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/ma_shell.png"
+  ]
+ },
+ "tal/ma_steam": {
+  "anchor": [
+   9,
+   22
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_steam_0.png",
+   "res://assets/generated/props/tal/ma_steam_1.png",
+   "res://assets/generated/props/tal/ma_steam_2.png"
+  ]
+ },
+ "tal/ma_tank": {
+  "anchor": [
+   8,
+   40
+  ],
+  "shadow": [
+   16,
+   3
+  ],
+  "shape": {
+   "offset": [
+    8,
+    -6
+   ],
+   "rect": [
+    32,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/ma_tank.png"
+  ]
+ },
+ "tal/ma_worn_dial": {
+  "anchor": [
+   8,
+   13
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_worn_dial.png"
   ]
  },
  "tal/net_rack": {
