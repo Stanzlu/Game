@@ -760,9 +760,58 @@
     {
      "type": "flag",
      "ref": "fragment.stage_scratch"
+    },
+    {
+     "type": "line",
+     "ref": "auf_cairn_first_3"
+    },
+    {
+     "type": "line",
+     "ref": "auf_iron_ring_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.iron_ring"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand. Der Aufstieg (Akt V, G1) fügt den Eisenring in der Felswand hinzu: innen blank und rund geschliffen von einem Seil, das hier oft lief; für einen Atemzug läuft eines durch den Ring und zieht etwas Schweres hinauf, dann ist er wieder leer und hält weiter (`auf_iron_ring_3`). Kein Bild des Kindes, keine Figur, kein Grund, kein Lesbares; das erste der drei Fragmente der Welt in Akt V. Die Steinmännchen am Pfad sind keine Fragmente und tragen dasselbe: von jemandem gebaut, ohne Namen, jedes dort, wo man das vorige noch sieht (`auf_cairn_first_3`), ohne ein Wort über Hilfe oder Weg."
+  },
+  {
+   "id": "rauch-faeden",
+   "kind": "vorausdeutung",
+   "title": "Rauch: ein Faden, viele Fäden, ein gezogener",
+   "bible": "§46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "bl_back_1"
+    },
+    {
+     "type": "flag",
+     "ref": "valley.view_back_seen"
+    },
+    {
+     "type": "line",
+     "ref": "str_view_2"
+    },
+    {
+     "type": "flag",
+     "ref": "city.view_seen"
+    },
+    {
+     "type": "line",
+     "ref": "auf_view_smoke_2"
+    },
+    {
+     "type": "line",
+     "ref": "auf_view_smoke_3"
+    },
+    {
+     "type": "flag",
+     "ref": "mountain.view_seen"
+    }
+   ],
+   "payoff": "Der Rauch zeigt von weitem, wie ein Ort lebt. Über dem Haus steht dünner Rauch, gerade nach oben (`bl_back_1`, Akt II); die Stadt schickt viele Fäden vor, die sich im Himmel nicht einig werden (`str_view_2`, Akt IV); die Anlage im Gebirge zeigt einen einzigen, dünn und gerade und so genau, als hätte jemand vorher überlegt, wohin er soll (`auf_view_smoke_3`, Akt V, G1). Der Text sagt nicht, wer dort feuert; die Pedanterie ist der Gag, nie seine Angst (Brief O13). Die Anlage (G3) löst den Rauch auf, ohne ihn zu erklären."
   },
   {
    "id": "gefaelliger-liste",
@@ -1104,6 +1153,51 @@
    "payoff_lines": [
     "tor_mira_3"
    ]
+  },
+  {
+   "id": "mira-spur",
+   "kind": "vorausdeutung",
+   "title": "Miras Spur am Weg (Akt V)",
+   "bible": "§13, §16, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_boundary_1"
+    },
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_boundary_2"
+    },
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_joined_1"
+    },
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_joined_2"
+    },
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_silent_1"
+    },
+    {
+     "type": "line",
+     "ref": "auf_mira_trace_silent_2"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_boundary"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_joined"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_silent"
+    }
+   ],
+   "payoff": "Akt V hat keine Mira (Plan 3, Brief O11), aber eine einzige Spur im Aufstieg (G1), gelesen aus dem Ausgang des Streits am Tor (S7). Hat die Spielerin die Grenze gesetzt, hängt ein Streifen Netz an einem Pfosten ein Stück vom Weg, flach geknotet, so dass man ihn nicht streift (`auf_mira_trace_boundary_1`); hat sie sich angeschlossen, hängt er in Armhöhe an einem niedrigen Ast dort, wo sie geht, locker geknotet (`auf_mira_trace_joined_1`); hat sie geschwiegen, liegt ein flacher Stein mitten auf dem Weg, kein Netz, nichts darunter als Erde (`auf_mira_trace_silent_2`). Der Text nennt Mira nie und kommentiert keine Spur, rechnet nichts an und lobt und tadelt nicht; wiedererkennen lässt sie sich am Netz und am Knoten (`bl_knot_2`, Akt II) und am flachen, nicht runden Stein (`tal_mira_16`, Akt I). Keine Folge, kein Flag, keine neue Erinnerung: sie ist vorausgegangen und kehrt zurück (Bible §13); Akt VI und VII lesen weiter `city.mira_parted_*`."
   },
   {
    "id": "schluessel-passt",
@@ -3146,6 +3240,21 @@
    "flag": "city.mira_parted_silent",
    "axis": "Beziehungen",
    "meaning": "Der Streit am Tor ist im Schweigen ausgegangen (Akt IV, S7): Mira hat es sich gedacht und geht voraus; die Beziehung wird `strained`, die Erinnerung `gate` entsteht. Schweigen ist eine Antwort und hat eine Folge, keine Strafe: Mira kehrt zurück (Bible §13, §16). Eine Spur für Akt VI und VII."
+  },
+  {
+   "flag": "mountain.view_seen",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im Aufstieg von der Felsplatte aus den Rauch der Anlage gesehen: ein einziger Faden, dünn, gerade und ohne Wind, ganz oben rechts (Akt V, G1). Die Szene liest es und markiert den Beat pass_view."
+  },
+  {
+   "flag": "mountain.slate_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat das Schieferplättchen mit dem eingeritzten Pfeil am Weg eingesteckt (Kuriosität, Akt V, G1): der Pfeil zeigt dorthin, wohin man ihn hält, und führt nirgends hin. Wer es liegen lässt, verpasst nichts; der Stein zeigt es."
+  },
+  {
+   "flag": "fragment.iron_ring",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist im Aufstieg am Eisenring in der Felswand stehen geblieben: innen blank von einem Seil, das hier oft lief, für einen Atemzug läuft eines hindurch (Spur der Welt, Akt V, G1; kein Bild des Kindes)."
   }
  ]
 }
