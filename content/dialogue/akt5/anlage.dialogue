@@ -110,7 +110,7 @@ Der Wächter steht am Pult, den Stift in der Faust. Auf seinem Blatt ist eine Ze
 Wächter: Rubrik Unvorhergesehenes, für Dinge, die nicht passieren. Heute ein Eintrag. [ID:anl_again_2] [#draft]
 Wächter: Muss ich das Eintragen auch eintragen? Nein. Ich habe nachgesehen. [ID:anl_again_3] [#draft]
 Wächter: Die Schrauben sind gleich viele wie vorhin. Das ist der Sinn von Schrauben. [ID:anl_again_4] [#draft]
-- Fang an. [if not WorldState.has_flag("plant.load") /] [ID:anl_again_r1] [#draft]
+- Fang an. [ID:anl_again_r1] [#draft]
 	=> load_offer
 - Noch nicht. [ID:anl_again_r2] [#draft]
 	Wächter: Noch nicht. Dafür gibt es keine Rubrik. Ich lege eine an. [ID:anl_again_5] [#draft]

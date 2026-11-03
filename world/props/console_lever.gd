@@ -45,7 +45,7 @@ func set_down(value: bool, with_sound := false) -> void:
 
 
 ## Takes the lever into use (the load calls the next lever): the examine zone of a still lever
-## goes, the zone for pulling comes. Off again puts it back to a lever that only stands.
+## goes, the zone for pulling comes. A lever in use stays in use (nothing takes it out again).
 func set_active(value: bool) -> void:
 	if value == active:
 		return

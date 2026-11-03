@@ -26,8 +26,9 @@ const WAVES: Array[Dictionary] = [
 	{"levers": 9, "period": 5.0, "seconds": 30.0},
 	{"levers": 12, "period": 1.0, "seconds": 24.0},
 ]
-## The least time one hand needs for one pull (a step along the console and the press): a bound
-## that no play beats, so a demand above `hand_rate()` is impossible for anyone.
+## The least time between two pulls: one hand (a step along the console and the press). The run
+## keeps to it itself (`pull` takes no pull sooner), so a demand above `hand_rate()` cannot be met
+## by anyone, whatever the keys and the speed of the walk.
 const HAND_SECONDS := 0.45
 ## Seconds at the console's back before the run waits for her (at normal pace).
 const AWAY_SECONDS := 3.0
@@ -46,6 +47,7 @@ var _away := 0.0
 var _waiting := false
 var _armed := false
 var _ready_left := 0.0
+var _since_pull := HAND_SECONDS
 
 
 ## How far the periods and the waves are stretched by the settings: "more time" and the calmer
@@ -94,6 +96,7 @@ func begin(first_wave := 1, armed := true) -> void:
 	_waiting = false
 	_armed = armed
 	_ready_left = READY_SECONDS * Settings.timing_factor()
+	_since_pull = HAND_SECONDS
 	_holds.clear()
 	_use_levers_up_to(levers_in(wave))
 	for number: int in levers:
@@ -102,15 +105,17 @@ func begin(first_wave := 1, armed := true) -> void:
 			_holds[number] = period(wave, stretch())
 
 
-## Held for the rest of the wave: a lever that is down springs up again after its period.
+## Held for its period: a lever that is down springs up again after it. One hand pulls no sooner
+## than `HAND_SECONDS` after its last pull (the lever stays up, she presses again).
 func pull(number: int) -> void:
-	if state != State.RUNNING:
+	if state != State.RUNNING or _since_pull < HAND_SECONDS:
 		return
 	var lever := levers.get(number) as ConsoleLever
 	if lever == null or not lever.active or lever.down:
 		return
 	lever.set_down(true, true)
 	_holds[number] = period(wave, stretch())
+	_since_pull = 0.0
 
 
 ## The levers in use that stand up, asking to be pulled.
@@ -138,6 +143,7 @@ func is_waiting() -> bool:
 func step(delta: float, at_console: bool, talking: bool) -> void:
 	if state != State.RUNNING or talking:
 		return
+	_since_pull += delta
 	if not _armed:
 		# a run loaded in the middle: she gets a moment at the console before it goes on
 		if at_console:

@@ -78,12 +78,18 @@ func _ready() -> void:
 	elif WorldState.has_flag("plant.load"):
 		# a game loaded in the middle of the load: it goes on from the wave she reached, when she is back
 		_run.begin(_wave_from_flags(), false)
+	if WorldState.has_flag("plant.load"):
+		_advance_to_load()
+	# the hall shows the load as it stands from the first picture (no dials swinging out on arrival)
+	_trouble = _run.trouble()
+	_apply_trouble()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	Beat.mark("maschine_enter")
 
 
 func _physics_process(delta: float) -> void:
-	_run.step(delta, _at_console(), _talking())
+	if _run.state == LoadRun.State.RUNNING:
+		_run.step(delta, _at_console(), _talking())
 	_follow_trouble(delta)
 
 
@@ -96,6 +102,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		_reset_levers(false)
 	elif id == "plant.load":
 		_run.begin(1, true)
+		_advance_to_load()
 		Beat.mark("maschine_load")
 
 
@@ -109,6 +116,8 @@ func _on_pulled(number: int) -> void:
 	if _run.state == LoadRun.State.RUNNING:
 		_run.pull(number)
 		return
+	if _run.state == LoadRun.State.OVER:
+		return  # the load has stopped: the levers stand as they stood (G5 goes on from here)
 	var pulled_lever := lever(number)
 	if not WorldState.has_flag("plant.probe") or WorldState.has_flag("plant.probe_done"):
 		# not called, or done: it is a lever, it goes down and up
@@ -194,11 +203,13 @@ func _on_wave_began(wave: int) -> void:
 	match wave:
 		2:
 			WorldState.set_flag("plant.wave_two")
+			await _say(LAST, "wave_two")
 		3:
 			WorldState.set_flag("plant.wave_three")
+			await _say(LAST, "wave_three")
 		4:
 			WorldState.set_flag("plant.wave_four")
-	await _say(LAST, ["", "", "wave_two", "wave_three", "wave_four"][wave])
+			await _say(LAST, "wave_four")
 
 
 func _on_waited() -> void:
@@ -212,10 +223,17 @@ func _on_returned() -> void:
 ## The fourth wave has run its time: the keeper reckons it up, and it stops where it stands.
 func _on_overloaded() -> void:
 	await _say(LAST, "load_over")
+	# it stops where it stands: every lever up and asking, as a loaded game shows it too
+	for number: int in _levers:
+		(_levers[number] as ConsoleLever).set_down(false)
 	WorldState.set_flag("plant.overload")
+	Beat.mark("maschine_overload")
+
+
+## The walk of the hero: the load has begun (the journal gives the help from here on).
+func _advance_to_load() -> void:
 	if WorldState.quest_stage(QUEST) == "plant":
 		WorldState.advance_quest(QUEST, "load")
-	Beat.mark("maschine_overload")
 
 
 ## One cue of the keeper's, played as a cutscene (a line at a time, nothing runs meanwhile).
@@ -250,6 +268,10 @@ func _follow_trouble(delta: float) -> void:
 	if is_equal_approx(_trouble, goal):
 		return
 	_trouble = move_toward(_trouble, goal, delta * TROUBLE_RATE)
+	_apply_trouble()
+
+
+func _apply_trouble() -> void:
 	for gauge in _gauges:
 		gauge.set_trouble(_trouble)
 	for cloud in _steam:

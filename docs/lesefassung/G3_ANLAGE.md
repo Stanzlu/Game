@@ -104,7 +104,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Wächter:** Rubrik Unvorhergesehenes, für Dinge, die nicht passieren. Heute ein Eintrag. `[#draft]`  <sub>anl_again_2</sub>
 - **Wächter:** Muss ich das Eintragen auch eintragen? Nein. Ich habe nachgesehen. `[#draft]`  <sub>anl_again_3</sub>
 - **Wächter:** Die Schrauben sind gleich viele wie vorhin. Das ist der Sinn von Schrauben. `[#draft]`  <sub>anl_again_4</sub>
-- ▸ **Fang an.** *(wenn `plant.load nicht`)*
+- ▸ **Fang an.**
   - *→ weiter bei* `load_offer`
 - ▸ **Noch nicht.**
   - **Wächter:** Noch nicht. Dafür gibt es keine Rubrik. Ich lege eine an. `[#draft]`  <sub>anl_again_5</sub>

@@ -4,7 +4,7 @@
 ; Boden die Zeilen 7 bis 16 (die Spalten 5 bis 27), die Tür (D) in der Vorderwand, Zeile 17, Spalte 7; die Ankunft aus dem Hochtal (1) liegt zwei Zellen vor ihr, der Start (@) im rechten Gang neben dem Pult (mehr als 20 Zellen Luftlinie von der Tür).
 ; Das Schaltpult (C, 15 Zellen, die Spalten 9 bis 23, flach unter allem, die Kollision ist seine Form) steht an der Rückwand: die Hebel stehen in der Zeile 7 (a bis l = Hebel 1 bis 12, die
 ; Spalten 10 bis 15 und 17 bis 22), die Mitte (K, Spalte 16) ist der Riegelanzeiger mit dem Cue small_door. Hebel 1 bis 3 (a, b, c) sind in Betrieb, die anderen neun stehen still unter ihrem Tuch
-; (m, eigenes Requisit je Hebel in der Zeile 8 unter ihm, um 9 Pixel auf den Hebel gehoben; G4 nimmt sie einzeln weg). Hinter dem Pult ist nichts: die kleine Tür sitzt in der Rückwand, man sieht sie
+; (m, n, o, eigenes Requisit je Hebel in der Zeile 8 unter ihm, um 9 Pixel auf den Hebel gehoben; seit G4 nimmt die Last sie in drei Gruppen weg: m mit der zweiten Welle, n mit der dritten, o mit der vierten). Hinter dem Pult ist nichts: die kleine Tür sitzt in der Rückwand, man sieht sie
 ; über dem Riegelanzeiger, sie ist nicht zu erreichen. Der Wächter (A) steht am linken Ende des Pults, die Zeiger (P, Q, R, T) hängen an der Wand (zwei links, zwei rechts, Q zittert und trägt den Cue gauges),
 ; das abgewetzte Zifferblatt (Z) sitzt am rechten Ende des Pults, das zischende Rohr (V) mit seinem Dampf (s) steht links vorn, ein Rohr (U) liegt rechts quer über den Boden. Sechs Lampen: zwei hängen
 ; am Träger (H), vier stehen im Raum (L); höchstens sechs PointLight2D. Zwei Kessel (N) stehen an den Seiten.

@@ -57,7 +57,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Wächter:** Rubrik Unvorhergesehenes, für Dinge, die nicht passieren. Heute ein Eintrag. `[#draft]`  <sub>anl_again_2</sub>
 - **Wächter:** Muss ich das Eintragen auch eintragen? Nein. Ich habe nachgesehen. `[#draft]`  <sub>anl_again_3</sub>
 - **Wächter:** Die Schrauben sind gleich viele wie vorhin. Das ist der Sinn von Schrauben. `[#draft]`  <sub>anl_again_4</sub>
-- ▸ **Fang an.** *(wenn `plant.load nicht`)*
+- ▸ **Fang an.**
   - *→ weiter bei* `load_offer`
 - ▸ **Noch nicht.**
   - **Wächter:** Noch nicht. Dafür gibt es keine Rubrik. Ich lege eine an. `[#draft]`  <sub>anl_again_5</sub>
@@ -146,14 +146,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### G4-6 · `load_over`
 
 > --- Das Ende der vierten Welle ----------------------------------------------------------------------------------------------
-> Nach einer festen Zeit hält der Lauf (die Szene setzt danach plant.overload), und er rechnet es vor: zwölf Hebel, jeder verlangt alle paar Atemzüge einen Zug, zwei Hände, eine Rechnung, die nicht
+> Nach einer festen Zeit hält der Lauf (die Szene setzt danach plant.overload), und er rechnet es vor: zwölf Hebel, jeder verlangt in kurzen Abständen einen Zug, zwei Hände, eine Rechnung, die nicht
 > aufgeht. Er trägt "nicht erfüllt" ein, mit dem Kreuz in der Mitte des Kästchens, und er bleibt dabei: "Das Verfahren verlangt es trotzdem." Die Zeile über die Abweichungen sagt nicht, welche (Zeiger,
 > Dampf, Lampe sind Sache des Bildes). Kein Dank, kein Trost, keine Einsicht, keine Lehre, kein Wort für das, was in G5 geschieht; er steht noch am Pult, die andere Hand blättert. Die Rechnung gilt
-> bei jedem Tempo der Einstellungen (sie nennt nur "alle paar Atemzüge", keine Zahl). Der Gag ist die Gründlichkeit: zweimal gerechnet, dasselbe Ergebnis, dafür sind Rechnungen da.
+> bei jedem Tempo der Einstellungen (sie nennt nur "in kurzen Abständen", keine Zahl). Der Gag ist die Gründlichkeit: zweimal gerechnet, dasselbe Ergebnis, dafür sind Rechnungen da.
 
 - *Der Lauf hält. Der Wächter blättert um und nimmt die andere Hand nicht vom Pult.* `[#draft]`  <sub>lst_over_1</sub>
 - **Wächter:** Ich halte an und rechne. Laut, damit man es nachprüfen kann. `[#draft]`  <sub>lst_over_2</sub>
-- **Wächter:** Zwölf Hebel. Jeder verlangt alle paar Atemzüge einen Zug. `[#draft]`  <sub>lst_over_3</sub>
+- **Wächter:** Zwölf Hebel. Jeder verlangt in kurzen Abständen einen Zug. `[#draft]`  <sub>lst_over_3</sub>
 - **Wächter:** Zwei Hände. Bis sie beim zwölften sind, steht der erste wieder oben. `[#draft]`  <sub>lst_over_4</sub>
 - **Wächter:** Ich habe zweimal gerechnet. Zweimal dasselbe Ergebnis. Dafür sind Rechnungen da. `[#draft]`  <sub>lst_over_5</sub>
 - **Wächter:** Die Rechnung geht nicht auf. Ich trage ein: nicht erfüllt. `[#draft]`  <sub>lst_over_6</sub>

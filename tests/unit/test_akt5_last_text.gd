@@ -202,7 +202,7 @@ func test_the_reckoning_holds_at_every_pace_because_it_names_no_number_of_second
 	var told := await _told("load_over")
 	for word: String in ["Sekunden", "Minute", "schnell", "langsam"]:
 		assert_false(told.contains(word), "the sum is the same for every setting: no %s" % word)
-	assert_true(told.contains("alle paar Atemzüge"))
+	assert_true(told.contains("in kurzen Abständen"))
 
 
 func test_the_reckoning_has_no_lesson_no_thanks_and_no_word_for_what_follows() -> void:

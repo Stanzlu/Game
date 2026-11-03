@@ -9,7 +9,7 @@
 # behalten die Zeile "lever_idle" aus anlage.dialogue (»Steht.«), es gibt dafür keinen eigenen Cue.
 
 # --- Die Wellen --------------------------------------------------------------------------------------------------------------
-# Die Szene spielt sie beim Beginn der Welle (der Lauf steht still, solange gesprochen wird). Er ruft die neuen Hebel und eine Reihenfolge aus, jede Welle knapper als die vorige; bei der vierten
+# Die Szene spielt sie beim Beginn der Welle (der Lauf steht still, solange gesprochen wird). Er ruft die neuen Hebel und eine Reihenfolge aus, bei der vierten
 # zählt er schon in Atemzügen. Die Reihenfolge ist immer: erst der höchste der drei neuen, dann abwärts. Keine Warnung, kein Wort über Folgen.
 
 ~ wave_two
@@ -45,15 +45,15 @@ Wächter: Pausendauer eingetragen, ich habe mitgezählt. Stand wie vor der Pause
 => END
 
 # --- Das Ende der vierten Welle ----------------------------------------------------------------------------------------------
-# Nach einer festen Zeit hält der Lauf (die Szene setzt danach plant.overload), und er rechnet es vor: zwölf Hebel, jeder verlangt alle paar Atemzüge einen Zug, zwei Hände, eine Rechnung, die nicht
+# Nach einer festen Zeit hält der Lauf (die Szene setzt danach plant.overload), und er rechnet es vor: zwölf Hebel, jeder verlangt in kurzen Abständen einen Zug, zwei Hände, eine Rechnung, die nicht
 # aufgeht. Er trägt "nicht erfüllt" ein, mit dem Kreuz in der Mitte des Kästchens, und er bleibt dabei: "Das Verfahren verlangt es trotzdem." Die Zeile über die Abweichungen sagt nicht, welche (Zeiger,
 # Dampf, Lampe sind Sache des Bildes). Kein Dank, kein Trost, keine Einsicht, keine Lehre, kein Wort für das, was in G5 geschieht; er steht noch am Pult, die andere Hand blättert. Die Rechnung gilt
-# bei jedem Tempo der Einstellungen (sie nennt nur "alle paar Atemzüge", keine Zahl). Der Gag ist die Gründlichkeit: zweimal gerechnet, dasselbe Ergebnis, dafür sind Rechnungen da.
+# bei jedem Tempo der Einstellungen (sie nennt nur "in kurzen Abständen", keine Zahl). Der Gag ist die Gründlichkeit: zweimal gerechnet, dasselbe Ergebnis, dafür sind Rechnungen da.
 
 ~ load_over
 Der Lauf hält. Der Wächter blättert um und nimmt die andere Hand nicht vom Pult. [ID:lst_over_1] [#draft]
 Wächter: Ich halte an und rechne. Laut, damit man es nachprüfen kann. [ID:lst_over_2] [#draft]
-Wächter: Zwölf Hebel. Jeder verlangt alle paar Atemzüge einen Zug. [ID:lst_over_3] [#draft]
+Wächter: Zwölf Hebel. Jeder verlangt in kurzen Abständen einen Zug. [ID:lst_over_3] [#draft]
 Wächter: Zwei Hände. Bis sie beim zwölften sind, steht der erste wieder oben. [ID:lst_over_4] [#draft]
 Wächter: Ich habe zweimal gerechnet. Zweimal dasselbe Ergebnis. Dafür sind Rechnungen da. [ID:lst_over_5] [#draft]
 Wächter: Die Rechnung geht nicht auf. Ich trage ein: nicht erfüllt. [ID:lst_over_6] [#draft]

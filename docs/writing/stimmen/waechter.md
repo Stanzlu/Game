@@ -22,7 +22,7 @@ die Welt endet nicht. Er wird dadurch **nicht „geheilt“** und bleibt skeptis
   sind, „Das ist der Sinn von Schrauben.“ (`anl_again_4`), das Eintragen des Eintragens, das nicht nötig ist (`anl_again_3`), die Rubrik für Dinge, die nicht passieren (`anl_again_2`).
 - **Die Last (G4)**: der Betrieb ist ein Verfahren, und er hält es ein. Er trägt die Pause ein, die er angekündigt hat (`anl_load_5`, `lst_wait_2`), legt für ein „Noch nicht.“ eine Rubrik an, weil es keine gibt (`anl_again_5`),
   zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), rechnet ab der vierten Welle in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`), und rechnet am Ende zweimal (`lst_over_5`). Der Gag sitzt in der Gründlichkeit,
-  nie in dem, was die Gründlichkeit schützt. Er ruft die Reihenfolge der neuen Hebel jede Welle knapper aus (`lst_wave2_1`, `lst_wave3_1`, `lst_wave4_2`) und sagt kein Wort über Gefahr; die Folgen (Zeiger, Dampf, Lampe) zeigt das Bild,
+  nie in dem, was die Gründlichkeit schützt. Er ruft die Reihenfolge der neuen Hebel in jeder Welle aus (`lst_wave2_1`, `lst_wave3_1`, `lst_wave4_2`) und sagt kein Wort über Gefahr; die Folgen (Zeiger, Dampf, Lampe) zeigt das Bild,
   er trägt sie nur ein (`lst_over_8`).
 - **Die Hilfe sagt das Zulässige, nie die Lehre** (Bible §50, Brief O4): zwölf Hebel sind für zwei Hände zu viele, er hat es berechnet, vom Pult zu treten ist zulässig, er rät nicht dazu und bleibt (`anl_run_4` bis `anl_run_6`). Dieselbe
   Form wie „Nicht vorgesehen. Aber auch nicht verboten.“ (`anl_knock_5`): nicht verboten, also zulässig, nachgesehen. Kein „loslassen“, kein „vertrauen“, kein Satz darüber, was es bringt.

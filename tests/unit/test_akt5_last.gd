@@ -14,6 +14,11 @@ func before_each() -> void:
 	WorldState.new_game()
 	Settings.set_value("access.timing", 0, false)
 	Settings.set_value("access.encounter_speed", 0, false)
+	_make_run()
+
+
+## A fresh run with its twelve levers (the first three in use).
+func _make_run() -> void:
 	_levers = {}
 	_run = LoadRun.new()
 	add_child_autofree(_run)
@@ -55,11 +60,17 @@ func _lever(number: int) -> ConsoleLever:
 	return _levers[number] as ConsoleLever
 
 
+## The nine pairs of "more time" and "pace of encounters", each as the run itself reads them: the
+## settings are set and `LoadRun.stretch()` is asked (the formula is not copied here).
 func _all_settings() -> Array[float]:
 	var stretches: Array[float] = []
-	for timing: float in Settings.TIMING_FACTORS:
-		for pace: float in Settings.ENCOUNTER_SPEEDS:
-			stretches.append(timing / pace)
+	for timing in Settings.TIMING_FACTORS.size():
+		for pace in Settings.ENCOUNTER_SPEEDS.size():
+			Settings.set_value("access.timing", timing, false)
+			Settings.set_value("access.encounter_speed", pace, false)
+			stretches.append(LoadRun.stretch())
+	Settings.set_value("access.timing", 0, false)
+	Settings.set_value("access.encounter_speed", 0, false)
 	return stretches
 
 
@@ -237,6 +248,7 @@ func test_the_trouble_is_the_share_of_levers_in_use_that_stand_up() -> void:
 	assert_eq(_run.trouble(), 1.0, "three of three ask")
 	for number: int in [1, 2, 3]:
 		_run.pull(number)
+		_play(LoadRun.HAND_SECONDS)
 	assert_eq(_run.trouble(), 0.0, "all held")
 	_run.pull(1)  # already held: nothing changes
 	_play(LoadRun.period(1, 1.0) + 0.5)
@@ -244,3 +256,69 @@ func test_the_trouble_is_the_share_of_levers_in_use_that_stand_up() -> void:
 	var idle := LoadRun.new()
 	add_child_autofree(idle)
 	assert_eq(idle.trouble(), 0.0, "no load, no trouble")
+
+
+# --- One hand --------------------------------------------------------------------------------
+
+
+func test_one_hand_takes_no_second_pull_before_a_hand_could_and_the_lever_stays_up() -> void:
+	_run.begin()
+	for number: int in [1, 2, 3]:
+		_lever(number).set_down(false)
+	_run.pull(1)
+	assert_true(_lever(1).down)
+	_run.pull(2)
+	assert_false(_lever(2).down, "not yet: the lever stays up and she presses again")
+	_play(LoadRun.HAND_SECONDS - 0.05)
+	_run.pull(2)
+	assert_false(_lever(2).down)
+	_play(0.1)
+	_run.pull(2)
+	assert_true(_lever(2).down, "a hand's time later it is taken")
+
+
+## A perfect hand: pulls the lever that is up, the one with the lowest number first, as soon as it
+## may. Returns the most levers held at once in `seconds` of the wave `first_wave` (a wave that
+## does not end meanwhile: the run is only played through its first wave here).
+func _perfect_hand(first_wave: int, seconds: float) -> int:
+	_make_run()
+	_run.begin(first_wave)
+	var most := 0
+	var tick := 1.0 / 60.0
+	var time := 0.0
+	while time < seconds:
+		_run.step(tick, true, false)
+		time += tick
+		for number: int in range(1, 13):
+			var lever := _lever(number)
+			if lever.active and not lever.down:
+				_run.pull(number)
+				break
+		var held := 0
+		for number: int in range(1, 13):
+			if _lever(number).active and _lever(number).down:
+				held += 1
+		most = maxi(most, held)
+	return most
+
+
+func test_a_perfect_hand_keeps_the_first_wave_at_every_setting() -> void:
+	for timing in Settings.TIMING_FACTORS.size():
+		for pace in Settings.ENCOUNTER_SPEEDS.size():
+			Settings.set_value("access.timing", timing, false)
+			Settings.set_value("access.encounter_speed", pace, false)
+			assert_eq(_perfect_hand(1, 6.0), 3, "all three held at %s" % LoadRun.stretch())
+
+
+func test_a_perfect_hand_never_holds_all_twelve_of_the_fourth_wave_at_any_setting() -> void:
+	for timing in Settings.TIMING_FACTORS.size():
+		for pace in Settings.ENCOUNTER_SPEEDS.size():
+			Settings.set_value("access.timing", timing, false)
+			Settings.set_value("access.encounter_speed", pace, false)
+			var most := _perfect_hand(4, 20.0)
+			assert_lt(
+				most,
+				12,
+				"at stretch %s the best hand holds %d of twelve" % [LoadRun.stretch(), most]
+			)
+			assert_gt(most, 0, "it does hold some")

@@ -129,6 +129,7 @@ func test_the_keepers_offer_begins_the_run_with_the_three_levers_of_the_trial() 
 	assert_eq(scene._run.wave, 1)
 	assert_eq(_in_use(scene), [1, 2, 3])
 	assert_true(Beat.reached("maschine_load"))
+	assert_eq(WorldState.quest_stage(QUEST), "load", "the journal gives the help from here on")
 	assert_eq(_covers(scene), 9, "all nine cloths are still on")
 
 
@@ -140,7 +141,6 @@ func test_a_pull_during_the_run_holds_the_lever_and_it_springs_up_by_itself() ->
 	assert_true(scene.lever(1).down, "she holds it")
 	scene._run.step(LoadRun.period(1, 1.0) + 0.5, true, false)
 	assert_false(scene.lever(1).down, "and after its period it asks again")
-	assert_false(WorldState.has_flag("plant.probe_done") and false, "(the trial stays done)")
 
 
 func test_the_run_never_locks_her_and_the_hall_can_be_left_at_any_time() -> void:
@@ -196,6 +196,7 @@ func test_the_dials_wander_the_steam_thickens_and_the_lamps_dim_with_the_open_le
 	assert_lt(lamp.light_scale, 0.6, "the lamps dim")
 	for number: int in [1, 2, 3]:
 		scene.lever(number).pulled.emit(number)
+		scene._run.step(LoadRun.HAND_SECONDS, true, false)
 	await wait_physics_frames(240)
 	assert_lt(scene._trouble, 0.1, "held again: it settles")
 	for gauge: Gauge in scene._gauges:
@@ -235,14 +236,14 @@ func test_with_picture_shaking_off_the_dials_still_show_the_load_but_do_not_trem
 # --- The pause --------------------------------------------------------------------------------
 
 
-func test_leaving_the_console_stops_the_run_and_the_keeper_enters_the_pause_once() -> void:
+func test_leaving_the_console_stops_the_run_and_the_keeper_enters_the_pause() -> void:
 	var scene := await _hall()
 	await _put(scene, AWAY)
 	assert_false(scene._run.is_waiting())
 	scene._run.step(LoadRun.AWAY_SECONDS + 0.2, false, false)
 	await wait_physics_frames(2)
 	assert_true(scene._run.is_waiting())
-	assert_true(await _told(scene, func() -> bool: return _quiet(scene)), "he says it once")
+	assert_true(await _told(scene, func() -> bool: return _quiet(scene)), "he enters the pause")
 	var time: float = scene._run._wave_time
 	await wait_physics_frames(120)
 	assert_eq(scene._run._wave_time, time, "nothing runs while she is away")
@@ -269,15 +270,19 @@ func test_after_the_fourth_wave_he_reckons_it_up_and_the_run_stops_for_good() ->
 	assert_true(await _told(scene, func() -> bool: return _quiet(scene)))
 	assert_eq(scene._run.state, LoadRun.State.OVER)
 	assert_true(Beat.reached("maschine_overload"))
-	assert_eq(WorldState.quest_stage(QUEST), "load", "the walk goes one step on")
+	assert_eq(WorldState.quest_stage(QUEST), "load")
 	assert_eq(_covers(scene), 0, "every cloth is off")
 	assert_eq(_in_use(scene).size(), 12)
 	var open: int = scene._run.open_count()
 	scene._run.step(30.0, true, false)
 	assert_eq(scene._run.open_count(), open, "nothing moves any more")
 	assert_false(scene.player.is_locked(), "nothing is locked")
+	assert_eq(scene._run.open_count(), 12, "all twelve stand up and ask")
 	scene.lever(5).pulled.emit(5)
-	assert_true(scene.lever(5).down, "after it a lever is only a lever again")
+	assert_false(scene.lever(5).down, "the levers stand as they stood: a pull moves nothing")
+	assert_eq(scene._run.open_count(), 12)
+	await wait_physics_frames(240)
+	assert_gt(scene._trouble, 0.99, "and the dials stay where the load put them")
 
 
 # --- A game loaded in the middle --------------------------------------------------------------
@@ -319,8 +324,41 @@ func test_a_game_loaded_after_the_run_finds_every_lever_in_use_the_dials_off_and
 	assert_eq(scene._run.state, LoadRun.State.OVER)
 	assert_eq(_in_use(scene).size(), 12)
 	assert_eq(_covers(scene), 0)
-	await wait_physics_frames(200)
-	assert_gt(scene._trouble, 0.9, "the dials still stand off their mark")
+	assert_gt(scene._trouble, 0.99, "the dials stand off their mark from the first picture")
+	for gauge: Gauge in scene._gauges:
+		assert_gt(absf(gauge.needle.rotation_degrees - gauge._rest), 20.0, "no swing on arrival")
 	var time: float = scene._run._wave_time
 	await wait_physics_frames(60)
 	assert_eq(scene._run._wave_time, time, "and nothing runs")
+
+
+func test_the_steam_has_its_resting_look_from_the_first_picture_and_thickens_with_the_load(
+) -> void:
+	var scene := await _hall(false)
+	var steam: Decor = scene._steam[0]
+	assert_almost_eq(steam.modulate.a, 0.7, 0.01, "no pop when the load begins")
+	assert_almost_eq(steam.scale.x, 1.0, 0.01)
+	WorldState.set_flag("plant.load")
+	for number: int in [1, 2, 3]:
+		scene.lever(number).set_down(false)
+	await wait_physics_frames(200)
+	assert_almost_eq(steam.modulate.a, 1.0, 0.05, "denser with every lever that stands up")
+
+
+func test_a_game_loaded_in_each_wave_goes_on_from_that_wave() -> void:
+	var flags := {
+		2: ["plant.wave_two"],
+		4: ["plant.wave_two", "plant.wave_three", "plant.wave_four"],
+	}
+	for wave: int in flags:
+		WorldState.new_game()
+		WorldState.set_ui_mode(GameState.UiMode.REAL)
+		WorldState.set_flag("plant.load")
+		for flag: String in flags[wave]:
+			WorldState.set_flag(flag)
+		var scene := await _hall(false)
+		assert_eq(scene._run.wave, wave, "wave %d" % wave)
+		assert_eq(_in_use(scene).size(), wave * 3)
+		assert_eq(_covers(scene), 12 - wave * 3 if wave < 4 else 0)
+		scene.queue_free()
+		await wait_physics_frames(2)
