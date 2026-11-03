@@ -5,7 +5,8 @@ and a fire catching, a cat (meowing, behind a door, purring), a goat, dry wood, 
 and standing up, a bird landing, the drover's call; the child in Elysia humming the motif
 of the later main theme; the hermit's flute (Act III), Lio's lute in the street and Tess's
 whistling in the workshop, and Lio's worst concert (the lute with a crowd humming along, the string
-that breaks, a few hands clapping beside the beat; Act IV). The fire in the fireplace is a bed
+that breaks, a few hands clapping beside the beat; Act IV), and the beat of the plant (the levers
+that fall by themselves, three, one, two; Act V). The fire in the fireplace is a bed
 (make_nature.py, nature_fire_bed).
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
@@ -23,7 +24,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from make_music import ANSWER, DORIAN, MOTIF, degree, midi_hz  # noqa: E402
 from make_sfx import (RATE, at, bandpass, env, highpass, knock, lowpass, mix, noise, preview,  # noqa: E402
-                      reverb, secs, sine, write)
+                      reverb, secs, sine, tri, write)
 import make_nature  # noqa: E402
 
 
@@ -967,13 +968,92 @@ def crowd_clap(rng):
     return outdoors(dry, 0.12)[: int(RATE * total)]
 
 
+# --- The plant's beat ----------------------------------------------------------------------------
+
+# The beat of the plant (Act V, G5): the levers of the console fall by themselves, three, one,
+# two (the order of the probe in G3), and what the keeper had counted for years becomes a
+# little figure. A bar is four equal places and the fourth is a rest: three, one, two, (rest),
+# three, one, two. Not a march: every click is soft, wood on metal, none is accented, and each
+# lever has its own pitch. Under it a quiet, low chord (D, A, D: an open fifth, the lever
+# numbers in order, one is the lowest) that each lever brings in with its click and that dies
+# away after the last one. The pitches of the clicks are the third partial of the chord's
+# tones, so the clicks and the chord are one thing. Dry: the hall is large, but a cloud of
+# reverb would turn the click into a room.
+MACHINE_BEAT = 0.42  # seconds from one click to the next (and the rest is one as well)
+MACHINE_ORDER = (3, 1, 2)  # drei, eins, zwei
+MACHINE_TONES = {1: 38, 2: 45, 3: 50}  # MIDI of the chord tone each lever brings in: D2, A2, D3
+MACHINE_START = 0.03  # the first click: the scene plays the sound when the first lever falls
+MACHINE_FADE = (0.30, 1.0)  # the chord holds this long after the last click, then dies over this long
+MACHINE_CHORD = 0.20  # the chord against clicks of about 1.0: under them (the clicks stand about 12 dB over its level)
+
+
+def lever_klack(freq, rng, level=1.0):
+    """One lever falling into its stop: a wooden stick on a metal bar. A damped wooden body at
+    `freq`, a short tap of noise, a thin metallic ring (a bar's partials are not harmonic: 1 and
+    2.76) and, a few ms behind, the lever settling in its guide, quieter and a little higher.
+    Soft: the top is rolled off at 5 kHz."""
+    t = secs(0.17)
+    body = sine(freq, t) * env(t, 0.0008, 0.022) + 0.35 * sine(freq * 2.3, t) * env(t, 0.0008, 0.012)
+    tap = fft_band(noise(len(t), rng), 900, 3200, 2) * env(t, 0.0004, 0.004)
+    ring_f = freq * 3.0 * rng.uniform(0.995, 1.005)
+    ring = (sine(ring_f, t) * env(t, 0.0006, 0.045) + 0.5 * sine(ring_f * 2.76, t) * env(t, 0.0006, 0.022)) * 0.18
+    main = 0.8 * body + 0.55 * tap + ring
+    t2 = secs(0.07)
+    settle = (0.5 * sine(freq * 1.5, t2) * env(t2, 0.0008, 0.012)
+              + 0.35 * fft_band(noise(len(t2), rng), 1200, 3800, 2) * env(t2, 0.0004, 0.003)) * 0.30
+    return lowpass(mix(main, at(settle, 0.034 + rng.uniform(-0.003, 0.003))), 5000) * level
+
+
+def machine_count(rng, beat=MACHINE_BEAT):
+    """The beat of the plant, about 3.7 s (Act V, G5): see MACHINE_ORDER. Two bars of three
+    clicks and a rest; a click is placed a few ms off its place and differs a little in level,
+    as a hand and a spring do."""
+    slots = [MACHINE_START + beat * k for k in range(8)]  # the fourth place of each bar is the rest
+    clicks = [(slots[k], MACHINE_ORDER[k % 4]) for k in range(8) if k % 4 != 3]
+    last = clicks[-1][0]
+    total = last + MACHINE_FADE[0] + MACHINE_FADE[1]
+    n = int(RATE * total)
+    t = np.arange(n) / RATE
+    wood = np.zeros(n)
+    for when, lever in clicks:
+        freq = midi_hz(MACHINE_TONES[lever]) * 3.0
+        hit = lever_klack(freq, rng, rng.uniform(0.88, 1.0))
+        wood = mix(wood, at(hit, max(when + rng.normal(0, 0.004), 0.0), total)[:n])
+    wood = reverb(wood, 0.16, 0.06, seed=23, bright=3200)[:n]
+
+    # the chord: every lever's tone comes in softly with its first click and is struck again
+    # (a swell, no new onset) with its second; a second voice a few cents up makes it breathe
+    fade_from = last + MACHINE_FADE[0]
+    tail = np.where(t < fade_from, 1.0, np.cos(np.clip((t - fade_from) / MACHINE_FADE[1], 0, 1) * np.pi / 2) ** 2)
+    chord = np.zeros(n)
+    for lever in MACHINE_ORDER:
+        f = midi_hz(MACHINE_TONES[lever])
+        times = [when for when, k in clicks if k == lever]
+        knots_t, knots_v = [0.0], [0.0]
+        for i, when in enumerate(times):
+            if i == 0:
+                knots_t += [when, when + 0.16]
+                knots_v += [0.0, 1.0]
+            else:
+                knots_t += [when - 0.02, when + 0.10, when + 0.40]
+                knots_v += [0.80, 1.0, 0.86]
+        swell = np.interp(t, knots_t + [total], knots_v + [knots_v[-1]])
+        voice = 0.62 * tri(f, t) + 0.38 * sine(f, t) + 0.30 * (tri(f * 1.0035, t) * 0.62 + sine(f * 1.0035, t, 1.1) * 0.38)
+        chord += voice * swell * (1.0 + 0.04 * np.sin(2 * np.pi * rng.uniform(0.22, 0.34) * t + rng.uniform(0, 6.28)))
+    chord = chord * tail * MACHINE_CHORD
+    out = mix(wood, chord)[:n]
+    return out * np.minimum(1.0, t / 0.004)  # the file starts on zero
+
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
-# water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
+# water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling. The plant's beat is clicks
+# over a soft chord: at -26 its click peaks (about -8 dBFS) are those of a lever pulled, the chord sits under them.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
           "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0, "whistle": -21.0,
-          "snap": -17.0, "claps": -21.0}
+          "snap": -17.0, "claps": -21.0, "machine": -26.0}
 LOOPS = set()
 
 
@@ -1026,6 +1106,8 @@ def build(only=None):
     sounds["lio_concert_0"] = (lio_concert(np.random.default_rng(61)), "lute")
     sounds["string_snap_0"] = (string_snap(np.random.default_rng(67)), "snap")
     sounds["crowd_clap_0"] = (crowd_clap(np.random.default_rng(71)), "claps")
+    # The beat of the plant (Act V, G5): its own random stream again
+    sounds["machine_count_0"] = (machine_count(np.random.default_rng(73)), "machine")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

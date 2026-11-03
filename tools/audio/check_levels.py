@@ -75,6 +75,7 @@ SFX_GROUPS = [
     (r"lio_concert_", make_slice_sfx.GROUPS["lute"]),
     (r"string_snap_", make_slice_sfx.GROUPS["snap"]),
     (r"crowd_clap_", make_slice_sfx.GROUPS["claps"]),
+    (r"machine_count_", make_slice_sfx.GROUPS["machine"]),
     (r"purr$", make_slice_sfx.GROUPS["purr"]),
     (r"sit$|stand$", make_slice_sfx.GROUPS["cloth"]),
     (r"bird$", make_slice_sfx.GROUPS["bird"]),
@@ -152,6 +153,12 @@ CLASSES = [
     ("lute at the concert", ["lio_concert_0"], -2.0, "SFX", "tal_abend", 0.0, 6.0),
     ("string snaps", ["string_snap_0"], -2.0, "SFX", "tal_abend", 2.0, 8.0),
     ("hands clapping", ["crowd_clap_0"], -4.0, "SFX", "tal_abend", -3.0, 3.0),
+    # The beat of the plant (Act V, G5): the levers of the console fall by themselves, three, one, two, soft clicks over a
+    # quiet low chord. The hall plays no bed (music "silence", no ambience), so it is measured against the coldest bed
+    # there is, an interior (haus_kalt). The class is meant to stay quiet beside the lever (placeholder lever.wav, played
+    # at -4 dB): its click peaks are the lever's (about -12 dBFS as played) while its loudness, which the chord carries,
+    # sits some 5 LU under the bed: a motif that is heard, not an event.
+    ("beat of the plant", ["machine_count_0"], -2.0, "SFX", "haus_kalt", -6.0, -3.0),
     # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
     # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
     ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),
