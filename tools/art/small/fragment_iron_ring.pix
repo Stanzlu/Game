@@ -1,0 +1,23 @@
+# Fragment Eisenring (G1): ein Ring in der Felswand, an der Innenseite vom Seil glatt gescheuert; eine Spur der Welt, kein Kind, keine Figur, kein Grund
+name: fragment_iron_ring
+out: assets/generated/fragments
+size: 16x16
+palette: o=#1a1a1e u=#6f6152 t=#55493f k=#3e352e j=#8a9098 i=#4a4f58 b=#c4cad2 r=#8e4420
+outline: o
+---
+................
+.oooooooooooooo.
+.ouuuuujiuuuuko.
+.outtttjituttko.
+.outttjjijtktko.
+.outkjjjjjittko.
+.outjjjttiiitko.
+.outjjttttiiuko.
+.ouujjttttiitko.
+.outjbttttbitko.
+.outjbbttbbitko.
+.oukkibbbbitkko.
+.outttiiiitttko.
+.okkkkkkrkkkkko.
+.oooooooooooooo.
+................

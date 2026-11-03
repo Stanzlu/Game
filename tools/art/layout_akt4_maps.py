@@ -18,7 +18,9 @@ walks through it stays in view). Inside, the gate street leads north to the Haup
 round the block to the workshop and back east along the south wall. Every building is a front (a sprite whose foot lies
 on a solid row of the grid, with solid plot behind it as deep as its roof is high), so nobody ever walks behind one.
 
-Hand-written head (meta, legend) stays; only the [map] block is replaced.
+Hand-written head (meta, legend) stays; only the [map] block is replaced. Since G1 (Act V) the strasse also has, after chapter.act4,
+a door in the notch at its northern edge (the brook comes out of the forest there) into the mountains, a chalk arrow at the signpost and
+three cairns along the brook's west bank (props on meadow cells, so the baked ground and its stamp stay).
 
 Usage: python3 tools/art/layout_akt4_maps.py strasse|stadt [--write]
 Afterwards re-run tools/art/bake_ground.py content/maps/<map>.txt (once the layout is final: ADR-068).
@@ -62,6 +64,13 @@ PASTURE_FENCE_Y = 24
 ORCHARD = (28, 46, 36, 50)  # the orchard south of the road: x0, x1, y0, y1
 PADDOCK = (70, 89, 37, 49)  # the pasture in the south-east
 PADDOCK_GAP = (76, 77)
+# Act V, G1: after chapter.act4 a door in the notch of the northern forest leads into the mountains (the brook comes out of it), the arrival
+# from it one cell south of the door; a chalk arrow at the signpost points up; three cairns on the brook's west bank show the way north. All of it
+# stands on meadow cells of the old stamp (`if chapter.act4`, no catalog shadow): the ground of `strasse` is not baked again.
+PASS_DOOR = (56, 3)
+PASS_ARRIVAL = (56, 4)
+ARROW_CELL = (82, 33)
+PASS_CAIRNS = ((59, 22), (60, 14), (60, 7))
 
 
 def _centerline(points, widths=None):
@@ -351,6 +360,11 @@ def build():
     # the pocket: a few trees among the roofs
     scatter("T", 3, 1, (POCKET[0] + 1, POCKET[1] - 1, POCKET[2], POCKET[3]), tall=False, apart=0,
             test=lambda x, y: all(abs(x - rx) > 3 or abs(y - ry) > 2 for r in "JLM" for rx, ry in named.get(r, [])))
+    # ---- Act V, G1: the door into the mountains, the arrival from it, the chalk arrow and the cairns of the way north (set last: the scatter above is
+    # unchanged, so nothing of the baked ground moves)
+    for glyph, (x, y) in (("D", PASS_DOOR), ("r", PASS_ARRIVAL), ("8", ARROW_CELL)) + tuple(("K", cell) for cell in PASS_CAIRNS):
+        assert g.get(x, y) == ".", (glyph, x, y, g.get(x, y))
+        put(glyph, x, y)
     build.shortfall = shortfall
     return g, named
 

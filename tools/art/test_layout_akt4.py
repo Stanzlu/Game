@@ -13,15 +13,17 @@ STRASSE = os.path.join(mapfile.ROOT, "content", "maps", "strasse.txt")
 TAL = os.path.join(mapfile.ROOT, "content", "maps", "tal.txt")
 DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "strasse.dialogue")
 DIALOGUE_RES = "res://content/dialogue/akt4/strasse.dialogue"
+AUFSTIEG = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "aufstieg.dialogue")
+AUFSTIEG_RES = "res://content/dialogue/akt5/aufstieg.dialogue"  # G1: the chalk arrow's cue lives with the climb's text
 # ground cells a person can stand on (the legend's own grounds: grass, path, mud, puddle, tilled soil, cobbles)
 STANDABLE = set(".,mpd_")
 # the road itself: path, mud of the ruts, puddles, cobbles
 ROAD = set(",mp_")
 # spots of the walk, each once on the map (the rest of the letters are scattered forest, fences and hay)
-NAMED = "Nn@WsV1234S5 67b".replace(" ", "")
+NAMED = "Nn@WsV1234S5 67bDr8".replace(" ", "")
 # the spots with a cue (the cue's name by glyph)
 CUES = {"1": "signpost", "2": "goat_prints", "3": "field_notice", "4": "scarecrow", "5": "milestone", "6": "goat_bell",
-        "7": "view_town"}
+        "7": "view_town", "8": "signpost_third"}
 # what may stand on the road's cells (a prop with a collision shape anywhere else would narrow the way)
 ON_ROAD = ROAD | set("Nn@sWVqQ2x")
 
@@ -112,12 +114,13 @@ class StrasseLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                self.assertEqual(params["dialogue"], DIALOGUE_RES, glyph)
+                self.assertEqual(params["dialogue"], AUFSTIEG_RES if glyph == "8" else DIALOGUE_RES, glyph)
         self.assertEqual(used, CUES)
-        if os.path.exists(DIALOGUE):
-            with open(DIALOGUE, encoding="utf-8") as f:
-                cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
-            self.assertLessEqual(set(used.values()), cues, "every cue of the map is a cue of the dialogue")
+        for path, glyphs in ((DIALOGUE, "1234567" + "56"), (AUFSTIEG, "8")):
+            if os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
+                self.assertLessEqual({used[g] for g in glyphs if g in used}, cues, "every cue of the map is a cue of its dialogue")
 
     def test_every_sprite_of_the_map_is_in_the_catalog_and_none_has_a_light(self):
         meta, symbols, rows, _ = _strasse()
@@ -318,6 +321,59 @@ class StrasseLayoutTests(unittest.TestCase):
             self.assertEqual(rows[y][0], "_", "paving beyond the door")
         self.assertEqual(spots["s"][0], (layout.CITY_X, layout.road_row(layout.CITY_X)))
         self.assertGreaterEqual(spots["s"][0][0] - bx, 7, "the arrival from the town lies seven cells before the door")
+
+    def test_after_act_four_a_door_leads_north_into_the_mountains_and_the_ground_is_not_baked_again(self):
+        """G1: the door in the notch of the northern forest, the arrival from the pass, the chalk arrow at the signpost, three cairns."""
+        meta, symbols, rows, spots = _strasse()
+        self.assertEqual(spots["D"], [layout.PASS_DOOR])
+        self.assertEqual(spots["r"], [layout.PASS_ARRIVAL])
+        (dx, dy), (rx, ry) = spots["D"][0], spots["r"][0]
+        self.assertEqual((rx, ry), (dx, dy + 1), "the arrival lies one cell south of the door")
+        door = symbols["D"]["params"]
+        self.assertEqual((door["target"], door["spawn"], door["auto"], door["size"]), ("pass", "strasse", True, [5, 1]))
+        self.assertEqual(door["if"], "chapter.act4", "the way into the mountains opens with the end of Act IV")
+        self.assertEqual(symbols["r"]["marker"], "spawn_pass")
+        # the zone (one row high, five cells wide, centred on the glyph) lies on the notch's meadow and the forest's solid cells, and never on the arrival
+        for x in range(dx - 2, dx + 3):
+            self.assertIn(rows[dy][x], ".hD", "the zone covers meadow and forest only at column %d" % x)
+        self.assertEqual({rows[dy][x] for x in range(dx - 1, dx + 2)} - {"D", "."}, set())
+        for x in range(dx - 4, dx + 5):
+            self.assertEqual(rows[dy - 1][x] in "h~", True, "forest above the door at column %d" % x)
+        for glyph in "Dr8K":
+            self.assertEqual(symbols[glyph]["ground"], ".", "the meadow under it is what the stamp baked")
+        # the brook comes out of the forest just east of the notch: the door is where the brook leads
+        self.assertTrue(any(rows[0][x] == "~" for x in range(dx + 3, dx + 9)))
+        # the chalk arrow stands near the signpost, but not so near that using the sign could take it
+        sx, sy = spots["1"][0]
+        ax, ay = spots["8"][0]
+        self.assertGreaterEqual(math.hypot(ax - sx, ay - sy), 2.0)
+        self.assertGreaterEqual(math.hypot(ax - sx, ay - (sy - 1)), 2.6, "the signpost's use cell (84, 31) is out of the arrow's reach (16 + 18 px)")
+        self.assertLessEqual(math.hypot(ax - sx, ay - sy), 6.0)
+        arrow = symbols["8"]["params"]
+        self.assertEqual((arrow["sprite"], arrow["if"], arrow["cue"]), ("tal/gb_arrow_chalk", "chapter.act4", "signpost_third"))
+        # three cairns on the west bank of the brook, going north; each is a prop that exists only after Act IV
+        cairns = spots["K"]
+        self.assertEqual(sorted(cairns, key=lambda c: c[1]), sorted(layout.PASS_CAIRNS, key=lambda c: c[1]))
+        self.assertEqual(len(cairns), 3)
+        self.assertEqual(symbols["K"]["params"]["sprite"], "tal/gb_cairn_road")
+        self.assertEqual(symbols["K"]["params"]["if"], "chapter.act4")
+        for x, y in cairns:
+            self.assertTrue(54 <= x <= 60, "on the brook's west bank")
+            self.assertLess(y, 27, "north of the road")
+        # no crown hides the arrow or a cairn (the door and the arrival are invisible, a crooked tree stands over the notch)
+        reach = {"T": (3, 8), "C": (3, 8), "P": (2, 5), "O": (2, 5)}
+        for x, y in cairns + [(ax, ay)]:
+            for dyy in range(1, 9):
+                for dxx in range(-3, 4):
+                    cell = rows[y + dyy][x + dxx] if y + dyy < len(rows) and 0 <= x + dxx < len(rows[0]) else "h"
+                    if cell in reach:
+                        wide, high = reach[cell]
+                        self.assertFalse(abs(dxx) <= wide and dyy <= high, "a crown hides the prop at %d,%d" % (x, y))
+        # nothing here changes a baked cell: the shadows that the stamp counts are those of props without a condition
+        catalog = mapfile.load_catalog()
+        for sprite in ("tal/gb_arrow_chalk", "tal/gb_cairn_road"):
+            self.assertNotIn("shadow", catalog[sprite])
+        self.assertEqual(mapfile.stamp(STRASSE), mapfile.read_stamps()["strasse"], "strasse is not baked again: its stamp stays")
 
     def test_the_meta_names_the_baked_images(self):
         meta, _, _, _ = _strasse()

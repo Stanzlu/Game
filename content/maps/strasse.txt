@@ -3,7 +3,7 @@
 ; Steinbrücke über den Bach, eine Weide, deren Eckpfosten ein Glöckchen trägt, ein Meilenstein, Obstbäume, Heu und ein Hügel mit
 ; einer Bank, von dem man den Rauch der Stadt hinter der Hecke sieht. Im Westen führt eine Tür in die Stadt (S2; das Seil der
 ; Pflasterarbeiten und der Blocker town_wait sind fort, der Steinhaufen liegt noch am Rand). Keine Figur spricht, nur Dinge.
-; Layout: tools/art/layout_akt4_maps.py strasse --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/strasse.txt.
+; Layout: tools/art/layout_akt4_maps.py strasse --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/strasse.txt (seit G1 nicht mehr: die Tür in den Pass und ihre Dinge ändern den Boden nicht).
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/strasse_ground.png"
@@ -58,22 +58,29 @@ S = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 6 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_bell", "cue": "goat_bell", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 16, "unless": "city.bell_taken"}}
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "tal/st_bench"}}
 7 = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "view_town", "dialogue": "res://content/dialogue/akt4/strasse.dialogue", "radius": 22}}
+; Akt V, G1: nach chapter.act4 führt eine Tür in der Kerbe des Nordrandes (dort kommt der Bach aus dem Wald) in das Gebirge (pass), die Ankunft von dort liegt eine Zelle südlich;
+; am Wegweiser malt jemand einen dritten Pfeil mit Kreide auf einen flachen Stein (nach oben), drei Steinmännchen am Westufer des Baches weisen nach Norden. Alles Wiesenzellen des
+; alten Stempels: nur bedingte Dinge ohne Katalogschatten, der Boden von strasse wird nicht neu gebacken.
+D = {"ground": ".", "prop": "res://world/props/door.tscn", "params": {"target": "pass", "spawn": "strasse", "auto": true, "size": [5, 1], "if": "chapter.act4"}}
+r = {"ground": ".", "marker": "spawn_pass"}
+8 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_arrow_chalk", "cue": "signpost_third", "dialogue": "res://content/dialogue/akt5/aufstieg.dialogue", "radius": 16, "if": "chapter.act4"}}
+K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_road", "if": "chapter.act4"}}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh....hhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.......h~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh..D.hhh~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...r...h~~~hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.........~~~h..hhhhhhhhh.....hhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....hhhhhhh........P.~~~......hhhh.....g..hhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.......hhhh......R....~~~...................hhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.......hhhh......R...K~~~...................hhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh............g...g......~~~.......g............hhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh........................~~~..T.........g...T....hhh.hhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh......P............C....~~~.......T.................hhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.............T...........~~~.................g........hhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh...T.....................~~~.E.....................E..hhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh............R.....R.....~~..E.dddddddddd..........E..hhhhhh
-hhhhhhhhhhhhhhhhh....hh.g..hhhhhhhhhh.....E..........E.......~~..E.dddddddddd..ddddddd.E..hhhhhh
+hhhhhhhhhhhhhhhhh....hh.g..hhhhhhhhhh.....E..........E......K~~..E.dddddddddd..ddddddd.E..hhhhhh
 hhhhhhhhhhhhhh...............ghhhhhhhh....E.H........E.......~~..E.dddddddddd..dddddddgE.hhhhhhh
 hhhhhhhhhhhh...T.P......P.......hhhhhhh...E......Y...E.......~~..E.dddddddddd..ddddddd.E.hhhhhhh
 hhhhhhhhhhh..T.....J........P.T..hhhhhhh..E.........YE..C....~~..E.dddddddddd..ddddddd.E.hhhhhhh
@@ -81,7 +88,7 @@ hhhhhhhhhhh......................hhhhhhh..E..........E......~~~..E.dddddddddd..d
 hhhhhhhhhhh...........L....g.....hhhhhh...E...H......E......~~~..E.dddddddddd..ddddddd.Ehhhhhhhh
 hhhhhhhhhhhh...J............Mg..hhhhhh....E........H.E......~~~..E.ddddd4dddd..ddddddd.Ehhhhhhhh
 hhhhhhhhhhhhhhh...............hhhhhhhh....E..........E......~~~..E.dddddddddd..ddddddd.Ehhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....E.....Y....E......~~~..E.dddddddddd..dddddddgE.hhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....E.....Y....E.....K~~~..E.dddddddddd..dddddddgE.hhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....E..........E......~~...E.....................E.hhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh.....FF..FFFFFFFS......~~...FFFFFFFFFF..FFFFFFFFFFF..hhhhhh
 hhhhhhhh...u......g,7,..u...........g................6......~~............................hhhhhh
@@ -92,7 +99,7 @@ hhhhhh....^^^^^^^^^,,,^^^^^^^.,,,,ppmm,,,,mm,pmmmm,,,,mm,,,~~~,,,,,,,,pp,,,mm2,,
 ____,,,,,V,,,,,,,,,,,,,,,,,pp,,mmmmp,,,mmm,,pp,,,,mmpm,,,qqqqqq,mmmmm,,p,,,,,mmmpmmmm,,,,n,,,,N,
 _____,,,,mmmmmm,,,,,,mmmmm,,pmm,,,,,,,,,,,.....5.,,pp,mm,______,,,@,,,,mmpmmm,,pp,,,,mm,,,,,,,,,
 ____W,,,,,,s,,,,,,,,,,,,,,,,,,,mm,,,,,,...............,,,QQQQQQ,,,,,,,m,,,,,,,......1,,,,,,,,,,,
-_____,,,,m,,,,,,mmmpmmmmmmmmmmp,,x,......................,~~~,,,,,,,,,,,...................hhhhh
+_____,,,,m,,,,,,mmmpmmmmmmmmmmp,,x,......................,~~~,,,,,,,,,,,..........8........hhhhh
 ___,,,,,,,,,,,,,,,pp,,,,,,,,,,,,..........................~~~.....a.........a...........g.hhhhhh
 hhhhhhhhh.................................................~~~............................hhhhhhh
 hhhhhhhh....................FFFFFFFF..FFFFFFFFF...........~~~........FFFFFFF..FFFFFFFFFFhhhhhhhh

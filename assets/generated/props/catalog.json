@@ -1868,6 +1868,271 @@
    "res://assets/generated/props/tal/fo_table.png"
   ]
  },
+ "tal/gb_arrow_chalk": {
+  "anchor": [
+   13,
+   10
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_arrow_chalk.png"
+  ]
+ },
+ "tal/gb_boulder": {
+  "anchor": [
+   19,
+   26
+  ],
+  "shadow": [
+   17,
+   4
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -3
+   ],
+   "rect": [
+    30,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_boulder_0.png",
+   "res://assets/generated/props/tal/gb_boulder_1.png"
+  ]
+ },
+ "tal/gb_cairn_a": {
+  "anchor": [
+   9,
+   18
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_cairn_a.png"
+  ]
+ },
+ "tal/gb_cairn_b": {
+  "anchor": [
+   9,
+   26
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_cairn_b.png"
+  ]
+ },
+ "tal/gb_cairn_c": {
+  "anchor": [
+   9,
+   34
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_cairn_c.png"
+  ]
+ },
+ "tal/gb_cairn_road": {
+  "anchor": [
+   9,
+   26
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_cairn_road.png"
+  ]
+ },
+ "tal/gb_iron_ring": {
+  "anchor": [
+   11,
+   26
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_iron_ring.png"
+  ]
+ },
+ "tal/gb_lookout": {
+  "anchor": [
+   30,
+   30
+  ],
+  "shadow": [
+   26,
+   5
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_lookout.png"
+  ]
+ },
+ "tal/gb_net_branch": {
+  "anchor": [
+   15,
+   36
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_net_branch.png"
+  ]
+ },
+ "tal/gb_net_post": {
+  "anchor": [
+   8,
+   34
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_net_post.png"
+  ]
+ },
+ "tal/gb_planks": {
+  "anchor": [
+   40,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_planks.png"
+  ]
+ },
+ "tal/gb_rockfall": {
+  "anchor": [
+   48,
+   40
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_rockfall.png"
+  ]
+ },
+ "tal/gb_scree": {
+  "anchor": [
+   22,
+   9
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_scree_0.png",
+   "res://assets/generated/props/tal/gb_scree_1.png",
+   "res://assets/generated/props/tal/gb_scree_2.png"
+  ]
+ },
+ "tal/gb_sign_trail": {
+  "anchor": [
+   15,
+   42
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_sign_trail.png"
+  ]
+ },
+ "tal/gb_slate": {
+  "anchor": [
+   10,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_slate.png"
+  ]
+ },
+ "tal/gb_smoke": {
+  "anchor": [
+   8,
+   166
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_smoke.png"
+  ]
+ },
+ "tal/gb_steps": {
+  "anchor": [
+   24,
+   32
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_steps.png"
+  ]
+ },
+ "tal/gb_stone_mark": {
+  "anchor": [
+   12,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_stone_mark.png"
+  ]
+ },
  "tal/goat_boot": {
   "anchor": [
    17,

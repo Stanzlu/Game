@@ -1,0 +1,124 @@
+# Der Aufstieg, Akt V, Segment G1 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O1, O11, O13, O15). Nach dem Ende von Akt IV
+# steht am Nordrand der Straße eine Tür in das Gebirge; dahinter steigt ein Pfad am Bach entlang nach Norden, unten Waldrand und
+# Wiese, in der Mitte Geröll und Kehren, oben Felsterrassen mit Blick. Leicht, Erkunden, Humor aus den Dingen (Ziel 5 von 10).
+# Keine Figur spricht und keine ist zu sehen: der Wächter und das Kind treten erst später auf, Mira ist nicht da (Akt V hat
+# keine Mira) und hinterlässt eine einzige Spur, je nach Ausgang des Streits anders gelegt und nie kommentiert. Navigation ohne
+# Marker (O15): Steinmännchen, jedes vom vorigen aus zu sehen, der Rauch der Anlage oben rechts und das Licht; kein Pfeil, der etwas
+# verspricht (der dritte Pfeil an der Straße und der im Schiefer sind Gags, sie zeigen, wohin man sie hält). Zeilen ohne Sprecher sind
+# Erzählung (ohne Doppelpunkt). Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt. Alle Cues der Datei sind Dinge am
+# Weg; nichts hier verlangt eine Antwort außer dem Schiefer.
+
+# --- Der dritte Pfeil --------------------------------------------------------------------------------------------------
+# Neben dem Wegweiser der Straße (S1: »Ohne Gewähr«) steht seit dem Ende von Akt IV ein dritter Pfeil, mit Kreide gemalt, nach oben.
+# Er ist ein Gag über Wegweiser, die sich nicht festlegen, und der erste Hinweis auf das Gebirge, ohne ein Wort darüber. Nichts wird
+# gesetzt; die Karte zeigt den Pfeil nur mit chapter.act4.
+
+~ signpost_third
+Neben dem Wegweiser ist ein dritter Pfeil dazugekommen, mit Kreide gemalt. Er zeigt nach oben. [ID:auf_signpost_third_1] [#draft]
+Kein Wort dabei, nicht einmal »Ohne Gewähr«. Oben liegen die Berge und der Himmel, und der Pfeil legt sich nicht fest. [ID:auf_signpost_third_2] [#draft]
+=> END
+
+# --- Die Steinmännchen -------------------------------------------------------------------------------------------------
+# Das erste am Beginn des Pfads. Der Text erzählt nur, dass jemand sie gebaut hat und dass jedes dort steht, wo man das vorige noch
+# sieht (ein Test der Karte rechnet es nach). Kein Satz über Wegweiser oder Hilfe, kein Name, kein Grund. Nichts wird gesetzt.
+
+~ cairn_first
+Am Anfang des Pfads steht ein Steinmännchen, fünf Steine, unten flach, oben rund. Der oberste sitzt, als hätte er nie etwas anderes vorgehabt. [ID:auf_cairn_first_1] [#draft]
+Weiter oben steht das nächste, dahinter, klein im Licht, das übernächste. Jedes steht dort, wo man das vorige noch sieht. [ID:auf_cairn_first_2] [#draft]
+Niemand hat seinen Namen dazugeschrieben. Die Steine sind einfach fertig. [ID:auf_cairn_first_3] [#draft]
+=> END
+
+# --- Miras Spur --------------------------------------------------------------------------------------------------------
+# Akt V hat keine Mira (Brief O11): sie ist in jedem Ausgang des Streits (S7) vorausgegangen. Die Karte zeigt genau eine der drei
+# Spuren, je nach city.mira_parted_boundary, _joined oder _silent (es gilt nie mehr als eines); jede ist ein eigenes Requisit mit
+# eigenem Cue, die Cues lesen nichts und setzen nichts. Der Text kommentiert keine Spur: er sagt nicht, wessen sie ist, nicht, was sie
+# bedeutet, und keine Zeile rechnet es der Spielerin an. Wiedererkennen tragen das Netz und der Knoten (flach und sauber, wie in
+# bl_knot_2) und der flache Stein (nicht rund, wie tal_mira_16 es verlangt). Grenze: ordentlich und ein Stück vom Weg, man streift
+# es nicht. Anschließen: auf der Seite der Spielerin, in Armhöhe, locker gebunden. Schweigen: ein Stein mitten auf dem Weg, kein
+# Netz, nichts darunter; keine Strafe, keine Antwort, ein Ding.
+
+~ mira_trace_boundary
+An einem Pfosten, ein Stück vom Weg, hängt ein Streifen Netz, der Knoten flach und fest. [ID:auf_mira_trace_boundary_1] [#draft]
+Es hängt gerade. Wer auf dem Weg bleibt, streift es nicht. [ID:auf_mira_trace_boundary_2] [#draft]
+=> END
+
+~ mira_trace_joined
+An einem niedrigen Ast, genau dort, wo du gehst, hängt ein Streifen Netz in Armhöhe. [ID:auf_mira_trace_joined_1] [#draft]
+Der Knoten sitzt locker. Ein Zug, und er ginge auf. [ID:auf_mira_trace_joined_2] [#draft]
+=> END
+
+~ mira_trace_silent
+Mitten auf dem Weg liegt ein flacher Stein, nicht rund. Von allein ist er nicht dort. [ID:auf_mira_trace_silent_1] [#draft]
+Kein Netz, kein Faden, kein Knoten. Unter der Kante ist nur Erde. [ID:auf_mira_trace_silent_2] [#draft]
+=> END
+
+# --- Die Aussicht ------------------------------------------------------------------------------------------------------
+# Vom Aussichtsfels in der oberen Hälfte: Hänge, ein ferner Grat, ganz oben rechts der Rauch der Anlage. In S1 hatte die Stadt viele
+# Fäden, die sich nicht einig wurden; dieser ist einer, gerade wie der über dem Haus, nur dünner und genauer, ohne Wind. Der Text
+# sagt nicht, was dort steht, nur dass jemand dort Feuer mit Vorsatz macht (ein Wink auf den Wächter, den die Spielerin noch nicht
+# kennt; die Pedanterie ist der Gag, nie seine Angst). Das Flag mountain.view_seen liest die Szene (Beat pass_view). Das zweite Mal
+# gibt es nur noch eine kurze Zeile.
+
+~ view_smoke
+if WorldState.has_flag("mountain.view_seen")
+	Oben rechts steht der dünne Faden, gerade wie vorhin. Er hat es sich nicht anders überlegt. [ID:auf_view_smoke_4] [#draft]
+else
+	Vom Felsen aus reicht der Blick über die Hänge bis zu einem fernen Grat. Ganz oben rechts steigt Rauch auf. [ID:auf_view_smoke_1] [#draft]
+	Ein einziger Faden, gerade nach oben, wie über dem Haus, nur dünner. Er steht in der Luft wie mit dem Lineal gezogen. [ID:auf_view_smoke_2] [#draft]
+	Ein Lagerfeuer qualmt schiefer. Wer dort Holz auflegt, hat sich vorher überlegt, wohin der Rauch soll. [ID:auf_view_smoke_3] [#draft]
+	do WorldState.set_flag("mountain.view_seen")
+=> END
+
+# --- Der Bach und das Schild -------------------------------------------------------------------------------------------
+# Zwei Dinge am Weg, nichts gesetzt. Der Bach kommt aus dem Norden, unter der Brücke der Straße her; hier ist er schmal und hat doch
+# Bohlen. Das Schild ist ein Schild: es verspricht den Gipfel, eine zweite Hand hat unter ihm nachgetragen, wie lange schon (Humor,
+# ohne Person; keine Ziffer, keine Meterzahl, kein Doppelpunkt im Wortlaut).
+
+~ plank_bridge
+Der Bach ist hier schmal genug zum Springen. Jemand hat trotzdem zwei Bohlen darübergelegt, dicht an dicht. [ID:auf_plank_bridge_1] [#draft]
+Sie halten. Der Bach murmelt darunter weiter, als hätte man ihn nicht gefragt. [ID:auf_plank_bridge_2] [#draft]
+=> END
+
+~ trail_sign
+Am Wegrand steht ein Holzschild, die Buchstaben mit dem Pinsel gemalt und zum Ende hin blasser. Es sagt »Gipfel. Bald.« [ID:auf_trail_sign_1] [#draft]
+Darunter hat jemand mit Kohle nachgetragen »Seit Stunden.« Das Schild lässt es stehen. [ID:auf_trail_sign_2] [#draft]
+=> END
+
+# --- Das Schieferplättchen ---------------------------------------------------------------------------------------------
+# Eine Kuriosität wie das Glöckchen der Ziege (str_bell): Einstecken gibt den Gegenstand und das Flag, Liegen lassen gibt nichts und
+# kostet nichts. Der Pfeil darauf ist der zweite Gag über Pfeile (der Pfad hat keine): er zeigt, wohin man das Plättchen hält. Das
+# Flag mountain.slate_taken liest die Karte (unless), der Stein ohne Plättchen ist ein anderes Bild.
+
+~ slate_chip
+Auf einem flachen Stein am Wegrand liegt ein Plättchen Schiefer, dünn wie ein Keks. Jemand hat einen Pfeil hineingeritzt, mit viel Nachdruck. [ID:auf_slate_chip_1] [#draft]
+- Einstecken. [ID:auf_slate_chip_r1] [#draft]
+	Du steckst es ein und drehst es noch einmal in der Hand. Der Pfeil zeigt jedes Mal dorthin, wohin du ihn hältst. [ID:auf_slate_chip_2] [#draft]
+	do WorldState.add_item("curiosity_slate_chip")
+	do WorldState.set_flag("mountain.slate_taken")
+- Liegen lassen. [ID:auf_slate_chip_r2] [#draft]
+	Du lässt es liegen. Der Pfeil zeigt jetzt auf niemanden, aber mit Nachdruck. [ID:auf_slate_chip_3] [#draft]
+=> END
+
+# --- Der Eisenring -----------------------------------------------------------------------------------------------------
+# Ein Fragment, eine Spur der Welt (kein Bild des Kindes, keine Figur, kein Grund): ein Ring in der Felswand, innen blank von einem
+# Seil, das hier oft lief. Wie bei den anderen Spuren der Welt ist er für einen Atemzug in Gebrauch, dann wieder leer. Das erste Mal
+# setzt das Flag (Collection liest es), danach gibt es nur noch eine kurze Zeile.
+
+~ iron_ring
+if WorldState.has_flag("fragment.iron_ring")
+	Der Eisenring in der Felswand, innen blank. Er hält weiter, auch ohne Seil. [ID:auf_iron_ring_4] [#draft]
+else
+	In der Felswand steckt ein Eisenring, faustgroß, außen rostig. Innen ist er blank und rund geschliffen. [ID:auf_iron_ring_1] [#draft]
+	Die Rille im Eisen stammt von einem Seil, das hier oft lief, immer in dieselbe Richtung. [ID:auf_iron_ring_2] [#draft]
+	Für einen Atemzug läuft ein Seil durch den Ring, straff, und zieht etwas Schweres hinauf. Dann ist der Ring wieder leer. [ID:auf_iron_ring_3] [#draft]
+	do WorldState.set_flag("fragment.iron_ring")
+=> END
+
+# --- Das Ende des Pfads ------------------------------------------------------------------------------------------------
+# Am Nordende liegt Geröll quer. Der Blocker ist ein Platzhalter bis G2 und verspricht nichts: weder, dass es hier weitergeht, noch,
+# dass es nicht weitergeht. G2 ersetzt ihn durch die Tür in das Hochtal und legt den Cue still, wie S2 es mit town_wait tat.
+
+~ ridge_wait
+Am Ende des Pfads liegt Geröll quer, Stein über Stein, die obersten mit dem Moos nach unten. [ID:auf_ridge_wait_1] [#draft]
+Dahinter verliert sich der Weg im Fels. Von hier aus ist nicht zu sehen, wie weit. [ID:auf_ridge_wait_2] [#draft]
+=> END

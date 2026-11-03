@@ -42,6 +42,7 @@ PREFIX = {
     "werkstatt": "S4-",
     "konzert": "S6-",
     "streit": "S7-",
+    "akt5/aufstieg": "G1-",  # Act V: one prefix per segment ("G1-1"); the folder keeps it apart from a file of the same name in another act
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]
