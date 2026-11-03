@@ -91,7 +91,7 @@ func _evening_look() -> void:
 	bloom = 1.0
 	music = "silence"
 	ambience = load(EVENING_AMBIENCE)
-	ambience_db = -9.0
+	ambience_db = -8.0
 
 
 func _on_flag_changed(id: String, value: bool) -> void:

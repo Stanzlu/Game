@@ -403,7 +403,7 @@ STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d":
                 "!": "_", "4": "_", "5": "_", "6": "_", "7": "_", "8": "_",
                 "ä": "_", "ß": "_", "ö": "_", "æ": "_", "ü": "_", "ø": "_", "Ä": "_", "å": "_", "Ö": "_", "Æ": "_", "Ü": "_", "Ø": "_",
                 # S6: the evening of the concert (everything that stands on the cobbles only in the evening, `if city.evening`)
-                "Ω": "_", "Δ": "_", "Σ": "_", "λ": "_", "Π": "_", "Ξ": "_", "Ł": "_", "Ʒ": "_", "Γ": "_", "Θ": "_", "θ": "_", "τ": "_",
+                "Ω": "_", "Δ": "_", "Σ": "_", "λ": "_", "Π": "_", "Ξ": "_", "Ł": "_", "Γ": "_", "Θ": "_", "θ": "_", "τ": "_",
                 "γ": "_", "β": "_", "κ": "_", "μ": "_", "ε": "_"}
 
 
@@ -558,7 +558,6 @@ def build_stadt():
     put("Δ", 41, 21)  # the stage lamps at both ends
     put("Δ", 47, 21)
     put("Σ", 44, 20)  # the string of lanterns above it
-    put("Ʒ", 44, 21)  # the crate Lio sits on
     put("Ł", 44, 22)  # Lio, in the middle of the stage
     put("Γ", 46, 22)  # the goat on the stage
     put("Θ", 48, 21)  # Orin at the post of the right lamp (once she asked him to hold it)
@@ -570,7 +569,7 @@ def build_stadt():
     put("β", 37, 27)  # the citizen from the stall
     put("κ", 47, 28)  # the clerk of the town hall
     put("μ", 61, 28)  # Mira, at the edge of the crowd
-    put("ε", 44, 29)  # the arrival of the evening (SceneTravel "abend")
+    put("ε", 44, 24)  # the arrival of the evening (SceneTravel "abend"): right before the stage, looking at it
     # ---- outside: the door, the arrival
     put("N", EAST_DOOR_X, DOOR_ROW)
     put("n", ARRIVAL_X_S, DOOR_ROW)

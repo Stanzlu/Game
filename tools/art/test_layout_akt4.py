@@ -357,7 +357,7 @@ STADT_SHEETS = {"I": "torwaechterin", "M": "mira", "y": "gefaelliger", "v": "bue
 SLIPS = {"bouquet": ("ä", "ß"), "ladder": ("ö", "æ"), "stage": ("ü", "ø"), "goat": ("Ä", "å"), "bread": ("Ö", "Æ"), "lost": ("Ü", "Ø")}
 SLIP_GLYPHS = "".join(a + b for a, b in SLIPS.values())
 # S6: the evening of the concert: what stands only then (`if city.evening`), once each, and the cues of its people and things
-EVENING_ONCE = "ΩΣΠΞŁƷΓΘθτγβκμε"
+EVENING_ONCE = "ΩΣΠΞŁΓΘθτγβκμε"
 KONZERT_DIALOGUE_RES = "res://content/dialogue/akt4/konzert.dialogue"
 KONZERT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "konzert.dialogue")
 EVENING_CUES = {"Ł": "con_lio", "Γ": "con_goat", "Θ": "con_orin", "θ": "con_orin", "γ": "con_gef", "μ": "con_mira", "Π": "con_poster",
@@ -588,7 +588,7 @@ class StadtLayoutTests(unittest.TestCase):
             fp, sp = symbols[fresh]["params"], symbols[struck]["params"]
             self.assertEqual(fp["sprite"], "tal/st_slip_open")
             self.assertEqual(sp["sprite"], "tal/st_slip_struck")
-            self.assertEqual((fp["cue"], fp["if"], fp["unless"]), ("do_" + task, "list.take_" + task, "list.done_" + task), "taken, not yet done")
+            self.assertEqual((fp["cue"], fp["if"], fp["unless"]), ("do_" + task, "list.take_" + task, ["list.done_" + task, "city.evening"]), "taken, not yet done, and not in the evening of the concert (S6): the shops are shut")
             self.assertEqual((sp["cue"], sp["if"], sp["unless"]), ("slip_struck", "list.closed", "list.take_" + task), "closed and not taken")
             for g in (fresh, struck):
                 self.assertEqual(_ground(symbols, g), "_", "no bake needed")
@@ -861,7 +861,6 @@ class EveningLayoutTests(unittest.TestCase):
         self.assertEqual(stage[0], hall[0], "in the middle before the door")
         self.assertEqual(spots["Ł"][0][0], stage[0])
         self.assertEqual(spots["Ł"][0][1], stage[1] - 1, "Lio on the stage, one row behind its front")
-        self.assertEqual(spots["Ʒ"][0], (stage[0], stage[1] - 2), "his crate one row above him")
         self.assertEqual(sorted(spots["Δ"]), [(stage[0] - 3, stage[1] - 2), (stage[0] + 3, stage[1] - 2)], "a lamp at each end")
         x, y = spots["Γ"][0]
         self.assertTrue(abs(x - stage[0]) <= 3 and stage[1] - 2 <= y <= stage[1] - 1, "the goat stands on the stage")
@@ -870,7 +869,7 @@ class EveningLayoutTests(unittest.TestCase):
         for glyph in "θτγβκμ":
             x, y = spots[glyph][0]
             self.assertGreater(y, stage[1], glyph + " stands before the stage, in the crowd")
-        self.assertGreater(spots["ε"][0][1], spots["κ"][0][1], "she arrives behind the crowd and looks at the stage")
+        self.assertEqual(spots["ε"][0], (stage[0], stage[1] + 1), "she arrives right before the stage, in the middle of it")
 
     def test_everything_of_the_evening_stands_only_in_the_evening_and_the_day_gives_way(self):
         _, symbols, _, _ = _stadt()

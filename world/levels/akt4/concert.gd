@@ -16,7 +16,12 @@ extends Node
 const DIALOGUE := "res://content/dialogue/akt4/konzert.dialogue"
 const BEAT := "city_concert"
 ## Seconds the tune of the concert lasts (make_slice_sfx.py, lio_concert_0).
-const SONG_SECONDS := 19.0
+const SONG_SECONDS := 19.2
+## Second of the tune in which the hands clap (Tess, a little beside the beat), if she is there.
+const CLAP_AT := 12.6
+## Where she stands for the concert and how far from it counts as "elsewhere" (pixels).
+const ARRIVAL_MARKER := "spawn_abend"
+const ARRIVAL_SLACK := 12.0
 ## The parts: the cue, the quiet before it (seconds) and whether the part waits for the tune.
 const PARTS: Array[Dictionary] = [
 	{"cue": "arrive", "pause": 1.0},
@@ -38,6 +43,7 @@ var _clock := 0.0
 var _busy := false
 ## Seconds the tune has been playing, -1 while it has not begun.
 var _song_age := -1.0
+var _clapped := false
 
 
 ## Puts the concert into the scene, unless it has been played.
@@ -50,6 +56,8 @@ static func attach(on: StadtScene) -> Concert:
 
 
 func _ready() -> void:
+	# a pause in a line stops the game, not the tune that is playing: the tune's age runs on
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	WorldState.flag_changed.connect(_on_flag_changed)
 
 
@@ -63,14 +71,12 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		_song_age = 0.0
 
 
-## True from the first line to the last: the evening is being played.
-func is_playing() -> bool:
-	return _part >= 0 and _part < PARTS.size()
-
-
 func _physics_process(delta: float) -> void:
 	if _song_age >= 0.0:
 		_song_age += delta
+		if not _clapped and _song_age >= CLAP_AT and WorldState.has_flag("city.board_done"):
+			_clapped = true
+			AudioDirector.sfx("crowd_clap", -4.0, 1.0)
 	if _busy or _scene.player == null or _part >= PARTS.size():
 		return
 	_clock += delta
@@ -79,6 +85,7 @@ func _physics_process(delta: float) -> void:
 		# still comes back from the black of the door
 		if _scene.quiet() and not _scene.player.is_locked():
 			_cut = Cutscene.begin(_scene)
+			_take_place()
 			_part = 0
 			_clock = 0.0
 		return
@@ -90,10 +97,21 @@ func _physics_process(delta: float) -> void:
 	_play(str(spec["cue"]))
 
 
+## She stands before the stage, looking at it, whichever way she came (a game loaded in the evening
+## begins wherever it was saved, a door sends her with the facing she left with).
+func _take_place() -> void:
+	var player := _scene.player
+	var marker := _scene.map.data.find_marker(ARRIVAL_MARKER)
+	if not marker.is_empty():
+		var at := _scene.map.cell_to_world(marker[0]["cell"])
+		if player.global_position.distance_to(at) > ARRIVAL_SLACK:
+			player.teleport(at)
+			_scene.view.follow(player)
+	player.facing = Facing.Dir.N
+
+
 func _play(cue: String) -> void:
 	_busy = true
-	if cue == "finale":
-		AudioDirector.sfx("crowd_clap", -4.0, 1.0)
 	await _cut.say(DIALOGUE, cue)
 	_busy = false
 	_part += 1

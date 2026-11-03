@@ -79,30 +79,29 @@ J = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue"
 7 = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate", "if": "city.board_done"}}
 8 = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "dialogue": "res://content/dialogue/akt4/werkstatt.dialogue", "cue": "bench", "face": "w", "sit": true, "if": "city.board_done", "unless": "city.evening"}}
 ; die Liste (S5): je Aufgabe am Ort ein frischer Zettel (genommen und noch nicht getan: das Brett nennt ihn, sie tut ihn dort) und ein durchgestrichener (die Liste ist geschlossen und sie hat die Aufgabe nicht genommen); flach, ohne Katalogschatten (der Stempel bleibt)
-ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bouquet", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bouquet", "unless": "list.done_bouquet"}}
+ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bouquet", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bouquet", "unless": ["list.done_bouquet", "city.evening"]}}
 ß = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_bouquet"}}
-ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_ladder", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_ladder", "unless": "list.done_ladder"}}
+ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_ladder", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_ladder", "unless": ["list.done_ladder", "city.evening"]}}
 æ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_ladder"}}
-ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_stage", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_stage", "unless": "list.done_stage"}}
+ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_stage", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_stage", "unless": ["list.done_stage", "city.evening"]}}
 ø = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_stage"}}
-Ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_goat", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_goat", "unless": "list.done_goat"}}
+Ä = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_goat", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_goat", "unless": ["list.done_goat", "city.evening"]}}
 å = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_goat"}}
-Ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bread", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bread", "unless": "list.done_bread"}}
+Ö = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_bread", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_bread", "unless": ["list.done_bread", "city.evening"]}}
 Æ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_bread"}}
-Ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_lost", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_lost", "unless": "list.done_lost"}}
+Ü = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_open", "cue": "do_lost", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.take_lost", "unless": ["list.done_lost", "city.evening"]}}
 Ø = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_slip_struck", "cue": "slip_struck", "dialogue": "res://content/dialogue/akt4/stadt.dialogue", "if": "list.closed", "unless": "list.take_lost"}}
-; Der Abend des Konzerts (S6, `city.evening`): alles, was nur abends steht. Die Bühne vor dem Rathaus (Ω Stirnseite, Δ Bühnenlampen, Σ Laternenschnur, Ʒ die Kiste unter Lio), Lio (Ł) und die Ziege (Γ) auf ihr, Orin am Pfosten der Lampe (Θ, wenn sie ihn gebeten hat) oder in der Menge (θ), Tess (τ, wenn das Brett gesägt ist), der Gefällige (γ), die Bürgerin (β), die Beamtin (κ), Mira am Rand (μ); das Plakat (Π) und das alte Brett mit den Kerben (Ξ, das Fragment); vier Laternenpfosten leuchten (λ). Flach und ohne Katalogschatten, wo es auf den Zellen des Stempels steht
+; Der Abend des Konzerts (S6, `city.evening`): alles, was nur abends steht. Die Bühne vor dem Rathaus (Ω Stirnseite, Δ Bühnenlampen, Σ Laternenschnur), Lio (Ł, er sitzt auf den Brettern) und die Ziege (Γ) auf ihr, Orin am Pfosten der Lampe (Θ, wenn sie ihn gebeten hat) oder in der Menge (θ), Tess (τ, wenn das Brett gesägt ist), der Gefällige (γ), die Bürgerin (β), die Beamtin (κ), Mira am Rand (μ); das Plakat (Π) und das alte Brett mit den Kerben (Ξ, das Fragment); vier Laternenpfosten leuchten (λ). Flach und ohne Katalogschatten, wo es auf den Zellen des Stempels steht
 Ω = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stage", "if": "city.evening"}}
 Δ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stage_lamp", "if": "city.evening"}}
 Σ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_lantern_line", "lift": 44, "if": "city.evening"}}
 λ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_lamp_post", "sprite_when": {"city.evening": "tal/st_lamp_post_lit"}}}
 Π = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_poster", "cue": "con_poster", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "radius": 18, "if": "city.evening"}}
 Ξ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stage_scratch", "cue": "con_scratch", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "radius": 18, "if": "city.evening"}}
-Ʒ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_seat_crate", "if": "city.evening"}}
 Ł = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_lio_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_lio", "face": "s", "sit": true, "if": "city.evening"}}
 Γ = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_goat", "if": "city.evening"}}
 Θ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_orin_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_orin", "face": "w", "if": ["city.evening", "city.stage_orin"]}}
-θ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_orin_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_orin", "face": "n", "if": "city.evening", "unless": "city.stage_orin"}}
+θ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_orin_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_orin", "face": "n", "if": ["city.evening", "city.orin_met"], "unless": "city.stage_orin"}}
 τ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_tess_look.tres", "face": "n", "if": ["city.evening", "city.board_done"]}}
 γ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_gefaelliger_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_gef", "face": "n", "sit": true, "if": "city.evening"}}
 β = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_buerger_look.tres", "face": "n", "if": "city.evening"}}
@@ -139,15 +138,15 @@ hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhfhhhhhhhhRhhhhhhhhhdhhhhhhchhhhhahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhh_JØÜ_D_Äå_____hhhhh___hhhhh____hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_s_______Σ__________Z_______S_____λhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhThhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh______Δ__Ʒ__ΔΘ__________x______X___hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh______Δ_____ΔΘ__________x______X___hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhThhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh__v__2__iŁ_Γ________y______________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhh_____Ξ___Ω_________________________hhhhhhhhhhhhhhhhhhhhh|hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_Π_______________________________3_hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_Π_______ε_______________________3_hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____x______________________________hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhahhhhhhbhhhhhhhFhhhhλ___θ____üø___τ____________λ____ÆÖ_hhhchhhhhhhehhhhhhfhhhhhhhhThhhhhhhhhh
 hhhhhhhhhh|hh______________B__%ßäq___β_____________γ________________________________hhhhhhh|hhhhhhhhhhhhhhhh
 hThhhhhhhhhhh__________________5_4_____________κ_____________μ__@___________________hhhhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhhhhh_________________$_____________ε_______________________________________hhhhhhhhhhhhhhhhhhhhhThh
+hhhhhhhhhhhhh_________________$_____________________________________________________hhhhhhhhhhhhhhhhhhhhhThh
 hhhhhhhhPhhhh___________l______________________________O___1__________________l_____hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhh|hh____hhhhhhhhhhhhhhhhhh__r_________λ________M__________r___hhhhhhhh_____hhhhhhh|hhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh____hhhhhhhhhhhhhhhhhhh__________________Q________________hhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh

@@ -27,20 +27,20 @@ else
 # und verschiebt die Auskunft, welcher, auf hinterher.
 
 ~ intro
-Lio sitzt auf seiner Kiste in der Mitte der Bühne, die Laute vor der Brust. Neben ihm steht die Ziege, als stünde sie im Programm. [ID:kon_intro_1] [#draft]
+Lio sitzt mitten auf der Bühne, die Laute vor der Brust. Neben ihm steht die Ziege, als stünde sie im Programm. [ID:kon_intro_1] [#draft]
 Lio: Willkommen! Heute Abend hört ihr — nein. Heute Abend hören wir. Alle zusammen. So ist es geplant. [ID:kon_intro_2] [#draft]
 Lio: Das erste Stück heißt »Der Teil, an dem es gut wird«. Der Teil kommt gleich. Erst kommt der Teil davor, und der ist auch gut. In seiner Art. [ID:kon_intro_3] [#draft]
 Lio: Falls etwas schiefgeht, war das Absicht. Ich sage hinterher, was. [ID:kon_intro_4] [#draft]
 => END
 
 # --- Die Saite -------------------------------------------------------------------------------------------------------------------------------
-# Beim ersten Akkord reißt die tiefste Saite. Die Zeile, die es erzählt, setzt city.string_snapped, die Szene spielt in demselben Augenblick den Klang (string_snap); davor steht kein Wort
+# Beim ersten Akkord reißt die tiefste Saite. Das Flag steht vor der Zeile, die es erzählt (eine Mutation läuft, wenn ihre Zeile verlangt wird), die Szene spielt in demselben Augenblick den Klang (string_snap); davor steht kein Wort
 # über den Klang, danach spielt Lio auf den übrigen weiter. Der Witz zielt auf den Ablauf (die Tiefe), nicht auf ihn.
 
 ~ snap
 Lio setzt die Finger auf die Saiten, holt Luft und schlägt den ersten Akkord an. [ID:kon_snap_1] [#draft]
-Die tiefste Saite reißt, schnellt ihm über die Hand und hängt schief von der Brücke. [ID:kon_snap_2] [#draft]
 do WorldState.set_flag("city.string_snapped")
+Die tiefste Saite reißt, schnellt ihm über die Hand und hängt schief von der Brücke. [ID:kon_snap_2] [#draft]
 Er sieht sie an, sieht auf den Platz und spielt auf den übrigen weiter, eine Lage höher als geplant. [ID:kon_snap_3] [#draft]
 Lio: Die Tiefe streichen wir. Heute gibt es nur Höhe, dafür reichlich. [ID:kon_snap_4] [#draft]
 => END
@@ -96,8 +96,8 @@ Die Laternen schwanken an ihren Pfosten, und die Schatten der Leute gehen mit, a
 # und macht die Beziehung zu Lio vertraut.
 
 ~ song
-Lio sieht dem Blatt nach und lässt es gehen. Dann fängt er von vorn an, ohne Noten, auf den Saiten, die ihm bleiben. [ID:kon_song_1] [#draft]
 do WorldState.set_flag("melody.lio_concert")
+Lio sieht dem Blatt nach und lässt es gehen. Dann fängt er von vorn an, ohne Noten, auf den Saiten, die ihm bleiben. [ID:kon_song_1] [#draft]
 do WorldState.add_memory("lio", "concert")
 do WorldState.set_relationship("lio", "familiar")
 Die Bürgerin mit dem schweren Korb singt mit, laut und mit vollem Text. Es ist der Text eines anderen Liedes. Er passt trotzdem. [ID:kon_song_2] [#draft]
@@ -118,7 +118,7 @@ Lio nimmt den Hut ab und verbeugt sich, tief und ohne Eile, vor der Ziege. Sie n
 => END
 
 # --- Danach: Lio und die Saite -----------------------------------------------------------------------------------------------------------
-# Lio sitzt auf seiner Kiste, die Laute auf dem Knie, und schenkt ihr die gerissene Saite ("Sie hat ihr Bestes gegeben"). Beide Antworten sind gleichwertig, nichts wird gezählt: einstecken
+# Lio sitzt auf den Brettern, die Laute auf dem Knie, und schenkt ihr die gerissene Saite ("Sie hat ihr Bestes gegeben"). Beide Antworten sind gleichwertig, nichts wird gezählt: einstecken
 # (Kuriosität, city.string_taken) oder liegen lassen (er legt sie auf die Bühne, city.string_left). Der Router con_lio liest nur und springt; das Setzen steht in con_lio_gift, die Wiederkehr in
 # con_lio_again, die beide Wege kennt und nichts fragt.
 
@@ -128,7 +128,7 @@ if WorldState.has_flag("city.string_taken") or WorldState.has_flag("city.string_
 => con_lio_gift
 
 ~ con_lio_gift
-Lio sitzt auf seiner Kiste, die Laute auf dem Knie, und wickelt die gerissene Saite um zwei Finger. [ID:kon_lio_1] [#draft]
+Lio sitzt auf den Brettern, die Laute auf dem Knie, und wickelt die gerissene Saite um zwei Finger. [ID:kon_lio_1] [#draft]
 Lio: Die ist heute gerissen. Behalt sie. Sie hat ihr Bestes gegeben. [ID:kon_lio_2] [#draft]
 - Einstecken. [ID:kon_lio_r1] [#draft]
 	Du steckst sie ein. Sie federt noch, ganz leise, in der Tasche. [ID:kon_lio_3] [#draft]
@@ -161,7 +161,7 @@ if WorldState.has_flag("city.stage_orin")
 	Orin steht noch am Pfosten, beide Hände um das Holz, den Rücken gerade wie ein Türrahmen. [ID:kon_orin_1] [#draft]
 	Orin: Als die Ziege einsetzte, hat der Pfosten in meinen Händen gezuckt. Jetzt liegt er ruhig. Esche, glaube ich. [ID:kon_orin_2] [#draft]
 	=> END
-Orin steht am Rand der Menge, den Rücken an der Hauswand, und sieht den Platz an, zweimal von links nach rechts. [ID:kon_orin_3] [#draft]
+Orin steht am Rand der Menge, die Arme verschränkt, und sieht den Platz an, zweimal von links nach rechts. [ID:kon_orin_3] [#draft]
 if WorldState.has_flag("city.letter_told")
 	Orin: Die Laternen riechen nach Öl und ein wenig nach Wachs. Ich bleibe noch, solange es riecht. [ID:kon_orin_5] [#draft]
 	=> END
@@ -174,7 +174,7 @@ Gefälliger: Ich sitze. Das ist alles, was ich gerade tue. [ID:kon_gef_2] [#draf
 => END
 
 ~ con_mira
-Mira lehnt im Dunkel hinter dem Brunnen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor. [ID:kon_mira_1] [#draft]
+Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor. [ID:kon_mira_1] [#draft]
 Mira: Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. [ID:kon_mira_2] [#draft]
 => END
 
@@ -216,7 +216,7 @@ Es heißt »Das schlechteste Konzert der Welt«. Darunter steht »Eintritt frei�
 
 ~ con_poster_again
 if WorldState.has_flag("city.poster_taken")
-	Am Pfosten sind vier kleine Löcher, wo das Plakat hing. Das Holz ist dort heller. [ID:kon_posta_1] [#draft]
+	Das Plakat hängt noch, dasselbe noch einmal. Lio hat mehr davon gemalt, als es Pfosten gibt. [ID:kon_posta_1] [#draft]
 else
 	Das Plakat hängt noch. Der Pfeil bei »Ausstieg auch« zeigt zum Tor. [ID:kon_posta_2] [#draft]
 => END

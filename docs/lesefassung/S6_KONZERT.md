@@ -24,7 +24,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Lio steht an der Bühnenkante, die Ziege schon neben ihm. Er kündigt an, setzt neu an und liefert den eigentlichen Satz spät; zuletzt verspricht er, dass jeder Fehler Absicht war,
 > und verschiebt die Auskunft, welcher, auf hinterher.
 
-- *Lio sitzt auf seiner Kiste in der Mitte der Bühne, die Laute vor der Brust. Neben ihm steht die Ziege, als stünde sie im Programm.* `[#draft]`  <sub>kon_intro_1</sub>
+- *Lio sitzt mitten auf der Bühne, die Laute vor der Brust. Neben ihm steht die Ziege, als stünde sie im Programm.* `[#draft]`  <sub>kon_intro_1</sub>
 - **Lio:** Willkommen! Heute Abend hört ihr — nein. Heute Abend hören wir. Alle zusammen. So ist es geplant. `[#draft]`  <sub>kon_intro_2</sub>
 - **Lio:** Das erste Stück heißt »Der Teil, an dem es gut wird«. Der Teil kommt gleich. Erst kommt der Teil davor, und der ist auch gut. In seiner Art. `[#draft]`  <sub>kon_intro_3</sub>
 - **Lio:** Falls etwas schiefgeht, war das Absicht. Ich sage hinterher, was. `[#draft]`  <sub>kon_intro_4</sub>
@@ -32,7 +32,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S6-3 · `snap`
 
 > --- Die Saite -------------------------------------------------------------------------------------------------------------------------------
-> Beim ersten Akkord reißt die tiefste Saite. Die Zeile, die es erzählt, setzt city.string_snapped, die Szene spielt in demselben Augenblick den Klang (string_snap); davor steht kein Wort
+> Beim ersten Akkord reißt die tiefste Saite. Das Flag steht vor der Zeile, die es erzählt (eine Mutation läuft, wenn ihre Zeile verlangt wird), die Szene spielt in demselben Augenblick den Klang (string_snap); davor steht kein Wort
 > über den Klang, danach spielt Lio auf den übrigen weiter. Der Witz zielt auf den Ablauf (die Tiefe), nicht auf ihn.
 
 - *Lio setzt die Finger auf die Saiten, holt Luft und schlägt den ersten Akkord an.* `[#draft]`  <sub>kon_snap_1</sub>
@@ -111,7 +111,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S6-10 · `con_lio`
 
 > --- Danach: Lio und die Saite -----------------------------------------------------------------------------------------------------------
-> Lio sitzt auf seiner Kiste, die Laute auf dem Knie, und schenkt ihr die gerissene Saite ("Sie hat ihr Bestes gegeben"). Beide Antworten sind gleichwertig, nichts wird gezählt: einstecken
+> Lio sitzt auf den Brettern, die Laute auf dem Knie, und schenkt ihr die gerissene Saite ("Sie hat ihr Bestes gegeben"). Beide Antworten sind gleichwertig, nichts wird gezählt: einstecken
 > (Kuriosität, city.string_taken) oder liegen lassen (er legt sie auf die Bühne, city.string_left). Der Router con_lio liest nur und springt; das Setzen steht in con_lio_gift, die Wiederkehr in
 > con_lio_again, die beide Wege kennt und nichts fragt.
 
@@ -121,7 +121,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S6-11 · `con_lio_gift`
 
-- *Lio sitzt auf seiner Kiste, die Laute auf dem Knie, und wickelt die gerissene Saite um zwei Finger.* `[#draft]`  <sub>kon_lio_1</sub>
+- *Lio sitzt auf den Brettern, die Laute auf dem Knie, und wickelt die gerissene Saite um zwei Finger.* `[#draft]`  <sub>kon_lio_1</sub>
 - **Lio:** Die ist heute gerissen. Behalt sie. Sie hat ihr Bestes gegeben. `[#draft]`  <sub>kon_lio_2</sub>
 - ▸ **Einstecken.**
   - *Du steckst sie ein. Sie federt noch, ganz leise, in der Tasche.* `[#draft]`  <sub>kon_lio_3</sub>
@@ -151,7 +151,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - *Orin steht noch am Pfosten, beide Hände um das Holz, den Rücken gerade wie ein Türrahmen.* `[#draft]`  <sub>kon_orin_1</sub>
   - **Orin:** Als die Ziege einsetzte, hat der Pfosten in meinen Händen gezuckt. Jetzt liegt er ruhig. Esche, glaube ich. `[#draft]`  <sub>kon_orin_2</sub>
   - *→ Ende des Szenenstücks*
-- *Orin steht am Rand der Menge, den Rücken an der Hauswand, und sieht den Platz an, zweimal von links nach rechts.* `[#draft]`  <sub>kon_orin_3</sub>
+- *Orin steht am Rand der Menge, die Arme verschränkt, und sieht den Platz an, zweimal von links nach rechts.* `[#draft]`  <sub>kon_orin_3</sub>
 *wenn* `city.letter_told`
   - **Orin:** Die Laternen riechen nach Öl und ein wenig nach Wachs. Ich bleibe noch, solange es riecht. `[#draft]`  <sub>kon_orin_5</sub>
   - *→ Ende des Szenenstücks*
@@ -164,7 +164,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S6-16 · `con_mira`
 
-- *Mira lehnt im Dunkel hinter dem Brunnen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
+- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
 - **Mira:** Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. `[#draft]`  <sub>kon_mira_2</sub>
 
 ### S6-17 · `con_scratch`
@@ -203,7 +203,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S6-20 · `con_poster_again`
 
 *wenn* `city.poster_taken`
-  - *Am Pfosten sind vier kleine Löcher, wo das Plakat hing. Das Holz ist dort heller.* `[#draft]`  <sub>kon_posta_1</sub>
+  - *Das Plakat hängt noch, dasselbe noch einmal. Lio hat mehr davon gemalt, als es Pfosten gibt.* `[#draft]`  <sub>kon_posta_1</sub>
 *sonst*
   - *Das Plakat hängt noch. Der Pfeil bei »Ausstieg auch« zeigt zum Tor.* `[#draft]`  <sub>kon_posta_2</sub>
 

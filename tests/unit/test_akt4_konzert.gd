@@ -189,10 +189,13 @@ func test_the_string_breaks_on_the_line_that_tells_it_and_lio_plays_on() -> void
 	assert_eq(seen.size(), 4)
 	assert_true(WorldState.has_flag("city.string_snapped"), "the scene plays the sound with it")
 	var block: String = _blocks()["snap"]
+	# a mutation runs when its line is asked for: the flag stands before the line that tells it
+	assert_lt(block.find("kon_snap_1"), block.find("city.string_snapped"), "after the first line")
 	assert_lt(
-		block.find("kon_snap_2"), block.find("city.string_snapped"), "the flag comes with the line"
+		block.find("city.string_snapped"),
+		block.find("kon_snap_2"),
+		"and with the line of the break"
 	)
-	assert_lt(block.find("city.string_snapped"), block.find("kon_snap_3"), "and before the next")
 
 
 func test_the_lamp_is_held_by_her_by_lio_or_by_orin_if_she_asks_him() -> void:

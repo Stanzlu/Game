@@ -14,7 +14,7 @@ const CITY := "res://content/dialogue/akt4/stadt.dialogue"
 const GOAT_SCRIPT := preload("res://world/props/goat.gd")
 const QUEST := "main_city_way"
 const STAGE_CELL := Vector2i(44, 23)
-const ARRIVAL := Vector2i(44, 29)
+const ARRIVAL := Vector2i(44, 24)
 const LIT_LAMPS := 4
 const STAGE_LAMPS := 2
 ## The lines of the nine parts, by ID: the tape of a run is made of them.
@@ -211,6 +211,7 @@ func test_the_shops_and_the_hall_are_shut_in_the_evening_and_open_by_day() -> vo
 
 func test_orin_holds_the_lamp_if_she_asked_him_and_stands_in_the_crowd_if_not() -> void:
 	_evening()
+	WorldState.set_flag("city.orin_met")
 	var scene := await _scene()
 	var crowd := _with_sheet(scene, "orin")
 	assert_eq(crowd.size(), 1)
@@ -220,6 +221,24 @@ func test_orin_holds_the_lamp_if_she_asked_him_and_stands_in_the_crowd_if_not() 
 	var post := _with_sheet(scene, "orin")
 	assert_eq(post.size(), 1, "never in two places")
 	assert_eq(_cell(scene, post[0]), Vector2i(48, 21), "at the post of the right lamp")
+
+
+func test_orin_is_not_in_the_crowd_for_someone_who_never_met_him() -> void:
+	_evening()
+	var scene := await _scene()
+	assert_eq(_with_sheet(scene, "orin").size(), 0, "no stranger who knows her name and the duck")
+	assert_null(_walker(scene, "con_orin"))
+
+
+func test_the_slips_of_the_day_do_not_lie_in_the_crowd_of_the_evening() -> void:
+	for task: String in ["bouquet", "ladder", "stage", "goat", "bread", "lost"]:
+		WorldState.set_flag("list.take_" + task)
+	_evening()
+	var scene := await _scene()
+	assert_eq(_decor(scene, "tal/st_slip_open").size(), 0, "taken, not done: they wait for the day")
+	WorldState.set_flag("list.closed")
+	await wait_physics_frames(3)
+	assert_eq(_decor(scene, "tal/st_slip_open").size(), 0)
 
 
 func test_tess_is_in_the_crowd_only_with_the_board_and_then_not_on_her_crate() -> void:
@@ -241,13 +260,26 @@ func test_the_day_returns_when_the_walk_goes_on_and_the_flag_follows_it() -> voi
 	assert_eq(_lights(scene), 0)
 
 
-func test_the_evening_arrives_before_the_stage_looking_at_it() -> void:
+func test_the_evening_arrives_before_the_stage_and_the_music_is_lios() -> void:
 	_evening()
 	SceneTravel.pending_spawn = "abend"
 	SceneTravel.stay = false
 	var scene := await _scene()
 	assert_eq(_cell(scene, scene.player), ARRIVAL)
 	assert_eq(scene.music, "silence", "Lio's tune is the music")
+
+
+func test_a_game_loaded_in_the_evening_is_put_before_the_stage_looking_at_it() -> void:
+	_evening(false)
+	var scene: StadtScene = STADT.instantiate()
+	add_child_autofree(scene)
+	# saved at Lio's corner of the gate street, before the scene was loaded again as the evening
+	# (the concert has not begun: it waits for the first physics step)
+	scene.player.teleport(scene.map.cell_to_world(Vector2i(79, 37)))
+	var locked: bool = await wait_until(func() -> bool: return scene.player.is_locked(), 30.0)
+	assert_true(locked, "the concert has begun")
+	assert_eq(_cell(scene, scene.player), ARRIVAL, "and she stands where it is seen")
+	assert_eq(scene.player.facing, Facing.Dir.N, "looking at the stage")
 
 
 func test_sitting_beside_tess_is_a_thing_of_the_day() -> void:
@@ -268,17 +300,18 @@ func test_yes_to_lio_ends_the_day_as_soon_as_the_talk_is_over() -> void:
 	var scene := await _scene()
 	await wait_until(func() -> bool: return scene.quiet(), 10.0)
 	assert_eq(SceneTravel.last_target, "")
-	# a talk is up while the flag is set (the answer sets it): the day goes only when it is over
-	Talk.present(scene, CITY, "lio_again", scene.player)
+	# Lio's invitation, answered "Ich komme." in the real box: the day goes when the talk is over
+	Talk.present(scene, CITY, "lio_invite", scene.player)
 	await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 10.0)
-	WorldState.set_flag("city.concert_invited")
-	await wait_physics_frames(5)
-	assert_eq(SceneTravel.last_target, "", "not in the middle of a line")
 	var over := func() -> bool:
-		if scene.dialogue_box.is_open() and not _asked(scene):
+		if _asked(scene):
+			BoxAnswers.pick(scene.dialogue_box, "Ich komme.")
+		elif scene.dialogue_box.is_open():
 			_confirm()
 		return not scene.dialogue_box.is_open()
 	await wait_until(over, 30.0)
+	assert_true(WorldState.has_flag("city.concert_invited"))
+	assert_eq(WorldState.quest_stage(QUEST), "evening")
 	await wait_physics_frames(5)
 	assert_eq(SceneTravel.last_target, "stadt", "the scene is loaded again, as the evening")
 
@@ -402,7 +435,8 @@ func test_asking_orin_in_the_cutscene_puts_him_at_the_post() -> void:
 func test_a_game_left_during_the_concert_plays_it_again_from_the_start() -> void:
 	_evening(false)
 	var scene := await _scene()
-	await wait_physics_frames(20)
+	var begun: bool = await wait_until(func() -> bool: return scene.dialogue_box.is_open(), 30.0)
+	assert_true(begun, "the first part is up")
 	assert_false(Beat.reached("city_concert"))
 	scene.queue_free()
 	await wait_physics_frames(3)
