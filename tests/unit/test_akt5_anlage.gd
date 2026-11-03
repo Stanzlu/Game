@@ -20,6 +20,9 @@ const CUES: PackedStringArray = [
 	"gauges",
 	"worn_dial",
 	"steam_pipe",
+	"load_offer",
+	"waechter_run",
+	"waechter_over",
 ]
 const SPEAKER := "Wächter: "
 
@@ -101,8 +104,9 @@ func test_the_file_tells_its_cues_in_draft_with_unique_ids_within_the_budget() -
 	assert_eq(unique.size(), ids.size(), "no ID twice")
 	assert_eq(_source().count("[#draft]"), ids.size(), "every line is a draft")
 	assert_false(_source().contains("[#ph]"), "no placeholder in a story file")
-	# the segment plans 45 lines (plus or minus eight) and the answers on top
-	assert_lte(ids.size() - answers, 56, "the lines of the segment")
+	# G3 plans 45 lines (plus or minus eight), G4 adds the keeper's offer, his run and his rest here
+	# (the lines the scene plays during the load are in last.dialogue), and the answers on top
+	assert_lte(ids.size() - answers, 76, "the lines of the segments")
 	assert_gte(ids.size() - answers, 37, "and not a hall without things")
 
 
@@ -229,7 +233,7 @@ func test_the_states_of_the_keeper_follow_the_flags_and_the_last_one_asks_for_no
 	assert_false(_has(waiting, "anl_w_2"), "no second introduction")
 	assert_eq((await DialogueWalk.answers(FILE, "waechter")).size(), 0, "nothing is asked of her")
 	WorldState.set_flag("plant.probe_done")
-	var after := await DialogueWalk.play(FILE, "waechter")
+	var after := await DialogueWalk.play(FILE, "waechter", PackedStringArray(["Noch nicht"]))
 	assert_true(_has(after, "anl_again_2"), "after the trial")
 	assert_false(_has(after, "anl_wait_2"))
 	var told := "\n".join(after)
@@ -263,7 +267,7 @@ func test_the_keeper_has_a_voice_and_the_journal_a_line() -> void:
 		assert_ne(tr(key), key, key)
 	var quest := ContentDB.quest("main_mountain_way")
 	assert_true(quest.can_advance("valley", "plant"))
-	assert_true(quest.stage("plant").is_final(), "G4 hangs the next stage on it")
+	assert_false(quest.stage("plant").is_final(), "the load (G4) hangs on it")
 
 
 # --- The things of the hall ----------------------------------------------------------------------

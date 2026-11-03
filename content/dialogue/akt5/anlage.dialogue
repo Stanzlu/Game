@@ -7,7 +7,9 @@
 # Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt; nur das Tor öffnet sich vor der letzten Zeile des Klopfens, damit "Eintritt." gesprochen wird, wenn das Tor aufgeht.
 # Setzer und Leser eines Flags stehen nie im selben Cue: grat.gate_open setzt "gate_knock" (die Karte liest es), plant.probe setzt "probe_offer" (die Szene startet daraus die Probe),
 # plant.probe_done setzt die Szene (der Cue "waechter" liest es); die Lage der Hebel ist allein Sache der Szene (kein Flag). Die Probe ist nie Voraussetzung: wer sie nie verlangt, verlässt die Halle
-# wie jeder, und in keinem Cue gibt es Zeit, Druck oder Strafe (das beginnt erst später).
+# wie jeder, und in keinem Cue der Probe gibt es Zeit, Druck oder Strafe. Seit G4 (Die Last, docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O13, O19, O20) stehen am Ende der Datei die Cues des
+# Betriebs ("load_offer", "waechter_run", "waechter_over"): "waechter" und "waechter_again" springen in sie, und Sprünge gehen nur innerhalb einer Datei. Die Cues, die die Szene während des Laufs
+# spielt, stehen in last.dialogue.
 
 # --- Das Tor -----------------------------------------------------------------------------------------------------------------
 # Der Blocker am Tor (plant_gate in hochtal.dialogue bleibt als Text stehen und wird stillgelegt). Das Tor ist zu, aber nicht gesperrt: ein Schild, keine Klinke, keine Klingel. Zwei
@@ -40,9 +42,14 @@ Wächter: Eintritt. [ID:anl_knock_6] [#draft]
 # Das erste Mal (und jedes Mal vor der Probe): er schreibt, sieht nicht auf und zählt die Spielerin ("Eins. Du."). Weil er jeden Besuch von vorn zählt, darf der Cue vor der Probe
 # so oft gespielt werden, wie die Spielerin will: die Wiederholung gehört zu seinem Verfahren. Er stellt die Halle in Fakten vor (zwölf Hebel, drei in Betrieb, neun stehen), stellt
 # eine Kontrollfrage und beantwortet sie selbst, und bietet die Probe an. Die Antworten sind kurz; das Schweigen "…" ist eine volle Antwort und die letzte. Wer die Probe nie
-# verlangt, kommt nie in Not (kein Flag, kein Druck, kein Zähler). Wer sie gemacht hat (plant.probe_done), liest "waechter_again".
+# verlangt, kommt nie in Not (kein Flag, kein Druck, kein Zähler). Wer sie gemacht hat (plant.probe_done), liest "waechter_again"; seit G4 liest, wer den Betrieb aufgenommen hat (plant.load),
+# "waechter_run", und wer den Lauf bis zum Ende gespielt hat (plant.overload, die Szene setzt es), "waechter_over". Der Cue liest die Flags und setzt keines; der späteste Zustand steht oben.
 
 ~ waechter
+if WorldState.has_flag("plant.overload")
+	=> waechter_over
+if WorldState.has_flag("plant.load")
+	=> waechter_run
 if WorldState.has_flag("plant.probe_done")
 	=> waechter_again
 if WorldState.has_flag("plant.probe")
@@ -94,12 +101,21 @@ Der Stift macht einen Strich aufs Klemmbrett, ohne dass er hinsieht. [ID:anl_wai
 # --- Nach der Probe ----------------------------------------------------------------------------------------------------------
 # Er zählt weiter und trägt etwas ein; er lobt nicht, er kündigt nichts an und er erklärt nichts. Der Gag ist das Eintragen des Eintragens (er hat nachgesehen, es ist nicht
 # nötig) und die Schrauben, die jedes Mal gleich viele sind: das ist der Sinn von Schrauben. Kein Wort über die anderen Hebel.
+# Seit G4 hängen an den vier Zeilen drei Antworten: "Fang an." springt in "load_offer" (nur solange plant.load fehlt; der Zustand "waechter" schickt Spieler mit Betrieb ohnehin nach "waechter_run"),
+# "Noch nicht." kostet nichts und bekommt einen trockenen Satz (der Gag: er legt eine Rubrik an), das Schweigen "…" ist die letzte Antwort. Der Betrieb ist nie Voraussetzung: wer nie "Fang an." sagt,
+# bleibt bei diesen Zeilen und kommt an ihm vorbei wie jeder. Kein Lob für die Probe, keine Ankündigung der Last, kein Wort über die anderen Hebel.
 
 ~ waechter_again
 Der Wächter steht am Pult, den Stift in der Faust. Auf seinem Blatt ist eine Zeile dazugekommen, kleiner geschrieben als die anderen. [ID:anl_again_1] [#draft]
 Wächter: Rubrik Unvorhergesehenes, für Dinge, die nicht passieren. Heute ein Eintrag. [ID:anl_again_2] [#draft]
 Wächter: Muss ich das Eintragen auch eintragen? Nein. Ich habe nachgesehen. [ID:anl_again_3] [#draft]
 Wächter: Die Schrauben sind gleich viele wie vorhin. Das ist der Sinn von Schrauben. [ID:anl_again_4] [#draft]
+- Fang an. [ID:anl_again_r1] [#draft]
+	=> load_offer
+- Noch nicht. [ID:anl_again_r2] [#draft]
+	Wächter: Noch nicht. Dafür gibt es keine Rubrik. Ich lege eine an. [ID:anl_again_5] [#draft]
+- … [ID:anl_again_r3] [#draft]
+	Wächter: Schweigen. Nummer vergeben. Es waren noch welche frei. [ID:anl_again_6] [#draft]
 => END
 
 # --- Die Probe: die Szene spielt die Zeilen ---------------------------------------------------------------------------------
@@ -159,4 +175,50 @@ else
 ~ steam_pipe
 Ein Rohr steht aus dem Boden und zischt in gleichen Abständen, jedes Mal gleich lang und mit derselben kleinen Wolke. [ID:anl_pipe_1] [#draft]
 Das Zischen fällt auf das Ticken, das du vom Tor kennst, Schlag auf Schlag. Es ist nicht klar, wer von wem abschreibt. [ID:anl_pipe_2] [#draft]
+=> END
+
+# --- Der Betrieb (G4, Die Last) ----------------------------------------------------------------------------------------------
+# Die drei Cues, in die der Wächter springt, liegen hier, weil ihre Aufrufer ("waechter", "waechter_again") hier liegen; was die Szene während des Laufs spielt (die Wellen, die Pause, das Ende
+# der vierten Welle), steht in last.dialogue. Er spricht wie in G3: kurz, zählend, trocken; er trägt ein, er lobt nicht, er tröstet nicht, er sagt nie "Kind", nie "Tür", nie etwas über sein
+# Warum und nie etwas über die Spielerin als Person. Der Humor ist Pedanterie (Pausen, die er einträgt, Rubriken, Zahlen), nie seine Angst. Hebelnummern sind Wörter.
+
+# Das Angebot: "Fang an." nach der Probe. Er stellt den Betrieb als Verfahren vor (oben verlangt, unten erledigt; nach einer Frist steht der Hebel wieder oben), nennt die Pausenregel und kündigt
+# vier Stufen an, ohne zu sagen, wohin sie führen. Die Pausenregel ist hier ein Verfahren, keine Hilfe. plant.load steht zuletzt (nach der letzten Zeile): die Szene startet daraus den Lauf mit
+# den drei Hebeln der Probe. Kein Wort über Zeitdruck oder Folgen.
+
+~ load_offer
+Er schlägt auf dem Klemmbrett ein neues Blatt auf, schreibt »Betrieb« darüber und unterstreicht es zweimal. [ID:anl_load_1] [#draft]
+Wächter: Jeder Hebel, der oben steht, verlangt Bedienung. Unten ist erledigt. [ID:anl_load_2] [#draft]
+Wächter: Nach einer Frist steht er wieder oben. Dann ziehst du ihn wieder herunter. [ID:anl_load_3] [#draft]
+Wächter: Es kommen Hebel dazu, in vier Stufen. Ich rufe jede aus. [ID:anl_load_4] [#draft]
+Wächter: Wer das Pult verlässt, hält den Betrieb an. Ich trage die Pause ein. [ID:anl_load_5] [#draft]
+Wächter: Eins, Zwei, Drei in Betrieb. Beginn. [ID:anl_load_6] [#draft]
+do WorldState.set_flag("plant.load")
+=> END
+
+# Während des Betriebs: wer ihn anspricht, bekommt keine zweite Vorstellung. "Weiter." ist die Antwort für den, der einfach weitermacht: er sagt seinen Satz, während er zählt, und der Text kommentiert nicht,
+# dass es währenddessen schiefgeht. "Wie schaffe ich das?" ist die abrufbare Hilfe (Bible §50 "Puzzlehilfen", Brief O4), ohne Umschweife: zwölf Hebel sind für zwei Hände zu viele, er hat es berechnet, und vom
+# Pult zu treten ist zulässig (die Form von "Nicht vorgesehen. Aber auch nicht verboten."). Keine Lehre, kein Wort dafür, was das Wegtreten bedeutet, keine Aufforderung: er rät nicht dazu und bleibt selbst
+# am Pult. Das Schweigen "…" ist die letzte Antwort. Der Cue liest und setzt nichts.
+
+~ waechter_run
+Der Wächter zählt die Hebel mit dem Stift durch, eine Hand fest auf dem Pult. [ID:anl_run_1] [#draft]
+Wächter: Betrieb. Oben ist offen, unten ist erledigt. Ich zähle mit. [ID:anl_run_2] [#draft]
+- Weiter. [ID:anl_run_r1] [#draft]
+	Wächter: Solange ich zähle, passiert nichts. [ID:anl_run_3] [#draft]
+- Wie schaffe ich das? [ID:anl_run_r2] [#draft]
+	Wächter: Zwölf Hebel sind für zwei Hände zu viele. Ich habe es berechnet. [ID:anl_run_4] [#draft]
+	Wächter: Vom Pult zu treten ist zulässig. Ich habe nachgesehen. [ID:anl_run_5] [#draft]
+	Wächter: Ich rate nicht dazu. Ich bleibe am Pult. [ID:anl_run_6] [#draft]
+- … [ID:anl_run_r3] [#draft]
+	Du schweigst. Der Wächter macht einen Strich und zählt weiter. [ID:anl_run_7] [#draft]
+=> END
+
+# Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht, und dieser Cue ist der Platz, an dem G5 weiterbaut. Er zählt die offenen Hebel, trägt es ein,
+# verlangt nichts und bietet nichts an (kein "Fang an." mehr, keine Antwort). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat.
+
+~ waechter_over
+Der Lauf ruht. Der Wächter fährt die Hebel ab, die oben stehen, und zählt halblaut. [ID:anl_over_1] [#draft]
+Wächter: Offene Hebel gezählt, Zahl eingetragen. Nicht erfüllt, wie vermerkt. [ID:anl_over_2] [#draft]
+Wächter: Alles vorbehaltlich einer Nachprüfung der Rechnung. [ID:anl_over_3] [#draft]
 => END
