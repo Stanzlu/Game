@@ -1239,6 +1239,15 @@
    "res://assets/generated/props/haus/hut_table.png"
   ]
  },
+ "haus/loaf": {
+  "anchor": [
+   14,
+   10
+  ],
+  "textures": [
+   "res://assets/generated/props/haus/loaf.png"
+  ]
+ },
  "haus/plan_board": {
   "anchor": [
    14,
@@ -1318,6 +1327,26 @@
   ],
   "textures": [
    "res://assets/generated/props/haus/shell.png"
+  ]
+ },
+ "haus/slot_peg": {
+  "anchor": [
+   4,
+   0
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/slot_peg.png"
+  ]
+ },
+ "haus/slot_shelf": {
+  "anchor": [
+   10,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/haus/slot_shelf.png"
   ]
  },
  "haus/stool": {

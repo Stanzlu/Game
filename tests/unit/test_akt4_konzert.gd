@@ -397,7 +397,7 @@ func test_the_quest_goes_from_the_list_to_the_evening() -> void:
 	assert_false(quest.stage("list").is_final(), "the evening follows the list")
 	assert_false(quest.stage("evening").is_final(), "the night follows the concert (S7)")
 	assert_true(quest.can_advance("evening", "night"))
-	assert_true(quest.stage("night").is_final(), "until the way home (S8)")
+	assert_false(quest.stage("night").is_final(), "the way home follows the night (S8)")
 	for key: String in ["QUEST_MAIN_CITY_WAY_EVENING", "MEMORY_LIO_CONCERT"]:
 		assert_ne(tr(key), key, key)
 	assert_false(tr("QUEST_MAIN_CITY_WAY_EVENING").contains("Verbindung"))

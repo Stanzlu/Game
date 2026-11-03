@@ -16,6 +16,7 @@ const CUES: PackedStringArray = [
 	"field_notice",
 	"milestone",
 	"view_town",
+	"dawn",
 ]
 
 
@@ -40,7 +41,7 @@ func _ids() -> PackedStringArray:
 	return found
 
 
-func test_the_file_tells_eight_cues_in_draft_with_unique_ids() -> void:
+func test_the_file_tells_its_cues_in_draft_with_unique_ids() -> void:
 	var source := FileAccess.get_file_as_string(FILE)
 	var cues := RegEx.create_from_string("(?m)^~ ([a-z_]+)$").search_all(source)
 	var names: PackedStringArray = []
@@ -48,7 +49,7 @@ func test_the_file_tells_eight_cues_in_draft_with_unique_ids() -> void:
 		names.append(hit.get_string(1))
 	assert_eq(names, CUES, "the cues of the contract, in this order")
 	var ids := _ids()
-	assert_eq(ids.size(), 24, "twenty-two lines and two answers")
+	assert_eq(ids.size(), 26, "twenty-two lines and two answers, and two of the morning (S8)")
 	var unique := {}
 	for id in ids:
 		unique[id] = true
@@ -133,7 +134,11 @@ func test_the_quest_starts_on_the_road_and_goes_on_to_the_town() -> void:
 	assert_true(
 		quest.can_advance("evening", "night"), "and the quarrel at the gate the one after (S7)"
 	)
-	assert_true(quest.stage("night").is_final())
+	assert_true(
+		quest.can_advance("night", "home"), "and the morning on the road the one after (S8)"
+	)
+	assert_true(quest.can_advance("home", "done"), "and the shelves in the house the last")
+	assert_true(quest.stage("done").is_final())
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_TITLE"), "QUEST_MAIN_CITY_WAY_TITLE")
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_WEST"), "QUEST_MAIN_CITY_WAY_WEST")
 	assert_true(WorldState.start_quest(QUEST))

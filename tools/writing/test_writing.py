@@ -523,6 +523,18 @@ class ReadableTests(unittest.TestCase):
         self.assertIn("‹Name› und ‹Katzenname›, ‹Taste: sprint›.", out)
         self.assertNotIn("wait", out)
 
+    def test_a_file_name_that_two_acts_share_keeps_one_prefix_for_each(self):
+        with tempfile.TemporaryDirectory() as folder:
+            prefixes = {}
+            for act in ("akt3", "akt4"):
+                os.makedirs(os.path.join(folder, act))
+                path = os.path.join(folder, act, "heimkehr.dialogue")
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("~ eins\nMira: A. [ID:a_1]\n")
+                prefixes[act] = readable.render("T", [path])
+        self.assertIn("W6-1 · `eins`", prefixes["akt3"])
+        self.assertIn("S8-1 · `eins`", prefixes["akt4"])
+
     def test_the_slice_is_written_in_playing_order(self):
         names = [os.path.basename(p) for p in readable.story_paths()]
         self.assertEqual(names[:4], ["elysia.dialogue", "tal.dialogue", "antreiber.dialogue", "haus.dialogue"])

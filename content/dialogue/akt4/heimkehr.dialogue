@@ -1,0 +1,92 @@
+# Die Heimkehr, Akt IV, Segment S8 (docs/akt4/REGIONSBRIEFE.md, O6, O9, O14, O15, O18; Bible §13, §44, §45; Stilblätter tess.md, antreiber.md, gefaelliger.md). Das Ende von Akt IV ist wie das von
+# Akt III: still, im Haus, ohne Titel. Die Spielerin kommt zurück, der Antreiber sitzt an seiner Werkbank (Akt III), und Tess kommt als Gast mit Absicht: sie klopft, bringt Bretter mit, zeigt einmal,
+# wie ein Regalbrett an die Wand kommt, und sieht dann zu. Danach hängen zwei Regale und eine Leiste mit zwei Haken an der Wand (vier Plätze für Kuriositäten; die Karte zeigt sie, sobald house.shelves gilt).
+# Über die Werkbank sagt sie "Schief. Aber dicht." (Brief O9), ein Brot des Gefälligen liegt auf dem Tisch (house.bread; es ist item_loaf aus S5, kein neuer Gegenstand, Brief O18), sie setzt sich auf
+# einen Stuhl, sagt einen Satz über Holz und geht; der Stuhl bleibt (house.guest_tess, die Szene setzt es mit dem Sitzen). Der Akt endet, ohne dass ein Cue es tut: Stufe done, Kapitelmarke act4, Beat act4_home.
+# Tess spricht kurz und konkret und ist warm im Handeln: sie lobt nicht, sagt nichts über Gefühle, die Nacht, die Stadt oder Mira und kennt keine Lebensregel, nur Handgriffe, Maße und Holz. Der Antreiber
+# sagt kein Wort (ein Bild, kein Satz über ihn). Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen ausgeschrieben.
+# Der Text gilt in jedem Zustand: von der Katze, vom Stuhl des Einsiedlers und vom Blatt an der Wand ist keine Rede, vom Tee nur, dass er kalt ist. Wer Tess nie getroffen hat (kein city.tess_met), liest
+# ihren Namen auf dem Zollstock am Gürtel, wie in der Werkstatt (wer_tess_2); die Schürzentasche ist für das Brot frei. Gesetzt wird nur, was am Cue hängt: house.shelves (build), house.bread
+# (bread), die Erinnerung und die Beziehung (home_close). house.guest_tess, die Stufen, die Marken und der Beat gehören der Szene.
+
+# --- Ankommen --------------------------------------------------------------------------------------------------------------------
+# Das Haus nach der Nacht: Holz, kalter Tee, der Antreiber an der Werkbank, der nicht aufsieht. Nichts erklärt, was unterwegs geschah, und kein Wort über Mira. Dann klopft es (die Szene spielt das
+# Klopfen), die Tür geht auf, Tess steht im Raum.
+
+~ home_in
+Im Haus riecht es nach Holz und nach kaltem Tee. [ID:hk4_in_1] [#draft]
+Der Antreiber sitzt an der Werkbank und sieht nicht auf. Sein Hobel geht über ein Brett, von dem nichts mehr abfällt. [ID:hk4_in_2] [#draft]
+=> END
+
+# --- Tess kommt -----------------------------------------------------------------------------------------------------------------
+# Sie steht schon im Raum (die Tür ist offen, sie ist bis vor den Tisch gegangen). Geklopft hat sie mit dem Ende eines Bretts: ein Ding, das sie nicht erklärt. Wer sie nie getroffen hat, liest ihren
+# Namen auf dem Zollstock, wie in der Werkstatt (wer_tess_2); wer sie kennt, liest die Zeile nicht. Sie ist nicht zufällig hier, und sie sagt es, ohne zu sagen, warum. "Ich zeig's dir einmal. Dann bist
+# du dran." ist ihr Satz aus der Werkstatt (wer_offer_1), das Haus wird gebaut, nicht geschenkt; "Halt mal." führt in die Arbeit.
+
+~ tess_in
+Geklopft hat sie mit dem Ende eines Bretts. Jetzt steht sie mitten im Raum, ein Bündel Bretter auf der Schulter. [ID:hk4_tess_1] [#draft]
+if not WorldState.has_flag("city.tess_met")
+	Am Gürtel hängt ein Zollstock, in dessen Kante ein Wort geritzt ist, »Tess«. [ID:hk4_tess_2] [#draft]
+Tess: Ich bin nicht zufällig hier. [ID:hk4_tess_3] [#draft]
+Tess: Zwei Regale, eine Leiste. Die Wand verträgt das. [ID:hk4_tess_4] [#draft]
+Tess: Ich zeig's dir einmal. Dann bist du dran. [ID:hk4_tess_5] [#draft]
+Tess: Halt mal. [ID:hk4_tess_6] [#draft]
+=> END
+
+# --- Die Regale ----------------------------------------------------------------------------------------------------------------
+# Das Flag steht vor der ersten Zeile: die Karte hängt die Regale und die Leiste in dem Augenblick auf, in dem der Text von ihnen spricht (eine Mutation läuft, wenn ihre Zeile verlangt wird). Darum
+# beginnt die erste Zeile mit dem, was dann an der Wand hängt, und erzählt erst danach, wie der erste Nagel kam. Sie zeigt es einmal und gibt den Hammer weiter; sie sieht zu, die Daumen in der
+# Schürze (wie am Bock, wer_saw_4), und hilft nicht ungefragt. Kein Lob für die Nägel, keine Wertung.
+
+~ build
+do WorldState.set_flag("house.shelves")
+Zwei Regale und eine Leiste mit zwei Haken hängen an der Wand. Der erste Nagel steckt schräg, so hat Tess ihn geschlagen. [ID:hk4_build_1] [#draft]
+Alle anderen Nägel sind deine. Tess hat zugesehen, die Daumen in der Schürze. [ID:hk4_build_2] [#draft]
+=> END
+
+# --- Die Werkbank --------------------------------------------------------------------------------------------------------------
+# Sie prüft die Fugen mit dem Daumen, und der Antreiber hält den Hobel still: ein Bild, kein Satz über ihn (er sagt nichts, sie fragt nichts). "Dicht" hat damit einen Gegenstand, die Fuge der Platte.
+# Das Urteil ist ihre Art zu sagen, dass es hält, und kein Lob. Danach geht es sofort weiter: kein Nachsatz, kein Witz, keine Antwort von ihm.
+
+~ bench
+Tess beugt sich über die Werkbank und fährt mit dem Daumen über jede Fuge. Der Antreiber hält den Hobel still. [ID:hk4_bench_1] [#draft]
+Tess: Schief. Aber dicht. [ID:hk4_bench_2] [#draft]
+=> END
+
+# --- Das Brot --------------------------------------------------------------------------------------------------------------------
+# Das Brot des Gefälligen aus S5 (item_loaf, Brief O18): "Er kocht zu viel." Der Humor sitzt im Brot und in der Schürzentasche, nie im Gefälligen, über den sie ohne ein
+# Urteil spricht ("der mit den Zetteln" ist ein Bild, kein Name; wer ihn nie getroffen hat, kennt die Zettel vom Brett auf dem Platz). Das Flag steht vor der ersten Zeile: das Brot liegt auf dem Tisch,
+# wenn sie es hinlegt. Es ist das Brot auf dem Leinentuch, nichts Neues im Inventar.
+
+~ bread
+do WorldState.set_flag("house.bread")
+Aus der Schürzentasche kommt ein Brot in einem Leinentuch. Tess legt es auf den Tisch. [ID:hk4_bread_1] [#draft]
+Tess: Der mit den Zetteln hat mir das mitgegeben. Er kocht zu viel. [ID:hk4_bread_2] [#draft]
+=> END
+
+# --- Der Stuhl bleibt ----------------------------------------------------------------------------------------------------------
+# Sie sitzt (die Szene setzt house.guest_tess, der Stuhl steht dann da) und bricht das Brot, ohne zu fragen, ob jemand will: die Wärme ist die Hand, nicht das Wort. Der letzte Satz handelt von Holz,
+# nicht von der Nacht und nicht von der Stadt; er ist ein Handgriff, keine Lebensregel ("Kiefer arbeitet" meint, dass Holz sich bewegt). Das letzte Wort hat das Haus: der Stuhl, der Geruch, der Tee,
+# der noch genauso kalt ist wie zu Beginn. Die Szene lässt sie nach der letzten Zeile aufstehen und gehen; die Zeile steht davor und sagt, was dann bleibt. Die Erinnerung und die Beziehung stehen vor
+# der ersten Zeile (sie war da und hat es gezeigt), kein Fazit, kein Zähler.
+
+~ home_close
+do WorldState.add_memory("tess", "guest")
+do WorldState.set_relationship("tess", "close")
+Tess setzt sich, bricht ein Stück vom Brot ab und schiebt es dir hin, ohne zu fragen, ob du willst. [ID:hk4_close_1] [#draft]
+Tess: Kiefer arbeitet noch. Nach dem ersten Regen sitzen die Nägel fester. [ID:hk4_close_2] [#draft]
+Wenn sie geht, bleibt der Stuhl. Im Haus riecht es nach Harz und frischem Brot, und der Tee ist immer noch kalt. [ID:hk4_close_3] [#draft]
+=> END
+
+# --- Die vier Plätze -------------------------------------------------------------------------------------------------------------
+# Zwei Regalbretter und zwei Haken an der Leiste (shelf_3, shelf_4, wall_1, wall_2; Props CuriositySlot). Wer einen Platz untersucht und etwas Passendes bei sich trägt, wählt es aus einem Menü und stellt
+# es dorthin; trägt sie nichts, sagt eine Zeile, dass hier nichts steht und nichts zum Hinstellen da ist. Beide Zeilen gelten für alle vier Plätze, Brett wie Haken: kein Lob, keine Wertung, kein Zähler,
+# kein "noch nicht", keine Aufforderung zu suchen. Die Dinge sind teils bedeutsam, teils Unsinn (Bible §31), und das Haus fragt nicht danach.
+
+~ slot_nothing
+Der Platz ist leer. In deinen Taschen liegt nichts, das hierher passt. [ID:hk4_slot_1] [#draft]
+=> END
+
+~ slot_placed
+Du rückst es ein Stück zurecht und nimmst die Hand weg. Es bleibt. [ID:hk4_slot_2] [#draft]
+=> END

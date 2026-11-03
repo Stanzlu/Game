@@ -235,10 +235,11 @@ func test_the_keeper_at_night_says_the_gate_is_shut_and_by_day_nothing_changed()
 	assert_false(_has(by_night, "stadt_gate_2"))
 
 
-func test_the_night_is_the_last_stage_of_the_walk_so_far_and_is_written_down() -> void:
+func test_the_night_is_a_stage_of_the_walk_and_is_written_down() -> void:
 	var quest := ContentDB.quest("main_city_way")
 	assert_true(quest.can_advance("evening", "night"))
-	assert_true(quest.stage("night").is_final(), "until the way home (S8)")
+	assert_false(quest.stage("night").is_final(), "the morning follows (S8)")
+	assert_true(quest.can_advance("night", "home"))
 	for key: String in ["QUEST_MAIN_CITY_WAY_NIGHT", "MEMORY_MIRA_GATE"]:
 		assert_ne(tr(key), key, key)
 		for digit: String in "0123456789":
