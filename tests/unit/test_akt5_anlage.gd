@@ -267,7 +267,7 @@ func test_the_keeper_has_a_voice_and_the_journal_a_line() -> void:
 		assert_ne(tr(key), key, key)
 	var quest := ContentDB.quest("main_mountain_way")
 	assert_true(quest.can_advance("valley", "plant"))
-	assert_true(quest.stage("plant").is_final(), "G4 hangs the next stage on it")
+	assert_false(quest.stage("plant").is_final(), "the load (G4) hangs on it")
 
 
 # --- The things of the hall ----------------------------------------------------------------------
