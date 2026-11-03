@@ -356,7 +356,14 @@ STADT_SHEETS = {"I": "torwaechterin", "M": "mira", "y": "gefaelliger", "v": "bue
 # S5: the six tasks of the list, a fresh slip and a struck one each (the struck one stands one cell aside)
 SLIPS = {"bouquet": ("ä", "ß"), "ladder": ("ö", "æ"), "stage": ("ü", "ø"), "goat": ("Ä", "å"), "bread": ("Ö", "Æ"), "lost": ("Ü", "Ø")}
 SLIP_GLYPHS = "".join(a + b for a, b in SLIPS.values())
-STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s" + SLIP_GLYPHS
+# S6: the evening of the concert: what stands only then (`if city.evening`), once each, and the cues of its people and things
+EVENING_ONCE = "ΩΣΠΞŁƷΓΘθτγβκμε"
+KONZERT_DIALOGUE_RES = "res://content/dialogue/akt4/konzert.dialogue"
+KONZERT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "konzert.dialogue")
+EVENING_CUES = {"Ł": "con_lio", "Γ": "con_goat", "Θ": "con_orin", "θ": "con_orin", "γ": "con_gef", "μ": "con_mira", "Π": "con_poster",
+                "Ξ": "con_scratch"}
+LIT_LAMP_CELLS = ((35, 26), (69, 20), (47, 31), (62, 26))
+STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s" + SLIP_GLYPHS + EVENING_ONCE
 FACADE_GLYPHS = "RFKabcdefjuwzGUt"
 TREES = {"T": (3, 7), "C": (3, 7), "P": (2, 5)}
 
@@ -447,9 +454,17 @@ class StadtLayoutTests(unittest.TestCase):
                     expected = ("duck", FLORIST_DIALOGUE_RES) if glyph == "4" else ("bench", WORKSHOP_DIALOGUE_RES)
                     self.assertEqual((params["cue"], params["dialogue"]), expected, glyph)
                     continue
+                if glyph in EVENING_CUES:
+                    # the people and things of the concert speak in the concert's file
+                    self.assertEqual((params["cue"], params["dialogue"]), (EVENING_CUES[glyph], KONZERT_DIALOGUE_RES), glyph)
+                    continue
                 used[glyph] = params["cue"]
                 self.assertEqual(params["dialogue"], STADT_DIALOGUE_RES, glyph)
         self.assertEqual(used, STADT_CUES)
+        if os.path.exists(KONZERT_DIALOGUE):
+            with open(KONZERT_DIALOGUE, encoding="utf-8") as f:
+                konzert_cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
+            self.assertLessEqual(set(EVENING_CUES.values()), konzert_cues)
         if os.path.exists(STADT_DIALOGUE):
             with open(STADT_DIALOGUE, encoding="utf-8") as f:
                 cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
@@ -628,7 +643,7 @@ class StadtLayoutTests(unittest.TestCase):
         pult = spots["2"][0]
         for x, y in stage:
             glyph = rows[y][x]
-            self.assertTrue(glyph in "_" or (x, y) in (pult, spots["i"][0]), "nothing stands on the stage but what S6 may move: %s at %d,%d" % (glyph, x, y))
+            self.assertTrue(glyph in "_" or glyph in EVENING_ONCE + "Δ" or (x, y) in (pult, spots["i"][0]), "nothing stands on the stage but what the evening puts there: %s at %d,%d" % (glyph, x, y))
         self.assertGreaterEqual(spots["i"][0][1] - door[1], 2)
 
     def test_the_lanes_are_at_least_four_wide_and_two_figures_pass_the_shops(self):
@@ -738,9 +753,16 @@ class StadtLayoutTests(unittest.TestCase):
             if params.get("sprite"):
                 sprites.add(params["sprite"])
         sprites.update(rule["sprite"] for rule in meta["scatter"])
-        for sprite in sprites:
+        evening = set()
+        for glyph in set("".join(rows)):
+            params = symbols[glyph].get("params", {})
+            evening.update(params.get("sprite_when", {}).values())
+            if params.get("if") == "city.evening" and params.get("sprite"):
+                evening.add(params["sprite"])
+        for sprite in sprites | evening:
             self.assertIn(sprite, catalog, sprite)
-            self.assertNotIn("lights", catalog[sprite], "the town by day has no PointLight2D: " + sprite)
+            if sprite not in evening:
+                self.assertNotIn("lights", catalog[sprite], "the town by day has no PointLight2D: " + sprite)
         for sprite in sprites:
             if sprite.startswith("tal/st_") and "wall" not in sprite and "gate" not in sprite:
                 self.assertTrue(os.path.exists(mapfile.res_path(catalog[sprite]["textures"][0])), sprite)
@@ -753,6 +775,8 @@ class StadtLayoutTests(unittest.TestCase):
         catalog = mapfile.load_catalog()
         for glyph in set("".join(rows)):
             params = symbols[glyph].get("params", {})
+            if glyph == "λ":
+                continue  # the lit lamp posts of the evening: the day post is the old one, its shadow is baked
             if "if" in params or "unless" in params or "sprite_when" in params:
                 self.assertNotIn("shadow", catalog.get(params.get("sprite", ""), {}), glyph)
         for name in FACADE_GLYPHS:
@@ -824,6 +848,68 @@ class ValleyCounterpartTests(unittest.TestCase):
         self.assertEqual(tal["<"]["params"]["spawn"], "tal")
         self.assertEqual(strasse["n"]["marker"], "spawn_" + tal["<"]["params"]["spawn"])
         self.assertEqual(tal["%"]["marker"], "spawn_" + strasse["N"]["params"]["spawn"])
+
+
+class EveningLayoutTests(unittest.TestCase):
+    """S6: the evening of the concert on the same map (`if city.evening`): the stage before the town hall, four lit lamp posts, at most
+    eight lights, and everything of the day that cannot be there gives way."""
+
+    def test_the_stage_stands_before_the_hall_and_lio_in_the_middle_of_it(self):
+        _, symbols, rows, spots = _stadt()
+        hall = spots["D"][0]
+        stage = spots["Ω"][0]
+        self.assertEqual(stage[0], hall[0], "in the middle before the door")
+        self.assertEqual(spots["Ł"][0][0], stage[0])
+        self.assertEqual(spots["Ł"][0][1], stage[1] - 1, "Lio on the stage, one row behind its front")
+        self.assertEqual(spots["Ʒ"][0], (stage[0], stage[1] - 2), "his crate one row above him")
+        self.assertEqual(sorted(spots["Δ"]), [(stage[0] - 3, stage[1] - 2), (stage[0] + 3, stage[1] - 2)], "a lamp at each end")
+        for glyph in "ΓΘ":
+            x, y = spots[glyph][0]
+            self.assertTrue(abs(x - stage[0]) <= 3 and stage[1] - 2 <= y <= stage[1] - 1, glyph + " stands on the stage")
+        for glyph in "θτγβκμ":
+            x, y = spots[glyph][0]
+            self.assertGreater(y, stage[1], glyph + " stands before the stage, in the crowd")
+        self.assertGreater(spots["ε"][0][1], spots["κ"][0][1], "she arrives behind the crowd and looks at the stage")
+
+    def test_everything_of_the_evening_stands_only_in_the_evening_and_the_day_gives_way(self):
+        _, symbols, _, _ = _stadt()
+        for glyph in EVENING_ONCE + "Δ":
+            params = symbols[glyph].get("params", {})
+            if glyph == "ε":
+                continue
+            flags = params.get("if")
+            flags = [flags] if isinstance(flags, str) else flags
+            self.assertIn("city.evening", flags or [], glyph)
+        # the day's people, the doors and the roof's goat are gone in the evening
+        for glyph in "yvLYJMD%&8":
+            self.assertEqual(symbols[glyph]["params"].get("unless"), "city.evening", glyph)
+        self.assertEqual(symbols["Θ"]["params"]["if"], ["city.evening", "city.stage_orin"])
+        self.assertEqual(symbols["θ"]["params"]["unless"], "city.stage_orin")
+        self.assertEqual(symbols["τ"]["params"]["if"], ["city.evening", "city.board_done"])
+        self.assertEqual(symbols["λ"]["params"]["sprite_when"], {"city.evening": "tal/st_lamp_post_lit"})
+
+    def test_at_most_eight_lights_and_four_of_the_posts_light_up(self):
+        _, symbols, rows, spots = _stadt()
+        catalog = mapfile.load_catalog()
+        lights = 0
+        for glyph, cells in spots.items():
+            params = symbols[glyph].get("params", {})
+            names = [params.get("sprite", "")] + list(params.get("sprite_when", {}).values())
+            lit = max((len(catalog.get(name, {}).get("lights", [])) for name in names), default=0)
+            lights += lit * len(cells)
+        self.assertLessEqual(lights, 8, "O3: at most eight PointLight2D")
+        self.assertEqual(sorted(spots["λ"]), sorted(LIT_LAMP_CELLS))
+        day, lit = catalog["tal/st_lamp_post"], catalog["tal/st_lamp_post_lit"]
+        for key in ("anchor", "shadow", "shape"):
+            self.assertEqual(day.get(key), lit.get(key), "the lit post is the old one: " + key)
+
+    def test_the_stage_and_the_things_of_the_evening_cast_no_baked_shadow(self):
+        _, symbols, _, _ = _stadt()
+        catalog = mapfile.load_catalog()
+        for glyph in "ΩΔΣΠΞ":
+            sprite = symbols[glyph]["params"]["sprite"]
+            self.assertNotIn("shadow", catalog[sprite], "the stamp of the town stays: " + sprite)
+        self.assertTrue(catalog["tal/st_stage"].get("flat"), "people stand on the stage")
 
 
 if __name__ == "__main__":

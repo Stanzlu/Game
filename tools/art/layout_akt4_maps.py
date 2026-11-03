@@ -393,13 +393,18 @@ BUILDINGS = [
     ("K", 22, 38), ("d", 31, 38), ("a", 37, 38), ("u", 43, 38), ("j", 51, 38), ("w", 60, 38), ("z", 67, 38), ("b", 74, 38),
     ("f", 88, 38),  # south block, doors on the lane along the south wall
 ]
+# S6: the four lamp posts around the square that are lit in the evening
+LIT_LAMPS = ((35, 26), (69, 20), (47, 31), (62, 26))
 STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d": "h", "e": "h", "f": "h", "j": "h", "u": "h",
                 "w": "h", "z": "h", "G": "_", "U": "h", "W": "h", "|": "h", "t": "h", "O": "_", "Q": "_", "Z": "_", "S": "_",
                 "s": "_", "1": "_", "2": "_", "3": "_", "l": "_", "x": "_", "X": "_", "B": "_", "E": "_", "H": "_", "q": "_",
                 "r": "_", "Y": "_", "T": "h", "C": "h", "P": "h", "*": ".", "o": ".", "g": ".", "I": "_", "M": "_", "y": "_",
                 "v": "_", "L": "_", "J": "_", "%": "_", "&": "_", "D": "_", "N": ",", "@": "_", "n": ",", "i": "_", "$": "_",
                 "!": "_", "4": "_", "5": "_", "6": "_", "7": "_", "8": "_",
-                "ä": "_", "ß": "_", "ö": "_", "æ": "_", "ü": "_", "ø": "_", "Ä": "_", "å": "_", "Ö": "_", "Æ": "_", "Ü": "_", "Ø": "_"}
+                "ä": "_", "ß": "_", "ö": "_", "æ": "_", "ü": "_", "ø": "_", "Ä": "_", "å": "_", "Ö": "_", "Æ": "_", "Ü": "_", "Ø": "_",
+                # S6: the evening of the concert (everything that stands on the cobbles only in the evening, `if city.evening`)
+                "Ω": "_", "Δ": "_", "Σ": "_", "λ": "_", "Π": "_", "Ξ": "_", "Ł": "_", "Ʒ": "_", "Γ": "_", "Θ": "_", "θ": "_", "τ": "_",
+                "γ": "_", "β": "_", "κ": "_", "μ": "_", "ε": "_"}
 
 
 def hall_perch(row):
@@ -504,15 +509,17 @@ def build_stadt():
     put("2", 40, 22)  # the lectern in front of the town hall (stage space beside it: columns 41 to 48)
     put("J", 40, 19)  # the goat's glyph: below the roof's left end; the sprite is lifted onto the parapet
     put("D", HALL_X, 19)
-    put("i", HALL_X, 22)
+    put("i", HALL_X - 1, 22)  # the arrival before the hall (the stage of the evening stands on its right: Lio in the middle)
     put("1", 59, 30)  # the wreath, at the fountain
     put("3", 68, 24)  # the table with bread and salt, where the Hauptstrasse comes in
     put("M", 56, 31)  # Mira on the fountain's rim
     put("@", *START_S)
     for x, y in ((37, 31), (67, 31)):
         put("r", x, y)
-    for x, y in ((35, 26), (69, 20), (47, 31), (62, 26), (24, 30), (15, 34), (27, 42), (40, 42), (56, 42), (70, 42), (78, 30), (83, 34)):
+    for x, y in ((24, 30), (15, 34), (27, 42), (40, 42), (56, 42), (70, 42), (78, 30), (83, 34)):
         put("l", x, y)
+    for x, y in LIT_LAMPS:  # the four around the square: lit in the evening (S6)
+        put("λ", x, y)
     for x, y in ((66, 21), (59, 21), (39, 25), (79, 38), (14, 40), (77, 42)):
         put("X" if (x + y) % 2 else "x", x, y)
     # ---- the shops: pails and pots before the florist, wood and a sawhorse at the workshop; a door before the florist (S3) and one before the workshop (S4), the bench, the crate and Tess outside
@@ -546,6 +553,24 @@ def build_stadt():
     put("I", GATE_X + 2, GATE_ROWS[0] + 1)
     put("L", 79, 36)
     put("Y", 79, 35)
+    # ---- the concert (S6): the stage before the town hall, its people and its things; all of it stands only in the evening
+    put("Ω", 44, 23)  # the stage: seven cells wide (41 to 47), its front on row 23
+    put("Δ", 41, 21)  # the stage lamps at both ends
+    put("Δ", 47, 21)
+    put("Σ", 44, 20)  # the string of lanterns above it
+    put("Ʒ", 44, 21)  # the crate Lio sits on
+    put("Ł", 44, 22)  # Lio, in the middle of the stage
+    put("Γ", 46, 22)  # the goat on the stage
+    put("Θ", 42, 22)  # Orin at the post of the lamp (once she asked him to hold it)
+    put("Ξ", 40, 23)  # the old board at the corner of the stage, with the notches
+    put("Π", 36, 24)  # Lio's poster
+    put("θ", 39, 26)  # Orin in the crowd (when he does not hold the lamp)
+    put("τ", 49, 26)  # Tess in the crowd (when the board is sawn)
+    put("γ", 51, 27)  # the one who cannot say no, sitting for once
+    put("β", 37, 27)  # the citizen from the stall
+    put("κ", 47, 28)  # the clerk of the town hall
+    put("μ", 61, 28)  # Mira, at the edge of the crowd
+    put("ε", 44, 29)  # the arrival of the evening (SceneTravel "abend")
     # ---- outside: the door, the arrival
     put("N", EAST_DOOR_X, DOOR_ROW)
     put("n", ARRIVAL_X_S, DOOR_ROW)
