@@ -209,17 +209,19 @@ func test_the_slate_lies_until_it_is_taken_and_a_loaded_game_has_none() -> void:
 # --- The doors -------------------------------------------------------------------------------
 
 
-func test_the_pass_has_a_door_back_to_the_road_and_its_end_is_a_blocker() -> void:
+func test_the_pass_has_a_door_back_to_the_road_and_its_end_is_a_door_to_the_high_valley() -> void:
 	var scene := await _up()
 	var doors := _doors_to(scene, "strasse")
 	assert_eq(doors.size(), 1)
 	assert_eq(doors[0].get(&"spawn"), "pass")
 	assert_eq(scene.map.world_to_cell((doors[0] as Node2D).global_position), DOOR_CELL)
 	assert_true(doors[0].get(&"auto"))
-	assert_eq(_doors_to(scene, "grat").size(), 0, "the high valley is the next segment (G2)")
-	var wait := _blockers(scene)
-	assert_eq(wait.size(), 1, "scree across the end of the path")
-	assert_eq(scene.map.world_to_cell((wait[0] as Node2D).global_position), END_CELL)
+	var valley := _doors_to(scene, "grat")
+	assert_eq(valley.size(), 1, "the scree no longer lies across the end of the path (G2)")
+	assert_eq(valley[0].get(&"spawn"), "pass")
+	assert_true(valley[0].get(&"auto"))
+	assert_eq(scene.map.world_to_cell((valley[0] as Node2D).global_position), END_CELL)
+	assert_eq(_blockers(scene).size(), 0, "and nothing holds her")
 
 
 func test_from_the_road_she_arrives_before_the_door_and_south_returns_to_it() -> void:

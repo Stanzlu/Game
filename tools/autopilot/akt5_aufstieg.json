@@ -24,7 +24,5 @@
   {"wait_for": {"beat": "pass_view"}, "timeout": 30, "t": 0.1},
   {"use": [15, 29], "face": "up", "log": "the slate chip: taken with the first answer", "t": 0.5},
   {"wait_for": {"flag": "mountain.slate_taken"}, "timeout": 30, "t": 0.1},
-  {"use": [66, 5], "face": "up", "log": "the scree at the end of the path: nothing goes on yet", "t": 0.5},
-  {"wait_for": {"dialogue_closed": true}, "timeout": 30, "t": 0.1},
   {"log": "segment finished", "quit": true, "t": 0.5}
 ]

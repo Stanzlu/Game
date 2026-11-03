@@ -175,12 +175,13 @@ func test_the_slate_is_a_curiosity_with_a_picture_and_a_sentence() -> void:
 # --- The walk ----------------------------------------------------------------------------------
 
 
-func test_the_walk_into_the_mountains_has_one_stage_that_is_the_end_until_the_next_segment(
-) -> void:
+func test_the_walk_begins_with_the_climb_and_the_valley_follows_it() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_not_null(quest)
 	assert_eq(quest.first_stage().id, "climb")
-	assert_true(quest.stage("climb").is_final(), "the next segment hangs a stage on it (G3)")
+	assert_false(quest.stage("climb").is_final(), "the valley (G2) hangs on it")
+	assert_true(quest.can_advance("climb", "valley"))
+	assert_true(quest.stage("valley").is_final(), "and the next segment hangs a stage on that (G3)")
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_TITLE"), "QUEST_MAIN_MOUNTAIN_WAY_TITLE")
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_CLIMB"), "QUEST_MAIN_MOUNTAIN_WAY_CLIMB")
 	assert_true(WorldState.start_quest(QUEST))

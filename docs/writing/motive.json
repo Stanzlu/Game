@@ -2152,6 +2152,84 @@
    ]
   },
   {
+   "id": "stein-unruhig",
+   "kind": "gag",
+   "title": "Der Stein, der nicht liegen bleibt",
+   "bible": "§33, §43",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hoch_stone_1"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_stone_2"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_cairn_1_try_1"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_cairn_2_try_1"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_cairn_3_try_1"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_cairn_3_try_2"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.stone_taken"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.stone_try_1"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.stone_try_2"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.stone_try_3"
+    }
+   ],
+   "payoff": "Nebenquest des Hochtals (Akt V, G2, Humor und Welt, Brief O13). Ein runder Stein liegt am Fuß des ersten Steinmännchens, und jedes der drei im Tal wirft ihn ab: er rollt über die Kante (`hoch_cairn_1_try_1`), neigt sich so gemächlich, dass es nach Absicht aussieht (`hoch_cairn_2_try_1`), und der Wind nimmt ihn (`hoch_cairn_3_try_1`). Nichts ist zu lösen und nichts gesperrt: am Ende steckt der Stein in der Tasche, und die Tasche stellt keine Fragen (`hoch_cairn_3_try_2`). Kein Lob, keine Lehre, kein Satz darüber, wohin ein Stein gehört. Ein Ding mit eigenem Willen wie die Ziege; der Gag endet im Hochtal."
+  },
+  {
+   "id": "murmeltier-hort",
+   "kind": "gag",
+   "title": "Der Hort des Murmeltiers",
+   "bible": "§31, §33",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hoch_marmot_1"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_marmot_2"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_marmot_3"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_marmot_4"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.thimble_taken"
+    }
+   ],
+   "payoff": "Kuriositäten sind teils bedeutsam, teils Unsinn (Bible §31). Am Hang des Hochtals (Akt V, G2) liegt vor einem Bau ein Häufchen Dinge, die ein Murmeltier für wichtig hält: ein Löffelstiel, ein Knopf ohne Hose, ein Hut aus Pappe und, ganz oben, ein Fingerhut (`hoch_marmot_2`). Das Murmeltier ist nie zu sehen und tritt nie auf, es ist eine Spur, und die Ordnung des Häufchens ist der Gag. Wer den Fingerhut nimmt, lässt den Hut aus Pappe als Wichtigsten zurück (`hoch_marmot_3`); der Fingerhut wandert in die Taschen und wartet auf einen Platz im Haus. Keine Erklärung, keine Auflösung."
+  },
+  {
    "id": "kind-lied",
    "kind": "kind",
    "title": "Lied und Summen",
@@ -2250,9 +2328,21 @@
     {
      "type": "flag",
      "ref": "fragment.empty_room"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_hand_2"
+    },
+    {
+     "type": "line",
+     "ref": "hoch_hand_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.hand"
     }
    ],
-   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide."
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder."
   }
  ],
  "register": [
@@ -3255,6 +3345,41 @@
    "flag": "fragment.iron_ring",
    "axis": "Wahrnehmung",
    "meaning": "Sie ist im Aufstieg am Eisenring in der Felswand stehen geblieben: innen blank von einem Seil, das hier oft lief, für einen Atemzug läuft eines hindurch (Spur der Welt, Akt V, G1; kein Bild des Kindes)."
+  },
+  {
+   "flag": "fragment.hand",
+   "axis": "Kind",
+   "meaning": "Sie hat sich am Ufer des Bergsees über den flachen Stein gebeugt: der Abdruck einer kleinen Hand, Wasser statt Staub, noch nicht getrocknet (Fragment 4 von 6, Akt V, G2, Bible §15). Vier Zeilen, kein Wort, keine Ursache; nie Voraussetzung (Brief O7)."
+  },
+  {
+   "flag": "grat.stone_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den kleinen runden Stein am Fuß des ersten Steinmännchens im Hochtal eingesteckt (Nebenquest „Der Stein, der nicht liegen bleibt“, Akt V, G2). Die Szene startet daraus die Quest; erst mit dem Stein in der Tasche bieten die Steinmännchen ihm einen Platz obenauf an. Wer ihn liegen lässt, verpasst nichts."
+  },
+  {
+   "flag": "grat.stone_try_1",
+   "axis": "Gag",
+   "meaning": "Der Stein ist vom ersten Steinmännchen gerollt (Akt V, G2)."
+  },
+  {
+   "flag": "grat.stone_try_2",
+   "axis": "Gag",
+   "meaning": "Der Stein ist vom zweiten Steinmännchen gekippt (Akt V, G2)."
+  },
+  {
+   "flag": "grat.stone_try_3",
+   "axis": "Gag",
+   "meaning": "Der Wind hat den Stein vom dritten Steinmännchen genommen (Akt V, G2). Mit dem dritten Versuch schließt die Szene die Nebenquest, und der Stein bleibt in der Tasche."
+  },
+  {
+   "flag": "grat.quartz_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Bergkristall aus dem Geröll des Hochtals eingesteckt (Kuriosität, Akt V, G2). Wer ihn liegen lässt, verpasst nichts; die Karte zeigt es."
+  },
+  {
+   "flag": "grat.thimble_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Fingerhut aus dem Häufchen am Bau des Murmeltiers genommen (Kuriosität, Akt V, G2): der Hut aus Pappe sitzt danach ganz oben. Das Murmeltier ist nie zu sehen."
   }
  ]
 }
