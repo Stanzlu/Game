@@ -2621,6 +2621,15 @@
    "res://assets/generated/props/tal/ma_lamp_hang.png"
   ]
  },
+ "tal/ma_lamp_hang_dark": {
+  "anchor": [
+   8,
+   30
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/ma_lamp_hang_dark.png"
+  ]
+ },
  "tal/ma_lever_10_down": {
   "anchor": [
    8,
