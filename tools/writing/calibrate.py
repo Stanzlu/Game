@@ -5,15 +5,18 @@ Usage: python3 tools/writing/calibrate.py                    the Slice at every 
        python3 tools/writing/calibrate.py --akt1             Act I at every text speed (its own baseline)
        python3 tools/writing/calibrate.py --akt2             Act II the same (the real world's files of the Slice and akt2/)
        python3 tools/writing/calibrate.py --akt3             Act III the same (akt3/)
+       python3 tools/writing/calibrate.py --akt4             Act IV the same (akt4/)
        python3 tools/writing/calibrate.py --record-akt1 run.log   write the baseline of Act I from an
                                                      autopilot run (tools/autopilot/akt1_full.json)
        python3 tools/writing/calibrate.py --record-akt2 run.log   the same for Act II (akt2_full.json, which
                                                      starts from the save at the end of Act I: its play time is taken off)
        python3 tools/writing/calibrate.py --record-akt3 run.log   and for Act III (akt3_full.json, from the save at the end of Act II)
+       python3 tools/writing/calibrate.py --record-akt4 run.log   and for Act IV (akt4_full.json, from the save at the end of Act III)
        python3 tools/writing/calibrate.py --log run.log      fit the model to a real run of the Slice (beat lines)
        python3 tools/writing/calibrate.py --akt1 --log run.log   the same for a human run of Act I
        python3 tools/writing/calibrate.py --akt2 --log run.log   and of Act II (counted from the beat valley_arrival)
        python3 tools/writing/calibrate.py --akt3 --log run.log   and of Act III (counted from the beat act3_morning)
+       python3 tools/writing/calibrate.py --akt4 --log run.log   and of Act IV (counted from the beat strasse_enter)
        python3 tools/writing/calibrate.py --segment WORDS LINES WALK_MINUTES   a planned segment
 The model has three parts:
     reading  seen characters x seconds per character (the text speed of core/settings.gd) plus a
@@ -37,15 +40,17 @@ BASELINE = os.path.join(HERE, "calibration_baseline.json")
 BASELINE_AKT1 = os.path.join(HERE, "calibration_akt1.json")
 BASELINE_AKT2 = os.path.join(HERE, "calibration_akt2.json")
 BASELINE_AKT3 = os.path.join(HERE, "calibration_akt3.json")
-BASELINES = {"akt1": BASELINE_AKT1, "akt2": BASELINE_AKT2, "akt3": BASELINE_AKT3}
-ACT_NAMES = {"akt1": "Akt I", "akt2": "Akt II", "akt3": "Akt III"}
+BASELINE_AKT4 = os.path.join(HERE, "calibration_akt4.json")
+BASELINES = {"akt1": BASELINE_AKT1, "akt2": BASELINE_AKT2, "akt3": BASELINE_AKT3, "akt4": BASELINE_AKT4}
+ACT_NAMES = {"akt1": "Akt I", "akt2": "Akt II", "akt3": "Akt III", "akt4": "Akt IV"}
 ## The save an act's autopilot run starts from: its play time (seconds) is not the act's and is taken off.
 START_SAVES = {
     "akt2": os.path.join(dialogue.ROOT, "tests", "fixtures", "saves", "v2_akt1_end.json"),
     "akt3": os.path.join(dialogue.ROOT, "tests", "fixtures", "saves", "v2_akt2_end.json"),
+    "akt4": os.path.join(dialogue.ROOT, "tests", "fixtures", "saves", "v2_akt3_end.json"),
 }
-## The beat where an act begins; a human run of the whole game is counted from it (Act III: the morning after).
-ACT_STARTS = {"akt2": "valley_arrival", "akt3": "act3_morning"}
+## The beat where an act begins; a human run of the whole game is counted from it (Act III: the morning after, Act IV: the road).
+ACT_STARTS = {"akt2": "valley_arrival", "akt3": "act3_morning", "akt4": "strasse_enter"}
 ## Pixels a second of the walking pace of the default feel (entities/player/tuning/direkt.tres): the
 ## autopilot teleports where a player walks, so the pixels it skipped are turned back into seconds.
 WALK_SPEED = 88.0
@@ -288,7 +293,7 @@ def main(argv):
                   % (ACT_NAMES[act], data["seconds"], data["dialogue_seconds"], data["clicks"], data["route_px"],
                      len(data["beats"])))
             return 0
-    act = "akt3" if "--akt3" in argv else "akt2" if "--akt2" in argv else "akt1" if "--akt1" in argv else ""
+    act = "akt4" if "--akt4" in argv else "akt3" if "--akt3" in argv else "akt2" if "--akt2" in argv else "akt1" if "--akt1" in argv else ""
     if act and "--log" not in argv:
         floor = act_baseline(act)
         name = ACT_NAMES[act]

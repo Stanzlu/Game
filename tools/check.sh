@@ -165,12 +165,12 @@ fi
 grep -o '"beat":"[a-z_]*"' "$smoke_log" | cut -d'"' -f4 | paste -sd' ' -
 echo "smoke ok"
 
-# The segments of Acts I to III (docs/akt1/REGIONSBRIEFE.md ...): each plays its
+# The segments of Acts I to IV (docs/akt1/REGIONSBRIEFE.md ...): each plays its
 # own script from its own scene on a fresh profile and has to reach its marks.
 # "script:scene:frames:mark mark ..."; a mark is a beat (the log line "beat":"<id>") or, with a dot in
 # it, a flag that was set ("flag":"<id>","value":true). A scene written "@<name>" starts from the frozen
 # save tests/fixtures/saves/<name>.json instead (the profile gets it as its autosave, "--continue"):
-# akt2_full begins where akt1_full ended. What is in that save never shows up as a mark.
+# akt2_full begins where akt1_full ended, akt4_full where akt3_full ended. What is in that save never shows up as a mark.
 segments=(
   "akt1_gasthaus:gasthaus:2400:inn_enter inn_fed inn_room inn_slept elysia.inn_book_signed"
   "akt1_markt:markt:2500:market_enter market_board market_bread market_board_done market_melody elysia.market_greeted"
@@ -202,6 +202,7 @@ segments=(
   "akt4_konzert:@v2_akt3_end:16000:stadt_abend city_concert city.concert_invited city.string_snapped melody.lio_concert city.string_taken fragment.stage_scratch city.poster_taken"
   "akt4_streit:@v2_akt3_end:18000:stadt_abend city_concert city.mira_gate stadt_richter city.richter_met stadt_tor city.mira_parted_boundary"
   "akt4_heimkehr:@v2_akt3_end:24000:stadt_tor strasse_dawn act4_home chapter.act4 house.shelves house.bread house.guest_tess"
+  "akt4_full:@v2_akt3_end:16000:strasse_enter strasse_view fragment.milestone city.bell_taken stadt_enter stadt_lio rathaus_enter rathaus_lost rathaus_day blumenladen_enter blumenladen_duck blumenladen_letter werkstatt_enter werkstatt_board stadt_abend city_concert stadt_richter stadt_tor strasse_dawn act4_home city.gef_met melody.lio_street fragment.fountain_rim city.day_wreath city.day_lectern city.day_table city.lost_glove city.lost_key city.lost_buttons city.lost_cup city.orin_met city.duck_seen city.duck_passed city.feather_taken city.letter_told city.tess_met melody.tess_whistle city.asked_help city.board_done city.sat_with_tess list.opened list.closed list.sat list.kitchen_seen list.take_bouquet list.take_stage list.take_bread list.done_bouquet list.done_stage list.done_bread city.concert_invited city.string_snapped melody.lio_concert city.string_taken fragment.stage_scratch city.poster_taken city.mira_gate city.richter_met city.mira_parted_boundary chapter.act4 house.shelves house.bread house.guest_tess"
   "akt1_full:elysia:40000:elysia_start butterflies_caught inn_slept elysia.inn_stayed market_melody market_hall_open hall_mirror feast irritation trail_hallway trail_door trail_room stone child_melody rift_found valley_arrival elysia.feast_toast elysia.rift_crossed"
   "akt2_full:@v2_akt1_end:16000:arrival_echo first_no act2_richter crossed house_entered shed_path wood fire act2_safe act2_nein mira_visit act2_werte act2_blick evening bachlauf_enter bachlauf_hook bachlauf_blick bachlauf_float bachlauf_weir bachlauf_freed bachlauf_back ending valley.mira_met valley.fell_in valley.fell_twice valley.crossed valley.wood_needed valley.wood_taken valley.antreiber_rests house.fire_lit house.rested melody.house_hum house.antreiber_refused house.antreiber_by_fire house.mira_visited house.mira_left value.freedom fragment.beam_herbs house.prints_seen house.spoon_found house.shelf_filled house.shelf_stone house.cat_fed fragment.bank_table fragment.dry_bed valley.weight_taken valley.glass_taken valley.knot_seen valley.goat_prints_seen valley.view_back_seen valley.trap_freed valley.shell_seen valley.berries_eaten valley.flower_smelled valley.reflection_seen valley.goat_met valley.potato_taken valley.goat_traded valley.mountains_seen valley.ending chapter.act2 chapter.slice"
 )

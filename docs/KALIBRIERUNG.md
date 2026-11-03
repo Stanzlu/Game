@@ -128,6 +128,40 @@ Das Log gibt den Weg: **130 Sekunden** Spielzeit (der Stand trägt 374 davon sch
 - **Der Lauf ist der eingefrorene Stand `v2_akt3_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act3`, Quest `done`, Facette `care`, 180 Flags, zehn Gegenstände). Der Stand wird nie von Hand
   geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn als Ende zählt, und Akt IV beginnt in ihm.
 
+## Akt IV nach dem Lauf des Autopiloten (P6.16, S9, ADR-071)
+
+`tools/autopilot/akt4_full.json` spielt Akt IV vom eingefrorenen Ende von Akt III (still im Haus) bis zum Ende des Weges nach Hause: die Straße (Wegweiser, Hufabdrücke, Glöckchen,
+Meilenstein, die Aussicht), der Platz und das Rathaus (das Tor, Mira am Brunnen, das Zettelbrett, Lio, das Fundbüro, „Ein perfekter Tag“), der Blumenladen (Orin, die Ente, der Brief),
+die Werkstatt (Tess, das Brett, „Hilfe erbitten“) und die Bank („Nichts“), die Liste des Gefälligen (drei Aufgaben, das Nein, das Brot, die Küche) mit den Gängen, das Konzert, der Richter und der
+Streit am Tor, der Morgen auf der Straße und die Heimkehr (Tess, die Regale, das Brot, der Stuhl, das stille Ende mit der Kapitelmarke `act4`, ein Gegenstand auf einem Regalbrett).
+Er setzt kein Flag und gibt keinen Gegenstand; er nimmt in jedem Gespräch die erste Antwort (bei Mira am Tor ist das die Grenze) und beginnt in `tests/fixtures/saves/v2_akt3_end.json`.
+`check.sh` spielt den Lauf bei jedem Durchgang (rund 9 Sekunden) und verlangt 63 Marken (18 Beats, 45 Flags).
+
+Das Log gibt den Weg: **264 Sekunden** Spielzeit (der Stand trägt 503 davon schon), 134 mit offenem Gespräch, 279 geklickte Zeilen (**58 %** der 479 Zeilen von Akt IV, wie
+`calibrate.py` zählt: auch Zweige, die der Lauf nicht nimmt) und 14.861 Pixel Luftlinie, die der Autopilot springt statt geht. Der Weg ohne Lesen ist damit 130 Sekunden plus 169 für die Sprünge,
+**5,0 Minuten**.
+
+| Tempo | Akt IV |
+|---|---|
+| langsam | 29,2 min |
+| normal | 22,3 min |
+| schnell | 17,8 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 54,2 min |
+
+`python3 tools/writing/calibrate.py --akt4` zeigt die Tabelle, `--record-akt4 <Log>` schreibt `calibration_akt4.json` neu (nach einem neuen Segment den Lauf wiederholen),
+`--akt4 --log <Log>` passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `strasse_enter`). Dazu vier Befunde:
+
+- **Der Plan rechnet mit 120 Minuten für Akt IV, das Modell mit 18 bis 29.** Der Akt hat den längsten Weg bisher (5,0 Minuten gegen 3,3 in Akt I, 4,3 in Akt II und 2,5 in Akt III) und die meiste Schrift
+  (479 Zeilen gegen 272 in Akt III); die Lücke zu den 120 Minuten ist mit rund 5-fach so klein wie bei Akt II (Akt I rund 7-fach, Akt III rund 8-fach).
+  Der äußerste Eckfall gibt 54; dein Durchlauf legt Anteil, Pause und Umweg fest.
+- **Der Autopilot sieht 58 % der Zeilen** (Akt I: 33 %, Akt II: 41 %, Akt III: 44 %). Er nimmt in jedem Gespräch die erste Antwort; was der Lauf nicht sieht, steht unter GUT-Tests: die zwei anderen
+  Ausgänge des Streits (anschließen, schweigen), die Aufgaben der Liste, die er nicht nimmt, ihre Folgen, die Antworten der Facetten `connection` und `integrity`, die Töpfe der Ente, das Konzert ohne Tess
+  und ohne Orin, die Heimkehr ohne vorherige Begegnung mit Tess.
+- **Die Textdichte liegt bei 21,5 Zeilen je Minute** (Akt I: 24,0; Akt II: 25,9; Akt III: 24,4; Plan 9.6: 6): die Stadt hat mehr Weg je Zeile als die Akte davor (5,0 Minuten für 479 Zeilen, in Akt III 2,5 für 272). Auch Akt IV trägt seine Länge nicht aus Text: wer die Bank, die Regale und den Abend nicht abkürzt, braucht länger als der Autopilot.
+- **Der Lauf ist der eingefrorene Stand `v2_akt4_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act4`, Quest `done`, die fünf Facetten, 245 Flags, 21 Gegenstände, vier Beziehungen: Tess `close`,
+  Mira, Orin und Lio `familiar`). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn als Ende zählt (das
+  letzte Kapitel des Baus ist `act4`, bis Akt V es rückt), und Akt V beginnt in ihm.
+
 ## Benutzen
 
 ```
@@ -135,10 +169,11 @@ python3 tools/writing/calibrate.py                                   den Slice b
 python3 tools/writing/calibrate.py --akt1                            Akt I bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt2                            Akt II bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt3                            Akt III bei jedem Tempo (eigener Weg)
-python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2, --record-akt3 für Akt II, III)
+python3 tools/writing/calibrate.py --akt4                            Akt IV bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2, --record-akt3, --record-akt4 für Akt II, III, IV)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
-python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2, --akt3 für Akt II, III)
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2, --akt3, --akt4 für Akt II, III, IV)
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.
