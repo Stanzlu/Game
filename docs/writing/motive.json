@@ -2390,6 +2390,27 @@
    "payoff": "Das Warum des Wächters zeigen Dinge, keine Erklärung (Brief O6, wie das Warum des Antreibers und des Gefälligen). An der Rückwand der Halle, hinter dem Pult, sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht: dunkles Holz, zwei Eisenbänder und ein schwerer Riegel, den Stangen von allen zwölf Hebeln halten, keine locker (`anl_door_1`, `anl_door_2`). Sie ist zu, und die Spielerin klopft nicht (`anl_door_3`): ein Echo der geschlossenen Tür aus Akt I (`kd_door_3`, `kd_door_4`, Fragment `fragment.closed_door`), ohne dass es jemand sagt. Das Wort Kind fällt nicht, der Wächter spricht nie über die Tür, kein Täter, keine Ursache, keine Wirkung auf die Spielerin. Die Tür bleibt zu, auch nach dem Loslassen: er hat sie nur nicht mehr in der Hand (Akt V, G5 und G9)."
   },
   {
+   "id": "waechter-vorbehalt",
+   "kind": "vorausdeutung",
+   "title": "Der Vorbehalt des Wächters",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "lst_over_9"
+    },
+    {
+     "type": "line",
+     "ref": "anl_over_3"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.overload"
+    }
+   ],
+   "payoff": "Der Wächter wird nicht geheilt, und sein letztes Wort ist ein Vorbehalt, kein Dank (Bible §14). Der erste steht am Ende der Last (Akt V, G4): die Rechnung geht nicht auf, er trägt es ein und bleibt dabei, das Verfahren verlangt es trotzdem (`lst_over_9`), und danach gilt alles vorbehaltlich einer Nachprüfung der Rechnung (`anl_over_3`). Der Text stellt ihn nicht bloß: die Zahl stimmt, und er hält trotzdem am Pult fest. Im Loslassen (G5) lässt er den Dampf kommen, ohne es gutzuheißen; sein letzter Vorbehalt kommt am Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat)."
+  },
+  {
    "id": "waechter-zaehlt",
    "kind": "gag",
    "title": "Der Wächter zählt und trägt ein",
@@ -2462,9 +2483,53 @@
     {
      "type": "flag",
      "ref": "plant.probe_done"
+    },
+    {
+     "type": "line",
+     "ref": "anl_again_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_load_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_run_3"
+    },
+    {
+     "type": "line",
+     "ref": "anl_run_5"
+    },
+    {
+     "type": "line",
+     "ref": "lst_wave3_2"
+    },
+    {
+     "type": "line",
+     "ref": "lst_wave4_3"
+    },
+    {
+     "type": "line",
+     "ref": "lst_wait_2"
+    },
+    {
+     "type": "line",
+     "ref": "lst_over_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_over_3"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.load"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.overload"
     }
    ],
-   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung; die Last, die nachweislich unmöglich wird (G4), das Loslassen (G5) und sein trockener Schluss (G9, am Herd im Haus) folgen."
+   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) und sein trockener Schluss (G9, am Herd im Haus) folgen."
   }
  ],
  "register": [
@@ -3517,6 +3582,31 @@
    "flag": "plant.probe_done",
    "axis": "Beschützer",
    "meaning": "Sie hat die drei Hebel in der Reihenfolge des Wächters gezogen, und er hat es eingetragen (Akt V, G3). Der Cue `waechter` liest es und wechselt zu `waechter_again`; kein Lob, keine Ankündigung."
+  },
+  {
+   "flag": "plant.load",
+   "axis": "Beschützer",
+   "meaning": "Sie hat den Betrieb aufgenommen (Akt V, G4): auf ihr „Fang an.“ stellt der Wächter das Verfahren vor (oben verlangt, unten erledigt, vier Stufen, die Pause wird eingetragen), und die Szene startet den Lauf mit den drei Hebeln der Probe. Der Cue `waechter` liest es und wechselt zu `waechter_run`. Der Betrieb ist nie Voraussetzung: wer ihn nie verlangt, kommt an ihm vorbei wie jeder."
+  },
+  {
+   "flag": "plant.wave_two",
+   "axis": "Beschützer",
+   "meaning": "Die zweite Welle des Laufs hat begonnen (Akt V, G4): Hebel Vier bis Sechs sind in Betrieb, die Tücher über ihnen sind fort. Die Szene setzt es beim Beginn der Welle, die Karte liest es. Wer den Lauf nie startet, sieht es nie."
+  },
+  {
+   "flag": "plant.wave_three",
+   "axis": "Beschützer",
+   "meaning": "Die dritte Welle des Laufs hat begonnen (Akt V, G4): Hebel Sieben bis Neun sind in Betrieb, die Tücher über ihnen sind fort. Die Szene setzt es, die Karte liest es."
+  },
+  {
+   "flag": "plant.wave_four",
+   "axis": "Beschützer",
+   "meaning": "Die vierte Welle des Laufs hat begonnen (Akt V, G4): Hebel Zehn bis Zwölf sind in Betrieb, alle zwölf stehen unter Bedienung. Die Szene setzt es, die Karte liest es; ab hier ist die Rechnung des Wächters nachweislich nicht mehr zu erfüllen."
+  },
+  {
+   "flag": "plant.overload",
+   "axis": "Beschützer",
+   "meaning": "Der Lauf hat die vierte Welle durchlaufen und hält (Akt V, G4): der Wächter hat vorgerechnet, dass es nicht aufgeht, und trägt „nicht erfüllt“ ein. Die Szene setzt es nach seiner Rechnung, der Cue `waechter` liest es und wechselt zu `waechter_over`; dort verlangt und bietet er nichts mehr an, G5 baut an diesem Zustand weiter. Nichts ist gesperrt, nichts scheitert hart, die Welt steht."
   },
   {
    "flag": "fragment.worn_dial",

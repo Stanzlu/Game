@@ -1,0 +1,63 @@
+# Die Last, Akt V, Segment G4 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O13, O19, O20; Stilblatt waechter.md, Gegenbeispiele 1 bis 9). Nach der Probe bietet der Wächter den Betrieb an
+# ("load_offer" in anlage.dialogue, wo auch "waechter_run" und "waechter_over" stehen, weil ihre Aufrufer dort liegen). Danach läuft der Lauf am Pult in vier Wellen, und die Szene spielt die
+# Cues dieser Datei: die Ankündigung jeder Welle, die Pause, die Rückkehr und das Ende der vierten Welle. Jeder Hebel, der unten steht, springt nach einer Frist wieder hoch; der Lauf wird
+# nachweislich unmöglich, nichts scheitert hart, die Welt endet nicht. Der Wächter rechnet es vor und bleibt dabei: er wird nicht geheilt, er tröstet nie, er sagt nie "Kind", nie "Tür", nie
+# etwas über sein Warum und nie etwas über die Spielerin als Person und ruft sie nie beim Namen. Kein Wort über Gefahr; die Hilfe, die sagt, dass die Last für zwei Hände zu groß ist, steht in "waechter_run".
+# Der Humor ist Pedanterie (Zahlen, Verfahren, Einträge), nie seine Angst. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung). Zahlen sind ausgeschrieben, auch die
+# Nummern der Hebel. Setzer und Leser eines Flags stehen nie im selben Cue: die Szene setzt "plant.wave_two", "plant.wave_three" und "plant.wave_four" beim Beginn der Welle (die Karte liest sie
+# und nimmt die Tücher weg) und "plant.overload" nach "load_over" (der Cue "waechter" liest es); keiner der Cues dieser Datei setzt oder liest ein Flag. Die neun stillen Hebel vor ihrer Welle
+# behalten die Zeile "lever_idle" aus anlage.dialogue (»Steht.«), es gibt dafür keinen eigenen Cue.
+
+# --- Die Wellen --------------------------------------------------------------------------------------------------------------
+# Die Szene spielt sie beim Beginn der Welle (der Lauf steht still, solange gesprochen wird). Er ruft die neuen Hebel und eine Reihenfolge aus, jede Welle knapper als die vorige; bei der vierten
+# zählt er schon in Atemzügen. Die Reihenfolge ist immer: erst der höchste der drei neuen, dann abwärts. Keine Warnung, kein Wort über Folgen.
+
+~ wave_two
+Wächter: Vier bis Sechs in Betrieb. Erst Sechs, dann Fünf, dann Vier. [ID:lst_wave2_1] [#draft]
+Er zählt die Hebel mit dem Stift nach, einmal, und schreibt die Zahl daneben. [ID:lst_wave2_2] [#draft]
+Wächter: Die Fristen sind kürzer. So steht es im Verfahren. [ID:lst_wave2_3] [#draft]
+=> END
+
+~ wave_three
+Wächter: Sieben bis Neun in Betrieb. Erst Neun, dann Acht, dann Sieben. [ID:lst_wave3_1] [#draft]
+Er zählt nach, zweimal, und schreibt die Zahl erst hin, als sie beide Male dieselbe ist. [ID:lst_wave3_2] [#draft]
+Wächter: Neun. Drei mal drei. Eine ordentliche Zahl. [ID:lst_wave3_3] [#draft]
+=> END
+
+~ wave_four
+Wächter: Zehn bis Zwölf in Betrieb. Das sind alle. [ID:lst_wave4_1] [#draft]
+Wächter: Erst Zwölf, dann Elf, dann Zehn. [ID:lst_wave4_2] [#draft]
+Wächter: Ab hier rechne ich in Atemzügen. Sekunden sind zu grob. [ID:lst_wave4_3] [#draft]
+=> END
+
+# --- Die Pause ---------------------------------------------------------------------------------------------------------------
+# Wer das Pult verlässt, hält den Lauf an: nichts geht verloren, nichts wird gesperrt. "load_wait" spielt die Szene einmal je Lauf, wenn sie vom Pult wegtritt, "load_back" bei der Rückkehr, nachdem
+# der Lauf wartete. Trocken, ohne Vorwurf und ohne Lob; er trägt die Pause ein, wie er es angekündigt hat. Der Text kennt die Nummer des Hebels nicht (er ist statisch) und nennt keine.
+
+~ load_wait
+Wächter: Du verlässt das Pult. Ich halte an. Vorläufig. [ID:lst_wait_1] [#draft]
+Wächter: Pause eingetragen. Die Hebel bleiben, wie sie sind. [ID:lst_wait_2] [#draft]
+=> END
+
+~ load_back
+Der Stift des Wächters setzt wieder an, kaum dass du am Pult stehst. [ID:lst_back_1] [#draft]
+Wächter: Pausendauer eingetragen, ich habe mitgezählt. Stand wie vor der Pause. [ID:lst_back_2] [#draft]
+=> END
+
+# --- Das Ende der vierten Welle ----------------------------------------------------------------------------------------------
+# Nach einer festen Zeit hält der Lauf (die Szene setzt danach plant.overload), und er rechnet es vor: zwölf Hebel, jeder verlangt alle paar Atemzüge einen Zug, zwei Hände, eine Rechnung, die nicht
+# aufgeht. Er trägt "nicht erfüllt" ein, mit dem Kreuz in der Mitte des Kästchens, und er bleibt dabei: "Das Verfahren verlangt es trotzdem." Die Zeile über die Abweichungen sagt nicht, welche (Zeiger,
+# Dampf, Lampe sind Sache des Bildes). Kein Dank, kein Trost, keine Einsicht, keine Lehre, kein Wort für das, was in G5 geschieht; er steht noch am Pult, die andere Hand blättert. Die Rechnung gilt
+# bei jedem Tempo der Einstellungen (sie nennt nur "alle paar Atemzüge", keine Zahl). Der Gag ist die Gründlichkeit: zweimal gerechnet, dasselbe Ergebnis, dafür sind Rechnungen da.
+
+~ load_over
+Der Lauf hält. Der Wächter blättert um und nimmt die andere Hand nicht vom Pult. [ID:lst_over_1] [#draft]
+Wächter: Ich halte an und rechne. Laut, damit man es nachprüfen kann. [ID:lst_over_2] [#draft]
+Wächter: Zwölf Hebel. Jeder verlangt alle paar Atemzüge einen Zug. [ID:lst_over_3] [#draft]
+Wächter: Zwei Hände. Bis sie beim zwölften sind, steht der erste wieder oben. [ID:lst_over_4] [#draft]
+Wächter: Ich habe zweimal gerechnet. Zweimal dasselbe Ergebnis. Dafür sind Rechnungen da. [ID:lst_over_5] [#draft]
+Wächter: Die Rechnung geht nicht auf. Ich trage ein: nicht erfüllt. [ID:lst_over_6] [#draft]
+Er setzt ein Kreuz in die letzte Spalte, genau in die Mitte des Kästchens. [ID:lst_over_7] [#draft]
+Wächter: Abweichungen von Normal sind eingetragen, alle. [ID:lst_over_8] [#draft]
+Wächter: Ich bleibe dabei. Das Verfahren verlangt es trotzdem. [ID:lst_over_9] [#draft]
+=> END
