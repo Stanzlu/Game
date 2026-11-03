@@ -99,6 +99,7 @@ MEMORY_MIRA_GATE,"Am Tor hat sie gesagt, was sie mir heute angesehen hat. Sie ha
 MEMORY_ORIN_DUCK,"Orin hat mich gebeten, nach einer Ente zu sehen. Sie stand vor der Tür und tat nichts. Das sei das Beunruhigende, sagt er."
 MEMORY_ORIN_LETTER,"Über Orins Tisch hängt ein Strauß, kopfüber, mit Bast. Der Brief dazu hat keine Anschrift. Er liest ihn nicht vor, er wollte nur, dass ich weiß, dass es ihn gibt."
 MEMORY_TESS_BOARD,"Tess hat mir gezeigt, wie man eine Säge zieht, nicht drückt. Mein Brett ist krumm geworden. Es bleibt stehen, sagt sie."
+MEMORY_TESS_GUEST,"Tess ist mit Brettern gekommen, ohne dass ich sie gerufen habe, und hat mir den ersten Nagel gezeigt."
 MEMORY_LIO_CONCERT,"Lio hat gespielt. Die Saite riss beim ersten Akkord, der Wind nahm die Noten, und die Ziege hatte den Einsatz. Keiner ist gegangen."
 QUEST_SIDE_ELYSIA_BOARD_TITLE,Die Auftragstafel
 QUEST_SIDE_ELYSIA_BOARD_BREAD,"Auf der Tafel sucht jemand einen Helden. Das Brot für die Schneiderin wartet bei der Bäckerin."
@@ -132,6 +133,8 @@ QUEST_MAIN_CITY_WAY_HELP,"Hier fragt man einander um Hilfe, nicht nach Heldentat
 QUEST_MAIN_CITY_WAY_LIST,"Am Brett auf dem Platz hängen mehr Zettel, als ein Mensch tun kann, und der Gefällige entschuldigt sich für jeden einzelnen. Ich muss nicht alle tun."
 QUEST_MAIN_CITY_WAY_EVENING,"Lio hat auf den Abend eingeladen, auf den Platz, zum schlechtesten Konzert der Welt. Es war laut, und es war schief, und keiner ist gegangen."
 QUEST_MAIN_CITY_WAY_NIGHT,"Das Konzert ist vorbei. Mira hat gesagt, dass sie noch heute Nacht weitergeht."
+QUEST_MAIN_CITY_WAY_HOME,"Auf dem Rückweg wird es hell. Die Straße ist dieselbe, nur in der anderen Richtung. Ich gehe nach Hause."
+QUEST_MAIN_CITY_WAY_DONE,"Im Haus hängen jetzt zwei Regale und eine Leiste mit zwei Haken, und am Tisch steht ein Stuhl mehr. Tess hat mir den ersten Nagel gezeigt, die anderen habe ich geschlagen. Auf dem Tisch liegt ein Brot."
 QUEST_SIDE_CITY_LOST_TITLE,Das Fundbüro
 QUEST_SIDE_CITY_LOST_ASK,"Im Rathaus gibt es ein Fundbüro. Es gibt zurück, was niemandem mehr gehört. Die Beamtin will nur wissen, was ich verloren habe."
 QUEST_SIDE_CITY_LOST_DONE,"Das Regal ist leer, bis auf eine Spinne, die dort wohnt. Ich habe einen Handschuh, einen Schlüssel, eine Dose mit Knöpfen und eine Tasse mit Sprung. Verloren habe ich nichts davon."

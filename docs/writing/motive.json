@@ -912,9 +912,25 @@
     {
      "type": "flag",
      "ref": "list.sat"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_bread_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_bread_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_close_1"
+    },
+    {
+     "type": "flag",
+     "ref": "house.bread"
     }
    ],
-   "payoff": "Bible §14: „Später muss der Gefällige erst lernen, dass Grenzen nicht bedeuten, jedes Brot aggressiv abzulehnen.“ Nach dem Nein setzt sich der Gefällige zu ihr, schweigt eine Weile und hält ihr ein Brot hin: „Ich habe zu viel gebacken. Immer. Du musst nicht.“ (`stadt_list_31`). Eine Grenze kann Nähe ermöglichen (Plan 5.2): sie darf es nehmen oder warm ablehnen, beides ist gleichwertig. „Nein, danke.“ und das Schweigen kränken ihn nicht, er isst es selbst, und es ist das erste Mal, dass sie ihn essen sieht (`stadt_list_35`); „Nehmen.“ führt in seine Küche. Das Brot ist `item_loaf` aus Akt I, kein zweiter Gegenstand (Brief O18); im Haus (S8, Nachspiel) kocht er zu viel, ein Gast und ein Tisch, kein Rezeptsystem. Die Zeile danach (`stadt_list_46`, `stadt_list_47`) entschuldigt sich weniger, aber nicht gar nicht.",
+   "payoff": "Bible §14: „Später muss der Gefällige erst lernen, dass Grenzen nicht bedeuten, jedes Brot aggressiv abzulehnen.“ Nach dem Nein setzt sich der Gefällige zu ihr, schweigt eine Weile und hält ihr ein Brot hin: „Ich habe zu viel gebacken. Immer. Du musst nicht.“ (`stadt_list_31`). Eine Grenze kann Nähe ermöglichen (Plan 5.2): sie darf es nehmen oder warm ablehnen, beides ist gleichwertig. „Nein, danke.“ und das Schweigen kränken ihn nicht, er isst es selbst, und es ist das erste Mal, dass sie ihn essen sieht (`stadt_list_35`); „Nehmen.“ führt in seine Küche. Das Brot ist `item_loaf` aus Akt I, kein zweiter Gegenstand (Brief O18); im Haus (S8) liegt es auf dem Tisch: Tess bringt es mit („Der mit den Zetteln hat mir das mitgegeben. Er kocht zu viel.“, `hk4_bread_2`) und bricht ein Stück ab, ohne zu fragen, ob jemand will (`hk4_close_1`); er selbst kommt nicht, sein Brot ist der Gast, und es gibt kein Rezeptsystem und keine Küche als Schleife. Die Zeile danach (`stadt_list_46`, `stadt_list_47`) entschuldigt sich weniger, aber nicht gar nicht.",
    "payoff_lines": [
     "stadt_list_31",
     "stadt_list_35"
@@ -1212,9 +1228,21 @@
     {
      "type": "line",
      "ref": "kon_song_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_5"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_build_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_build_2"
     }
    ],
-   "payoff": "Das Haus wird gebaut, nicht geschenkt (Bible §13, Brief O9). Das erste Brett, das die Spielerin sägt, wird krumm, auf beiden Wegen, mit Tess’ Händen am Holz oder ohne, und Tess nennt es, wie es ist: krumm, es bleibt stehen. Sie lobt nicht und tadelt nicht, sie nimmt es als Maß; es wandert als Kuriosität in die Taschen der Spielerin und wartet auf ein Fach im Haus. In S8 kommt Tess als Gast mit Absicht, baut mit der Spielerin zwei Regale und eine Wandleiste und sagt über die Arbeit des Antreibers an der Werkbank „Schief. Aber dicht.“ (Brief O9); die Leiter mit den Bleistiftstrichen am Holm, die in der Werkstatt noch vier Sprossen und zwei leere Löcher hat, ist dann das erste Stück am Dach. Wer um Hilfe gebeten hat (`city.asked_help`), bekommt kürzere Zeilen und die Antwort „Hältst du mir die Leiter?“, wer es allein gesägt hat, dasselbe Brett: kein Weg ist der bessere. Beim Konzert (S6) steht Tess hinten in der Menge, wenn das Brett gesägt ist, und klatscht einen halben Schlag neben dem Takt, gleichmäßig wie bei einer Säge (`kon_song_4`)."
+   "payoff": "Das Haus wird gebaut, nicht geschenkt (Bible §13, Brief O9). Das erste Brett, das die Spielerin sägt, wird krumm, auf beiden Wegen, mit Tess’ Händen am Holz oder ohne, und Tess nennt es, wie es ist: krumm, es bleibt stehen. Sie lobt nicht und tadelt nicht, sie nimmt es als Maß; es wandert als Kuriosität in die Taschen der Spielerin und wartet auf ein Fach im Haus. In S8 kommt Tess als Gast mit Absicht (Motiv `tess-gast`): sie zeigt den ersten Nagel („Ich zeig's dir einmal. Dann bist du dran.“, `hk4_tess_5`), die Spielerin schlägt die übrigen, und zwei Regale und eine Wandleiste mit zwei Haken hängen an der Wand (Motiv `vier-plaetze`); über die Arbeit des Antreibers an der Werkbank sagt sie „Schief. Aber dicht.“ (`hk4_bench_2`, Brief O9, Motiv `krumm-traegt`); die Leiter mit den Bleistiftstrichen am Holm, die in der Werkstatt noch vier Sprossen und zwei leere Löcher hat, ist dann das erste Stück am Dach. Wer um Hilfe gebeten hat (`city.asked_help`), bekommt kürzere Zeilen und die Antwort „Hältst du mir die Leiter?“, wer es allein gesägt hat, dasselbe Brett: kein Weg ist der bessere. Beim Konzert (S6) steht Tess hinten in der Menge, wenn das Brett gesägt ist, und klatscht einen halben Schlag neben dem Takt, gleichmäßig wie bei einer Säge (`kon_song_4`)."
   },
   {
    "id": "verbindung-lampe",
@@ -1386,7 +1414,126 @@
      "ref": "house.guest_hermit"
     }
    ],
-   "payoff": "In der Hütte hängt ein zweiter Becher glatt und unbenutzt am Nagel (W3). Wer den Einsiedler ins Tal einlädt, sieht ihn im Haus: er wischt seinen Becher aus, obwohl er sauber ist, setzt sich auf den Stuhl, den er mitbrachte, und lässt ihn stehen, wenn er geht. Er zieht nie ein; er kommt, wenn es einen Grund gibt, und der Grund ist Tee (W6). Akt IV (Tess) nutzt den Stuhl wieder (Plan 5.2, „zweiter Stuhl, Besuch“)."
+   "payoff": "In der Hütte hängt ein zweiter Becher glatt und unbenutzt am Nagel (W3). Wer den Einsiedler ins Tal einlädt, sieht ihn im Haus: er wischt seinen Becher aus, obwohl er sauber ist, setzt sich auf den Stuhl, den er mitbrachte, und lässt ihn stehen, wenn er geht. Er zieht nie ein; er kommt, wenn es einen Grund gibt, und der Grund ist Tee (W6). Akt IV, S8: Tess ist der zweite Gast und lässt ebenfalls einen Stuhl stehen (Plan 5.2, „zweiter Stuhl, Besuch“; Motiv `tess-gast`)."
+  },
+  {
+   "id": "tess-gast",
+   "kind": "vorausdeutung",
+   "title": "Tess als Gast mit Absicht",
+   "bible": "§13, §44, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hk4_in_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_3"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_5"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_tess_6"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_close_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_close_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_close_3"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_tess"
+    }
+   ],
+   "payoff": "Akt IV, S8 (Brief O9): nach dem Einsiedler der zweite Gast und der erste mit Absicht. Das Haus wird gebaut, nicht geschenkt (Bible §13): Tess klopft mit dem Ende eines Bretts, sagt „Ich bin nicht zufällig hier.“ (`hk4_tess_3`), zeigt es einmal und gibt den Hammer weiter, bricht das Brot, ohne zu fragen, ob jemand will, spricht zuletzt über Holz („Kiefer arbeitet noch.“, `hk4_close_2`) und geht; der Stuhl bleibt (`house.guest_tess`). Sie sagt nichts über die Nacht, die Stadt oder Mira und lobt nicht. Der Akt endet still, mit dem Haus als letztem Wort (Harz, Brot, der Tee, der noch kalt ist, `hk4_close_3`): ein Anfang und keine Lehre. Wer Tess nie getroffen hat, liest ihren Namen auf dem Zollstock (`hk4_tess_2`). Die Erinnerung `guest` und die Beziehung `close` setzt der Cue `home_close`. Das Präfix `house.guest_` zählt die Gäste (Plan 5.6); kein Akt hängt an einem einzelnen.",
+   "payoff_lines": [
+    "hk4_tess_3",
+    "hk4_close_3"
+   ]
+  },
+  {
+   "id": "krumm-traegt",
+   "kind": "vorausdeutung",
+   "title": "Krumm, aber es trägt (Tess' Maß)",
+   "bible": "§13, §46, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "wer_done_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_build_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_bench_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_bench_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_slot_2"
+    },
+    {
+     "type": "flag",
+     "ref": "city.board_done"
+    }
+   ],
+   "payoff": "Tess misst Arbeit nie als schön oder schlecht, sondern daran, ob sie hält: das krumme Brett „bleibt aber stehen“ (`wer_done_2`, S4), die Werkbank des Antreibers ist „Schief. Aber dicht.“ (`hk4_bench_2`, S8), und was die Spielerin auf einen der vier Plätze stellt, bleibt (`hk4_slot_2`). Kein Lob und kein Tadel (Bible §51): der Antreiber antwortet nicht, sein Hobel steht still (`hk4_bench_1`), und es geht weiter, ohne Nachsatz und ohne Witz."
+  },
+  {
+   "id": "vier-plaetze",
+   "kind": "vorausdeutung",
+   "title": "Regale und vier Plätze im Haus",
+   "bible": "§31, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hk4_tess_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_build_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_slot_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk4_slot_2"
+    },
+    {
+     "type": "flag",
+     "ref": "house.shelves"
+    }
+   ],
+   "payoff": "Kuriositäten sind teils bedeutsam, teils Unsinn (Bible §31) und wandern ins Haus (Brief O14), in kein Inventar mit Zähler. In S8 hängen Tess und die Spielerin zwei Regale und eine Leiste mit zwei Haken auf: vier Plätze (`shelf_3`, `shelf_4`, `wall_1`, `wall_2`), auf die die Spielerin stellt, was sie gefunden hat. Wer nichts bei sich trägt, hört, dass der Platz leer ist und nichts dazu passt (`hk4_slot_1`), ohne „noch nicht“ und ohne Aufforderung zu suchen; was sie hinstellt, bleibt (`hk4_slot_2`), ohne Lob und ohne Zahl. Das krumme Brett von Tess (`curiosity_crooked_board`) ist eines der Dinge, die dorthin gehören; die Plätze selbst bleiben leer, solange niemand etwas hinstellt."
   },
   {
    "id": "werte-am-feuer",
@@ -2311,6 +2458,21 @@
    "meaning": "Der Einsiedler hat das Haus besucht (nur wer ihn in der Hütte eingeladen hat, Akt III, W6): er brachte einen Stuhl mit, saß, trank und ging wieder; der Stuhl bleibt stehen, und auf dem Blatt an der Wand steht sein Name bei »Besuch«, Dauer »offen«. Er zieht nie ein. Das Präfix house.guest_ zählt die Gäste (Plan 5.6), kein Akt endet an ihnen."
   },
   {
+   "flag": "house.shelves",
+   "axis": "Haus",
+   "meaning": "Im Haus hängen zwei Regale und eine Leiste mit zwei Haken (Akt IV, S8): vier Plätze (`shelf_3`, `shelf_4`, `wall_1`, `wall_2`), auf die die Spielerin Kuriositäten stellen kann. Tess zeigt den ersten Nagel, die Spielerin schlägt die übrigen. Der Text setzt das Flag mit der ersten Zeile von `build`, die Karte zeigt die Plätze erst dann; was auf ihnen steht, führt `house.curiosity_slots`, nie eine Zahl im Bild."
+  },
+  {
+   "flag": "house.bread",
+   "axis": "Haus",
+   "meaning": "Auf dem Tisch im Haus liegt ein Brot auf einem Leinentuch (Akt IV, S8): das Brot des Gefälligen aus S5, Tess hat es mitgebracht („Er kocht zu viel.“). Es ist `item_loaf`, kein neuer Gegenstand, kein Rezept, keine Küche. Der Text setzt das Flag vor der Zeile, in der Tess es hinlegt; die Karte zeigt das Brot."
+  },
+  {
+   "flag": "house.guest_tess",
+   "axis": "Besucher",
+   "meaning": "Tess hat das Haus besucht (Akt IV, S8): sie kam mit Absicht und mit Brettern, zeigte den ersten Nagel, sagte über die Werkbank „Schief. Aber dicht.“, brach das Brot und ging; der Stuhl, auf dem sie saß, bleibt stehen. Die Szene setzt das Flag mit dem Sitzen, die Karte zeigt den Stuhl. Der Besuch beendet den Akt (Stufe `done`, Kapitelmarke `act4`, Beat `act4_home`), still und ohne Titel; wer Tess nie getroffen hat, liest ihren Namen auf dem Zollstock. Das Präfix `house.guest_` zählt die Gäste (Plan 5.6)."
+  },
+  {
    "flag": "house.looks_closely",
    "axis": "Wahrnehmung",
    "meaning": "Die Szene des Hauses leitet es aus der Facette Wahrnehmung ab; die Karte zeigt dann einen Punkt mehr im Raum (Akt II, B2)."
@@ -2808,7 +2970,7 @@
   {
    "flag": "city.tess_met",
    "axis": "Fortschritt",
-   "meaning": "Sie hat in der Werkstatt Tess getroffen (Akt IV, S4): eine Handwerkerin, die „Halt mal“ sagt, bevor sie aufsieht, und dann nur nennt, was das Haus im Tal braucht, Dach, Regal, Leiter. Die Beziehung ist vorsichtig; das Angebot ist ein Brett fürs Haus, „Ich zeig’s dir einmal. Dann bist du dran.“"
+   "meaning": "Sie hat in der Werkstatt Tess getroffen (Akt IV, S4): eine Handwerkerin, die „Halt mal“ sagt, bevor sie aufsieht, und dann nur nennt, was das Haus im Tal braucht, Dach, Regal, Leiter. Die Beziehung ist vorsichtig; das Angebot ist ein Brett fürs Haus, „Ich zeig’s dir einmal. Dann bist du dran.“ In S8 liest der Cue `tess_in` das Flag: wer Tess nie getroffen hat, liest ihren Namen auf dem Zollstock (`hk4_tess_2`)."
   },
   {
    "flag": "city.asked_help",

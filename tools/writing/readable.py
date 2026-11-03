@@ -34,6 +34,7 @@ PREFIX = {
     "flutlichtung": "W4-",
     "nachtwald": "W5-",
     "heimkehr": "W6-",
+    "akt4/heimkehr": "S8-",  # a file name that two acts share: "<folder>/<name>" wins over "<name>"
     "strasse": "S1-",  # Act IV: one prefix per segment ("S1-1")
     "stadt": "S2-",  # S2 has two files: the square and the town hall
     "rathaus": "S2R-",
@@ -187,7 +188,8 @@ def render(title, paths):
     for entry in paths:
         path, only = entry if isinstance(entry, tuple) else (entry, None)
         name = os.path.splitext(os.path.basename(path))[0].replace(".dialogue", "")
-        prefix = PREFIX.get(name, name[:1].upper())
+        folder = os.path.basename(os.path.dirname(path))
+        prefix = PREFIX.get("%s/%s" % (folder, name)) or PREFIX.get(name, name[:1].upper())
         out += ["", "## " + os.path.basename(path).replace(".dialogue", ""), ""]
         out += render_file(path, prefix, only)
     out.append("")

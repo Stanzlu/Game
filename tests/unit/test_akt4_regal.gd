@@ -15,6 +15,8 @@ const POSTER := "curiosity_concert_poster"
 
 
 func before_each() -> void:
+	# the menu pauses the tree, as every menu does: the test goes on while it is open
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	SceneTravel.stay = true
 	WorldState.new_game()
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
@@ -54,7 +56,7 @@ func _slots(scene: GameScene) -> Dictionary:
 
 
 func _carry(item: String) -> void:
-	assert_true(WorldState.add_item(item), "carried: " + item)
+	assert_gt(WorldState.add_item(item), 0, "carried: " + item)
 
 
 # --- WorldState --------------------------------------------------------------------------------

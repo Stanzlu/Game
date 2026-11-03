@@ -85,3 +85,14 @@ else
 	Die Stadt selbst bleibt hinter der Hecke. Ihren Rauch hat sie schon vorgeschickt. [ID:str_view_3] [#draft]
 	do WorldState.set_flag("city.view_seen")
 => END
+
+# =============================================================================================================================
+# S8: die Heimkehr (Akt IV, Segment S8; docs/akt4/REGIONSBRIEFE.md O15). Wer nach dem Streit aus der Stadt auf die Straße tritt, in der Stufe home der Heldenquest, sieht es hell werden: ohne Ereignis,
+# ohne ein Wort über Mira, die Stadt oder die Nacht davor. Die Szene spielt den Cue einmal, beim ersten Betreten von der Stadt aus; die Straße ist dieselbe wie auf dem Hinweg, nur der Tag ist neu (die
+# Krähe auf der Vogelscheuche, str_crow_2, ist wieder da). Nichts wird gesetzt. Zeilen-IDs str_dawn_*.
+# =============================================================================================================================
+
+~ dawn
+Auf der Straße wird es hell, ohne dass etwas Besonderes geschieht. [ID:str_dawn_1] [#draft]
+Der Himmel über den Feldern wird erst grau, dann heller, dann einfach Tag. Die Krähe sitzt schon wieder auf der Vogelscheuche. [ID:str_dawn_2] [#draft]
+=> END
