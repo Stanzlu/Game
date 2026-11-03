@@ -72,6 +72,9 @@ SFX_GROUPS = [
     (r"hermit_flute_", make_slice_sfx.GROUPS["flute"]),
     (r"lio_street_", make_slice_sfx.GROUPS["lute"]),
     (r"tess_whistle_", make_slice_sfx.GROUPS["whistle"]),
+    (r"lio_concert_", make_slice_sfx.GROUPS["lute"]),
+    (r"string_snap_", make_slice_sfx.GROUPS["snap"]),
+    (r"crowd_clap_", make_slice_sfx.GROUPS["claps"]),
     (r"purr$", make_slice_sfx.GROUPS["purr"]),
     (r"sit$|stand$", make_slice_sfx.GROUPS["cloth"]),
     (r"bird$", make_slice_sfx.GROUPS["bird"]),
@@ -139,6 +142,16 @@ CLASSES = [
     # than its loudness says, and Tess whistles to herself. So it sits at the lute's gain but a group lower (-21 LUFS),
     # a hair over the bed (about +1 LU) and well under the lute (+2).
     ("whistle in the workshop", ["tess_whistle_0"], -2.0, "SFX", "tal_morgen", 0.0, 4.0),
+    # Lio's worst concert (Act IV, S6), the plaza in the evening, heard under the valley's evening bed (the nearest the
+    # town has). The lute plays as it does in the street (same group, same -2 dB): the piece is the centre of the
+    # evening, and a hair over the bed is how a plucked tune with its peaks is heard; the crowd that hums in the last six
+    # seconds is in the file, not a second sound. The string that breaks is the one jolt of the evening: well over the
+    # bed (about +5 LU, at the goat's gain), sharp but not harsh. A few hands clapping are many metres away and meant
+    # to be modest: a transient with no body, so its loudness (the gated mean over the blocks that hold a clap) is a
+    # hair under the bed's while its peaks (about -7 dBFS as played, the lute's are -10) stand clear of the bed's.
+    ("lute at the concert", ["lio_concert_0"], -2.0, "SFX", "tal_abend", 0.0, 6.0),
+    ("string snaps", ["string_snap_0"], -2.0, "SFX", "tal_abend", 2.0, 8.0),
+    ("hands clapping", ["crowd_clap_0"], -4.0, "SFX", "tal_abend", -3.0, 3.0),
     # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
     # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
     ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),
