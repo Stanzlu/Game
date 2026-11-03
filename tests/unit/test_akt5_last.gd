@@ -218,6 +218,8 @@ func test_a_run_begun_without_her_waits_until_she_stands_at_the_console() -> voi
 	var time := _run._wave_time
 	_play(10.0, false)
 	assert_eq(_run._wave_time, time, "nothing runs without her")
+	_play(LoadRun.READY_SECONDS - 0.5, true)
+	assert_eq(_run._wave_time, time, "she gets a moment at the console first")
 	_play(1.0, true)
 	assert_gt(_run._wave_time, time)
 

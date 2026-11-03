@@ -316,12 +316,16 @@ class MaschineMapTests(unittest.TestCase):
         self.assertEqual([x - rx for x, _ in cells], LEVER_COLS)
         self.assertEqual(sorted(set(range(6, 19)) - set(LEVER_COLS)), [12])
         # the cloths: one for each lever that stands still, in the row below it, lifted onto it, and none for the three in use
-        self.assertEqual(sorted(_glyph_cells(rows, "m")), sorted((x, y + 1) for (x, y) in cells[3:]), "one cloth below each of the nine still levers")
+        # (since G4 the cloths come off wave by wave: m for the levers 4 to 6, n for 7 to 9, o for 10 to 12, each with its own flag)
+        cloths = sorted(_glyph_cells(rows, "m") + _glyph_cells(rows, "n") + _glyph_cells(rows, "o"))
+        self.assertEqual(cloths, sorted((x, y + 1) for (x, y) in cells[3:]), "one cloth below each of the nine still levers")
+        for glyph, group, flag in (("m", cells[3:6], "plant.wave_two"), ("n", cells[6:9], "plant.wave_three"), ("o", cells[9:12], "plant.wave_four")):
+            self.assertEqual(sorted(_glyph_cells(rows, glyph)), sorted((x, y + 1) for (x, y) in group), "the cloths of the wave that takes them off: " + glyph)
+            self.assertEqual(symbols[glyph]["params"]["unless"], flag, "the cloths %s go with %s" % (glyph, flag))
         params = symbols["m"]["params"]
         self.assertEqual((symbols["m"]["prop"], params["sprite"], params["lift"]), (DECOR, "tal/ma_lever_cover", 9))
         self.assertNotIn("cue", params, "the lever beneath it speaks")
-        for key in ("if", "unless"):
-            self.assertNotIn(key, params, "G4 takes the cloths away one by one: it brings its own condition")
+        self.assertNotIn("if", params, "a cloth goes when its wave comes, it never waits for a flag to appear")
         cover = catalog["tal/ma_lever_cover"]
         self.assertEqual(_png_size(mapfile.res_path(cover["textures"][0])), (16, 36))
         self.assertEqual(cover["anchor"], [8, 36])

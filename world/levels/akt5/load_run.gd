@@ -31,6 +31,9 @@ const WAVES: Array[Dictionary] = [
 const HAND_SECONDS := 0.45
 ## Seconds at the console's back before the run waits for her (at normal pace).
 const AWAY_SECONDS := 3.0
+## A run begun without her (a game loaded in the middle of the load) gives her this long at the
+## console before it goes on (at normal pace).
+const READY_SECONDS := 2.0
 
 var state := State.IDLE
 var wave := 1
@@ -42,6 +45,7 @@ var _holds: Dictionary = {}
 var _away := 0.0
 var _waiting := false
 var _armed := false
+var _ready_left := 0.0
 
 
 ## How far the periods and the waves are stretched by the settings: "more time" and the calmer
@@ -89,6 +93,7 @@ func begin(first_wave := 1, armed := true) -> void:
 	_away = 0.0
 	_waiting = false
 	_armed = armed
+	_ready_left = READY_SECONDS * Settings.timing_factor()
 	_holds.clear()
 	_use_levers_up_to(levers_in(wave))
 	for number: int in levers:
@@ -133,18 +138,23 @@ func is_waiting() -> bool:
 func step(delta: float, at_console: bool, talking: bool) -> void:
 	if state != State.RUNNING or talking:
 		return
+	if not _armed:
+		# a run loaded in the middle: she gets a moment at the console before it goes on
+		if at_console:
+			_ready_left -= delta
+			_armed = _ready_left <= 0.0
+		return
 	if at_console:
-		_armed = true
 		_away = 0.0
 		if _waiting:
 			_waiting = false
 			returned.emit()
-	elif _armed:
+	else:
 		_away += delta
 		if _away >= AWAY_SECONDS * Settings.timing_factor() and not _waiting:
 			_waiting = true
 			waited.emit()
-	if _waiting or not _armed:
+	if _waiting:
 		return
 	_wave_time += delta
 	for number: int in _holds.keys():

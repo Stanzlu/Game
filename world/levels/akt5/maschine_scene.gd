@@ -72,7 +72,9 @@ func _ready() -> void:
 		_run.state = LoadRun.State.OVER
 		_run.wave = LoadRun.WAVES.size()
 		for number: int in _levers:
-			(_levers[number] as ConsoleLever).set_active(true)
+			var each := _levers[number] as ConsoleLever
+			each.set_active(true)
+			each.set_down(false)
 	elif WorldState.has_flag("plant.load"):
 		# a game loaded in the middle of the load: it goes on from the wave she reached, when she is back
 		_run.begin(_wave_from_flags(), false)
