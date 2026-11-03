@@ -198,7 +198,7 @@ func test_the_frozen_ends_of_the_acts_say_whether_the_game_is_over() -> void:
 	assert_false(saves.slice_finished(), "and the newer save of the two says nothing")
 	# the end of Act IV is not the end any more: the way north into the mountains goes on (G1)
 	_write_raw("slot_3", FileAccess.get_file_as_string(fixtures + "v2_akt4_end.json"))
-	assert_false(saves.summary("slot_3")["finished"], "the shelves hung, the act over, the way goes on")
+	assert_false(saves.summary("slot_3")["finished"], "the act is over, the way goes on")
 	assert_false(saves.slice_finished(), "and the newest save says nothing")
 
 
