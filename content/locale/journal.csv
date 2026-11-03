@@ -156,6 +156,7 @@ QUEST_SIDE_CITY_LIST_CLOSED,"Ich habe gesagt, was ich tue und was nicht. Die and
 QUEST_MAIN_MOUNTAIN_WAY_TITLE,Der Weg ins Gebirge
 QUEST_MAIN_MOUNTAIN_WAY_CLIMB,"Am Wegweiser hat jemand einen dritten Pfeil dazugemalt, nach oben. Ich steige auf. Der Weg folgt dem Bach nach Norden, und Steinmännchen stehen am Rand."
 QUEST_MAIN_MOUNTAIN_WAY_VALLEY,"Der Pfad hat in einem Hochtal geendet, zwischen Felswänden, mit einem See. Im Osten steht hinter einem Zaun die Anlage, und aus ihrem Schornstein steigt der Rauch, den ich von unten gesehen habe. Ich gehe nach Osten."
+QUEST_MAIN_MOUNTAIN_WAY_PLANT,"In der Anlage zählt jemand. Er hat ein Pult mit zwölf Hebeln, von denen drei laufen, und er zeigt mir die drei. Wenn ich die Reihenfolge vergesse, sagt er sie noch einmal."
 QUEST_SIDE_GRAT_STONE_TITLE,"Der Stein, der nicht liegen bleibt"
 QUEST_SIDE_GRAT_STONE_CARRY,"Am Fuß des ersten Steinmännchens im Hochtal lag ein kleiner runder Stein. Ich habe ihn eingesteckt. Obenauf ist bei jedem Steinmännchen im Tal noch Platz."
 QUEST_SIDE_GRAT_STONE_DONE,"Ich habe den Stein auf alle drei Steinmännchen gelegt. Er ist gerollt, gekippt und vom Wind weitergeschoben worden. Jetzt steckt er in meiner Tasche."

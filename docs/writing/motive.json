@@ -772,9 +772,17 @@
     {
      "type": "flag",
      "ref": "fragment.iron_ring"
+    },
+    {
+     "type": "line",
+     "ref": "anl_dial_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.worn_dial"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand. Der Aufstieg (Akt V, G1) fügt den Eisenring in der Felswand hinzu: innen blank und rund geschliffen von einem Seil, das hier oft lief; für einen Atemzug läuft eines durch den Ring und zieht etwas Schweres hinauf, dann ist er wieder leer und hält weiter (`auf_iron_ring_3`). Kein Bild des Kindes, keine Figur, kein Grund, kein Lesbares; das erste der drei Fragmente der Welt in Akt V. Die Steinmännchen am Pfad sind keine Fragmente und tragen dasselbe: von jemandem gebaut, ohne Namen, jedes dort, wo man das vorige noch sieht (`auf_cairn_first_3`), ohne ein Wort über Hilfe oder Weg."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand. Der Aufstieg (Akt V, G1) fügt den Eisenring in der Felswand hinzu: innen blank und rund geschliffen von einem Seil, das hier oft lief; für einen Atemzug läuft eines durch den Ring und zieht etwas Schweres hinauf, dann ist er wieder leer und hält weiter (`auf_iron_ring_3`). Kein Bild des Kindes, keine Figur, kein Grund, kein Lesbares; das erste der drei Fragmente der Welt in Akt V. Die Steinmännchen am Pfad sind keine Fragmente und tragen dasselbe: von jemandem gebaut, ohne Namen, jedes dort, wo man das vorige noch sieht (`auf_cairn_first_3`), ohne ein Wort über Hilfe oder Weg. Die Anlage (Akt V, G3) fügt das abgewetzte Zifferblatt hinzu: ein Zeiger am Pult hat das Glas Jahr um Jahr gestreift, bis eine Rille blieb, immer an derselben Stelle, genau unter der Spitze, wenn er auf »Normal« steht; für einen Atemzug liegt ein Zeiger über dem anderen, hundert, tausend, alle dort (`anl_dial_3`). Kein Bild des Kindes, keine Figur, kein Grund; das zweite der drei Fragmente der Welt in Akt V."
   },
   {
    "id": "rauch-faeden",
@@ -809,9 +817,13 @@
     {
      "type": "flag",
      "ref": "mountain.view_seen"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_3"
     }
    ],
-   "payoff": "Der Rauch zeigt von weitem, wie ein Ort lebt. Über dem Haus steht dünner Rauch, gerade nach oben (`bl_back_1`, Akt II); die Stadt schickt viele Fäden vor, die sich im Himmel nicht einig werden (`str_view_2`, Akt IV); die Anlage im Gebirge zeigt einen einzigen, dünn und gerade und so genau, als hätte jemand vorher überlegt, wohin er soll (`auf_view_smoke_3`, Akt V, G1). Der Text sagt nicht, wer dort feuert; die Pedanterie ist der Gag, nie seine Angst (Brief O13). Die Anlage (G3) löst den Rauch auf, ohne ihn zu erklären."
+   "payoff": "Der Rauch zeigt von weitem, wie ein Ort lebt. Über dem Haus steht dünner Rauch, gerade nach oben (`bl_back_1`, Akt II); die Stadt schickt viele Fäden vor, die sich im Himmel nicht einig werden (`str_view_2`, Akt IV); die Anlage im Gebirge zeigt einen einzigen, dünn und gerade und so genau, als hätte jemand vorher überlegt, wohin er soll (`auf_view_smoke_3`, Akt V, G1). Der Text sagt nicht, wer dort feuert; die Pedanterie ist der Gag, nie seine Angst (Brief O13). Die Halle (Akt V, G3) löst den Rauch auf, ohne ihn zu erklären: der Mann, der vorher überlegt hat, wohin der Rauch soll, steht am Pult, der Stift setzt einen Strich, bevor er den Kopf hebt, und seine Stiefel stehen Spitze an Spitze (`anl_w_3`). Kein Wort über Feuer, Holz oder Schornstein; in der Halle ist nur Dampf im Bild."
   },
   {
    "id": "gefaelliger-liste",
@@ -2343,6 +2355,116 @@
     }
    ],
    "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder."
+  },
+  {
+   "id": "kleine-tuer",
+   "kind": "vorausdeutung",
+   "title": "Die kleine Tür hinter dem Pult",
+   "bible": "§15, §46, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "kd_door_3"
+    },
+    {
+     "type": "line",
+     "ref": "kd_door_4"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.closed_door"
+    },
+    {
+     "type": "line",
+     "ref": "anl_door_1"
+    },
+    {
+     "type": "line",
+     "ref": "anl_door_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_door_3"
+    }
+   ],
+   "payoff": "Das Warum des Wächters zeigen Dinge, keine Erklärung (Brief O6, wie das Warum des Antreibers und des Gefälligen). An der Rückwand der Halle, hinter dem Pult, sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht: graues Holz, Scharniere, die von Öl glänzen, und ein schwerer Riegel, den Stangen von allen zwölf Hebeln halten, keine locker (`anl_door_1`, `anl_door_2`). Sie ist zu, und die Spielerin klopft nicht (`anl_door_3`): ein Echo der geschlossenen Tür aus Akt I (`kd_door_3`, `kd_door_4`, Fragment `fragment.closed_door`), ohne dass es jemand sagt. Das Wort Kind fällt nicht, der Wächter spricht nie über die Tür, kein Täter, keine Ursache, keine Wirkung auf die Spielerin. Die Tür bleibt zu, auch nach dem Loslassen: er hat sie nur nicht mehr in der Hand (Akt V, G5 und G9)."
+  },
+  {
+   "id": "waechter-zaehlt",
+   "kind": "gag",
+   "title": "Der Wächter zählt und trägt ein",
+   "bible": "§14, §33, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "anl_knock_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_knock_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_7"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_10"
+    },
+    {
+     "type": "line",
+     "ref": "anl_w_12"
+    },
+    {
+     "type": "line",
+     "ref": "anl_wrong_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_right_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_again_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_again_3"
+    },
+    {
+     "type": "line",
+     "ref": "anl_again_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_pipe_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_gauge_2"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.gate_open"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.probe"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.probe_done"
+    }
+   ],
+   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung; die Last, die nachweislich unmöglich wird (G4), das Loslassen (G5) und sein trockener Schluss (G9, am Herd im Haus) folgen."
   }
  ],
  "register": [
@@ -3380,6 +3502,26 @@
    "flag": "grat.thimble_taken",
    "axis": "Gegenstände",
    "meaning": "Sie hat den Fingerhut aus dem Häufchen am Bau des Murmeltiers genommen (Kuriosität, Akt V, G2): der Hut aus Pappe sitzt danach ganz oben. Das Murmeltier ist nie zu sehen."
+  },
+  {
+   "flag": "grat.gate_open",
+   "axis": "Fortschritt",
+   "meaning": "Sie hat am Tor der Anlage geklopft, und die Stimme dahinter hat geöffnet (Akt V, G3): das Tor steht offen, an seiner Stelle die Tür in die Halle. Wer nicht klopft, bleibt davor; nichts ist gesperrt, was nicht vorher schon zu war."
+  },
+  {
+   "flag": "plant.probe",
+   "axis": "Beschützer",
+   "meaning": "Der Wächter hat ihr die Probe der drei Hebel angeboten und die Reihenfolge ausgerufen (Akt V, G3). Keine Frist, keine Strafe; die Szene startet daraus die Probe, wer fragt, hört die Reihenfolge noch einmal. Die Probe ist nie Voraussetzung."
+  },
+  {
+   "flag": "plant.probe_done",
+   "axis": "Beschützer",
+   "meaning": "Sie hat die drei Hebel in der Reihenfolge des Wächters gezogen, und er hat es eingetragen (Akt V, G3). Der Cue `waechter` liest es und wechselt zu `waechter_again`; kein Lob, keine Ankündigung."
+  },
+  {
+   "flag": "fragment.worn_dial",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist am abgewetzten Zifferblatt am Pult stehen geblieben: eine Rille im Glas, immer an derselben Stelle, für einen Atemzug liegt ein Zeiger über dem anderen (Spur der Welt, Akt V, G3; kein Bild des Kindes)."
   }
  ]
 }
