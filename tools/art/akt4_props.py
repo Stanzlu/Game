@@ -20,10 +20,13 @@ the wall (four-cell runs, a run for the side walls, corner towers), the gate wit
 the fountain (and a patch with the worn hollows that lies over its rim), the notice board with its sixteen sheets, two
 stalls, the three stations of "Ein perfekter Tag" (wreath, lectern, table with bread and salt and sparrows), crates,
 barrels, dark lamp posts, pails of peonies, a woodstack, a sawhorse, pots and the crate Lio sits on. S3 adds one more: an ordinary
-white duck in profile that stands by the florist's pots (its shadow is painted into the picture, the catalog gives it none). S5 adds the slips of the list (a fresh one with a pin and one crossed out, flat on the cobbles, no letter, no digit, no catalog shadow). Houses and shops carry no
+white duck in profile that stands by the florist's pots (its shadow is painted into the picture, the catalog gives it none). S5 adds the slips of the list (a fresh one with a pin and one crossed out, flat on the cobbles, no letter, no digit, no catalog shadow). S6 adds the evening: a stage on the square, its two
+lamps, the lamp post with its lantern burning, a string of paper lanterns, the old board at the stage's corner and a poster (see the
+section "the concert"; only the lamps carry a light). Houses and shops carry no
 shadow in the catalog (their foot is the map's solid ground); a few things stand outside the image grid on purpose
 (anchors below the picture: the rim patch and the seat crate sit over or under something that lies on another cell).
-Called from make_sprites.build(); `--preview out.png` draws Act IV's pieces, `--preview-town out.png` the town's.
+Called from make_sprites.build(); `--preview out.png` draws Act IV's pieces, `--preview-town out.png` the town's, `--preview-concert out.png [row lift]` the concert's (S6: the
+stage, its lamps, the lit posts, the string of lanterns, the board and the poster, by day and at night).
 """
 import os
 import sys
@@ -1764,9 +1767,302 @@ def duck(ms):
     return c
 
 
+# --------------------------------------------------------------------------- the concert (S6)
+# Lio's worst concert of the world is the town's first night map: a stage at the edge of the square in front of the town hall
+# (seven cells wide, the deck two cells deep and a front of one cell, glyph on the middle of the front: anchor (56, 40), the
+# canvas is 48 px = those three cells), a lamp at each back end of it, the four lamp posts of the square burning, a string of paper
+# lanterns over the stage, an old board that leans at the front corner and a poster on a short post. Only the two kinds of
+# lamp carry a light (PointLight2D, six in all: four posts and two stage lamps); the string and the paper lanterns glow only
+# in their emissive layer. Every new piece that the map places on a cell of the baked stamp carries NO shadow in the catalog
+# (the stage, the board, the poster, the string); the lit post has the same shadow as the dark one, because it replaces it
+# on the same cell. Letters and digits appear nowhere: the poster and the board hold scribbles and cuts nobody can read.
+NEW_WOOD = ramp("#6a4a2a", "#9c7446", "#c89c5e", "#e8c488", "#f8e2b0")  # the two fresh boards of the deck
+OLD_WOOD = ramp("#1a1612", "#2c2620", "#443a30", "#5e5242")  # the oldest board: dark, grey, worn
+LEANING_WOOD = ramp("#3a3228", "#5c5040", "#82735c", "#a89676", "#c8b690")  # the same board, leaning at the corner
+FLAME = {"g": "#9a4c1c", "G": "#d6802c", "F": "#f8b84a", "f": "#fff2b0"}  # glass at the rim, glass, flame, hot core
+RIBBON = ramp("#5a1810", "#9a2c1c", "#cc4a30", "#ee7a50")
+POSTER_PAPER = ramp("#7a6a34", "#b8a460", "#dccb86", "#f3e6a8", "#fff8d0")
+INK = np.array([52, 36, 24], np.float32)
+CRAYON = np.array([176, 48, 30], np.float32)
+PAPER_AMBER = ramp("#6a3c10", "#b06a1c", "#e89a30", "#ffc858", "#fff0a0")
+PAPER_RED = ramp("#5a1810", "#9a2e1c", "#d4503a", "#f58058", "#ffc08a")
+PAPER_CREAM = ramp("#5e4e2c", "#9a8450", "#d0ba7c", "#f0e0a8", "#fffbe0")
+PAPER_ROSE = ramp("#5a1a30", "#9a3458", "#d4648a", "#f894b4", "#ffd0dc")
+LANTERN_CAP = ramp("#1e140e", "#3a281a", "#5c4228")
+LANTERN_PAPERS = [PAPER_AMBER, PAPER_RED, PAPER_CREAM, PAPER_ROSE, PAPER_AMBER]
+
+
+def _stamp(c, rows, colors, ox, oy):
+    """Draws a hand-made grid of characters (one colour each, '.' is transparent) onto `c` at (ox, oy)."""
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch != ".":
+                c.rgb[oy + y, ox + x] = colors[ch]
+                c.a[oy + y, ox + x] = True
+
+
+def stage(ms):
+    """The stage that nobody knows who built, seen from the front and a little above: the back edge, a deck of five courses of
+    boards (two of them, a long one in the second course and one in the fourth, are fresh and pale, nailed with bright
+    nails; the one at the front left is dark, grey and old, the oldest of the stage), a rim at the front, and below it the front:
+    upright boards with a brace nailed across them, some of them not quite as long as the rest (somebody saved on nails), a
+    corner post at each end. At the back, between the places where Orin and Lio stand, the rim breaks off in a gap with two
+    treads: the way up, only hinted at. 112 x 48, anchor (56, 40) (the centre of the bottom cell, 8 px above the canvas's
+    foot); the deck is flat (it lies under everybody), only the front blocks (shape in the catalog)."""
+    rng = np.random.default_rng(1301)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    plank = ex["plank"]
+    c = ms.Canvas(112, 48)
+    grain = pa.value_noise(48, 112, (1, 9), rng)
+    nail_old = IRON_DARK[3]
+    nail_new = np.array([226, 230, 236], np.float32)
+    # the back edge, the far end of the deck, in shade
+    c.paint(c.rect(1, 1, 111, 3), plank, np.where(c.yy < 2, 0.3, 0.12), dither=False)
+    # the deck: five courses of boards, five px and a dark crack each; the joints are staggered
+    c.paint(c.rect(1, 3, 111, 32), plank, 0.03, dither=False)
+    courses = [(3, [40, 88]), (9, [22, 62, 100]), (15, [52, 94]), (21, [30, 70]), (27, [41, 80])]
+    fresh = {(1, 2), (3, 1)}  # (course, board): the two new boards
+    worn = {(4, 0)}  # the old one, front left
+    for r, (y0, joints) in enumerate(courses):
+        starts = [1] + [j + 1 for j in joints]
+        ends = joints + [111]
+        for i, (x0, x1) in enumerate(zip(starts, ends)):
+            if (r, i) in fresh:
+                colors, tone = NEW_WOOD, 0.56
+            elif (r, i) in worn:
+                colors, tone = OLD_WOOD, 0.5
+            else:
+                colors, tone = plank, 0.40 + 0.2 * rng.random()
+            value = (tone + 0.14 * (grain - 0.5) + np.where(c.yy == y0, 0.2, 0.0) - np.where(c.yy == y0 + 4, 0.14, 0.0)
+                     + np.where(c.xx == x0, 0.08, 0.0))
+            c.paint(c.rect(x0, y0, x1, y0 + 5), colors, value, contrast=2.0, dither=False)
+            if x1 - x0 >= 14:  # a nail near each end
+                for nx in (x0 + 2, x1 - 3):
+                    c.fill(c.rect(nx, y0 + 2, nx + 1, y0 + 3), nail_new if (r, i) in fresh else nail_old)
+    for kx, ky in ((18, 5), (47, 11), (104, 17), (46, 23), (76, 29)):  # knots in the ordinary boards
+        c.paint(c.rect(kx, ky, kx + 2, ky + 1), plank, 0.1, dither=False)
+    c.paint(c.rect(14, 27, 15, 30), OLD_WOOD, 0.05, dither=False)  # a crack in the oldest board
+    c.paint(c.rect(15, 30, 16, 32), OLD_WOOD, 0.05, dither=False)
+    c.paint(c.rect(24, 28, 33, 31), OLD_WOOD, 0.82, dither=False)  # where hands and feet have worn it pale
+    # the way up at the back: the rim breaks off, two treads lead down behind the edge, a rail post on each side
+    c.paint(c.rect(38, 1, 50, 9), plank, 0.03, dither=False)
+    c.paint(c.rect(39, 3, 49, 5), plank, np.where(c.yy < 4, 0.84, 0.62), dither=False)
+    c.paint(c.rect(40, 6, 48, 8), plank, np.where(c.yy < 7, 0.56, 0.34), dither=False)
+    for px in (37, 50):
+        c.paint(c.rect(px, 1, px + 1, 9), plank, 0.74, dither=False)
+    # the rim at the front: a lit edge, the board, its shade
+    c.paint(c.rect(1, 32, 111, 35), plank, np.where(c.yy < 33, 0.92, np.where(c.yy < 34, 0.64, 0.2)), dither=False)
+    # the front: upright boards (six or seven px, a dark gap between), a few a pixel short
+    bx = 1
+    while bx < 111:
+        width = int(rng.choice([6, 7]))
+        x1 = min(bx + width, 111)
+        bottom = 47 - int(rng.integers(0, 2))
+        value = (0.24 + 0.2 * rng.random() + np.where(c.xx == bx, 0.14, 0.0) - np.where(c.xx == x1 - 1, 0.1, 0.0)
+                 - np.where(c.yy >= bottom - 1, 0.16, 0.0))
+        c.paint(c.rect(bx, 35, x1, bottom), plank, value, contrast=2.0, dither=False)
+        bx = x1 + 1
+    c.paint(c.rect(1, 39, 111, 42), plank, np.where(c.yy < 40, 0.76, np.where(c.yy < 41, 0.52, 0.26)), dither=False)  # the brace
+    for nx in range(8, 108, 14):
+        c.fill(c.rect(nx, 40, nx + 1, 41), nail_old)
+    for px in (1, 108):  # the corner posts
+        c.paint(c.rect(px, 32, px + 3, 47), plank, np.where(c.xx < px + 1, 0.8, np.where(c.xx < px + 2, 0.52, 0.24)), dither=False)
+    c.outline(st["outline"])
+    return c
+
+
+def stage_lamp(ms):
+    """A lamp on a post for the stage: a tall wooden pole that leans a little (it has been knocked, and it stands), a tin lantern
+    with a handle-less cap on top whose glass is a warm flame, a strip of red cloth tied round the pole, two stones and a small
+    block at its foot. The glass and the flame are the emissive layer; the PointLight2D (catalog) sits on the flame. Returns
+    (sprite, emissive); 14 x 42, anchor (7, 40): the flame's centre is 34 px above it."""
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c, e = ms.Canvas(14, 42), ms.Canvas(14, 42)
+    # the pole, three px wide, its top leaning 1.5 px to the right of its foot
+    for y in range(11, 38):
+        cx = 6.5 + 1.5 * (37 - y) / 31.0
+        x0 = int(round(cx - 1.5))
+        for dx, value in ((0, 0.8), (1, 0.52), (2, 0.22)):
+            c.paint(c.rect(x0 + dx, y, x0 + dx + 1, y + 1), ex["plank"], value, dither=False)
+    # a strip of red cloth knotted round the pole, its two ends hanging
+    rx0 = int(round(6.5 + 1.5 * (37 - 17) / 31.0 - 1.5))
+    c.paint(c.rect(rx0, 16, rx0 + 3, 18), RIBBON, 0.65, dither=False)
+    c.paint(c.rect(rx0 + 3, 17, rx0 + 4, 22), RIBBON, 0.5, dither=False)
+    c.paint(c.rect(rx0 + 2, 18, rx0 + 3, 21), RIBBON, 0.3, dither=False)
+    # the foot: a small block and two stones that hold it
+    c.paint(c.rect(3, 37, 11, 40), ex["plank"], np.where(c.yy < 38, 0.5, 0.26), dither=False)
+    c.paint(c.ellipse(3.5, 38.6, 2.6, 1.8), st["stone"], 0.5, dither=False)
+    c.paint(c.ellipse(10.5, 38.8, 2.6, 1.6), st["stone"], 0.4, dither=False)
+    # the lantern: cap, glass with the flame, base plate
+    colors = {"i": ex["iron"][2], "I": ex["iron"][3], "b": ex["iron"][1]}
+    colors.update({k: pa.hex_rgb(v) for k, v in FLAME.items()})
+    rows = ["..iiii..",
+            ".iIIIIi.",
+            "igGGGGgi",
+            "igGFFGgi",
+            "igFffFgi",
+            "igFffFgi",
+            "igGFFGgi",
+            "igGGGGgi",
+            ".iggggi.",
+            "..bbbb..",
+            "...bb..."]
+    _stamp(c, rows, colors, 4, 1)
+    glow = np.zeros((42, 14), bool)
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in FLAME:
+                glow[1 + y, 4 + x] = True
+    c.outline(st["outline"])
+    e.rgb[glow] = c.rgb[glow]
+    e.a |= glow
+    return c, e
+
+
+def lamp_post_lit(ms):
+    """The lamp post of the square with its lantern burning: the same picture as `lamp_post` (the same outline, so that the
+    one replaces the other on its cell), only the glass inside the frame is lit: amber at the rim, a flame with a hot core, the
+    iron bar still across it. The glass and the flame are the emissive layer; the PointLight2D (catalog) sits on the lantern.
+    Returns (sprite, emissive); 18 x 72, anchor (9, 68), like `lamp_post`."""
+    c, e = lamp_post(ms), ms.Canvas(18, 72)
+    glass = c.rect(5, 6, 13, 17) & ~c.rect(8, 6, 10, 17)
+    inner = (c.xx >= 6) & (c.xx < 12) & (c.yy >= 7) & (c.yy < 16)
+    flame = c.ellipse(9, 11.5, 3.0, 3.8) & glass
+    core = c.ellipse(9, 12.0, 1.7, 2.6) & glass
+    c.fill(glass, pa.hex_rgb(FLAME["g"]))
+    c.fill(glass & inner, pa.hex_rgb(FLAME["G"]))
+    c.fill(flame, pa.hex_rgb(FLAME["F"]))
+    c.fill(core, pa.hex_rgb(FLAME["f"]))
+    e.rgb[glass] = c.rgb[glass]
+    e.a |= glass
+    return c, e
+
+
+def stage_scratch(ms):
+    """An old board that leans against the front corner of the stage, the one that was never new: silvered, weathered wood with a
+    crack down its grain, a broken top end, a rusty nail, and cut into it by somebody with a knife (and time) a column of
+    notches: a heart that was begun again at the top and not finished (no tip, no right side), a heart below it that was
+    given up after its left half, a slash and a short stroke. No letters, no digits, nothing to read. A small contact shade is
+    part of the picture (the catalog gives it no shadow). 16 x 22, anchor (8, 19); the board leans to the right (towards the
+    stage)."""
+    rng = np.random.default_rng(1303)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(16, 22)
+    c.paint(c.ellipse(7.5, 19.6, 6.4, 1.5) & (c.yy > 18), st["stone"], 0.26, dither=False)  # the contact shade under it
+    grain = pa.value_noise(22, 16, (6, 1), rng)
+
+    def left(y):  # the board's left edge: seven px wide, its top leans 3 px to the right of its foot
+        return int(round(4.0 + 3.0 * (19 - y) / 18.0))
+
+    for y in range(1, 20):
+        span = range(1, 6) if y == 1 else range(7)  # the top end is broken, not sawn
+        for dx in span:
+            value = (0.52 + 0.14 * (grain[y, min(left(y) + dx, 15)] - 0.5) + (0.2 if dx == 0 else 0.0) - (0.2 if dx == 6 else 0.0)
+                     - (0.1 if y >= 18 else 0.0) - (0.12 if dx == 3 and y not in (6, 11, 14) else 0.0))
+            c.paint(c.rect(left(y) + dx, y, left(y) + dx + 1, y + 1), LEANING_WOOD, value, dither=False)
+    c.paint(c.rect(left(2) + 4, 2, left(2) + 6, 3) & c.a, LEANING_WOOD, 0.1, dither=False)  # a chip out of the top
+    c.fill(c.rect(left(15) + 5, 15, left(15) + 6, 16), IRON_DARK[3])  # a nail that stayed
+    c.fill(c.rect(left(15) + 5, 16, left(15) + 6, 17), TERRACOTTA[1])  # and its rust
+    groove = LEANING_WOOD[0] * 0.7  # the cuts: dark grooves; each figure follows the board's lean
+    cuts = [
+        (2, [".#.#.", "#.#.#", "#....", ".#..."]),  # the second heart, begun again and not finished
+        (7, [".#...", "#.#..", "#....", ".#..."]),  # the first, given up after its left half
+        (12, ["...#.", "..#..", ".#..."]),  # a slash
+        (16, ["###.."]),  # a short stroke
+    ]
+    for y0, rows in cuts:
+        for j, row in enumerate(rows):
+            y = y0 + j
+            for i, ch in enumerate(row):
+                if ch == "#":
+                    c.rgb[y, left(y) + 1 + i] = groove
+    c.outline(st["outline"])
+    return c
+
+
+def poster(ms):
+    """A poster nailed to a short post, the one that announces the evening: a sheet of yellowish paper, a little crooked, one
+    corner folded over, two nails, two lines of scribble in dark ink (a long one and a shorter one: the title and the rest) and,
+    under them, one crooked red stroke that dips in the middle, like a line drawn with the other hand. No letter and no
+    digit. The post is a rough stake; a small contact shade is part of the picture (no catalog shadow). 14 x 30, anchor (7, 27)."""
+    rng = np.random.default_rng(1305)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(14, 30)
+    c.paint(c.ellipse(7, 27.6, 5, 1.5) & (c.yy > 26), st["stone"], 0.3, dither=False)
+    grain = pa.value_noise(30, 14, (6, 1), rng)
+    c.paint(c.rect(6, 12, 9, 28), ex["plank"], np.where(c.xx < 7, 0.74, np.where(c.xx < 8, 0.5, 0.22)) + 0.1 * (grain - 0.5), dither=False)
+    c.paint(c.rect(5, 26, 10, 28), ex["plank"], 0.3, dither=False)
+    top = 1 + np.floor((c.xx - 1) * 0.14)  # the sheet's top edge slopes a little down to the right, in steps
+    sheet = (c.xx >= 1) & (c.xx < 13) & (c.yy >= top) & (c.yy < top + 15)
+    value = 0.78 - 0.4 * (c.xx - 1) / 12 - 0.2 * (c.yy - top) / 15 + 0.1 * (grain - 0.5)
+    c.paint(sheet, POSTER_PAPER, value, dither=False)
+    c.paint(sheet & (c.yy < top + 1), POSTER_PAPER, 0.96, dither=False)  # the lit top edge
+    # the corner that is folded over: a small triangle, lighter on its back
+    fold = sheet & (c.xx >= 9) & (c.yy >= top + 11) & ((c.xx - 9) + (c.yy - top - 11) >= 3)
+    c.paint(fold, POSTER_PAPER, 0.2, dither=False)
+    c.paint(sheet & (c.xx >= 9) & (c.yy >= top + 11) & ((c.xx - 9) + (c.yy - top - 11) == 2), POSTER_PAPER, 0.95, dither=False)
+    # the scribble: a long wavy line, a shorter wavy line, and the crooked stroke
+    for x in range(3, 11):
+        y = int(round(top[0, x])) + 3 + (1 if (x % 3) == 1 else 0)
+        c.fill(c.rect(x, y, x + 1, y + 1), INK)
+    for x in range(3, 8):
+        y = int(round(top[0, x])) + 6 + (1 if (x % 2) == 0 else 0)
+        c.fill(c.rect(x, y, x + 1, y + 1), INK)
+    for x, dy in zip(range(3, 11), (0, 0, 1, 2, 2, 1, 1, 0)):
+        c.fill(c.rect(x, int(round(top[0, x])) + 10 + dy, x + 1, int(round(top[0, x])) + 11 + dy), CRAYON)
+    c.fill(c.rect(3, int(round(top[0, 3])) + 1, 5, int(round(top[0, 3])) + 2), IRON_DARK[3])  # two nails through the top edge
+    c.fill(c.rect(10, int(round(top[0, 10])) + 1, 12, int(round(top[0, 10])) + 2), IRON_DARK[3])
+    c.outline(st["outline"])
+    return c
+
+
+def _paper_lantern(ms, c, e, x, y_top, colors):
+    """One paper lantern that hangs with its top at `y_top` and its middle at column `x`: a cap, a round body (nine px wide, eight
+    tall) with two ribs, a bright middle, a small plate and a tassel (13 px from the cap to the tip of the tassel). The body is drawn on both layers, the rest only on `c`."""
+    body = c.ellipse(x + 0.5, y_top + 6.0, 4.5, 4.1)
+    dx = (c.xx + 0.5 - x - 0.5) / 4.5
+    dy = (c.yy + 0.5 - y_top - 6.0) / 4.1
+    value = 0.5 + 0.46 * (1 - dx * dx) - 0.14 * dy * dy
+    value = value - np.where((c.yy == y_top + 4) | (c.yy == y_top + 7), 0.3, 0.0)
+    value = np.where((c.xx == x) & (c.yy >= y_top + 3), np.maximum(value, 0.8), value)  # the bright middle
+    c.paint(body, colors, np.clip(value, 0, 1), dither=False)
+    c.paint(c.rect(x - 2, y_top, x + 3, y_top + 2), LANTERN_CAP, np.where(c.yy < y_top + 1, 0.9, 0.4), dither=False)
+    c.paint(c.rect(x - 1, y_top + 10, x + 2, y_top + 11), LANTERN_CAP, 0.5, dither=False)
+    c.paint(c.rect(x, y_top + 11, x + 1, y_top + 12), colors, 0.4, dither=False)  # the tassel
+    c.paint(c.rect(x, y_top + 12, x + 1, y_top + 13), colors, 0.7, dither=False)
+    e.rgb[body] = c.rgb[body]
+    e.a |= body
+
+
+def lantern_line(ms):
+    """A string of five paper lanterns for the evening, to hang over the stage: a thin cord that sags in the middle and
+    leaves the picture at the top on both sides (it is tied up out of sight), a lantern every eighteen px (amber, red, cream, rose,
+    amber), each with a cap, two ribs and a tassel. The bodies are the emissive layer (drawn unshaded over the night tint); the
+    string has NO light. 112 x 26, anchor (56, 26) (the middle of the lowest row); the map puts it with "lift": 28, and
+    `flat` is off, so it hangs over whoever stands under it."""
+    st = pa.STYLES["tal"]
+    c, e = ms.Canvas(112, 26), ms.Canvas(112, 26)
+
+    def cord(x):  # where the cord is at column x: it sags 9 px in the middle and runs out of the picture at the top corners
+        return 9.0 * (1 - ((x - 55.5) / 53.5) ** 2)
+
+    xs = [20, 38, 56, 74, 92]
+    for x, colors in zip(xs, LANTERN_PAPERS):
+        y_cord = int(round(cord(x)))
+        c.paint(c.rect(x, y_cord + 1, x + 1, y_cord + 3), CORD, 0.4, dither=False)  # the thread it hangs on
+        _paper_lantern(ms, c, e, x, y_cord + 3, colors)
+    c.outline(st["outline"])
+    # the cord itself is a single dark-warm pixel line, drawn after the outline so that it stays thin
+    for x in range(1, 111):
+        y = int(round(cord(x)))
+        if 0 <= y < 26:
+            c.fill(c.rect(x, y, x + 1, y + 1), CORD[1] if (x % 3) else CORD[0])
+    return c, e
+
+
 # --------------------------------------------------------------------------- catalog
 def build(ms):
-    """Registers the sprites of Act IV in the catalog (no light anywhere). The post and the bell are two props; the
+    """Registers the sprites of Act IV in the catalog (no light anywhere but the lamps of the concert, S6). The post and the bell are two props; the
     bell's anchor lifts it onto the post's nail: the map puts the bell on the cell below the post, whose centre is
     16 px south of the post's foot, and the cord's top (pixel (4, 0)) must meet the nail 3 px east and 18 px above that
     foot, so the anchor is (4 - 3, 18 + 16) = (1, 34)."""
@@ -1855,6 +2151,26 @@ def build_town(ms):
     # (the map puts them on the cells of the town's stamp)
     ms.save("tal", "st_slip_open", slip(ms), (6, 7), flat=True)
     ms.save("tal", "st_slip_struck", slip(ms, struck=True), (6, 7), flat=True)
+    build_concert(ms)
+
+
+def build_concert(ms):
+    """Registers the sprites of the concert (S6). Six PointLight2D in all: four lit lamp posts and two stage lamps (the budget of
+    the first night map of the town is eight); the string of paper lanterns glows only in its emissive layer. The stage, the board,
+    the poster and the string carry no shadow in the catalog (the map puts them on cells of the town's baked stamp); the lit post
+    has the shadow of the dark one, which it replaces on the same cell. The stage is flat (under everybody) and blocks only its
+    front: a rect of 112 x 8 over the anchor, the upper half of the cell the glyph stands on."""
+    ms.save("tal", "st_stage", stage(ms), (56, 40), flat=True, shape={"rect": [112, 8], "offset": [0, -4]})
+    lamp, lamp_glow = stage_lamp(ms)
+    ms.save("tal", "st_stage_lamp", lamp, (7, 40), emissive=lamp_glow, shape={"circle": 3, "offset": [0, -1]},
+            lights=[{"offset": [0, -34], "color": "#f2c078", "energy": 0.9, "range": 96}])
+    lit, lit_glow = lamp_post_lit(ms)
+    ms.save("tal", "st_lamp_post_lit", lit, (9, 68), emissive=lit_glow, shape={"circle": 3, "offset": [0, -1]}, shadow=[6, 2],
+            lights=[{"offset": [0, -60], "color": "#f2c078", "energy": 0.8, "range": 104}])
+    ms.save("tal", "st_stage_scratch", stage_scratch(ms), (8, 19), shape={"circle": 4, "offset": [0, -2]})
+    ms.save("tal", "st_poster", poster(ms), (7, 27), shape={"circle": 3, "offset": [0, -1]})
+    line, line_glow = lantern_line(ms)
+    ms.save("tal", "st_lantern_line", line, (56, 26), emissive=line_glow)
 
 
 def preview(path):
@@ -1907,8 +2223,106 @@ def preview_town(path):
     sheet.resize((sheet.width * 2, sheet.height * 2), Image.NEAREST).save(path)
 
 
+def preview_concert(path, line_row=21, lift=28):
+    """The square in front of the town hall at dusk, roughly as the scene will show it: the day (left) and the night (right,
+    each sprite multiplied by the night tint, every PointLight2D of the catalog added as a warm radial pool, every emissive layer
+    drawn on top unshaded). The stage with Lio, the goat's place and Orin on it, the stage lamps at its back ends, the string
+    over it (the map cell `line_row` of the glyph and its `lift`; 21 is Lio's row), the board at the front corner, the poster, a lit lamp post, and four people of the
+    audience for the scale. Written at 4x."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import mapfile
+    from PIL import Image
+    root = mapfile.ROOT
+    cat = mapfile.load_catalog()  # needs make_sprites.py to have run: the preview reads the catalog and its pictures
+
+    def img_of(name, layer="textures"):
+        return Image.open(mapfile.res_path(cat["tal/" + name][layer][0])).convert("RGBA")
+
+    def person(sheet, row, col=0):
+        frame = Image.open(os.path.join(root, "assets", "generated", "characters", sheet + ".png")).convert("RGBA")
+        return frame.crop((col * 24, row * 32, col * 24 + 24, row * 32 + 32))
+
+    w, h = 270, 190
+    ox, oy = 90, 80  # the stage's top-left corner in the picture (world 656, 336 is the stage's top-left)
+    ground = Image.new("RGBA", (w, h), tuple(int(v) for v in pa.STYLES["tal"]["stone"][1]) + (255,))
+    rng = np.random.default_rng(7)
+    arr = np.array(ground).astype(np.float32)
+    arr[..., :3] *= (0.9 + 0.2 * pa.value_noise(h, w, 5, rng))[..., None]
+    ground = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGBA")
+
+    def world(cx, cy):  # the centre of a map cell as picture coordinates
+        return cx * 16 + 8 - 656 + ox, cy * 16 + 8 - 336 + oy
+
+    placed = []  # (sort y, image, emissive or None, left, top, lights)
+
+    def put(name, cx, cy, lift=0, flat=False):
+        entry = cat["tal/" + name]
+        px, py = world(cx, cy)
+        ax, ay = entry["anchor"]
+        left, top = px - ax, py - ay - lift
+        lights = [(px + lt["offset"][0], py + lt["offset"][1], lt) for lt in entry.get("lights", [])]
+        emit = img_of(name, "emissive") if "emissive" in entry else None
+        placed.append((-1000 if entry.get("flat") else cy, img_of(name), emit, left, top, lights))
+
+    def put_person(sheet, cx, cy, row=0):
+        px, py = world(cx, cy)
+        placed.append((cy, person(sheet, row), None, px - 12, py - 30, []))
+
+    put("st_stage", 44, 23)
+    put("st_stage_lamp", 41, 21)
+    put("st_stage_lamp", 47, 21)
+    put("st_stage_scratch", 40, 23)
+    put("st_poster", 49, 23)
+    put("st_lamp_post_lit", 38, 25)
+    put_person("lio", 44, 21)
+    put_person("orin", 42, 21)
+    put_person("buerger", 41, 25)
+    put_person("gefaelliger", 44, 25)
+    put_person("tess", 47, 25)
+    put_person("beamtin", 50, 25)
+    # the goat is not drawn (its sprite is the valley's); the string over the stage
+    put("st_lantern_line", 44, line_row, lift=lift)
+    placed.sort(key=lambda p: p[0])
+
+    day = ground.copy()
+    for _, img, _, left, top, _ in placed:
+        day.alpha_composite(img, (left, top))
+
+    tint = np.array([0.36, 0.40, 0.62], np.float32)
+    night = ground.copy()
+    arr = np.array(night).astype(np.float32)
+    arr[..., :3] *= tint
+    night = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGBA")
+    for _, img, _, left, top, _ in placed:
+        tinted = np.array(img).astype(np.float32)
+        tinted[..., :3] *= tint
+        night.alpha_composite(Image.fromarray(tinted.astype(np.uint8), "RGBA"), (left, top))
+    arr = np.array(night).astype(np.float32)
+    dayarr = np.array(day).astype(np.float32)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    pools = np.zeros((h, w, 3), np.float32)
+    for _, _, _, _, _, lights in placed:
+        for lx, ly, lt in lights:
+            r = float(lt["range"])
+            d = np.hypot(xx - lx, yy - ly) / r
+            tex = np.interp(d, [0.0, 0.45, 1.0], [1.0, 0.45, 0.0])
+            col = np.array([int(lt["color"][i:i + 2], 16) for i in (1, 3, 5)], np.float32) / 255.0
+            pools += tex[..., None] * col * float(lt["energy"])
+    arr[..., :3] = np.clip(arr[..., :3] + dayarr[..., :3] * pools, 0, 255)
+    night = Image.fromarray(arr.astype(np.uint8), "RGBA")
+    for _, _, emit, left, top, _ in placed:
+        if emit is not None:
+            night.alpha_composite(emit, (left, top))
+    sheet = Image.new("RGBA", (w * 2 + 6, h), (20, 20, 24, 255))
+    sheet.alpha_composite(day, (0, 0))
+    sheet.alpha_composite(night, (w + 6, 0))
+    sheet.resize((sheet.width * 4, sheet.height * 4), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) == 3 and sys.argv[1] == "--preview":
+    if len(sys.argv) >= 3 and sys.argv[1] == "--preview-concert":  # out.png [row [lift]] of the string's glyph
+        preview_concert(sys.argv[2], *[int(v) for v in sys.argv[3:5]])
+    elif len(sys.argv) == 3 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
     elif len(sys.argv) == 3 and sys.argv[1] == "--preview-town":
         preview_town(sys.argv[2])

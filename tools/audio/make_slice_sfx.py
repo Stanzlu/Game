@@ -4,7 +4,9 @@ A door that creaks, knocking, falling into the stream, a stepping stone that roc
 and a fire catching, a cat (meowing, behind a door, purring), a goat, dry wood, sitting down
 and standing up, a bird landing, the drover's call; the child in Elysia humming the motif
 of the later main theme; the hermit's flute (Act III), Lio's lute in the street and Tess's
-whistling in the workshop (Act IV). The fire in the fireplace is a bed (make_nature.py, nature_fire_bed).
+whistling in the workshop, and Lio's worst concert (the lute with a crowd humming along, the string
+that breaks, a few hands clapping beside the beat; Act IV). The fire in the fireplace is a bed
+(make_nature.py, nature_fire_bed).
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
 per group (LUFS, see GROUPS), written with .import files to assets/generated/sfx/. The Real world is quiet and a
@@ -633,12 +635,345 @@ def tess_whistle(rng, unit=TESS_UNIT, space=None):
     return workshop(out) if space is None else space(out)
 
 
+# --- The concert ---------------------------------------------------------------------------
+
+# Lio's worst concert in the world (Act IV, S6). The same lute, the same key as in the street
+# (D dorian, D4 is degree 1), but a tune that can be sung and a string less: the lowest courses
+# are gone after the snap, so the lute has no note below G3 and no root under the chords until
+# the crowd comes in, a D3 hummed by whoever stands there. It goes wrong first (see
+# lio_concert) and is beautiful in the end. All in 6/8: two bars to the verse, two to the
+# refrain, an eighth is CONCERT_UNIT seconds.
+CONCERT_UNIT = 0.24
+CONCERT_LOW = 55  # G3: the lowest note the lute still has
+# (degree, eighths) per bar; degrees as in LIO_TUNE (1 = D4, 8 = D5)
+CONCERT_VERSE = [[(1, 1), (3, 1), (5, 1), (6, 1), (5, 1), (3, 1)],
+                 [(2, 1), (3, 1), (5, 1), (3, 1), (2, 2)]]
+# The refrain: six tones, long-short-long, A A B | A F D. It lands on the root.
+CONCERT_REFRAIN = [[(5, 2), (5, 1), (6, 3)],
+                   [(5, 2), (3, 1), (1, 3)]]
+# The chord under each bar: (MIDI of the low note on the first eighth, MIDI on the fourth)
+CONCERT_BASS = {"verse": [(57, 62), (57, 64)], "refrain": [(55, 62), (57, 62)]}
+CONCERT_START = {"first": 0.35, "verse": 3.05, "refrain_wrong": 5.93, "refrain_right": 9.50, "crowd": 13.00}
+CONCERT_SECONDS = 19.2
+CONCERT_CHORD_SEED = 46
+CROWD_LEVEL = 0.07  # one voice against a lute note of 1.0 (the voices add up, and the crowd is meant to be soft)
+
+
+def formant_filter(x, formants, floor=0.12):
+    """A vowel for a whole signal: the source spectrum through resonators in parallel, one per
+    formant (frequency, bandwidth, height of its peak), plus a low floor for the voice's
+    fundamental. Zero phase and static, as a held vowel is; the pitch of the source may move."""
+    n = len(x)
+    f = np.fft.rfftfreq(2 * n, 1.0 / RATE)
+    gain = floor / np.sqrt(1 + (f / 350.0) ** 2)
+    for centre, bandwidth, height in formants:
+        q = centre / bandwidth
+        gain = gain + height / q * centre**2 / np.sqrt((centre**2 - f**2) ** 2 + (centre * f / q) ** 2)
+    return np.fft.irfft(np.fft.rfft(x, 2 * n) * gain, 2 * n)[:n]
+
+
+# open "o" (men, women): first, second and third formant, each with the height of its peak
+HUM_O_MEN = [(430, 90, 1.0), (780, 120, 0.6), (2700, 300, 0.2)]
+HUM_O_WOMEN = [(500, 100, 1.0), (900, 140, 0.6), (3000, 330, 0.2)]
+
+
+def hum_voice(notes, seconds, rng, women=False, cents_sd=10.0, vibrato=9.0, breathy=0.05, level=1.0):
+    """One person humming an open "o" along a tune. `notes` is a list of (start, end, hz); the
+    voice slides into each note over ~70 ms, is a little off (`cents_sd` per note and a slow
+    wander), the vibrato of the long notes comes late and shallow (`vibrato` cents), and the
+    breath dips a hair between two notes. The source is a sum of harmonics with the roll-off of
+    a relaxed voice, the vowel is formant_filter."""
+    n = int(RATE * seconds)
+    t = np.arange(n) / RATE
+    knots_t = [0.0]
+    amp_t, amp_v = [0.0], [0.0]
+    pitch = [notes[0][2]]
+    for i, (s, e, hz) in enumerate(notes):
+        off = float(np.clip(rng.normal(0, cents_sd), -2.4 * cents_sd, 2.4 * cents_sd))
+        hz_i = hz * 2 ** (off / 1200)
+        knots_t += [max(s, knots_t[-1] + 0.001), e]
+        pitch += [hz_i, hz_i]
+        nxt = notes[i + 1][0] if i + 1 < len(notes) else None
+        joined = nxt is not None and nxt - e < 0.05
+        amp_t += [s - 0.03, s + 0.07, e - 0.05, e + (0.02 if joined else 0.18)]
+        amp_v += [0.0, 1.0, 0.92, 0.55 if joined else 0.0]
+    knots_t = np.array(knots_t)
+    f0 = np.interp(t, knots_t, np.array(pitch))
+    # a slide is not a step: smooth the pitch over ~60 ms
+    k = int(RATE * 0.06)
+    f0 = np.convolve(np.pad(f0, k, mode="edge"), np.ones(k) / k, mode="same")[k:-k]
+    wander = np.interp(t, np.linspace(0, seconds, int(seconds / 0.5) + 2), rng.normal(0, 4.0, int(seconds / 0.5) + 2))
+    # vibrato grows over the first 0.4 s of every note
+    swell = np.zeros(n)
+    for s, e, hz in notes:
+        swell = np.maximum(swell, np.interp(t, [s, s + 0.35, s + 0.6, e, e + 0.1], [0, 0, 1, 1, 0]))
+    swing = vibrato * swell * np.sin(2 * np.pi * rng.uniform(4.6, 5.6) * t + rng.uniform(0, 6.28))
+    f0 = f0 * 2 ** ((wander + swing) / 1200)
+    phase = 2 * np.pi * np.cumsum(f0) / RATE + rng.uniform(0, 6.28)
+    top = 5500.0
+    src = np.zeros(n)
+    for h in range(1, 48):
+        if h * float(np.max(f0)) > top:
+            break
+        src += np.sin(h * phase + rng.uniform(0, 6.28)) / h
+    src = src + breathy * noise(n, rng) * 2.0
+    voice = formant_filter(src, HUM_O_WOMEN if women else HUM_O_MEN)
+    amp = np.interp(t, amp_t, amp_v)
+    amp = amp * (1 + 0.05 * np.sin(2 * np.pi * rng.uniform(0.5, 1.2) * t + rng.uniform(0, 6.28)))
+    out = voice * amp
+    # a hummed note is about as loud on a low pitch as on a high one: level the voice (partly),
+    # so that the D3 under the chord is not lost to the formants
+    smooth = int(RATE * 0.3)
+    cum = np.concatenate([[0.0], np.cumsum(np.pad(out**2, smooth // 2, mode="edge"))])
+    env_now = np.sqrt((cum[smooth:smooth + n] - cum[:n]) / smooth) + 1e-4
+    out = out / env_now**0.8
+    active = amp > 0.5
+    return out / (np.sqrt(np.mean(out[active] ** 2)) + 1e-9) * level
+
+
+def _concert_notes(start, bars, shift_octave=0):
+    """Absolute (start, end, hz) of the tones of `bars` from `start`, shifted by octaves."""
+    out = []
+    pos = start
+    for bar in bars:
+        for deg, eighths in bar:
+            length = eighths * CONCERT_UNIT
+            out.append((pos, pos + length, midi_hz(degree(LIO_ROOT, DORIAN, deg)) * 2**shift_octave))
+            pos += length
+    return out
+
+
+def lio_concert(rng, parts_out=None, log=None):
+    """Lio's concert (Act IV, S6), about 19 s, not a loop; no pitch spread when it is played
+    (AudioDirector.sfx(..., 1.0)): a tune stays a tune.
+
+    - 0.35 to 2.4 s, the first try: the tune starts, two entries come late (the low note, the A),
+      a note lands a semitone over its place (B flat for B), he goes on, the last one is stopped
+      with the hand: a knuckle on the wood, again from the top.
+    - 3.05 s, the second try: the verse carries through, then the refrain, which does not land
+      (the last tone is an E, late, and cut short); a pause, two taps of the foot.
+    - 9.5 s, the refrain again, and this time the last tone is the D, held.
+    - 12.3 s, one voice joins on the D; from 13.0 s, the last six seconds, the crowd hums the
+      refrain (open "o", men an octave under the women, nobody quite together), the lute plays
+      along and the last tone opens into a long chord: the crowd stands on the root the lute
+      lost (D3), a few hold the A and the F instead of going down to the D.
+    `parts_out` (a dict) gets the lute and the crowd separately, `log` (a list) every lute note
+    as (seconds, Hz, label), so the tune can be checked against the notes written here."""
+    u = CONCERT_UNIT
+    log = [] if log is None else log
+    lute = []
+    wood = []  # knuckles and the foot on the stage: a hand over the strings does not mute these
+    tune_only = []  # the notes of the tune alone, for the check
+
+    def hz(deg=None, midi=None):
+        m = degree(LIO_ROOT, DORIAN, deg) if midi is None else midi
+        return midi_hz(m) * rng.uniform(0.998, 1.002)
+
+    def pluck(freq, when, seconds, vel, label, **kw):
+        note = at(lute_note(freq, seconds, rng, vel, **kw), when)
+        lute.append(note)
+        if label in ("melody", "late_melody", "wrong", "stopped", "wrong_landing", "landing"):
+            tune_only.append(note)
+        log.append((when, freq, label))
+
+    def bass(midi, when, vel=0.58, label="bass", seconds=2.0):
+        assert midi >= CONCERT_LOW
+        pluck(hz(midi=midi), when + rng.normal(0, 0.008), seconds, vel, label, tau=1.3)
+
+    # --- the first try, written out: the grid is T + 0.24 k ---
+    T = CONCERT_START["first"]
+    pluck(hz(1), T, 1.6, 0.78, "melody")  # D
+    pluck(hz(3), T + u, 1.6, 0.80, "melody")  # F
+    bass(57, T + 0.20 + 0.22, 0.5, "late_bass")  # the A3 that should have come with the D
+    pluck(hz(5), T + 2 * u + 0.19, 1.6, 0.74, "late_melody")  # the A, late
+    pluck(midi_hz(70) * rng.uniform(0.999, 1.001), T + 3 * u + 0.17, 1.5, 0.86, "wrong")  # B flat for B
+    pluck(hz(5), T + 4 * u + 0.20, 1.5, 0.76, "melody")  # A
+    pluck(hz(3), T + 5 * u + 0.20, 0.5, 0.70, "stopped", cut=0.05)  # F, stopped with the hand
+    wood.append(at(knock(190, 0.12, rng, 0.2) * 0.10, 2.38))
+    wood.append(at(knock(210, 0.10, rng, 0.2) * 0.06, 2.72))
+
+    def play_bars(bars, start, bass_key, ornament=False, wrong_end=False, melody_vel=(0.76, 0.92)):
+        pos = start
+        for b, bar in enumerate(bars):
+            low, high = CONCERT_BASS[bass_key][b]
+            bass(low, pos, 0.60)
+            bass(high, pos + 3 * u, 0.50)
+            if ornament:  # a third string, on the way
+                bass(low + 12 if low + 12 <= 69 else 69, pos + 5 * u, 0.36, "ornament", 1.2)
+            at_eighth = pos
+            for i, (deg, eighths) in enumerate(bar):
+                last = bass_key == "refrain" and b == 1 and i == 2
+                when = at_eighth + rng.normal(0, 0.010)
+                vel = rng.uniform(*melody_vel)
+                if last and wrong_end:
+                    pluck(hz(2), when + 0.17, 0.5, 0.84, "wrong_landing", cut=0.28)
+                elif last:
+                    pluck(hz(deg), when, 3.2, 0.92, "landing")
+                else:
+                    pluck(hz(deg), when, 2.0 if eighths > 1 else 1.7, vel, "melody")
+                at_eighth += eighths * u
+            pos += 6 * u
+
+    play_bars(CONCERT_VERSE, CONCERT_START["verse"], "verse")
+    play_bars(CONCERT_REFRAIN, CONCERT_START["refrain_wrong"], "refrain", wrong_end=True)
+    # two taps of the foot to count in, the same beat as the unit
+    for k, tap in enumerate((CONCERT_START["refrain_right"] - 2 * u, CONCERT_START["refrain_right"] - u)):
+        wood.append(at(knock(98, 0.18, rng, 0.1) * (0.22 - 0.04 * k), tap))
+    play_bars(CONCERT_REFRAIN, CONCERT_START["refrain_right"], "refrain", ornament=True, melody_vel=(0.82, 0.94))
+    # the crowd's round: the lute carries the chords and doubles the tune, softer
+    round_start = CONCERT_START["crowd"]
+    play_bars([CONCERT_REFRAIN[0]], round_start, "refrain", ornament=True, melody_vel=(0.62, 0.74))
+    # last bar of the round, the root is written by hand: the landing opens into the chord
+    pos = round_start + 6 * u
+    bass(57, pos, 0.60)
+    bass(62, pos + 3 * u, 0.50)
+    pluck(hz(5), pos + rng.normal(0, 0.008), 1.7, 0.70, "melody")
+    pluck(hz(3), pos + 2 * u + rng.normal(0, 0.008), 1.7, 0.68, "melody")
+    chord_at = pos + 3 * u
+    # the chord: A3 D4 F4 A4 D5, strummed from the bottom, left to ring. Two strings of a course
+    # beat against each other slowly and a long chord shows it: which of the five fundamentals
+    # comes out loudest is down to the phases, so the strings have their own random stream, the
+    # seed picked (of 400) for a chord whose notes stand within about 2 dB of what is written
+    chord_rng = np.random.default_rng(CONCERT_CHORD_SEED)
+    for k, (midi, vel) in enumerate(((57, 0.50), (62, 0.60), (65, 0.38), (69, 0.54), (74, 0.48))):
+        freq = midi_hz(midi) * chord_rng.uniform(0.998, 1.002)
+        note = at(lute_note(freq, 3.6, chord_rng, vel, tau=2.7), chord_at + 0.030 * k)
+        lute.append(note)
+        log.append((chord_at + 0.030 * k, freq, "chord"))
+
+    strings = mix(*lute)
+    # the palm on the strings: after the stopped F of the first try and after the E that did not
+    # land, all the strings stop at once (12 ms), well before the next note
+    for stop_at, until in ((1.84, 3.00), (8.58, 9.45)):
+        a, b = int(RATE * stop_at), int(RATE * until)
+        gain = np.ones(len(strings))
+        gain[a:b] = 0.0
+        ramp = int(RATE * 0.012)
+        gain[a - ramp:a] = np.linspace(1.0, 0.0, ramp)
+        strings = strings * gain
+    dry = mix(strings, *wood)
+    dry = mix(dry, 0.18 * fft_band(strings, 110, 320, 2))  # the wooden body, a little less than in the street
+    # --- the crowd ---
+    men = _concert_notes(round_start, CONCERT_REFRAIN, -1)
+    women = _concert_notes(round_start, CONCERT_REFRAIN, 0)
+    # nobody holds exactly together: each voice has its own entry shift (30 ms) and its own breath
+    total = CONCERT_SECONDS
+    voices = []
+    plan = [
+        # (women, notes, level, entry shift, holds)
+        (True, women, 1.00, -0.02, "D"),
+        (True, women, 0.42, 0.03, "F"),
+        (True, women, 0.60, 0.05, "A"),
+        (True, women, 0.70, 0.01, "D"),
+        (False, men, 1.40, 0.00, "D"),
+        (False, men, 1.10, 0.04, "D"),
+        (False, men, 0.80, 0.07, "A"),
+    ]
+    for women_voice, tune, level, shift, hold in plan:
+        notes = [(s + shift, e + shift, h) for s, e, h in tune]
+        s, e, h = notes[-1]
+        e = e + 2.7  # the last tone is held through the chord and let go
+        if hold == "F":
+            h = tune[-2][2]
+        elif hold == "A":
+            h = tune[0][2]
+        notes[-1] = (s, e, h)
+        out = hum_voice(notes, total, rng, women=women_voice, cents_sd=9.0, level=level * CROWD_LEVEL)
+        voices.append(out)
+    # the first to join, alone, on the D of the second round
+    first = [(CONCERT_START["refrain_right"] + 10 * u + 0.1, CONCERT_START["crowd"] + 0.35, midi_hz(62))]
+    voices.append(hum_voice(first, total, rng, women=True, cents_sd=8.0, level=CROWD_LEVEL * 0.55))
+    crowd = mix(*voices)
+    if parts_out is not None:
+        parts_out["lute"] = dry
+        parts_out["tune"] = mix(*tune_only)
+        parts_out["crowd"] = crowd
+        parts_out["chord_at"] = chord_at
+    wet_lute = reverb(dry, 0.5, 0.18, seed=19, bright=3800)
+    wet_crowd = reverb(crowd, 0.7, 0.28, seed=23, bright=3200)
+    out = mix(wet_lute, wet_crowd)[: int(RATE * total)]
+    fade = int(RATE * 1.5)
+    out[-fade:] *= np.cos(np.linspace(0, np.pi / 2, fade)) ** 2
+    return out
+
+
+# --- The string that breaks and the hands that clap ---------------------------------------
+
+
+def string_snap(rng):
+    """A string of Lio's lute breaks (Act IV, S6), about 0.6 s: a hard pluck, 30 ms later the
+    "peng" (a crack of the string letting go, a short fall of pitch as the loose end whips, the
+    body jolting), and the other strings answering, ringing a little and dying. The string that
+    breaks is the D3: no note of it afterwards, in the answer or in the concert."""
+    total = 0.64
+    n = int(RATE * total)
+    t = np.arange(n) / RATE
+    # the pluck that does it: hard, bright, a string under tension (a hair sharp)
+    pluck = lute_note(midi_hz(50) * 1.012, 0.05, rng, 0.62, tau=0.4, cut=0.034)
+    pluck = pluck * np.minimum(1.0, np.arange(len(pluck)) / (0.0012 * RATE))  # the file starts on zero
+    snap_at = 0.034
+    m = int(RATE * 0.05)
+    tm = np.arange(m) / RATE
+    crack = fft_band(noise(m, rng), 1800, 9000, 2) * np.exp(-tm / 0.0035)
+    crack = crack / (np.max(np.abs(crack)) + 1e-9)
+    # the loose end whips: a metallic fall from ~2.2 kHz to ~700 Hz, rattling
+    w = int(RATE * 0.16)
+    tw = np.arange(w) / RATE
+    glide = 700 + 1500 * np.exp(-tw / 0.035)
+    whip = np.sin(2 * np.pi * np.cumsum(glide) / RATE) * np.exp(-tw / 0.03)
+    whip = whip * (0.6 + 0.4 * np.sin(2 * np.pi * 95 * tw)) * 0.5
+    jolt = np.sin(2 * np.pi * rng.uniform(185, 205) * tw) * np.exp(-tw / 0.035) * 0.55
+    peng = mix(0.95 * crack, at(0.8 * whip, 0.002), 0.7 * jolt[: len(tm)] if len(jolt) >= len(tm) else jolt)
+    # the others answer: the courses that are left, not the one that broke
+    answers = []
+    for midi, vel, late in ((55, 0.34, 0.004), (57, 0.30, 0.009), (62, 0.30, 0.003), (65, 0.26, 0.013), (69, 0.22, 0.007), (74, 0.16, 0.011)):
+        answers.append(at(lute_note(midi_hz(midi) * rng.uniform(0.997, 1.003), 0.55, rng, vel, tau=0.30), snap_at + late))
+    buzz = fft_band(noise(n, rng), 2500, 7000, 2) * np.exp(-np.maximum(t - snap_at, 0) / 0.05) * (t > snap_at) * 0.06
+    dry = mix(at(pluck, 0.0), at(peng, snap_at), *answers)
+    dry = mix(dry, buzz)[:n]
+    return outdoors(dry, 0.10)[:n]
+
+
+def hand_clap(rng, bright=1.0, size=1.0):
+    """One pair of hands: a click of the palms (noise 700 Hz to 4.5 kHz, a few ms), the air
+    between them ringing a moment (a damped tone around 1.3 kHz), sometimes a flam of two hits
+    within 8 ms. `bright` moves the band, `size` the tone."""
+    length = int(RATE * 0.12)
+    t = np.arange(length) / RATE
+    band = fft_band(noise(length, rng), 450 * bright, 3000 * bright, 2)
+    body = band * np.exp(-t / 0.0085)
+    flam = at(band[: int(RATE * 0.03)] * np.exp(-np.arange(int(RATE * 0.03)) / RATE / 0.006), 0.007 + 0.003 * rng.random())
+    ring = np.sin(2 * np.pi * 1300 * size * t) * np.exp(-t / 0.014) * 0.35
+    hit = mix(body, 0.6 * flam, ring)[:length]
+    return hit / (np.max(np.abs(hit)) + 1e-9)
+
+
+def crowd_clap(rng):
+    """A few hands, about 3 s (Act IV, S6): single claps, never together and never on the beat
+    of the song (a dotted quarter is 0.72 s: the beat is at 0.3, 1.02, 1.74, 2.46; the hands are
+    a tenth or two before or after it), eight claps in all, never closer than 0.19 s and none within 0.1 s of a beat. Nothing here
+    is an applause carpet: between two claps there is always air."""
+    total = 3.05
+    # (seconds, hand, level): hand 0 is Tess (dry, a bit high), always a little behind the beat
+    # and a little more behind each time; hand 1 is someone deeper, hand 2 someone small
+    claps = [(0.43, 0, 0.90), (0.95, 1, 0.55), (1.18, 0, 0.80), (1.56, 2, 0.50), (1.93, 0, 0.85),
+             (2.17, 1, 0.60), (2.36, 2, 0.45), (2.68, 0, 0.75)]
+    parts = []
+    for when, hand, level in claps:
+        bright, size = ((1.15, 1.0), (0.80, 0.72), (1.0, 1.25))[hand]
+        c = hand_clap(rng, bright, size)
+        parts.append(at(c * level * rng.uniform(0.9, 1.0), when + rng.normal(0, 0.006), total))
+    dry = mix(*parts)
+    return outdoors(dry, 0.12)[: int(RATE * total)]
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling.
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
-          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0, "whistle": -21.0}
+          "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0, "whistle": -21.0,
+          "snap": -17.0, "claps": -21.0}
 LOOPS = set()
 
 
@@ -686,6 +1021,11 @@ def build(only=None):
     # Tess's whistling (Act IV, S4): its own random stream again
     whistle_rng = np.random.default_rng(59)
     sounds["tess_whistle_0"] = (tess_whistle(whistle_rng), "whistle")
+    # Lio's worst concert (Act IV, S6): the lute with the crowd, the string that breaks, the hands
+    # that clap, each with its own random stream again
+    sounds["lio_concert_0"] = (lio_concert(np.random.default_rng(61)), "lute")
+    sounds["string_snap_0"] = (string_snap(np.random.default_rng(67)), "snap")
+    sounds["crowd_clap_0"] = (crowd_clap(np.random.default_rng(71)), "claps")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

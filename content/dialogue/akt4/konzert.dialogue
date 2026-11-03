@@ -1,0 +1,222 @@
+# Das Konzert, Akt IV, Segment S6 (docs/akt4/REGIONSBRIEFE.md, O3, O6, O10, O13; Bible §13, §44, §45; Stilblätter lio.md, orin.md, tess.md, gefaelliger.md, mira.md). Lios schlechtestes
+# Konzert der Welt: ein Abend auf dem Platz, technisch ein Unglück und trotzdem einer der schönsten Abende des Spiels. Das Schiefgehen zielt auf den Ablauf (die Saite,
+# die Lampe, den Einsatz, den Wind), nie auf einen Menschen, und der Text sagt weder, dass es gut war, noch, dass es schlecht war: er zeigt, dass niemand geht. Kein Elysia-Lob,
+# kein "Bravo", kein "Musik heilt". Gewicht: leicht, laut, am Ende warm. Lio kündigt an und liefert spät, er lacht über den Ablauf; die Ziege hat als Einzige den Einsatz und niemand erklärt,
+# was sie will (O13). Zeilen ohne Sprecher sind Erzählung (zweite Person, Präsens; ohne Doppelpunkt, Frage, Ausruf und Auslassung); Titel und Plakattexte stehen in » «.
+# Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+# Die Cues der Zwischensequenz (arrive bis finale) spielt die Szene in dieser Reihenfolge, die Spielerin kann in ihr nicht sprechen, außer in der Antwortgruppe von hold. Danach geht sie frei über den
+# Platz; die Cues con_* gehören den Figuren und Dingen des Abends, jeder wiederholbar ohne Wirkung außer da, wo es dasteht. Lio lädt in stadt.dialogue ein (lio_invite).
+# Wahl und Folge stehen nie im selben Cue: die Antworten von hold setzen city.stage_orin, das con_orin liest; con_lio_gift setzt city.string_taken und city.string_left, con_lio und
+# con_lio_again lesen sie; con_poster_pick setzt city.poster_taken und city.poster_left, con_poster und con_poster_again lesen sie. Die Szene liest city.string_snapped (snap)
+# und city.board_done (song: Tess steht dann in der Menge); das Wort für die Facette connection steht nie im Text, die Handlung ist Fragen und Halten.
+
+# --- Die Zwischensequenz: der Platz am Abend -------------------------------------------------------------------------------------------
+# Der erste Blick: Laternen, Rauch, Brot, die Bühne. Wer "Die Bühne." von der Liste getan hat (list.done_stage, der Gang am Rand des Platzes), bekommt die ehrliche Zeile über die eigenen Nägel, ohne ein
+# Wort über Bretter, die jemand anderes gebaut hat; wer sie nicht genommen hat, die Zeile über die Nägel, an denen gespart wurde. Kein Tadel, kein Lob. Nur dieser Cue liest das Flag.
+
+~ arrive
+Der Platz am Abend. An den Pfosten brennen Laternen, irgendwo raucht ein Ofen, und es riecht nach Brot, das nicht mehr heiß ist. [ID:kon_arr_1] [#draft]
+if WorldState.has_flag("list.done_stage")
+	Die Bühne steht. Wo sie wackelt, sind es deine Nägel, und die wackeln wenigstens aufrichtig. [ID:kon_arr_2] [#draft]
+else
+	Die Bühne steht schief. Wer sie gebaut hat, hat bei den Nägeln gespart. [ID:kon_arr_3] [#draft]
+=> END
+
+# --- Die Ankündigung ---------------------------------------------------------------------------------------------------------------------
+# Lio steht an der Bühnenkante, die Ziege schon neben ihm. Er kündigt an, setzt neu an und liefert den eigentlichen Satz spät; zuletzt verspricht er, dass jeder Fehler Absicht war,
+# und verschiebt die Auskunft, welcher, auf hinterher.
+
+~ intro
+Lio sitzt mitten auf der Bühne, die Laute vor der Brust. Neben ihm steht die Ziege, als stünde sie im Programm. [ID:kon_intro_1] [#draft]
+Lio: Willkommen! Heute Abend hört ihr — nein. Heute Abend hören wir. Alle zusammen. So ist es geplant. [ID:kon_intro_2] [#draft]
+Lio: Das erste Stück heißt »Der Teil, an dem es gut wird«. Der Teil kommt gleich. Erst kommt der Teil davor, und der ist auch gut. In seiner Art. [ID:kon_intro_3] [#draft]
+Lio: Falls etwas schiefgeht, war das Absicht. Ich sage hinterher, was. [ID:kon_intro_4] [#draft]
+=> END
+
+# --- Die Saite -------------------------------------------------------------------------------------------------------------------------------
+# Beim ersten Akkord reißt die tiefste Saite. Das Flag steht vor der Zeile, die es erzählt (eine Mutation läuft, wenn ihre Zeile verlangt wird), die Szene spielt in demselben Augenblick den Klang (string_snap); davor steht kein Wort
+# über den Klang, danach spielt Lio auf den übrigen weiter. Der Witz zielt auf den Ablauf (die Tiefe), nicht auf ihn.
+
+~ snap
+Lio setzt die Finger auf die Saiten, holt Luft und schlägt den ersten Akkord an. [ID:kon_snap_1] [#draft]
+do WorldState.set_flag("city.string_snapped")
+Die tiefste Saite reißt, schnellt ihm über die Hand und hängt schief von der Brücke. [ID:kon_snap_2] [#draft]
+Er sieht sie an, sieht auf den Platz und spielt auf den übrigen weiter, eine Lage höher als geplant. [ID:kon_snap_3] [#draft]
+Lio: Die Tiefe streichen wir. Heute gibt es nur Höhe, dafür reichlich. [ID:kon_snap_4] [#draft]
+=> END
+
+# --- Die Lampe -------------------------------------------------------------------------------------------------------------------------------
+# Die Bühnenlampe kippt, und Lio fragt nicht, er stellt fest, dass jemand müsse. Drei Antworten, alle ergeben dieselbe Lampe (ein wenig schief, sie steht): "Ich halte sie." (unbedingt),
+# "Orin! Hältst du die Lampe?" (nur mit der Facette connection: die Spielerin bittet um Hilfe, und Orin hält, mit etwas Konkretem; er steht danach am Pfosten, city.stage_orin) und das
+# Schweigen (Lio hält den Pfosten mit dem Fuß, nichts wird gesetzt). Keiner wird gelobt. Das Schweigen bleibt die letzte Antwort. Die Folge liest con_orin, nicht dieser Cue.
+
+~ hold
+Am rechten Rand der Bühne neigt sich die Lampe auf ihrem Pfosten, langsam, wie jemand, der im Stehen einschläft. [ID:kon_hold_1] [#draft]
+Lio: Das ist Licht von der Seite. Sehr künstlerisch. Es muss nur jemand — also. Jemand muss sie halten. [ID:kon_hold_2] [#draft]
+- Ich halte sie. [ID:kon_hold_r1] [#draft]
+	Du steigst auf die Bretter und fasst den Pfosten. Die Lampe kippt noch einen Fingerbreit und steht dann, ein wenig schief. [ID:kon_hold_3] [#draft]
+- Orin! Hältst du die Lampe? [if WorldState.has_facet("connection") and WorldState.has_flag("city.orin_met") /] [ID:kon_hold_r2] [#draft]
+	Orin kommt durch die erste Reihe, ohne jemanden zu streifen, und fasst den Pfosten mit beiden Händen. Die Lampe steht, ein wenig schief. [ID:kon_hold_4] [#draft]
+	Orin: Mit Bast ginge es besser. Ich habe immer Bast. Bis dahin halte ich. [ID:kon_hold_5] [#draft]
+	do WorldState.set_flag("city.stage_orin")
+- … [ID:kon_hold_r3] [#draft]
+	Lio rückt in kleinen Schritten zum Pfosten, klemmt ihn mit dem Fuß fest und spielt weiter. Die Lampe steht, ein wenig schief. [ID:kon_hold_6] [#draft]
+=> END
+
+# --- Die Ziege -------------------------------------------------------------------------------------------------------------------------------
+# Sie steht neben Lio auf der Bühne und setzt sich auf den Taktschlag, auf den sonst keiner wartet. Sie sagt nichts Verständliches, und niemand, auch der Text nicht, erklärt, was sie will.
+
+~ goat
+Die Ziege neben Lio setzt die Hufe nebeneinander, als sei dort ihr Platz eingezeichnet. [ID:kon_goat_1] [#draft]
+Ziege: Mäh-äh. Mäh. Mäh-äh. [ID:kon_goat_2] [#draft]
+=> END
+
+# --- Der Einsatz -------------------------------------------------------------------------------------------------------------------------------
+# Lio zählt für eine Band ein, die es nicht gibt, und niemand kommt, weil niemand da ist. Die Ziege hat den Einsatz, auf der Eins. Das Lachen gilt dem Ablauf; Lio rettet die Lage mit der
+# Behauptung, es sei ihr Einsatz gewesen.
+
+~ entry
+Lio: Und eins, und zwei, und drei, und jetzt die anderen! [ID:kon_entry_1] [#draft]
+Er nickt nach hinten, zu einer Band, die nicht da ist. Nur die Ziege meckert, genau auf der Eins, und der Platz lacht auf. [ID:kon_entry_2] [#draft]
+Lio: Das war ihr Einsatz. Ich wollte ihn nur nicht vorwegnehmen. [ID:kon_entry_3] [#draft]
+=> END
+
+# --- Der Wind -------------------------------------------------------------------------------------------------------------------------------------
+# Er nimmt das Notenblatt vom Ständer, die Laternen schwanken, und mit ihnen die Schatten der Leute. Zwei Zeilen, nur Dinge.
+
+~ wind
+Ein Windstoß fährt über den Platz, nimmt Lio das Notenblatt vom Ständer und trägt es über die Köpfe davon, Richtung Brunnen. [ID:kon_wind_1] [#draft]
+Die Laternen schwanken an ihren Pfosten, und die Schatten der Leute gehen mit, alle ein Stück nach links, als hätten sie sich verabredet. [ID:kon_wind_2] [#draft]
+=> END
+
+# --- Das Lied -------------------------------------------------------------------------------------------------------------------------------------
+# Die dritte Melodie der Stadt, melody.lio_concert (die Szene spielt den Klang mit dem Flag, rund neunzehn Sekunden). Lio spielt ohne Noten auf den Saiten, die ihm bleiben, und der Platz bleibt:
+# die Bürgerin singt den falschen Text, der Gefällige sitzt ohne Zettel in der Hand (ein Bild, kein Satz über ihn), Tess klatscht neben dem Takt (nur mit city.board_done, sonst steht sie nicht in der
+# Menge), die Beamtin sieht auf die Uhr und hört dann auf, es zu tun, und der Refrain kommt beim zweiten Mal richtig an. Keine Zeile sagt, ob es gut war. Setzt die Erinnerung lio.concert
+# und macht die Beziehung zu Lio vertraut.
+
+~ song
+do WorldState.set_flag("melody.lio_concert")
+Lio sieht dem Blatt nach und lässt es gehen. Dann fängt er von vorn an, ohne Noten, auf den Saiten, die ihm bleiben. [ID:kon_song_1] [#draft]
+do WorldState.add_memory("lio", "concert")
+do WorldState.set_relationship("lio", "familiar")
+Die Bürgerin mit dem schweren Korb singt mit, laut und mit vollem Text. Es ist der Text eines anderen Liedes. Er passt trotzdem. [ID:kon_song_2] [#draft]
+Der Gefällige sitzt am Rand der Menge auf dem Pflaster. In seinen Händen ist kein Zettel. Du siehst es erst jetzt, und er auch. [ID:kon_song_3] [#draft]
+if WorldState.has_flag("city.board_done")
+	Hinten klatscht Tess, einen halben Schlag neben dem Takt, und bleibt dabei, gleichmäßig wie bei einer Säge. [ID:kon_song_4] [#draft]
+Die Beamtin sieht auf ihre Uhr, dann auf die Bühne, dann steckt sie die Uhr weg. In der Tasche geht ihre Hand im Takt. [ID:kon_song_5] [#draft]
+Der Refrain kommt ein zweites Mal. Diesmal trifft Lio jeden Ton, und der Platz trifft mit, auf ein langes, offenes O. [ID:kon_song_6] [#draft]
+=> END
+
+# --- Das Ende der Zwischensequenz --------------------------------------------------------------------------------------------------------
+# Ein stilles Bild: der letzte Akkord steht, die Menge löst sich nicht auf, Lio verbeugt sich vor der Ziege. Kein Schwarz, kein Titel, kein Elysia-Ende; hier endet die Zwischensequenz
+# und die Spielerin geht frei.
+
+~ finale
+Der letzte Akkord steht lange über dem Platz. Dann ist es still, und keiner geht, die Hände noch halb erhoben. [ID:kon_fin_1] [#draft]
+Lio nimmt den Hut ab und verbeugt sich, tief und ohne Eile, vor der Ziege. Sie nimmt es hin. [ID:kon_fin_2] [#draft]
+=> END
+
+# --- Danach: Lio und die Saite -----------------------------------------------------------------------------------------------------------
+# Lio sitzt auf den Brettern, die Laute auf dem Knie, und schenkt ihr die gerissene Saite ("Sie hat ihr Bestes gegeben"). Beide Antworten sind gleichwertig, nichts wird gezählt: einstecken
+# (Kuriosität, city.string_taken) oder liegen lassen (er legt sie auf die Bühne, city.string_left). Der Router con_lio liest nur und springt; das Setzen steht in con_lio_gift, die Wiederkehr in
+# con_lio_again, die beide Wege kennt und nichts fragt.
+
+~ con_lio
+if WorldState.has_flag("city.string_taken") or WorldState.has_flag("city.string_left")
+	=> con_lio_again
+=> con_lio_gift
+
+~ con_lio_gift
+Lio sitzt auf den Brettern, die Laute auf dem Knie, und wickelt die gerissene Saite um zwei Finger. [ID:kon_lio_1] [#draft]
+Lio: Die ist heute gerissen. Behalt sie. Sie hat ihr Bestes gegeben. [ID:kon_lio_2] [#draft]
+- Einstecken. [ID:kon_lio_r1] [#draft]
+	Du steckst sie ein. Sie federt noch, ganz leise, in der Tasche. [ID:kon_lio_3] [#draft]
+	do WorldState.add_item("curiosity_snapped_string")
+	do WorldState.set_flag("city.string_taken")
+- Lass nur. [ID:kon_lio_r2] [#draft]
+	Lio legt sie neben sich auf die Bretter, schön gerade, als brauche er sie morgen noch. [ID:kon_lio_4] [#draft]
+	do WorldState.set_flag("city.string_left")
+=> END
+
+~ con_lio_again
+if WorldState.has_flag("city.string_taken")
+	Lio: Du hast die Saite? Gut. Sie hat als Erste Feierabend gemacht, das verdient Aufbewahrung. [ID:kon_lioa_1] [#draft]
+else
+	Lio: Die Saite bleibt liegen, wo sie liegt. Sie hat sich den Platz verdient. [ID:kon_lioa_2] [#draft]
+=> END
+
+# --- Danach: die Ziege, Orin, der Gefällige, Mira ---------------------------------------------------------------------------------------
+# Kurze Gespräche und Bilder, jedes wiederholbar ohne Wirkung. Die Ziege sagt nichts Verständliches (O13). Orin steht am Pfosten, wenn die Spielerin ihn gebeten hat (city.stage_orin), und erzählt
+# etwas Konkretes vom Halten, ohne Gefühlswort und ohne Lehre; sonst steht er in der Menge und sagt etwas Konkretes über den Abend, die Ente fehlt nicht, sie ist nur nicht eingeladen (nach dem Brief, city.letter_told, ohne Witz: der Geruch der Laternen). Der Gefällige
+# entschuldigt sich nicht, ein Satz. Mira steht im Dunkel hinter dem Brunnen, trocken, sie sieht zum Tor; keine Erinnerung, kein Flag, kein Wort über die Liste (46 von 47 gehört dem Streit in S7).
+
+~ con_goat
+Die Ziege steht noch auf der Bühne und sieht hinauf zum First des Rathauses, als rechne sie etwas nach. [ID:kon_cgoat_1] [#draft]
+Ziege: Mäh. Mäh-äh. [ID:kon_cgoat_2] [#draft]
+=> END
+
+~ con_orin
+if WorldState.has_flag("city.stage_orin")
+	Orin steht noch am Pfosten, beide Hände um das Holz, den Rücken gerade wie ein Türrahmen. [ID:kon_orin_1] [#draft]
+	Orin: Als die Ziege einsetzte, hat der Pfosten in meinen Händen gezuckt. Jetzt liegt er ruhig. Esche, glaube ich. [ID:kon_orin_2] [#draft]
+	=> END
+Orin steht am Rand der Menge, die Arme verschränkt, und sieht den Platz an, zweimal von links nach rechts. [ID:kon_orin_3] [#draft]
+if WorldState.has_flag("city.letter_told")
+	Orin: Die Laternen riechen nach Öl und ein wenig nach Wachs. Ich bleibe noch, solange es riecht. [ID:kon_orin_5] [#draft]
+	=> END
+Orin: Ich habe nachgesehen. Keine Ente. Sie fehlt nicht, sie ist nur nicht eingeladen. Den Unterschied mache ich gern. [ID:kon_orin_4] [#draft]
+=> END
+
+~ con_gef
+Der Gefällige sitzt noch auf dem Pflaster, die Hände leer auf den Knien. [ID:kon_gef_1] [#draft]
+Gefälliger: Ich sitze. Das ist alles, was ich gerade tue. [ID:kon_gef_2] [#draft]
+=> END
+
+~ con_mira
+Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor. [ID:kon_mira_1] [#draft]
+Mira: Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. [ID:kon_mira_2] [#draft]
+=> END
+
+# --- Das Fragment: das alte Brett ------------------------------------------------------------------------------------------------------------
+# Eine Spur der Welt (kein Bild des Kindes, keine Figur, kein lesbares Wort): an der Bühnenecke lehnt das älteste Brett, das nicht neu ist, mit Kerben, die einmal Buchstaben waren, und zwei
+# halben Herzen übereinander, von jemandem angefangen und aufgegeben. Das erste Mal setzt das Flag, danach gibt es nur noch eine kurze Zeile ohne Wirkung. Die Worte sind die der Erzählung.
+
+~ con_scratch
+if WorldState.has_flag("fragment.stage_scratch")
+	Das graue Brett an der Bühnenecke. Die zwei halben Herzen hören an derselben Stelle auf. [ID:kon_scr_4] [#draft]
+	=> END
+An der Bühnenecke lehnt ein Brett, das älter ist als die Bühne, grau wie Regen. Kerben laufen darüber, Buchstaben, die man nicht mehr liest. [ID:kon_scr_1] [#draft]
+Dazwischen ein Herz, auf halbem Weg liegen gelassen, und darüber ein zweites, das an derselben Stelle aufhört. [ID:kon_scr_2] [#draft]
+Für einen Atemzug stehen die Kerben hell im Holz, frisch, mit Spänen in den Rillen. Dann sind sie wieder grau, und die Laternen schwanken. [ID:kon_scr_3] [#draft]
+do WorldState.set_flag("fragment.stage_scratch")
+=> END
+
+# --- Das Plakat ------------------------------------------------------------------------------------------------------------------------------------------
+# Am Pfosten hängt Lios Plakat, mit Kohle geschrieben, die Buchstaben kippen nach rechts, als liefen sie dem nächsten Satz voraus. Kuriosität: "Abnehmen." (city.poster_taken) oder "Hängen lassen."
+# (city.poster_left), gleichwertig, nichts gezählt. Der Router con_poster liest nur; das Setzen steht in con_poster_pick, die Wiederkehr in con_poster_again (der Pfeil bei "Ausstieg auch" zeigt
+# zum Tor, ein Ding, das keiner erklärt). Keine Ziffern auf dem Plakat.
+
+~ con_poster
+if WorldState.has_flag("city.poster_taken") or WorldState.has_flag("city.poster_left")
+	=> con_poster_again
+=> con_poster_pick
+
+~ con_poster_pick
+Am Pfosten hängt ein Plakat, gelblich, mit Kohle beschrieben, die Buchstaben kippen nach rechts, als liefen sie dem nächsten Satz voraus. [ID:kon_post_1] [#draft]
+Es heißt »Das schlechteste Konzert der Welt«. Darunter steht »Eintritt frei«, und noch kleiner, mit einem Pfeil, »Ausstieg auch«. [ID:kon_post_2] [#draft]
+- Abnehmen. [ID:kon_post_r1] [#draft]
+	Du ziehst die Nägel heraus, einen nach dem anderen. Das Plakat rollt sich in deiner Hand sofort ein, als hätte es nichts dagegen. [ID:kon_post_3] [#draft]
+	do WorldState.add_item("curiosity_concert_poster")
+	do WorldState.set_flag("city.poster_taken")
+- Hängen lassen. [ID:kon_post_r2] [#draft]
+	Du lässt es hängen. Der Wind hebt eine Ecke und legt sie wieder hin. [ID:kon_post_4] [#draft]
+	do WorldState.set_flag("city.poster_left")
+=> END
+
+~ con_poster_again
+if WorldState.has_flag("city.poster_taken")
+	Das Plakat hängt noch, dasselbe noch einmal. Lio hat mehr davon gemalt, als es Pfosten gibt. [ID:kon_posta_1] [#draft]
+else
+	Das Plakat hängt noch. Der Pfeil bei »Ausstieg auch« zeigt zum Tor. [ID:kon_posta_2] [#draft]
+=> END

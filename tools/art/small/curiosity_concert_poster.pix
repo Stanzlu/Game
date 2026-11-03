@@ -1,0 +1,23 @@
+# Ein Konzertplakat (S6): ein gelbliches Blatt, zwei Nägel oben, zwei Zeilen Gekritzel und ein krummer roter Strich, unten rechts die umgeschlagene Ecke; keine Schrift
+name: curiosity_concert_poster
+out: assets/generated/items
+size: 16x16
+palette: o=#3a2c14 w=#fbf2c8 y=#ecdc9c s=#c4b270 k=#a49250 i=#342418 r=#b0301e n=#8a909a
+outline: o
+---
+................
+.ooooooooooooo..
+.onwwwwwwwwwno..
+.owwwwwwwwwwyo..
+.owiwiwiwiwyyo..
+.owwiwiwiwwyyo..
+.owwwwwwwwwyyo..
+.owiwiwiwyyyyo..
+.owwiwiwwyyyyo..
+.owwwwwwyyyyyo..
+.owrryywwrrryo..
+.owwyrrrwyyyso..
+.oyyyyyyyyysko..
+.oyyyyyyyyssko..
+.ooooooooooooo..
+................

@@ -20,7 +20,7 @@ const HALL_DOOR := Vector2i(44, 19)
 const MARKERS := {
 	"player_spawn": Vector2i(64, 28),
 	"spawn_strasse": Vector2i(99, 54),
-	"spawn_rathaus": Vector2i(44, 22),
+	"spawn_rathaus": Vector2i(43, 22),
 	"spawn_blumenladen": Vector2i(30, 29),
 	"spawn_werkstatt": Vector2i(22, 41),
 }

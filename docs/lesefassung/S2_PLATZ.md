@@ -110,11 +110,17 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - *Er stimmt die Laute, stimmt noch einmal und legt los. Sie klingt wie ein Bach, der noch nicht weiß, wohin.* `[#draft]`  <sub>stadt_lio_3</sub>
 - **Lio:** Den Ton habe ich nicht verfehlt. Den hat's woandershin gezogen. `[#draft]`  <sub>stadt_lio_4</sub>
 - **Lio:** Aber der Rest war gut, oder? Sag Ja. Oder klatsch. Ich bin da flexibel. `[#draft]`  <sub>stadt_lio_5</sub>
+*wenn* `list.closed`
+  *wenn* `city.concert_invited nicht`
+    - *→ weiter bei* `lio_invite`
 
 ### S2-9 · `lio_again`
 
 - **Lio:** Der Ton von vorhin ist übrigens noch unterwegs. Wenn du ihn siehst, sag ihm, wir fangen gleich an. `[#draft]`  <sub>stadt_lio_6</sub>
 - **Lio:** Ich lege eine Pause ein. Das ist Teil des Stücks. Das Stück heißt »Pause«. `[#draft]`  <sub>stadt_lio_7</sub>
+*wenn* `list.closed`
+  *wenn* `city.concert_invited nicht`
+    - *→ weiter bei* `lio_invite`
 
 ### S2-10 · `fountain_rim`
 

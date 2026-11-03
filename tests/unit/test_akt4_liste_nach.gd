@@ -168,7 +168,7 @@ func test_the_list_is_a_quest_with_two_stages_and_the_walk_ends_in_it() -> void:
 	assert_true(list.stage("closed").is_final())
 	var way := ContentDB.quest("main_city_way")
 	assert_true(way.can_advance("help", "list"))
-	assert_true(way.stage("list").is_final(), "this is as far as S5 goes")
+	assert_false(way.stage("list").is_final(), "the evening of the concert follows (S6)")
 	for key: String in [
 		"QUEST_MAIN_CITY_WAY_LIST",
 		"QUEST_SIDE_CITY_LIST_TITLE",

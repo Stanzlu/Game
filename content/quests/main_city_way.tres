@@ -21,11 +21,16 @@ next = PackedStringArray("list")
 [sub_resource type="Resource" id="Resource_list"]
 script = ExtResource("2_stage")
 id = "list"
+next = PackedStringArray("evening")
+
+[sub_resource type="Resource" id="Resource_evening"]
+script = ExtResource("2_stage")
+id = "evening"
 outcome = "done"
 
 [resource]
 script = ExtResource("1_quest")
 id = "main_city_way"
 kind = 0
-stages = Array[ExtResource("2_stage")]([SubResource("Resource_west"), SubResource("Resource_town"), SubResource("Resource_help"), SubResource("Resource_list")])
+stages = Array[ExtResource("2_stage")]([SubResource("Resource_west"), SubResource("Resource_town"), SubResource("Resource_help"), SubResource("Resource_list"), SubResource("Resource_evening")])
 draft = false

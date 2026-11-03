@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cfrldp2bpytpe"
+path="res://.godot/imported/konzert.dialogue-ce7a14d32f6cf1676953435b3b050856.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/konzert.dialogue"
+dest_files=["res://.godot/imported/konzert.dialogue-ce7a14d32f6cf1676953435b3b050856.tres"]
+
+[params]
+
+defaults=true

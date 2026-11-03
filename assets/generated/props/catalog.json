@@ -2901,6 +2901,52 @@
    "res://assets/generated/props/tal/st_lamp_post.png"
   ]
  },
+ "tal/st_lamp_post_lit": {
+  "anchor": [
+   9,
+   68
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/st_lamp_post_lit_emit.png"
+  ],
+  "lights": [
+   {
+    "color": "#f2c078",
+    "energy": 0.8,
+    "offset": [
+     0,
+     -60
+    ],
+    "range": 104
+   }
+  ],
+  "shadow": [
+   6,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_lamp_post_lit.png"
+  ]
+ },
+ "tal/st_lantern_line": {
+  "anchor": [
+   56,
+   26
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/st_lantern_line_emit.png"
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/st_lantern_line.png"
+  ]
+ },
  "tal/st_lectern": {
   "anchor": [
    18,
@@ -3013,6 +3059,22 @@
   },
   "textures": [
    "res://assets/generated/props/tal/st_post.png"
+  ]
+ },
+ "tal/st_poster": {
+  "anchor": [
+   7,
+   27
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_poster.png"
   ]
  },
  "tal/st_pots": {
@@ -3208,6 +3270,72 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/st_slip_struck.png"
+  ]
+ },
+ "tal/st_stage": {
+  "anchor": [
+   56,
+   40
+  ],
+  "flat": true,
+  "shape": {
+   "offset": [
+    0,
+    -4
+   ],
+   "rect": [
+    112,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_stage.png"
+  ]
+ },
+ "tal/st_stage_lamp": {
+  "anchor": [
+   7,
+   40
+  ],
+  "emissive": [
+   "res://assets/generated/props/tal/st_stage_lamp_emit.png"
+  ],
+  "lights": [
+   {
+    "color": "#f2c078",
+    "energy": 0.9,
+    "offset": [
+     0,
+     -34
+    ],
+    "range": 96
+   }
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_stage_lamp.png"
+  ]
+ },
+ "tal/st_stage_scratch": {
+  "anchor": [
+   8,
+   19
+  ],
+  "shape": {
+   "circle": 4,
+   "offset": [
+    0,
+    -2
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/st_stage_scratch.png"
   ]
  },
  "tal/st_stall_cloth": {
