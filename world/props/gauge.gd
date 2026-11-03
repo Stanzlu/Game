@@ -10,9 +10,12 @@ extends Decor
 const TREMBLE_HZ := 5.3
 
 var needle: Sprite2D
+## Degrees the needle wanders at full trouble (the sign says to which side).
+var drift := 32.0
 var _rest := 0.0
 var _amplitude := 0.0
 var _phase := 0.0
+var _trouble := 0.0
 var _clock := 0.0
 
 
@@ -39,12 +42,22 @@ func apply_params(params: Dictionary) -> void:
 		set_process(true)
 
 
+## How far the load has pushed the needle off its mark, 0 to 1 (the hall's scene sets it): the
+## needle wanders from "Normal" by `drift` degrees at 1 and trembles a little more.
+func set_trouble(value: float) -> void:
+	_trouble = clampf(value, 0.0, 1.0)
+	_apply()
+
+
 func _process(delta: float) -> void:
 	super(delta)
 	_clock += delta
+	_apply()
+
+
+func _apply() -> void:
 	if needle == null:
 		return
 	var moving := _amplitude > 0.0 and Settings.get_bool("display.screen_shake")
-	needle.rotation_degrees = (
-		_rest + (sin(_clock * TREMBLE_HZ + _phase) * _amplitude if moving else 0.0)
-	)
+	var tremble := sin(_clock * TREMBLE_HZ + _phase) * _amplitude * (1.0 + _trouble)
+	needle.rotation_degrees = _rest + _trouble * drift + (tremble if moving else 0.0)

@@ -15,6 +15,7 @@ var active := false
 var down := false
 var _up: Texture2D
 var _down: Texture2D
+var _radius := 16.0
 
 
 func apply_params(params: Dictionary) -> void:
@@ -29,9 +30,9 @@ func apply_params(params: Dictionary) -> void:
 	var down_entry := PropCatalog.entry(str(params.get("sprite_down", "")))
 	if not down_entry.is_empty():
 		_down = PropCatalog.texture_for(down_entry, global_position)
+	_radius = float(params.get("radius", 16.0))
 	if active:
-		var area := Talk.add_area(self, "INTERACT_PULL", float(params.get("radius", 16.0)))
-		area.interacted.connect(func(_actor: Node) -> void: pulled.emit(number))
+		_add_pull_area()
 
 
 ## Puts the lever down or up (the picture changes); `with_sound` plays the click from the lever.
@@ -41,3 +42,22 @@ func set_down(value: bool, with_sound := false) -> void:
 		sprite.texture = _down if value else _up
 	if with_sound:
 		SoundBank.play_at(get_parent(), "lever", global_position, -4.0)
+
+
+## Takes the lever into use (the load calls the next lever): the examine zone of a still lever
+## goes, the zone for pulling comes. Off again puts it back to a lever that only stands.
+func set_active(value: bool) -> void:
+	if value == active:
+		return
+	active = value
+	if value:
+		var old := get_node_or_null("Interactable")
+		if old != null:
+			old.name = "Examine"
+			old.queue_free()
+		_add_pull_area()
+
+
+func _add_pull_area() -> void:
+	var area := Talk.add_area(self, "INTERACT_PULL", _radius)
+	area.interacted.connect(func(_actor: Node) -> void: pulled.emit(number))

@@ -40,7 +40,10 @@ j = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"
 k = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 11, "active": false, "prompt": "INTERACT_PULL", "sprite_up": "tal/ma_lever_11_up", "sprite_down": "tal/ma_lever_11_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
 l = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 12, "active": false, "prompt": "INTERACT_PULL", "sprite_up": "tal/ma_lever_12_up", "sprite_down": "tal/ma_lever_12_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
 ; das Tuch über einem stillen Hebel (je Hebel eins, in der Zeile 8 unter ihm, 9 Pixel auf den Hebel gehoben; ohne Schatten: G4 nimmt es weg)
-m = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lever_cover", "lift": 9}}
+; die Tücher der stillen Hebel, in drei Gruppen: m (Hebel 4 bis 6) weicht mit der zweiten Welle der Last, n (7 bis 9) mit der dritten, o (10 bis 12) mit der vierten
+m = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lever_cover", "lift": 9, "unless": "plant.wave_two"}}
+n = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lever_cover", "lift": 9, "unless": "plant.wave_three"}}
+o = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lever_cover", "lift": 9, "unless": "plant.wave_four"}}
 ; der Riegelanzeiger in der Mitte des Pults, unter der kleinen Tür der Rückwand (Cue small_door), und das abgewetzte Zifferblatt am rechten Ende des Pults (Cue worn_dial)
 K = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_bolt", "cue": "small_door", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 16}}
 Z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_worn_dial", "cue": "worn_dial", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 14}}
@@ -67,7 +70,7 @@ s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ####WWWWWWWWWWWWWWWWWWWWWWWWW####
 ####WWWWWHWWWWWWWWWWWWWHWWWWW####
 ####WP_Q__abcdefKghijklZ_R_TW####
-####W___A____mmmCmmmmmm___@_W####
+####W___A____mmmCnnnooo___@_W####
 ####W_______________________W####
 ####WN____________________N_W####
 ####W_______________________W####
