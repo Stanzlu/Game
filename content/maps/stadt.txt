@@ -106,8 +106,12 @@ J = {"ground": "_", "prop": "res://world/props/goat.tscn", "params": {"dialogue"
 γ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_gefaelliger_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_gef", "face": "n", "sit": true, "if": "city.evening"}}
 β = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_buerger_look.tres", "face": "n", "if": "city.evening"}}
 κ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_beamtin_look.tres", "face": "n", "if": "city.evening"}}
-μ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_mira", "face": "s", "if": "city.evening"}}
+μ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt4/konzert.dialogue", "cue": "con_mira", "face": "s", "if": "city.evening", "unless": "city.mira_gate"}}
 ε = {"ground": "_", "marker": "spawn_abend"}
+; S7: eine Lampe am Tor (derselbe Sprite wie die Bühnenlampen, mit Licht, ohne Katalogschatten: der Stempel bleibt), damit der Streit zu sehen ist
+Λ = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/st_stage_lamp", "if": "city.evening"}}
+; S7: Mira am Tor, nachdem sie es im Konzert gesagt hat (μ steht dann nicht mehr in der Menge) und bis sie vorausgegangen ist (eines der drei Ausgangsflags)
+Ψ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt4/streit.dialogue", "cue": "mira_gate", "face": "s", "if": ["city.evening", "city.mira_gate"], "unless": ["city.mira_parted_boundary", "city.mira_parted_joined", "city.mira_parted_silent"]}}
 ; Türen: D ins Rathaus, N das Tor an der Straße (Rand der Karte); Marken: der Start auf dem Platz, die Ankünfte (Herkunft Straße: vor dem Tor draußen; Herkunft Rathaus: vor der Tür; Blumenladen und Werkstatt: vor den Läden)
 D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "rathaus", "spawn": "stadt", "unless": "city.evening"}}
 N = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "strasse", "spawn": "stadt", "auto": true, "size": [1, 7]}}
@@ -160,8 +164,8 @@ hhhhhhhhhh|hh_________&_öæ____________________________________________________
 hhhhhhhhhhhhh_x____E______H_7_______________________________________________________hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhh_________!__6__8_______________________________________________________hhhhhhhhhhhhhhhhhhhThhhh
 hhhThhhhhhhhh______________l____________l_______________l_____________l______X______hhUhhhhhhhhhhhhhhhhhhhhh
-hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhh|hhhhhhhhhhhhhhhh
-hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_____hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhh|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_Ψ___hhhhhhh|hhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh___Λ_hhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh____Ihhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhthWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhWhhhhhh__G__hhhWhhhthhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh_______hhhhhhhhhhhhhhhhhhhhhhh

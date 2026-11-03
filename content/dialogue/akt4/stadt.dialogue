@@ -17,6 +17,8 @@
 # Keine Wirkung; beide Antworten lassen dich hinein. Die Ziege, die sie erwähnt, steht später auf dem Dach des Rathauses.
 
 ~ gate
+if WorldState.has_flag("city.evening")
+	=> gate_night
 Im Torbogen steht eine Frau im Mantel, den Schlüsselbund in der Faust. Sie sieht an dir vorbei, ob noch jemand kommt. [ID:stadt_gate_1] [#draft]
 Torwächterin: Fuhrwerke nicht vor zehn. Hunde an die Leine. Ziegen gar nicht. [ID:stadt_gate_2] [#draft]
 - Ziegen? [ID:stadt_gate_r1] [#draft]
@@ -511,4 +513,15 @@ Lio: Ich habe sogar eine Bühne. Ich weiß nur nicht, wer sie gebaut hat. Sie st
 	do WorldState.set_flag("city.concert_invited")
 - Später. [ID:stadt_inv_r2] [#draft]
 	Lio: Später ist gut. Ich fange eh nie pünktlich an, nur zuverlässig. [ID:stadt_inv_5] [#draft]
+=> END
+
+# =============================================================================================================================
+# S7: der Streit (Akt IV, Segment S7; docs/akt4/REGIONSBRIEFE.md O11, O12). Der Streit selbst steht in streit.dialogue; hier steht nur die Torwächterin in der Nacht (gate springt bei city.evening
+# hierher; der Wortlaut des Tages bleibt Zeichen für Zeichen). Zeilen-IDs stadt_gnt_*.
+# =============================================================================================================================
+
+~ gate_night
+Im Torbogen steht die Torwächterin, den Schlüsselbund in der Faust, und sieht durch dich hindurch auf die Straße. [ID:stadt_gnt_1] [#draft]
+Torwächterin: Zu. Bei Sonnenaufgang wieder. Wer raus will, bleibt bis dahin drin. [ID:stadt_gnt_2] [#draft]
+Torwächterin: Ich habe heute Abend Musik gehört. Dafür bin ich nicht zuständig. Gehört habe ich sie trotzdem. [ID:stadt_gnt_3] [#draft]
 => END
