@@ -45,7 +45,8 @@ const WRITE_ONLY_FLAGS := {
 	"chapter mark of Act III (ADR-070): the valley's map reads it (ADR-071), Act V will in code",
 	"city.string_snapped":
 	"the string breaks (S6): concert.gd plays the sound on the flag's signal",
-	"chapter.act4": "chapter mark of Act IV (ADR-071): the road's door to the pass reads it (ADR-073)",
+	"chapter.act4":
+	"chapter mark of Act IV (ADR-071): the road's door to the pass reads it (ADR-073)",
 }
 
 static var _const_regex := RegEx.create_from_string(
