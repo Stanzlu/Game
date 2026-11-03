@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://clrxxol4hb6l"
+path="res://.godot/imported/loslassen.dialogue-490545e0d9f26a85dc32c21f75ad5109.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/loslassen.dialogue"
+dest_files=["res://.godot/imported/loslassen.dialogue-490545e0d9f26a85dc32c21f75ad5109.tres"]
+
+[params]
+
+defaults=true

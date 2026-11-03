@@ -23,6 +23,8 @@ const CUES: PackedStringArray = [
 	"load_offer",
 	"waechter_run",
 	"waechter_over",
+	"waechter_done",
+	"potato_entry",
 ]
 const SPEAKER := "Wächter: "
 
@@ -106,7 +108,8 @@ func test_the_file_tells_its_cues_in_draft_with_unique_ids_within_the_budget() -
 	assert_false(_source().contains("[#ph]"), "no placeholder in a story file")
 	# G3 plans 45 lines (plus or minus eight), G4 adds the keeper's offer, his run and his rest here
 	# (the lines the scene plays during the load are in last.dialogue), and the answers on top
-	assert_lte(ids.size() - answers, 76, "the lines of the segments")
+	# G5 adds his rest after the letting go and the potato (the cues the scene plays are in loslassen.dialogue)
+	assert_lte(ids.size() - answers, 96, "the lines of the segments")
 	assert_gte(ids.size() - answers, 37, "and not a hall without things")
 
 

@@ -3615,7 +3615,7 @@
   {
    "flag": "melody.machine_count",
    "axis": "Musik",
-   "meaning": "Sie hat den Takt der Anlage gehört (Akt V, G5): das Klacken der Hebel in der Reihenfolge der Probe, Drei, Eins, Zwei, das beim Loslassen zu einem Motiv wird, mit einem leisen Dreiton darunter; hörbar, kein Fragment. Die Szene setzt es, wenn der dritte Hebel der Reihenfolge gefallen ist."
+   "meaning": "Sie hat den Takt der Anlage gehört (Akt V, G5): das Klacken der Hebel in der Reihenfolge der Probe, Drei, Eins, Zwei, das beim Loslassen zu einem Motiv wird, mit einem leisen Dreiton darunter; hörbar, kein Fragment. Die Szene setzt es, wenn der letzte Hebel gefallen ist, in der Zeit, in der die Halle sich beruhigt."
   },
   {
    "flag": "city.stage_orin",

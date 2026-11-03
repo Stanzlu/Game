@@ -257,7 +257,8 @@ func test_the_help_is_in_the_journal_too_and_says_the_same_without_the_word_for_
 		assert_false(line.contains(word), "no %s" % word)
 	var quest := ContentDB.quest("main_mountain_way")
 	assert_true(quest.can_advance("plant", "load"))
-	assert_true(quest.stage("load").is_final(), "G5 hangs the next stage on it")
+	assert_false(quest.stage("load").is_final(), "the letting go (G5) hangs on it")
+	assert_true(quest.can_advance("load", "letgo"))
 	assert_false(quest.stage("plant").is_final())
 
 
@@ -266,7 +267,11 @@ func test_after_the_run_has_stopped_he_asks_nothing_and_offers_nothing_and_keeps
 	WorldState.set_flag("plant.probe_done")
 	WorldState.set_flag("plant.load")
 	WorldState.set_flag("plant.overload")
-	assert_eq((await DialogueWalk.answers(ANLAGE, "waechter")).size(), 0, "nothing is asked")
+	# nothing is asked of her; since G5 the help "Und jetzt?" is one answer away, and the silence
+	var answers := await DialogueWalk.answers(ANLAGE, "waechter")
+	assert_eq(answers.size(), 3, "the help, the thanks he cannot enter, the silence")
+	assert_true("Und jetzt" in answers[0])
+	assert_eq(answers[2], "…", "the silence stays the last")
 	var seen := await DialogueWalk.play(ANLAGE, "waechter")
 	assert_true(_has(seen, "anl_over_3"))
 	assert_true(

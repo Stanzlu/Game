@@ -240,19 +240,18 @@ func test_the_levers_after_the_letting_go_are_only_levers_again() -> void:
 
 func test_a_burst_of_steam_half_way_and_it_dies_down_again() -> void:
 	var scene := await _hall()
-	var rest := 0.0
 	await _put(scene, AWAY)
 	var mid := func() -> bool: return scene._surge_left > 0.0
 	assert_true(await _told(scene, mid))
-	var peak := 0.0
+	var peak := [0.0]
 	var through := func() -> bool:
-		peak = maxf(peak, scene._surge)
+		peak[0] = maxf(peak[0], scene._surge)
 		return WorldState.has_flag("plant.letgo")
 	assert_true(await _told(scene, through))
-	assert_gt(peak, 0.5, "the steam rose")
+	assert_gt(peak[0], 0.5, "the steam rose")
 	assert_true(await _told(scene, func() -> bool: return _quiet(scene)))
 	await wait_physics_frames(600)
-	assert_eq(scene._surge, rest, "and it died down")
+	assert_eq(scene._surge, 0.0, "and it died down")
 
 
 func test_the_left_hanging_lamp_goes_out_and_stays_out_and_nobody_mends_it() -> void:
@@ -284,7 +283,8 @@ func test_the_hall_never_flashes_while_it_goes_on() -> void:
 	var scene := await _hall()
 	await _put(scene, AWAY)
 	var worst := [0.0, 0.0]
-	var last := [1.0, 0.7]
+	# the hall stands at the load's edge when she steps away: the first picture is the start
+	var last := [(scene._lamps[0] as Decor).light_scale, (scene._steam[0] as Decor).modulate.a]
 	var through := func() -> bool:
 		for lamp in scene._lamps:
 			if is_instance_valid(lamp):
