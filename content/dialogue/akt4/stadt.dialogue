@@ -115,11 +115,17 @@ do WorldState.set_flag("melody.lio_street")
 Er stimmt die Laute, stimmt noch einmal und legt los. Sie klingt wie ein Bach, der noch nicht weiß, wohin. [ID:stadt_lio_3] [#draft]
 Lio: Den Ton habe ich nicht verfehlt. Den hat's woandershin gezogen. [ID:stadt_lio_4] [#draft]
 Lio: Aber der Rest war gut, oder? Sag Ja. Oder klatsch. Ich bin da flexibel. [ID:stadt_lio_5] [#draft]
+if WorldState.has_flag("list.closed")
+	if not WorldState.has_flag("city.concert_invited")
+		=> lio_invite
 => END
 
 ~ lio_again
 % Lio: Der Ton von vorhin ist übrigens noch unterwegs. Wenn du ihn siehst, sag ihm, wir fangen gleich an. [ID:stadt_lio_6] [#draft]
 % Lio: Ich lege eine Pause ein. Das ist Teil des Stücks. Das Stück heißt »Pause«. [ID:stadt_lio_7] [#draft]
+if WorldState.has_flag("list.closed")
+	if not WorldState.has_flag("city.concert_invited")
+		=> lio_invite
 => END
 
 # --- Der Brunnenrand ---------------------------------------------------------------------------------------------------
@@ -481,4 +487,28 @@ do WorldState.set_flag("list.done_lost")
 ~ slip_struck
 Der Zettel ist durchgestrichen, mit einem einzigen Strich, ohne Druck. Daneben steht, klein und rund, »Tut mir leid«. [ID:stadt_list_65] [#draft]
 Er hängt trotzdem noch da, falls sich jemand umentscheidet. [ID:stadt_list_66] [#draft]
+=> END
+
+# =============================================================================================================================
+# S6: das Konzert (Akt IV, Segment S6; docs/akt4/REGIONSBRIEFE.md O3, O10). Der Abend selbst steht in konzert.dialogue; hier steht nur die Einladung. Sprünge aus S2 hierher: lio_street und
+# lio_again springen am Ende zu lio_invite, wenn die Liste geschlossen ist (list.closed) und die Einladung nicht angenommen wurde (city.concert_invited); ohne diese Flags bleibt der
+# Wortlaut von S2, Zeichen für Zeichen. Zeilen-IDs stadt_inv_*.
+# =============================================================================================================================
+
+# --- Die Einladung -----------------------------------------------------------------------------------------------------------------------------------
+# Lio kennt die Liste nicht und fragt nicht nach ihr. Er lädt ein, wie er alles ankündigt: erst die Hauptsache, dann die Bühne, von der er nicht weiß, wer sie gebaut hat. Zwei Antworten, beide
+# echt: "Ich komme." setzt city.concert_invited und rückt die Heldenquest von list auf evening (die Szene liest das Flag und blendet in den Abend über); "Später." setzt nichts, der Tag bleibt, und die
+# Einladung steht beim nächsten Ansprechen wieder da.
+
+~ lio_invite
+Lio steht von seiner Kiste auf, die Laute an der Hüfte, und räuspert sich lange, als müsste er erst eine Rede finden. [ID:stadt_inv_1] [#draft]
+Lio: Heute Abend. Auf dem Platz. Das schlechteste Konzert der Welt. [ID:stadt_inv_2] [#draft]
+Lio: Ich habe sogar eine Bühne. Ich weiß nur nicht, wer sie gebaut hat. Sie steht jedenfalls, das ist ein Anfang. [ID:stadt_inv_3] [#draft]
+- Ich komme. [ID:stadt_inv_r1] [#draft]
+	Lio: Gut! Dann fehlt nur noch alles andere. [ID:stadt_inv_4] [#draft]
+	if WorldState.quest_stage("main_city_way") == "list"
+		do WorldState.advance_quest("main_city_way", "evening")
+	do WorldState.set_flag("city.concert_invited")
+- Später. [ID:stadt_inv_r2] [#draft]
+	Lio: Später ist gut. Ich fange eh nie pünktlich an, nur zuverlässig. [ID:stadt_inv_5] [#draft]
 => END

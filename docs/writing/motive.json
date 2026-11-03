@@ -663,9 +663,17 @@
     {
      "type": "flag",
      "ref": "melody.tess_whistle"
+    },
+    {
+     "type": "line",
+     "ref": "kon_song_1"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.lio_concert"
     }
    ],
-   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31). Tess pfeift beim Messen, ohne es zu merken (Akt IV, S4): ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief, die zweite Melodie der Stadt, hörbar und kein Fragment. Das Konzert (S6) bringt die dritte Melodie, `melody.lio_concert`."
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31). Tess pfeift beim Messen, ohne es zu merken (Akt IV, S4): ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief, die zweite Melodie der Stadt, hörbar und kein Fragment. Das Konzert (Akt IV, S6) bringt die dritte Melodie, `melody.lio_concert`: Lio spielt sie ohne Noten auf den Saiten, die ihm bleiben (`kon_song_1`), anfangs wacklig, mit einem Refrain, den der Platz beim zweiten Mal richtig singt (`kon_song_6`); hörbar, kein Fragment, im Haus später wiederzuhören (Bible §31)."
   },
   {
    "id": "spuren-der-welt",
@@ -744,9 +752,17 @@
     {
      "type": "flag",
      "ref": "fragment.fountain_rim"
+    },
+    {
+     "type": "line",
+     "ref": "kon_scr_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.stage_scratch"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand."
   },
   {
    "id": "gefaelliger-liste",
@@ -837,9 +853,17 @@
     {
      "type": "flag",
      "ref": "list.closed"
+    },
+    {
+     "type": "line",
+     "ref": "kon_song_3"
+    },
+    {
+     "type": "line",
+     "ref": "kon_gef_2"
     }
    ],
-   "payoff": "Das Brett am Platz hat sechzehn offene Zettel in vielen Handschriften, durchgestrichene mit einem »Tut mir leid« daneben und einen leeren, der trotzdem hängt; der Gefällige entschuldigt sich, bevor er bittet, und hat in S2 noch keine Aufgabe für sie. Die Signature-Begegnung (Akt IV, S5) lässt siebzehn, achtzehn und neunzehn dazuwachsen, er entschuldigt sich vor jedem (`stadt_list_8`, `stadt_list_10`, `stadt_list_12`) und bittet nicht, er fragt nur (`stadt_list_15`). Fortschritt entsteht durch Priorisieren und Ablehnen (Bible §14): sie wählt bis zu drei von sechs Aufgaben und sagt zu den übrigen Nein, ohne Grund (`stadt_list_r25`); kein Zeitlimit, kein Scheitern, niemand stirbt. Jedes Nein hat eine Folge im Raum, einen durchgestrichenen Zettel an seinem Ort mit dem kleinen runden »Tut mir leid« (`stadt_list_65`), jedes Ja einen Gang (`do_*`: ein frischer Zettel, eine Kleinigkeit, kein Lob). Das Nein tut ihm weh, er zuckt, entschuldigt sich einmal und hält es aus (`stadt_list_22` bis `stadt_list_24`). Zwei leere Zettel hängen am Ende am Brett (`stadt_list_3`): der leere von S2 und der neunzehnte, für den Fall. Das Brot am Ende ist die Antwort auf ein Nein (Motiv „Das Brot nach dem Nein“), sein Warum zeigen Dinge in seiner Küche (Motiv „Das Warum des Gefälligen“), keine Zeile erklärt es (Bible §51).",
+   "payoff": "Das Brett am Platz hat sechzehn offene Zettel in vielen Handschriften, durchgestrichene mit einem »Tut mir leid« daneben und einen leeren, der trotzdem hängt; der Gefällige entschuldigt sich, bevor er bittet, und hat in S2 noch keine Aufgabe für sie. Die Signature-Begegnung (Akt IV, S5) lässt siebzehn, achtzehn und neunzehn dazuwachsen, er entschuldigt sich vor jedem (`stadt_list_8`, `stadt_list_10`, `stadt_list_12`) und bittet nicht, er fragt nur (`stadt_list_15`). Fortschritt entsteht durch Priorisieren und Ablehnen (Bible §14): sie wählt bis zu drei von sechs Aufgaben und sagt zu den übrigen Nein, ohne Grund (`stadt_list_r25`); kein Zeitlimit, kein Scheitern, niemand stirbt. Jedes Nein hat eine Folge im Raum, einen durchgestrichenen Zettel an seinem Ort mit dem kleinen runden »Tut mir leid« (`stadt_list_65`), jedes Ja einen Gang (`do_*`: ein frischer Zettel, eine Kleinigkeit, kein Lob). Das Nein tut ihm weh, er zuckt, entschuldigt sich einmal und hält es aus (`stadt_list_22` bis `stadt_list_24`). Zwei leere Zettel hängen am Ende am Brett (`stadt_list_3`): der leere von S2 und der neunzehnte, für den Fall. Das Brot am Ende ist die Antwort auf ein Nein (Motiv „Das Brot nach dem Nein“), sein Warum zeigen Dinge in seiner Küche (Motiv „Das Warum des Gefälligen“), keine Zeile erklärt es (Bible §51). Beim Konzert (S6) sitzt er auf der untersten Stufe vor dem Rathaus, in den Händen kein Zettel (`kon_song_3`); danach sagt er einen Satz, in dem keine Entschuldigung steht (`kon_gef_2`). Der Text sagt nichts darüber, was das heißt.",
    "payoff_lines": [
     "stadt_gef_4",
     "stadt_board_4",
@@ -982,9 +1006,17 @@
     {
      "type": "line",
      "ref": "stadt_list_6"
+    },
+    {
+     "type": "line",
+     "ref": "kon_mira_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_mira_2"
     }
    ],
-   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste (S5, gebaut): ein Zettel steckt in ihrem Netz, sie liest ihn einmal und sagt „Nein.“ (`stadt_list_5`), faltet ihn und knotet weiter; der Text kommentiert es nicht, sie fragt nichts, es gibt kein Flag und keine neue Erinnerung; der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus."
+   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste (S5, gebaut): ein Zettel steckt in ihrem Netz, sie liest ihn einmal und sagt „Nein.“ (`stadt_list_5`), faltet ihn und knotet weiter; der Text kommentiert es nicht, sie fragt nichts, es gibt kein Flag und keine neue Erinnerung; der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus. Nach dem Konzert (S6) steht sie im Dunkel hinter dem Brunnen und sieht nicht zur Bühne, sondern zum Tor (`kon_mira_1`); sie sagt trocken etwas über die Bürgerin mit dem falschen Text (`kon_mira_2`), kein Wort über die Liste, keine neue Erinnerung, kein Flag."
   },
   {
    "id": "schluessel-passt",
@@ -1105,9 +1137,46 @@
     {
      "type": "flag",
      "ref": "city.asked_help"
+    },
+    {
+     "type": "line",
+     "ref": "kon_song_4"
     }
    ],
-   "payoff": "Das Haus wird gebaut, nicht geschenkt (Bible §13, Brief O9). Das erste Brett, das die Spielerin sägt, wird krumm, auf beiden Wegen, mit Tess’ Händen am Holz oder ohne, und Tess nennt es, wie es ist: krumm, es bleibt stehen. Sie lobt nicht und tadelt nicht, sie nimmt es als Maß; es wandert als Kuriosität in die Taschen der Spielerin und wartet auf ein Fach im Haus. In S8 kommt Tess als Gast mit Absicht, baut mit der Spielerin zwei Regale und eine Wandleiste und sagt über die Arbeit des Antreibers an der Werkbank „Schief. Aber dicht.“ (Brief O9); die Leiter mit den Bleistiftstrichen am Holm, die in der Werkstatt noch vier Sprossen und zwei leere Löcher hat, ist dann das erste Stück am Dach. Wer um Hilfe gebeten hat (`city.asked_help`), bekommt kürzere Zeilen und die Antwort „Hältst du mir die Leiter?“, wer es allein gesägt hat, dasselbe Brett: kein Weg ist der bessere."
+   "payoff": "Das Haus wird gebaut, nicht geschenkt (Bible §13, Brief O9). Das erste Brett, das die Spielerin sägt, wird krumm, auf beiden Wegen, mit Tess’ Händen am Holz oder ohne, und Tess nennt es, wie es ist: krumm, es bleibt stehen. Sie lobt nicht und tadelt nicht, sie nimmt es als Maß; es wandert als Kuriosität in die Taschen der Spielerin und wartet auf ein Fach im Haus. In S8 kommt Tess als Gast mit Absicht, baut mit der Spielerin zwei Regale und eine Wandleiste und sagt über die Arbeit des Antreibers an der Werkbank „Schief. Aber dicht.“ (Brief O9); die Leiter mit den Bleistiftstrichen am Holm, die in der Werkstatt noch vier Sprossen und zwei leere Löcher hat, ist dann das erste Stück am Dach. Wer um Hilfe gebeten hat (`city.asked_help`), bekommt kürzere Zeilen und die Antwort „Hältst du mir die Leiter?“, wer es allein gesägt hat, dasselbe Brett: kein Weg ist der bessere. Beim Konzert (S6) steht Tess hinten in der Menge, wenn das Brett gesägt ist, und klatscht einen halben Schlag neben dem Takt, gleichmäßig wie bei einer Säge (`kon_song_4`)."
+  },
+  {
+   "id": "verbindung-lampe",
+   "kind": "vorausdeutung",
+   "title": "Die Lampe und der Pfosten (Orin hält, Verbindung)",
+   "bible": "§13, §16, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "kon_hold_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_hold_4"
+    },
+    {
+     "type": "line",
+     "ref": "kon_hold_5"
+    },
+    {
+     "type": "line",
+     "ref": "kon_orin_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_orin_2"
+    },
+    {
+     "type": "flag",
+     "ref": "city.stage_orin"
+    }
+   ],
+   "payoff": "Die Facette Verbindung heißt Hilfe erbitten und gemeinsam handeln (Brief O6); das Wort steht nie im Text. Setzer war das Bitten am Bock (Akt IV, S4), der zweite Leser ist die Bühne (S6): kippt die Lampe, hat die Spielerin drei Antworten, die alle dieselbe Lampe ergeben, ein wenig schief und stehend, „Ich halte sie.“, das Schweigen (Lio klemmt den Pfosten mit dem Fuß fest) und, nur mit der Facette, „Orin! Hältst du die Lampe?“ (`kon_hold_4`). Orin hält den Pfosten mit beiden Händen und sagt etwas Konkretes über Bast (`kon_hold_5`); nach dem Lied steht er noch dort und erzählt vom Holz in seinen Händen, ohne Gefühlswort und ohne Lehre (`kon_orin_2`). Wer ihn nicht gebeten hat, trifft ihn in der Menge (`kon_orin_4`). Keiner der Wege wird gelobt, keiner ist besser. Die Folge liest `con_orin`, nie derselbe Cue wie die Wahl (`city.stage_orin`)."
   },
   {
    "id": "nichts",
@@ -1372,9 +1441,29 @@
     {
      "type": "line",
      "ref": "stadt_goat_3"
+    },
+    {
+     "type": "line",
+     "ref": "kon_goat_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_goat_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_entry_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_cgoat_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_cgoat_2"
     }
    ],
-   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke, die Haken um die Pfützen schlagen und doch nach Westen gehen, und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach: die Torwächterin hat ihr Nein gesagt, und sie ist über die Mauer gegangen (`stadt_gate_3`), Mira fragt nicht mehr, wie sie auf das Rathausdach kam (`stadt_mira_6`), und die Ziege steht auf dem First und meckert in einem Rhythmus, der nach einer Liste klingt, welche, steht nirgends (`stadt_goat_3`). Die Stationen von „Ein perfekter Tag“ zeigen nur, was sie angefressen oder umgestoßen hat, nie sie dabei. S6 sieht sie auf der Bühne."
+   "payoff": "Taucht zunehmend absurd auf (II, IV); Nachspiel: besetzt das Rathaus, niemand kennt die Forderungen. Akt IV, S1: nur als Spur auf der Straße, Hufabdrücke, die Haken um die Pfützen schlagen und doch nach Westen gehen, und ein Glöckchen, das jemand wie einen Hut an den Zaunpfosten gehängt hat (hat in Akt II noch ahnungslos auf dem Balken gestanden, jetzt hat sie etwas vor); nie die Ziege selbst, keine Forderung erklärt. S2 sieht sie auf einem Dach: die Torwächterin hat ihr Nein gesagt, und sie ist über die Mauer gegangen (`stadt_gate_3`), Mira fragt nicht mehr, wie sie auf das Rathausdach kam (`stadt_mira_6`), und die Ziege steht auf dem First und meckert in einem Rhythmus, der nach einer Liste klingt, welche, steht nirgends (`stadt_goat_3`). Die Stationen von „Ein perfekter Tag“ zeigen nur, was sie angefressen oder umgestoßen hat, nie sie dabei. S6 sieht sie auf der Bühne (Akt IV): sie tritt in die Mitte und setzt die Hufe, als sei dort ihr Platz eingezeichnet (`kon_goat_1`), und sie hat als Einzige den Einsatz, genau auf der Eins (`kon_entry_2`). Nach dem Lied steht sie dort noch und sieht hinauf zum First, auf dem sie vorhin stand, als rechne sie etwas nach (`kon_cgoat_1`). Lio verbeugt sich am Ende vor ihr, und sie nimmt es hin; niemand erklärt, was sie will."
   },
   {
    "id": "kartoffel",
@@ -1446,9 +1535,106 @@
     {
      "type": "flag",
      "ref": "city.feather_taken"
+    },
+    {
+     "type": "line",
+     "ref": "kon_orin_4"
     }
    ],
-   "payoff": "Orins Erzfeind (Akt IV, S3). Die Ente verhält sich vollkommen normal: sie steht vor dem Laden, pickt, sieht einen mit einem Auge an und hat zu allem keine Meinung; kein Quak, keine Herkunft, kein Wort über Orin, der nur bittet nachzusehen und auf „Warum?“ keinen Grund nennt (`flo_orin_7`). Die Nebenquest „Die Ente“ hat zwei gleichwertige Ausgänge: die Spielerin steht neben ihm, und die Töpfe mit den Pfingstrosen kommen hinaus (`city.duck_passed`), oder sie bleiben drinnen, „Dann morgen“ (`city.duck_stayed`); die Ente schaut in beiden Fällen unbeteiligt (`flo_rep_7`, `flo_rep_10`). Neben ihr liegt eine Feder (Kuriosität). Nach dem Brief gibt es keinen Witz um sie (Bible §45). Die Ente kehrt wieder: im Nachspiel weigert sich Orin weiterhin (Bible §42)."
+   "payoff": "Orins Erzfeind (Akt IV, S3). Die Ente verhält sich vollkommen normal: sie steht vor dem Laden, pickt, sieht einen mit einem Auge an und hat zu allem keine Meinung; kein Quak, keine Herkunft, kein Wort über Orin, der nur bittet nachzusehen und auf „Warum?“ keinen Grund nennt (`flo_orin_7`). Die Nebenquest „Die Ente“ hat zwei gleichwertige Ausgänge: die Spielerin steht neben ihm, und die Töpfe mit den Pfingstrosen kommen hinaus (`city.duck_passed`), oder sie bleiben drinnen, „Dann morgen“ (`city.duck_stayed`); die Ente schaut in beiden Fällen unbeteiligt (`flo_rep_7`, `flo_rep_10`). Neben ihr liegt eine Feder (Kuriosität). Nach dem Brief gibt es keinen Witz um sie (Bible §45). Die Ente kehrt wieder: im Nachspiel weigert sich Orin weiterhin (Bible §42). Auf Lios Konzert (Akt IV, S6) fehlt sie nicht, sie ist nur nicht eingeladen: Orin hat nachgesehen (`kon_orin_4`)."
+  },
+  {
+   "id": "lio-konzert",
+   "kind": "gag",
+   "title": "Das schlechteste Konzert der Welt (Lio)",
+   "bible": "§13, §44, §45",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "stadt_lio_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_lio_5"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_inv_2"
+    },
+    {
+     "type": "line",
+     "ref": "stadt_inv_3"
+    },
+    {
+     "type": "line",
+     "ref": "kon_intro_3"
+    },
+    {
+     "type": "line",
+     "ref": "kon_intro_4"
+    },
+    {
+     "type": "line",
+     "ref": "kon_snap_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_snap_4"
+    },
+    {
+     "type": "line",
+     "ref": "kon_hold_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_entry_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_entry_3"
+    },
+    {
+     "type": "line",
+     "ref": "kon_wind_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_song_6"
+    },
+    {
+     "type": "line",
+     "ref": "kon_fin_1"
+    },
+    {
+     "type": "line",
+     "ref": "kon_fin_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_lio_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_post_2"
+    },
+    {
+     "type": "flag",
+     "ref": "city.concert_invited"
+    },
+    {
+     "type": "flag",
+     "ref": "city.string_snapped"
+    },
+    {
+     "type": "flag",
+     "ref": "city.string_taken"
+    },
+    {
+     "type": "flag",
+     "ref": "city.poster_taken"
+    }
+   ],
+   "payoff": "Lio kündigt an und liefert spät: schon auf der Straße kommt der Teil, an dem es gut wird, gleich (`stadt_lio_2`), und nach dem Nein der Liste lädt er zum schlechtesten Konzert der Welt, mit einer Bühne, von der er nicht weiß, wer sie gebaut hat (`stadt_inv_3`). Der Abend (Akt IV, S6, Bible §44) geht technisch schief, und jeder Witz zielt auf den Ablauf, nie auf einen Menschen: die tiefste Saite reißt beim ersten Akkord (`kon_snap_2`) und wird gestrichen (`kon_snap_4`), die Lampe kippt (`kon_hold_2`), die Band, auf die er einzählt, gibt es nicht, und die Ziege hat den Einsatz (`kon_entry_3`), der Wind nimmt das Notenblatt (`kon_wind_1`). Gut oder schlecht sagt keine Zeile; sie zeigen, dass niemand geht (`kon_fin_1`), und Lio verbeugt sich vor der Ziege (`kon_fin_2`). Kein Elysia-Lob, kein Bravo, kein „Musik heilt“ (Stilblatt lio.md). Danach schenkt er die gerissene Saite (`kon_lio_2`, Kuriosität) und hängt das Plakat auf, »Eintritt frei«, »Ausstieg auch« (`kon_post_2`, Kuriosität); die Erinnerung `lio.concert` entsteht, die Beziehung wird vertraut. Seine Musik kehrt im Haus wieder (Bible §31)."
   },
   {
    "id": "antreiber-freizeit",
@@ -2569,7 +2755,7 @@
   {
    "flag": "list.take_stage",
    "axis": "Entscheidungen",
-   "meaning": "Sie hat „Die Bühne.“ aus der Liste gewählt (Akt IV, S5, Wert Freiheit, nie genannt): am Ort (am Rand des Platzes vor dem Rathaus) hängt ein frischer Zettel, den Gang tut sie dort (`do_stage`). Mit `value.freedom` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16)."
+   "meaning": "Sie hat „Die Bühne.“ aus der Liste gewählt (Akt IV, S5, Wert Freiheit, nie genannt): am Ort (am Rand des Platzes vor dem Rathaus) hängt ein frischer Zettel, den Gang tut sie dort (`do_stage`). Mit `value.freedom` aus Akt II setzt die Wahl die Facette Integrität; ohne ihn ist es dieselbe Aufgabe, kein Wert ist der bessere (Bible §16). Das Konzert (Akt IV, S6) liest es: die Bühne steht, und wo sie wackelt, sind es ihre Nägel (`kon_arr_2`); ohne die Aufgabe hat jemand bei den Nägeln gespart (`kon_arr_3`)."
   },
   {
    "flag": "list.take_bread",
@@ -2620,6 +2806,56 @@
    "flag": "list.done_lost",
    "axis": "Fortschritt",
    "meaning": "Sie hat den Gang für „Das Fundbüro.“ getan (Akt IV, S5): ein grauer Schal aufs unterste Brett der Fundstücke. Ohne Lob, ohne Wert im Bild; die Karte nimmt den frischen Zettel danach fort oder hakt ihn ab."
+  },
+  {
+   "flag": "city.concert_invited",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat Lios Einladung angenommen (Akt IV, S6, „Ich komme.“): das schlechteste Konzert der Welt, heute Abend auf dem Platz, nach dem Nein der Liste. Die Heldenquest rückt von list auf evening, die Szene liest das Flag und blendet in den Abend über. „Später.“ setzt nichts, die Einladung steht beim nächsten Ansprechen wieder da."
+  },
+  {
+   "flag": "city.string_snapped",
+   "axis": "Gag",
+   "meaning": "Beim ersten Akkord ist die tiefste Saite von Lios Laute gerissen (Akt IV, S6, `kon_snap_2`): die Szene spielt den Klang in demselben Augenblick und liest das Flag; Lio spielt auf den übrigen weiter."
+  },
+  {
+   "flag": "melody.lio_concert",
+   "axis": "Musik",
+   "meaning": "Sie hat Lios Konzert gehört (Akt IV, S6): die dritte Melodie der Stadt, anfangs wacklig, mit einem Refrain von sechs Tönen, den der Platz beim zweiten Mal richtig singt; hörbar, kein Fragment (Brief O10). Die Erinnerung lio.concert entsteht, die Beziehung zu Lio wird vertraut."
+  },
+  {
+   "flag": "city.stage_orin",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat Orin gebeten, die Bühnenlampe zu halten (Akt IV, S6): die Antwort „Orin! Hältst du die Lampe?“ gibt es nur mit der Facette Verbindung, sie ist der zweite Leser neben dem Bitten bei Tess. Orin steht danach am Pfosten, die Karte liest es, `con_orin` erzählt etwas Konkretes über das Halten. Gleichwertig mit „Ich halte sie.“ und dem Schweigen: alle drei ergeben dieselbe Lampe, keine Wertung."
+  },
+  {
+   "flag": "city.string_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat Lios gerissene Saite eingesteckt (Kuriosität, Akt IV, S6): „Behalt sie. Sie hat ihr Bestes gegeben.“ Gleichwertig mit city.string_left, nichts wird gezählt."
+  },
+  {
+   "flag": "city.string_left",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat die gerissene Saite liegen lassen (Akt IV, S6, „Lass nur.“): Lio legt sie neben sich auf die Bühne. Gleichwertig mit city.string_taken; `con_lio_again` kennt beide Wege und fragt nichts."
+  },
+  {
+   "flag": "city.poster_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat Lios Konzertplakat vom Pfosten genommen (Kuriosität, Akt IV, S6): gelbliches Papier, Kohle, »Eintritt frei«, »Ausstieg auch«. Gleichwertig mit city.poster_left."
+  },
+  {
+   "flag": "city.poster_left",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat das Konzertplakat hängen lassen (Akt IV, S6): es hängt weiter am Pfosten, der Pfeil bei »Ausstieg auch« zeigt zum Tor. Gleichwertig mit city.poster_taken."
+  },
+  {
+   "flag": "fragment.stage_scratch",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat das alte Brett an der Bühnenecke gesehen: Kerben, die einmal Buchstaben waren, zwei halbe Herzen übereinander, für einen Atemzug hell und frisch (Spur der Welt, Akt IV, S6; kein Bild des Kindes)."
+  },
+  {
+   "flag": "city.evening",
+   "axis": "Fortschritt",
+   "meaning": "Es ist Abend auf dem Platz (Akt IV, S6): die Szene setzt es beim Laden der Stadt in der Stufe evening, die Karte liest es und zeigt alles, was nur am Abend steht (die leuchtenden Laternen, die Bühne mit ihren Lampen, das Plakat, die Menge)."
   }
  ]
 }

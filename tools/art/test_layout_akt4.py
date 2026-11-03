@@ -863,9 +863,10 @@ class EveningLayoutTests(unittest.TestCase):
         self.assertEqual(spots["Ł"][0][1], stage[1] - 1, "Lio on the stage, one row behind its front")
         self.assertEqual(spots["Ʒ"][0], (stage[0], stage[1] - 2), "his crate one row above him")
         self.assertEqual(sorted(spots["Δ"]), [(stage[0] - 3, stage[1] - 2), (stage[0] + 3, stage[1] - 2)], "a lamp at each end")
-        for glyph in "ΓΘ":
-            x, y = spots[glyph][0]
-            self.assertTrue(abs(x - stage[0]) <= 3 and stage[1] - 2 <= y <= stage[1] - 1, glyph + " stands on the stage")
+        x, y = spots["Γ"][0]
+        self.assertTrue(abs(x - stage[0]) <= 3 and stage[1] - 2 <= y <= stage[1] - 1, "the goat stands on the stage")
+        lamp = sorted(spots["Δ"])[1]
+        self.assertEqual(spots["Θ"][0], (lamp[0] + 1, lamp[1]), "Orin holds the post of the right lamp, from the side")
         for glyph in "θτγβκμ":
             x, y = spots[glyph][0]
             self.assertGreater(y, stage[1], glyph + " stands before the stage, in the crowd")

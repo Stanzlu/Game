@@ -561,7 +561,7 @@ def build_stadt():
     put("Ʒ", 44, 21)  # the crate Lio sits on
     put("Ł", 44, 22)  # Lio, in the middle of the stage
     put("Γ", 46, 22)  # the goat on the stage
-    put("Θ", 42, 22)  # Orin at the post of the lamp (once she asked him to hold it)
+    put("Θ", 48, 21)  # Orin at the post of the right lamp (once she asked him to hold it)
     put("Ξ", 40, 23)  # the old board at the corner of the stage, with the notches
     put("Π", 36, 24)  # Lio's poster
     put("θ", 39, 26)  # Orin in the crowd (when he does not hold the lamp)
