@@ -982,6 +982,11 @@ def hall_cover(ms):
     c.paint(body & (y >= hem - 2), CLOTH, 0.2, dither=False)  # the hem's shade
     c.paint(c.rect(4, 9, 12, 10) & body, CLOTH, 0.14, dither=False)  # the string round the neck
     c.fill(c.rect(10, 9, 12, 13) & body, CLOTH[0])  # its loose end
+    tag = ramp("#6b6458", "#a79f8c", "#d9d2bc")  # a paper tag sewn on below the string: the one line of writing the dialogue reads
+    c.fill(c.rect(5, 15, 11, 23) & body, tag[2])
+    c.fill(c.rect(5, 15, 11, 16) & body, tag[1])
+    c.fill(c.rect(6, 18, 10, 19) & body, tag[0])
+    c.fill(c.rect(6, 20, 9, 21) & body, tag[0])
     c.outline(pa.STYLES["tal"]["outline"])
     return c
 

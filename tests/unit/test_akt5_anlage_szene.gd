@@ -201,18 +201,18 @@ func test_twelve_levers_with_their_numbers_three_in_use_and_nine_under_a_cloth()
 	var scene := await _hall()
 	var levers := _levers(scene)
 	assert_eq(levers.size(), 12)
-	var live := []
+	var active := []
 	var numbers := {}
 	for node in levers:
 		var lever := node as ConsoleLever
 		numbers[lever.number] = true
-		if lever.live:
-			live.append(lever.number)
+		if lever.active:
+			active.append(lever.number)
 		else:
 			assert_true(lever.has_meta(&"cue") and lever.get_meta(&"cue") == "lever_idle")
 	assert_eq(numbers.size(), 12, "each number once")
-	live.sort()
-	assert_eq(live, [1, 2, 3], "the three in use")
+	active.sort()
+	assert_eq(active, [1, 2, 3], "the three in use")
 	assert_eq(_decor_with(scene, "tal/ma_lever_cover").size(), 9, "a cloth on each of the others")
 	for number: int in LIVE:
 		assert_false(scene.lever(number).down, "all stand up at first")
@@ -319,6 +319,20 @@ func test_a_wrong_order_costs_one_line_and_the_three_go_back_and_she_can_try_aga
 	await _pull(scene, [3, 1, 2])
 	var done := func() -> bool: return WorldState.has_flag("plant.probe_done")
 	assert_true(await _told(scene, done), "the second try is as good as the first")
+
+
+func test_levers_left_down_in_the_free_phase_stand_up_when_the_trial_is_called() -> void:
+	var scene := await _hall()
+	await _pull(scene, [3, 1])
+	assert_eq(_downs(scene), [1, 3], "she tried them before she spoke to him")
+	WorldState.set_flag("plant.probe")
+	await wait_physics_frames(2)
+	assert_eq(
+		_downs(scene), [], "he calls the order: they stand up, the order begins with the first"
+	)
+	await _pull(scene, [3, 1, 2])
+	assert_true(await _told(scene, func() -> bool: return WorldState.has_flag("plant.probe_done")))
+	assert_eq(_downs(scene), [1, 2, 3])
 
 
 func test_a_lever_that_is_down_is_not_pulled_again_during_the_trial() -> void:

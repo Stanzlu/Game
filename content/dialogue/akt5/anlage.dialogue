@@ -6,7 +6,7 @@
 # Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Schilder stehen in » «. Zahlen sind ausgeschrieben, auch die Nummern der Hebel ("Hebel Drei").
 # Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt; nur das Tor öffnet sich vor der letzten Zeile des Klopfens, damit "Eintritt." gesprochen wird, wenn das Tor aufgeht.
 # Setzer und Leser eines Flags stehen nie im selben Cue: grat.gate_open setzt "gate_knock" (die Karte liest es), plant.probe setzt "probe_offer" (die Szene startet daraus die Probe),
-# plant.probe_done setzt die Szene (der Cue "waechter" liest es), plant.lever_1 bis _3 sind allein Sache der Szene. Die Probe ist nie Voraussetzung: wer sie nie verlangt, verlässt die Halle
+# plant.probe_done setzt die Szene (der Cue "waechter" liest es); die Lage der Hebel ist allein Sache der Szene (kein Flag). Die Probe ist nie Voraussetzung: wer sie nie verlangt, verlässt die Halle
 # wie jeder, und in keinem Cue gibt es Zeit, Druck oder Strafe (das beginnt erst später).
 
 # --- Das Tor -----------------------------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 
 ~ gate
 Am linken Pfosten hängt ein Messingschild, »Wächter im Dienst. Eintritt nach Eintrag.« Eine Klinke gibt es nicht, eine Klingel auch nicht. [ID:anl_gate_1] [#draft]
-Die Kette läuft genau durch die Mitte, das Schloss hängt gerade. Dahinter geht das Ticken weiter, ob du klopfst oder nicht. [ID:anl_gate_2] [#draft]
+Die Kette läuft genau durch die Mitte, das Schloss hängt gerade. Dahinter tickt etwas, gleichmäßig, in Pausen von immer derselben Länge, ob du klopfst oder nicht. [ID:anl_gate_2] [#draft]
 - Klopfen. [ID:anl_gate_r1] [#draft]
 	=> gate_knock
 - Weitergehen. [ID:anl_gate_r2] [#draft]
@@ -47,9 +47,9 @@ if WorldState.has_flag("plant.probe_done")
 	=> waechter_again
 if WorldState.has_flag("plant.probe")
 	=> waechter_wait
-Am Pult steht ein älterer Mann im langen Arbeitsmantel, die Messingknöpfe bis zum Kragen geschlossen, die Mütze genau gerade. Er schreibt und sieht nicht auf. [ID:anl_w_1] [#draft]
+Am Pult steht ein älterer Mann im langen Arbeitsmantel, bis zum Kragen geschlossen, die Mütze genau gerade. Er schreibt auf ein Klemmbrett und sieht nicht auf. [ID:anl_w_1] [#draft]
 Wächter: Eins. Du. [ID:anl_w_2] [#draft]
-Der Stift setzt einen Strich ins Notizbuch. Erst dann hebt er den Kopf. Seine Stiefel stehen Spitze an Spitze. [ID:anl_w_3] [#draft]
+Der Stift setzt einen Strich aufs Klemmbrett. Erst dann hebt er den Kopf. Seine Stiefel stehen Spitze an Spitze. [ID:anl_w_3] [#draft]
 Wächter: Ich zähle jeden Besuch neu. Dann stimmt die Zahl. [ID:anl_w_4] [#draft]
 Wächter: Zwölf Hebel. Drei in Betrieb, neun stehen. [ID:anl_w_5] [#draft]
 Wächter: Kontrollfrage. Hast du den Dampf gesehen? [ID:anl_w_6] [#draft]
@@ -67,16 +67,16 @@ Wächter: Ich zeige dir die drei. Eine Probe, keine Frist. [ID:anl_w_8] [#draft]
 
 # --- Die Probe: das Angebot --------------------------------------------------------------------------------------------------
 # Die drei Hebel in Betrieb, von links nach rechts Eins, Zwei, Drei, und die Reihenfolge, die er ausruft: Erst Drei, dann Eins, dann Zwei (die Szene prüft sie im Code, dieser Text
-# muss sie genau so nennen). Keine Frist, keine Strafe; wer sie vergisst, fragt noch einmal (der Cue ist über "Zeig mir die Hebel." jederzeit wieder zu erreichen). In der letzten Zeile
+# muss sie genau so nennen). Keine Frist, keine Strafe; wer sie vergisst, spricht ihn noch einmal an und bekommt in "waechter_wait" die Wiederholung. In der letzten Zeile
 # tritt er vom Pult zurück; danach setzt der Cue plant.probe, und die Szene startet die Probe. Kein Wort darüber, was die anderen Hebel tun oder was sie bewachen.
 
 ~ probe_offer
 Wächter: Von links nach rechts Eins, Zwei, Drei. Diese drei laufen. [ID:anl_probe_1] [#draft]
 Wächter: Ich rufe eine Reihenfolge aus. Du ziehst in dieser Reihenfolge. [ID:anl_probe_2] [#draft]
-Wächter: Keine Frist, keine Strafe. Das Verfahren kennt beides nicht. [ID:anl_probe_3] [#draft]
+Wächter: Keine Frist, keine Strafe. Die Probe kennt beides nicht. [ID:anl_probe_3] [#draft]
 Wächter: Ich sage es einmal. Eine Wiederholung trage ich ein. [ID:anl_probe_4] [#draft]
 Wächter: Erst Drei, dann Eins, dann Zwei. [ID:anl_probe_5] [#draft]
-Er klappt das Notizbuch zu und tritt einen Schritt vom Pult zurück, genau einen. [ID:anl_probe_6] [#draft]
+Er lässt den Stift sinken und sieht von dem Klemmbrett zu den Hebeln, genau einmal hin und genau einmal zurück. [ID:anl_probe_6] [#draft]
 do WorldState.set_flag("plant.probe")
 => END
 
@@ -85,10 +85,10 @@ do WorldState.set_flag("plant.probe")
 # Wiederholung ein, wie er es angekündigt hat, und sagt die Reihenfolge noch einmal, genau so. Ohne Antwort, ohne Frist.
 
 ~ waechter_wait
-Der Wächter steht einen Schritt vom Pult, das Notizbuch zu, den Blick auf den Hebeln. [ID:anl_wait_1] [#draft]
+Der Wächter steht am Pult, den Stift gesenkt, den Blick auf den Hebeln. [ID:anl_wait_1] [#draft]
 Wächter: Wiederholung. Ich trage sie ein. [ID:anl_wait_2] [#draft]
 Wächter: Erst Drei, dann Eins, dann Zwei. [ID:anl_wait_3] [#draft]
-Der Stift macht einen Strich, ohne dass er das Notizbuch aufschlägt. [ID:anl_wait_4] [#draft]
+Der Stift macht einen Strich aufs Klemmbrett, ohne dass er hinsieht. [ID:anl_wait_4] [#draft]
 => END
 
 # --- Nach der Probe ----------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ Der Stift macht einen Strich, ohne dass er das Notizbuch aufschlägt. [ID:anl_wa
 # nötig) und die Schrauben, die jedes Mal gleich viele sind: das ist der Sinn von Schrauben. Kein Wort über die anderen Hebel.
 
 ~ waechter_again
-Der Wächter steht am Pult, den Stift in der Faust. Auf seiner Seite ist eine Zeile dazugekommen, kleiner geschrieben als die anderen. [ID:anl_again_1] [#draft]
+Der Wächter steht am Pult, den Stift in der Faust. Auf seinem Blatt ist eine Zeile dazugekommen, kleiner geschrieben als die anderen. [ID:anl_again_1] [#draft]
 Wächter: Rubrik Unvorhergesehenes, für Dinge, die nicht passieren. Heute ein Eintrag. [ID:anl_again_2] [#draft]
 Wächter: Muss ich das Eintragen auch eintragen? Nein. Ich habe nachgesehen. [ID:anl_again_3] [#draft]
 Wächter: Die Schrauben sind gleich viele wie vorhin. Das ist der Sinn von Schrauben. [ID:anl_again_4] [#draft]
@@ -128,14 +128,14 @@ Auf das Tuch ist ein Schild genäht, mit einer einzigen Zeile, »Steht.« [ID:an
 => END
 
 ~ small_door
-An der Rückwand, hinter dem Pult, sitzt eine Tür, die dir kaum bis zur Brust reicht. Das Holz ist grau, die Scharniere glänzen von Öl. [ID:anl_door_1] [#draft]
+An der Rückwand, hinter dem Pult, sitzt eine Tür, die dir kaum bis zur Brust reicht. Das Holz ist dunkel, zwei Eisenbänder halten es zusammen. [ID:anl_door_1] [#draft]
 An ihr sitzt ein schwerer Riegel, und von ihm laufen Stangen zum Pult, eine zu jedem der zwölf Hebel. Zusammen halten sie ihn, und keine ist locker. [ID:anl_door_2] [#draft]
 Die Tür ist zu. Du klopfst nicht. [ID:anl_door_3] [#draft]
 => END
 
 ~ gauges
-An der Seitenwand hängen vier runde Zeiger in einer Reihe, beschriftet in Druckbuchstaben. Alle vier stehen auf »Normal«. [ID:anl_gauge_1] [#draft]
-Der dritte zittert ein wenig, so leise, als wolle er nicht auffallen. Er steht trotzdem auf »Normal«. [ID:anl_gauge_2] [#draft]
+An der Rückwand hängen vier runde Zeiger, zwei links vom Pult und zwei rechts davon. Alle vier stehen auf der grünen Marke, die hier »Normal« heißt. [ID:anl_gauge_1] [#draft]
+Der zweite von links zittert ein wenig, so leise, als wolle er nicht auffallen. Er steht trotzdem auf »Normal«. [ID:anl_gauge_2] [#draft]
 => END
 
 # --- Eine Spur der Welt: das Zifferblatt -------------------------------------------------------------------------------------
@@ -145,10 +145,10 @@ Der dritte zittert ein wenig, so leise, als wolle er nicht auffallen. Er steht t
 
 ~ worn_dial
 if WorldState.has_flag("fragment.worn_dial")
-	Das Zifferblatt am Pult mit der Rille im Glas. Der Zeiger steht auf »Normal«, wie in jedem Jahr. [ID:anl_dial_4] [#draft]
+	Das Zifferblatt am Pult mit der Rille im Glas. Der Zeiger steht ruhig, wie in jedem Jahr. [ID:anl_dial_4] [#draft]
 else
 	Ein Zeiger am Pult sitzt dicht über dem Glas seines Zifferblatts und hat es berührt, Jahr um Jahr. Dort ist es abgewetzt, eine Rille, fein und rund. [ID:anl_dial_1] [#draft]
-	Die Rille liegt immer an derselben Stelle, genau unter der Spitze, wenn der Zeiger auf »Normal« steht. [ID:anl_dial_2] [#draft]
+	Die Rille liegt immer an derselben Stelle, dicht neben der Spitze des Zeigers, wenn er ruhig steht. [ID:anl_dial_2] [#draft]
 	Für einen Atemzug liegt ein Zeiger über dem anderen, hundert, tausend, jeder auf derselben Stelle. Dann ist es wieder einer. [ID:anl_dial_3] [#draft]
 	do WorldState.set_flag("fragment.worn_dial")
 => END
@@ -157,6 +157,6 @@ else
 # Humor aus einem Ding: das Rohr zischt in genau dem Takt des Tickens vom Tor. Nichts wird erklärt, niemand klärt, wer von wem lernt.
 
 ~ steam_pipe
-Ein Rohr an der Wand zischt in gleichen Abständen, jedes Mal gleich lang und mit derselben kleinen Wolke. [ID:anl_pipe_1] [#draft]
+Ein Rohr steht aus dem Boden und zischt in gleichen Abständen, jedes Mal gleich lang und mit derselben kleinen Wolke. [ID:anl_pipe_1] [#draft]
 Das Zischen fällt auf das Ticken, das du vom Tor kennst, Schlag auf Schlag. Es ist nicht klar, wer von wem abschreibt. [ID:anl_pipe_2] [#draft]
 => END

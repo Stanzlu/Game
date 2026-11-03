@@ -1,6 +1,6 @@
 # Der Wächter
 
-**Beleg in Akt V:** 25 Zeilen in `content/dialogue/akt5/anlage.dialogue` (G3, Ø 7,3 Wörter, längste 13, kein Ausruf, zwei Fragen: eine Kontrollfrage, die er selbst beantwortet, und eine, die er sich selbst
+**Beleg in Akt V:** 27 Zeilen in `content/dialogue/akt5/anlage.dialogue` (G3, Ø 7,2 Wörter, längste 13, kein Ausruf, zwei Fragen: eine Kontrollfrage, die er selbst beantwortet, und eine, die er sich selbst
 stellt), dazu die Dinge der Halle als Erzählung (die kleine Tür, die Zeigerwand, das Zifferblatt, das Rohr). Aus der Bible (§14) und dem Plan (Akt V). **Belegt in G3:** Zählen, Nummern,
 Eintragen, Kontrollfragen, das trockene „Nein.“ der Probe. **Noch ohne Beleg:** die Last (G4), das Loslassen (G5), sein Vorbehalt am Schluss, der Herd im Haus (G9).
 

@@ -294,7 +294,7 @@ class MaschineMapTests(unittest.TestCase):
             self.assertEqual(entry["prop"], LEVER)
             self.assertEqual(entry["ground"], "_")
             self.assertEqual(params["n"], n)
-            self.assertEqual(params["live"], n <= 3, "levers 1, 2 and 3 are in use, the others stand still")
+            self.assertEqual(params["active"], n <= 3, "levers 1, 2 and 3 are in use, the others stand still")
             self.assertEqual((params["sprite_up"], params["sprite_down"]), ("tal/ma_lever_%d_up" % n, "tal/ma_lever_%d_down" % n))
             self.assertEqual(params["radius"], 12)
             self.assertEqual("cue" in params, n > 3, "a still lever can be looked at (lever_idle), one in use is pulled")

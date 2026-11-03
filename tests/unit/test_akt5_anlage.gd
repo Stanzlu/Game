@@ -169,6 +169,7 @@ func test_the_gate_is_a_sign_a_chain_and_a_choice_to_knock_or_to_walk_on() -> vo
 	assert_eq(WorldState.state.flags, before, "and sets nothing")
 	var told := "\n".join(left)
 	assert_true(told.contains("Messingschild") and told.contains("Kette"), "what the picture has")
+	assert_true(told.contains("tickt"), "the ticking is first heard here (the cue of G2 is silent)")
 	assert_true(told.contains("Wächter"), "the sign is where his name is first read")
 
 

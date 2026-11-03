@@ -41,7 +41,15 @@ func _ready() -> void:
 			_set_lever(number, true, false)
 	if WorldState.quest_stage(QUEST) == "valley":
 		WorldState.advance_quest(QUEST, "plant")
+	WorldState.flag_changed.connect(_on_flag_changed)
 	Beat.mark("maschine_enter")
+
+
+## The keeper calls the trial: whatever she pulled before stands up again, and the order begins
+## with the first lever (a lever left down from the free phase would otherwise be ignored).
+func _on_flag_changed(id: String, value: bool) -> void:
+	if value and id == "plant.probe":
+		_reset_levers(false)
 
 
 func lever(number: int) -> ConsoleLever:
@@ -80,10 +88,17 @@ func _wrong() -> void:
 	var cut := Cutscene.begin(self)
 	await cut.say(DIALOGUE, "lever_wrong")
 	cut.end()
-	for number in LIVE:
-		_set_lever(number, false, true)
-	_pulled.clear()
+	_reset_levers(true)
 	_busy = false
+
+
+## The three stand up again (a click for each that was down) and the order begins anew.
+func _reset_levers(with_sound: bool) -> void:
+	for number in LIVE:
+		var target := lever(number)
+		if target != null and target.down:
+			target.set_down(false, with_sound)
+	_pulled.clear()
 
 
 ## Right order: he enters it. The levers stay down.

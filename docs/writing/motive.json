@@ -2387,7 +2387,7 @@
      "ref": "anl_door_3"
     }
    ],
-   "payoff": "Das Warum des Wächters zeigen Dinge, keine Erklärung (Brief O6, wie das Warum des Antreibers und des Gefälligen). An der Rückwand der Halle, hinter dem Pult, sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht: graues Holz, Scharniere, die von Öl glänzen, und ein schwerer Riegel, den Stangen von allen zwölf Hebeln halten, keine locker (`anl_door_1`, `anl_door_2`). Sie ist zu, und die Spielerin klopft nicht (`anl_door_3`): ein Echo der geschlossenen Tür aus Akt I (`kd_door_3`, `kd_door_4`, Fragment `fragment.closed_door`), ohne dass es jemand sagt. Das Wort Kind fällt nicht, der Wächter spricht nie über die Tür, kein Täter, keine Ursache, keine Wirkung auf die Spielerin. Die Tür bleibt zu, auch nach dem Loslassen: er hat sie nur nicht mehr in der Hand (Akt V, G5 und G9)."
+   "payoff": "Das Warum des Wächters zeigen Dinge, keine Erklärung (Brief O6, wie das Warum des Antreibers und des Gefälligen). An der Rückwand der Halle, hinter dem Pult, sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht: dunkles Holz, zwei Eisenbänder und ein schwerer Riegel, den Stangen von allen zwölf Hebeln halten, keine locker (`anl_door_1`, `anl_door_2`). Sie ist zu, und die Spielerin klopft nicht (`anl_door_3`): ein Echo der geschlossenen Tür aus Akt I (`kd_door_3`, `kd_door_4`, Fragment `fragment.closed_door`), ohne dass es jemand sagt. Das Wort Kind fällt nicht, der Wächter spricht nie über die Tür, kein Täter, keine Ursache, keine Wirkung auf die Spielerin. Die Tür bleibt zu, auch nach dem Loslassen: er hat sie nur nicht mehr in der Hand (Akt V, G5 und G9)."
   },
   {
    "id": "waechter-zaehlt",
