@@ -164,9 +164,9 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S6-16 · `con_mira`
 
-- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
+- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht dich an und gleich darauf an dir vorbei, zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
 - **Mira:** Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. `[#draft]`  <sub>kon_mira_2</sub>
-- **Mira:** Ich stell mich ans Tor. Von da sieht man, wann es hell wird. `[#draft]`  <sub>kon_mira_3</sub>
+- **Mira:** Ich stell mich ans Tor. Ich geh noch heute Nacht weiter. `[#draft]`  <sub>kon_mira_3</sub>
 *wenn* `main_city_way und evening`
 
 ### S6-17 · `con_scratch`

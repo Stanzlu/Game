@@ -2,8 +2,8 @@
 # weiter. Vorher meldet sich der Richter, genau einmal: er stellt sich vor (der Sprecher heißt von jetzt an "Richter", in Akt II hieß er "Stimme"), er liest den Beat act2_richter ("Wir kennen uns."),
 # er redet über den Ablauf des Abends und nie über die Spielerin, er verhaspelt sich, er überdramatisiert (der Wind, die Saite), er stellt sich nicht auf die Seite des Spiels, und das letzte
 # Wort hat die Welt: der Platz summt. Er schweigt, solange die Spielerin mit Mira spricht (zwei Cues, die Szene spielt sie nacheinander, nie gleichzeitig).
-# Mira ist gelegentlich unfair, nie grausam: "Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen." ist Zeugenschaft, kein Maß (ohne Zahl; die Menge der gewählten Aufgaben ist offen) und kein
-# Therapiewort. Drei Antworten, alle möglich, keine falsch: die Grenze ("Den Rest nicht."), anschließen, schweigen. Ein Nein darf reale Folgen haben (Bible §16): Mira geht in jedem Ausgang voraus (Akt V
+# Mira ist gelegentlich unfair, nie grausam: "Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen." ist Zeugenschaft, kein Maß (ohne Zahl; wer keine Aufgabe genommen hat, hört "Nein" statt "Ja": gleich unfair) und kein
+# Therapiewort. Drei Antworten, alle möglich, keine falsch: die Grenze ("Den Rest nicht."), anschließen, schweigen. Ein Nein darf reale Folgen haben (Bible §16): Mira geht in jedem Ausgang voraus, noch in der Nacht (Akt V
 # hat keine Mira), die Beziehung und das Flag city.mira_parted_<ausgang> sind die Spur für VI und VII; sie kehrt zurück (Bible §13). Keine Romanze, kein Trost, kein "!" bei Mira.
 # Wahl und Folge stehen nie im selben Cue: die Antworten von mira_gate setzen die Flags, ihre Folge liest die Karte (Mira verschwindet), nie ein Cue. Eine Erinnerungsvariante (gate) für alle drei Ausgänge:
 # Zeugenschaft, nicht Urteil. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung). Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
@@ -32,10 +32,13 @@ do WorldState.set_flag("city.richter_met")
 # (gate_leaves) liest nichts. Mira geht voraus, das Tor macht für eine Person einen Spalt auf.
 
 ~ mira_gate
-Mira steht vor dem Tor, das Netz geschultert, die Stiefel fest geschnürt. Sie sieht hinauf, wo die Sterne anfangen, nicht zu dir. [ID:tor_mira_1] [#draft]
-Mira: Bei Sonnenaufgang geh ich durch. Ich bin die Erste. [ID:tor_mira_2] [#draft]
-Mira: Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen. [ID:tor_mira_3] [#draft]
-Sie sagt es nicht laut. Sie sagt es dem Tor. [ID:tor_mira_4] [#draft]
+Mira steht vor dem Tor, das Netz geschultert, die Stiefel fest geschnürt. Sie dreht sich zu dir, aber ihr Blick geht über dich hinweg, hinauf, wo die Sterne anfangen. [ID:tor_mira_1] [#draft]
+Mira: Ich geh noch in der Nacht. Bei Sonnenaufgang will ich weit sein. [ID:tor_mira_2] [#draft]
+if WorldState.has_flag("list.take_bouquet") or WorldState.has_flag("list.take_ladder") or WorldState.has_flag("list.take_stage") or WorldState.has_flag("list.take_goat") or WorldState.has_flag("list.take_bread") or WorldState.has_flag("list.take_lost")
+	Mira: Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen. [ID:tor_mira_3] [#draft]
+else
+	Mira: Du hast heute Nein gesagt, bis es dunkel wurde. Ich hab zugesehen. [ID:tor_mira_3b] [#draft]
+Sie sagt es nicht laut. Sie sagt es an dir vorbei, dem Tor. [ID:tor_mira_4] [#draft]
 - Ich habe getan, was ich konnte. Den Rest nicht. [ID:tor_mira_r1] [#draft]
 	Mira: Das ist der Stand. [ID:tor_mira_5] [#draft]
 	Sie nickt kurz, wie jemand, der etwas abhakt, das ihm nicht gefällt und das stimmt. [ID:tor_mira_6] [#draft]
@@ -60,6 +63,6 @@ Sie sagt es nicht laut. Sie sagt es dem Tor. [ID:tor_mira_4] [#draft]
 	=> gate_leaves
 
 ~ gate_leaves
-Die Torwächterin schiebt in ihrem Häuschen den Riegel zurück, und das Tor geht einen Spalt weit auf, gerade für eine Person mit Netz. [ID:tor_out_1] [#draft]
-Dann ist es wieder zu, und vor dem Tor ist Nacht. [ID:tor_out_2] [#draft]
+Die Torwächterin im Torbogen sieht auf die Straße und nicht auf Mira, die an ihr vorbeigeht, eine Person mit Netz, die niemand aufhält. [ID:tor_out_1] [#draft]
+Dann ist der Torbogen wieder leer, und vor dem Tor ist Nacht. [ID:tor_out_2] [#draft]
 => END

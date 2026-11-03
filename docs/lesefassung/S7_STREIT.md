@@ -30,10 +30,13 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > sich freut; die Beziehung wird eng), schweigen (sie hat es sich gedacht; die Beziehung wird angespannt). Jeder Ausgang setzt sein Flag, die Beziehung und dieselbe Erinnerung; der Wortlaut danach
 > (gate_leaves) liest nichts. Mira geht voraus, das Tor macht für eine Person einen Spalt auf.
 
-- *Mira steht vor dem Tor, das Netz geschultert, die Stiefel fest geschnürt. Sie sieht hinauf, wo die Sterne anfangen, nicht zu dir.* `[#draft]`  <sub>tor_mira_1</sub>
-- **Mira:** Bei Sonnenaufgang geh ich durch. Ich bin die Erste. `[#draft]`  <sub>tor_mira_2</sub>
-- **Mira:** Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen. `[#draft]`  <sub>tor_mira_3</sub>
-- *Sie sagt es nicht laut. Sie sagt es dem Tor.* `[#draft]`  <sub>tor_mira_4</sub>
+- *Mira steht vor dem Tor, das Netz geschultert, die Stiefel fest geschnürt. Sie dreht sich zu dir, aber ihr Blick geht über dich hinweg, hinauf, wo die Sterne anfangen.* `[#draft]`  <sub>tor_mira_1</sub>
+- **Mira:** Ich geh noch in der Nacht. Bei Sonnenaufgang will ich weit sein. `[#draft]`  <sub>tor_mira_2</sub>
+*wenn* `list.take_bouquet oder list.take_ladder oder list.take_stage oder list.take_goat oder list.take_bread oder list.take_lost`
+  - **Mira:** Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen. `[#draft]`  <sub>tor_mira_3</sub>
+*sonst*
+  - **Mira:** Du hast heute Nein gesagt, bis es dunkel wurde. Ich hab zugesehen. `[#draft]`  <sub>tor_mira_3b</sub>
+- *Sie sagt es nicht laut. Sie sagt es an dir vorbei, dem Tor.* `[#draft]`  <sub>tor_mira_4</sub>
 - ▸ **Ich habe getan, was ich konnte. Den Rest nicht.**
   - **Mira:** Das ist der Stand. `[#draft]`  <sub>tor_mira_5</sub>
   - *Sie nickt kurz, wie jemand, der etwas abhakt, das ihm nicht gefällt und das stimmt.* `[#draft]`  <sub>tor_mira_6</sub>
@@ -50,8 +53,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S7-3 · `gate_leaves`
 
-- *Die Torwächterin schiebt in ihrem Häuschen den Riegel zurück, und das Tor geht einen Spalt weit auf, gerade für eine Person mit Netz.* `[#draft]`  <sub>tor_out_1</sub>
-- *Dann ist es wieder zu, und vor dem Tor ist Nacht.* `[#draft]`  <sub>tor_out_2</sub>
+- *Die Torwächterin im Torbogen sieht auf die Straße und nicht auf Mira, die an ihr vorbeigeht, eine Person mit Netz, die niemand aufhält.* `[#draft]`  <sub>tor_out_1</sub>
+- *Dann ist der Torbogen wieder leer, und vor dem Tor ist Nacht.* `[#draft]`  <sub>tor_out_2</sub>
 
 ## stadt
 
@@ -78,7 +81,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > =============================================================================================================================
 
 - *Im Torbogen steht die Torwächterin, den Schlüsselbund in der Faust, und sieht durch dich hindurch auf die Straße.* `[#draft]`  <sub>stadt_gnt_1</sub>
-- **Torwächterin:** Zu. Bei Sonnenaufgang wieder. Wer raus will, bleibt bis dahin drin. `[#draft]`  <sub>stadt_gnt_2</sub>
+- **Torwächterin:** Nachts ist hier nichts mehr zu tun. Wer geht, geht. Ich zähle nicht mit. `[#draft]`  <sub>stadt_gnt_2</sub>
 - **Torwächterin:** Ich habe heute Abend Musik gehört. Dafür bin ich nicht zuständig. Gehört habe ich sie trotzdem. `[#draft]`  <sub>stadt_gnt_3</sub>
 
 ## konzert
@@ -86,7 +89,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S6-16 · `con_mira`
 
-- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
+- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht dich an und gleich darauf an dir vorbei, zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
 - **Mira:** Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. `[#draft]`  <sub>kon_mira_2</sub>
-- **Mira:** Ich stell mich ans Tor. Von da sieht man, wann es hell wird. `[#draft]`  <sub>kon_mira_3</sub>
+- **Mira:** Ich stell mich ans Tor. Ich geh noch heute Nacht weiter. `[#draft]`  <sub>kon_mira_3</sub>
 *wenn* `main_city_way und evening`

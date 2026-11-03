@@ -174,9 +174,9 @@ Gefälliger: Ich sitze. Das ist alles, was ich gerade tue. [ID:kon_gef_2] [#draf
 => END
 
 ~ con_mira
-Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor. [ID:kon_mira_1] [#draft]
+Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht dich an und gleich darauf an dir vorbei, zum Tor. [ID:kon_mira_1] [#draft]
 Mira: Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. [ID:kon_mira_2] [#draft]
-Mira: Ich stell mich ans Tor. Von da sieht man, wann es hell wird. [ID:kon_mira_3] [#draft]
+Mira: Ich stell mich ans Tor. Ich geh noch heute Nacht weiter. [ID:kon_mira_3] [#draft]
 do WorldState.set_flag("city.mira_gate")
 if WorldState.quest_stage("main_city_way") == "evening"
 	do WorldState.advance_quest("main_city_way", "night")

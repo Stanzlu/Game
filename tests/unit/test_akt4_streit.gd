@@ -147,8 +147,15 @@ func test_mira_says_it_to_the_gate_and_is_unfair_without_a_number_or_a_therapy_w
 	var seen := await DialogueWalk.groups(FILE, "mira_gate")
 	assert_eq(seen.size(), 1, "one choice")
 	var told := await _told("mira_gate")
-	assert_true(told.contains("Ja gesagt, bis es dunkel wurde"), "witness, not a measure")
+	assert_true(
+		told.contains("Nein gesagt, bis es dunkel wurde"), "no task taken: the same, turned"
+	)
 	assert_true(told.contains("Ich hab zugesehen"))
+	WorldState.set_flag("list.take_stage")
+	var said_yes := await _told("mira_gate")
+	assert_true(said_yes.contains("Ja gesagt, bis es dunkel wurde"), "witness, not a measure")
+	assert_true(said_yes.contains("Ich hab zugesehen"))
+	assert_false(said_yes.contains("Nein gesagt"))
 	var mira := _said_by("Mira")
 	assert_gt(mira.length(), 250, "all of her speech is read")
 	assert_false(mira.contains("!"), "never a !")
@@ -236,4 +243,4 @@ func test_the_night_is_the_last_stage_of_the_walk_so_far_and_is_written_down() -
 		assert_ne(tr(key), key, key)
 		for digit: String in "0123456789":
 			assert_false(tr(key).contains(digit), "no number in " + key)
-	assert_true(tr("MEMORY_MIRA_GATE").contains("Ja gesagt"), "the memory is the witness")
+	assert_true(tr("MEMORY_MIRA_GATE").contains("zugesehen"), "the memory is the witness")
