@@ -54,7 +54,7 @@ Am Fuß des ersten Steinmännchens liegt ein kleiner runder Stein, so groß wie 
 
 ~ cairn_1
 Das erste Steinmännchen im Hochtal ist unten breit und oben schmal, Stein auf Stein, ohne Mörtel und ohne Zweifel. [ID:hoch_cairn_1_1] [#draft]
-Auf dem obersten Stein ist eine kleine Mulde, gerade groß genug für etwas Rundes. [ID:hoch_cairn_1_2] [#draft]
+Ganz oben ist eine kleine Mulde, gerade groß genug für etwas Rundes. [ID:hoch_cairn_1_2] [#draft]
 if WorldState.has_flag("grat.stone_taken")
 	=> cairn_1_offer
 => END

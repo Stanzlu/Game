@@ -1978,6 +1978,39 @@
    "res://assets/generated/props/tal/gb_cairn_road.png"
   ]
  },
+ "tal/gb_dwarf_pine": {
+  "anchor": [
+   24,
+   28
+  ],
+  "shadow": [
+   17,
+   4
+  ],
+  "shape": {
+   "circle": 6,
+   "offset": [
+    0,
+    -3
+   ]
+  },
+  "sway": 0.5,
+  "textures": [
+   "res://assets/generated/props/tal/gb_dwarf_pine_0.png",
+   "res://assets/generated/props/tal/gb_dwarf_pine_1.png",
+   "res://assets/generated/props/tal/gb_dwarf_pine_2.png"
+  ]
+ },
+ "tal/gb_hand_stone": {
+  "anchor": [
+   17,
+   11
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_hand_stone.png"
+  ]
+ },
  "tal/gb_iron_ring": {
   "anchor": [
    11,
@@ -2008,6 +2041,25 @@
   },
   "textures": [
    "res://assets/generated/props/tal/gb_lookout.png"
+  ]
+ },
+ "tal/gb_marmot_den": {
+  "anchor": [
+   36,
+   36
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -14
+   ],
+   "rect": [
+    46,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_marmot_den.png"
   ]
  },
  "tal/gb_net_branch": {
@@ -2052,6 +2104,76 @@
    "res://assets/generated/props/tal/gb_planks.png"
   ]
  },
+ "tal/gb_plant_fence": {
+  "anchor": [
+   8,
+   24
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -2
+   ],
+   "rect": [
+    16,
+    6
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_plant_fence.png"
+  ]
+ },
+ "tal/gb_plant_gate": {
+  "anchor": [
+   24,
+   38
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -2
+   ],
+   "rect": [
+    48,
+    8
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_plant_gate.png"
+  ]
+ },
+ "tal/gb_plant_hall": {
+  "anchor": [
+   96,
+   162
+  ],
+  "shadow": [
+   92,
+   7
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -8
+   ],
+   "rect": [
+    176,
+    20
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_plant_hall.png"
+  ]
+ },
+ "tal/gb_quartz": {
+  "anchor": [
+   9,
+   22
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_quartz.png"
+  ]
+ },
  "tal/gb_rockfall": {
   "anchor": [
    48,
@@ -2059,6 +2181,16 @@
   ],
   "textures": [
    "res://assets/generated/props/tal/gb_rockfall.png"
+  ]
+ },
+ "tal/gb_round_stone": {
+  "anchor": [
+   6,
+   5
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_round_stone.png"
   ]
  },
  "tal/gb_scree": {
@@ -2093,6 +2225,26 @@
    "res://assets/generated/props/tal/gb_sign_trail.png"
   ]
  },
+ "tal/gb_sign_view": {
+  "anchor": [
+   19,
+   44
+  ],
+  "shadow": [
+   7,
+   2
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_sign_view.png"
+  ]
+ },
  "tal/gb_slate": {
   "anchor": [
    10,
@@ -2113,6 +2265,16 @@
    "res://assets/generated/props/tal/gb_smoke.png"
   ]
  },
+ "tal/gb_smoke_plant": {
+  "anchor": [
+   8,
+   94
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_smoke_plant.png"
+  ]
+ },
  "tal/gb_steps": {
   "anchor": [
    24,
@@ -2131,6 +2293,15 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/gb_stone_mark.png"
+  ]
+ },
+ "tal/gb_thimble": {
+  "anchor": [
+   5,
+   10
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_thimble.png"
   ]
  },
  "tal/goat_boot": {

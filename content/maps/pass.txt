@@ -1,12 +1,13 @@
 ; Akt V, G1: der Pass, die erste Karte des Gebirges (Klasse M, ADR-068, ADR-073). Von der Straße führt eine Tür im Süden in eine Kerbe des Waldes, dahinter beginnt der Aufstieg:
 ; ein Pfad nach Norden an einem Bach entlang, unten Waldrand und Wiese mit Bohlen über den Bach, darüber vier Absätze unter Bändern aus Fels, die der Pfad in Kehren
 ; nimmt (Rampen mit Holzstufen, abwechselnd im Osten und im Westen); der Bach fällt durch die Bänder und quert jeden Absatz in einer Furt, er entspringt am Fuß der
-; Nordwand. Die Absätze verlieren ihr Gras: Wiese, Geröll im Gras, Geröll, blanker Fels. Am Nordende liegt in einer Lücke der Wand Geröll quer (ein Blocker, bis G2
-; die Tür ins Hochtal setzt). Nichts weist den Weg als Steinmännchen alle gut zehn Zellen (jedes vom vorigen aus zu sehen) und der Rauch der Anlage oben rechts.
+; Nordwand. Die Absätze verlieren ihr Gras: Wiese, Geröll im Gras, Geröll, blanker Fels. Am Nordende liegt in einer Lücke der Wand seit G2 die Tür ins Hochtal (`grat`;
+; in G1 lag dort Geröll quer, ein Blocker mit dem Cue ridge_wait, der Text steht noch in aufstieg.dialogue). Nichts weist den Weg als Steinmännchen alle gut zehn Zellen
+; (jedes vom vorigen aus zu sehen) und der Rauch der Anlage oben rechts.
 ; Keine Figur spricht, nur Dinge: das erste Steinmännchen, Miras Spur (je nach Streit ein Netz an einem Pfosten, ein Netz an einem Ast oder ein flacher Stein; es gibt nie
 ; zwei), die Bohlen, ein handgemaltes Schild, ein Schieferplättchen, ein Eisenring in der Wand und der Aussichtsfels.
 ; Layout: tools/art/layout_akt5_maps.py pass --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/pass.txt. Streuregeln sind Laufzeit-Meta
-; und brauchen keinen neuen Bake. Was G2 später wegnimmt (Blocker X, Geröll F), trägt keinen gebackenen Schatten.
+; und brauchen keinen neuen Bake. Die Tür D und die Ankunft d ersetzen in G2 Blocker und Geröll auf Zellen mit demselben Boden (`,`): der Boden und sein Stempel bleiben.
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/pass_ground.png"
@@ -60,15 +61,15 @@ Z = {"ground": "^", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 7 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_sign_trail", "cue": "trail_sign", "dialogue": "res://content/dialogue/akt5/aufstieg.dialogue", "radius": 16}}
 8 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_slate", "cue": "slate_chip", "dialogue": "res://content/dialogue/akt5/aufstieg.dialogue", "radius": 14, "unless": "mountain.slate_taken"}}
 9 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_iron_ring", "cue": "iron_ring", "dialogue": "res://content/dialogue/akt5/aufstieg.dialogue", "radius": 18}}
-; das Nordende: Geröll liegt quer in der Lücke der Wand (der Blocker mit dem Cue ridge_wait; G2 ersetzt ihn durch die Tür ins Hochtal), dahinter der Haufen (ohne gebackenen Schatten)
-X = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 1], "cue": "ridge_wait", "dialogue": "res://content/dialogue/akt5/aufstieg.dialogue"}}
-F = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_rockfall"}}
+; das Nordende (G2): die Tür ins Hochtal steht in der Lücke der Wand (Breite fünf; die Ankunft von dort liegt eine Zelle südlich). In G1 lag hier Geröll quer (Blocker mit dem Cue ridge_wait, Haufen dahinter)
+D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "grat", "spawn": "pass", "auto": true, "size": [5, 1]}}
+d = {"ground": ",", "marker": "spawn_grat"}
 [map]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,F,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^.......^^^^^^^^^^^^^mm........^^^^^^^^^^^^^^^^^^^^,,X,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^..............mmmmmmmm...OR.......^^^^^^^^^^^mmmmm,,,,,mmmmm...^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^.......^^^^^^^^^^^^^mm........^^^^^^^^^^^^^^^^^^^^,,D,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^..............mmmmmmmm...OR.......^^^^^^^^^^^mmmmm,,d,,mmmmm...^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^.........O....mmm~mmmm................B...mmm,,,,,,,,,,mmmm....^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^...O..........m~~~mm.O.mmmm..............,,,,,,,,,,,,,mmmm...R.^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^....R.B.....,,,,ww....ammm,,,,,......,,,,,,,,,,,,,mmbrmmom...O.^^^^^^^^^^^^^^^^^^

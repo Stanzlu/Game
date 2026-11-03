@@ -1,0 +1,23 @@
+# Fragment Hand (G2): ein flacher Stein am Ufer, darauf der Abdruck einer kleinen Hand, dunkler, noch nass; Wasser an den Fingerspitzen und am Handballen. Ein Bild des Kindes, ohne Kind, ohne Ort, ohne Anlass
+name: fragment_hand
+out: assets/generated/fragments
+size: 16x16
+palette: o=#1b1f27 s=#9ea4b0 t=#808796 k=#5e6574 d=#2c3440 m=#3e4a5a w=#cfe6f2
+outline: o
+---
+................
+.oooooooooooooo.
+.osssssstttttto.
+.ossssstwttttto.
+.osssswtdtwttto.
+.ossssdtdtdttto.
+.ottttdtdtdtdto.
+.ottttdtdtdkdko.
+.otttddddddddko.
+.ottddmmmmmmdko.
+.otttdmmmmmmdko.
+.otttkdmmmmdkko.
+.ottkkkdwwdkkko.
+.ottkkkkkkkkkko.
+.oooooooooooooo.
+................

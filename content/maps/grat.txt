@@ -1,0 +1,115 @@
+; Akt V, G2: das Hochtal, die zweite Karte des Gebirges (Klasse M, 96 × 56, ADR-068, ADR-073). Von der Tür im Süden (sie führt zurück auf den Pass) öffnet sich ein Becken zwischen den Wänden:
+; in der Mitte ein Bergsee mit flachem Ufer, Matten und Geröll, Latschenkiefern, im Osten ein Murmeltierhang, dazu drei Steinmännchen (je eines vom vorigen aus zu sehen), die den Weg am Südufer
+; entlang nach Nordosten zeigen: dort steht die Anlage, ein Haus mit Schornstein in einer Nische des Felsens, vor ihm ein Zaun mit einem Tor (zu, bis G3 die Tür in die Maschine setzt) und ein Platz aus
+; festgetretener Erde. Über dem Tal liegt der Grat hinter dem Blocker am Fuß der Rampe im Nordwesten (G6 öffnet ihn): ein Absatz an der Nordwand, darüber hinweg ein Weg nach Osten, eine
+; Spalte über der Anlage (drei Zellen breit, mit einem Umweg über den Absatz daneben) und am Ostende ein Plateau (frei, für die Tür des ursprünglichen Hauses, G8).
+; Keine Figur: Dinge, kleine Scherze und die Hand auf dem Stein am Ufer (die erste Rückblende). Der Layoutstand ist endgültig (ADR-068): Änderungen nur an der Legende.
+; Layout: tools/art/layout_akt5_maps.py grat --write (ersetzt den [map]-Block), danach tools/art/bake_ground.py content/maps/grat.txt. Streuregeln sind Laufzeit-Meta und brauchen keinen neuen Bake.
+; Was später weicht oder an einen Zustand gebunden ist (der Stein, der Kristall, der Fingerhut, das Tor, der Haufen am Fuß der Rampe, die beiden Blocker), trägt keinen gebackenen Schatten.
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/grat_ground.png"
+water = "res://assets/generated/maps/grat_water.png"
+scatter = [{"sprite": "tal/grass_tuft", "on": ".", "density": 0.26, "spacing": 11, "clump": 52}, {"sprite": "tal/wildflowers", "on": ".", "density": 0.1, "spacing": 14}, {"sprite": "tal/pebbles", "on": ",m", "density": 0.3, "spacing": 10}, {"sprite": "tal/pebbles", "on": ".", "near": "^", "radius": 1, "density": 0.35, "spacing": 12}, {"sprite": "tal/bush", "on": ".", "near": "h", "radius": 1, "density": 0.1, "spacing": 22}, {"sprite": "tal/reeds", "on": ".", "near": "~w", "radius": 1, "density": 0.3, "spacing": 14}, {"sprite": "tal/grass_tuft", "on": ",m", "near": ".", "radius": 1, "density": 0.2, "spacing": 10}]
+[legend]
+. = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
+m = {"atlas": [2, 0], "surface": "dirt", "paint": "mud"}
+, = {"atlas": [2, 0], "surface": "dirt", "paint": "path"}
+p = {"atlas": [2, 0], "surface": "puddle", "paint": "puddle"}
+~ = {"atlas": [5, 0], "surface": "water", "solid": true, "paint": "water"}
+h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
+^ = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "cliff"}
+; begehbares Wasser: das flache Ufer des Sees (w, flache Steine)
+w = {"atlas": [3, 0], "surface": "stone", "paint": "water"}
+; Latschenkiefern (L auf Gras, l auf Geröll), Felsbrocken (O, o), kleine Felsen (R, r), loses Geröll am Boden (S, flach), hohes Gras und Gebüsch
+L = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_dwarf_pine"}}
+l = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_dwarf_pine"}}
+O = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_boulder"}}
+o = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_boulder"}}
+R = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+r = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/rock"}}
+S = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_scree"}}
+g = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/tall_grass"}}
+u = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/bush"}}
+; die Tür zurück auf den Pass (Breite fünf, im Südrand; die Ankunft von dort liegt sechs Zellen nördlich) und der Start bei --start=grat
+D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "pass", "spawn": "grat", "auto": true, "size": [5, 1]}}
+d = {"ground": ",", "marker": "spawn_pass"}
+@ = {"ground": ".", "marker": "player_spawn"}
+; die drei Steinmännchen (Formen c, b, a: fünf, drei und zwei Steine), der kleine runde Stein an der Seite des ersten (er liegt, bis er genommen ist, und sitzt ein Stück höher am Fuß)
+1 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_c", "cue": "cairn_1", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 18}}
+2 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_b", "cue": "cairn_2", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 18}}
+3 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_a", "cue": "cairn_3", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 18}}
+q = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_round_stone", "cue": "stone_pick", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 14, "lift": 5, "unless": "grat.stone_taken"}}
+; das Schild am Eingang (Aussicht), der flache Stein mit der Hand am Ufer (die Rückblende), der Bergkristall im Geröll, der Bau des Murmeltiers mit dem Fingerhut im Häufchen
+7 = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_sign_view", "cue": "valley_sign", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 16}}
+H = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_hand_stone", "cue": "hand_stone", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 16}}
+Q = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_quartz", "cue": "quartz", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 14, "unless": "grat.quartz_taken"}}
+M = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_marmot_den", "cue": "marmot_den", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "radius": 22}}
+t = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_thimble", "lift": 2, "unless": "grat.thimble_taken"}}
+; die Anlage: das Haus am Ende seiner Nische (der Schornstein steht zwei Zellen östlich der Mitte), der Rauch über ihm, der Zaun von Fels zu Fels, das Tor in seiner Mitte (zu) und davor der Blocker plant_gate (G3 ersetzt ihn durch die Tür in die Maschine)
+A = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_hall"}}
+Z = {"ground": "^", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_smoke_plant"}}
+f = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_fence"}}
+G = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_plant_gate"}}
+X = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 1], "offset": [0, -1], "cue": "plant_gate", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue"}}
+; der Aufgang zum Grat im Nordwesten: Holzstufen, davor ein Haufen Geröll und der Blocker ramp_wait am Fuß (G6 öffnet ihn und nimmt den Haufen weg; beide ohne gebackenen Schatten)
+s = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_steps"}}
+F = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_rockfall"}}
+Y = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 1], "cue": "ramp_wait", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue"}}
+[map]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^.......mmm^^^^^^^^^^^^^^^^^^^^^^^^^^mmmmmmm^^^^^^^^^^^^^^^....m......^^^^
+^^^^^^^^^^^^^^...........R..L.mSmm.^^^^^^^^^^R...........mmSmmmlmmm,,,,,,,,,,,,......m.......^^^
+^^^^^^^^^^^^^^.L..R.O..L..O....Sm..R.....................Smmmmmmmm,,,,,,,,,,,,,,,............^^^
+^^^^^^^^^^^^^.....................,,.............,,,,,,,,,,,mmmmm,,,,^^^^^^^^.,,,,,.....,.mm^^^^
+^^^^^^^^^^^^^....R..L......,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,,,,,m,,,m^^^^^^^^...,,,,,,,,,,..^^^^
+^^^^^^^^^^^^^.O.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m^^^^^^^^...,,,,,,,,,mm.^^^^
+^^^^^^^^^^^^^.,,,,,,,,,,,,,,,,.........,,,,,,,,.......R..mmm..,,,,,,,,,,,,,,,,,,,,,,........^^^^
+^^^^^^^^^^^^^.,,,,,,,,,,,,.......................................,,,,,,,,,,,,,,,,...........^^^^
+^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,,,,,.......m..mm..^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^....^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,s,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,F,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,Y,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^........,,,...........^^^^^^^..^^^^^^^^^hhmSS....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^.h.....,,,....L....mmm............^^hhhhhhhR....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^hh....,,,.......mSmmmmmmo..L......mmhhhhhhh.R.....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^..L..,,,.......ommmQmmSmm.....L.moSmmhhh...Rg....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^...,,,,.L.....SSmmmm~~~~~.....mmSmS.....mSmmm...^^^^^^^^^^^^^^^^^^^^Z^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^..,,,....R......~~~~~~~~~~.....R.u...mmSmmmlmm..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^R.,,,...R..L..~~~~~~~~~~~~~~~....O...mrmmmmmmS..^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^..,,,........~~~~~~~~~~~~~~~~~~~....lmmmmMmmmmm^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^..,,,..L...w~~~~~~~~~~~~~~~~~~~~~g...mmmmtmmmS.g^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^...,,,.....w~~~~~~~~~~~~~~~~~~~~~~...mmmmmmmmS..g^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^...,,,....w~~~~~~~~~~~~~~~~~~~~~~~~....mmmmS....h^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^....,,,....w~~~~~~~~~~~~~~~~~~~~~~~~......L....uhhh^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^^.gL..,,,...gw~~~~~~~~~~~~~~~~~~~~~~~~.L.........hhhh^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^^.....,,,.....w~~~~~~~~~~~~~~~~~~~~~~~g..........hhhh^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^^....,,,..L.O.w~~~~~~~~~~~~~~~~~~~~~~~..O........hh^^^^^^^^^^,,,,,,,A,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h....,,,......w~~~~~~~~~~~~~~~~~~~~~~........L....^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h....,,,.......w~~~~~~~~~~~~~~~~~~~~w...L.O....Ou.^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h....,,,.....R.w~~~~~~~~~~~~~~~~~~~w..............^^^^^^^^^^^,,,,,,,,,,,,,,,^^^^^^^^^^^^
+^^^^^^^^h..L..,,,.L.....w~~~~~~~~~~~~~~~~ww...g...........^^^^^^^^^^^ffffff,G,ffffff^^^^^^^^^^^^
+^^^^^^^^^h....,,,.....L..w~~~~~~~~~~~~~wwg............................,,,,,,X,,,,,,....mhhh^^^^^
+^^^^^^^^^h.....,,,........www~~wwwwwwww........L.R.L...3..........,,,,,,,,,,,,,,,,,,,,.hhhhh^^^^
+^^^^^^^^hhh....,,,,..........ww.....H....................,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,hhhhh^^^^
+^^^^^^^^.hhm....,,,,.....L................2..R......,,,,,,,,,,pp,,,,,,,,,,,,,,,,,,,,,,,,hhhh^^^^
+^^^^^^^^...S..L..,,,,..........,,,,,,,,........,,,,,,,,,,,,,,,,,,.,,,,,,,,,,,,,,,,,,,,,hhhhh.^^^
+^^^^^^^^..m.......,,,,...,,,,,,,pp,,,,,,,,,,,,,,,,,,,,,,,..........,,,,,,,,,,,,,,,,,,,..hhh..^^^
+^^^^^^^...m........,,,,,,,,,,,,,,,,,,,,,,,pp,,,,,,,,...........R...L..,,,,,,,,,,,,,hhhhhh.g..^^^
+^^^^^^^..mSm...mm...,,,pp,,,,,..........,,,,,,....@......L...L..Og..mommmmSS.....hhhhhhhhh...^^^
+^^^^^^^^.mmm.mmm7....,,,,,......g...R...............Lu............mmSmmSSmmm..O.hhhhhhhhhhh..^^^
+^^^^^^^^mmmmlmm......,d,.....1....L....Lu.O............g..hhhhh.SShhhhhhhhhu....hhhhhhhhhhh..^^^
+^^^^^^^^^mmmm.....^^^^,,.L....q.............^^^^...g..hhhhhhhhh.Shhhhhh^^^^h..R..hhhhhhhhh...^^^
+^^^^^^^^^hhhhhh.^^^^^^^p.......hhhhhhhh...^^^^^^^^....hhhhhhhhh.Shhhh^^^^^^^^.....hhhhhhh...^^^^
+^^^^^^^^^^hhh^^^^^^,,,,,,,....hh^^^^hhhh^^^^^^^^^^^^..hhhh^^^hhmmmh^^^^^^^^^^^^......^^.....^^^^
+^^^^^^^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^,,D,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
