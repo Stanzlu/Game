@@ -15,9 +15,6 @@ signal finished
 signal syllable(character: String)
 
 const VOICES_PATH := "res://content/dialogue/voices.json"
-const LARGE_FONT := preload("res://assets/fonts/jersey15/Jersey15-Regular.ttf")
-const NORMAL_TEXT := 19
-const LARGE_TEXT := 27
 const NORMAL_TOP := -80.0
 const LARGE_TOP := -108.0
 ## Auto-advance waits this long plus a little per character.
@@ -90,6 +87,13 @@ func _ready() -> void:
 	_panel.gui_input.connect(_on_panel_input)
 	UiSkin.attach(_root)
 	Settings.changed.connect(func(_key: String) -> void: _apply_text_size())
+	# the end of Act IV changes the hand the text is written in
+	WorldState.flag_changed.connect(
+		func(id: String, _value: bool) -> void:
+			if id == Chapter.flag_for(UiSkin.PERSONAL_FROM):
+				_apply_text_size()
+	)
+	WorldState.state_replaced.connect(_apply_text_size)
 	_panel.resized.connect(_place_decorations)
 	_apply_text_size()
 	hide()
@@ -372,18 +376,19 @@ func _place_decorations() -> void:
 
 func _apply_text_size() -> void:
 	var large := Settings.get_bool("text.large")
-	var size := LARGE_TEXT if large else NORMAL_TEXT
+	var size := UiSkin.body_size(large)
+	var large_font := UiSkin.large_font()
 	for control: Control in [_name, _template]:
 		control.add_theme_font_size_override(&"font_size", size)
 		if large:
-			control.add_theme_font_override(&"font", LARGE_FONT)
+			control.add_theme_font_override(&"font", large_font)
 		else:
 			control.remove_theme_font_override(&"font")
 	for prop: StringName in [&"normal_font_size", &"bold_font_size", &"italics_font_size"]:
 		_text.add_theme_font_size_override(prop, size)
 	for prop: StringName in [&"normal_font", &"bold_font", &"italics_font"]:
 		if large:
-			_text.add_theme_font_override(prop, LARGE_FONT)
+			_text.add_theme_font_override(prop, large_font)
 		else:
 			_text.remove_theme_font_override(prop)
 	_panel.offset_top = LARGE_TOP if large else NORMAL_TOP

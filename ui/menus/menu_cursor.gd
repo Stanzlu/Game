@@ -2,13 +2,15 @@ class_name MenuCursor
 extends Control
 ## The selection marker of a menu list: glides to the focused row and bobs by whole pixels.
 ## Its look comes from the theme type "MenuCursor" (colors: color, shade; constants: style),
-## so it follows the skins: Elysia shows a gold gem, the Real world a short line.
+## so it follows the skins: Elysia shows a gold gem, the Real world a short line, the personal
+## skin a chevron drawn in two strokes.
 
-enum Style { ARROW, GEM, DASH }
+enum Style { ARROW, GEM, DASH, SCRIBBLE }
 
 const ARROW: PackedStringArray = ["x...", "xx..", "xxx.", "xxxx", "xxx.", "xx..", "x..."]
 const GEM: PackedStringArray = ["..o..", ".oxo.", "oxhxo", ".oxo.", "..o.."]
 const DASH: PackedStringArray = ["xxxx"]
+const SCRIBBLE: PackedStringArray = ["x....", ".xx..", "..xxx", ".xx..", "x...."]
 const GLIDE := 28.0
 
 var target: Control
@@ -69,6 +71,8 @@ func _pattern() -> PackedStringArray:
 			return GEM
 		Style.DASH:
 			return DASH
+		Style.SCRIBBLE:
+			return SCRIBBLE
 	return ARROW
 
 

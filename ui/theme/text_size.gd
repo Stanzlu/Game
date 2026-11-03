@@ -32,4 +32,9 @@ static func apply(enable: bool) -> void:
 		if theme.has_font_size(&"font_size", type):
 			theme.set_font_size(&"font_size", type, SMALL_SIZE[enable])
 	COMPACT.set(&"default_font_size", SMALL_SIZE[enable])
+	# the personal skin names its own body font, so it also keeps its own sizes (the title and the
+	# small fonts are named in it as well: a skin's default font comes before the base theme's types)
+	UiSkin.PERSONAL_SKIN.set(&"default_font_size", UiSkin.PERSONAL_SIZE[enable])
+	for type in SMALL_TYPES:
+		UiSkin.PERSONAL_SKIN.set_font_size(&"font_size", type, SMALL_SIZE[enable])
 	Log.info(Log.Category.UI, "text size", {"large": enable})

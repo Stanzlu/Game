@@ -193,7 +193,7 @@ bei nicht ganzzahligem Zoom tastet `sharp_display.gdshader` bzw. `grade.gdshader
 `ui/theme/base_theme.tres` (ADR-026): Grundschrift Jersey 10 in 19 px, `TitleLabel`/`SubtitleLabel` in
 Jersey 15 (27 px), `SmallLabel`/`HintLabel`/`PromptText` in Tiny5 (8 px), dazu `MutedLabel`,
 `MenuEntry`, `MenuCursor`, `DialogueNamePlate`, `PromptPanel`/`PromptKey`, `TitleMenuPanel`.
-Die Skins Elysia und Real überschreiben nur Farben und Rahmen. `TextSize` (`ui/theme/text_size.gd`)
+Die Skins Elysia und Real überschreiben nur Farben und Rahmen; der dritte, „persönlich“ (`personal_skin.tres`, ADR-072), ist ab `chapter.act4` der Anblick der Wirklichkeit (Patrick Hand, `UiSkin.theme_for`, nichts gespeichert) und nennt die Klein- und Titelschrift selbst, weil der Standardfont einer Skin dem Typ der Basis vorgeht. `TextSize` (`ui/theme/text_size.gd`)
 schaltet für „Große Schrift“ die Schriftgrößen aller gemeinsamen Themes um (ADR-033). `MenuLayer` legt einen weichgezeichneten
 Hintergrund (`menu_backdrop.gdshader`) unter das Panel; `OptionList` führt einen `MenuCursor` mit und
 spielt die Menüklänge. Entwickler-Panels nutzen `compact_theme.tres`. Renderer: Compatibility
