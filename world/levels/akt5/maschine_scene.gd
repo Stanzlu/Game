@@ -16,7 +16,7 @@ const ORDER: Array[int] = [3, 1, 2]
 ## The levers in use in this segment.
 const LIVE: Array[int] = [1, 2, 3]
 ## The room's cells: the camera stays centred on it (it fits whole at the zoom of an interior).
-const ROOM := Rect2i(3, 2, 28, 18)
+const ROOM := Rect2i(4, 4, 25, 14)
 const PAUSE_BEFORE_ANSWER := 0.5
 
 var _levers: Dictionary = {}

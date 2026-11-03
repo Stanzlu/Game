@@ -13,7 +13,7 @@ var needle: Sprite2D
 var _rest := 0.0
 var _amplitude := 0.0
 var _phase := 0.0
-var _time := 0.0
+var _clock := 0.0
 
 
 func apply_params(params: Dictionary) -> void:
@@ -41,10 +41,10 @@ func apply_params(params: Dictionary) -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
-	_time += delta
+	_clock += delta
 	if needle == null:
 		return
 	var moving := _amplitude > 0.0 and Settings.get_bool("display.screen_shake")
 	needle.rotation_degrees = (
-		_rest + (sin(_time * TREMBLE_HZ + _phase) * _amplitude if moving else 0.0)
+		_rest + (sin(_clock * TREMBLE_HZ + _phase) * _amplitude if moving else 0.0)
 	)

@@ -1,0 +1,83 @@
+; Akt V, G3: die Halle des Wächters von innen (Klasse S, Zoom 1,5 wie die Werkstatt, das Rathaus, das Haus und die Hütte). Von Hand gesetzt, kein Generator.
+; Wände, Träger, Rohre, die Stangen von den zwölf Hebeln zu der kleinen Tür, die kleine Tür selbst, die Seitenwände und die Vorderwand malt das Requisit tal/ma_shell, den Boden backt
+; tools/art/bake_ground.py content/maps/maschine.txt. Der Raum liegt in den Zellen 4 bis 28 und 4 bis 17 (25 x 14, 400 x 224 Pixel: bei Zoom 1,5 ganz im Bild): Rückwand die Zeilen 4 bis 6,
+; Boden die Zeilen 7 bis 16 (die Spalten 5 bis 27), die Tür (D) in der Vorderwand, Zeile 17, Spalte 7; die Ankunft aus dem Hochtal (1) liegt zwei Zellen vor ihr, der Start (@) im rechten Gang neben dem Pult (mehr als 20 Zellen Luftlinie von der Tür).
+; Das Schaltpult (C, 15 Zellen, die Spalten 9 bis 23, flach unter allem, die Kollision ist seine Form) steht an der Rückwand: die Hebel stehen in der Zeile 7 (a bis l = Hebel 1 bis 12, die
+; Spalten 10 bis 15 und 17 bis 22), die Mitte (K, Spalte 16) ist der Riegelanzeiger mit dem Cue small_door. Hebel 1 bis 3 (a, b, c) sind in Betrieb, die anderen neun stehen still unter ihrem Tuch
+; (m, eigenes Requisit je Hebel in der Zeile 8 unter ihm, um 9 Pixel auf den Hebel gehoben; G4 nimmt sie einzeln weg). Hinter dem Pult ist nichts: die kleine Tür sitzt in der Rückwand, man sieht sie
+; über dem Riegelanzeiger, sie ist nicht zu erreichen. Der Wächter (A) steht am linken Ende des Pults, die Zeiger (P, Q, R, T) hängen an der Wand (zwei links, zwei rechts, Q zittert und trägt den Cue gauges),
+; das abgewetzte Zifferblatt (Z) sitzt am rechten Ende des Pults, das zischende Rohr (V) mit seinem Dampf (s) steht links vorn, ein Rohr (U) liegt rechts quer über den Boden. Sechs Lampen: zwei hängen
+; am Träger (H), vier stehen im Raum (L); höchstens sechs PointLight2D. Zwei Kessel (N) stehen an den Seiten.
+; Prüfhinweise: die Zeilen 7 und 8 sind in den Spalten 9 bis 23 vom Pult zu. Der Leistungstest läuft vom Start (@, Spalte 26, Zeile 8) im Quadrat (1,6 s rechts, 1,0 s unten, 1,6 s links, 1,0 s oben, mit Sprint):
+; rechts stößt er an die Seitenwand, unten an den Kessel (N), links geht er unter dem Pult entlang, oben stößt er an das Pult: er bleibt oben im Raum, die Tür liegt weit links unten (ein Test geht den Lauf nach).
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/maschine_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_grat"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_shell"}}
+; die Tür zurück in das Hochtal (wie in der Werkstatt: zwei Zellen vor ihr kommt man an)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "grat", "spawn": "maschine", "auto": true, "sound": "door_close"}}
+; der Wächter am linken Ende des Pults: er schreibt und zählt, sieht auf das Pult (Blick nach Osten) und blinzelt (glance); er steht still
+A = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_waechter_look.tres", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "cue": "waechter", "face": "e", "glance": true}}
+; das Schaltpult (15 Zellen breit, das Bild steht mit der Mitte in der markierten Zelle, flach unter den Hebeln), die Kollision ist seine Form
+C = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_console"}}
+; die zwölf Hebel in der Zeile 7 (a bis l = Hebel 1 bis 12): jeder mit Nummer und Form, oben und gezogen; 1 bis 3 sind in Betrieb, die anderen stehen still und haben den Cue lever_idle
+a = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 1, "live": true, "sprite_up": "tal/ma_lever_1_up", "sprite_down": "tal/ma_lever_1_down", "radius": 12}}
+b = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 2, "live": true, "sprite_up": "tal/ma_lever_2_up", "sprite_down": "tal/ma_lever_2_down", "radius": 12}}
+c = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 3, "live": true, "sprite_up": "tal/ma_lever_3_up", "sprite_down": "tal/ma_lever_3_down", "radius": 12}}
+d = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 4, "live": false, "sprite_up": "tal/ma_lever_4_up", "sprite_down": "tal/ma_lever_4_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+e = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 5, "live": false, "sprite_up": "tal/ma_lever_5_up", "sprite_down": "tal/ma_lever_5_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+f = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 6, "live": false, "sprite_up": "tal/ma_lever_6_up", "sprite_down": "tal/ma_lever_6_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+g = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 7, "live": false, "sprite_up": "tal/ma_lever_7_up", "sprite_down": "tal/ma_lever_7_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+h = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 8, "live": false, "sprite_up": "tal/ma_lever_8_up", "sprite_down": "tal/ma_lever_8_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+i = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 9, "live": false, "sprite_up": "tal/ma_lever_9_up", "sprite_down": "tal/ma_lever_9_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+j = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 10, "live": false, "sprite_up": "tal/ma_lever_10_up", "sprite_down": "tal/ma_lever_10_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+k = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 11, "live": false, "sprite_up": "tal/ma_lever_11_up", "sprite_down": "tal/ma_lever_11_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+l = {"ground": "_", "prop": "res://world/props/console_lever.tscn", "params": {"n": 12, "live": false, "sprite_up": "tal/ma_lever_12_up", "sprite_down": "tal/ma_lever_12_down", "radius": 12, "cue": "lever_idle", "dialogue": "res://content/dialogue/akt5/anlage.dialogue"}}
+; das Tuch über einem stillen Hebel (je Hebel eins, in der Zeile 8 unter ihm, 9 Pixel auf den Hebel gehoben; ohne Schatten: G4 nimmt es weg)
+m = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lever_cover", "lift": 9}}
+; der Riegelanzeiger in der Mitte des Pults, unter der kleinen Tür der Rückwand (Cue small_door), und das abgewetzte Zifferblatt am rechten Ende des Pults (Cue worn_dial)
+K = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_bolt", "cue": "small_door", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 16}}
+Z = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_worn_dial", "cue": "worn_dial", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 14}}
+; die Zeigerwand: vier Zeiger an der Rückwand (P, Q links, R, T rechts), alle auf Normal; Q zittert und trägt den Cue gauges. needle_at ist die Nabe vom Anker des Zifferblatts (Pixel), angle die Ruhelage (Grad, 0 = oben)
+P = {"ground": "_", "prop": "res://world/props/gauge.tscn", "params": {"sprite": "tal/ma_gauge_1", "needle": "tal/ma_needle_1", "needle_at": [8, -22], "angle": 0, "tremble": false, "amplitude": 1.5}}
+Q = {"ground": "_", "prop": "res://world/props/gauge.tscn", "params": {"sprite": "tal/ma_gauge_2", "needle": "tal/ma_needle_2", "needle_at": [8, -22], "angle": -40, "tremble": true, "amplitude": 1.5, "cue": "gauges", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 18}}
+R = {"ground": "_", "prop": "res://world/props/gauge.tscn", "params": {"sprite": "tal/ma_gauge_3", "needle": "tal/ma_needle_3", "needle_at": [-8, -22], "angle": 32, "tremble": false, "amplitude": 1.5}}
+T = {"ground": "_", "prop": "res://world/props/gauge.tscn", "params": {"sprite": "tal/ma_gauge_4", "needle": "tal/ma_needle_4", "needle_at": [-8, -22], "angle": 14, "tremble": false, "amplitude": 1.5}}
+; Lampen: zwei hängen am Träger (H, auf den Wandzellen der Zeile 6), vier stehen im Raum (L); jede hat einen Eintrag lights im Katalog, zusammen sechs, dazu gebackenes Glühen (emissive)
+H = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lamp_hang"}}
+L = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lamp"}}
+; die Kessel an den Seiten (zwei Zellen breit, das Bild steht mit dem linken Ende in der markierten Zelle), das Rohr quer über dem Boden (fünf Zellen, links beginnend: ein Hindernis in der Reihe nach rechts)
+N = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_tank"}}
+U = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_pipe_run"}}
+; das Rohr, das genau im Takt zischt (Cue steam_pipe), und sein Dampf (s: eine Zelle darüber, auf die Düse gehoben; ein zweiter Hauch steigt aus einem Flansch des Rohrs U; flache Bilder, die die Szene bewegen oder weglassen kann)
+V = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_hiss_pipe", "cue": "steam_pipe", "dialogue": "res://content/dialogue/akt5/anlage.dialogue", "radius": 16}}
+s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_steam", "lift": 12}}
+[map]
+#################################
+#################################
+#################################
+#################################
+####SWWWWWWWWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWWWWWWWWW####
+####WWWWWHWWWWWWWWWWWWWHWWWWW####
+####WP_Q__abcdefKghijklZ_R_TW####
+####W___A____mmmCmmmmmm___@_W####
+####W_______________________W####
+####WN____________________N_W####
+####W_______________________W####
+####W__s_L_____________L____W####
+####W______________U_s______W####
+####W__V____________________W####
+####W__1____________________W####
+####WL_____________________LW####
+####WWWDWWWWWWWWWWWWWWWWWWWWW####
+#################################
+#################################
+#################################
+#################################

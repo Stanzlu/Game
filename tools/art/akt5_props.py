@@ -9,7 +9,7 @@ ramps and the two planks over the brook, the hand-painted sign (its words are sc
 chip with a scratched arrow, the iron ring in the rock wall (its inner edge worn bright by a rope), the chalk arrow on a
 flat stone at the signpost of the road, the three traces of Mira (a tidy net knot on a post, a net on a low branch, a plain
 flat stone), the thin column of smoke of the plant, the rock one stands on to see it and the fall of rock that closes the
-way. No prop has a light. What the map places under `if`/`unless` carries no shadow in the catalog (shadow cells feed the
+way. No prop of the mountains has a light (the lamps of the hall, G3, are the exception). What the map places under `if`/`unless` carries no shadow in the catalog (shadow cells feed the
 baked stamp of the map), and so do the things placed on cells of an older stamp (the chalk arrow and the cairns of the
 road, which are `gb_arrow_chalk` and `gb_cairn_road`) and the things that later segments take away (the fall of rock at the end of the pass, which G2
 replaced by a door, the heap of scree at the foot of the Grat's ramp in `grat`, which G6 opens, and the gate of the
@@ -22,6 +22,15 @@ under it); a flat stone at the water with the print of a small hand on it, still
 broken at its foot, the marmot's den (a rock with a round hole under it, earth thrown out in front, a spoon's handle, a button,
 a cardboard hat and a dent where the thimble sits) and the thimble; and a shorter column of smoke. Everything is drawn to the
 same palette as the valley; the Anlage is the only thing in the mountains that is square.
+
+Die Anlage (G3, prefix `ma_`): the gate stands open (`gb_plant_gate_open`, the same cells as the shut one, nothing to walk into) and the hall of the
+Wächter is a room of its own (content/maps/maschine.txt, Klasse S, zoom 1.5: 25 x 14 cells, 400 x 224 pixels). A flat shell paints the walls (a girder, cold
+slate-grey stone, the bus bar and the twelve rods from the levers to the bolt of the small shut door, pipes, side walls, the front wall with its door); the
+console (15 cells, flat, its collision is its shape) carries twelve levers, each a prop of its own with a number plate and a knob in a form of its own (up
+and pulled), nine of them under a cloth (a prop of its own each); four dials with their needles as props of their own (the scene rotates and trembles
+them), the worn dial of the fragment, the bolt indicator (the cue of the small door), six lamps (the only things in the Akt with `lights`, one each, and a
+baked glow as fallback), two boilers, a pipe across the floor, the pipe that hisses and the puffs of steam (flat pictures the scene may move, fade or
+leave out, never a flash). `--preview-hall out.png` lays all of it out (3x). Nothing here is a person and nothing says what the small door is.
 """
 import os
 import sys
@@ -602,6 +611,14 @@ def plant_fence(ms):
     return c
 
 
+def _gate_plate(c):
+    """The little brass sign on the left pillar of the gate (its words are the dialogue's): a plate with two lines of scratches. 8 x 6."""
+    c.paint(c.rect(1, 22, 9, 28), BRASS, np.where(c.yy < 24, 0.85, 0.6), dither=False)
+    c.fill(c.rect(2, 24, 8, 25), BRASS[1])
+    c.fill(c.rect(2, 26, 7, 27), BRASS[1])
+    c.fill(c.rect(1, 22, 2, 23), BRASS[3])
+
+
 def plant_gate(ms):
     """The gate of the Anlage, shut: two pillars of stone with a ball on each, between them two leaves of iron bars with a brace, a
     chain through the middle and a lock hanging on it. 48 x 44, anchor (24, 38): it fills the three cells of its row."""
@@ -629,6 +646,7 @@ def plant_gate(ms):
     c.fill(c.rect(24, 23, 25, 25), BRASS[2])
     c.fill(c.rect(24, 28, 25, 30), ex["iron"][0])
     c.paint(c.rect(10, 36, 38, 40), ex["stone_wall"], 0.38, dither=False)  # the sill
+    _gate_plate(c)
     c.outline(st["outline"])
     return c
 
@@ -842,6 +860,554 @@ def view_sign(ms):
     return c
 
 
+# =========================================================================== Die Anlage (G3): the gate opens, the hall (prefix `ma_`)
+# The hall of the Wächter, seen from the front like the workshop (Klasse S, zoom 1.5): a room of 25 x 14 cells (400 x 224 pixels, the map's room
+# is the cells 4 to 28 and 4 to 17). The back wall (rows 0 to 2) is cold slate-grey cut stone under an iron girder, with the pipes along its
+# top, four dials, two hanging lamps and, in the middle, the small shut door (12 x 18 pixels, child-sized) whose bolt is held by twelve thin
+# rods that come up from the twelve levers of the console and meet in a bus bar under the girder. The console stands against the wall in the
+# middle (15 cells, the cells 5 to 19 of the room, the levers in the cells 6 to 18 with a bolt indicator in the middle cell 12); it is a flat
+# picture under everything (the levers stand on it, the player in front of it), its collision is the catalog shape. Nothing here is a person
+# and nothing says what the door is for.
+MA_W, MA_H = 400, 224  # 25 x 14 cells; the room's top left cell is the map cell (4, 4)
+MA_CONSOLE_X0 = 5  # the console's first cell (room column) and its width in cells
+MA_CONSOLE_W = 15
+MA_LEVER_COLS = [6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18]  # the room column of lever n = 1 to 12 (the bolt indicator stands in 12)
+MA_DOOR = (200, 47)  # the small door: the middle of its foot on the back wall's foot (x, y in room pixels)
+
+HALL_STONE = ramp("#1a2026", "#28323a", "#3a4752", "#53626e", "#7a8c98")  # cold slate-grey cut stone
+COPPER = ramp("#2e140a", "#5e2c14", "#9a5226", "#cf8040", "#efb070")
+CLOTH = ramp("#4a4636", "#78745e", "#a6a288", "#d0ccb0", "#ebe7cc")  # linen gone grey: the cloth over the levers that are not in use
+LAMP_GLASS = ramp("#6a4a14", "#b88628", "#f0c050", "#ffe49a", "#fff6d4")  # glass with a flame behind it
+STEAM = ramp("#7c8a94", "#a4b2ba", "#cdd8dc", "#eef3f4")
+NEEDLE_RED = ramp("#3a0c0e", "#7e1a1c", "#c43030", "#ee6a58")
+NORMAL_GREEN = ramp("#0e2a18", "#1d5a30", "#3c8c4c", "#7cc07c")
+
+# the form of each lever's knob (9 x 9, nine different and three more: never only a colour, Bible §50): disc, square, triangle, diamond,
+# cross, ring, star, hexagon, dome, T-bar, bar, chevron
+FORMS = {
+    1: ("..xxxxx..", ".xxxxxxx.", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", ".xxxxxxx.", "..xxxxx.."),
+    2: (".........", ".xxxxxxx.", ".xxxxxxx.", ".xxxxxxx.", ".xxxxxxx.", ".xxxxxxx.", ".xxxxxxx.", ".xxxxxxx.", "........."),
+    3: ("....x....", "...xxx...", "...xxx...", "..xxxxx..", "..xxxxx..", ".xxxxxxx.", ".xxxxxxx.", "xxxxxxxxx", "xxxxxxxxx"),
+    4: ("....x....", "...xxx...", "..xxxxx..", ".xxxxxxx.", "xxxxxxxxx", ".xxxxxxx.", "..xxxxx..", "...xxx...", "....x...."),
+    5: ("...xxx...", "...xxx...", "...xxx...", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "...xxx...", "...xxx...", "...xxx..."),
+    6: ("..xxxxx..", ".xx...xx.", "xx.....xx", "x.......x", "x.......x", "x.......x", "xx.....xx", ".xx...xx.", "..xxxxx.."),
+    7: ("....x....", "....x....", ".x..x..x.", "..xxxxx..", "xxxxxxxxx", "..xxxxx..", ".x..x..x.", "....x....", "....x...."),
+    8: ("...xxx...", ".xxxxxxx.", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", ".xxxxxxx.", "...xxx..."),
+    9: (".........", "..xxxxx..", ".xxxxxxx.", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", "........."),
+    10: ("xxxxxxxxx", "xxxxxxxxx", "...xxx...", "...xxx...", "...xxx...", "...xxx...", "...xxx...", "...xxx...", "...xxx..."),
+    11: (".........", ".........", ".xxxxxxx.", "xxxxxxxxx", "xxxxxxxxx", "xxxxxxxxx", ".xxxxxxx.", ".........", "........."),
+    12: ("xxxxxxxxx", "xxxxxxxxx", ".xxxxxxx.", ".xxxxxxx.", "..xxxxx..", "..xxxxx..", "...xxx...", "...xxx...", "....x...."),
+}
+DIGITS = {
+    "0": ("xxx", "x.x", "x.x", "x.x", "xxx"), "1": (".x.", "xx.", ".x.", ".x.", "xxx"), "2": ("xxx", "..x", "xxx", "x..", "xxx"),
+    "3": ("xxx", "..x", "xxx", "..x", "xxx"), "4": ("x.x", "x.x", "xxx", "..x", "..x"), "5": ("xxx", "x..", "xxx", "..x", "xxx"),
+    "6": ("xxx", "x..", "xxx", "x.x", "xxx"), "7": ("xxx", "..x", ".x.", ".x.", ".x."), "8": ("xxx", "x.x", "xxx", "x.x", "xxx"),
+    "9": ("xxx", "x.x", "xxx", "..x", "xxx"),
+}
+# the dials of the wall: where the mark "Normal" lies (degrees clockwise from straight up) and where the needle rests; all four stand on it
+GAUGE_NORMAL = {1: 0.0, 2: -40.0, 3: 32.0, 4: 14.0}
+GAUGE_ANCHOR = {1: (6, 36), 2: (6, 36), 3: (22, 36), 4: (22, 36)}  # the dial's picture is 28 x 28, its hub at (14, 14): needle_at is (14 - anchor x, -22)
+GAUGE_STEP = {1: 25, 2: 20, 3: 25, 4: 25}  # the tick spacing of the scale (degrees); the scale runs from -125 to +125
+LEVER_PLATE_Y = (41, 50)  # the number plate under a lever, in the lever's picture (rows)
+
+
+def _pattern(c, pat, x0, y0):
+    """A mask: the pattern of 'x' cells with its top left at (x0, y0)."""
+    m = np.zeros((c.h, c.w), bool)
+    for j, row in enumerate(pat):
+        for i, ch in enumerate(row):
+            if ch == "x" and 0 <= y0 + j < c.h and 0 <= x0 + i < c.w:
+                m[y0 + j, x0 + i] = True
+    return m
+
+
+def _digits(c, x, y, text, ink):
+    """Small numerals (3 x 5) for the plates of the levers: the number is the lever's name."""
+    for k, ch in enumerate(text):
+        c.fill(_pattern(c, DIGITS[ch], x + k * 4, y), ink)
+
+
+def _rod(c, x, y0, y1, tone_ramp=BRIGHT_IRON):
+    c.paint(c.rect(x, y0, x + 1, y1), tone_ramp, 0.62, dither=False)
+    c.paint(c.rect(x + 1, y0, x + 2, y1), tone_ramp, 0.2, dither=False)
+
+
+def hall_lever(ms, n, down):
+    """Lever `n` of the console: a collar on the console's top, a stem and a knob in the form of its number, and a brass plate with the number
+    on the front panel below it. Up (not pulled) the knob stands high above the collar; pulled it leans towards the player, in front of the
+    console's edge, close above the plate. 16 x 52, anchor (8, 30): the collar's middle, the glyph's cell."""
+    c = ms.Canvas(16, 52)
+    live = n <= 3
+    ink = BRIGHT_IRON[0]
+    plate = c.rect(1, LEVER_PLATE_Y[0], 15, LEVER_PLATE_Y[1])
+    c.paint(plate, BRASS, np.where(c.yy < LEVER_PLATE_Y[0] + 1, 0.98, np.where(c.yy >= LEVER_PLATE_Y[1] - 1, 0.12, 0.62)), dither=False)
+    c.fill(c.rect(2, LEVER_PLATE_Y[0] + 1, 3, LEVER_PLATE_Y[0] + 2), BRASS[3])
+    c.fill(c.rect(13, LEVER_PLATE_Y[0] + 1, 14, LEVER_PLATE_Y[0] + 2), BRASS[3])
+    text = str(n)
+    _digits(c, 8 - (len(text) * 4 - 1) // 2 - (0 if len(text) == 2 else 0), LEVER_PLATE_Y[0] + 2, text, ink)
+    # the collar and the slot it moves in
+    c.paint(c.ellipse(8, 30, 5.6, 2.8), BRIGHT_IRON, 0.3 + 0.5 * (c.yy < 30), dither=False)
+    c.paint(c.ellipse(8, 30.4, 3.6, 1.5), BRIGHT_IRON, 0.04, dither=False)
+    if down:
+        c.paint(c.rect(7, 30, 9, 38), BRIGHT_IRON, 0.04, dither=False)  # the slot runs towards the player
+        c.paint(c.rect(7, 27, 9, 33), BRIGHT_IRON, np.where(c.xx < 8, 0.8, 0.3), dither=False)
+        y0 = 31
+    else:
+        c.paint(c.rect(7, 12, 9, 30), BRIGHT_IRON, np.where(c.xx < 8, 0.85, 0.28), dither=False)
+        c.fill(c.rect(7, 27, 9, 28), BRIGHT_IRON[1])  # a collar ring on the stem
+        y0 = 3
+    knob_ramp = BRASS if live else BRIGHT_IRON
+    m = _pattern(c, FORMS[n], 4, y0)
+    c.paint(m, knob_ramp, np.clip(0.82 - 0.46 * ((c.xx - 4) + (c.yy - y0)) / 16.0, 0.1, 0.95), contrast=2.0, dither=False)
+    c.paint(m & (~np.roll(m, -1, 0) | ~np.roll(m, -1, 1)), knob_ramp, 0.1, dither=False)
+    c.paint(m & (~np.roll(m, 1, 0) | ~np.roll(m, 1, 1)), knob_ramp, 1.0, dither=False)
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_cover(ms):
+    """The cloth over a lever that is not in use: linen gone grey, pulled over the stem and the knob (a bump on top, a skirt that steps out under it),
+    folds that run down from the bump, a hem with a few jags, a string round the neck. It stops above the lever's number plate (the number stays
+    readable). 16 x 36, anchor (8, 36); the map lifts it by 9 onto the lever from the cell below."""
+    rng = np.random.default_rng(3011)
+    c = ms.Canvas(16, 36)
+    y = c.yy
+    half = np.where(y < 3, 1.8 + (y - 2) * 1.2, np.where(y < 10, 3.6 + 0.08 * (y - 3), np.where(y < 13, 5.2, 5.4 + (y - 13) * 0.115)))
+    hem = 31 + np.where((c.xx.astype(int) % 6) < 2, 2, np.where((c.xx.astype(int) % 6) < 4, 1, 0))
+    body = (np.abs(c.xx + 0.5 - 8) <= half) & (y >= 2) & (y < hem)
+    t = (c.xx + 0.5 - 8) / np.maximum(half, 1.0)  # -1 at the left edge, +1 at the right
+    folds = np.abs(t * 3.0 + 0.35 * (y - 12) / 20.0) % 1.0
+    c.paint(body, CLOTH, 0.64 + 0.3 * c.cylinder(1, 15) - 0.15 * (folds < 0.14) + 0.07 * (pa.value_noise(36, 16, 3, rng) - 0.5), contrast=2.0, dither=False)
+    c.paint(body & (y >= 10) & (y < 12), CLOTH, 0.84 - 0.5 * (t > 0.2), dither=False)  # where the skirt steps out, a lit edge
+    c.paint(body & (y >= hem - 2), CLOTH, 0.2, dither=False)  # the hem's shade
+    c.paint(c.rect(4, 9, 12, 10) & body, CLOTH, 0.14, dither=False)  # the string round the neck
+    c.fill(c.rect(10, 9, 12, 13) & body, CLOTH[0])  # its loose end
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_console(ms):
+    """The console: fifteen cells long against the back wall, a top of grey steel (dark where it meets the wall, a bright lip in front) with a
+    slot for each lever and for the bolt indicator in the middle, a front panel of riveted plates with a recess for each lever's number plate, a
+    plinth and, on the floor, a dithered shadow. Flat, under the levers. 240 x 40, anchor (120, 24): the middle of the front panel's row (the cell
+    12, 4 of the room), the top starts 24 pixels above."""
+    rng = np.random.default_rng(3021)
+    c = ms.Canvas(240, 40)
+    grain = pa.value_noise(40, 240, (1, 9), rng)
+    top = c.rect(0, 0, 240, 16)
+    c.paint(top, BRIGHT_IRON, 0.44 + 0.1 * (grain - 0.5) + 0.2 * (c.yy >= 12) - 0.16 * (c.yy < 3), dither=False)
+    c.paint(c.rect(0, 15, 240, 16), BRIGHT_IRON, 0.96, dither=False)
+    for x0 in (0, 224):  # the end blocks: the same steel, a brass corner on the outer side and a row of rivets
+        edge = 0 if x0 == 0 else 15
+        c.paint(c.rect(x0 + edge, 1, x0 + edge + 1, 16), BRASS, 0.55, dither=False)
+        for ry in (4, 9):
+            c.fill(c.rect(x0 + 6, ry, x0 + 7, ry + 1), BRIGHT_IRON[4])
+            c.fill(c.rect(x0 + 9, ry, x0 + 10, ry + 1), BRIGHT_IRON[3])
+    for col in MA_LEVER_COLS + [12]:  # the slots
+        x = (col - MA_CONSOLE_X0) * 16 + 8
+        c.paint(c.rect(x - 5, 5, x + 5, 11), BRIGHT_IRON, 0.05, dither=False)
+        c.paint(c.rect(x - 5, 11, x + 5, 12), BRIGHT_IRON, 0.7, dither=False)
+    panel = c.rect(0, 16, 240, 33)
+    c.paint(panel, BRIGHT_IRON, 0.27 + 0.08 * (grain - 0.5) - 0.06 * ((c.yy - 16) / 17.0), dither=False)
+    for k in range(0, 16):  # the seams between the plates, a rivet at each corner
+        x = k * 16
+        c.paint(c.rect(x, 16, x + 1, 33), BRIGHT_IRON, 0.05, dither=False)
+        for ry in (18, 30):
+            c.fill(c.rect(x + 2, ry, x + 3, ry + 1), BRIGHT_IRON[3])
+            c.fill(c.rect(x + 13, ry, x + 14, ry + 1), BRIGHT_IRON[2])
+    c.paint(c.rect(0, 16, 240, 17), BRIGHT_IRON, 0.08, dither=False)
+    for col in MA_LEVER_COLS:  # the recess for each number plate
+        x = (col - MA_CONSOLE_X0) * 16 + 8
+        c.paint(c.rect(x - 7, 18, x + 7, 29), BRIGHT_IRON, 0.08, dither=False)
+    c.paint(c.rect(0, 33, 240, 37), BRIGHT_IRON, np.where(c.yy < 34, 0.6, 0.12), dither=False)
+    shadow = (c.yy >= 37) & (c.yy < 40) & (pa.BAYER4[np.arange(40)[:, None] % 4, np.arange(240)[None, :] % 4] < np.where(c.yy < 38, 0.7, 0.35))
+    c.fill(shadow, HALL_STONE[0])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_bolt(ms):
+    """The bolt indicator in the middle of the console: a small iron housing with a brass frame and a glass tube in which the pin of the bolt
+    stands, down, in. 16 x 20, anchor (8, 16): the glyph's cell, close above the housing's foot."""
+    c = ms.Canvas(16, 20)
+    c.paint(c.rect(1, 4, 15, 17), BRIGHT_IRON, np.where(c.xx < 4, 0.62, np.where(c.xx > 12, 0.2, 0.4)), dither=False)
+    c.paint(c.rect(1, 3, 15, 5), BRIGHT_IRON, 0.9, dither=False)
+    c.paint(c.rect(5, 6, 11, 16), BRASS, np.where(c.xx < 6, 0.9, 0.5), dither=False)  # the frame
+    c.paint(c.rect(6, 7, 10, 15), GLASS_COLD, 0.2 + 0.5 * (c.yy < 11), dither=False)  # the tube
+    c.paint(c.rect(7, 10, 9, 15), BRIGHT_IRON, np.where(c.xx < 8, 0.7, 0.3), dither=False)  # the pin, down
+    c.fill(c.rect(7, 9, 9, 10), BRASS[3])  # its brass tip
+    c.fill(c.rect(6, 7, 7, 9), GLASS_COLD[3])  # a glint
+    for rx, ry in ((2, 5), (13, 5), (2, 15), (13, 15)):
+        c.fill(c.rect(rx, ry, rx + 1, ry + 1), BRIGHT_IRON[4])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def _polar(cx, cy, r, deg):
+    """The point at radius r and `deg` degrees clockwise from straight up."""
+    a = np.radians(deg)
+    return cx + r * np.sin(a), cy - r * np.cos(a)
+
+
+def hall_gauge(ms, k):
+    """A dial of the Zeigerwand, without its needle (the needle is a prop of its own, hung on the hub): an iron mounting plate with four rivets,
+    a brass ring, a pale face with the scale (ticks every so many degrees, no numerals) and the mark "Normal": a broad dark-green stub reaching
+    from the middle of the face to the ring, which no tick looks like (a shape, never only a colour). 28 x 28, anchor (see GAUGE_ANCHOR): the dial's
+    picture ends 8 pixels above the cell's centre; the hub is at (14, 14)."""
+    c = ms.Canvas(28, 28)
+    plate = c.rect(1, 1, 27, 27) & ~(((c.xx < 3) | (c.xx > 24)) & ((c.yy < 3) | (c.yy > 24)))
+    c.paint(plate, BRIGHT_IRON, 0.3 + 0.35 * c.sphere(8, 8, 26, 26), dither=False)
+    for rx, ry in ((3, 3), (24, 3), (3, 24), (24, 24)):
+        c.fill(c.rect(rx, ry, rx + 1, ry + 1), BRIGHT_IRON[4])
+    c.paint(_disc(c, 14, 14, 12), BRASS, 0.3 + 0.65 * c.sphere(10, 10, 14, 14), dither=False)
+    face = _disc(c, 14, 14, 10)
+    c.paint(face, CHALK, 0.8 + 0.18 * c.sphere(10, 10, 14, 14), dither=False)
+    ink = BRIGHT_IRON[1]
+    step = GAUGE_STEP[k]
+    for a in range(-125, 126, step):
+        long = (a % (2 * step) == 0) if k != 4 else False
+        for r in np.arange(7.6 if long else 8.4, 9.8, 0.5):
+            x, y = _polar(14, 14, r, a)
+            c.fill(c.rect(int(x), int(y), int(x) + 1, int(y) + 1), ink)
+        if k == 4:  # this dial has dots in place of ticks
+            x, y = _polar(14, 14, 8.6, a)
+            c.fill(c.rect(int(x), int(y), int(x) + 1, int(y) + 1), ink)
+    if k == 3:  # a hatched arc at the far end of this scale, beyond the usual
+        for a in range(95, 126, 6):
+            for r in np.arange(5.8, 9.4, 0.6):
+                x, y = _polar(14, 14, r, a)
+                c.fill(c.rect(int(x), int(y), int(x) + 1, int(y) + 1), RUST[2])
+    # the mark "Normal": a broad stub from r = 4.5 to the ring, three pixels wide, a pale edge
+    n = GAUGE_NORMAL[k]
+    for r in np.arange(4.5, 10.4, 0.5):
+        for off in (-1.3, 0.0, 1.3):
+            x, y = _polar(14, 14, r, n)
+            x2, y2 = _polar(0, 0, off, n + 90)
+            c.fill(c.rect(int(round(x + x2)), int(round(y - y2)), int(round(x + x2)) + 1, int(round(y - y2)) + 1), NORMAL_GREEN[1] if off != 0 else NORMAL_GREEN[2])
+    x, y = _polar(14, 14, 10.0, n)
+    c.fill(c.rect(int(round(x)), int(round(y)), int(round(x)) + 1, int(round(y)) + 1), NORMAL_GREEN[3])
+    c.fill(c.rect(11, 12, 13, 14), CHALK[3])  # a glint on the glass
+    c.fill(c.rect(12, 11, 14, 12), CHALK[3])
+    c.fill(c.rect(13, 13, 15, 15), BRIGHT_IRON[1])  # the hub's seat
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_needle(ms, k):
+    """The needle of a dial, drawn pointing straight up from its hub, with a short tail and a brass hub cap: red, tapering to a point. 7 x 20,
+    anchor (3, 13) = the hub; the tip is `13 - tip` pixels above it."""
+    tip = {1: 3, 2: 4, 3: 3, 4: 4}[k]
+    c = ms.Canvas(7, 20)
+    for y in range(tip, 13):
+        half = 0.5 + (y - tip) / (13.0 - tip) * 1.0
+        c.fill(c.rect(int(round(3.5 - half)), y, int(round(3.5 + half)), y + 1), NEEDLE_RED[2] if y > tip + 1 else NEEDLE_RED[3])
+    c.fill(c.rect(3, tip, 4, 13), NEEDLE_RED[3])
+    c.fill(c.rect(2, 13, 5, 17), NEEDLE_RED[1])  # the tail
+    c.fill(c.rect(3, 13, 4, 17), NEEDLE_RED[2])
+    c.paint(_disc(c, 3.5, 13.5, 2.2), BRASS, 0.6 + 0.4 * c.sphere(2, 12, 4, 4), dither=False)
+    c.fill(c.rect(3, 12, 4, 13), BRASS[4] if len(BRASS) > 4 else BRASS[3])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_worn_dial(ms):
+    """The worn dial on the console's right end: a small dial on a bracket, tilted towards the player, its needle at rest on the mark "Normal";
+    in the glass a groove, a pale scratch with a dark twin, worn by the needle that has swept this same stretch for years (the fragment). 16 x 18,
+    anchor (8, 13)."""
+    c = ms.Canvas(16, 18)
+    c.paint(c.rect(2, 13, 14, 17), BRIGHT_IRON, np.where(c.yy < 14, 0.8, 0.22), dither=False)  # the bracket
+    c.paint(c.ellipse(8, 7.5, 7.4, 6.8), BRASS, 0.3 + 0.65 * c.sphere(5, 4, 9, 9), dither=False)
+    c.paint(c.ellipse(8, 7.5, 5.8, 5.3), CHALK, 0.82, dither=False)
+    for a in range(-110, 111, 22):  # a bare scale
+        x, y = _polar(8, 7.5, 4.4, a)
+        c.fill(c.rect(int(x), int(y), int(x) + 1, int(y) + 1), BRIGHT_IRON[1])
+    for r in np.arange(0.5, 4.6, 0.5):  # the needle at rest, straight up
+        c.fill(c.rect(8, int(7.5 - r), 9, int(7.5 - r) + 1), NEEDLE_RED[2])
+    c.fill(c.rect(7, 7, 10, 9), BRASS[2])
+    # the groove: a pale scratch just beside the needle's stretch, longer than the others, and a dark line next to it
+    for r in np.arange(1.2, 5.2, 0.5):
+        x, y = _polar(8, 7.5, r, 14)
+        c.fill(c.rect(int(round(x)), int(round(y)), int(round(x)) + 1, int(round(y)) + 1), CHALK[3])
+        c.fill(c.rect(int(round(x)) + 1, int(round(y)), int(round(x)) + 2, int(round(y)) + 1), BRIGHT_IRON[1])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def _lantern(c, cx, y0, h, emit=None):
+    """A lantern: a cap, a cage of four iron bars round a glass with a flame, a foot. Returns the mask of the glass (the glow)."""
+    glass = c.rect(cx - 4, y0 + 3, cx + 4, y0 + h - 3)
+    c.paint(glass, LAMP_GLASS, 0.5 + 0.4 * (1.0 - np.abs(c.xx + 0.5 - cx) / 4.0) + 0.1 * (c.yy < y0 + h / 2), dither=False)
+    c.fill(c.rect(cx - 1, y0 + 5, cx + 1, y0 + h - 6), LAMP_GLASS[4])
+    for bx in (cx - 5, cx + 4):
+        c.paint(c.rect(bx, y0 + 2, bx + 1, y0 + h - 2), BRIGHT_IRON, 0.3, dither=False)
+    c.paint(c.rect(cx - 6, y0, cx + 6, y0 + 3), BRIGHT_IRON, np.where(c.yy < y0 + 1, 0.9, 0.35), dither=False)
+    c.paint(c.rect(cx - 2, y0 - 2, cx + 2, y0), BRIGHT_IRON, 0.6, dither=False)
+    c.paint(c.rect(cx - 6, y0 + h - 3, cx + 6, y0 + h), BRIGHT_IRON, np.where(c.yy < y0 + h - 2, 0.7, 0.2), dither=False)
+    return glass
+
+
+def hall_lamp_hang(ms):
+    """A lamp that hangs from the girder on a chain: three links of chain, a lantern. 16 x 30, anchor (8, 30): the lantern's foot is the
+    cell's centre; the chain reaches up to the girder. Returns the picture and the pixels that glow."""
+    c = ms.Canvas(16, 30)
+    for y in range(0, 10, 3):
+        c.fill(c.rect(7, y, 9, y + 2), BRIGHT_IRON[2])
+        c.fill(c.rect(7, y + 1, 8, y + 3), BRIGHT_IRON[3])
+    glass = _lantern(c, 8, 10, 18)
+    c.outline(pa.STYLES["tal"]["outline"])
+    em = ms.Canvas(16, 30)
+    em.fill(glass, LAMP_GLASS[3])
+    return c, em
+
+
+def hall_lamp(ms):
+    """A standing lamp: a round foot, an iron post with two collars, a lantern on a short arm. 16 x 46, anchor (8, 44). Returns the picture and the
+    glowing pixels."""
+    c = ms.Canvas(16, 46)
+    c.paint(c.ellipse(8, 43, 6.0, 2.2), BRIGHT_IRON, 0.35 + 0.4 * (c.yy < 43), dither=False)
+    c.paint(c.rect(7, 18, 9, 43), BRIGHT_IRON, np.where(c.xx < 8, 0.75, 0.24), dither=False)
+    for y in (24, 36):
+        c.paint(c.rect(5, y, 11, y + 2), BRIGHT_IRON, np.where(c.yy == y, 0.9, 0.3), dither=False)
+    glass = _lantern(c, 8, 2, 17)
+    c.paint(c.rect(6, 19, 10, 21), BRIGHT_IRON, 0.5, dither=False)
+    c.outline(pa.STYLES["tal"]["outline"])
+    em = ms.Canvas(16, 46)
+    em.fill(glass, LAMP_GLASS[3])
+    return c, em
+
+
+def hall_tank(ms):
+    """A boiler tank against the side: an upright iron cylinder with rivet bands, a dome on top with a pipe stub, a pressure dial, a valve wheel at
+    its foot and a rust streak. 32 x 44, anchor (8, 40): the glyph's cell holds its left half; it stands on two cells."""
+    rng = np.random.default_rng(3031)
+    c = ms.Canvas(32, 44)
+    body = c.rect(1, 10, 31, 41) | c.ellipse(16, 11, 15, 5.0)
+    body &= c.yy < 41
+    c.paint(body, BRIGHT_IRON, 0.12 + 0.82 * c.cylinder(1, 31) + 0.06 * (pa.value_noise(44, 32, 3, rng) - 0.5), contrast=2.2, dither=False)
+    for y in (17, 28, 38):
+        c.paint(c.rect(1, y, 31, y + 2), BRIGHT_IRON, np.where(c.yy == y, 0.9, 0.2), dither=False)
+        for x in range(4, 30, 5):
+            c.fill(c.rect(x, y, x + 1, y + 1), BRIGHT_IRON[4])
+    c.paint(c.rect(13, 0, 19, 8), BRIGHT_IRON, np.where(c.xx < 15, 0.8, 0.26), dither=False)  # the pipe stub
+    c.paint(c.rect(11, 6, 21, 9), BRIGHT_IRON, 0.7, dither=False)
+    c.paint(_disc(c, 16, 23, 4.6), BRASS, 0.3 + 0.65 * c.sphere(14, 21, 6, 6), dither=False)  # the pressure dial
+    c.paint(_disc(c, 16, 23, 3.2), CHALK, 0.85, dither=False)
+    c.fill(c.rect(16, 21, 17, 24), NEEDLE_RED[2])
+    c.paint(_disc(c, 24, 36, 2.6) & ~_disc(c, 24, 36, 1.2), RUST, 0.8, dither=False)  # the valve wheel
+    c.fill(c.rect(23, 35, 25, 37), BRIGHT_IRON[3])
+    c.paint(c.rect(6, 30, 8, 41), RUST, 0.5 + 0.2 * (c.yy > 36), dither=False)  # rust running down
+    c.paint(c.rect(1, 41, 31, 44), BRIGHT_IRON, np.where(c.yy < 42, 0.55, 0.1), dither=False)  # the plinth
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_pipe_run(ms):
+    """A pipe along the floor, five cells long: a fat iron pipe with a flange at each joint, a pale lit top, a bracket under it every two cells and
+    a damp patch. 80 x 20, anchor (8, 14): the glyph's cell holds the left end."""
+    rng = np.random.default_rng(3041)
+    c = ms.Canvas(80, 20)
+    pipe = c.rect(0, 2, 80, 13)
+    c.paint(pipe, BRIGHT_IRON, 0.1 + 0.85 * c.cylinder(-30, 110) * 0 + 0.7 * ((13 - c.yy) / 11.0) + 0.06 * (pa.value_noise(20, 80, (2, 8), rng) - 0.5),
+            contrast=2.0, dither=False)
+    c.paint(c.rect(0, 2, 80, 4), BRIGHT_IRON, 0.96, dither=False)
+    for fx in (0, 24, 48, 72):
+        c.paint(c.rect(fx, 0, fx + 4, 15), BRIGHT_IRON, np.where(c.xx == fx, 0.9, 0.3), dither=False)
+        for fy in (2, 6, 10, 13):
+            c.fill(c.rect(fx + 1, fy, fx + 2, fy + 1), BRIGHT_IRON[4])
+    for bx in (12, 36, 60):
+        c.paint(c.rect(bx, 13, bx + 5, 17), BRIGHT_IRON, 0.3, dither=False)
+    c.paint(c.ellipse(52, 15.5, 7.0, 1.6), BRIGHT_IRON, 0.05, dither=False)  # a damp patch under a joint
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_hiss_pipe(ms):
+    """The pipe that hisses: an upright iron pipe with a collar and a valve wheel, bent over at the top into a nozzle that points up and to the
+    right; a small brass cap on the nozzle. The steam is a prop of its own. 16 x 50, anchor (8, 46)."""
+    c = ms.Canvas(16, 50)
+    c.paint(c.rect(5, 14, 11, 46), BRIGHT_IRON, np.where(c.xx < 7, 0.8, np.where(c.xx > 9, 0.2, 0.46)), dither=False)
+    c.paint(c.rect(3, 42, 13, 47), BRIGHT_IRON, np.where(c.yy < 43, 0.9, 0.2), dither=False)
+    c.paint(c.rect(4, 26, 12, 28), BRIGHT_IRON, np.where(c.yy < 27, 0.9, 0.3), dither=False)
+    c.paint(c.rect(4, 34, 12, 36), BRIGHT_IRON, np.where(c.yy < 35, 0.9, 0.3), dither=False)
+    c.paint(_disc(c, 8, 30.5, 3.4) & ~_disc(c, 8, 30.5, 1.6), RUST, 0.85, dither=False)  # the valve wheel
+    c.fill(c.rect(7, 29, 9, 32), BRIGHT_IRON[3])
+    c.paint(c.rect(5, 8, 15, 14), BRIGHT_IRON, np.where(c.yy < 10, 0.85, 0.3), dither=False)  # the bend and the nozzle
+    c.paint(c.rect(11, 4, 15, 11), BRIGHT_IRON, np.where(c.xx < 12, 0.8, 0.24), dither=False)
+    c.paint(c.rect(10, 2, 16, 5), BRASS, np.where(c.yy < 3, 0.95, 0.5), dither=False)
+    c.fill(c.rect(11, 2, 15, 3), BRASS[4] if len(BRASS) > 4 else BRASS[3])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
+
+
+def hall_steam(ms, seed):
+    """A puff of steam: a few round clouds clumped, the lit tops bright, the shaded undersides blue-grey, the edges dithered into the air.
+    28 x 24, anchor (14, 22); a flat picture that the scene may move, fade or leave out."""
+    rng = np.random.default_rng(seed)
+    c = ms.Canvas(28, 24)
+    blobs = [(14 + rng.uniform(-4, 4), 15 + rng.uniform(-2, 3), rng.uniform(6.5, 8.0))]
+    for _ in range(4):
+        blobs.append((14 + rng.uniform(-9, 9), 12 + rng.uniform(-6, 6), rng.uniform(3.8, 6.0)))
+    value = np.zeros((24, 28), np.float32)
+    alpha = np.zeros((24, 28), bool)
+    b = pa.BAYER4[np.arange(24)[:, None] % 4, np.arange(28)[None, :] % 4]
+    for cx, cy, r in sorted(blobs, key=lambda q: q[1]):
+        d = np.hypot(c.xx + 0.5 - cx, c.yy + 0.5 - cy)
+        core = d <= r * 0.8
+        soft = (d <= r) & (b < 0.5 * (1.0 - (d / r - 0.8) / 0.2).clip(0, 1) + 0.25)
+        m = core | soft
+        light = 0.55 + 0.4 * ((cy - c.yy) / r).clip(-1, 1) * 0.5 + 0.12 * (c.xx < cx)
+        value = np.where(m, light, value)
+        alpha |= m
+    c.paint(alpha, STEAM, np.clip(value, 0, 1), contrast=2.0, dither=False)
+    return c
+
+
+def hall_shell(ms):
+    """The hall, seen from the front, lying under everything (the floor is baked from the map): an iron girder under the ceiling; the back wall
+    (rows 0 to 2, x 16 to 384) of cold slate-grey cut stone with a bus bar under the girder, twelve thin rods hanging from it down to the twelve
+    levers' knobs, a thicker one down to the bolt of the small door in the middle of the wall's foot (12 x 18 pixels, an arch of stone round
+    it, two planks, a bar across it that its rod holds); pipes with flanges along the top of both wing walls; the two side walls as dark iron
+    girders; the front wall (row 13) with a door of iron-strapped planks in the room column 3. 400 x 224, anchor (8, 8): the room's top left cell."""
+    rng = np.random.default_rng(3051)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(MA_W, MA_H)
+    grain = pa.value_noise(MA_H, MA_W, (2, 12), rng)
+    # ---- the back wall
+    _blocks(c, 16, 8, 384, 48, 8, 22, HALL_STONE, rng, base=0.46, lit=0.1)
+    c.paint(c.rect(16, 8, 384, 16), HALL_STONE, 0.16, dither=False)  # in the shadow of the girder
+    c.paint(c.rect(16, 16, 384, 20), HALL_STONE, 0.3, dither=False)
+    c.paint(c.rect(16, 44, 384, 48), HALL_STONE, np.where(c.yy < 45, 0.7, 0.1), dither=False)  # the baseboard
+    # ---- the girder under the ceiling and the bus bar
+    c.paint(c.rect(0, 0, MA_W, 8), BRIGHT_IRON, np.where(c.yy < 2, 0.8, np.where(c.yy > 5, 0.14, 0.4)) + 0.06 * (grain - 0.5), dither=False)
+    for rx in range(8, MA_W, 24):
+        c.fill(c.rect(rx, 3, rx + 1, 4), BRIGHT_IRON[4])
+    c.paint(c.rect(88, 9, 312, 13), BRIGHT_IRON, np.where(c.yy < 10, 0.9, np.where(c.yy > 11, 0.15, 0.5)), dither=False)  # the bus bar
+    for bx in (92, 200, 308):
+        c.paint(c.rect(bx - 2, 8, bx + 3, 14), BRIGHT_IRON, 0.6, dither=False)  # its brackets
+    # ---- the twelve rods from the knobs up to the bus bar, and the thicker one to the bolt
+    for col in MA_LEVER_COLS:
+        x = col * 16 + 8
+        _rod(c, x, 13, 30)
+        c.paint(c.rect(x - 1, 13, x + 2, 15), BRIGHT_IRON, 0.7, dither=False)  # the clevis on the bar
+    # ---- the small door: a stone arch, two planks, an iron bar across it; its right end is held by the thick rod that comes down beside the door
+    dx, dy = MA_DOOR
+    c.paint(c.rect(dx - 9, dy - 21, dx + 9, dy + 1), HALL_STONE, np.where(c.xx < dx, 0.7, 0.44), dither=False)
+    c.paint(c.rect(dx - 9, dy - 21, dx + 9, dy - 19), HALL_STONE, 0.95, dither=False)
+    arch = c.rect(dx - 6, dy - 18, dx + 6, dy + 1) & ~(((c.xx < dx - 4) | (c.xx >= dx + 4)) & (c.yy < dy - 15))
+    wood = ramp("#3a2614", "#5a3c20", "#82592e", "#ad7e44")
+    c.paint(arch, wood, np.where(((c.xx - (dx - 6)) % 6) == 5, 0.04, 0.5 + 0.14 * (grain - 0.5) + 0.2 * (c.xx < dx - 2)), dither=False)
+    c.paint(c.rect(dx - 6, dy - 13, dx + 6, dy - 11), BRIGHT_IRON, 0.55, dither=False)  # a strap
+    c.paint(c.rect(dx - 6, dy - 4, dx + 6, dy - 2), BRIGHT_IRON, 0.55, dither=False)
+    c.fill(c.rect(dx + 2, dy - 9, dx + 4, dy - 7), BRASS[3])  # a round knob at a child's height
+    c.paint(c.rect(dx - 11, dy - 9, dx + 12, dy - 7), BRIGHT_IRON, np.where(c.yy == dy - 9, 0.9, 0.3), dither=False)  # the bolt bar across
+    c.paint(c.rect(dx - 13, dy - 11, dx - 10, dy - 5), BRIGHT_IRON, 0.5, dither=False)  # its staples in the wall
+    c.paint(c.rect(dx + 10, dy - 11, dx + 13, dy - 5), BRIGHT_IRON, 0.5, dither=False)
+    c.paint(c.rect(dx + 9, 13, dx + 12, dy - 9), BRIGHT_IRON, np.where(c.xx < dx + 10, 0.8, 0.22), dither=False)  # the thick rod, beside the door
+    c.paint(c.rect(dx + 8, dy - 12, dx + 13, dy - 9), BRASS, 0.7, dither=False)  # and the clasp that holds the bar's end
+    c.fill(c.rect(dx + 9, dy - 12, dx + 10, dy - 11), BRASS[3])
+    # ---- the pipes along the top of both wings, with flanges, and the drops at the corners
+    for x0, x1 in ((16, 90), (310, 384)):
+        c.paint(c.rect(x0, 14, x1, 19), BRIGHT_IRON, np.where(c.yy < 15, 0.9, np.where(c.yy > 17, 0.16, 0.5)), dither=False)
+        for fx in range(x0 + 6, x1 - 4, 20):
+            c.paint(c.rect(fx, 13, fx + 3, 20), BRIGHT_IRON, np.where(c.xx == fx, 0.9, 0.3), dither=False)
+            c.paint(c.rect(fx, 20, fx + 2, 24), RUST, 0.5, dither=False)
+    for x in (18, 376):
+        c.paint(c.rect(x, 8, x + 6, 48), BRIGHT_IRON, np.where(c.xx < x + 2, 0.8, np.where(c.xx > x + 3, 0.18, 0.46)), dither=False)
+        for fy in (26, 40):
+            c.paint(c.rect(x - 1, fy, x + 7, fy + 3), BRIGHT_IRON, np.where(c.yy == fy, 0.9, 0.3), dither=False)
+    # ---- the shadow of the wall on the floor row
+    sh = (c.yy >= 48) & (c.yy < 52) & (c.xx >= 14) & (c.xx < 386) & (pa.BAYER4[np.arange(MA_H)[:, None] % 4, np.arange(MA_W)[None, :] % 4] < np.where(c.yy < 50, 0.75, 0.35))
+    c.fill(sh, HALL_STONE[0])
+    # ---- the side walls: dark iron girders with rivets, a lit edge towards the room
+    for x0, x1, lit_edge in ((0, 16, 14), (MA_W - 16, MA_W, MA_W - 16)):
+        c.paint(c.rect(x0, 8, x1, MA_H), BRIGHT_IRON, 0.12, dither=False)
+        face = (4, 12) if x0 == 0 else (MA_W - 12, MA_W - 4)
+        c.paint(c.rect(face[0], 8, face[1], MA_H - 6), BRIGHT_IRON, 0.32 - 0.14 * np.clip((c.yy - 8) / 200.0, 0, 1) + 0.06 * (grain - 0.5), dither=False)
+        c.paint(c.rect(lit_edge, 8, lit_edge + 2, MA_H - 6), BRIGHT_IRON, 0.62 if x0 == 0 else 0.2, dither=False)
+        for ry in range(20, MA_H - 10, 24):
+            c.fill(c.rect(face[0] + 3, ry, face[0] + 5, ry + 2), BRIGHT_IRON[4])
+    # ---- the front wall with its door in the room column 3
+    fy = MA_H - 16
+    _blocks(c, 4, fy, MA_W - 4, MA_H - 2, 8, 22, HALL_STONE, rng, base=0.34, lit=0.08)
+    c.paint(c.rect(4, fy, MA_W - 4, fy + 3), HALL_STONE, np.where(c.yy < fy + 1, 0.9, 0.5), dither=False)
+    c.paint(c.rect(4, MA_H - 3, MA_W - 4, MA_H), BRIGHT_IRON, 0.08, dither=False)
+    d0, d1 = 48, 64
+    c.paint(c.rect(d0 - 3, fy, d0, MA_H), HALL_STONE, 0.7, dither=False)
+    c.paint(c.rect(d1, fy, d1 + 3, MA_H), HALL_STONE, 0.3, dither=False)
+    c.paint(c.rect(d0 - 3, fy, d1 + 3, fy + 3), HALL_STONE, 0.85, dither=False)
+    leaf = c.rect(d0, fy + 3, d1, MA_H - 1)
+    plank = ((c.xx - d0) // 4).astype(int)
+    c.paint(leaf, ramp("#2a1c10", "#3e2a18", "#5a3e24", "#7a5634"), np.where(((c.xx - d0) % 4) == 3, 0.06, 0.46 + 0.1 * ((plank * 7 + 3) % 5) / 5.0 + 0.1 * (grain - 0.5)),
+            dither=False)
+    for sy in (fy + 5, fy + 11):
+        c.paint(c.rect(d0, sy, d1, sy + 2), BRIGHT_IRON, 0.55, dither=False)
+    c.paint(c.rect(d1 - 5, fy + 8, d1 - 2, fy + 11), BRIGHT_IRON, 0.85, dither=False)
+    return c
+
+
+def gate_open(ms):
+    """The gate of the Anlage, open: the two stone pillars with their balls as before, the two leaves swung back against them (seen nearly edge-on,
+    three bars and two rails each), the chain hanging loose from the left leaf with the lock open at its end, and nothing between the pillars
+    but the ground. 48 x 44 like the shut gate, anchor (24, 38): it fills the same three cells."""
+    rng = np.random.default_rng(3061)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(48, 44)
+    for x0 in (0, 38):
+        _blocks(c, x0, 8, x0 + 10, 40, 6, 10, ex["stone_wall"], rng, base=0.5, lit=0.1, stagger=False)
+        c.paint(c.rect(x0 - 1 if x0 else 0, 5, x0 + 10 if x0 == 0 else 48, 9), ex["stone_wall"], np.where(c.yy < 6, 0.9, 0.55), dither=False)
+        ball = c.ellipse(x0 + 5, 3.5, 3.4, 3.2)
+        c.paint(ball, ex["stone_wall"], 0.3 + 0.65 * c.sphere(x0 + 4, 2.5, 4, 4), dither=False)
+    for lx0, lx1 in ((10, 15), (33, 38)):  # the leaves, swung back against the pillars: narrow, with a slant at the top
+        c.paint(c.rect(lx0, 13, lx1, 15), BRIGHT_IRON, np.where(c.yy == 13, 0.8, 0.3), dither=False)
+        c.paint(c.rect(lx0, 33, lx1, 35), BRIGHT_IRON, np.where(c.yy == 33, 0.8, 0.3), dither=False)
+        c.paint(c.rect(lx0, 23, lx1, 25), BRIGHT_IRON, np.where(c.yy == 23, 0.8, 0.3), dither=False)
+        for bx in range(lx0, lx1, 2):
+            c.paint(c.rect(bx, 15, bx + 1, 33), BRIGHT_IRON, 0.5 if (bx - lx0) % 4 == 0 else 0.22, dither=False)
+            c.fill(c.rect(bx, 13, bx + 1, 14), BRIGHT_IRON[4])
+    for x in range(12, 18):  # the chain hanging from the left leaf, a loop of it on the ground
+        y = 27 + (x - 12) * 2 // 3
+        c.fill(c.rect(x, y, x + 1, y + 2), BRASS[1] if x % 2 else BRASS[2])
+    for k in range(5):
+        c.fill(c.rect(18 + k, 31 + (k % 2), 19 + k, 33 + (k % 2)), BRASS[1] if k % 2 else BRASS[2])
+    c.paint(c.rect(22, 31, 26, 37), BRASS, 0.7, dither=False)  # the lock, lying open on the ground
+    c.fill(c.rect(23, 32, 25, 33), BRASS[3])
+    c.fill(c.rect(25, 29, 26, 32), BRASS[1])
+    c.paint(c.rect(10, 36, 15, 40), ex["stone_wall"], 0.38, dither=False)  # the sill stones stay at the pillars
+    c.paint(c.rect(33, 36, 38, 40), ex["stone_wall"], 0.38, dither=False)
+    _gate_plate(c)
+    c.outline(st["outline"])
+    return c
+
+
+def build_hall(ms):
+    """Registers the sprites of the hall in the catalog (prefix `ma_`). The shell and the console are flat; the levers, the covers, the dials and
+    the lamps stand on cells of their own. No catalog shadow on anything the story takes or changes (the covers, the open gate, the gauge needles
+    are props of their own); the furniture of the hall stands on the floor of `maschine`, which is baked after it and is the only map with this
+    prefix (no other stamp changes)."""
+    ms.save("tal", "ma_shell", hall_shell(ms), (8, 8), flat=True)
+    ms.save("tal", "ma_console", hall_console(ms), (120, 24), flat=True, shape={"rect": [240, 30], "offset": [0, -9]})
+    for n in range(1, 13):
+        ms.save("tal", "ma_lever_%d_up" % n, hall_lever(ms, n, False), (8, 30))
+        ms.save("tal", "ma_lever_%d_down" % n, hall_lever(ms, n, True), (8, 30))
+    ms.save("tal", "ma_lever_cover", hall_cover(ms), (8, 36))
+    ms.save("tal", "ma_bolt", hall_bolt(ms), (8, 16))
+    for k in range(1, 5):  # the dials of the left wing are drawn 8 pixels right of their cell, those of the right wing 8 pixels left (they fit between the side wall and the console)
+        ms.save("tal", "ma_gauge_%d" % k, hall_gauge(ms, k), GAUGE_ANCHOR[k])
+        ms.save("tal", "ma_needle_%d" % k, hall_needle(ms, k), (3, 13))
+    ms.save("tal", "ma_worn_dial", hall_worn_dial(ms), (8, 13))
+    lamp_light = {"offset": [0, -16], "color": "#ffd9a0", "energy": 0.9, "range": 96}
+    pic, glow = hall_lamp_hang(ms)
+    ms.save("tal", "ma_lamp_hang", pic, (8, 30), emissive=glow, lights=[lamp_light])
+    pic, glow = hall_lamp(ms)
+    ms.save("tal", "ma_lamp", pic, (8, 44), emissive=glow, shape={"circle": 4, "offset": [0, -2]}, shadow=[6, 2],
+            lights=[{"offset": [0, -34], "color": "#ffd9a0", "energy": 0.85, "range": 88}])
+    ms.save("tal", "ma_tank", hall_tank(ms), (8, 40), shape={"rect": [32, 12], "offset": [8, -6]}, shadow=[16, 3])
+    ms.save("tal", "ma_pipe_run", hall_pipe_run(ms), (8, 14), shape={"rect": [80, 8], "offset": [32, -4]}, shadow=[40, 2])
+    ms.save("tal", "ma_hiss_pipe", hall_hiss_pipe(ms), (8, 46), shape={"circle": 4, "offset": [0, -2]}, shadow=[6, 2])
+    ms.save("tal", "ma_steam", [hall_steam(ms, 3071 + i) for i in range(3)], (9, 22))
+    ms.save("tal", "gb_plant_gate_open", gate_open(ms), (24, 38))
+
+
 # --------------------------------------------------------------------------- catalog
 def build(ms):
     """Registers the sprites of Act V in the catalog (no light anywhere). What the map places under `if`/`unless`, what stands
@@ -881,6 +1447,7 @@ def build(ms):
     ms.save("tal", "gb_thimble", thimble(ms), (5, 10))
     ms.save("tal", "gb_sign_view", view_sign(ms), (19, 44), shape={"circle": 3, "offset": [0, -1]}, shadow=[7, 2])
     ms.save("tal", "gb_smoke_plant", smoke(ms, 96), (8, 94), flat=True)
+    build_hall(ms)
 
 
 def preview(path):
@@ -903,8 +1470,69 @@ def preview(path):
     sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
 
 
+def preview_hall(path):
+    """`--preview-hall out.png`: the shell with the console, the levers (the first three live, pulled and not), the covers, the dials with their
+    needles at rest, the lamps and the rest of the furniture laid out like content/maps/maschine.txt (3x), and under it every piece on its own."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_sprites as ms
+    from PIL import Image
+
+    def img(canvas):
+        return Image.fromarray(canvas.rgba().astype(np.uint8), "RGBA")
+
+    sheet = Image.new("RGBA", (MA_W + 20, MA_H + 190), (96, 92, 84, 255))
+    floor = Image.new("RGBA", (MA_W, MA_H), (128, 124, 116, 255))
+    sheet.alpha_composite(floor, (10, 10))
+
+    def put(pic, anchor, cell, lift=0):
+        sheet.alpha_composite(pic, (10 + cell[0] * 16 + 8 - anchor[0], 10 + cell[1] * 16 + 8 - anchor[1] - lift))
+
+    put(img(hall_shell(ms)), (8, 8), (0, 0))
+    put(img(hall_console(ms)), (120, 24), (12, 4))
+    for n, col in enumerate(MA_LEVER_COLS, 1):
+        put(img(hall_lever(ms, n, n == 2)), (8, 30), (col, 3))
+        if n > 3:
+            put(img(hall_cover(ms)), (8, 36), (col, 4), 9)
+    put(img(hall_bolt(ms)), (8, 16), (12, 3))
+    put(img(hall_worn_dial(ms)), (8, 13), (19, 3))
+    for k, col in zip(range(1, 5), (1, 3, 21, 23)):
+        put(img(hall_gauge(ms, k)), GAUGE_ANCHOR[k], (col, 3))
+        big = Image.new("RGBA", (31, 31), (0, 0, 0, 0))
+        big.alpha_composite(img(hall_needle(ms, k)), (15 - 3, 15 - 13))
+        put(big.rotate(-GAUGE_NORMAL[k], resample=Image.NEAREST, center=(15, 15)), (15 - (14 - GAUGE_ANCHOR[k][0]), 15), (col, 3), 22)
+    put(img(hall_lamp_hang(ms)[0]), (8, 30), (5, 2))
+    put(img(hall_lamp_hang(ms)[0]), (8, 30), (19, 2))
+    for cell in ((5, 8), (19, 8), (1, 12), (23, 12)):
+        put(img(hall_lamp(ms)[0]), (8, 44), cell)
+    put(img(hall_tank(ms)), (8, 40), (1, 6))
+    put(img(hall_tank(ms)), (8, 40), (22, 6))
+    put(img(hall_pipe_run(ms)), (8, 14), (15, 9))
+    put(img(hall_hiss_pipe(ms)), (8, 46), (3, 10))
+    put(img(hall_steam(ms, 3071)), (9, 22), (3, 8), 8)
+    x, y = 10, MA_H + 20
+    for pic in (hall_lever(ms, 1, False), hall_lever(ms, 1, True), hall_cover(ms), hall_bolt(ms), hall_worn_dial(ms), hall_gauge(ms, 1), hall_gauge(ms, 2),
+                hall_gauge(ms, 3), hall_gauge(ms, 4), hall_needle(ms, 1), hall_steam(ms, 3071), hall_steam(ms, 3072), hall_steam(ms, 3073),
+                hall_hiss_pipe(ms), hall_tank(ms), gate_open(ms), plant_gate(ms)):
+        im = img(pic)
+        if x + im.width > sheet.width:
+            x, y = 10, y + 58
+        sheet.alpha_composite(im, (x, y))
+        x += im.width + 6
+    x, y = 10, y + 58
+    for n in range(1, 13):
+        for down in (False, True):
+            im = img(hall_lever(ms, n, down))
+            if x + im.width > sheet.width:
+                x, y = 10, y + 56
+            sheet.alpha_composite(im, (x, y))
+            x += im.width + 2
+    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(path)
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1] == "--preview":
         preview(sys.argv[2])
+    elif len(sys.argv) > 2 and sys.argv[1] == "--preview-hall":
+        preview_hall(sys.argv[2])
     else:
-        sys.exit("usage: akt5_props.py --preview out.png")
+        sys.exit("usage: akt5_props.py --preview out.png | --preview-hall out.png")

@@ -21,6 +21,8 @@ beaten earth. The Grat lies over the valley behind the blocker `ramp_wait` at th
 a ledge along the northern wall, a rock island on it that the way goes round (north and south branch), the Spalte (a cleft three
 cells wide and six deep opening on the south branch, above the Anlage) and, at the east end, a plateau of free ground (G8's door).
 Nothing in the Grat is placed but the steps of the ramp and a few rocks and shrubs: G6 to G8 put their things into it.
+G3 changed letters only, never ground (the stamp of the bake stays): the blocker at the gate goes with `grat.gate_open`, the gate changes its picture,
+the door into the hall `maschine` (E, in front of the hall's own door) exists once the gate is open and its arrival (e, `spawn_maschine`) lies two cells in front of it.
 
 Hand-written head (meta, legend) stays; only the [map] block is replaced.
 
@@ -503,8 +505,10 @@ GRAT_RAMP_STEPS = (GRAT_RAMP_X, 14)
 GRAT_POCKET = (69, 83, 31, 37)  # the yard of the Anlage, a pocket in the rock: x0, x1, y0, y1 (the hall is twelve cells wide, one and a half each side)
 GRAT_FENCE_Y = 38  # the fence closes the pocket from rock to rock; the gate stands in the middle of it
 GRAT_GATE = (76, 38)
-GRAT_GATE_BLOCKER = (76, 39)  # three cells wide, covering the gate's row (offset 0, -1): one stops at the gate
+GRAT_GATE_BLOCKER = (76, 39)  # three cells wide, covering the gate's row (offset 0, -1): one stops at the gate (until `grat.gate_open`, G3)
 GRAT_HALL = (76, 34)
+GRAT_HALL_DOOR = (76, 35)  # G3: the door into the hall `maschine` (`if grat.gate_open`, three cells wide and two rows deep, the hall's own door), one cell in front of the hall's wall
+GRAT_YARD_ARRIVAL = (76, 37)  # G3: the arrival from the hall (marker `spawn_maschine`), two cells in front of that door and just inside the gate
 GRAT_SMOKE = (78, 24)  # the foot of the column: the top of the chimney (ten rows above the hall, two cells east of its middle)
 GRAT_SPALTE = (73, 75, 11, 16)  # the cleft: x0, x1, y0, y1 (three cells wide, six deep), opens on the ledge
 GRAT_PLATEAU = (81, 91, 2, 10)  # x0, x1, y0, y1: free ground for G8's door
@@ -527,7 +531,7 @@ GRAT_GROUND = {
     ".": ".", ",": ",", "m": "m", "p": "p", "~": "~", "w": "w", "h": "h", "^": "^",
     "L": ".", "l": "m", "O": ".", "o": "m", "R": ".", "r": "m", "S": "m", "g": ".", "u": ".",
     "D": ",", "d": ",", "@": ".", "1": ".", "2": ".", "3": ".", "q": ".", "7": ".", "H": ".", "Q": "m", "M": "m", "t": "m",
-    "A": ",", "Z": "^", "f": ",", "G": ",", "X": ",", "Y": ",", "F": ",", "s": ",",
+    "A": ",", "Z": "^", "f": ",", "G": ",", "X": ",", "Y": ",", "F": ",", "s": ",", "E": ",", "e": ",",
 }
 GRAT_BLOCKS = set("h^vOoAfGXY")  # a line of sight is stopped by solid ground and by what stands tall
 
@@ -757,6 +761,9 @@ def grat_build():
             put("f", x, GRAT_FENCE_Y)
     put("G", *GRAT_GATE)
     put("X", *GRAT_GATE_BLOCKER)
+    # ---- G3: the door into the hall (it exists once the gate is open) and the arrival from it, both on beaten earth in the yard (the ground does not change)
+    put("E", *GRAT_HALL_DOOR)
+    put("e", *GRAT_YARD_ARRIVAL)
     # ---- the Grat's ramp: the steps, the scree heap and the blocker at its foot
     put("s", *GRAT_RAMP_STEPS)
     put("F", *GRAT_RAMP_HEAP)

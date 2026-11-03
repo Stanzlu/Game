@@ -475,11 +475,14 @@ class PassLayoutTests(unittest.TestCase):
 # ============================================================================================================== grat (G2)
 GRAT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "hochtal.dialogue")
 GRAT_DIALOGUE_RES = "res://content/dialogue/akt5/hochtal.dialogue"
+# G3: the blocker at the gate asks the Anlage's own dialogue (the cue `gate`); the cue `plant_gate` of hochtal.dialogue stays there as text
+GRAT_ANLAGE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "anlage.dialogue")
+GRAT_ANLAGE_RES = "res://content/dialogue/akt5/anlage.dialogue"
 # the glyphs that stand once on the map
-GRAT_NAMED = "Dd@123q7HQMtAZGXYFs"
+GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEe"
 # the cues of the map by glyph (the contract of G2)
 GRAT_CUES = {"1": "cairn_1", "2": "cairn_2", "3": "cairn_3", "q": "stone_pick", "7": "valley_sign", "H": "hand_stone", "Q": "quartz",
-             "M": "marmot_den", "X": "plant_gate", "Y": "ramp_wait"}
+             "M": "marmot_den", "X": "gate", "Y": "ramp_wait"}
 # things a person cannot walk through, whatever the ground: the hall, the fence, the gate, the blockers
 GRAT_SOLID_PROPS = set("AfGXY")
 # a line of sight is stopped by solid ground and by what stands tall
@@ -545,13 +548,14 @@ class GratLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                self.assertEqual(params["dialogue"], GRAT_DIALOGUE_RES, glyph)
+                self.assertEqual(params["dialogue"], GRAT_ANLAGE_RES if glyph == "X" else GRAT_DIALOGUE_RES, glyph)
         self.assertEqual(used, GRAT_CUES)
         self.assertEqual(len(set(used.values())), len(used), "no cue twice")
-        if os.path.exists(GRAT_DIALOGUE):
-            with open(GRAT_DIALOGUE, encoding="utf-8") as f:
-                cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
-            self.assertLessEqual(set(used.values()), cues, "every cue of the map is a cue of the dialogue")
+        for path, glyphs in ((GRAT_DIALOGUE, [g for g in used if g != "X"]), (GRAT_ANLAGE, ["X"])):
+            if os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
+                self.assertLessEqual({used[g] for g in glyphs}, cues, "every cue of the map is a cue of its dialogue")
 
     def test_the_legend_grounds_are_the_generators_and_no_placement_changes_the_ground_it_stands_on(self):
         _, symbols, rows, _ = _grat()
@@ -613,7 +617,9 @@ class GratLayoutTests(unittest.TestCase):
             self.assertNotIn("if", params)
         for glyph in "XYG":
             self.assertNotIn("if", symbols[glyph].get("params", {}), "the blockers and the gate are there until their segment takes them away")
-            self.assertNotIn("unless", symbols[glyph].get("params", {}))
+        self.assertNotIn("unless", symbols["Y"].get("params", {}), "the blocker of the ramp stays until G6")
+        self.assertEqual(symbols["X"]["params"]["unless"], "grat.gate_open", "the blocker at the gate goes with the flag the knocking sets (G3)")
+        self.assertNotIn("shadow", catalog["tal/gb_plant_gate_open"], "the open gate is a look the story changes: no baked shadow")
         self.assertNotIn("cue", symbols["t"]["params"], "the thimble is taken at the den (its cue), the thimble itself is a picture")
 
     def test_the_door_the_arrival_and_the_start_are_at_the_south_end_far_from_every_door(self):
@@ -633,7 +639,7 @@ class GratLayoutTests(unittest.TestCase):
             self.assertEqual(rows[y][door[0] - 3], "^")
         self.assertEqual(symbols["D"]["params"]["size"][1], 1)
         # the doors of the map: the one in the south and the future one at the gate (G3); the start is far from both (the benchmark walks right first, then down)
-        doors = [door, layout.GRAT_GATE_BLOCKER]
+        doors = [door, layout.GRAT_GATE_BLOCKER, layout.GRAT_HALL_DOOR]
         for dx, dy in doors:
             self.assertGreaterEqual(math.hypot(start[0] - dx, start[1] - dy), 20, "the benchmark walks right, then down: stay away from %s" % ((dx, dy),))
             self.assertGreaterEqual(abs(start[0] - dx) + abs(start[1] - dy), 20)
@@ -648,7 +654,7 @@ class GratLayoutTests(unittest.TestCase):
             glyph = rows[sy][x]
             if glyph in GRAT_BLOCKS or glyph in "123":
                 break
-            self.assertNotIn(glyph, "DXY", "the first run to the right meets no door")
+            self.assertNotIn(glyph, "DXYE", "the first run to the right meets no door")
         # the pass's side of the door
         _, p_symbols, p_rows = _map()
         p_spots = _spots(p_rows)
@@ -689,7 +695,7 @@ class GratLayoutTests(unittest.TestCase):
         # and with the blocker gone all of it can: one walk up the ramp, the ledge, both branches round the island, the cleft, the plateau
         open_reach = _reach(rows, symbols, spots["@"][0], blocked=_blocked_by_props(rows) - {(x, ry) for x in range(rx - 2, rx + 3)})
         self.assertEqual({c for c in grat_cells if c not in open_reach}, set(), "once the blocker is gone every cell of the Grat can be reached")
-        # the pocket stays closed even then (G3's door is the way in)
+        # the pocket stays closed even then (only the open gate lets one in: G3, see the test of the hall door)
         for y in range(y0, y1 + 1):
             for x in range(x0, x1 + 1):
                 self.assertNotIn((x, y), open_reach)
@@ -841,7 +847,9 @@ class GratLayoutTests(unittest.TestCase):
         self.assertEqual(catalog["tal/gb_plant_gate"]["anchor"][0] * 2, 48)
         self.assertEqual(spots["X"][0], (gx, gy + 1), "the blocker stands in front of the gate")
         params = symbols["X"]["params"]
-        self.assertEqual((params["size"], params["offset"], params["cue"]), ([3, 1], [0, -1], "plant_gate"), "it covers the three cells of the gate's row")
+        self.assertEqual((params["size"], params["offset"], params["cue"]), ([3, 1], [0, -1], "gate"), "it covers the three cells of the gate's row")
+        self.assertEqual(params["unless"], "grat.gate_open", "it gives way once the gate is open (G3)")
+        self.assertEqual(symbols["G"]["params"]["sprite_when"], {"grat.gate_open": "tal/gb_plant_gate_open"}, "and the gate stands open")
         for x, y in _door_zone(symbols, "X", spots):
             self.assertEqual(_ground(symbols, rows[y][x]), ",", "the forecourt in front of the gate")
         # the chimney's top and the foot of the smoke are the same point, the column rises straight over rock
@@ -974,6 +982,60 @@ class GratLayoutTests(unittest.TestCase):
         self.assertGreater(text.count(".") , 900, "meadows")
         # the basin is wider than it is high at the lake's height, and the ledge is a stretch along the northern wall
         self.assertGreaterEqual(sum(1 for c in rows[5] if c in STANDABLE), 60, "the ledge runs along the wall")
+
+    def test_g3_the_gate_opens_into_the_yard_and_the_door_to_the_hall_stands_in_front_of_the_halls_own_door(self):
+        meta, symbols, rows, spots = _grat()
+        catalog = mapfile.load_catalog()
+        x0, x1, y0, y1 = layout.GRAT_POCKET
+        hx, hy = layout.GRAT_HALL
+        # the door: three cells wide, two deep, on the cell right in front of the hall, only with the gate open
+        self.assertEqual(len(spots["E"]), 1)
+        ex, ey = spots["E"][0]
+        self.assertEqual((ex, ey), layout.GRAT_HALL_DOOR)
+        self.assertEqual((ex, ey), (hx, hy + 1), "in front of the hall's own door, one cell south of its foot")
+        params = symbols["E"]["params"]
+        self.assertEqual(symbols["E"]["prop"], "res://world/props/door.tscn")
+        self.assertEqual((params["target"], params["spawn"], params["auto"], params["size"], params["if"]), ("maschine", "grat", True, [3, 2], "grat.gate_open"))
+        self.assertNotIn("unless", params)
+        self.assertEqual(_ground(symbols, "E"), ",", "beaten earth, no change of ground: the bake stays")
+        self.assertEqual(rows[ey][ex - 1:ex + 2], ",E,")
+        # its zone (the glyph's cell, 24 pixels to each side and 16 up and down) lies in front of the hall's collision, so that touching the hall
+        # is touching the door, and does not reach the arrival
+        hall = catalog["tal/gb_plant_hall"]["shape"]
+        origin_y = hy * 16 + 8
+        wall_bottom = origin_y + hall["offset"][1] + hall["rect"][1] / 2  # the lowest pixel row the hall's collision covers
+        zone_top, zone_bottom = ey * 16 + 8 - 16, ey * 16 + 8 + 16
+        self.assertLessEqual(zone_top, wall_bottom + 0.5, "the zone touches the hall's wall")
+        self.assertGreater(zone_bottom, wall_bottom + 4.5, "and reaches past the pixel where the player's feet stop at the wall, so that standing at the wall is standing in the zone")
+        self.assertEqual(zone_bottom - zone_top, 32)
+        # the marker: named after the scene one comes from, in the yard, outside the zone
+        self.assertEqual(len(spots["e"]), 1)
+        ax, ay = spots["e"][0]
+        self.assertEqual((ax, ay), layout.GRAT_YARD_ARRIVAL)
+        self.assertEqual(symbols["e"]["marker"], "spawn_maschine")
+        self.assertEqual(_ground(symbols, "e"), ",")
+        self.assertTrue(x0 <= ax <= x1 and y0 <= ay <= y1, "the arrival lies in the yard")
+        self.assertGreaterEqual(ay, ey + 2, "two cells in front of the door: the player's feet are outside its zone")
+        self.assertGreater(ay * 16 + 8 - 4.5, zone_bottom)
+        # the hall's side of the door: `maschine` answers with `spawn_grat` and a door back with spawn `maschine`
+        maschine = os.path.join(mapfile.ROOT, "content", "maps", "maschine.txt")
+        _, m_symbols, m_rows = _map(maschine)
+        self.assertEqual(m_symbols["D"]["params"]["target"], "grat")
+        self.assertEqual(m_symbols["D"]["params"]["spawn"], "maschine")
+        self.assertEqual(m_symbols["1"]["marker"], "spawn_grat")
+        # the gate: shut it keeps the yard closed (see above); open (blocker and gate gone) one walks from the start over the forecourt and through the gate to the door
+        gx, gy = layout.GRAT_GATE_BLOCKER
+        gate_cells = {(x, y) for x in range(gx - 1, gx + 2) for y in (gy - 1, gy)}
+        open_reach = _reach(rows, symbols, spots["@"][0], blocked=_blocked_by_props(rows) - gate_cells)
+        self.assertIn((ax, ay), open_reach, "with the gate open one can walk to the arrival")
+        for x in range(ex - 1, ex + 2):
+            for y in (ey, ey + 1):
+                self.assertIn((x, y), open_reach, "and into the door's zone: %d,%d" % (x, y))
+        shut_reach = _reach(rows, symbols, spots["@"][0], blocked=_blocked_by_props(rows))
+        for cell in [(ax, ay), (ex, ey)]:
+            self.assertNotIn(cell, shut_reach, "shut, the yard cannot be reached")
+        # the blocker and the gate belong together: the blocker gives way with the flag that changes the gate's picture
+        self.assertEqual(symbols["X"]["params"]["unless"], list(symbols["G"]["params"]["sprite_when"])[0])
 
 
 def _gsight(rows, a, b):

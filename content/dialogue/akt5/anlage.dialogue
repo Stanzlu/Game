@@ -14,8 +14,8 @@
 # Antworten, beide gleichwertig: "Klopfen." öffnet, "Weitergehen." kostet nichts. Der Text wiederholt nicht, was G2 über Zaun und Ticken sagte.
 
 ~ gate
-Am Tor hängt ein Messingschild, »Wächter im Dienst. Eintritt nach Eintrag.« Eine Klinke gibt es nicht, eine Klingel auch nicht. [ID:anl_gate_1] [#draft]
-Abgeschlossen ist es nicht, nur sehr genau zugemacht. Dahinter geht das Ticken weiter, ob du klopfst oder nicht. [ID:anl_gate_2] [#draft]
+Am linken Pfosten hängt ein Messingschild, »Wächter im Dienst. Eintritt nach Eintrag.« Eine Klinke gibt es nicht, eine Klingel auch nicht. [ID:anl_gate_1] [#draft]
+Die Kette läuft genau durch die Mitte, das Schloss hängt gerade. Dahinter geht das Ticken weiter, ob du klopfst oder nicht. [ID:anl_gate_2] [#draft]
 - Klopfen. [ID:anl_gate_r1] [#draft]
 	=> gate_knock
 - Weitergehen. [ID:anl_gate_r2] [#draft]
