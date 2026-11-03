@@ -885,8 +885,13 @@ class EveningLayoutTests(unittest.TestCase):
             flags = [flags] if isinstance(flags, str) else flags
             self.assertIn("city.evening", flags or [], glyph)
         # the day's people, the doors and the roof's goat are gone in the evening
-        for glyph in "yvLYJMD%&8":
+        for glyph in "yvLYJD%&8":
             self.assertEqual(symbols[glyph]["params"].get("unless"), "city.evening", glyph)
+        # Mira on the square is gone in the evening and for good once the quarrel sent her ahead (S8)
+        self.assertEqual(
+            symbols["M"]["params"].get("unless"),
+            ["city.evening", "city.mira_parted_boundary", "city.mira_parted_joined", "city.mira_parted_silent"],
+        )
         self.assertEqual(symbols["Θ"]["params"]["if"], ["city.evening", "city.stage_orin"])
         self.assertEqual(symbols["θ"]["params"]["unless"], "city.stage_orin")
         self.assertEqual(symbols["τ"]["params"]["if"], ["city.evening", "city.board_done"])
