@@ -23,7 +23,7 @@ Kein Wort dabei, nicht einmal »Ohne Gewähr«. Oben liegen die Berge und der Hi
 # sieht (ein Test der Karte rechnet es nach). Kein Satz über Wegweiser oder Hilfe, kein Name, kein Grund. Nichts wird gesetzt.
 
 ~ cairn_first
-Am Anfang des Pfads steht ein Steinmännchen, drei Steine, flach, rund, flach. Der oberste sitzt, als hätte er nie etwas anderes vorgehabt. [ID:auf_cairn_first_1] [#draft]
+Am Anfang des Pfads steht ein Steinmännchen, fünf Steine, unten flach, oben rund. Der oberste sitzt, als hätte er nie etwas anderes vorgehabt. [ID:auf_cairn_first_1] [#draft]
 Weiter oben steht das nächste, dahinter, klein im Licht, das übernächste. Jedes steht dort, wo man das vorige noch sieht. [ID:auf_cairn_first_2] [#draft]
 Niemand hat seinen Namen dazugeschrieben. Die Steine sind einfach fertig. [ID:auf_cairn_first_3] [#draft]
 => END
@@ -75,7 +75,7 @@ else
 # ohne Person; keine Ziffer, keine Meterzahl, kein Doppelpunkt im Wortlaut).
 
 ~ plank_bridge
-Der Bach ist hier kaum breiter als ein Schritt. Jemand hat trotzdem zwei Bohlen darübergelegt, Kante an Kante. [ID:auf_plank_bridge_1] [#draft]
+Der Bach ist hier schmal genug zum Springen. Jemand hat trotzdem zwei Bohlen darübergelegt, dicht an dicht. [ID:auf_plank_bridge_1] [#draft]
 Sie halten. Der Bach murmelt darunter weiter, als hätte man ihn nicht gefragt. [ID:auf_plank_bridge_2] [#draft]
 => END
 

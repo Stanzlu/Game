@@ -21,7 +21,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Das erste am Beginn des Pfads. Der Text erzählt nur, dass jemand sie gebaut hat und dass jedes dort steht, wo man das vorige noch
 > sieht (ein Test der Karte rechnet es nach). Kein Satz über Wegweiser oder Hilfe, kein Name, kein Grund. Nichts wird gesetzt.
 
-- *Am Anfang des Pfads steht ein Steinmännchen, drei Steine, flach, rund, flach. Der oberste sitzt, als hätte er nie etwas anderes vorgehabt.* `[#draft]`  <sub>auf_cairn_first_1</sub>
+- *Am Anfang des Pfads steht ein Steinmännchen, fünf Steine, unten flach, oben rund. Der oberste sitzt, als hätte er nie etwas anderes vorgehabt.* `[#draft]`  <sub>auf_cairn_first_1</sub>
 - *Weiter oben steht das nächste, dahinter, klein im Licht, das übernächste. Jedes steht dort, wo man das vorige noch sieht.* `[#draft]`  <sub>auf_cairn_first_2</sub>
 - *Niemand hat seinen Namen dazugeschrieben. Die Steine sind einfach fertig.* `[#draft]`  <sub>auf_cairn_first_3</sub>
 
@@ -72,7 +72,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > Bohlen. Das Schild ist ein Schild: es verspricht den Gipfel, eine zweite Hand hat unter ihm nachgetragen, wie lange schon (Humor,
 > ohne Person; keine Ziffer, keine Meterzahl, kein Doppelpunkt im Wortlaut).
 
-- *Der Bach ist hier kaum breiter als ein Schritt. Jemand hat trotzdem zwei Bohlen darübergelegt, Kante an Kante.* `[#draft]`  <sub>auf_plank_bridge_1</sub>
+- *Der Bach ist hier schmal genug zum Springen. Jemand hat trotzdem zwei Bohlen darübergelegt, dicht an dicht.* `[#draft]`  <sub>auf_plank_bridge_1</sub>
 - *Sie halten. Der Bach murmelt darunter weiter, als hätte man ihn nicht gefragt.* `[#draft]`  <sub>auf_plank_bridge_2</sub>
 
 ### G1-8 · `trail_sign`

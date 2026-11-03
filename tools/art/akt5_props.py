@@ -3,7 +3,7 @@ so they share the atlas of the valley; the mountains are the valley's palette wi
 make_sprites.build(); `--preview out.png` draws them on one sheet (3x) to look at.
 
 Aufstieg (G1): the climb into the mountains, a walk of small things and small jokes. Nothing here is a person; every piece
-has the shape of what it was made for, and nothing says what it means. Cairns in three forms (two, three and four stones;
+has the shape of what it was made for, and nothing says what it means. Cairns in three forms (two, three and five stones;
 the stones are the valley's grey with a warm one among them), the big boulder and the loose scree, the wooden steps of the
 ramps and the two planks over the brook, the hand-painted sign (its words are scribbles, a painted peak under them), a slate
 chip with a scratched arrow, the iron ring in the rock wall (its inner edge worn bright by a rope), the chalk arrow on a

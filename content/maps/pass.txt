@@ -36,7 +36,7 @@ u = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 O = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_boulder"}}
 o = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_boulder"}}
 S = {"ground": "m", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_scree"}}
-; die Steinmännchen am Weg in drei Formen (zwei, drei, vier Steine), auf Gras (A, B, K) und auf Geröll (a, b, k); das erste (1) hat einen Cue
+; die Steinmännchen am Weg in drei Formen (zwei, drei, fünf Steine), auf Gras (A, B, K) und auf Geröll (a, b, k); das erste (1) hat einen Cue
 A = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_a"}}
 B = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_b"}}
 K = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cairn_c"}}

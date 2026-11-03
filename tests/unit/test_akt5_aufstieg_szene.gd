@@ -119,6 +119,20 @@ func test_the_pass_is_a_map_of_class_m_with_its_markers() -> void:
 	assert_eq(_cell(scene), START, "a game begun here stands on the meadow at the foot")
 
 
+## The benchmark walks right for 1.6 s and then down for 1.0 s (BenchmarkRunner.PATTERN): the first
+## cairn stops the first leg, so the second never carries her through the door at the foot.
+func test_the_benchmark_walk_from_the_start_does_not_reach_the_door_at_the_foot() -> void:
+	SceneTravel.stay = true
+	var scene := await _up()
+	for leg: Array in [[&"move_right", 96], [&"move_down", 60]]:
+		Input.action_press(leg[0])
+		await wait_physics_frames(leg[1])
+		Input.action_release(leg[0])
+	assert_eq(SceneTravel.last_target, "", "the door at the foot stays shut to the benchmark")
+	assert_lt(_cell(scene).x, 52, "west of the first cairn, which stands in the row")
+	assert_gte(DOOR_CELL.y - START.y, 5, "and the door is still some cells off")
+
+
 func test_every_thing_of_the_path_is_there_with_its_cue() -> void:
 	var scene := await _up()
 	for cue: String in CUES:

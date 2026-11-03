@@ -15,7 +15,7 @@
   {"wait_for": {"quest": "main_mountain_way", "stage": "climb"}, "timeout": 10, "log": "the walk up begins on the path", "t": 0.1},
   {"use": [52, 51], "face": "up", "log": "the first cairn: the next stands where this one can be seen", "t": 0.5},
   {"use": [69, 45], "face": "up", "log": "a strip of net on a post: the first answer at the gate was the boundary", "t": 0.5},
-  {"use": [63, 48], "face": "down", "log": "two planks over the brook", "t": 0.5},
+  {"use": [62, 49], "face": "right", "log": "two planks over the brook", "t": 0.5},
   {"use": [64, 36], "face": "up", "log": "the sign: summit, soon", "t": 0.5},
   {"use": [68, 26], "face": "up", "log": "the iron ring in the rock: a trace of the world", "t": 0.5},
   {"wait_for": {"flag": "fragment.iron_ring"}, "timeout": 30, "t": 0.1},
