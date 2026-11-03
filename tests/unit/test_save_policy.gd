@@ -159,6 +159,50 @@ func test_the_frozen_v2_end_of_act_three_keeps_its_story() -> void:
 	assert_gt(s.playtime_seconds, 480.0, "Act II's 375 seconds and the act's own")
 
 
+func test_the_frozen_v2_end_of_act_four_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt4_full.json from v2_akt3_end.json, frozen where it ends: the
+	# house, with the shelves hung, her chair and the loaf, the act over (S9, ADR-071)
+	var result := SaveCodec.decode(_fixture("v2_akt4_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "haus")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL)
+	for chapter: String in ["act1", "act2", "slice", "act3", "act4"]:
+		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
+	assert_true(
+		Chapter.in_flags(s.flags, Chapter.LAST), "the last chapter of the build, until Act V"
+	)
+	for facet: String in ["care", "connection", "integrity", "perception", "boundaries"]:
+		assert_true(s.facets.has(facet), "%s was her own will on the way" % facet)
+	var way: GameState.QuestProgress = s.quests["main_city_way"]
+	assert_eq(way.stage, "done")
+	assert_eq(
+		way.history,
+		PackedStringArray(["west", "town", "help", "list", "evening", "night", "home", "done"])
+	)
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+	for flag: String in [
+		"house.shelves",
+		"house.bread",
+		"house.guest_tess",
+		"beat.act4_home",
+		"list.closed",
+		"city.asked_help",
+		"city.mira_parted_boundary",
+		"city.board_done",
+		"melody.lio_concert",
+	]:
+		assert_true(s.flags.has(flag), "%s was set on the way" % flag)
+	assert_eq(s.relationships["tess"].state, GameState.Relationship.State.CLOSE)
+	assert_eq(s.relationships["mira"].state, GameState.Relationship.State.FAMILIAR)
+	assert_true(s.inventory.has("curiosity_blue_glass"), "carried: the run puts nothing on a shelf")
+	assert_false(s.house.curiosity_slots.has("shelf_3"), "the shelves of Tess are bare")
+	assert_gt(s.playtime_seconds, 740.0, "Act III's 503 seconds and the act's own")
+
+
 func test_the_frozen_v2_end_of_the_slice_keeps_its_story() -> void:
 	var result := SaveCodec.decode(_fixture("v2_slice_end.json"))
 	assert_true(result.ok, result.error)

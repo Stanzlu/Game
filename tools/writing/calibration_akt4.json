@@ -1,0 +1,82 @@
+{
+ "_comment": "The Akt IV run of the autopilot (tools/autopilot/akt4_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt4. The run starts from tests/fixtures/saves/v2_akt3_end.json, which carries 503 s of play: taken off here, so the numbers are the act's.",
+ "seconds": 264,
+ "dialogue_seconds": 134,
+ "clicks": 279,
+ "route_px": 14861,
+ "beats": [
+  {
+   "beat": "strasse_enter",
+   "seconds": 3
+  },
+  {
+   "beat": "strasse_view",
+   "seconds": 22
+  },
+  {
+   "beat": "stadt_enter",
+   "seconds": 23
+  },
+  {
+   "beat": "stadt_lio",
+   "seconds": 43
+  },
+  {
+   "beat": "rathaus_enter",
+   "seconds": 49
+  },
+  {
+   "beat": "rathaus_lost",
+   "seconds": 57
+  },
+  {
+   "beat": "rathaus_day",
+   "seconds": 74
+  },
+  {
+   "beat": "blumenladen_enter",
+   "seconds": 76
+  },
+  {
+   "beat": "blumenladen_duck",
+   "seconds": 92
+  },
+  {
+   "beat": "blumenladen_letter",
+   "seconds": 106
+  },
+  {
+   "beat": "werkstatt_enter",
+   "seconds": 109
+  },
+  {
+   "beat": "werkstatt_board",
+   "seconds": 119
+  },
+  {
+   "beat": "stadt_abend",
+   "seconds": 176
+  },
+  {
+   "beat": "city_concert",
+   "seconds": 210
+  },
+  {
+   "beat": "stadt_richter",
+   "seconds": 231
+  },
+  {
+   "beat": "stadt_tor",
+   "seconds": 235
+  },
+  {
+   "beat": "strasse_dawn",
+   "seconds": 243
+  },
+  {
+   "beat": "act4_home",
+   "seconds": 263
+  }
+ ],
+ "start_seconds": 503
+}
