@@ -220,7 +220,7 @@ Wächter: Betrieb. Oben ist offen, unten ist erledigt. Ich zähle mit. [ID:anl_r
 
 # Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht. Er zählt die offenen Hebel, trägt es ein, verlangt nichts und bietet nichts an (kein "Fang an."
 # mehr). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat. Seit G5 hängen daran drei Antworten (Bible §50 "Puzzlehilfen", Brief O4): die
-# abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, das Pult nicht zu bedienen und abzuwarten, er hat nachgesehen und rät
+# abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, vom Pult wegzutreten und abzuwarten, er hat nachgesehen und rät
 # nicht dazu; kein Wort "loslassen", kein Wort darüber, was es bringt), das unbedingte "Gut." und das Schweigen "…" als letzte Antwort. Der Cue liest und setzt nichts.
 
 ~ waechter_over
@@ -229,7 +229,7 @@ Wächter: Offene Hebel gezählt, Zahl eingetragen. Nicht erfüllt, wie vermerkt.
 Wächter: Alles vorbehaltlich einer Nachprüfung der Rechnung. [ID:anl_over_3] [#draft]
 - Und jetzt? [ID:anl_over_r1] [#draft]
 	Wächter: Für diesen Stand kennt das Verfahren keinen Schritt. [ID:anl_over_4] [#draft]
-	Wächter: Zulässig ist, das Pult nicht zu bedienen und abzuwarten. Ich habe nachgesehen. [ID:anl_over_5] [#draft]
+	Wächter: Zulässig ist, vom Pult wegzutreten und abzuwarten. Ich habe nachgesehen. [ID:anl_over_5] [#draft]
 	Wächter: Ich rate nicht dazu. [ID:anl_over_6] [#draft]
 - Gut. [ID:anl_over_r2] [#draft]
 	Wächter: Gut ist als Eintrag nicht vorgesehen. Ich schreibe: zur Kenntnis genommen. [ID:anl_over_7] [#draft]
@@ -256,7 +256,7 @@ Wächter: Sonst steht dort nichts. Das passt zu einem Einzelfall. [ID:anl_done_5
 	Wächter: Ja. Erwartet hatte ich etwas anderes. [ID:anl_done_6] [#draft]
 	Wächter: Die Erwartung bleibt trotzdem eingetragen. [ID:anl_done_7] [#draft]
 - Nichts einzutragen ist zulässig. [if WorldState.has_facet("trust") /] [ID:anl_done_r2] [#draft]
-	Wächter: Ja. Das Feld »Ohne Eintrag« ist vorgesehen. Ich habe es noch nie benutzt. [ID:anl_done_8] [#draft]
+	Wächter: Das Feld »Ohne Eintrag« ist vorgesehen. Ich habe es noch nie benutzt. [ID:anl_done_8] [#draft]
 	Wächter: Es steht auf jedem Blatt, unten rechts. [ID:anl_done_9] [#draft]
 - Die kam aus dem Rohr. [if WorldState.has_flag("plant.potato_taken") and not WorldState.has_flag("plant.potato_entered") /] [ID:anl_done_r3] [#draft]
 	=> potato_entry

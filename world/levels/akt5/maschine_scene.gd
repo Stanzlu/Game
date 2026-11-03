@@ -40,6 +40,8 @@ const LAMP_LOW := 0.45
 ## follows it at this speed (per second, 0 to 1), slowly and never a flash.
 const SURGE_SECONDS := 4.0
 const SURGE_RATE := 0.6
+## The dial that goes to its edge in the burst is the one that trembles (the cue `gauges`).
+const SURGE_GAUGE_CUE := "gauges"
 
 var _levers: Dictionary = {}
 var _pulled: Array[int] = []
@@ -107,7 +109,7 @@ func _ready() -> void:
 	if WorldState.has_flag("plant.load"):
 		_advance_to_load()
 	# the hall shows the load as it stands from the first picture (no dials swinging out on arrival)
-	_trouble = _run.trouble()
+	_trouble = _trouble_goal()
 	_apply_trouble()
 	_sync_potato_quest()
 	WorldState.flag_changed.connect(_on_flag_changed)
@@ -298,7 +300,10 @@ func _on_letgo_fell(number: int, index: int) -> void:
 	if index == 0:
 		await _say(LETGO, "letgo_first")
 	elif index == LetGo.ORDER.size() - 1:
-		WorldState.set_flag("melody.machine_count")
+		if WorldState.has_flag("melody.machine_count"):
+			AudioDirector.sfx("machine_count", -2.0, 1.0)  # heard before: the flag does not change
+		else:
+			WorldState.set_flag("melody.machine_count")  # and the flag's change plays it
 
 
 func _on_letgo_mid() -> void:
@@ -308,6 +313,8 @@ func _on_letgo_mid() -> void:
 
 ## The lamp goes out (the map shows the dark one from the flag on) and nobody mends it.
 func _on_letgo_defect() -> void:
+	if WorldState.has_flag("plant.defect"):
+		return  # a game loaded after the lamp went out: it is out already, and nobody tells it twice
 	WorldState.set_flag("plant.defect")
 	await _say(LETGO, "letgo_defect")
 
@@ -379,8 +386,10 @@ func _collect_effects() -> void:
 ## slowly and in steps of the picture, never a flash.
 func _follow_trouble(delta: float) -> void:
 	var surge_goal := 1.0 if _surge_left > 0.0 else 0.0
-	_surge_left = maxf(_surge_left - delta, 0.0)
-	var goal := _run.trouble()
+	# the burst lasts while he speaks about it and a while longer
+	if not _speaking:
+		_surge_left = maxf(_surge_left - delta, 0.0)
+	var goal := _trouble_goal()
 	if is_equal_approx(_trouble, goal) and is_equal_approx(_surge, surge_goal):
 		return
 	_trouble = move_toward(_trouble, goal, delta * TROUBLE_RATE)
@@ -388,13 +397,23 @@ func _follow_trouble(delta: float) -> void:
 	_apply_trouble()
 
 
+## How much of the load is not kept: what the levers say while the load runs or has stopped; after
+## the letting go the hall is calm whatever a lever is made to do (they are only levers again).
+func _trouble_goal() -> float:
+	return 0.0 if WorldState.has_flag("plant.letgo") else _run.trouble()
+
+
 func _apply_trouble() -> void:
+	# the burst of steam comes from the pipe on the left, and the trembling dial goes to its edge
+	var middle := map.cell_to_world(Vector2i(16, 0)).x
 	for gauge in _gauges:
-		gauge.set_trouble(_trouble)
-	var density := maxf(_trouble, _surge)
+		var edge: bool = gauge.has_meta(&"cue") and gauge.get_meta(&"cue") == SURGE_GAUGE_CUE
+		gauge.set_trouble(maxf(_trouble, _surge) if edge else _trouble)
 	for cloud in _steam:
-		cloud.modulate.a = 0.7 + 0.3 * density
-		cloud.scale = Vector2.ONE * (1.0 + 0.5 * _trouble + 0.7 * _surge)
+		var left := cloud.global_position.x < middle
+		var burst := _surge if left else 0.0
+		cloud.modulate.a = 0.7 + 0.3 * maxf(_trouble, burst)
+		cloud.scale = Vector2.ONE * (1.0 + 0.5 * _trouble + 0.7 * burst)
 	for lamp in _lamps:
 		if is_instance_valid(lamp):
 			lamp.light_scale = lerpf(1.0, LAMP_LOW, _trouble)

@@ -51,7 +51,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 > Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht. Er zählt die offenen Hebel, trägt es ein, verlangt nichts und bietet nichts an (kein "Fang an."
 > mehr). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat. Seit G5 hängen daran drei Antworten (Bible §50 "Puzzlehilfen", Brief O4): die
-> abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, das Pult nicht zu bedienen und abzuwarten, er hat nachgesehen und rät
+> abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, vom Pult wegzutreten und abzuwarten, er hat nachgesehen und rät
 > nicht dazu; kein Wort "loslassen", kein Wort darüber, was es bringt), das unbedingte "Gut." und das Schweigen "…" als letzte Antwort. Der Cue liest und setzt nichts.
 
 - *Der Lauf ruht. Der Wächter fährt die Hebel ab, die oben stehen, und zählt halblaut.* `[#draft]`  <sub>anl_over_1</sub>
@@ -59,7 +59,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Wächter:** Alles vorbehaltlich einer Nachprüfung der Rechnung. `[#draft]`  <sub>anl_over_3</sub>
 - ▸ **Und jetzt?**
   - **Wächter:** Für diesen Stand kennt das Verfahren keinen Schritt. `[#draft]`  <sub>anl_over_4</sub>
-  - **Wächter:** Zulässig ist, das Pult nicht zu bedienen und abzuwarten. Ich habe nachgesehen. `[#draft]`  <sub>anl_over_5</sub>
+  - **Wächter:** Zulässig ist, vom Pult wegzutreten und abzuwarten. Ich habe nachgesehen. `[#draft]`  <sub>anl_over_5</sub>
   - **Wächter:** Ich rate nicht dazu. `[#draft]`  <sub>anl_over_6</sub>
 - ▸ **Gut.**
   - **Wächter:** Gut ist als Eintrag nicht vorgesehen. Ich schreibe: zur Kenntnis genommen. `[#draft]`  <sub>anl_over_7</sub>
@@ -86,7 +86,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
   - **Wächter:** Ja. Erwartet hatte ich etwas anderes. `[#draft]`  <sub>anl_done_6</sub>
   - **Wächter:** Die Erwartung bleibt trotzdem eingetragen. `[#draft]`  <sub>anl_done_7</sub>
 - ▸ **Nichts einzutragen ist zulässig.** *(wenn `trust`)*
-  - **Wächter:** Ja. Das Feld »Ohne Eintrag« ist vorgesehen. Ich habe es noch nie benutzt. `[#draft]`  <sub>anl_done_8</sub>
+  - **Wächter:** Das Feld »Ohne Eintrag« ist vorgesehen. Ich habe es noch nie benutzt. `[#draft]`  <sub>anl_done_8</sub>
   - **Wächter:** Es steht auf jedem Blatt, unten rechts. `[#draft]`  <sub>anl_done_9</sub>
 - ▸ **Die kam aus dem Rohr.** *(wenn `plant.potato_taken und plant.potato_entered nicht`)*
   - *→ weiter bei* `potato_entry`
@@ -132,7 +132,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > und sagt kein Wort über Gefahr; er nennt, was das Verfahren hier verlangt, und trägt ein, dass er es nicht tut. Die letzte Zeile ist die Probezeile des Blatts, trocken und ohne Erklärung, was
 > ihn zurückhält.
 
-- *Aus dem Rohr links bricht ein Stoß Dampf, weiß und dicht. Ein Zeiger springt an den Rand und bleibt dort stehen.* `[#draft]`  <sub>los_mid_1</sub>
+- *Aus dem Rohr links bricht ein Stoß Dampf, weiß und dicht. Ein Zeiger wandert an den Rand und bleibt dort stehen.* `[#draft]`  <sub>los_mid_1</sub>
 - *Die Hand des Wächters liegt über einem Hebel. Sie zieht nicht.* `[#draft]`  <sub>los_mid_2</sub>
 - **Wächter:** Zeiger am Rand. Das Verfahren verlangt jetzt einen Zug. `[#draft]`  <sub>los_mid_3</sub>
 - **Wächter:** Ich ziehe nicht. Ich trage ein, dass ich nicht ziehe. `[#draft]`  <sub>los_mid_4</sub>

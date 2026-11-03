@@ -3,9 +3,9 @@ extends GutTest
 ## load has stopped and every lever stands up. At the console nothing happens; whoever steps away
 ## and waits sees the levers go down by themselves, a burst of steam, a lamp that goes out and
 ## stays out, and the dials come back. The keeper enters it all and doubts it; the facet `trust` is
-## set, the walk of the hero goes on, a potato rolls out of the pipe. Nothing is locked, nothing
-## fails, and a game loaded in any of the states finds the hall as it stood. The model's own
-## arithmetic is in test_akt5_letgo, the keeper's words in test_akt5_letgo_text.
+## set and the walk of the hero goes on. Nothing is locked, nothing fails. The potato and a game
+## loaded in any of the states are tested in test_akt5_letgo_laden, the model's own arithmetic in
+## test_akt5_letgo, the keeper's words in test_akt5_letgo_text.
 
 const MASCHINE := preload("res://world/levels/akt5/maschine.tscn")
 const QUEST := "main_mountain_way"
@@ -128,13 +128,6 @@ func _lamps(scene: GameScene) -> Array[int]:
 	return [lit, dark]
 
 
-func _potato(scene: GameScene) -> Node:
-	for node in _alive(scene):
-		if node.get(&"item") == "item_potato":
-			return node
-	return null
-
-
 ## Plays the whole letting go: she steps away and waits until the keeper has told it to the end.
 func _let_go(scene: MaschineScene) -> void:
 	await _put(scene, AWAY)
@@ -163,7 +156,7 @@ func test_at_the_console_nothing_is_asked_and_nothing_falls() -> void:
 # --- The course ---------------------------------------------------------------------------------
 
 
-func test_stepping_away_begins_it_and_the_keeper_enters_that_the_console_is_empty() -> void:
+func test_stepping_away_begins_it_and_the_keeper_speaks_at_once_without_locking_her() -> void:
 	var scene := await _hall()
 	await _put(scene, AWAY)
 	var began := func() -> bool: return scene._letgo.state == LetGo.State.RUNNING
@@ -270,6 +263,7 @@ func test_the_dials_the_steam_and_the_lamps_come_back_once_the_levers_are_down()
 	await _let_go(scene)
 	await wait_physics_frames(600)
 	assert_lt(scene._trouble, 0.01, "the hall is calm")
+	assert_eq(scene._lamps.size(), 5, "the lamps are found again: the dark one casts no light")
 	for lamp in scene._lamps:
 		if is_instance_valid(lamp):
 			assert_almost_eq(lamp.light_scale, 1.0, 0.01, "the lamps shine as before")
@@ -306,67 +300,3 @@ func test_the_course_is_as_long_with_more_time_and_a_slower_pace() -> void:
 	var through := func() -> bool: return WorldState.has_flag("plant.letgo")
 	assert_true(await _told(scene, through))
 	assert_almost_eq(scene._letgo.elapsed, LetGo.seconds(), 0.1, "waiting is no skill")
-
-
-# --- The potato ---------------------------------------------------------------------------------
-
-
-func test_a_potato_lies_by_the_pipe_only_after_the_letting_go() -> void:
-	var scene := await _hall()
-	assert_null(_potato(scene), "nothing before")
-	await _let_go(scene)
-	assert_not_null(_potato(scene), "a potato has rolled out of the pipe")
-
-
-func test_the_potato_is_taken_once_and_begins_its_quest() -> void:
-	var scene := await _hall(["plant.letgo"])
-	var potato := _potato(scene)
-	assert_not_null(potato)
-	assert_false(WorldState.has_item("item_potato"))
-	potato._on_interacted(scene.player)
-	assert_true(WorldState.has_item("item_potato"))
-	assert_true(WorldState.has_flag("plant.potato_taken"))
-	assert_true(WorldState.is_quest_active(POTATO_QUEST))
-	assert_eq(WorldState.quest_stage(POTATO_QUEST), "show")
-	await wait_physics_frames(2)
-	assert_null(_potato(scene), "and it is gone from the floor")
-
-
-func test_the_quest_is_done_when_the_keeper_has_entered_it() -> void:
-	var scene := await _hall(["plant.letgo", "plant.potato_taken"])
-	assert_eq(WorldState.quest_stage(POTATO_QUEST), "show", "caught up for a loaded game")
-	WorldState.set_flag("plant.potato_entered")
-	await wait_physics_frames(2)
-	assert_false(WorldState.is_quest_active(POTATO_QUEST))
-	assert_eq(scene._letgo.state, LetGo.State.DONE)
-
-
-func test_a_potato_already_taken_does_not_lie_there_again() -> void:
-	var scene := await _hall(["plant.letgo", "plant.potato_taken"])
-	assert_null(_potato(scene))
-
-
-# --- Loading ------------------------------------------------------------------------------------
-
-
-func test_a_game_loaded_after_the_letting_go_finds_the_hall_as_it_stood() -> void:
-	WorldState.set_facet("trust")
-	var scene := await _hall(["plant.letgo", "plant.defect", "melody.machine_count"])
-	assert_eq(scene._letgo.state, LetGo.State.DONE, "nothing is told twice")
-	assert_eq(_down(scene), 12, "the levers stand as they fell")
-	assert_lt(scene._trouble, 0.01, "the dials are calm from the first picture")
-	assert_eq(_lamps(scene), [5, 1])
-	assert_eq(WorldState.quest_stage(QUEST), "letgo")
-	await _put(scene, AWAY)
-	await wait_physics_frames(300)
-	assert_true(_quiet(scene), "and nobody begins to speak")
-
-
-func test_a_game_loaded_in_the_middle_of_it_begins_the_course_again_with_the_lamp_out() -> void:
-	var scene := await _hall(["plant.defect"])
-	assert_eq(_lamps(scene), [5, 1], "the lamp that went out is out")
-	assert_eq(_down(scene), 0, "the levers stand up as the load left them")
-	await _let_go(scene)
-	assert_eq(_down(scene), 12)
-	assert_true(WorldState.has_facet("trust"))
-	assert_eq(_lamps(scene), [5, 1], "still one dark lamp, not two")

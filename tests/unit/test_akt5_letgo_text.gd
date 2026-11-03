@@ -232,7 +232,7 @@ func test_the_help_after_the_load_is_one_answer_away_and_says_only_what_is_allow
 	assert_eq(answers[2], "…", "the silence stays the last")
 	var help := await _told("waechter", PackedStringArray(["Und jetzt"]), ANLAGE)
 	assert_true(help.contains("keinen Schritt"), "the procedure has none for this")
-	assert_true(help.contains("das Pult nicht zu bedienen und abzuwarten"), "what is allowed")
+	assert_true(help.contains("vom Pult wegzutreten und abzuwarten"), "what is allowed")
 	assert_true(help.contains("Ich rate nicht dazu"), "he does not advise it")
 	for word: String in ["loslassen", "vertrau", "Kontrolle", "musst", "solltest", "bringt"]:
 		assert_false(help.contains(word), "no lesson: %s" % word)
