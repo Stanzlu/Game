@@ -156,12 +156,8 @@ func test_at_the_console_nothing_is_asked_and_nothing_falls() -> void:
 	assert_false(WorldState.has_facet("trust"))
 	assert_true(_quiet(scene), "and nobody speaks")
 	assert_eq(_lamps(scene), [6, 0], "all six lamps are lit")
-
-
-func test_a_pull_at_the_console_still_moves_nothing_before_the_letting_go() -> void:
-	var scene := await _hall()
 	scene.lever(5).pulled.emit(5)
-	assert_false(scene.lever(5).down, "the levers stand as they stood")
+	assert_false(scene.lever(5).down, "a pull before the letting go moves nothing")
 
 
 # --- The course ---------------------------------------------------------------------------------

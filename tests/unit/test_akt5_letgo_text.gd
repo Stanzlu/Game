@@ -1,11 +1,11 @@
 extends GutTest
 ## Act V, segment G5: what the keeper says when the levers fall by themselves
-## (docs/akt5/REGIONSBRIEFE.md, O4, O10, O13). The empty console, the first lever, the burst of steam,
-## the lamp that goes out and is not mended, the end in which he enters it all and doubts it, the
-## potato; and in anlage.dialogue the help "Und jetzt?", his rest after the letting go (with the
-## answer that only the facet trust shows) and the potato's entry. He is never cured, never grateful,
-## never taught; the hall stands anyway, and he says it is one case. The hall itself is tested in
-## test_akt5_letgo_szene, the model in test_akt5_letgo.
+## (docs/akt5/REGIONSBRIEFE.md, O4, O10, O13). The empty console, the first lever, the burst of
+## steam, the lamp that goes out and is not mended, the end in which he enters it all and doubts
+## it, the potato; and in anlage.dialogue the help "Und jetzt?", his rest after the letting go (with
+## the answer that only the facet trust shows) and the potato's entry. He is never cured, never
+## grateful, never taught; the hall stands anyway, and he says it is one case. The hall itself is
+## tested in test_akt5_letgo_szene, the model in test_akt5_letgo.
 
 const ANLAGE := "res://content/dialogue/akt5/anlage.dialogue"
 const FILE := "res://content/dialogue/akt5/loslassen.dialogue"
@@ -208,12 +208,8 @@ func test_the_end_enters_it_all_and_doubts_it_and_ends_on_a_reservation() -> voi
 	assert_false(told.contains("vorbehaltlich"), "that one is used already (anl_over_3)")
 	assert_lte(seen.size(), 10)
 	assert_gte(seen.size(), 8)
-
-
-func test_the_end_has_no_thanks_no_comfort_and_no_word_for_what_the_wait_was() -> void:
-	var told := await _told("letgo_end")
 	for word: String in ["weniger", "lassen", "warten", "Wegtreten", "Pult verlassen", "Hilfe"]:
-		assert_false(told.contains(word), "no %s" % word)
+		assert_false(told.contains(word), "no word for what the wait was: %s" % word)
 
 
 func test_a_potato_rolls_out_and_the_text_says_no_more() -> void:
@@ -313,7 +309,9 @@ func test_the_potato_is_entered_as_average_and_nothing_is_explained() -> void:
 	for word: String in NEVER:
 		assert_false(told.contains(word), "no %s" % word)
 	var block := _block("potato_entry", ANLAGE)
-	assert_gt(block.find('set_flag("plant.potato_entered")'), block.find("[ID:anl_potato_7]"), "last")
+	assert_gt(
+		block.find('set_flag("plant.potato_entered")'), block.find("[ID:anl_potato_7]"), "last"
+	)
 
 
 # --- The journal --------------------------------------------------------------------------------
