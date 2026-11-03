@@ -289,8 +289,10 @@ func test_the_poster_can_be_taken_or_left_and_is_the_same_either_way() -> void:
 	assert_true(_has(left, "kon_post_4"))
 	assert_false(WorldState.has_item(POSTER))
 	assert_true(_has(await DialogueWalk.play(FILE, "con_poster"), "kon_posta_2"))
-	var poster := _blocks()["con_poster_pick"] as String
-	var digits := RegEx.create_from_string("\\d").search(poster.replace("kon_post_", ""))
+	var poster := RegEx.create_from_string("\\[[^\\]]*\\]").sub(
+		_blocks()["con_poster_pick"] as String, "", true
+	)
+	var digits := RegEx.create_from_string("\\d").search(poster)
 	assert_null(digits, "no digit on the poster")
 
 

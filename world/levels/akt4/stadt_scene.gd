@@ -81,14 +81,14 @@ func quiet() -> bool:
 ## built, and no time of day of the world: that would be left behind in the valley.
 func _evening_look() -> void:
 	day_preset = "keine"
-	world_tint = Color(0.5, 0.55, 0.76)
+	world_tint = Color(0.42, 0.47, 0.7)
 	cloud_shadows = 0.0
 	saturation = 0.92
 	contrast = 1.06
 	tint = Color(0.98, 0.98, 1.05)
 	shadow_tint = Color(0.03, 0.03, 0.08)
 	vignette = 0.34
-	bloom = 0.9
+	bloom = 1.0
 	music = "silence"
 	ambience = load(EVENING_AMBIENCE)
 	ambience_db = -9.0

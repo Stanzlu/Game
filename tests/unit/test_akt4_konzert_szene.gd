@@ -393,7 +393,7 @@ func test_asking_orin_in_the_cutscene_puts_him_at_the_post() -> void:
 	WorldState.set_flag("city.orin_met")
 	_evening(false)
 	var scene := await _scene()
-	await _play_out(scene, "Orin")
+	await _play_out(scene, "Orin! Hältst du die Lampe?")
 	assert_true(WorldState.has_flag("city.stage_orin"))
 	await wait_physics_frames(3)
 	assert_eq(_cell(scene, _with_sheet(scene, "orin")[0]), Vector2i(48, 21), "he holds it")
@@ -417,6 +417,6 @@ func test_a_game_left_during_the_concert_plays_it_again_from_the_start() -> void
 func test_while_it_plays_the_player_stands_still_and_saving_waits() -> void:
 	_evening(false)
 	var scene := await _scene()
-	var locked := await wait_until(func() -> bool: return scene.player.is_locked(), 30.0)
+	var locked: bool = await wait_until(func() -> bool: return scene.player.is_locked(), 30.0)
 	assert_true(locked, "the cutscene holds her")
 	assert_gt(SaveSystem.blockers().size(), 0, "and the game does not save while it plays")
