@@ -671,9 +671,13 @@
     {
      "type": "flag",
      "ref": "melody.lio_concert"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.machine_count"
     }
    ],
-   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31). Tess pfeift beim Messen, ohne es zu merken (Akt IV, S4): ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief, die zweite Melodie der Stadt, hörbar und kein Fragment. Das Konzert (Akt IV, S6) bringt die dritte Melodie, `melody.lio_concert`: Lio spielt sie ohne Noten auf den Saiten, die ihm bleiben (`kon_song_1`), anfangs wacklig, mit einem Refrain, den der Platz beim zweiten Mal richtig singt (`kon_song_6`); hörbar, kein Fragment, im Haus später wiederzuhören (Bible §31)."
+   "payoff": "Das Kind summt das Motiv der Tal-Musik; im Finale erkennt die Spielerin es wieder (§35). Die Muschel mit dem Riss verweist auf das Meer (Akt VII). Die Flöte des Einsiedlers (Akt III, W3) trägt Kopf und Schluss derselben Phrasen: die Weise, die nach Hause kommt (Bible §35: Motive der Figuren fügen sich). Lios Straßenmusik (Akt IV, S2) ist die erste Melodie der Stadt: eine gezupfte Laute, ein Ton geht woandershin, und die Phrase läuft trotzdem zu Ende; im Haus ist sie später hörbar (Bible §31). Tess pfeift beim Messen, ohne es zu merken (Akt IV, S4): ein ruhiges Absteigen mit einem Zittern am Ende, die Töne etwas schief, die zweite Melodie der Stadt, hörbar und kein Fragment. Das Konzert (Akt IV, S6) bringt die dritte Melodie, `melody.lio_concert`: Lio spielt sie ohne Noten auf den Saiten, die ihm bleiben (`kon_song_1`), anfangs wacklig, mit einem Refrain, den der Platz beim zweiten Mal richtig singt (`kon_song_6`); hörbar, kein Fragment, im Haus später wiederzuhören (Bible §31). Der Takt der Anlage (Akt V, G5, `melody.machine_count`) ist keine Melodie der Figuren, sondern der Hebel: das Klacken in der Reihenfolge der Probe, Drei, Eins, Zwei, das beim Loslassen zu einem Motiv wird, mit einem leisen Dreiton darunter; hörbar, kein Fragment."
   },
   {
    "id": "spuren-der-welt",
@@ -1806,9 +1810,33 @@
     {
      "type": "flag",
      "ref": "valley.potato_taken"
+    },
+    {
+     "type": "line",
+     "ref": "los_potato_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_potato_2"
+    },
+    {
+     "type": "line",
+     "ref": "anl_potato_6"
+    },
+    {
+     "type": "line",
+     "ref": "anl_potato_7"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.potato_taken"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.potato_entered"
     }
    ],
-   "payoff": "Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung."
+   "payoff": "Bemerkenswert durchschnittlich, möglicherweise bedeutungslos (II, V); Nachspiel: Belohnung. In Akt II tauscht die Ziege sie gegen einen Stiefel (`tal_goat_4`). In Akt V (G5) rollt eine zweite nach dem Loslassen aus dem zischenden Rohr links, ohne ein Wort der Erzählung (`los_potato_2`); sie liegt neben dem Rohr, die Spielerin nimmt sie mit (`plant.potato_taken`), und der Wächter trägt sie ein: Kartoffel, mittelgroß, nicht eingetragen (`anl_potato_2`), in Größe, Gewicht und Farbe durchschnittlich, Besonderheiten keine, was er bemerkenswert findet (`anl_potato_6`), Verbleib bei ihr (`anl_potato_7`). Die Nebenquest `side_plant_potato` endet damit (`plant.potato_entered`). Nichts wird erklärt: kein Warum, kein Symbol, kein Witz über ihn; das Rohr ist für Dampf vorgesehen und für nichts sonst. Nachspiel: Belohnung."
   },
   {
    "id": "ente",
@@ -2390,6 +2418,64 @@
    "payoff": "Das Warum des Wächters zeigen Dinge, keine Erklärung (Brief O6, wie das Warum des Antreibers und des Gefälligen). An der Rückwand der Halle, hinter dem Pult, sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht: dunkles Holz, zwei Eisenbänder und ein schwerer Riegel, den Stangen von allen zwölf Hebeln halten, keine locker (`anl_door_1`, `anl_door_2`). Sie ist zu, und die Spielerin klopft nicht (`anl_door_3`): ein Echo der geschlossenen Tür aus Akt I (`kd_door_3`, `kd_door_4`, Fragment `fragment.closed_door`), ohne dass es jemand sagt. Das Wort Kind fällt nicht, der Wächter spricht nie über die Tür, kein Täter, keine Ursache, keine Wirkung auf die Spielerin. Die Tür bleibt zu, auch nach dem Loslassen: er hat sie nur nicht mehr in der Hand (Akt V, G5 und G9)."
   },
   {
+   "id": "waechter-feld",
+   "kind": "vorausdeutung",
+   "title": "Das Feld „Ohne Eintrag“",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "los_end_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_8"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_9"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.letgo"
+    }
+   ],
+   "payoff": "Das Blatt des Wächters hat unten rechts ein Feld „Ohne Eintrag“, das er noch nie benutzt hat (Akt V, G5; Pedanterie, nie seine Angst). Am Ende des Loslassens lässt er es aus wie jedes Mal (`los_end_4`). Wer die Facette Vertrauen trägt, kann ihm sagen, dass es zulässig ist, nichts einzutragen, und hört nur, dass das Feld vorgesehen ist und er es noch nie benutzt hat (`anl_done_8`, `anl_done_9`): mehr nicht, kein Fortschritt, keine Heilung. Der nächste Auftritt ist der Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat); auch dort bleibt sein Schluss ein Vorbehalt, kein Dank."
+  },
+  {
+   "id": "waechter-defekt",
+   "kind": "vorausdeutung",
+   "title": "Der Defekt, den niemand repariert",
+   "bible": "§14, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "los_mid_1"
+    },
+    {
+     "type": "line",
+     "ref": "los_defect_2"
+    },
+    {
+     "type": "line",
+     "ref": "los_defect_3"
+    },
+    {
+     "type": "line",
+     "ref": "los_defect_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_3"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.defect"
+    }
+   ],
+   "payoff": "Einiges geht schief, die Welt endet trotzdem nicht (Bible §14). Im Loslassen (Akt V, G5) bricht ein Stoß Dampf aus dem Rohr und ein Zeiger springt an den Rand (`los_mid_1`), und eine Lampe fällt aus: das Verfahren verlangt die Behebung (`los_defect_2`), er trägt Defekt, offen ein (`los_defect_3`), und niemand geht zur Lampe (`los_defect_4`). Die Lampe bleibt dunkel, auch danach: Lampe Eins ist defekt und unbehoben, die Halle steht trotzdem, er hat es nachgeprüft (`anl_done_3`). Nichts wird repariert und nichts wird dadurch schlimmer; das Dunkle unter dem Träger ist ein Ding, das bleibt."
+  },
+  {
    "id": "waechter-vorbehalt",
    "kind": "vorausdeutung",
    "title": "Der Vorbehalt des Wächters",
@@ -2406,9 +2492,37 @@
     {
      "type": "flag",
      "ref": "plant.overload"
+    },
+    {
+     "type": "line",
+     "ref": "los_mid_4"
+    },
+    {
+     "type": "line",
+     "ref": "los_end_3"
+    },
+    {
+     "type": "line",
+     "ref": "los_end_5"
+    },
+    {
+     "type": "line",
+     "ref": "los_end_8"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_7"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.letgo"
     }
    ],
-   "payoff": "Der Wächter wird nicht geheilt, und sein letztes Wort ist ein Vorbehalt, kein Dank (Bible §14). Der erste steht am Ende der Last (Akt V, G4): die Rechnung geht nicht auf, er trägt es ein und bleibt dabei, das Verfahren verlangt es trotzdem (`lst_over_9`), und danach gilt alles vorbehaltlich einer Nachprüfung der Rechnung (`anl_over_3`). Der Text stellt ihn nicht bloß: die Zahl stimmt, und er hält trotzdem am Pult fest. Im Loslassen (G5) lässt er den Dampf kommen, ohne es gutzuheißen; sein letzter Vorbehalt kommt am Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat)."
+   "payoff": "Der Wächter wird nicht geheilt, und sein letztes Wort ist ein Vorbehalt, kein Dank (Bible §14). Der erste steht am Ende der Last (Akt V, G4): die Rechnung geht nicht auf, er trägt es ein und bleibt dabei, das Verfahren verlangt es trotzdem (`lst_over_9`), und danach gilt alles vorbehaltlich einer Nachprüfung der Rechnung (`anl_over_3`). Der Text stellt ihn nicht bloß: die Zahl stimmt, und er hält trotzdem am Pult fest. Im Loslassen (Akt V, G5, `loslassen.dialogue`) greift er nicht ein, wenn der Dampf kommt: seine Hand liegt über einem Hebel, das Verfahren verlangt einen Zug, und er trägt ein, dass er nicht zieht (`los_mid_4`). Am Ende ist der Zustand kein zulässiger (`los_end_3`), er trägt ihn trotzdem ein, als Einzelfall (`los_end_5`), und das Verfahren bleibt richtig: wiederholt sich der Fall, prüft er neu, bis dahin gilt das Verfahren (`los_end_8`). Danach steht der Einzelfall allein auf seiner Seite (`anl_done_5`), und die Erwartung, dass es anders ausgeht, bleibt eingetragen (`anl_done_7`). Kein Dank, keine Einsicht, keine Lehre, und der Text sagt nirgends, dass er es gelernt hat. Sein letzter Vorbehalt kommt am Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat)."
   },
   {
    "id": "waechter-zaehlt",
@@ -2527,9 +2641,49 @@
     {
      "type": "flag",
      "ref": "plant.overload"
+    },
+    {
+     "type": "line",
+     "ref": "los_away_2"
+    },
+    {
+     "type": "line",
+     "ref": "los_first_3"
+    },
+    {
+     "type": "line",
+     "ref": "los_mid_4"
+    },
+    {
+     "type": "line",
+     "ref": "los_defect_3"
+    },
+    {
+     "type": "line",
+     "ref": "anl_over_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_over_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_4"
+    },
+    {
+     "type": "line",
+     "ref": "anl_done_5"
+    },
+    {
+     "type": "line",
+     "ref": "anl_potato_6"
+    },
+    {
+     "type": "flag",
+     "ref": "plant.letgo"
     }
    ],
-   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) und sein trockener Schluss (G9, am Herd im Haus) folgen."
+   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) bleibt im Ton: das leere Pult trägt er mit der Dauer laufend ein (`los_away_2`), in die Spalte, wer den ersten Hebel gezogen hat, schreibt er niemand (`los_first_3`), und wo das Verfahren einen Zug verlangt, trägt er ein, dass er nicht zieht (`los_mid_4`); den Defekt der Lampe trägt er ein und behebt ihn nicht (`los_defect_3`). Wer „Und jetzt?“ fragt, hört, dass das Verfahren für diesen Stand keinen Schritt kennt (`anl_over_4`) und dass es zulässig ist, das Pult nicht zu bedienen, er rät aber nicht dazu (`anl_over_5`). Danach hat der Einzelfall eine eigene Seite, auf der er allein steht (`anl_done_5`), und die Kartoffel ist in allem durchschnittlich, Besonderheiten keine, was er bemerkenswert findet (`anl_potato_6`). Der Humor sitzt wieder in Spalten und Einträgen, nie in seiner Angst. Sein trockener Schluss (G9, am Herd im Haus) folgt."
   }
  ],
  "register": [
@@ -3459,6 +3613,11 @@
    "meaning": "Sie hat Lios Konzert gehört (Akt IV, S6): die dritte Melodie der Stadt, anfangs wacklig, mit einem Refrain von sechs Tönen, den der Platz beim zweiten Mal richtig singt; hörbar, kein Fragment (Brief O10). Die Erinnerung lio.concert entsteht, die Beziehung zu Lio wird vertraut."
   },
   {
+   "flag": "melody.machine_count",
+   "axis": "Musik",
+   "meaning": "Sie hat den Takt der Anlage gehört (Akt V, G5): das Klacken der Hebel in der Reihenfolge der Probe, Drei, Eins, Zwei, das beim Loslassen zu einem Motiv wird, mit einem leisen Dreiton darunter; hörbar, kein Fragment. Die Szene setzt es, wenn der dritte Hebel der Reihenfolge gefallen ist."
+  },
+  {
    "flag": "city.stage_orin",
    "axis": "Entscheidungen",
    "meaning": "Sie hat Orin gebeten, die Bühnenlampe zu halten (Akt IV, S6): die Antwort „Orin! Hältst du die Lampe?“ gibt es nur mit der Facette Verbindung, sie ist der zweite Leser neben dem Bitten bei Tess. Orin steht danach am Pfosten, die Karte liest es, `con_orin` erzählt etwas Konkretes über das Halten. Gleichwertig mit „Ich halte sie.“ und dem Schweigen: alle drei ergeben dieselbe Lampe, keine Wertung."
@@ -3606,7 +3765,27 @@
   {
    "flag": "plant.overload",
    "axis": "Beschützer",
-   "meaning": "Der Lauf hat die vierte Welle durchlaufen und hält (Akt V, G4): der Wächter hat vorgerechnet, dass es nicht aufgeht, und trägt „nicht erfüllt“ ein. Die Szene setzt es nach seiner Rechnung, der Cue `waechter` liest es und wechselt zu `waechter_over`; dort verlangt und bietet er nichts mehr an, G5 baut an diesem Zustand weiter. Nichts ist gesperrt, nichts scheitert hart, die Welt steht."
+   "meaning": "Der Lauf hat die vierte Welle durchlaufen und hält (Akt V, G4): der Wächter hat vorgerechnet, dass es nicht aufgeht, und trägt „nicht erfüllt“ ein. Die Szene setzt es nach seiner Rechnung, der Cue `waechter` liest es und wechselt zu `waechter_over`; dort verlangt und bietet er nichts mehr an, nur die Hilfe „Und jetzt?“ ist eine Antwort entfernt. Wer vom Pult wegtritt und wartet, löst das Loslassen aus (Akt V, G5; `plant.letgo`). Nichts ist gesperrt, nichts scheitert hart, die Welt steht."
+  },
+  {
+   "flag": "plant.letgo",
+   "axis": "Beschützer",
+   "meaning": "Sie ist vom Pult weggetreten und hat gewartet (Akt V, G5): die Hebel sind von selbst gefallen, Drei, Eins, Zwei und dann aufwärts, ein Stoß Dampf und ein Zeiger am Rand haben nichts zerstört, eine Lampe ist ausgefallen und niemand hat sie behoben, und die Halle steht. Die Szene setzt es nach den Zeilen des Wächters (`letgo_end` in `loslassen.dialogue`) und zugleich die Facette Vertrauen (`trust`); der Cue `waechter` liest es und wechselt zu `waechter_done`, wo `trust` eine zusätzliche Antwort zeigt, die nichts verlangt. Der Wächter wird nicht geheilt: er trägt alles ein, nennt es einen Einzelfall und hält das Verfahren für richtig. Der Herd im Haus (G9) liest die Facette."
+  },
+  {
+   "flag": "plant.defect",
+   "axis": "Beschützer",
+   "meaning": "Eine Lampe der Halle ist ausgefallen (Akt V, G5): die linke am Träger, `Lampe Eins`, die der Wächter als defekt einträgt, ohne sie zu beheben. Die Szene setzt es mitten im Loslassen, die Karte zeigt dann die dunkle Lampe; niemand repariert sie, auch später nicht. Nichts wird dadurch schlechter, die Halle steht."
+  },
+  {
+   "flag": "plant.potato_taken",
+   "axis": "Gag",
+   "meaning": "Sie hat die Kartoffel genommen, die nach dem Loslassen aus dem zischenden Rohr links gerollt ist (Akt V, G5). Die Karte setzt es beim Aufheben, die Szene beginnt daraus die Nebenquest `side_plant_potato`, und der Cue `waechter_done` zeigt erst dann die Antwort, die ihm die Kartoffel zeigt. Wer sie liegen lässt, verpasst nichts."
+  },
+  {
+   "flag": "plant.potato_entered",
+   "axis": "Gag",
+   "meaning": "Der Wächter hat die Kartoffel eingetragen (Akt V, G5): in allem durchschnittlich, Besonderheiten keine, Verbleib bei der Spielerin. Der Cue `potato_entry` setzt es zuletzt, die Szene schließt daraus die Nebenquest `side_plant_potato`, und die Antwort verschwindet danach aus `waechter_done`. Nichts wird erklärt."
   },
   {
    "flag": "fragment.worn_dial",

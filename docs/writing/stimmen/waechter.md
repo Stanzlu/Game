@@ -1,9 +1,10 @@
 # Der Wächter
 
-**Beleg in Akt V:** 58 Zeilen in `content/dialogue/akt5/anlage.dialogue` (G3 und G4) und `content/dialogue/akt5/last.dialogue` (G4), Ø 8,3 Wörter (G3: 27 Zeilen, Ø 7,2; G4: 31 Zeilen, Ø 9,2), längste 13, kein Ausruf,
-zwei Fragen (eine Kontrollfrage, die er selbst beantwortet, und eine, die er sich selbst stellt), dazu die Dinge der Halle als Erzählung (die kleine Tür, die Zeigerwand, das Zifferblatt, das Rohr). Aus der Bible (§14)
-und dem Plan (Akt V). **Belegt in G3:** Zählen, Nummern, Eintragen, Kontrollfragen, das trockene „Nein.“ der Probe. **Belegt in G4:** der Betrieb als Verfahren, die Pause, die er einträgt, das Nachzählen, die Rechnung, die nicht
-aufgeht, und das „Dabei bleiben“ (Die Last). **Noch ohne Beleg:** das Loslassen (G5), sein letzter Vorbehalt am Schluss, der Herd im Haus (G9).
+**Beleg in Akt V:** 89 Zeilen in `content/dialogue/akt5/anlage.dialogue` (G3, G4 und G5), `content/dialogue/akt5/last.dialogue` (G4) und `content/dialogue/akt5/loslassen.dialogue` (G5), Ø 8,3 Wörter (G3: 27 Zeilen, Ø 7,2; G4: 31 Zeilen, Ø 9,2;
+G5: 31 Zeilen, Ø 8,2), längste 13, kein Ausruf, zwei Fragen (eine Kontrollfrage, die er selbst beantwortet, und eine, die er sich selbst stellt; G5 hat keine), dazu die Dinge der Halle als Erzählung (die kleine Tür, die Zeigerwand,
+das Zifferblatt, das Rohr). Aus der Bible (§14) und dem Plan (Akt V). **Belegt in G3:** Zählen, Nummern, Eintragen, Kontrollfragen, das trockene „Nein.“ der Probe. **Belegt in G4:** der Betrieb als Verfahren, die Pause, die er einträgt,
+das Nachzählen, die Rechnung, die nicht aufgeht, und das „Dabei bleiben“ (Die Last). **Belegt in G5:** das Eintragen dessen, was niemand tut (Spalten, die leer bleiben), die Zeile für den Defekt, den er nicht behebt, das Festhalten am
+Verfahren nach dem Loslassen (Einzelfall, Wiedervorlage) und das Feld „Ohne Eintrag“. **Noch ohne Beleg:** sein letzter Vorbehalt am Schluss, der Herd im Haus (G9).
 
 ## Funktion
 
@@ -29,12 +30,22 @@ die Welt endet nicht. Er wird dadurch **nicht „geheilt“** und bleibt skeptis
 - **Er bleibt dabei.** Die Rechnung geht nicht auf, er trägt „nicht erfüllt“ ein und das Verfahren verlangt es trotzdem (`lst_over_9`). Danach verlangt und bietet er nichts mehr, und die letzte Zeile ist ein Vorbehalt (`anl_over_3`), kein Dank und keine
   Einsicht. Wo er seinen Satz sagt, während er zählt (`anl_run_3`), kommentiert der Text nicht, dass es währenddessen schiefgeht.
 - Wärme gibt es nicht: „Eingetragen.“ (`anl_right_1`) ist das Äußerste, und die Bemerkung danach ist ein Aktenvermerk, kein Dank (`anl_right_2`).
+- **Das Loslassen (G5)**: er greift nicht ein und sagt, was das Verfahren hier verlangt (`los_mid_3`), und trägt ein, dass er es nicht tut (`los_mid_4`); die Spalte „Gezogen von“ bekommt das Wort niemand (`los_first_3`), die Pause bekommt die Dauer
+  laufend (`los_away_2`), und der Defekt bekommt „Defekt. Offen.“ (`los_defect_3`), ohne dass jemand zur Lampe geht (`los_defect_4`). Der Gag sitzt in den Spalten, nie in dem, was ihn zurückhält; was er tut, während die Hebel fallen, ist dasselbe wie
+  sonst: er schreibt. Die Hilfe „Und jetzt?“ sagt das Zulässige und rät nicht dazu (`anl_over_4` bis `anl_over_6`): das Verfahren kennt für diesen Stand keinen Schritt, nicht zu bedienen und abzuwarten ist zulässig, er hat nachgesehen. Kein „loslassen“,
+  kein „vertrauen“, kein Satz darüber, was es bringt.
+- **Nach dem Loslassen bleibt er skeptisch.** Alle Hebel unten, alle Anzeigen normal, die Last wurde nicht gehalten, und das ist kein zulässiger Zustand (`los_end_3`); er trägt ihn trotzdem ein, als Einzelfall (`los_end_5`), das Verfahren ist richtig, und wiederholt sich der Fall,
+  prüft er neu (`los_end_7`, `los_end_8`). Der Einzelfall steht allein auf seiner Seite (`anl_done_5`), die Erwartung, dass es anders ausgeht, bleibt eingetragen (`anl_done_7`), und „Alles vorbehaltlich einer Nachprüfung“ (`anl_over_3`) kommt nicht noch einmal. Keine Zeile
+  dankt, tröstet oder sieht etwas ein.
+- **Das Feld „Ohne Eintrag“** ist der Hauch, nie die Angst: unten rechts auf jedem Blatt, von ihm in jedem Fall ausgelassen (`los_end_4`). Wer die Facette Vertrauen trägt, sagt ihm, dass nichts einzutragen zulässig ist, und er bestätigt nur, dass das Feld vorgesehen ist und er es
+  noch nie benutzt hat (`anl_done_8`, `anl_done_9`): kein Fortschritt, keine Heilung, kein Dank.
+- **Die Kartoffel** trägt er in der Form seiner Spalten ein (`anl_potato_2` bis `anl_potato_7`): durchschnittlich in Größe, Gewicht und Farbe, Besonderheiten keine, und das findet er bemerkenswert. Er erklärt sie nicht, und der Text macht keinen Witz über ihn.
 - Er spricht **nie über das Kind** und **nie über die kleine Tür** (die Tür sieht man, sie wird nicht besprochen, Brief O6); wo die Halle von ihr erzählt, erzählen Dinge (`anl_door_1` bis `anl_door_3`).
 
 ## Verlauf
 
 Akt V: die Anlage (G3: zählt hinter dem Zaun, öffnet das Tor mit „Eintritt.“, stellt die Probe der drei Hebel vor, trägt ein, dass sie klappt) → die Last wird unmöglich (G4: stellt den Betrieb vor, ruft vier Wellen aus,
-trägt die Pause ein, rechnet vor, dass es nicht aufgeht, trägt „nicht erfüllt“ ein, bleibt dabei und steht unter Vorbehalt) → das erste Loslassen (G5) → ein Defekt, den niemand repariert und der nichts zerstört → skeptischer Abschied (G5) → am Herd im Haus (G9, nur wer ihn losließ). Das Warum: was er bewachen musste; es zeigt die kleine Tür,
+trägt die Pause ein, rechnet vor, dass es nicht aufgeht, trägt „nicht erfüllt“ ein, bleibt dabei und steht unter Vorbehalt) → das erste Loslassen (G5: die Hebel fallen von selbst, der Dampf kommt, er zieht nicht und trägt es ein) → ein Defekt, den niemand repariert und der nichts zerstört (G5: Lampe Eins) → skeptischer Abschied (G5: Einzelfall, Wiedervorlage, das Feld „Ohne Eintrag“ bleibt leer) → am Herd im Haus (G9, nur wer ihn losließ). Das Warum: was er bewachen musste; es zeigt die kleine Tür,
 nie eine Zeile.
 
 ## Goldzeilen
@@ -58,6 +69,13 @@ nie eine Zeile.
 - `lst_over_5` „Ich habe zweimal gerechnet. Zweimal dasselbe Ergebnis. Dafür sind Rechnungen da.“
 - `lst_over_9` „Ich bleibe dabei. Das Verfahren verlangt es trotzdem.“
 - `anl_over_3` „Alles vorbehaltlich einer Nachprüfung der Rechnung.“
+- `los_first_3` „Spalte »Gezogen von«: leer. Ich schreibe: niemand.“
+- `los_mid_4` „Ich ziehe nicht. Ich trage ein, dass ich nicht ziehe.“
+- `los_end_3` „Die Last wurde nicht gehalten. Das ist kein zulässiger Zustand.“
+- `los_end_5` „Ich trage ihn trotzdem ein. Als Einzelfall.“
+- `anl_done_5` „Sonst steht dort nichts. Das passt zu einem Einzelfall.“
+- `anl_done_7` „Die Erwartung bleibt trotzdem eingetragen.“
+- `anl_potato_6` „Besonderheiten: keine. Das ist bemerkenswert.“
 
 Das Warum zeigen die Dinge, nie eine Zeile: hinter dem Pult sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht, der Riegel wird von Stangen aus allen zwölf Hebeln gehalten, und keine ist locker
 (`anl_door_2`); auf einem Zifferblatt hat ein Zeiger Jahr um Jahr eine Rille in das Glas gerieben (`anl_dial_1`).
@@ -66,8 +84,8 @@ Das Warum zeigen die Dinge, nie eine Zeile: hinter dem Pult sitzt eine Tür, die
 
 - „Hebel Sieben nicht anfassen. Sieben hält Vier.“ (G4, nicht verwendet: in der Last halten die Hebel einander nicht, jeder verlangt nur Bedienung, und die Unmöglichkeit ist eine Rechnung, keine Abhängigkeit)
 - „Solange ich zähle, passiert nichts.“ (gespielt in G4: `anl_run_3`, als Antwort auf „Weiter.“, während die Last wächst; in G3 wäre der Satz schon eine Erklärung gewesen)
-- „Der Dampf kam von allein. Ich lasse ihn. Ich schaue nur hin.“ (G5)
-- „Ich bleibe dabei: Das geht schief. … Es geht schief. Gut. Und?“ (G5)
+- „Der Dampf kam von allein. Ich lasse ihn. Ich schaue nur hin.“ (gespielt in G5 als `los_mid_5`, ohne „Ich lasse ihn“: das wäre schon das Loslassen als Satz)
+- „Ich bleibe dabei: Das geht schief. … Es geht schief. Gut. Und?“ (G5, nicht verwendet: „Gut. Und?“ wäre Zustimmung und Einsicht; der Text hat ihn stattdessen den Einzelfall eintragen lassen, `los_end_5`)
 
 („Das war nicht eingeplant. Ich trage es ein.“ ist in G3 gespielt: `anl_right_2`, mit dem Vordersatz „Dass es klappt“.)
 
@@ -85,3 +103,6 @@ Das Warum zeigen die Dinge, nie eine Zeile: hinter dem Pult sitzt eine Tür, die
 10. „Gleich platzt der Kessel!“ — Gefahr und Ausruf: in der Last sagt er kein Wort über Gefahr, die Folgen zeigt das Bild und er trägt sie ein (G4).
 11. „Du musst nur loslassen.“ / „Weniger ist mehr.“ — Lehre statt Hilfe: die Hilfe nennt das Zulässige (vom Pult zu treten ist zulässig) und der Wächter rät nicht dazu (G4).
 12. „Du hast recht, es geht nicht auf.“ — Einsicht und Zustimmung: er rechnet es selbst vor und bleibt trotzdem dabei; sein Vorbehalt bleibt ein Vorbehalt (G4).
+13. „Es ist gut, dass es gefallen ist.“ / „Vielleicht war es nie nötig.“ — Zustimmung und Einsicht nach dem Loslassen: er trägt es ein und hält es für einen Einzelfall (G5).
+14. „Ich repariere die Lampe.“ — er behebt den Defekt nie; sonst wäre der Defekt eine Prüfung gewesen, die er besteht (G5: „Defekt. Offen.“, `los_defect_3`).
+15. „Die Kartoffel steht für alles, was ich nicht halten konnte.“ — Deutung statt Eintrag; die Kartoffel ist bemerkenswert durchschnittlich und sonst nichts (G5, `anl_potato_6`).

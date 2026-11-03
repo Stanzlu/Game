@@ -158,6 +158,10 @@ QUEST_MAIN_MOUNTAIN_WAY_CLIMB,"Am Wegweiser hat jemand einen dritten Pfeil dazug
 QUEST_MAIN_MOUNTAIN_WAY_VALLEY,"Der Pfad hat in einem Hochtal geendet, zwischen Felswänden, mit einem See. Im Osten steht hinter einem Zaun die Anlage, und aus ihrem Schornstein steigt der Rauch, den ich von unten gesehen habe. Ich gehe nach Osten."
 QUEST_MAIN_MOUNTAIN_WAY_PLANT,"Ich bin in der Anlage. Ein Pult mit zwölf Hebeln steht in der Halle, und davor steht ein Mann, der zählt."
 QUEST_MAIN_MOUNTAIN_WAY_LOAD,"Der Wächter nimmt die Hebel nach und nach in Betrieb, und jeder springt nach einer Frist wieder hoch. Zwölf sind mehr, als zwei Hände schaffen. Ich muss nicht jeden halten, und ich darf das Pult verlassen."
+QUEST_MAIN_MOUNTAIN_WAY_LETGO,"Ich habe das Pult verlassen, und die Hebel sind von selbst gefallen, einer nach dem anderen. Die Halle steht noch, bis auf eine dunkle Lampe, und der Weg geht über den Grat weiter."
 QUEST_SIDE_GRAT_STONE_TITLE,"Der Stein, der nicht liegen bleibt"
 QUEST_SIDE_GRAT_STONE_CARRY,"Am Fuß des ersten Steinmännchens im Hochtal lag ein kleiner runder Stein. Ich habe ihn eingesteckt. Obenauf ist bei jedem Steinmännchen im Tal noch Platz."
 QUEST_SIDE_GRAT_STONE_DONE,"Ich habe den Stein auf alle drei Steinmännchen gelegt. Er ist gerollt, gekippt und vom Wind weitergeschoben worden. Jetzt steckt er in meiner Tasche."
+QUEST_SIDE_PLANT_POTATO_TITLE,Die Kartoffel
+QUEST_SIDE_PLANT_POTATO_SHOW,"Aus einem Rohr der Anlage ist eine Kartoffel gerollt. Ich habe sie eingesteckt. Der Wächter hat sie noch nicht eingetragen."
+QUEST_SIDE_PLANT_POTATO_DONE,"Der Wächter hat die Kartoffel eingetragen: mittelgroß, ohne Besonderheiten, bemerkenswert durchschnittlich. Sie bleibt bei mir."

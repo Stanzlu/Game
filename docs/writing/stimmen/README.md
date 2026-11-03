@@ -18,7 +18,7 @@ Schreiben eines Segments (Plan 9.4) und für die Prüflinse „Stimme“. Die Zi
 | [Spielfigur](spielfigur.md) | 67 | die Antworten, nicht eine Person |
 | [Richter](richter.md) | 6 | Akt II (B4): „Stimme“ nach dem zweiten Sturz, nur über Dinge (dazu zwei Erzählzeilen) |
 | [Einsiedler](einsiedler.md) | 12 | Akt III (W3): die Hütte, Angebote statt Fragen; (W6): der Besuch im Haus |
-| [Wächter](waechter.md) | 58 | Akt V (G3): Zählen, Nummern, Eintragen; die Probe der drei Hebel, die Dinge der Halle als Erzählung; (G4): die Last, der Betrieb als Verfahren, die Rechnung, die nicht aufgeht, der Vorbehalt |
+| [Wächter](waechter.md) | 89 | Akt V (G3): Zählen, Nummern, Eintragen; die Probe der drei Hebel, die Dinge der Halle als Erzählung; (G4): die Last, der Betrieb als Verfahren, die Rechnung, die nicht aufgeht, der Vorbehalt; (G5): das Loslassen, der Defekt, den niemand behebt, der Einzelfall, die Kartoffel |
 
 ## Ohne Beleg (aus der Bible, Annahmen; „Probezeilen“ sind Entwürfe, nicht im Spiel)
 

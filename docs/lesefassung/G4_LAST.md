@@ -17,8 +17,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > so oft gespielt werden, wie die Spielerin will: die Wiederholung gehört zu seinem Verfahren. Er stellt die Halle in Fakten vor (zwölf Hebel, drei in Betrieb, neun stehen), stellt
 > eine Kontrollfrage und beantwortet sie selbst, und bietet die Probe an. Die Antworten sind kurz; das Schweigen "…" ist eine volle Antwort und die letzte. Wer die Probe nie
 > verlangt, kommt nie in Not (kein Flag, kein Druck, kein Zähler). Wer sie gemacht hat (plant.probe_done), liest "waechter_again"; seit G4 liest, wer den Betrieb aufgenommen hat (plant.load),
-> "waechter_run", und wer den Lauf bis zum Ende gespielt hat (plant.overload, die Szene setzt es), "waechter_over". Der Cue liest die Flags und setzt keines; der späteste Zustand steht oben.
+> "waechter_run", und wer den Lauf bis zum Ende gespielt hat (plant.overload, die Szene setzt es), "waechter_over"; seit G5 liest, wer vom Pult weggetreten ist und gewartet hat (plant.letgo, die Szene setzt
+> es am Ende des Loslassens), "waechter_done". Der Cue liest die Flags und setzt keines; der späteste Zustand steht oben.
 
+*wenn* `plant.letgo`
+  - *→ weiter bei* `waechter_done`
 *wenn* `plant.overload`
   - *→ weiter bei* `waechter_over`
 *wenn* `plant.load`
@@ -101,12 +104,22 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### G3-16 · `waechter_over`
 
-> Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht, und dieser Cue ist der Platz, an dem G5 weiterbaut. Er zählt die offenen Hebel, trägt es ein,
-> verlangt nichts und bietet nichts an (kein "Fang an." mehr, keine Antwort). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat.
+> Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht. Er zählt die offenen Hebel, trägt es ein, verlangt nichts und bietet nichts an (kein "Fang an."
+> mehr). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat. Seit G5 hängen daran drei Antworten (Bible §50 "Puzzlehilfen", Brief O4): die
+> abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, das Pult nicht zu bedienen und abzuwarten, er hat nachgesehen und rät
+> nicht dazu; kein Wort "loslassen", kein Wort darüber, was es bringt), das unbedingte "Gut." und das Schweigen "…" als letzte Antwort. Der Cue liest und setzt nichts.
 
 - *Der Lauf ruht. Der Wächter fährt die Hebel ab, die oben stehen, und zählt halblaut.* `[#draft]`  <sub>anl_over_1</sub>
 - **Wächter:** Offene Hebel gezählt, Zahl eingetragen. Nicht erfüllt, wie vermerkt. `[#draft]`  <sub>anl_over_2</sub>
 - **Wächter:** Alles vorbehaltlich einer Nachprüfung der Rechnung. `[#draft]`  <sub>anl_over_3</sub>
+- ▸ **Und jetzt?**
+  - **Wächter:** Für diesen Stand kennt das Verfahren keinen Schritt. `[#draft]`  <sub>anl_over_4</sub>
+  - **Wächter:** Zulässig ist, das Pult nicht zu bedienen und abzuwarten. Ich habe nachgesehen. `[#draft]`  <sub>anl_over_5</sub>
+  - **Wächter:** Ich rate nicht dazu. `[#draft]`  <sub>anl_over_6</sub>
+- ▸ **Gut.**
+  - **Wächter:** Gut ist als Eintrag nicht vorgesehen. Ich schreibe: zur Kenntnis genommen. `[#draft]`  <sub>anl_over_7</sub>
+- ▸ **…**
+  - *Du schweigst. Der Wächter zählt die offenen Hebel noch einmal und kommt auf dieselbe Zahl.* `[#draft]`  <sub>anl_over_8</sub>
 
 ## last
 

@@ -1,8 +1,8 @@
-# Das Loslassen, Akt V, Segment G5 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O10, O13, O19, O20; Stilblatt waechter.md, Gegenbeispiele 1 bis 12). Nach dem Ende der Last (plant.overload, G4) steht die Spielerin
+# Das Loslassen, Akt V, Segment G5 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O10, O13, O19, O20; Stilblatt waechter.md, Gegenbeispiele 1 bis 15). Nach dem Ende der Last (plant.overload, G4) steht die Spielerin
 # am Pult vor zwölf Hebeln, die oben stehen. Tritt sie vom Pult weg und wartet (Spielzeit, nur solange sie weg ist und nicht gesprochen wird), spielt die Szene die Cues dieser Datei: der Wächter
 # trägt das leere Pult ein, ein Hebel fällt von selbst (Drei, dann Eins, dann Zwei, die Reihenfolge der Probe aus G3, danach aufwärts, einer nach dem anderen), mitten darin geht etwas schief, eine
-# Lampe fällt aus, und am Ende steht die Halle. "In dieser Datei steht nur, was die Szene spielt"; die Cues, in die der Wächter beim Ansprechen springt (waechter_done, potato_entry und die Hilfe
-# "Und jetzt?" in waechter_over), stehen in anlage.dialogue, weil ihre Aufrufer dort liegen und Sprünge nur innerhalb einer Datei gehen.
+# Lampe fällt aus, und am Ende steht die Halle. Hier steht nur, was die Szene spielt; die Cues, in die der Wächter beim Ansprechen springt (waechter_done, potato_entry und die Hilfe "Und jetzt?"
+# in waechter_over), stehen in anlage.dialogue, weil ihre Aufrufer dort liegen und Sprünge nur innerhalb einer Datei gehen.
 # Der Wächter wird nicht geheilt. Er greift nicht ein, er sagt, was das Verfahren verlangt, und trägt ein, dass er es nicht tut; er behebt den Defekt nie (die Lampe bleibt dunkel, "Defekt. Offen.");
 # er trägt am Ende alles ein und hält das Ergebnis für einen Einzelfall und das Verfahren für richtig. Er dankt nicht, er tröstet nicht, es gibt keine Einsicht und keine Lehre, und der Text kennt weder
 # "Vertrauen" noch "loslassen". Er ruft die Spielerin nie beim Namen und spricht nie über das Kind, die kleine Tür oder sein Warum. Der Humor ist Pedanterie (Spalten, Einträge, Zahlen), nie seine Angst.
@@ -56,11 +56,11 @@ Unter dem Träger wird es dämmrig, mehr nicht. Niemand geht zur Lampe, und die 
 # --- Das Ende ----------------------------------------------------------------------------------------------------------------
 # Der letzte Hebel fällt, die Zeiger gehen zurück, der Dampf wird dünn. Er trägt alles ein und bleibt skeptisch: alle Hebel unten, alle Anzeigen normal, die Last wurde nicht gehalten, das ist kein
 # zulässiger Zustand (er trägt ihn trotzdem ein, die Form von "Das Verfahren verlangt es trotzdem", lst_over_9). Das Ergebnis ist ihm ein Einzelfall, das Verfahren bleibt richtig, und "Alles
-# vorbehaltlich einer Nachprüfung" (anl_over_3) kommt nicht noch einmal. Der Hauch: sein Blatt hat ein Feld "Ohne Eintrag", das er in jedem Fall auslässt; wie jedes Mal, nicht anders als sonst. Kein Dank,
+# vorbehaltlich einer Nachprüfung" (anl_over_3) kommt nicht noch einmal. Der Hauch: sein Blatt hat unten rechts ein Feld "Ohne Eintrag", das er auslässt wie jedes Mal, nicht anders als sonst. Kein Dank,
 # kein Trost, keine Einsicht, kein Satz darüber, was die Zeiger oder die Lampe bedeuten. Die letzte Zeile ist ein Vorbehalt.
 
 ~ letgo_end
-Der letzte Hebel fällt. Die Zeiger wandern auf Normal zurück, und der Dampf wird dünn, bis nur noch das Rohr links zischt wie zuvor. [ID:los_end_1] [#draft]
+Der letzte Hebel fällt. Die Zeiger gehen zurück, der Dampf wird dünn, und nur das Rohr links zischt wie zuvor. [ID:los_end_1] [#draft]
 Wächter: Alle Hebel unten. Alle Anzeigen im Normalbereich. [ID:los_end_2] [#draft]
 Wächter: Die Last wurde nicht gehalten. Das ist kein zulässiger Zustand. [ID:los_end_3] [#draft]
 Er füllt die Spalten aus, eine nach der anderen. Das Feld unten rechts, »Ohne Eintrag«, lässt er aus, wie jedes Mal. [ID:los_end_4] [#draft]
