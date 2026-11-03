@@ -335,7 +335,7 @@ func test_tess_never_walks_through_the_player_who_stands_on_the_marker_of_the_do
 	assert_eq(crossed[0], 0, "she is never on the player")
 
 
-func test_the_end_is_on_the_disk_and_until_act_five_the_build_counts_it_as_finished() -> void:
+func test_the_end_is_on_the_disk_and_the_way_into_the_mountains_goes_on() -> void:
 	_end_of_act_three()
 	_walk_to("home")
 	var scene := await _house()
@@ -347,8 +347,8 @@ func test_the_end_is_on_the_disk_and_until_act_five_the_build_counts_it_as_finis
 	assert_true(Chapter.in_flags(disk.state.flags, "act4"), "the mark of the chapter")
 	for flag: String in ["beat.act4_home", "house.shelves", "house.bread", "house.guest_tess"]:
 		assert_true(disk.state.flags.has(flag), "saved: " + flag)
-	# Chapter.LAST is "act4": until Act V raises it, the newest end is the end of the build
-	assert_true(SaveSystem.summary(SaveSystem.AUTOSAVE)["finished"], "the build ends here")
+	# Chapter.LAST is "act5" since G1 (ADR-073): the end of Act IV is not the end, the way goes on
+	assert_false(SaveSystem.summary(SaveSystem.AUTOSAVE)["finished"], "the way into the mountains")
 	assert_push_error_count(0)
 
 

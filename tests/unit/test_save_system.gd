@@ -196,10 +196,10 @@ func test_the_frozen_ends_of_the_acts_say_whether_the_game_is_over() -> void:
 	_write_raw("slot_2", FileAccess.get_file_as_string(fixtures + "v2_akt3_end.json"))
 	assert_false(saves.summary("slot_2")["finished"], "the way home is not the end any more")
 	assert_false(saves.slice_finished(), "and the newer save of the two says nothing")
-	# the end of Act IV is the last chapter of the build until Act V raises it (S9)
+	# the end of Act IV is not the end any more: the way north into the mountains goes on (G1)
 	_write_raw("slot_3", FileAccess.get_file_as_string(fixtures + "v2_akt4_end.json"))
-	assert_true(saves.summary("slot_3")["finished"], "the shelves hung, the act over")
-	assert_true(saves.slice_finished(), "and it is the newest")
+	assert_false(saves.summary("slot_3")["finished"], "the shelves hung, the act over, the way goes on")
+	assert_false(saves.slice_finished(), "and the newest save says nothing")
 
 
 func test_the_closing_line_follows_the_newest_save_only() -> void:
