@@ -66,11 +66,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S8-5 · `bread`
 
 > --- Das Brot --------------------------------------------------------------------------------------------------------------------
-> Das Brot des Gefälligen aus S5 (item_loaf, Brief O18): "Er kocht zu viel." Der Humor sitzt im Brot und in der Tasche, in der sonst der Zollstock steckt, nie im Gefälligen, über den sie ohne ein
+> Das Brot des Gefälligen aus S5 (item_loaf, Brief O18): "Er kocht zu viel." Der Humor sitzt im Brot und in der Schürzentasche, nie im Gefälligen, über den sie ohne ein
 > Urteil spricht ("der mit den Zetteln" ist ein Bild, kein Name; wer ihn nie getroffen hat, kennt die Zettel vom Brett auf dem Platz). Das Flag steht vor der ersten Zeile: das Brot liegt auf dem Tisch,
 > wenn sie es hinlegt. Es ist das Brot auf dem Leinentuch, nichts Neues im Inventar.
 
-- *Aus der Schürzentasche, in der sonst der Zollstock steckt, kommt ein Brot in einem Leinentuch. Tess legt es auf den Tisch.* `[#draft]`  <sub>hk4_bread_1</sub>
+- *Aus der Schürzentasche kommt ein Brot in einem Leinentuch. Tess legt es auf den Tisch.* `[#draft]`  <sub>hk4_bread_1</sub>
 - **Tess:** Der mit den Zetteln hat mir das mitgegeben. Er kocht zu viel. `[#draft]`  <sub>hk4_bread_2</sub>
 
 ### S8-6 · `home_close`

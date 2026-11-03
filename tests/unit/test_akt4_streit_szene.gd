@@ -137,6 +137,26 @@ func test_she_is_gone_once_the_quarrel_has_sent_her_ahead_whichever_way_it_ended
 		scene.free()
 
 
+func test_after_the_night_she_is_not_back_on_the_square_whichever_way_it_ended() -> void:
+	for flag: String in PARTED:
+		for stage: String in ["night", "home", "done"]:
+			WorldState.new_game()
+			_night()
+			WorldState.set_flag(flag)
+			for next: String in ["home", "done"]:
+				if stage != "night" and WorldState.quest_stage(QUEST) != stage:
+					assert_true(WorldState.advance_quest(QUEST, next))
+			var scene := await _scene()
+			assert_eq(StadtScene.in_evening(), stage == "night", "the day is back from home on")
+			assert_eq(_miras(scene).size(), 0, "ahead of her for good: %s, %s" % [flag, stage])
+			scene.free()
+	# and the day before the quarrel has her at the fountain, as it had
+	WorldState.new_game()
+	WorldState.start_quest(QUEST)
+	var day := await _scene()
+	assert_eq(_miras(day).size(), 1, "at the fountain until she has gone")
+
+
 # --- The Richter -------------------------------------------------------------------------------
 
 

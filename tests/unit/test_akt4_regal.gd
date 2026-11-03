@@ -144,6 +144,43 @@ func test_with_something_carried_the_menu_opens_and_a_pick_puts_it_on_the_slot()
 	assert_false(WorldState.has_item(FEATHER))
 
 
+func test_the_menu_can_be_left_with_cancel_and_nothing_changes_and_the_game_runs_on() -> void:
+	_carry(FEATHER)
+	var scene := await _house()
+	var slot: CuriositySlot = _slots(scene)["shelf_4"]
+	await wait_until(func() -> bool: return scene.is_quiet(), 10.0)
+	(slot.get_node("Interactable") as Interactable).interacted.emit(scene.player)
+	await wait_until(func() -> bool: return scene.get_node_or_null("ShelfMenu") != null, 10.0)
+	assert_true(get_tree().paused, "the menu holds the game")
+	var cancel := InputEventAction.new()
+	cancel.action = &"cancel"
+	cancel.pressed = true
+	Input.parse_input_event(cancel)
+	var gone: bool = await wait_until(
+		func() -> bool:
+			return get_tree().paused == false and scene.get_node_or_null("ShelfMenu") == null,
+		10.0
+	)
+	assert_true(gone, "Esc closes it and lets the game go")
+	assert_eq(WorldState.curiosity_in("shelf_4"), "", "nothing was put there")
+	assert_true(WorldState.has_item(FEATHER), "and nothing was lost")
+
+
+func test_taking_a_thing_back_is_no_find_and_shows_no_pickup_line() -> void:
+	_carry(FEATHER)
+	WorldState.place_curiosity("wall_1", FEATHER)
+	var lines: Array[String] = []
+	var on_item := func(item: String, _amount: int) -> void: lines.append(item)
+	WorldState.item_received.connect(on_item)
+	WorldState.take_curiosity("wall_1")
+	WorldState.add_item(FEATHER, 1, false)
+	WorldState.place_curiosity("wall_1", FEATHER)
+	_carry(STRING)
+	WorldState.place_curiosity("wall_1", STRING)
+	WorldState.item_received.disconnect(on_item)
+	assert_eq(lines, [STRING], "only the find of the string is announced, no put-down is")
+
+
 func test_a_slot_that_holds_something_shows_it_and_the_menu_offers_to_take_it_back() -> void:
 	_carry(FEATHER)
 	WorldState.place_curiosity("wall_2", FEATHER)

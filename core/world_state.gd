@@ -332,7 +332,7 @@ func place_curiosity(slot_id: String, item_id: String) -> bool:
 		return false
 	var previous := curiosity_in(slot_id)
 	if not previous.is_empty():
-		add_item(previous)
+		add_item(previous, 1, false)
 	state.house.curiosity_slots[slot_id] = item_id
 	Log.info(Log.Category.WORLD_STATE, "curiosity placed", {"slot": slot_id, "item": item_id})
 	house_changed.emit()
@@ -345,7 +345,8 @@ func take_curiosity(slot_id: String) -> bool:
 	if item.is_empty():
 		return false
 	state.house.curiosity_slots.erase(slot_id)
-	add_item(item)
+	# a thing that was only put down is no find: no pickup line
+	add_item(item, 1, false)
 	Log.info(Log.Category.WORLD_STATE, "curiosity taken", {"slot": slot_id, "item": item})
 	house_changed.emit()
 	return true

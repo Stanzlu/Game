@@ -6,7 +6,7 @@
 # Tess spricht kurz und konkret und ist warm im Handeln: sie lobt nicht, sagt nichts über Gefühle, die Nacht, die Stadt oder Mira und kennt keine Lebensregel, nur Handgriffe, Maße und Holz. Der Antreiber
 # sagt kein Wort (ein Bild, kein Satz über ihn). Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen ausgeschrieben.
 # Der Text gilt in jedem Zustand: von der Katze, vom Stuhl des Einsiedlers und vom Blatt an der Wand ist keine Rede, vom Tee nur, dass er kalt ist. Wer Tess nie getroffen hat (kein city.tess_met), liest
-# ihren Namen auf dem Zollstock am Gürtel, wie in der Werkstatt (wer_tess_2); die Schürzentasche ist dann für das Brot frei. Gesetzt wird nur, was am Cue hängt: house.shelves (build), house.bread
+# ihren Namen auf dem Zollstock am Gürtel, wie in der Werkstatt (wer_tess_2); die Schürzentasche ist für das Brot frei. Gesetzt wird nur, was am Cue hängt: house.shelves (build), house.bread
 # (bread), die Erinnerung und die Beziehung (home_close). house.guest_tess, die Stufen, die Marken und der Beat gehören der Szene.
 
 # --- Ankommen --------------------------------------------------------------------------------------------------------------------
@@ -54,13 +54,13 @@ Tess: Schief. Aber dicht. [ID:hk4_bench_2] [#draft]
 => END
 
 # --- Das Brot --------------------------------------------------------------------------------------------------------------------
-# Das Brot des Gefälligen aus S5 (item_loaf, Brief O18): "Er kocht zu viel." Der Humor sitzt im Brot und in der Tasche, in der sonst der Zollstock steckt, nie im Gefälligen, über den sie ohne ein
+# Das Brot des Gefälligen aus S5 (item_loaf, Brief O18): "Er kocht zu viel." Der Humor sitzt im Brot und in der Schürzentasche, nie im Gefälligen, über den sie ohne ein
 # Urteil spricht ("der mit den Zetteln" ist ein Bild, kein Name; wer ihn nie getroffen hat, kennt die Zettel vom Brett auf dem Platz). Das Flag steht vor der ersten Zeile: das Brot liegt auf dem Tisch,
 # wenn sie es hinlegt. Es ist das Brot auf dem Leinentuch, nichts Neues im Inventar.
 
 ~ bread
 do WorldState.set_flag("house.bread")
-Aus der Schürzentasche, in der sonst der Zollstock steckt, kommt ein Brot in einem Leinentuch. Tess legt es auf den Tisch. [ID:hk4_bread_1] [#draft]
+Aus der Schürzentasche kommt ein Brot in einem Leinentuch. Tess legt es auf den Tisch. [ID:hk4_bread_1] [#draft]
 Tess: Der mit den Zetteln hat mir das mitgegeben. Er kocht zu viel. [ID:hk4_bread_2] [#draft]
 => END
 

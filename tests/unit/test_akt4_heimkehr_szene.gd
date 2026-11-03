@@ -315,6 +315,26 @@ func test_tess_comes_hangs_the_shelves_brings_the_loaf_sits_and_goes_the_chair_s
 	assert_push_error_count(0)
 
 
+func test_tess_never_walks_through_the_player_who_stands_on_the_marker_of_the_door() -> void:
+	_end_of_act_three()
+	_walk_to("home")
+	SceneTravel.pending_spawn = "door"
+	var scene := await _house()
+	var marker := scene.map.world_to_cell(scene.player.global_position)
+	assert_eq(marker, Vector2i(19, 14), "the player comes in on the marker of the door")
+	assert_false(marker in CityHomecoming.WAY_IN, "and her way in runs round that cell")
+	var crossed := [0]
+	var watch := func() -> bool:
+		_move_on(scene)
+		for guest in _guests(scene):
+			if (guest as Node2D).global_position.distance_to(scene.player.global_position) < 6.0:
+				crossed[0] += 1
+		return Chapter.reached("act4")
+	var over: bool = await wait_until(watch, 120.0)
+	assert_true(over)
+	assert_eq(crossed[0], 0, "she is never on the player")
+
+
 func test_the_end_is_on_the_disk_and_until_act_five_the_build_counts_it_as_finished() -> void:
 	_end_of_act_three()
 	_walk_to("home")

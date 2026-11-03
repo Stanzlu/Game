@@ -20,8 +20,10 @@ const BEAT := "act4_home"
 const QUEST := "main_city_way"
 const TESS_SHEET := preload("res://entities/character/sheet_tess_look.tres")
 const DOOR_CELL := Vector2i(19, 15)
-## Where she stands to talk to the player (before the table), at the bench and on her chair.
-const WAY_IN: Array[Vector2i] = [Vector2i(19, 14), Vector2i(19, 13)]
+## Where she stands to talk to the player (before the table), at the bench and on her chair. The way
+## in runs round the cell of the door's marker, where the player stands when she comes in (as Mira's
+## and the hermit's in the house): she never walks through the player.
+const WAY_IN: Array[Vector2i] = [Vector2i(18, 14), Vector2i(18, 13), Vector2i(19, 13)]
 const BENCH_STAND := Vector2i(23, 13)
 const CHAIR_CELL := Vector2i(18, 12)
 const SPEED_IN := 40.0
@@ -153,7 +155,11 @@ func _goes() -> void:
 	_busy = true
 	_tess.stand_up()
 	await _cut.wait(0.5)
-	await _tess.walk_to(_way([WAY_IN[WAY_IN.size() - 1], WAY_IN[0], DOOR_CELL]), SPEED_OUT)
+	var back: Array[Vector2i] = [WAY_IN[WAY_IN.size() - 1]]
+	for i in range(WAY_IN.size() - 2, -1, -1):
+		back.append(WAY_IN[i])
+	back.append(DOOR_CELL)
+	await _tess.walk_to(_way(back), SPEED_OUT)
 	AudioDirector.sfx("door_close", -3.0)
 	await _tess.vanish()
 	_tess.queue_free()
