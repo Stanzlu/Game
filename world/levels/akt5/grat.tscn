@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/levels/akt5/grat_scene.gd" id="1_scene"]
+[ext_resource type="Resource" path="res://entities/character/sheet_player_look.tres" id="2_sheet"]
+
+[node name="Grat" type="Node"]
+script = ExtResource("1_scene")
+map_path = "res://content/maps/grat.txt"
+player_sheet = ExtResource("2_sheet")
+wind_leaves = true
+reflect_player = true
+day_preset = "morgen"
+world_tint = Color(0.95, 0.97, 1, 1)
+water_ripples = 0.5
+cloud_shadows = 0.03
+water_glints = 0.8
+fog_banks = 3
+fog_color = Color(0.92, 0.95, 0.98, 0.12)
+swimmers = 0
+dragonflies = 0
