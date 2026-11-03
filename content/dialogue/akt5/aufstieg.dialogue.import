@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cmqlffaypfbs7"
+path="res://.godot/imported/aufstieg.dialogue-45de734905a78f5211f0a93959417724.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/aufstieg.dialogue"
+dest_files=["res://.godot/imported/aufstieg.dialogue-45de734905a78f5211f0a93959417724.tres"]
+
+[params]
+
+defaults=true

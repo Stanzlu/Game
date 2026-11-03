@@ -159,8 +159,8 @@ Das Log gibt den Weg: **264 Sekunden** Spielzeit (der Stand trägt 503 davon sch
   und ohne Orin, die Heimkehr ohne vorherige Begegnung mit Tess.
 - **Die Textdichte liegt bei 21,5 Zeilen je Minute** (Akt I: 24,0; Akt II: 25,9; Akt III: 24,4; Plan 9.6: 6): die Stadt hat mehr Weg je Zeile als die Akte davor (5,0 Minuten für 479 Zeilen, in Akt III 2,5 für 272). Auch Akt IV trägt seine Länge nicht aus Text: wer die Bank, die Regale und den Abend nicht abkürzt, braucht länger als der Autopilot.
 - **Der Lauf ist der eingefrorene Stand `v2_akt4_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act4`, Quest `done`, die fünf Facetten, 245 Flags, 21 Gegenstände, vier Beziehungen: Tess `close`,
-  Mira, Orin und Lio `familiar`). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn als Ende zählt (das
-  letzte Kapitel des Baus ist `act4`, bis Akt V es rückt), und Akt V beginnt in ihm.
+  Mira, Orin und Lio `familiar`). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn seit Akt V, G1, nicht mehr
+  als Ende zählt (das letzte Kapitel des Baus ist `act5`), und Akt V beginnt in ihm.
 
 ## Benutzen
 
