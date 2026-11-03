@@ -52,7 +52,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### G2-4 · `cairn_1`
 
 - *Das erste Steinmännchen im Hochtal ist unten breit und oben schmal, Stein auf Stein, ohne Mörtel und ohne Zweifel.* `[#draft]`  <sub>hoch_cairn_1_1</sub>
-- *Auf dem obersten Stein ist eine kleine Mulde, gerade groß genug für etwas Rundes.* `[#draft]`  <sub>hoch_cairn_1_2</sub>
+- *Der oberste Stein ist kaum größer als ein Daumen und sitzt, als wäre das nie anders gewesen.* `[#draft]`  <sub>hoch_cairn_1_2</sub>
 *wenn* `grat.stone_taken`
   - *→ weiter bei* `cairn_1_offer`
 
@@ -70,8 +70,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### G2-7 · `cairn_2`
 
-- *Das zweite Steinmännchen ist schmal und steht ein wenig schräg, wie jemand, der aufmerksam zuhört.* `[#draft]`  <sub>hoch_cairn_2_1</sub>
-- *Obenauf fehlt eine Spitze. Dort wäre Platz.* `[#draft]`  <sub>hoch_cairn_2_2</sub>
+- *Das zweite Steinmännchen besteht aus drei Steinen, genau übereinander, als hätte jemand mit dem Lot gebaut.* `[#draft]`  <sub>hoch_cairn_2_1</sub>
+- *Der oberste hat eine glatte, flache Kuppe. Für Besuch ist sie nicht eingerichtet, aber auch nicht dagegen.* `[#draft]`  <sub>hoch_cairn_2_2</sub>
 *wenn* `grat.stone_taken`
   - *→ weiter bei* `cairn_2_offer`
 
@@ -89,8 +89,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### G2-10 · `cairn_3`
 
-- *Das dritte Steinmännchen ist niedrig und breit. Man sieht ihm an, dass der Wind hier öfter vorbeikommt.* `[#draft]`  <sub>hoch_cairn_3_1</sub>
-- *Der oberste Stein ist flach und breit, wie für Besuch eingerichtet.* `[#draft]`  <sub>hoch_cairn_3_2</sub>
+- *Das dritte Steinmännchen ist niedrig und besteht nur aus zwei Steinen, der obere kleiner als der untere.* `[#draft]`  <sub>hoch_cairn_3_1</sub>
+- *Der obere ist gewölbt wie ein Rücken. Man sieht ihm an, dass der Wind hier öfter vorbeikommt.* `[#draft]`  <sub>hoch_cairn_3_2</sub>
 *wenn* `grat.stone_taken`
   - *→ weiter bei* `cairn_3_offer`
 
@@ -121,14 +121,14 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### G2-14 · `marmot_den`
 
 > --- Kuriosität: der Hort des Murmeltiers ------------------------------------------------------------------------------
-> Der Bau am Hang und davor ein Häufchen Dinge, die ein Murmeltier für wichtig hält (Decor, der Fingerhut liegt obenauf und fehlt
+> Der Bau am Hang und davor ein Häufchen Dinge, die ein Murmeltier für wichtig hält (Decor, der Fingerhut liegt in einer Mulde in der Mitte und fehlt
 > mit "grat.thimble_taken"). Das Murmeltier ist nie zu sehen und tritt nie auf; es ist eine Spur, und die Ordnung des Häufchens ist
 > der Gag. Nichts wird erklärt, nichts gesperrt.
 
 - *Am Hang führt ein rundes Loch unter einen Felsen. Zu sehen ist kein Murmeltier, aber hier wohnt eins.* `[#draft]`  <sub>hoch_marmot_1</sub>
-- *Davor liegt ein Häufchen, nach Wichtigkeit geordnet. Ein Löffelstiel, ein Knopf ohne Hose, ein Hut aus Pappe, und ganz oben ein Fingerhut.* `[#draft]`  <sub>hoch_marmot_2</sub>
+- *Davor liegt ein Häufchen, nach Wichtigkeit geordnet. Ein Löffel, ein Knopf ohne Hose, ein Hut aus Pappe, und mittendrin, in einer Mulde, ein Fingerhut.* `[#draft]`  <sub>hoch_marmot_2</sub>
 - ▸ **Den Fingerhut nehmen.**
-  - *Du nimmst den Fingerhut. Im Loch rührt sich nichts, aber der Hut aus Pappe sitzt jetzt ganz oben, als hätte er die Stelle immer gewollt.* `[#draft]`  <sub>hoch_marmot_3</sub>
+  - *Du nimmst den Fingerhut. Im Loch rührt sich nichts, aber in der Mitte des Häufchens fehlt jetzt die Hauptsache, und das sieht man.* `[#draft]`  <sub>hoch_marmot_3</sub>
 - ▸ **Liegen lassen.**
   - *Du lässt alles, wie es liegt. Das Häufchen ist fertig und wüsste nicht, was man daran verbessern sollte.* `[#draft]`  <sub>hoch_marmot_4</sub>
 

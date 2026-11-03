@@ -11,8 +11,9 @@ flat stone at the signpost of the road, the three traces of Mira (a tidy net kno
 flat stone), the thin column of smoke of the plant, the rock one stands on to see it and the fall of rock that closes the
 way. No prop has a light. What the map places under `if`/`unless` carries no shadow in the catalog (shadow cells feed the
 baked stamp of the map), and so do the things placed on cells of an older stamp (the chalk arrow and the cairns of the
-road, which are `gb_arrow_chalk` and `gb_cairn_road`) and the things that G2 and G6 take away (the fall of rock, which is
-the heap of scree at the foot of the Grat's ramp in `grat`, and the gate).
+road, which are `gb_arrow_chalk` and `gb_cairn_road`) and the things that later segments take away (the fall of rock at the end of the pass, which G2
+replaced by a door, the heap of scree at the foot of the Grat's ramp in `grat`, which G6 opens, and the gate of the
+Anlage, which G3 replaces by a door).
 
 Hochtal (G2): the Anlage, a hall seen from the front (a long wall of cut stone, a slate roof, a tall chimney, a double door with
 iron straps, a dial either side of it with no numerals, pipes down both ends), a palisade of iron bars one cell wide and the

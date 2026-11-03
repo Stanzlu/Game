@@ -54,7 +54,7 @@ Am Fuß des ersten Steinmännchens liegt ein kleiner runder Stein, so groß wie 
 
 ~ cairn_1
 Das erste Steinmännchen im Hochtal ist unten breit und oben schmal, Stein auf Stein, ohne Mörtel und ohne Zweifel. [ID:hoch_cairn_1_1] [#draft]
-Ganz oben ist eine kleine Mulde, gerade groß genug für etwas Rundes. [ID:hoch_cairn_1_2] [#draft]
+Der oberste Stein ist kaum größer als ein Daumen und sitzt, als wäre das nie anders gewesen. [ID:hoch_cairn_1_2] [#draft]
 if WorldState.has_flag("grat.stone_taken")
 	=> cairn_1_offer
 => END
@@ -72,8 +72,8 @@ Du hebst ihn auf. Er ist von der Sonne ein wenig warm, sonst unverändert. [ID:h
 => END
 
 ~ cairn_2
-Das zweite Steinmännchen ist schmal und steht ein wenig schräg, wie jemand, der aufmerksam zuhört. [ID:hoch_cairn_2_1] [#draft]
-Obenauf fehlt eine Spitze. Dort wäre Platz. [ID:hoch_cairn_2_2] [#draft]
+Das zweite Steinmännchen besteht aus drei Steinen, genau übereinander, als hätte jemand mit dem Lot gebaut. [ID:hoch_cairn_2_1] [#draft]
+Der oberste hat eine glatte, flache Kuppe. Für Besuch ist sie nicht eingerichtet, aber auch nicht dagegen. [ID:hoch_cairn_2_2] [#draft]
 if WorldState.has_flag("grat.stone_taken")
 	=> cairn_2_offer
 => END
@@ -91,8 +91,8 @@ Du hebst ihn auf. Das Steinmännchen steht da wie vorher und tut, als sei nichts
 => END
 
 ~ cairn_3
-Das dritte Steinmännchen ist niedrig und breit. Man sieht ihm an, dass der Wind hier öfter vorbeikommt. [ID:hoch_cairn_3_1] [#draft]
-Der oberste Stein ist flach und breit, wie für Besuch eingerichtet. [ID:hoch_cairn_3_2] [#draft]
+Das dritte Steinmännchen ist niedrig und besteht nur aus zwei Steinen, der obere kleiner als der untere. [ID:hoch_cairn_3_1] [#draft]
+Der obere ist gewölbt wie ein Rücken. Man sieht ihm an, dass der Wind hier öfter vorbeikommt. [ID:hoch_cairn_3_2] [#draft]
 if WorldState.has_flag("grat.stone_taken")
 	=> cairn_3_offer
 => END
@@ -124,15 +124,15 @@ Im Geröll steckt ein Bergkristall, fingerlang, an einem Ende abgebrochen. Er is
 => END
 
 # --- Kuriosität: der Hort des Murmeltiers ------------------------------------------------------------------------------
-# Der Bau am Hang und davor ein Häufchen Dinge, die ein Murmeltier für wichtig hält (Decor, der Fingerhut liegt obenauf und fehlt
+# Der Bau am Hang und davor ein Häufchen Dinge, die ein Murmeltier für wichtig hält (Decor, der Fingerhut liegt in einer Mulde in der Mitte und fehlt
 # mit "grat.thimble_taken"). Das Murmeltier ist nie zu sehen und tritt nie auf; es ist eine Spur, und die Ordnung des Häufchens ist
 # der Gag. Nichts wird erklärt, nichts gesperrt.
 
 ~ marmot_den
 Am Hang führt ein rundes Loch unter einen Felsen. Zu sehen ist kein Murmeltier, aber hier wohnt eins. [ID:hoch_marmot_1] [#draft]
-Davor liegt ein Häufchen, nach Wichtigkeit geordnet. Ein Löffelstiel, ein Knopf ohne Hose, ein Hut aus Pappe, und ganz oben ein Fingerhut. [ID:hoch_marmot_2] [#draft]
+Davor liegt ein Häufchen, nach Wichtigkeit geordnet. Ein Löffel, ein Knopf ohne Hose, ein Hut aus Pappe, und mittendrin, in einer Mulde, ein Fingerhut. [ID:hoch_marmot_2] [#draft]
 - Den Fingerhut nehmen. [ID:hoch_marmot_r1] [#draft]
-	Du nimmst den Fingerhut. Im Loch rührt sich nichts, aber der Hut aus Pappe sitzt jetzt ganz oben, als hätte er die Stelle immer gewollt. [ID:hoch_marmot_3] [#draft]
+	Du nimmst den Fingerhut. Im Loch rührt sich nichts, aber in der Mitte des Häufchens fehlt jetzt die Hauptsache, und das sieht man. [ID:hoch_marmot_3] [#draft]
 	do WorldState.add_item("curiosity_thimble")
 	do WorldState.set_flag("grat.thimble_taken")
 - Liegen lassen. [ID:hoch_marmot_r2] [#draft]
