@@ -147,7 +147,7 @@ else
 => END
 
 # --- Danach: die Ziege, Orin, der Gefällige, Mira ---------------------------------------------------------------------------------------
-# Kurze Gespräche und Bilder, jedes wiederholbar ohne Wirkung. Die Ziege sagt nichts Verständliches (O13). Orin steht am Pfosten, wenn die Spielerin ihn gebeten hat (city.stage_orin), und erzählt
+# Kurze Gespräche und Bilder, jedes wiederholbar ohne Wirkung (außer Miras letzter Zeile: sie geht ans Tor, der Streit folgt in streit.dialogue, S7). Die Ziege sagt nichts Verständliches (O13). Orin steht am Pfosten, wenn die Spielerin ihn gebeten hat (city.stage_orin), und erzählt
 # etwas Konkretes vom Halten, ohne Gefühlswort und ohne Lehre; sonst steht er in der Menge und sagt etwas Konkretes über den Abend, die Ente fehlt nicht, sie ist nur nicht eingeladen (nach dem Brief, city.letter_told, ohne Witz: der Geruch der Laternen). Der Gefällige
 # entschuldigt sich nicht, ein Satz. Mira steht im Dunkel hinter dem Brunnen, trocken, sie sieht zum Tor; keine Erinnerung, kein Flag, kein Wort über die Liste (46 von 47 gehört dem Streit in S7).
 
@@ -174,8 +174,12 @@ Gefälliger: Ich sitze. Das ist alles, was ich gerade tue. [ID:kon_gef_2] [#draf
 => END
 
 ~ con_mira
-Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor. [ID:kon_mira_1] [#draft]
+Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht dich an und gleich darauf an dir vorbei, zum Tor. [ID:kon_mira_1] [#draft]
 Mira: Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. [ID:kon_mira_2] [#draft]
+Mira: Ich stell mich ans Tor. Ich geh noch heute Nacht weiter. [ID:kon_mira_3] [#draft]
+do WorldState.set_flag("city.mira_gate")
+if WorldState.quest_stage("main_city_way") == "evening"
+	do WorldState.advance_quest("main_city_way", "night")
 => END
 
 # --- Das Fragment: das alte Brett ------------------------------------------------------------------------------------------------------------

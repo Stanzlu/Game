@@ -55,7 +55,8 @@ func test_only_the_voice_speaks_and_it_is_called_a_voice_until_act_four() -> voi
 	assert_eq(count, 8)
 	var voices: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(VOICES))
 	assert_eq(voices.get("Stimme"), "neutral", "a voice with a voice kind")
-	assert_false(voices.has("Richter"), "he gets his name in Act IV")
+	# Act II says "Stimme"; Act IV (S7) gives him his name, and the voice kind stays the same
+	assert_eq(voices.get("Richter"), "neutral", "he gets his name in Act IV")
 
 
 func test_it_asks_nothing_and_changes_nothing() -> void:

@@ -138,7 +138,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### S6-13 · `con_goat`
 
 > --- Danach: die Ziege, Orin, der Gefällige, Mira ---------------------------------------------------------------------------------------
-> Kurze Gespräche und Bilder, jedes wiederholbar ohne Wirkung. Die Ziege sagt nichts Verständliches (O13). Orin steht am Pfosten, wenn die Spielerin ihn gebeten hat (city.stage_orin), und erzählt
+> Kurze Gespräche und Bilder, jedes wiederholbar ohne Wirkung (außer Miras letzter Zeile: sie geht ans Tor, der Streit folgt in streit.dialogue, S7). Die Ziege sagt nichts Verständliches (O13). Orin steht am Pfosten, wenn die Spielerin ihn gebeten hat (city.stage_orin), und erzählt
 > etwas Konkretes vom Halten, ohne Gefühlswort und ohne Lehre; sonst steht er in der Menge und sagt etwas Konkretes über den Abend, die Ente fehlt nicht, sie ist nur nicht eingeladen (nach dem Brief, city.letter_told, ohne Witz: der Geruch der Laternen). Der Gefällige
 > entschuldigt sich nicht, ein Satz. Mira steht im Dunkel hinter dem Brunnen, trocken, sie sieht zum Tor; keine Erinnerung, kein Flag, kein Wort über die Liste (46 von 47 gehört dem Streit in S7).
 
@@ -164,8 +164,10 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S6-16 · `con_mira`
 
-- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht nicht zur Bühne, sie sieht zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
+- *Mira lehnt am Rand der Menge, im Dunkel zwischen zwei Laternen, das Netz über der Schulter. Sie sieht dich an und gleich darauf an dir vorbei, zum Tor.* `[#draft]`  <sub>kon_mira_1</sub>
 - **Mira:** Die mit dem Korb hat einen anderen Text gesungen und ihn durchgezogen. Immerhin. `[#draft]`  <sub>kon_mira_2</sub>
+- **Mira:** Ich stell mich ans Tor. Ich geh noch heute Nacht weiter. `[#draft]`  <sub>kon_mira_3</sub>
+*wenn* `main_city_way und evening`
 
 ### S6-17 · `con_scratch`
 

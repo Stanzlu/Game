@@ -357,11 +357,12 @@ STADT_SHEETS = {"I": "torwaechterin", "M": "mira", "y": "gefaelliger", "v": "bue
 SLIPS = {"bouquet": ("ä", "ß"), "ladder": ("ö", "æ"), "stage": ("ü", "ø"), "goat": ("Ä", "å"), "bread": ("Ö", "Æ"), "lost": ("Ü", "Ø")}
 SLIP_GLYPHS = "".join(a + b for a, b in SLIPS.values())
 # S6: the evening of the concert: what stands only then (`if city.evening`), once each, and the cues of its people and things
-EVENING_ONCE = "ΩΣΠΞŁΓΘθτγβκμε"
+EVENING_ONCE = "ΩΣΠΞŁΓΘθτγβκμεΨΛ"
 KONZERT_DIALOGUE_RES = "res://content/dialogue/akt4/konzert.dialogue"
+STREIT_DIALOGUE_RES = "res://content/dialogue/akt4/streit.dialogue"
 KONZERT_DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "konzert.dialogue")
 EVENING_CUES = {"Ł": "con_lio", "Γ": "con_goat", "Θ": "con_orin", "θ": "con_orin", "γ": "con_gef", "μ": "con_mira", "Π": "con_poster",
-                "Ξ": "con_scratch"}
+                "Ξ": "con_scratch", "Ψ": "mira_gate"}
 LIT_LAMP_CELLS = ((35, 26), (69, 20), (47, 31), (62, 26))
 STADT_ONCE = "@niN$!D" + "GUROQZIMyvLJ123%&FKOS45678" + "s" + SLIP_GLYPHS + EVENING_ONCE
 FACADE_GLYPHS = "RFKabcdefjuwzGUt"
@@ -456,7 +457,8 @@ class StadtLayoutTests(unittest.TestCase):
                     continue
                 if glyph in EVENING_CUES:
                     # the people and things of the concert speak in the concert's file
-                    self.assertEqual((params["cue"], params["dialogue"]), (EVENING_CUES[glyph], KONZERT_DIALOGUE_RES), glyph)
+                    file = STREIT_DIALOGUE_RES if glyph == "Ψ" else KONZERT_DIALOGUE_RES
+                    self.assertEqual((params["cue"], params["dialogue"]), (EVENING_CUES[glyph], file), glyph)
                     continue
                 used[glyph] = params["cue"]
                 self.assertEqual(params["dialogue"], STADT_DIALOGUE_RES, glyph)
@@ -464,7 +466,9 @@ class StadtLayoutTests(unittest.TestCase):
         if os.path.exists(KONZERT_DIALOGUE):
             with open(KONZERT_DIALOGUE, encoding="utf-8") as f:
                 konzert_cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
-            self.assertLessEqual(set(EVENING_CUES.values()), konzert_cues)
+            self.assertLessEqual(set(EVENING_CUES.values()) - {"mira_gate"}, konzert_cues)
+        with open(os.path.join(mapfile.ROOT, "content", "dialogue", "akt4", "streit.dialogue"), encoding="utf-8") as f:
+            self.assertIn("mira_gate", set(re.findall(r"^~ (\w+)", f.read(), re.M)))
         if os.path.exists(STADT_DIALOGUE):
             with open(STADT_DIALOGUE, encoding="utf-8") as f:
                 cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
@@ -910,6 +914,18 @@ class EveningLayoutTests(unittest.TestCase):
             sprite = symbols[glyph]["params"]["sprite"]
             self.assertNotIn("shadow", catalog[sprite], "the stamp of the town stays: " + sprite)
         self.assertTrue(catalog["tal/st_stage"].get("flat"), "people stand on the stage")
+
+    def test_mira_stands_in_the_crowd_until_she_says_she_goes_to_the_gate_and_then_at_the_gate(self):
+        _, symbols, rows, spots = _stadt()
+        crowd, gate = symbols["μ"]["params"], symbols["Ψ"]["params"]
+        self.assertEqual(crowd["unless"], "city.mira_gate", "never in two places")
+        self.assertEqual(gate["if"], ["city.evening", "city.mira_gate"])
+        self.assertEqual(
+            gate["unless"], ["city.mira_parted_boundary", "city.mira_parted_joined", "city.mira_parted_silent"], "until she has gone ahead"
+        )
+        x, y = spots["Ψ"][0]
+        self.assertTrue(layout.GATE_X - 2 <= x <= layout.GATE_X + 2 and layout.GATE_ROWS[0] - 1 <= y <= layout.GATE_ROWS[1], "at the gate, before its arch or in it")
+        self.assertEqual(symbols["Ψ"]["params"]["sheet"], symbols["μ"]["params"]["sheet"], "the same Mira")
 
 
 if __name__ == "__main__":

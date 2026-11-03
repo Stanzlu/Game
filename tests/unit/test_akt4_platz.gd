@@ -60,6 +60,7 @@ const STADT_CUES: PackedStringArray = [
 	"do_lost",
 	"slip_struck",
 	"lio_invite",
+	"gate_night",
 ]
 const THINGS: PackedStringArray = [
 	"curiosity_lost_glove",

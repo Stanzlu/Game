@@ -1014,9 +1014,80 @@
     {
      "type": "line",
      "ref": "kon_mira_2"
+    },
+    {
+     "type": "line",
+     "ref": "kon_mira_3"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_1"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_2"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_3"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_4"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_5"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_6"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_7"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_8"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_9"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_10"
+    },
+    {
+     "type": "line",
+     "ref": "tor_mira_11"
+    },
+    {
+     "type": "line",
+     "ref": "tor_out_1"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_gate"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_boundary"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_joined"
+    },
+    {
+     "type": "flag",
+     "ref": "city.mira_parted_silent"
     }
    ],
-   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste (S5, gebaut): ein Zettel steckt in ihrem Netz, sie liest ihn einmal und sagt „Nein.“ (`stadt_list_5`), faltet ihn und knotet weiter; der Text kommentiert es nicht, sie fragt nichts, es gibt kein Flag und keine neue Erinnerung; der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus. Nach dem Konzert (S6) steht sie im Dunkel hinter dem Brunnen und sieht nicht zur Bühne, sondern zum Tor (`kon_mira_1`); sie sagt trocken etwas über die Bürgerin mit dem falschen Text (`kon_mira_2`), kein Wort über die Liste, keine neue Erinnerung, kein Flag."
+   "payoff": "Drei Beats (Brief O11): das Wiedersehen am Brunnen, in dem sie auf nichts wartet und trotzdem sitzen bleibt (S2, keine neue Erinnerung, die Beziehung bleibt `familiar`); Mira am Rand der Liste (S5, gebaut): ein Zettel steckt in ihrem Netz, sie liest ihn einmal und sagt „Nein.“ (`stadt_list_5`), faltet ihn und knotet weiter; der Text kommentiert es nicht, sie fragt nichts, es gibt kein Flag und keine neue Erinnerung; der Streit nach dem Konzert, in dem sie gelegentlich unfair ist (S7, die letzte Erinnerungsvariante). Sie kehrt zurück, trotz Konflikten (Bible §13), und geht in jedem Ausgang voraus. Nach dem Konzert (S6) steht sie im Dunkel hinter dem Brunnen und sieht nicht zur Bühne, sondern zum Tor (`kon_mira_1`); sie sagt trocken etwas über die Bürgerin mit dem falschen Text (`kon_mira_2`), kein Wort über die Liste, keine neue Erinnerung, kein Flag. Der Streit am Tor (S7, gebaut): sie steht am Tor und geht noch in der Nacht weiter; „Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen.“ (`tor_mira_3`) ist Zeugenschaft, kein Maß; die Spielerin hat drei Antworten (die Grenze, anschließen, schweigen), keine falsch; Mira geht in jedem Ausgang voraus, die Beziehung (`familiar`, `close`, `strained`) und eine Erinnerung sind die Folge, sie kehrt zurück (Akt VI und VII lesen die Flags `city.mira_parted_*`).",
+   "payoff_lines": [
+    "tor_mira_3"
+   ]
   },
   {
    "id": "schluessel-passt",
@@ -1803,9 +1874,41 @@
     {
      "type": "line",
      "ref": "ric_7"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_3"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_4"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_5"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_6"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_7"
+    },
+    {
+     "type": "line",
+     "ref": "tor_ric_8"
+    },
+    {
+     "type": "flag",
+     "ref": "city.richter_met"
     }
    ],
-   "payoff": "Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Akt II (B4): eine Stimme nach dem zweiten Sturz, nur über Dinge (ein Stein ohne Angaben, ein Bach mit allen auf einmal, eine Bitte um Ruhe, die der Bach überhört); der Beat `act2_richter` merkt sich, dass sie gesprochen hat, Akt IV führt ihn als \"Richter\" ein."
+   "payoff": "Akt II, IV, VI: aus Drohung wird Aktenton, aus Aktenton Komik. Akt II (B4): eine Stimme nach dem zweiten Sturz, nur über Dinge (ein Stein ohne Angaben, ein Bach mit allen auf einmal, eine Bitte um Ruhe, die der Bach überhört); der Beat `act2_richter` merkt sich, dass sie gesprochen hat, Akt IV führt ihn als \"Richter\" ein. Akt IV (S7, gebaut): er stellt sich als „Richter“ vor und liest den Beat `act2_richter` („Wir kennen uns.“, `tor_ric_3`), genau einmal, am Tor und vor Mira; länger und schiefer, er verhaspelt sich an Saite, Lampe, Einsatz und Wind (`tor_ric_5` bis `tor_ric_7`), redet nie über die Spielerin, und das letzte Wort hat der summende Platz (`tor_ric_8`).",
+   "payoff_lines": [
+    "tor_ric_3",
+    "tor_ric_7"
+   ]
   },
   {
    "id": "kind-lied",
@@ -2856,6 +2959,31 @@
    "flag": "city.evening",
    "axis": "Fortschritt",
    "meaning": "Es ist Abend auf dem Platz (Akt IV, S6): die Szene setzt es beim Laden der Stadt in der Stufe evening, die Karte liest es und zeigt alles, was nur am Abend steht (die leuchtenden Laternen, die Bühne mit ihren Lampen, das Plakat, die Menge)."
+  },
+  {
+   "flag": "city.mira_gate",
+   "axis": "Fortschritt",
+   "meaning": "Mira hat es nach dem Konzert gesagt (Akt IV, S7, letzte Zeile von `con_mira`): „Ich stell mich ans Tor. Von da sieht man, wann es hell wird.“ Die Karte stellt sie ans Tor statt in die Menge (nie an zwei Orten), die Heldenquest geht von `evening` auf `night`, der Richter wartet auf die Spielerin am Tor."
+  },
+  {
+   "flag": "city.richter_met",
+   "axis": "Entscheidungen",
+   "meaning": "Der Richter hat gesprochen (Akt IV, S7), genau einmal, am Tor und vor Mira: er stellt sich vor („Wir kennen uns.“ für wen den Bach in Akt II gehört hat, sonst „nicht vorgestellt“), verliest den Abend (Saite, Lampe, Einsatz einer Ziege, Wind) und nie die Spielerin, verhaspelt sich; das letzte Wort hat der summende Platz. Die Szene liest das Flag, damit er nicht noch einmal anfängt."
+  },
+  {
+   "flag": "city.mira_parted_boundary",
+   "axis": "Beziehungen",
+   "meaning": "Der Streit am Tor ist mit der Grenze ausgegangen (Akt IV, S7): „Ich habe getan, was ich konnte. Den Rest nicht.“ Mira nickt („Das ist der Stand.“) und geht voraus; die Beziehung bleibt `familiar`, die Erinnerung `gate` entsteht. Eine Spur für Akt VI und VII (Konsequenzen-Register): ein Nein hat reale Folgen, und Mira kehrt trotzdem zurück (Bible §13, §16)."
+  },
+  {
+   "flag": "city.mira_parted_joined",
+   "axis": "Beziehungen",
+   "meaning": "Der Streit am Tor ist damit ausgegangen, dass die Spielerin sich anschließt (Akt IV, S7): „Dann komme ich mit.“ Mira antwortet trocken („Ich warte nicht.“) und geht trotzdem voraus (Akt V hat keine Mira); die Beziehung wird `close`, die Erinnerung `gate` entsteht. Eine Spur für Akt VI und VII."
+  },
+  {
+   "flag": "city.mira_parted_silent",
+   "axis": "Beziehungen",
+   "meaning": "Der Streit am Tor ist im Schweigen ausgegangen (Akt IV, S7): Mira hat es sich gedacht und geht voraus; die Beziehung wird `strained`, die Erinnerung `gate` entsteht. Schweigen ist eine Antwort und hat eine Folge, keine Strafe: Mira kehrt zurück (Bible §13, §16). Eine Spur für Akt VI und VII."
   }
  ]
 }

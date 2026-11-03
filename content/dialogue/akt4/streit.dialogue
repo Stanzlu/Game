@@ -1,0 +1,68 @@
+# Der Streit am Tor, Akt IV, Segment S7 (docs/akt4/REGIONSBRIEFE.md, O11, O12; Bible §13, §16, §51; Stilblätter mira.md, richter.md). Nach dem Konzert steht Mira am Tor und geht bei Sonnenaufgang
+# weiter. Vorher meldet sich der Richter, genau einmal: er stellt sich vor (der Sprecher heißt von jetzt an "Richter", in Akt II hieß er "Stimme"), er liest den Beat act2_richter ("Wir kennen uns."),
+# er redet über den Ablauf des Abends und nie über die Spielerin, er verhaspelt sich, er überdramatisiert (der Wind, die Saite), er stellt sich nicht auf die Seite des Spiels, und das letzte
+# Wort hat die Welt: der Platz summt. Er schweigt, solange die Spielerin mit Mira spricht (zwei Cues, die Szene spielt sie nacheinander, nie gleichzeitig).
+# Mira ist gelegentlich unfair, nie grausam: "Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen." ist Zeugenschaft, kein Maß (ohne Zahl; wer keine Aufgabe genommen hat, hört "Nein" statt "Ja": gleich unfair) und kein
+# Therapiewort. Drei Antworten, alle möglich, keine falsch: die Grenze ("Den Rest nicht."), anschließen, schweigen. Ein Nein darf reale Folgen haben (Bible §16): Mira geht in jedem Ausgang voraus, noch in der Nacht (Akt V
+# hat keine Mira), die Beziehung und das Flag city.mira_parted_<ausgang> sind die Spur für VI und VII; sie kehrt zurück (Bible §13). Keine Romanze, kein Trost, kein "!" bei Mira.
+# Wahl und Folge stehen nie im selben Cue: die Antworten von mira_gate setzen die Flags, ihre Folge liest die Karte (Mira verschwindet), nie ein Cue. Eine Erinnerungsvariante (gate) für alle drei Ausgänge:
+# Zeugenschaft, nicht Urteil. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung). Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt.
+
+# --- Der Richter ------------------------------------------------------------------------------------------------------------------------------------
+# Die Zwischensequenz (die Szene spielt sie, sobald die Spielerin dem Tor nah kommt und Mira dort steht). Länger und schiefer als in Akt II: er verlas Dinge, jetzt verhaspelt er sich an ihnen. Wer in Akt II
+# den Bach gehört hat (beat.act2_richter), dem sagt er "Wir kennen uns."; wer nicht, dem stellt er sich vor, als hole er etwas nach.
+
+~ richter
+Hinter dir, über den Dächern, klingt der Platz noch nach, als hätte ihn jemand nicht ganz abgestellt. [ID:tor_ric_1] [#draft]
+Vor dem Tor räuspert sich etwas, trocken wie Papier. [ID:tor_ric_2] [#draft]
+if WorldState.has_flag("beat.act2_richter")
+	Richter: Der Richter. Wir kennen uns. Vom Bach. Ich war der, der den Stein gehört hat. Das Protokoll ist — das Protokoll ist noch offen. [ID:tor_ric_3] [#draft]
+else
+	Richter: Der Richter. Wir sind einander nicht vorgestellt worden. Das wird hiermit nachgeholt. Das Protokoll ist — das Protokoll ist offen. [ID:tor_ric_4] [#draft]
+Richter: Zu Protokoll: ein Konzert. Eine Saite, gerissen. Eine Lampe, geneigt. Ein Einsatz, erteilt an ein — an ein Tier. [ID:tor_ric_5] [#draft]
+Richter: Der Wind hat Noten entwendet. Der Wind ist nicht anwesend. Der Wind wird — ich vertage. Ich vertage nicht. Ich notiere. [ID:tor_ric_6] [#draft]
+Richter: Ich notiere, dass keiner gegangen ist. Das ist ungewöhnlich. Das ist nicht vorgesehen. Das ist — um Ruhe wird gebeten. [ID:tor_ric_7] [#draft]
+Vom Platz her fängt jemand an zu summen, falsch und laut, und andere nehmen es auf. Die Stimme räuspert sich noch einmal und sagt nichts mehr. [ID:tor_ric_8] [#draft]
+do WorldState.set_flag("city.richter_met")
+=> END
+
+# --- Mira am Tor ----------------------------------------------------------------------------------------------------------------------------------------
+# Der Streit. Sie sagt es dem Tor, nicht dir. Die Antworten: die Grenze (sie nickt, es gefällt ihr nicht und es stimmt; die Beziehung bleibt vertraut), anschließen (sie sagt kein Wort darüber, dass sie
+# sich freut; die Beziehung wird eng), schweigen (sie hat es sich gedacht; die Beziehung wird angespannt). Jeder Ausgang setzt sein Flag, die Beziehung und dieselbe Erinnerung; der Wortlaut danach
+# (gate_leaves) liest nichts. Mira geht voraus, das Tor macht für eine Person einen Spalt auf.
+
+~ mira_gate
+Mira steht vor dem Tor, das Netz geschultert, die Stiefel fest geschnürt. Sie dreht sich zu dir, aber ihr Blick geht über dich hinweg, hinauf, wo die Sterne anfangen. [ID:tor_mira_1] [#draft]
+Mira: Ich geh noch in der Nacht. Bei Sonnenaufgang will ich weit sein. [ID:tor_mira_2] [#draft]
+if WorldState.has_flag("list.take_bouquet") or WorldState.has_flag("list.take_ladder") or WorldState.has_flag("list.take_stage") or WorldState.has_flag("list.take_goat") or WorldState.has_flag("list.take_bread") or WorldState.has_flag("list.take_lost")
+	Mira: Du hast heute Ja gesagt, bis es dunkel wurde. Ich hab zugesehen. [ID:tor_mira_3] [#draft]
+else
+	Mira: Du hast heute Nein gesagt, bis es dunkel wurde. Ich hab zugesehen. [ID:tor_mira_3b] [#draft]
+Sie sagt es nicht laut. Sie sagt es an dir vorbei, dem Tor. [ID:tor_mira_4] [#draft]
+- Ich habe getan, was ich konnte. Den Rest nicht. [ID:tor_mira_r1] [#draft]
+	Mira: Das ist der Stand. [ID:tor_mira_5] [#draft]
+	Sie nickt kurz, wie jemand, der etwas abhakt, das ihm nicht gefällt und das stimmt. [ID:tor_mira_6] [#draft]
+	Mira: Dann bis irgendwo. Ich werde nicht langsamer. [ID:tor_mira_7] [#draft]
+	do WorldState.add_memory("mira", "gate")
+	do WorldState.set_relationship("mira", "familiar")
+	do WorldState.set_flag("city.mira_parted_boundary")
+	=> gate_leaves
+- Dann komme ich mit. [ID:tor_mira_r2] [#draft]
+	Mira: Dann trag nur, was du allein tragen kannst. Ich warte nicht. [ID:tor_mira_8] [#draft]
+	Sie zieht den Riemen des Netzes fest, einmal, zweimal. Auf ihrer Schulter sitzt es ein wenig leichter. [ID:tor_mira_9] [#draft]
+	do WorldState.add_memory("mira", "gate")
+	do WorldState.set_relationship("mira", "close")
+	do WorldState.set_flag("city.mira_parted_joined")
+	=> gate_leaves
+- … [ID:tor_mira_r3] [#draft]
+	Mira: Dachte ich mir. [ID:tor_mira_10] [#draft]
+	Sie wartet einen Atemzug, ob noch etwas kommt. Es kommt nichts. [ID:tor_mira_11] [#draft]
+	do WorldState.add_memory("mira", "gate")
+	do WorldState.set_relationship("mira", "strained")
+	do WorldState.set_flag("city.mira_parted_silent")
+	=> gate_leaves
+
+~ gate_leaves
+Die Torwächterin im Torbogen sieht auf die Straße und nicht auf Mira, die an ihr vorbeigeht, eine Person mit Netz, die niemand aufhält. [ID:tor_out_1] [#draft]
+Dann ist der Torbogen wieder leer, und vor dem Tor ist Nacht. [ID:tor_out_2] [#draft]
+=> END

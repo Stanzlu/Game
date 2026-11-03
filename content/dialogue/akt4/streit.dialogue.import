@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://vbn8bvmadmmp"
+path="res://.godot/imported/streit.dialogue-e766bbe880a803ad7e6b8d84b8399f96.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt4/streit.dialogue"
+dest_files=["res://.godot/imported/streit.dialogue-e766bbe880a803ad7e6b8d84b8399f96.tres"]
+
+[params]
+
+defaults=true

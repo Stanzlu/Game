@@ -1,13 +1,14 @@
 # gdlint: ignore=max-public-methods
 extends GutTest
-## Act IV, segment S6: the evening of the concert in the scene of the city. Once Lio has been said
-## yes to (the quest stage "evening") the scene is loaded again as an evening: the night look is
-## exports of the scene and not the time of day of the world (that is global state), six
-## PointLight2D at most eight (four lamp posts, two stage lamps), the stage before the town hall
-## with Lio and the goat on it, the crowd (Orin at the post of the lamp if she asked him, Tess if
-## the board is sawn), the shops and the hall shut, the day's people gone. The concert plays
-## itself as a cutscene (nine cues in turn), sets the beat and leaves the room free. The lines are
-## tested in test_akt4_konzert, the layout of the map in tools/art/test_layout_akt4.py.
+## Act IV, segment S6: the evening of the concert in the scene of the city. Once Lio has been
+## said yes to (the quest stage "evening") the scene is loaded again as an evening: the night
+## look is exports of the scene and not the time of day of the world (that is global state),
+## seven PointLight2D (at most eight: four lamp posts, two stage lamps, the gate's), the stage
+## before the town hall with Lio and the goat on it, the crowd (Orin at the post of the lamp if
+## she asked him, Tess if the board is sawn), the shops and the hall shut, the day's people
+## gone. The concert plays itself as a cutscene (nine cues in turn), sets the beat and leaves
+## the room free. The lines are tested in test_akt4_konzert, the layout of the map in
+## tools/art/test_layout_akt4.py.
 
 const STADT := preload("res://world/levels/akt4/stadt.tscn")
 const CITY := "res://content/dialogue/akt4/stadt.dialogue"
@@ -16,7 +17,8 @@ const QUEST := "main_city_way"
 const STAGE_CELL := Vector2i(44, 23)
 const ARRIVAL := Vector2i(44, 24)
 const LIT_LAMPS := 4
-const STAGE_LAMPS := 2
+## Two on the stage and, since S7, one at the gate (the same lamp).
+const STAGE_LAMPS := 3
 ## The lines of the nine parts, by ID: the tape of a run is made of them.
 const PART_LINES: Array[String] = [
 	"kon_arr_1",
@@ -165,7 +167,7 @@ func test_in_the_stage_evening_the_scene_is_an_evening_with_lights_set_by_its_ex
 	assert_not_null(scene.view.world_root.get_node_or_null("WorldTint"))
 	assert_eq(_decor(scene, "tal/st_lamp_post_lit").size(), LIT_LAMPS, "four posts are lit")
 	assert_eq(_decor(scene, "tal/st_stage_lamp").size(), STAGE_LAMPS)
-	assert_eq(_lights(scene), LIT_LAMPS + STAGE_LAMPS, "six lights")
+	assert_eq(_lights(scene), LIT_LAMPS + STAGE_LAMPS, "seven lights")
 	assert_lte(_lights(scene), 8, "O3: at most eight PointLight2D")
 	assert_true(Beat.reached("stadt_abend"))
 

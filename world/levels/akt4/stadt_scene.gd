@@ -14,7 +14,8 @@ extends LookScene
 ## evening of the concert, with the night look as exports of this scene (never the time of day
 ## of the world, that is global state), the people and things that stand only then (the map
 ## reads `city.evening`) and the concert, a cutscene (`Concert`). The shops and the town hall
-## are shut then; the day comes back with the way home (S8).
+## are shut then; the day comes back with the way home (S8). The evening goes on as the night (S7):
+## Mira goes to the gate, the Richter speaks once and the quarrel there ends the stage.
 
 const WERKSTATT := "res://content/dialogue/akt4/werkstatt.dialogue"
 ## The bench before the workshop (the player sits on it, Tess on the crate two cells east of it) and
@@ -22,14 +23,24 @@ const WERKSTATT := "res://content/dialogue/akt4/werkstatt.dialogue"
 const BENCH_CELL := Vector2i(25, 41)
 const BENCH_REACH := 40.0
 ## The stages of the hero's way in which it is evening in the town.
-const EVENING_STAGES: PackedStringArray = ["evening"]
+const EVENING_STAGES: PackedStringArray = ["evening", "night"]
 const EVENING_AMBIENCE := "res://content/audio/tal_abend.tres"
+## The quarrel at the gate (S7): Mira waits there once she has said so in the crowd, and the Richter
+## speaks, once, when the player comes near enough (five cells from the middle of the passage).
+const STREIT := "res://content/dialogue/akt4/streit.dialogue"
+const GATE_CELL := Vector2i(81, 44)
+const GATE_REACH := 80.0
+## What Mira's leaving sets, one flag for each way the quarrel ended.
+const PARTED: PackedStringArray = [
+	"city.mira_parted_boundary", "city.mira_parted_joined", "city.mira_parted_silent"
+]
 
 var _asked := false
 var _with_tess := false
 ## Lio has been said yes to: the scene goes over into the evening as soon as the talk is over.
 var _invited := false
 var _concert: Concert
+var _voice_busy := false
 
 
 ## True while the story is in the evening of the town (on loading, `city.evening` follows it).
@@ -65,6 +76,28 @@ func _physics_process(_delta: float) -> void:
 	if _invited and quiet():
 		_invited = false
 		SceneTravel.go(self, "stadt", "abend")
+	elif _richter_due():
+		_richter_speaks()
+
+
+## The Richter speaks once, at the gate, before Mira does: she waits there (she said so in the
+## crowd) and the player has come near. Never while a line, a menu or the concert holds the room.
+func _richter_due() -> bool:
+	if _voice_busy or not WorldState.has_flag("city.mira_gate") or player == null:
+		return false
+	if WorldState.has_flag("city.richter_met") or player.is_locked() or not quiet():
+		return false
+	var gate := map.cell_to_world(GATE_CELL)
+	return player.global_position.distance_to(gate) <= GATE_REACH
+
+
+func _richter_speaks() -> void:
+	_voice_busy = true
+	var cut := Cutscene.begin(self)
+	await cut.say(STREIT, "richter")
+	await cut.wait(0.6)
+	Beat.mark("stadt_richter")
+	cut.end()
 
 
 ## Nothing is open: no line, no menu, no black. The evening starts and the day goes only then.
@@ -100,6 +133,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		Beat.mark("stadt_lio")
 	elif value and id == "city.concert_invited" and not WorldState.has_flag("city.evening"):
 		_invited = true
+	elif value and id in PARTED:
+		Beat.mark("stadt_tor")
 
 
 ## Sitting down on the bench beside Tess opens "Nichts" once per sitting; getting up ends it.

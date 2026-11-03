@@ -40,6 +40,7 @@ PREFIX = {
     "blumenladen": "S3-",
     "werkstatt": "S4-",
     "konzert": "S6-",
+    "streit": "S7-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

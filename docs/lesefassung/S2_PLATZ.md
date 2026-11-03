@@ -12,6 +12,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 ### S2-1 · `gate`
 
+*wenn* `city.evening`
+  - *→ weiter bei* `gate_night`
 - *Im Torbogen steht eine Frau im Mantel, den Schlüsselbund in der Faust. Sie sieht an dir vorbei, ob noch jemand kommt.* `[#draft]`  <sub>stadt_gate_1</sub>
 - **Torwächterin:** Fuhrwerke nicht vor zehn. Hunde an die Leine. Ziegen gar nicht. `[#draft]`  <sub>stadt_gate_2</sub>
 - ▸ **Ziegen?**

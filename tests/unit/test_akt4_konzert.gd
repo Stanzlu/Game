@@ -331,17 +331,31 @@ func test_orin_tells_something_concrete_and_nothing_funny_after_the_letter() -> 
 		assert_false(line.contains("Ente"), line)
 
 
-func test_the_goat_the_gefaellige_and_mira_set_nothing_and_mira_keeps_her_memories() -> void:
-	for cue: String in ["con_goat", "con_gef", "con_mira"]:
+func test_the_goat_and_the_gefaellige_set_nothing() -> void:
+	for cue: String in ["con_goat", "con_gef"]:
 		var before := WorldState.state.flags.duplicate()
 		var seen := await DialogueWalk.play(FILE, cue)
 		assert_gte(seen.size(), 2, cue)
 		assert_eq(WorldState.state.flags, before, "%s sets nothing" % cue)
 		assert_eq(await DialogueWalk.play(FILE, cue), seen, "%s: the same twice" % cue)
-	assert_false(
-		_blocks()["con_mira"].contains("add_memory"), "46 and 47 belong to the quarrel (S7)"
-	)
 	assert_false(_blocks()["con_gef"].contains("Entschuldigung"), "he does not apologise")
+
+
+func test_mira_says_she_goes_to_the_gate_and_that_is_all_she_sets() -> void:
+	WorldState.start_quest("main_city_way")
+	for stage: String in ["town", "help", "list", "evening"]:
+		WorldState.advance_quest("main_city_way", stage)
+	var before := WorldState.state.flags.duplicate()
+	var seen := await DialogueWalk.play(FILE, "con_mira")
+	assert_eq(seen.size(), 3)
+	assert_true(_has(seen, "kon_mira_3"), "from the gate one sees when it gets light")
+	before["city.mira_gate"] = true
+	assert_eq(WorldState.state.flags, before, "only the flag the map reads: she stands at the gate")
+	assert_eq(WorldState.quest_stage("main_city_way"), "night")
+	assert_eq(WorldState.relationship_state("mira"), "stranger", "no new memory here (S7 has one)")
+	assert_false(_blocks()["con_mira"].contains("add_memory"), "the memory is the quarrel's")
+	assert_eq((await DialogueWalk.play(FILE, "con_mira")).size(), 3, "and the same twice")
+	assert_eq(WorldState.quest_stage("main_city_way"), "night")
 
 
 # --- The invitation ------------------------------------------------------------------------------
@@ -381,7 +395,9 @@ func test_the_quest_goes_from_the_list_to_the_evening() -> void:
 	var quest := ContentDB.quest("main_city_way")
 	assert_true(quest.can_advance("list", "evening"))
 	assert_false(quest.stage("list").is_final(), "the evening follows the list")
-	assert_true(quest.stage("evening").is_final(), "until the quarrel at the gate (S7)")
+	assert_false(quest.stage("evening").is_final(), "the night follows the concert (S7)")
+	assert_true(quest.can_advance("evening", "night"))
+	assert_true(quest.stage("night").is_final(), "until the way home (S8)")
 	for key: String in ["QUEST_MAIN_CITY_WAY_EVENING", "MEMORY_LIO_CONCERT"]:
 		assert_ne(tr(key), key, key)
 	assert_false(tr("QUEST_MAIN_CITY_WAY_EVENING").contains("Verbindung"))

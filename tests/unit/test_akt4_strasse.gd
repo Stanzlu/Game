@@ -130,7 +130,10 @@ func test_the_quest_starts_on_the_road_and_goes_on_to_the_town() -> void:
 	assert_true(
 		quest.can_advance("list", "evening"), "and the concert's evening the one after (S6)"
 	)
-	assert_true(quest.stage("evening").is_final())
+	assert_true(
+		quest.can_advance("evening", "night"), "and the quarrel at the gate the one after (S7)"
+	)
+	assert_true(quest.stage("night").is_final())
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_TITLE"), "QUEST_MAIN_CITY_WAY_TITLE")
 	assert_ne(tr("QUEST_MAIN_CITY_WAY_WEST"), "QUEST_MAIN_CITY_WAY_WEST")
 	assert_true(WorldState.start_quest(QUEST))

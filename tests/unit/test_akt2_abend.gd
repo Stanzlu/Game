@@ -247,12 +247,15 @@ func test_the_three_memories_have_a_sentence_in_the_journal() -> void:
 
 
 func test_act_two_stays_within_its_six_new_memories_of_mira() -> void:
-	# 41 sentences for Mira before Act II (the Slice's); B2 added two, B6 adds three, one is left
+	# 41 sentences for Mira before Act II (the Slice's); B2 added two, B6 adds three, one is left:
+	# Act IV, S7 uses it (the memory of the quarrel at the gate)
 	var rows := 0
 	for line in FileAccess.get_file_as_string("res://content/locale/journal.csv").split("\n"):
 		if line.begins_with("MEMORY_MIRA_"):
 			rows += 1
-	assert_eq(rows, 41 + 2 + 3, "five new ones so far")
+	assert_eq(
+		rows, 41 + 2 + 3 + 1, "five new ones in Act II and the quarrel at the gate's (Act IV, S7)"
+	)
 	assert_lt(rows, 41 + 6 + 1, "never more than six")
 	var source := FileAccess.get_file_as_string(TAL)
 	var cue_from := source.find("~ " + CUE)

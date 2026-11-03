@@ -404,7 +404,7 @@ STADT_GROUND = {"R": "h", "F": "h", "K": "h", "a": "h", "b": "h", "c": "h", "d":
                 "ä": "_", "ß": "_", "ö": "_", "æ": "_", "ü": "_", "ø": "_", "Ä": "_", "å": "_", "Ö": "_", "Æ": "_", "Ü": "_", "Ø": "_",
                 # S6: the evening of the concert (everything that stands on the cobbles only in the evening, `if city.evening`)
                 "Ω": "_", "Δ": "_", "Σ": "_", "λ": "_", "Π": "_", "Ξ": "_", "Ł": "_", "Γ": "_", "Θ": "_", "θ": "_", "τ": "_",
-                "γ": "_", "β": "_", "κ": "_", "μ": "_", "ε": "_"}
+                "γ": "_", "β": "_", "κ": "_", "μ": "_", "ε": "_", "Ψ": "_", "Λ": "_"}
 
 
 def hall_perch(row):
@@ -569,6 +569,8 @@ def build_stadt():
     put("β", 37, 27)  # the citizen from the stall
     put("κ", 47, 28)  # the clerk of the town hall
     put("μ", 61, 28)  # Mira, at the edge of the crowd
+    put("Λ", 82, 44)  # the lamp at the gate (S7)
+    put("Ψ", 80, 43)  # Mira at the gate (S7), after she has said it in the crowd
     put("ε", 44, 24)  # the arrival of the evening (SceneTravel "abend"): right before the stage, looking at it
     # ---- outside: the door, the arrival
     put("N", EAST_DOOR_X, DOOR_ROW)
