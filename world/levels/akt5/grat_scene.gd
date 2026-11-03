@@ -9,7 +9,6 @@ extends LookScene
 
 const QUEST := "main_mountain_way"
 const STONE_QUEST := "side_grat_stone"
-const TRIES: PackedStringArray = ["grat.stone_try_1", "grat.stone_try_2", "grat.stone_try_3"]
 
 
 func _ready() -> void:
@@ -29,7 +28,7 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		return
 	if id == "fragment.hand":
 		Beat.mark("grat_hand")
-	elif id == "grat.stone_taken" or id in TRIES:
+	elif id.begins_with("grat.stone_"):
 		_sync_stone_quest()
 
 
@@ -41,8 +40,14 @@ func _sync_stone_quest() -> void:
 		return
 	if not WorldState.is_quest_started(STONE_QUEST):
 		WorldState.start_quest(STONE_QUEST)
-	for flag: String in TRIES:
-		if not WorldState.has_flag(flag):
-			return
-	if WorldState.is_quest_active(STONE_QUEST):
+	if _all_tries_made() and WorldState.is_quest_active(STONE_QUEST):
 		WorldState.advance_quest(STONE_QUEST, "done")
+
+
+## The flags are written out (StoryLint reads literals, not lists).
+func _all_tries_made() -> bool:
+	return (
+		WorldState.has_flag("grat.stone_try_1")
+		and WorldState.has_flag("grat.stone_try_2")
+		and WorldState.has_flag("grat.stone_try_3")
+	)
