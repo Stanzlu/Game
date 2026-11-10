@@ -59,8 +59,16 @@ E = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": 
 e = {"ground": ",", "marker": "spawn_maschine"}
 ; der Aufgang zum Grat im Nordwesten: Holzstufen, davor ein Haufen Geröll und der Blocker ramp_wait am Fuß (G6 öffnet ihn und nimmt den Haufen weg; beide ohne gebackenen Schatten)
 s = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_steps"}}
-F = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_rockfall"}}
-Y = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 1], "cue": "ramp_wait", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue"}}
+F = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_rockfall", "unless": "plant.letgo"}}
+Y = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size": [5, 1], "cue": "ramp_wait", "dialogue": "res://content/dialogue/akt5/hochtal.dialogue", "unless": "plant.letgo"}}
+; G6: der Aufgang ist frei, sobald der Wächter das Loslassen eingetragen hat (plant.letgo): der Blocker ramp_wait und der Geröllhaufen weichen (beide ohne gebackenen Schatten). Oben auf dem Grat: ein Blick vom Ende der Rampe (V),
+; die Gabel mit dem Wegweiser (B), der Mund der Spalte (C), am Ende der Spalte die Mulde im Fels (I, die zweite Rückblende) mit dem Kerzenstummel (J) und am Südrand des Plateaus ein Blick (P). Alle Dinge liegen auf Zellen mit ihrem alten Boden: der Bake bleibt.
+V = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "ledge_view", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 22}}
+B = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_fork_sign", "cue": "fork_sign", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 16}}
+C = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "cleft_mouth", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 22}}
+I = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cleft_alcove", "cue": "hiding_place", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 16}}
+J = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_candle", "cue": "candle", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 12, "unless": "grat.candle_taken"}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "plateau_edge", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 24}}
 [map]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,14 +79,14 @@ Y = {"ground": ",", "prop": "res://world/props/blocker.tscn", "params": {"size":
 ^^^^^^^^^^^^^....R..L......,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,,,,,m,,,m^^^^^^^^...,,,,,,,,,,..^^^^
 ^^^^^^^^^^^^^.O.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m^^^^^^^^...,,,,,,,,,mm.^^^^
 ^^^^^^^^^^^^^.,,,,,,,,,,,,,,,,.........,,,,,,,,.......R..mmm..,,,,,,,,,,,,,,,,,,,,,,........^^^^
-^^^^^^^^^^^^^.,,,,,,,,,,,,.......................................,,,,,,,,,,,,,,,,...........^^^^
-^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,,,,,.......m..mm..^^^^
+^^^^^^^^^^^^^.,,,,V,,,,,,,.......................................B,,,,,,,,,,,,,,,...........^^^^
+^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,C,,,.......mP.mm..^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^....^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,s,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,IJ^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,F,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^.....^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,Y,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

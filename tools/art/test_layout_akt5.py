@@ -478,11 +478,16 @@ GRAT_DIALOGUE_RES = "res://content/dialogue/akt5/hochtal.dialogue"
 # G3: the blocker at the gate asks the Anlage's own dialogue (the cue `gate`); the cue `plant_gate` of hochtal.dialogue stays there as text
 GRAT_ANLAGE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "anlage.dialogue")
 GRAT_ANLAGE_RES = "res://content/dialogue/akt5/anlage.dialogue"
+# G6: the things on the Grat ask the cleft's own dialogue
+GRAT_SPALTE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "spalte.dialogue")
+GRAT_SPALTE_RES = "res://content/dialogue/akt5/spalte.dialogue"
+GRAT_SPALTE_GLYPHS = "VBCIJP"
 # the glyphs that stand once on the map
-GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEe"
+GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEeVBCIJP"
 # the cues of the map by glyph (the contract of G2)
 GRAT_CUES = {"1": "cairn_1", "2": "cairn_2", "3": "cairn_3", "q": "stone_pick", "7": "valley_sign", "H": "hand_stone", "Q": "quartz",
-             "M": "marmot_den", "X": "gate", "Y": "ramp_wait"}
+             "M": "marmot_den", "X": "gate", "Y": "ramp_wait",
+             "V": "ledge_view", "B": "fork_sign", "C": "cleft_mouth", "I": "hiding_place", "J": "candle", "P": "plateau_edge"}
 # things a person cannot walk through, whatever the ground: the hall, the fence, the gate, the blockers
 GRAT_SOLID_PROPS = set("AfGXY")
 # a line of sight is stopped by solid ground and by what stands tall
@@ -534,7 +539,7 @@ class GratLayoutTests(unittest.TestCase):
             self.assertEqual(text.count(glyph), 1, glyph)
         self.assertEqual(text.count("f"), layout.GRAT_POCKET[1] - layout.GRAT_POCKET[0] + 1 - 3, "the fence: one piece a cell, but the gate's three")
         self.assertEqual(len(spots["1"]) + len(spots["2"]) + len(spots["3"]), 3, "three cairns")
-        for glyph in "BKabk":
+        for glyph in "Kabk":
             self.assertNotIn(glyph, text, "no other cairns than the three with a cue: " + glyph)
 
     def test_every_glyph_has_its_own_legend_line_and_every_cue_is_the_contracts(self):
@@ -548,10 +553,12 @@ class GratLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                self.assertEqual(params["dialogue"], GRAT_ANLAGE_RES if glyph == "X" else GRAT_DIALOGUE_RES, glyph)
+                expected = GRAT_ANLAGE_RES if glyph == "X" else GRAT_SPALTE_RES if glyph in GRAT_SPALTE_GLYPHS else GRAT_DIALOGUE_RES
+                self.assertEqual(params["dialogue"], expected, glyph)
         self.assertEqual(used, GRAT_CUES)
         self.assertEqual(len(set(used.values())), len(used), "no cue twice")
-        for path, glyphs in ((GRAT_DIALOGUE, [g for g in used if g != "X"]), (GRAT_ANLAGE, ["X"])):
+        valley = [g for g in used if g != "X" and g not in GRAT_SPALTE_GLYPHS]
+        for path, glyphs in ((GRAT_DIALOGUE, valley), (GRAT_ANLAGE, ["X"]), (GRAT_SPALTE, list(GRAT_SPALTE_GLYPHS))):
             if os.path.exists(path):
                 with open(path, encoding="utf-8") as f:
                     cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
@@ -617,7 +624,9 @@ class GratLayoutTests(unittest.TestCase):
             self.assertNotIn("if", params)
         for glyph in "XYG":
             self.assertNotIn("if", symbols[glyph].get("params", {}), "the blockers and the gate are there until their segment takes them away")
-        self.assertNotIn("unless", symbols["Y"].get("params", {}), "the blocker of the ramp stays until G6")
+        self.assertEqual(symbols["J"]["params"]["unless"], "grat.candle_taken", "the candle is gone once it is taken")
+        self.assertEqual(symbols["Y"]["params"]["unless"], "plant.letgo", "the blocker of the ramp goes with the letting go (G6)")
+        self.assertEqual(symbols["F"]["params"]["unless"], "plant.letgo", "and so does the heap of scree before the steps")
         self.assertEqual(symbols["X"]["params"]["unless"], "grat.gate_open", "the blocker at the gate goes with the flag the knocking sets (G3)")
         self.assertNotIn("shadow", catalog["tal/gb_plant_gate_open"], "the open gate is a look the story changes: no baked shadow")
         self.assertNotIn("cue", symbols["t"]["params"], "the thimble is taken at the den (its cue), the thimble itself is a picture")
@@ -875,7 +884,7 @@ class GratLayoutTests(unittest.TestCase):
         params = symbols["Y"]["params"]
         self.assertEqual((params["cue"], params["size"]), ("ramp_wait", [5, 1]))
         self.assertNotIn("if", params)
-        self.assertNotIn("unless", params)
+        self.assertEqual(params["unless"], "plant.letgo", "G6: the keeper's entry of the letting go takes the blocker away")
         cells = [rows[ry][x] for x in range(rx - 2, rx + 3)]
         self.assertTrue(all(_ground(symbols, c) == "," for c in cells))
         self.assertEqual(rows[ry][rx - 3], "^")
@@ -930,7 +939,7 @@ class GratLayoutTests(unittest.TestCase):
             self.assertEqual(rows[y][sx1 + 1], "^", "and on the east")
         for x in range(sx0, sx1 + 1):
             self.assertEqual(rows[sy1 + 1][x], "^", "the cleft ends in the rock")
-            self.assertIn(rows[sy0 - 1][x], ".,mp", "its mouth lies on the ledge")
+            self.assertIn(rows[sy0 - 1][x], ".,mpC", "its mouth lies on the ledge (G6: the middle cell is a spot to look from)")
         gx = layout.GRAT_HALL[0]
         self.assertTrue(abs((sx0 + sx1) / 2 - gx) <= 6, "above the Anlage: over the hall")
         self.assertGreater(layout.GRAT_HALL[1] - sy1, 10)
