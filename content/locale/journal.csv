@@ -162,6 +162,8 @@ QUEST_MAIN_MOUNTAIN_WAY_LETGO,"Ich habe das Pult verlassen, und die Hebel sind v
 QUEST_MAIN_MOUNTAIN_WAY_HIGH,"Ich stehe auf dem Grat, und das Tal liegt klein unter mir. Der Weg führt am Rand der Wand entlang nach Osten."
 QUEST_MAIN_MOUNTAIN_WAY_CHILD,"Ich habe auf dem Grat neben dem Kind gesessen, und als ich mich umsah, war es fort. Der Stein ist noch warm, und der Weg führt weiter nach Osten, über die Fläche."
 QUEST_MAIN_MOUNTAIN_WAY_HOUSE,"Auf der Fläche steht ein kleines Haus aus Brettern, das vorher nicht da war. Ich bin hineingegangen. Es ist ein einziges Zimmer, und es ist still dort."
+QUEST_MAIN_MOUNTAIN_WAY_HOME,"Ich gehe hinunter, vom Pass zur Straße und weiter ins Tal. Der Weg ist derselbe wie beim Aufstieg, nur andersherum."
+QUEST_MAIN_MOUNTAIN_WAY_DONE,"Ich bin im Haus. Es ist still, es riecht nach Holz und nach Tee, der kalt geworden ist. Das Licht liegt auf dem Boden."
 QUEST_SIDE_GRAT_STONE_TITLE,"Der Stein, der nicht liegen bleibt"
 QUEST_SIDE_GRAT_STONE_CARRY,"Am Fuß des ersten Steinmännchens im Hochtal lag ein kleiner runder Stein. Ich habe ihn eingesteckt. Obenauf ist bei jedem Steinmännchen im Tal noch Platz."
 QUEST_SIDE_GRAT_STONE_DONE,"Ich habe den Stein auf alle drei Steinmännchen gelegt. Er ist gerollt, gekippt und vom Wind weitergeschoben worden. Jetzt steckt er in meiner Tasche."

@@ -191,7 +191,7 @@ func test_stepping_in_takes_the_walk_one_step_on_and_marks_the_beat() -> void:
 	await _house()
 	assert_eq(WorldState.quest_stage(QUEST), "house", "the walk goes on")
 	assert_true(Beat.reached("urhaus_enter"))
-	assert_true(ContentDB.quest(QUEST).stage("house").is_final(), "the walk rests here until G9")
+	assert_false(ContentDB.quest(QUEST).stage("house").is_final(), "the way home (G9) hangs on it")
 	assert_false(ContentDB.quest(QUEST).stage("child").is_final())
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_HOUSE"), "QUEST_MAIN_MOUNTAIN_WAY_HOUSE")
 

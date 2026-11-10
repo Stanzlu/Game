@@ -392,9 +392,21 @@
     {
      "type": "flag",
      "ref": "house.garden_sprout"
+    },
+    {
+     "type": "line",
+     "ref": "tal_bed_2"
+    },
+    {
+     "type": "line",
+     "ref": "tal_bed_3"
+    },
+    {
+     "type": "line",
+     "ref": "tal_bed_4"
     }
    ],
-   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`). G7: nach der zentralen Szene wächst im Beet im Tal ein Trieb (`house.garden_sprout`, Brief O9), den kein Text nennt; die Spielerin pflanzt nichts, und der Samen bleibt im Rucksack."
+   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`). G7: nach der zentralen Szene wächst im Beet im Tal ein Trieb (`house.garden_sprout`, Brief O9); die Spielerin pflanzt nichts, und der Samen bleibt im Rucksack. G9: nur das Beet nennt den Trieb (`garden_bed`, `tal_bed_2` bis `tal_bed_4`): zwischen dem Unkraut, hellgrün, zwei Blätter, er war nicht da, als sie ging, und er tut nichts weiter; kein Wort über Samen, Pflege, Zukunft oder Sinn."
   },
   {
    "id": "hausmotive",
@@ -453,9 +465,13 @@
     {
      "type": "flag",
      "ref": "house.guest_hermit"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_waechter"
     }
    ],
-   "payoff": "Das Haus wächst mit den Akten (Plan 5.4): die Werkbank des Antreibers und der Stuhl, den der Einsiedler mitbringt und stehen lässt (Akt III, W6), dann Regale, Garten, Gäste."
+   "payoff": "Das Haus wächst mit den Akten (Plan 5.4): die Werkbank des Antreibers und der Stuhl, den der Einsiedler mitbringt und stehen lässt (Akt III, W6), dann Regale, Garten, Gäste; in Akt V der Wächter am Kamin (G9, `house.guest_waechter`, nur für den, der ihn am Pult losgelassen hat)."
   },
   {
    "id": "betaeuber",
@@ -2523,7 +2539,7 @@
      "ref": "house.garden_sprout"
     }
    ],
-   "payoff": "Akt V (G7, `kind.dialogue`, Brief O8): auf dem Grat, am Rand der Hochfläche, sitzt das Kind auf einem flachen Stein und sieht ins Tal (`kv_look_1`). Es reagiert auf nichts, bis die Spielerin sich neben es setzt, wann sie will; vorher bekommt sie nur Erzählung (`kv_look_3`). Der Stein ist an ihrem Ende kühl (`kv_seat_1`), an seinem warm (`kv_gone_3`, `kv_empty_1`): es sitzt dort lange. Dann summt es ein paar Töne, das Motiv der Tal-Musik (`kv_seat_3`), und Rahmen erscheinen in der Luft über den beiden (`kv_frames_1`; die Szene legt die Bilder hinein, die die Spielerin hält, der Text sagt über die Rahmen nichts, was Inhalt, Mangel oder Menge nennt). Das Kind summt von vorn und hört mitten in der Melodie auf (`kv_answer_1`), und die Spielerin antwortet oder nicht: „Ich bin da.“ ist die unbedingte Antwort (`kv_answer_r1`), „Ich warte mit dir.“ steht nur mit der Facette `trust` daneben (`kv_answer_r2`, zweiter Leser, Brief O10), das Schweigen „…“ ist die letzte. Alle drei haben dieselbe Gestalt (ein Satz der Spielerin, eine Zeile des Kindes, ein Satz der Welt) und führen zu `child_gone`: das Kind antwortet nie auf das Gesagte, es zeigt auf etwas oder schweigt („Schau mal.“ `kv_answer_4`, „Hör mal.“ `kv_answer_7`, „…“ `kv_answer_10`), es lobt nicht, tröstet nicht, erklärt nicht, und keine Antwort ist näher oder weiter als die anderen. Dann setzt das Summen wieder ein, an derselben Stelle (`kv_gone_1`); die Spielerin sieht einen Augenblick dorthin, wohin das Kind sieht, und dann wieder neben sich (`kv_gone_2`, `kv_gone_3`). Der Text sagt das Verschwinden nicht: die Szene nimmt das Kind aus dem Bild und lässt die Rahmen verblassen, ohne Abschied, Dank und Versprechen; der Stein bleibt warm. Im Tal wächst im Beet ein Trieb, den kein Text nennt (`house.garden_sprout`, Brief O9). Die Spielerin darf sitzen bleiben, solange sie will."
+   "payoff": "Akt V (G7, `kind.dialogue`, Brief O8): auf dem Grat, am Rand der Hochfläche, sitzt das Kind auf einem flachen Stein und sieht ins Tal (`kv_look_1`). Es reagiert auf nichts, bis die Spielerin sich neben es setzt, wann sie will; vorher bekommt sie nur Erzählung (`kv_look_3`). Der Stein ist an ihrem Ende kühl (`kv_seat_1`), an seinem warm (`kv_gone_3`, `kv_empty_1`): es sitzt dort lange. Dann summt es ein paar Töne, das Motiv der Tal-Musik (`kv_seat_3`), und Rahmen erscheinen in der Luft über den beiden (`kv_frames_1`; die Szene legt die Bilder hinein, die die Spielerin hält, der Text sagt über die Rahmen nichts, was Inhalt, Mangel oder Menge nennt). Das Kind summt von vorn und hört mitten in der Melodie auf (`kv_answer_1`), und die Spielerin antwortet oder nicht: „Ich bin da.“ ist die unbedingte Antwort (`kv_answer_r1`), „Ich warte mit dir.“ steht nur mit der Facette `trust` daneben (`kv_answer_r2`, zweiter Leser, Brief O10), das Schweigen „…“ ist die letzte. Alle drei haben dieselbe Gestalt (ein Satz der Spielerin, eine Zeile des Kindes, ein Satz der Welt) und führen zu `child_gone`: das Kind antwortet nie auf das Gesagte, es zeigt auf etwas oder schweigt („Schau mal.“ `kv_answer_4`, „Hör mal.“ `kv_answer_7`, „…“ `kv_answer_10`), es lobt nicht, tröstet nicht, erklärt nicht, und keine Antwort ist näher oder weiter als die anderen. Dann setzt das Summen wieder ein, an derselben Stelle (`kv_gone_1`); die Spielerin sieht einen Augenblick dorthin, wohin das Kind sieht, und dann wieder neben sich (`kv_gone_2`, `kv_gone_3`). Der Text sagt das Verschwinden nicht: die Szene nimmt das Kind aus dem Bild und lässt die Rahmen verblassen, ohne Abschied, Dank und Versprechen; der Stein bleibt warm. Im Tal wächst im Beet ein Trieb (`house.garden_sprout`, Brief O9), den erst das Beet selbst nennt, wenn sie zurückkommt (`tal_bed_2`, G9). Die Spielerin darf sitzen bleiben, solange sie will."
   },
   {
    "id": "kleine-tuer",
@@ -2661,9 +2677,28 @@
     {
      "type": "flag",
      "ref": "plant.letgo"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_6"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_8"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_9"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_waechter"
     }
    ],
-   "payoff": "Der Wächter wird nicht geheilt, und sein letztes Wort ist ein Vorbehalt, kein Dank (Bible §14). Der erste steht am Ende der Last (Akt V, G4): die Rechnung geht nicht auf, er trägt es ein und bleibt dabei, das Verfahren verlangt es trotzdem (`lst_over_9`), und danach gilt alles vorbehaltlich einer Nachprüfung der Rechnung (`anl_over_3`). Der Text stellt ihn nicht bloß: die Zahl stimmt, und er hält trotzdem am Pult fest. Im Loslassen (Akt V, G5, `loslassen.dialogue`) greift er nicht ein, wenn der Dampf kommt: seine Hand liegt über einem Hebel, das Verfahren verlangt einen Zug, und er trägt ein, dass er nicht zieht (`los_mid_4`). Am Ende ist der Zustand kein zulässiger (`los_end_3`), er trägt ihn trotzdem ein, als Einzelfall (`los_end_5`), und das Verfahren bleibt richtig: wiederholt sich der Fall, prüft er neu, bis dahin gilt das Verfahren (`los_end_8`). Danach steht der Einzelfall allein auf seiner Seite (`anl_done_5`), und die Erwartung, dass es anders ausgeht, bleibt eingetragen (`anl_done_7`). Kein Dank, keine Einsicht, keine Lehre, und der Text sagt nirgends, dass er es gelernt hat. Sein letzter Vorbehalt kommt am Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat)."
+   "payoff": "Der Wächter wird nicht geheilt, und sein letztes Wort ist ein Vorbehalt, kein Dank (Bible §14). Der erste steht am Ende der Last (Akt V, G4): die Rechnung geht nicht auf, er trägt es ein und bleibt dabei, das Verfahren verlangt es trotzdem (`lst_over_9`), und danach gilt alles vorbehaltlich einer Nachprüfung der Rechnung (`anl_over_3`). Der Text stellt ihn nicht bloß: die Zahl stimmt, und er hält trotzdem am Pult fest. Im Loslassen (Akt V, G5, `loslassen.dialogue`) greift er nicht ein, wenn der Dampf kommt: seine Hand liegt über einem Hebel, das Verfahren verlangt einen Zug, und er trägt ein, dass er nicht zieht (`los_mid_4`). Am Ende ist der Zustand kein zulässiger (`los_end_3`), er trägt ihn trotzdem ein, als Einzelfall (`los_end_5`), und das Verfahren bleibt richtig: wiederholt sich der Fall, prüft er neu, bis dahin gilt das Verfahren (`los_end_8`). Danach steht der Einzelfall allein auf seiner Seite (`anl_done_5`), und die Erwartung, dass es anders ausgeht, bleibt eingetragen (`anl_done_7`). Kein Dank, keine Einsicht, keine Lehre, und der Text sagt nirgends, dass er es gelernt hat. Sein letzter Vorbehalt kommt am Herd im Haus (G9, `waechter_in`, nur für den, der ihn am Pult losgelassen hat): er prüft den Herd nicht ganz, trägt ein, dass er hier nicht prüft (`hk5_w_6`, die Form von `los_mid_4`), erwartet keinen Dank und keinen Zwischenfall (`hk5_w_8`), und sein letztes Wort ist „Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen.“ (`hk5_w_9`): ein Vorbehalt, kein Dank und keine Einsicht.",
+   "payoff_lines": [
+    "hk5_w_9"
+   ]
   },
   {
    "id": "waechter-zaehlt",
@@ -2822,9 +2857,101 @@
     {
      "type": "flag",
      "ref": "plant.letgo"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_7"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_4"
     }
    ],
-   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) bleibt im Ton: das leere Pult trägt er mit der Dauer laufend ein (`los_away_2`), in die Spalte, wer den ersten Hebel gezogen hat, schreibt er niemand (`los_first_3`), und wo das Verfahren einen Zug verlangt, trägt er ein, dass er nicht zieht (`los_mid_4`); den Defekt der Lampe trägt er ein und behebt ihn nicht (`los_defect_3`). Wer „Und jetzt?“ fragt, hört, dass das Verfahren für diesen Stand keinen Schritt kennt (`anl_over_4`) und dass es zulässig ist, das Pult nicht zu bedienen, er rät aber nicht dazu (`anl_over_5`). Danach hat der Einzelfall eine eigene Seite, auf der er allein steht (`anl_done_5`), und die Kartoffel ist in allem durchschnittlich, Besonderheiten keine, was er bemerkenswert findet (`anl_potato_6`). Der Humor sitzt wieder in Spalten und Einträgen, nie in seiner Angst. Sein trockener Schluss (G9, am Herd im Haus) folgt."
+   "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) bleibt im Ton: das leere Pult trägt er mit der Dauer laufend ein (`los_away_2`), in die Spalte, wer den ersten Hebel gezogen hat, schreibt er niemand (`los_first_3`), und wo das Verfahren einen Zug verlangt, trägt er ein, dass er nicht zieht (`los_mid_4`); den Defekt der Lampe trägt er ein und behebt ihn nicht (`los_defect_3`). Wer „Und jetzt?“ fragt, hört, dass das Verfahren für diesen Stand keinen Schritt kennt (`anl_over_4`) und dass es zulässig ist, das Pult nicht zu bedienen, er rät aber nicht dazu (`anl_over_5`). Danach hat der Einzelfall eine eigene Seite, auf der er allein steht (`anl_done_5`), und die Kartoffel ist in allem durchschnittlich, Besonderheiten keine, was er bemerkenswert findet (`anl_potato_6`). Der Humor sitzt wieder in Spalten und Einträgen, nie in seiner Angst. Sein trockener Schluss steht am Herd im Haus (G9, nur für den, der ihn am Pult losgelassen hat): er führt den Kamin unter Herd (`hk5_w_2`), zählt die Scheite und lässt die Rinde aus (`hk5_w_4`), legt für das, was er nicht prüft, eine neue Rubrik an (`hk5_w_7`), zählt sich selbst als Besuch, damit die Zahl stimmt (`hk5_wh_2`), und der obere Teil bleibt offen, so vorgesehen, seit eben (`hk5_wh_4`). Der Humor sitzt in der Ordnung und in den Scheiten, nie in seiner Angst."
+  },
+  {
+   "id": "waechter-herd",
+   "kind": "vorausdeutung",
+   "title": "Der Wächter am Kamin",
+   "bible": "§14, §45, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hk5_w_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_3"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_5"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_6"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_7"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_8"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_w_9"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_1"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_2"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_3"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_wh_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk5_close_3"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_waechter"
+    }
+   ],
+   "payoff": "Akt V, G9 (`heimkehr.dialogue`, Brief O12): wer den Wächter am Pult losgelassen hat (Facette `trust`, dritter Leser), dem klopft er im Haus an und geht an den Kamin, den er „Herd“ nennt und unter dem er ihn führt (`hk5_w_2`). Er prüft ihn nicht ganz: Einfassung, Rückwand, der Zug im Rauchfang, die Scheite (die Rinde zählt nicht, `hk5_w_3`, `hk5_w_4`), dann nicht weiter, und er trägt ein, dass er hier nicht prüft (`hk5_w_6`, die Form von `los_mid_4`), in einer Rubrik, die er für diesen Fall neu anlegt (`hk5_w_7`). Eine Prüfung ist keine Gefälligkeit: er erwartet keinen Dank und keinen Zwischenfall (`hk5_w_8`), und sein letztes Wort ist ein Vorbehalt, kein Dank („Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen.“, `hk5_w_9`). Er wird nicht geheilt, er nennt seine Angst nie, und kein Wort geht über die Maschine, die Hebel, die Lampe oder das Loslassen. Danach steht er am Kamin, ein Besuch wie der andere: hier ist die Spielerin Eins und er Zwei, damit die Zahl stimmt (`hk5_wh_2`), der Zug ist weiter zulässig, und der obere Teil bleibt offen, so vorgesehen, seit eben (`hk5_wh_4`). Die Szene setzt `house.guest_waechter`, die Karte stellt ihn hin; wer ihn nicht losgelassen hat, kommt in ein stilles Haus, der Kamin bleibt leer, und der Akt hängt nie an ihm (wie am Gast des Einsiedlers). Der Akt endet danach in jedem Zustand gleich: Holz, ein Zug im Kamin, ein Rest Licht, der noch bis zum Tisch reicht (`hk5_close_3`), ohne Titel und ohne Abschied.",
+   "payoff_lines": [
+    "hk5_w_9"
+   ]
   },
   {
    "id": "spalte-weg",
@@ -3251,6 +3378,11 @@
    "flag": "house.guest_tess",
    "axis": "Besucher",
    "meaning": "Tess hat das Haus besucht (Akt IV, S8): sie kam mit Absicht und mit Brettern, zeigte den ersten Nagel, sagte über die Werkbank „Schief. Aber dicht.“, brach das Brot und ging; der Stuhl, auf dem sie saß, bleibt stehen. Die Szene setzt das Flag mit dem Sitzen, die Karte zeigt den Stuhl. Der Besuch beendet den Akt (Stufe `done`, Kapitelmarke `act4`, Beat `act4_home`), still und ohne Titel; wer Tess nie getroffen hat, liest ihren Namen auf dem Zollstock. Das Präfix `house.guest_` zählt die Gäste (Plan 5.6)."
+  },
+  {
+   "flag": "house.guest_waechter",
+   "axis": "Besucher",
+   "meaning": "Der Wächter steht am Kamin im Haus (Akt V, G9, Brief O12): nur wer ihn am Pult losgelassen hat (Facette `trust`) hört ihn anklopfen; er prüft den Herd nicht ganz, trägt es ein und sagt seinen Vorbehalt, nie einen Dank, und bleibt dann am Kamin stehen. Die Szene setzt das Flag am Ende des Besuchs, die Karte stellt ihn hin (`waechter_home`). Er zieht nicht ein, und der Akt hängt nie an ihm: wer ihn nicht losgelassen hat, kommt in ein stilles Haus, und der Kamin bleibt leer. Das Präfix house.guest_ zählt die Gäste (Plan 5.6)."
   },
   {
    "flag": "house.looks_closely",
@@ -4065,7 +4197,7 @@
   {
    "flag": "house.garden_sprout",
    "axis": "Garten",
-   "meaning": "Im Beet im Tal wächst ein Trieb (Akt V, G7, Brief O9). Die Szene setzt es, wenn das Kind gegangen ist; die Spielerin pflanzt nichts, es gibt keine Tagesaufgabe und keinen Zähler (Bible §29), und der Samen bleibt im Rucksack. Kein Text nennt den Trieb: man findet ihn, wenn man ins Tal zurückkommt. Akt VI und VII bauen den Gartenzustand aus; ob der Samen mitkommt, entscheidet sie im Finale (Bible §30)."
+   "meaning": "Im Beet im Tal wächst ein Trieb (Akt V, G7, Brief O9). Die Szene setzt es, wenn das Kind gegangen ist; die Spielerin pflanzt nichts, es gibt keine Tagesaufgabe und keinen Zähler (Bible §29), und der Samen bleibt im Rucksack. Nur das Beet nennt den Trieb (Akt V, G9, `garden_bed`): zwischen dem Unkraut, hellgrün, zwei Blätter, er war nicht da, als sie ging, und er tut nichts weiter; kein Text erklärt ihn, keiner nennt Samen, Pflege oder Zukunft. Man findet ihn, wenn man ins Tal zurückkommt. Akt VI und VII bauen den Gartenzustand aus; ob der Samen mitkommt, entscheidet sie im Finale (Bible §30)."
   },
   {
    "flag": "fragment.first_house",

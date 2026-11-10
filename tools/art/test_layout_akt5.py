@@ -14,6 +14,9 @@ STRASSE = os.path.join(mapfile.ROOT, "content", "maps", "strasse.txt")
 GRAT = os.path.join(mapfile.ROOT, "content", "maps", "grat.txt")
 DIALOGUE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "aufstieg.dialogue")
 DIALOGUE_RES = "res://content/dialogue/akt5/aufstieg.dialogue"
+# G9: the spot on the way down asks the homecoming's own dialogue
+HEIMKEHR = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "heimkehr.dialogue")
+HEIMKEHR_RES = "res://content/dialogue/akt5/heimkehr.dialogue"
 # ground cells a person can stand on: grass, path, mud, puddle, the fords (shallow water over flat stones) and the planks over the brook
 STANDABLE = set(".,mpwy")
 # the path itself: path cells, puddles in it, the fords and the planks (the grass and the scree beside it are not)
@@ -124,12 +127,23 @@ class PassLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                self.assertEqual(params["dialogue"], DIALOGUE_RES, glyph)
-        self.assertEqual(used, CUES)
-        if os.path.exists(DIALOGUE):
-            with open(DIALOGUE, encoding="utf-8") as f:
-                cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
-            self.assertLessEqual(set(used.values()), cues, "every cue of the map is a cue of the dialogue")
+                self.assertEqual(params["dialogue"], HEIMKEHR_RES if glyph == "\u0398" else DIALOGUE_RES, glyph)
+        self.assertEqual(used, dict(CUES, **{"\u0398": "descent_pass"}))
+        for path, glyphs in ((DIALOGUE, [g for g in used if g != "\u0398"]), (HEIMKEHR, ["\u0398"])):
+            if os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
+                self.assertLessEqual({used[g] for g in glyphs}, cues, "every cue of the map is a cue of its dialogue")
+
+    def test_g9_the_way_down_has_a_spot_to_look_from_two_cells_south_of_the_arrival(self):
+        _, symbols, rows, spots = _pass()
+        self.assertEqual(spots["\u0398"], [layout.NORTH_DESCENT])
+        self.assertEqual(layout.NORTH_DESCENT, (layout.NORTH_ARRIVAL[0], layout.NORTH_ARRIVAL[1] + 2))
+        params = symbols["\u0398"]["params"]
+        self.assertEqual(params["if"], "grat.child_gone", "only once the child is gone: the way up is as it was")
+        self.assertNotIn("sprite", params, "an invisible spot, no body, no picture (the stamp stays)")
+        self.assertEqual(symbols["\u0398"]["ground"], ",", "on the path's ground")
+        self.assertEqual(rows[layout.NORTH_DESCENT[1]][layout.NORTH_DESCENT[0]], "\u0398")
 
     def test_the_legend_grounds_are_the_generators_and_no_placement_changes_the_ground_it_stands_on(self):
         _, symbols, rows, _ = _pass()

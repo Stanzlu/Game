@@ -435,7 +435,7 @@ func test_every_cue_the_legend_and_the_scene_name_is_in_the_dialogue() -> void:
 	var regex := RegEx.create_from_string('"cue": "(\\w+)"')
 	for map: String in ["haus", "tal", "flutlichtung"]:
 		for line in FileAccess.get_file_as_string("res://content/maps/%s.txt" % map).split("\n"):
-			if line.begins_with(";") or not line.contains("heimkehr.dialogue"):
+			if line.begins_with(";") or not line.contains(HEIMKEHR):
 				continue
 			var found := regex.search(line)
 			assert_not_null(found, "a cue in: " + line.left(60))

@@ -56,6 +56,8 @@ C = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 δ = {"ground": "W", "prop": "res://world/props/curiosity_slot.tscn", "params": {"sprite": "haus/slot_peg", "slot": "wall_2", "radius": 22, "hang": -12, "if": "house.shelves"}}
 L = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/loaf", "lift": 27, "if": "house.bread"}}
 G = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "haus/guest_chair", "if": "house.guest_tess"}}
+; Akt V, G9 (Heimkehr): wer den Wächter am Pult losgelassen hat (trust), dem klopft er an und prüft den Kamin nicht ganz; danach steht er vor dem Herd (Ψ, östlich vom Platz Miras, einen Schritt vor dem Kamin, sieht nach Norden; house.guest_waechter setzt die Szene mit dem Stehen)
+Ψ = {"ground": "_", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_waechter_look.tres", "dialogue": "res://content/dialogue/akt5/heimkehr.dialogue", "cue": "waechter_home", "glance": true, "face": "n", "if": "house.guest_waechter"}}
 [map]
 ########################################
 ########################################
@@ -67,7 +69,7 @@ G = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ############WWWWWWWWWWWWWWWW############
 ############WαβWWWWRWYcwWhγδ############
 ############W___K__________W############
-############W__M__ak__p____W############
+############W__M_Ψak__p____W############
 ############W____rz______b_W############
 ############W___s_G_T_C____W############
 ############W______@L______W############
