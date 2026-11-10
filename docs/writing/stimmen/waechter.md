@@ -2,9 +2,10 @@
 
 **Beleg in Akt V:** 89 Zeilen in `content/dialogue/akt5/anlage.dialogue` (G3, G4 und G5), `content/dialogue/akt5/last.dialogue` (G4) und `content/dialogue/akt5/loslassen.dialogue` (G5), Ø 8,3 Wörter (G3: 27 Zeilen, Ø 7,2; G4: 31 Zeilen, Ø 9,2;
 G5: 31 Zeilen, Ø 8,2), längste 13, kein Ausruf, zwei Fragen (eine Kontrollfrage, die er selbst beantwortet, und eine, die er sich selbst stellt; G5 hat keine), dazu die Dinge der Halle als Erzählung (die kleine Tür, die Zeigerwand,
-das Zifferblatt, das Rohr). Aus der Bible (§14) und dem Plan (Akt V). **Belegt in G3:** Zählen, Nummern, Eintragen, Kontrollfragen, das trockene „Nein.“ der Probe. **Belegt in G4:** der Betrieb als Verfahren, die Pause, die er einträgt,
+das Zifferblatt, das Rohr); dazu **10 Zeilen in `content/dialogue/akt5/heimkehr.dialogue`** (G9: 7 in `waechter_in`, 3 in `waechter_home`, Ø 10,3 Wörter, längste 13, kein Ausruf, keine Frage; die Zeilen sind länger als in der Anlage, weil er hier
+jeden Satz im Haus eines anderen vollständig sagt), dazu drei Erzählzeilen (Klemmbrett, Stift, das Blatt am Kamin). Aus der Bible (§14) und dem Plan (Akt V). **Belegt in G3:** Zählen, Nummern, Eintragen, Kontrollfragen, das trockene „Nein.“ der Probe. **Belegt in G4:** der Betrieb als Verfahren, die Pause, die er einträgt,
 das Nachzählen, die Rechnung, die nicht aufgeht, und das „Dabei bleiben“ (Die Last). **Belegt in G5:** das Eintragen dessen, was niemand tut (Spalten, die leer bleiben), die Zeile für den Defekt, den er nicht behebt, das Festhalten am
-Verfahren nach dem Loslassen (Einzelfall, Wiedervorlage) und das Feld „Ohne Eintrag“. **Noch ohne Beleg:** sein letzter Vorbehalt am Schluss, der Herd im Haus (G9).
+Verfahren nach dem Loslassen (Einzelfall, Wiedervorlage) und das Feld „Ohne Eintrag“. **Belegt in G9:** der Herd im Haus (nur wer ihn am Pult losgelassen hat): er prüft ihn nicht ganz, trägt ein, was er nicht prüft, und sein letztes Wort ist ein Vorbehalt (`hk5_w_9`). **Noch ohne Beleg:** die letzte Szene (Bible §64: er prüft den Herd „demonstrativ nicht zum vierten Mal“), die Akt VII schreibt (Bible §64 fügt „und leidet sichtbar darunter“ hinzu: das ist gegen „nie in seinem Körper“ abzuwägen, wenn es so weit ist).
 
 ## Funktion
 
@@ -40,12 +41,18 @@ die Welt endet nicht. Er wird dadurch **nicht „geheilt“** und bleibt skeptis
 - **Das Feld „Ohne Eintrag“** ist der Hauch, nie die Angst: unten rechts auf jedem Blatt, von ihm in jedem Fall ausgelassen (`los_end_4`). Wer die Facette Vertrauen trägt, sagt ihm, dass nichts einzutragen zulässig ist, und er bestätigt nur, dass das Feld vorgesehen ist und er es
   noch nie benutzt hat (`anl_done_8`, `anl_done_9`): kein Fortschritt, keine Heilung, kein Dank.
 - **Die Kartoffel** trägt er in der Form seiner Spalten ein (`anl_potato_2` bis `anl_potato_7`): durchschnittlich in Größe, Gewicht und Farbe, Besonderheiten keine, und das findet er bemerkenswert. Er erklärt sie nicht, und der Text macht keinen Witz über ihn.
+- **Der Herd im Haus (G9)**: er kommt nur zu dem, der ihn am Pult losgelassen hat, und klopft an. Der Kamin heißt bei ihm „Herd“, er führt ihn unter Herd (`hk5_w_2`), prüft Einfassung und Rückwand, den Zug und die Scheite und lässt die Rinde aus (`hk5_w_3`,
+  `hk5_w_4`), und **er prüft nicht ganz**: ab einer Höhe im Rauchfang prüft er nicht und trägt ein, dass er nicht prüft (`hk5_w_6`, die Form von `los_mid_4`), in einer Rubrik, die es dafür nicht gab und die er anlegt (`hk5_w_7`, die Form von `anl_again_5`).
+  Eine Prüfung ist keine Gefälligkeit (`hk5_w_8`): er erwartet keinen Dank und keinen Zwischenfall, und **sein letztes Wort ist ein Vorbehalt**, nie ein Dank: „Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen.“ (`hk5_w_9`). Er sagt nicht, was oben im
+  Rauchfang ist oder warum er dort nicht prüft; er sagt nichts über die Maschine, die Hebel, die Lampe oder die Kartoffel, und das Wort „loslassen“ steht nicht in der Datei. Danach steht er am Kamin, ein Besuch wie der andere, und der Gag ist die Zählung: er ist hier
+  der Besuch und trägt sich als Zwei ein, die Spielerin bleibt Eins, „damit die Zahl stimmt“ (`hk5_wh_2`, nach `anl_w_2` und `anl_w_4`); die Rubrik von eben gilt, „so vorgesehen, seit eben“ (`hk5_wh_4`). Er wird nicht geheilt: der Vorbehalt bleibt, der Rest bleibt
+  offen, und kein Satz sagt, dass er etwas eingesehen hat.
 - Er spricht **nie über das Kind** und **nie über die kleine Tür** (die Tür sieht man, sie wird nicht besprochen, Brief O6); wo die Halle von ihr erzählt, erzählen Dinge (`anl_door_1` bis `anl_door_3`).
 
 ## Verlauf
 
 Akt V: die Anlage (G3: zählt hinter dem Zaun, öffnet das Tor mit „Eintritt.“, stellt die Probe der drei Hebel vor, trägt ein, dass sie klappt) → die Last wird unmöglich (G4: stellt den Betrieb vor, ruft vier Wellen aus,
-trägt die Pause ein, rechnet vor, dass es nicht aufgeht, trägt „nicht erfüllt“ ein, bleibt dabei und steht unter Vorbehalt) → das erste Loslassen (G5: die Hebel fallen von selbst, der Dampf kommt, er zieht nicht und trägt es ein) → ein Defekt, den niemand repariert und der nichts zerstört (G5: Lampe Eins) → skeptischer Abschied (G5: Einzelfall, Wiedervorlage, das Feld „Ohne Eintrag“ bleibt leer) → am Herd im Haus (G9, nur wer ihn losließ). Das Warum: was er bewachen musste; es zeigt die kleine Tür,
+trägt die Pause ein, rechnet vor, dass es nicht aufgeht, trägt „nicht erfüllt“ ein, bleibt dabei und steht unter Vorbehalt) → das erste Loslassen (G5: die Hebel fallen von selbst, der Dampf kommt, er zieht nicht und trägt es ein) → ein Defekt, den niemand repariert und der nichts zerstört (G5: Lampe Eins) → skeptischer Abschied (G5: Einzelfall, Wiedervorlage, das Feld „Ohne Eintrag“ bleibt leer) → am Herd im Haus (G9, nur wer ihn losließ: prüft den Herd nicht ganz, trägt es ein, Vorbehalt, bleibt am Kamin stehen). Das Warum: was er bewachen musste; es zeigt die kleine Tür,
 nie eine Zeile.
 
 ## Goldzeilen
@@ -76,6 +83,10 @@ nie eine Zeile.
 - `anl_done_5` „Sonst steht dort nichts. Das passt zu einem Einzelfall.“
 - `anl_done_7` „Die Erwartung bleibt trotzdem eingetragen.“
 - `anl_potato_6` „Besonderheiten: keine. Das ist bemerkenswert.“
+- `hk5_w_2` „Das ist ein Kamin. Ich führe ihn unter Herd.“
+- `hk5_w_8` „Eine Prüfung ist keine Gefälligkeit. Dank erwarte ich keinen, einen Zwischenfall auch nicht.“
+- `hk5_w_9` „Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen.“
+- `hk5_wh_4` „Der obere Teil bleibt offen. Das ist so vorgesehen, seit eben.“
 
 Das Warum zeigen die Dinge, nie eine Zeile: hinter dem Pult sitzt eine Tür, die der Spielerin kaum bis zur Brust reicht, der Riegel wird von Stangen aus allen zwölf Hebeln gehalten, und keine ist locker
 (`anl_door_2`); auf einem Zifferblatt hat ein Zeiger Jahr um Jahr eine Rille in das Glas gerieben (`anl_dial_1`).
@@ -106,3 +117,6 @@ Das Warum zeigen die Dinge, nie eine Zeile: hinter dem Pult sitzt eine Tür, die
 13. „Es ist gut, dass es gefallen ist.“ / „Vielleicht war es nie nötig.“ — Zustimmung und Einsicht nach dem Loslassen: er trägt es ein und hält es für einen Einzelfall (G5).
 14. „Ich repariere die Lampe.“ — er behebt den Defekt nie; sonst wäre der Defekt eine Prüfung gewesen, die er besteht (G5: „Defekt. Offen.“, `los_defect_3`).
 15. „Die Kartoffel steht für alles, was ich nicht halten konnte.“ — Deutung statt Eintrag; die Kartoffel ist bemerkenswert durchschnittlich und sonst nichts (G5, `anl_potato_6`).
+16. „Ich prüfe den Herd nicht mehr ganz, weil ich dir vertraue.“ / „Danke, dass du mich losgelassen hast.“ — Dank, Einsicht und die Lehre als Satz; er prüft nicht ganz und trägt es ein, ohne einen Grund zu nennen (G9, `hk5_w_6`, `hk5_w_9`).
+17. „Oben im Rauchfang ist nichts. Ich weiß es. Ich will nur nicht nachsehen.“ — nennt, was ihn zurückhält, und damit seine Angst; er sagt nur, ab wo er nicht prüft (G9, `hk5_w_6`).
+18. Der Herd ist ihm warm, er setzt sich, er trinkt Tee, er bleibt zum Abend — Wärme und Einzug; er steht am Kamin, ein Besuch wie der andere, ohne Einladung und ohne Gespräch (G9, `hk5_wh_1`).

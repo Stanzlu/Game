@@ -29,19 +29,19 @@ Die Tür geht hinter dir zu. Das Haus nimmt es zur Kenntnis und macht nichts dar
 => END
 
 # --- Der Wächter am Kamin (nur mit trust) --------------------------------------------------------------------------------------
-# Die Szene spielt es nur mit der Facette trust, nach dem Klopfen, wenn er vor dem Kamin steht (sie setzt danach house.guest_waechter). Er kommt mit Klemmbrett, nennt den Kamin "Herd" (bei ihm gibt es dafür
-# eine Rubrik, ein Satz über die Zuordnung) und prüft ihn nicht ganz: Einfassung, Rückwand, der Zug, die Scheite, dann nicht weiter, und das trägt er ein, in einer Rubrik, die er für diesen Fall neu anlegt
-# ("Ich trage ein, dass ich hier nicht prüfe", die Form von los_mid_4). Eine Prüfung ist keine Gefälligkeit: er erwartet keinen Dank und keinen Zwischenfall. Das letzte Wort ist ein Vorbehalt (wie anl_over_3),
+# Die Szene spielt es nur mit der Facette trust, nach dem Klopfen, wenn er vor dem Kamin steht (sie setzt danach house.guest_waechter). Er kommt mit Klemmbrett, nennt den Kamin "Herd" (ein Satz über die
+# Zuordnung: ein Kamin ist es, er führt ihn unter Herd) und prüft ihn nicht ganz: Einfassung, Rückwand, der Zug, die Scheite, dann nicht weiter, und das trägt er ein, in einer Rubrik, die er für diesen Fall neu anlegt
+# ("Dafür fehlt eine Rubrik. Ich lege sie an", die Form von anl_again_5; "Ich trage ein, dass ich hier nicht prüfe", die Form von los_mid_4). Eine Prüfung ist keine Gefälligkeit: er erwartet keinen Dank und keinen Zwischenfall. Das letzte Wort ist ein Vorbehalt (wie anl_over_3),
 # kein Dank und keine Einsicht. Kein Wort über die Maschine, die Hebel, die Lampe, die Kartoffel, das Wort "loslassen" oder seine Angst; was er hier nicht prüft, nennt er nicht, und der Text deutet es nicht.
 
 ~ waechter_in
 Der Wächter steht vor dem Kamin, das Klemmbrett im Arm. Mit dem Stift tippt er an die Einfassung und an die Rückwand, jeweils einmal. [ID:hk5_w_1] [#draft]
-Wächter: Das ist ein Kamin. Ich führe ihn unter Herd. Dort gibt es eine Rubrik. [ID:hk5_w_2] [#draft]
-Wächter: Einfassung in Ordnung. Rückwand in Ordnung. Der Zug im Rauchfang ist zulässig. [ID:hk5_w_3] [#draft]
-Wächter: Im Korb liegen Scheite. Ich zähle neun. Rinde zähle ich nicht mit. [ID:hk5_w_4] [#draft]
+Wächter: Das ist ein Kamin. Ich führe ihn unter Herd. [ID:hk5_w_2] [#draft]
+Wächter: Einfassung in Ordnung. Rückwand in Ordnung. Zug im Rauchfang zulässig. [ID:hk5_w_3] [#draft]
+Wächter: Scheite im Korb: neun. Rinde zähle ich nicht mit. [ID:hk5_w_4] [#draft]
 Er sieht den Rauchfang hinauf, so weit man sehen kann, und hebt den Stift vom Papier. [ID:hk5_w_5] [#draft]
 Wächter: Ab hier prüfe ich nicht. Ich trage ein, dass ich hier nicht prüfe. [ID:hk5_w_6] [#draft]
-Wächter: Rubrik »Nicht ganz geprüft«. Neu angelegt. Ein Eintrag. [ID:hk5_w_7] [#draft]
+Wächter: Dafür fehlt eine Rubrik. Ich lege »Nicht ganz geprüft« an. [ID:hk5_w_7] [#draft]
 Wächter: Eine Prüfung ist keine Gefälligkeit. Dank erwarte ich keinen, einen Zwischenfall auch nicht. [ID:hk5_w_8] [#draft]
 Wächter: Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen. [ID:hk5_w_9] [#draft]
 => END
@@ -65,6 +65,6 @@ Das Licht auf dem Boden ist ein Stück kürzer geworden. Es reicht gerade noch b
 ~ waechter_home
 Der Wächter steht am Kamin. Auf seinem Blatt steht unter »Nicht ganz geprüft« eine einzige Zeile. [ID:hk5_wh_1] [#draft]
 Wächter: Hier bist du Eins. Ich bin Zwei. Die Zahl stimmt. [ID:hk5_wh_2] [#draft]
-Wächter: Der Zug im Rauchfang ist weiter zulässig. Die Scheite sind unverändert. [ID:hk5_wh_3] [#draft]
+Wächter: Zug im Rauchfang weiter zulässig. Scheite unverändert. [ID:hk5_wh_3] [#draft]
 Wächter: Der obere Teil bleibt offen. Das ist so vorgesehen, seit eben. [ID:hk5_wh_4] [#draft]
 => END
