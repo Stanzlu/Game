@@ -11,6 +11,9 @@ extends CharacterBody2D
 ## with something to do); Elysians walk on without pause, always the same. "face": "n", "e",
 ## "s" or "w" is where it looks while standing at its spawn. "sit": true seats it there (Mira
 ## across her fire, the Antreiber by the path): it stays seated, also when talked to.
+## "inattentive": true keeps it looking where it looks (the child on the Grat, who looks down
+## into the valley whoever comes): it turns neither to the player who comes close nor to the one
+## who talks to it.
 ## A sheet with the "work" pose (Mira's) works while it lingers at the first waypoint, turned
 ## towards "work_face" (default "w": her net hangs to the left of that point; seen from behind,
 ## facing it, the hands would be hidden and only the head nod would show).
@@ -41,6 +44,7 @@ var dialogue_path := DEFAULT_DIALOGUE
 var cue := ""
 var glances := false
 var seated := false
+var inattentive := false
 var _index := 0
 ## Waypoint it reached last (-1: none, or it was blocked on the way).
 var _last_point := -1
@@ -91,6 +95,7 @@ func apply_params(params: Dictionary) -> void:
 	speed = float(params.get("speed", speed))
 	glances = bool(params.get("glance", false))
 	seated = bool(params.get("sit", false))
+	inattentive = bool(params.get("inattentive", false))
 	if seated:
 		_play("idle")
 	var pause: Variant = params.get("pause", 0.0)
@@ -142,7 +147,7 @@ func _on_talk(actor: Node) -> void:
 		Log.error(Log.Category.CONTENT, "npc dialogue missing", {"path": dialogue_path, "cue": cue})
 		return
 	talking = true
-	if actor is Node2D:
+	if actor is Node2D and not inattentive:
 		facing = Facing.from_vector((actor as Node2D).global_position - global_position)
 	presenter.connect(&"finished", _on_talk_finished.bind(presenter), CONNECT_ONE_SHOT)
 	# the bob follows the dialogue box's syllables (a signal of the box; without it: no bob)
@@ -194,7 +199,7 @@ func _physics_process(delta: float) -> void:
 		_play("idle")
 		return
 	var player := _nearest_player()
-	if player != null:
+	if player != null and not inattentive:
 		var dist := global_position.distance_to(player.global_position)
 		if dist < ATTENTION_RADIUS:
 			attending = true

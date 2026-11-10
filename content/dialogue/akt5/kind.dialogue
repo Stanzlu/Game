@@ -5,8 +5,8 @@
 # Sprecher sind Erzählung (zweite Person, Gegenwart, ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen wären ausgeschrieben, es kommt keine vor.
 # Das Kind spricht höchstens drei Wörter je Zeile, und es antwortet nie auf das, was die Spielerin sagt: es zeigt auf etwas in der Welt oder schweigt. Kein Weg ist falsch und keiner besser: die drei Antworten haben
 # dieselbe Gestalt (ein Satz der Spielerin, eine Zeile des Kindes, ein Satz der Welt) und führen alle zu "child_gone". Die Cues dieser Datei setzen kein Flag und keine Facette; die Szene setzt alles, und "child_answer"
-# liest die Facette "trust" (zweiter Leser, O10). Das Summen ist ein Satz von wenigen Tönen und kein Dauerton (der Klang "child_hum" ist derselbe wie im Nachtwald): es erklingt dreimal, zu Beginn, vor der Antwort
-# (es hört mitten in der Melodie auf) und vor dem Gehen.
+# liest die Facette "trust" (zweiter Leser, O10). Das Summen ist ein Satz von wenigen Tönen und kein Dauerton (der Klang "child_hum" ist derselbe wie im Nachtwald): die Szene spielt ihn zweimal, mit der Zeile, die ihn nennt ("child_hum"), und wenn er wieder einsetzt
+# ("child_return"); dass er vor der Antwort "mitten in der Melodie" aufhört, trägt nur der Text. Darum stehen diese zwei Zeilen in eigenen Cues.
 
 # --- Das Kind ansprechen, bevor man sitzt -----------------------------------------------------------------------------------
 # Die Spielerin spricht das sitzende Kind an (Cue am Kind, solange sie nicht sitzt). Nur Erzählung: es sitzt am Rand der Fläche, an einer Stelle, wo der Fels breit und flach ist (kein Absturz im Bild), neben ihm ist
@@ -25,6 +25,9 @@ Du stehst bei ihm. Der Wind geht flach über das Gras, und das Kind sieht nicht 
 ~ child_seat
 Du setzt dich neben das Kind auf den Stein. Er ist kühl, und du machst kein Geräusch dabei. [ID:kv_seat_1] [#draft]
 Das Kind rückt nicht weg. Es sieht weiter ins Tal, und der Wind geht an euch beiden vorbei. [ID:kv_seat_2] [#draft]
+=> END
+
+~ child_hum
 Dann summt es ein paar Töne, kaum mehr als Atem. Du kennst die Melodie. [ID:kv_seat_3] [#draft]
 => END
 
@@ -66,8 +69,11 @@ Das Kind sieht ins Tal. Der Wind geht durch die Rahmen hindurch. [ID:kv_answer_2
 # sobald sie wieder hinsieht. Kein Wort des Kindes, kein Abschied, kein Dank, kein Versprechen, keine Erklärung, wohin oder warum. Der Stein ist an seinem einen Ende warm; er bleibt es ("seat_empty"). Was danach im
 # Tal geschieht, steht hier nicht. Die Spielerin sitzt, solange sie will; nichts in den Zeilen fordert sie zum Aufstehen auf.
 
-~ child_gone
+~ child_return
 Irgendwann setzt das Summen wieder ein, genau an der Stelle, an der es aufgehört hat. [ID:kv_gone_1] [#draft]
+=> END
+
+~ child_gone
 Du siehst einen Augenblick ins Tal, dorthin, wohin es sieht. [ID:kv_gone_2] [#draft]
 Der Stein ist an seinem einen Ende warm. Du siehst wieder neben dich. [ID:kv_gone_3] [#draft]
 => END

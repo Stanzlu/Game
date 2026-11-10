@@ -192,8 +192,11 @@ func test_every_picture_she_holds_is_one_of_the_five_and_the_sixth_is_not_there_
 	assert_eq(ChildMeeting.held_names().size(), 5)
 	assert_false(ChildMeeting.held(5), "the picture of the first house is G8's")
 	WorldState.set_flag("fragment.first_house")
-	assert_eq(ChildMeeting.held_names().size(), 6)
-	assert_eq(ChildMeeting.held_names()[5], "first_house", "in the order of the child's story")
+	assert_eq(
+		ChildMeeting.held_names().size(),
+		5,
+		"the sixth frame is bound to its flag when G8 sets one: until then it stays empty"
+	)
 
 
 func test_the_answers_lead_to_the_same_end_and_no_way_is_wrong() -> void:
@@ -262,3 +265,28 @@ func test_the_hero_stage_child_ends_the_walk_for_now() -> void:
 	assert_false(quest.stage("high").is_final(), "the first house (G8) hangs on the child")
 	assert_true(quest.stage("child").is_final())
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_CHILD"), "QUEST_MAIN_MOUNTAIN_WAY_CHILD")
+
+
+func test_the_scene_also_begins_when_the_seat_glides_her_in_from_further_away() -> void:
+	# the key reaches further than the stone: she sits from about thirty pixels and glides to it
+	var scene := await _grat()
+	var at := scene.map.cell_to_world(SEAT)
+	scene.player.global_position = at + Vector2(0.0, -30.0)
+	await wait_physics_frames(2)
+	scene.player.sit_on(at, Facing.Dir.S)
+	var begun := func() -> bool: return not get_tree().get_nodes_in_group(&"cutscene").is_empty()
+	assert_true(await wait_until(begun, 10.0), "the scene is playing")
+	var gone := func() -> bool: return Beat.reached("grat_child")
+	assert_true(await _told(scene, gone, "Ich bin da."))
+
+
+func test_the_child_keeps_looking_into_the_valley_whoever_sits_down_beside_it() -> void:
+	var scene := await _grat()
+	var child := _first(scene, "child_look") as NpcWalker
+	assert_not_null(child)
+	assert_true(child.inattentive)
+	assert_eq(child.facing, Facing.Dir.S, "down into the valley")
+	await _sit(scene)
+	await wait_physics_frames(30)
+	assert_eq(child.facing, Facing.Dir.S, "it does not turn to the one who sits beside it")
+	assert_false(child.attending)

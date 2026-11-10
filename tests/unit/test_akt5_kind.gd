@@ -9,7 +9,14 @@ extends GutTest
 
 const FILE := "res://content/dialogue/akt5/kind.dialogue"
 const CUES: PackedStringArray = [
-	"child_look", "child_seat", "child_frames", "child_answer", "child_gone", "seat_empty"
+	"child_look",
+	"child_seat",
+	"child_hum",
+	"child_frames",
+	"child_answer",
+	"child_return",
+	"child_gone",
+	"seat_empty",
 ]
 ## What the text never says: the cause, the people, the lesson, the contents of the frames, the
 ## garden (G9 shows it), the house (G8 shows it).
@@ -169,13 +176,18 @@ func test_before_she_sits_there_is_only_narration_and_no_invitation() -> void:
 	assert_true(told.contains("Stein"), "the stone beside it is a thing, not a request")
 
 
-func test_she_sits_and_the_child_does_not_move_away_and_hums() -> void:
+func test_she_sits_and_the_child_does_not_move_away_and_then_it_hums() -> void:
 	var told := await _told("child_seat")
 	assert_true(told.contains("setzt dich"))
 	assert_true(told.contains("rückt nicht weg"))
-	assert_true(told.contains("summt"))
+	var hum := await _told("child_hum")
+	assert_true(
+		hum.contains("summt"),
+		"the line that names the hum has its own cue: the sound comes with it"
+	)
+	assert_true(hum.contains("Melodie"))
 	for word: String in ["lächelt", "freut", "Hand", "umarm", "tröst"]:
-		assert_false(told.contains(word), "no gesture of comfort: " + word)
+		assert_false((told + hum).contains(word), "no gesture of comfort: " + word)
 
 
 func test_the_frames_are_named_and_nothing_is_said_of_what_is_in_them() -> void:
@@ -220,9 +232,12 @@ func test_no_way_is_wrong_each_has_its_own_line_and_none_praises_or_teaches() ->
 
 
 func test_the_child_goes_without_a_goodbye_and_the_stone_is_warm_at_one_end() -> void:
+	var back := await DialogueWalk.play(FILE, "child_return")
+	assert_eq(back.size(), 1, "the tune takes up again: the sound comes with this line")
+	assert_true(back[0].contains("Summen"))
 	var seen := await DialogueWalk.play(FILE, "child_gone")
 	var told := "\n".join(seen)
-	assert_eq(seen.size(), 3)
+	assert_eq(seen.size(), 2)
 	assert_true(told.contains("warm"))
 	assert_true(told.contains("neben dich"), "she looks, and the place is empty")
 	for word: String in [

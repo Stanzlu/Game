@@ -208,3 +208,30 @@ func test_a_dialogue_box_without_the_signal_is_fine() -> void:
 func test_the_child_hums_more_often() -> void:
 	assert_lte(ChildGuide.HUM_PAUSE.y, 8.0)
 	assert_gte(ChildGuide.HUM_PAUSE.x, 4.0)
+
+
+## G7: the child on the Grat looks down into the valley whoever comes (the narration says so).
+func test_an_inattentive_walker_neither_turns_to_the_player_who_comes_nor_to_the_one_who_talks(
+) -> void:
+	var npc := _walker(
+		PLAIN_SHEET, {"route": [], "sit": true, "face": "s", "cue": "x", "inattentive": true}
+	)
+	npc.global_position = Vector2(100, 100)
+	var near := Node2D.new()
+	near.add_to_group(&"player")
+	add_child_autofree(near)
+	near.global_position = Vector2(80, 100)  # to its west, within the attention radius
+	await wait_physics_frames(4)
+	assert_false(npc.attending, "it does not attend")
+	assert_eq(npc.facing, Facing.Dir.S, "it looks where it looked")
+	var presenter := _presenter(StubPresenter.new())
+	assert_not_null(presenter)
+	npc.dialogue_path = "res://content/dialogue/akt5/kind.dialogue"
+	npc._on_talk(near)
+	assert_eq(npc.facing, Facing.Dir.S, "and it does not turn to the one who talks to it")
+	var plain := _walker(PLAIN_SHEET, {"route": [], "sit": true, "face": "s", "cue": "x"})
+	plain.global_position = Vector2(100, 140)
+	near.global_position = Vector2(80, 140)
+	await wait_physics_frames(4)
+	assert_true(plain.attending, "any other walker does")
+	assert_eq(plain.facing, Facing.Dir.W)

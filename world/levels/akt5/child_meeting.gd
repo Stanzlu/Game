@@ -17,15 +17,19 @@ const BEAT := "grat_child"
 const QUEST := "main_mountain_way"
 ## The flat stone she sits on (its left cell; the child sits on the one to the east of it).
 const SEAT_CELL := Vector2i(79, 10)
-## How far from the stone's middle she has to sit for it to count as sitting beside the child.
-const SEAT_REACH := 20.0
+## How far from the stone's middle she may sit for it to count as sitting beside the child: the
+## key reaches further than the stone (the seat glides her in), so it is as far as the bench's reach
+## in the city.
+const SEAT_REACH := 40.0
 ## The frames: the picture's name (its file `fragment_<name>.png`) in the order of the child's
 ## story, and the radius of the arc they hang on above the two (pixels).
 const NAMES: Array[String] = [
 	"hallway", "closed_door", "empty_room", "hand", "hiding", "first_house"
 ]
 const ARC_RADIUS := 46.0
-const ARC_SPAN := 1.7
+const ARC_SPAN := 1.9
+## The arc is wider than high (the frames side by side, not in each other's way).
+const ARC_STRETCH := 2.2
 const ARC_LIFT := 22.0
 ## Seconds between one frame and the next to appear, how long each takes, how long they all fade.
 const STAGGER := 0.45
@@ -67,7 +71,9 @@ static func held(index: int) -> bool:
 		4:
 			return WorldState.has_flag("fragment.hiding")
 		5:
-			return WorldState.has_flag("fragment.first_house")
+			# the picture of the first house is G8's: its flag is read here once G8 sets it (a flag
+			# that nothing sets would be a lie to StoryLint), and the frame stays empty until then
+			return false
 	return false
 
 
@@ -110,8 +116,10 @@ func _middle() -> Vector2:
 
 func _meet() -> void:
 	var cut := Cutscene.begin(scene)
-	AudioDirector.sfx("child_hum", -8.0, 1.0)
 	await cut.say(DIALOGUE, "child_seat")
+	# it hums (the sound comes with the line that says so)
+	AudioDirector.sfx("child_hum", -8.0, 1.0)
+	await cut.say(DIALOGUE, "child_hum")
 	await cut.wait(PAUSE)
 	_build()
 	_state = 1
@@ -125,6 +133,7 @@ func _meet() -> void:
 	await cut.wait(PAUSE)
 	# the tune takes up again where it broke off
 	AudioDirector.sfx("child_hum", -8.0, 1.0)
+	await cut.say(DIALOGUE, "child_return")
 	await cut.say(DIALOGUE, "child_gone")
 	# the child is gone; the frames fade, and in the valley a shoot grows in the bed
 	WorldState.set_flag("grat.child_gone")
@@ -150,12 +159,12 @@ func _build() -> void:
 		frame.z_index = 40
 		frame.modulate.a = 0.0
 		var t := (float(i) / float(NAMES.size() - 1) - 0.5) * ARC_SPAN
-		frame.global_position = (
-			middle + Vector2(sin(t) * ARC_RADIUS * 1.6, -cos(t) * ARC_RADIUS - ARC_LIFT)
+		var at := (
+			middle + Vector2(sin(t) * ARC_RADIUS * ARC_STRETCH, -cos(t) * ARC_RADIUS - ARC_LIFT)
 		)
 		var box := Sprite2D.new()
 		box.name = "Box"
-		box.texture = PropCatalog.texture_for(entry, frame.global_position)
+		box.texture = PropCatalog.texture_for(entry, at)
 		box.centered = true
 		frame.add_child(box)
 		if held(i):
@@ -166,6 +175,7 @@ func _build() -> void:
 			frame.add_child(picture)
 		frame.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 		scene.map.entities.add_child(frame)
+		frame.global_position = at
 		frames.append(frame)
 
 
