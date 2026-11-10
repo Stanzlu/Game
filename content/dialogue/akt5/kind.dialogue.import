@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ckfsal711ghcw"
+path="res://.godot/imported/kind.dialogue-ac619ac746b8808af6ca47ee6e0c3d95.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/kind.dialogue"
+dest_files=["res://.godot/imported/kind.dialogue-ac619ac746b8808af6ca47ee6e0c3d95.tres"]
+
+[params]
+
+defaults=true
