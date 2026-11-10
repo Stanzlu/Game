@@ -1,0 +1,78 @@
+{
+ "_comment": "The Akt V run of the autopilot (tools/autopilot/akt5_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt5. The run starts from tests/fixtures/saves/v2_akt4_end.json, which carries 765 s of play: taken off here, so the numbers are the act's.",
+ "seconds": 424,
+ "dialogue_seconds": 127,
+ "clicks": 256,
+ "route_px": 14863,
+ "beats": [
+  {
+   "beat": "pass_enter",
+   "seconds": 7
+  },
+  {
+   "beat": "pass_view",
+   "seconds": 23
+  },
+  {
+   "beat": "grat_enter",
+   "seconds": 27
+  },
+  {
+   "beat": "grat_hand",
+   "seconds": 46
+  },
+  {
+   "beat": "maschine_enter",
+   "seconds": 78
+  },
+  {
+   "beat": "maschine_probe",
+   "seconds": 103
+  },
+  {
+   "beat": "maschine_load",
+   "seconds": 114
+  },
+  {
+   "beat": "maschine_overload",
+   "seconds": 260
+  },
+  {
+   "beat": "maschine_letgo",
+   "seconds": 299
+  },
+  {
+   "beat": "grat_ledge",
+   "seconds": 313
+  },
+  {
+   "beat": "grat_cleft",
+   "seconds": 324
+  },
+  {
+   "beat": "grat_hiding",
+   "seconds": 327
+  },
+  {
+   "beat": "grat_child",
+   "seconds": 355
+  },
+  {
+   "beat": "urhaus_enter",
+   "seconds": 369
+  },
+  {
+   "beat": "urhaus_look",
+   "seconds": 372
+  },
+  {
+   "beat": "urhaus_house",
+   "seconds": 398
+  },
+  {
+   "beat": "act5_home",
+   "seconds": 423
+  }
+ ],
+ "start_seconds": 765
+}

@@ -159,6 +159,48 @@ func test_the_frozen_v2_end_of_act_three_keeps_its_story() -> void:
 	assert_gt(s.playtime_seconds, 480.0, "Act II's 375 seconds and the act's own")
 
 
+func test_the_frozen_v2_end_of_act_five_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt5_full.json from v2_akt4_end.json, frozen where it ends: the
+	# house, the keeper at the hearth, the act over and the build's last chapter reached (G10, ADR-073)
+	var result := SaveCodec.decode(_fixture("v2_akt5_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "haus")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL)
+	for chapter: String in ["act1", "act2", "slice", "act3", "act4", "act5"]:
+		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
+	assert_true(Chapter.in_flags(s.flags, Chapter.LAST), "the last chapter of this build")
+	for facet: String in ["care", "connection", "integrity", "perception", "boundaries"]:
+		assert_true(s.facets.has(facet), "%s was her own will on the way" % facet)
+	for facet: String in ["trust", "courage"]:
+		assert_true(s.facets.has(facet), "%s came from the play of Act V" % facet)
+	var way: GameState.QuestProgress = s.quests["main_mountain_way"]
+	assert_eq(way.stage, "done")
+	assert_eq(
+		way.history,
+		PackedStringArray(
+			["climb", "valley", "plant", "load", "letgo", "high", "child", "house", "home", "done"]
+		)
+	)
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+	for flag: String in [
+		"plant.letgo",
+		"plant.defect",
+		"melody.machine_count",
+		"grat.child_gone",
+		"house.garden_sprout",
+		"house.guest_waechter",
+		"fragment.hand",
+		"fragment.hiding",
+		"fragment.first_house",
+		"beat.act5_home",
+	]:
+		assert_true(s.flags.has(flag), "%s was set on the way" % flag)
+
+
 func test_the_frozen_v2_end_of_act_four_keeps_its_story() -> void:
 	# a real run of tools/autopilot/akt4_full.json from v2_akt3_end.json, frozen where it ends: the
 	# house, with the shelves hung, her chair and the loaf, the act over (S9, ADR-071)
