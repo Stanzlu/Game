@@ -482,12 +482,17 @@ GRAT_ANLAGE_RES = "res://content/dialogue/akt5/anlage.dialogue"
 GRAT_SPALTE = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "spalte.dialogue")
 GRAT_SPALTE_RES = "res://content/dialogue/akt5/spalte.dialogue"
 GRAT_SPALTE_GLYPHS = "VBCIJP"
+# G7: the child and the stone ask the child's own dialogue
+GRAT_KIND = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "kind.dialogue")
+GRAT_KIND_RES = "res://content/dialogue/akt5/kind.dialogue"
+GRAT_KIND_GLYPHS = "Kn"
 # the glyphs that stand once on the map
-GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEeVBCIJP"
+GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEeVBCIJPNKn"
 # the cues of the map by glyph (the contract of G2)
 GRAT_CUES = {"1": "cairn_1", "2": "cairn_2", "3": "cairn_3", "q": "stone_pick", "7": "valley_sign", "H": "hand_stone", "Q": "quartz",
              "M": "marmot_den", "X": "gate", "Y": "ramp_wait",
-             "V": "ledge_view", "B": "fork_sign", "C": "cleft_mouth", "I": "hiding_place", "J": "candle", "P": "plateau_edge"}
+             "V": "ledge_view", "B": "fork_sign", "C": "cleft_mouth", "I": "hiding_place", "J": "candle", "P": "plateau_edge",
+             "K": "child_look", "n": "seat_empty"}
 # things a person cannot walk through, whatever the ground: the hall, the fence, the gate, the blockers
 GRAT_SOLID_PROPS = set("AfGXY")
 # a line of sight is stopped by solid ground and by what stands tall
@@ -539,7 +544,7 @@ class GratLayoutTests(unittest.TestCase):
             self.assertEqual(text.count(glyph), 1, glyph)
         self.assertEqual(text.count("f"), layout.GRAT_POCKET[1] - layout.GRAT_POCKET[0] + 1 - 3, "the fence: one piece a cell, but the gate's three")
         self.assertEqual(len(spots["1"]) + len(spots["2"]) + len(spots["3"]), 3, "three cairns")
-        for glyph in "Kabk":
+        for glyph in "abk":
             self.assertNotIn(glyph, text, "no other cairns than the three with a cue: " + glyph)
 
     def test_every_glyph_has_its_own_legend_line_and_every_cue_is_the_contracts(self):
@@ -553,12 +558,12 @@ class GratLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                expected = GRAT_ANLAGE_RES if glyph == "X" else GRAT_SPALTE_RES if glyph in GRAT_SPALTE_GLYPHS else GRAT_DIALOGUE_RES
+                expected = GRAT_ANLAGE_RES if glyph == "X" else GRAT_SPALTE_RES if glyph in GRAT_SPALTE_GLYPHS else GRAT_KIND_RES if glyph in GRAT_KIND_GLYPHS else GRAT_DIALOGUE_RES
                 self.assertEqual(params["dialogue"], expected, glyph)
         self.assertEqual(used, GRAT_CUES)
         self.assertEqual(len(set(used.values())), len(used), "no cue twice")
-        valley = [g for g in used if g != "X" and g not in GRAT_SPALTE_GLYPHS]
-        for path, glyphs in ((GRAT_DIALOGUE, valley), (GRAT_ANLAGE, ["X"]), (GRAT_SPALTE, list(GRAT_SPALTE_GLYPHS))):
+        valley = [g for g in used if g != "X" and g not in GRAT_SPALTE_GLYPHS and g not in GRAT_KIND_GLYPHS]
+        for path, glyphs in ((GRAT_DIALOGUE, valley), (GRAT_ANLAGE, ["X"]), (GRAT_SPALTE, list(GRAT_SPALTE_GLYPHS)), (GRAT_KIND, list(GRAT_KIND_GLYPHS))):
             if os.path.exists(path):
                 with open(path, encoding="utf-8") as f:
                     cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
@@ -899,6 +904,32 @@ class GratLayoutTests(unittest.TestCase):
             path = os.path.join(mapfile.ROOT, "assets", "generated", out, name + ".png")
             self.assertTrue(os.path.exists(path), path)
             self.assertEqual(_png_size(path), (16, 16))
+
+    def test_g7_the_child_and_its_stone_sit_at_the_edge_of_the_plateau(self):
+        _, symbols, rows, spots = _grat()
+        self.assertEqual(spots["N"], [layout.GRAT_SEAT])
+        self.assertEqual(spots["K"], [layout.GRAT_CHILD])
+        self.assertEqual(spots["n"], [layout.GRAT_SEAT_SPOT])
+        self.assertEqual(layout.GRAT_CHILD, (layout.GRAT_SEAT[0] + 1, layout.GRAT_SEAT[1]), "the child on the stone's right cell")
+        self.assertEqual(layout.GRAT_SEAT_SPOT, (layout.GRAT_SEAT[0] - 1, layout.GRAT_SEAT[1]), "the spot beside the stone's left cell")
+        px0, px1, py0, py1 = layout.GRAT_PLATEAU
+        self.assertLessEqual(abs(layout.GRAT_CHILD[0] - px0), 2, "at the plateau's west edge")
+        self.assertEqual(layout.GRAT_CHILD[1], py1, "on the south edge, over the drop")
+        catalog = mapfile.load_catalog()
+        self.assertEqual(symbols["N"]["params"]["sprite"], "tal/gb_sit_rock")
+        self.assertEqual(symbols["N"]["params"]["sit"]["face"], "s")
+        self.assertTrue(catalog["tal/gb_sit_rock"].get("flat"), "the stone lies on the ground")
+        self.assertEqual(_png_size(mapfile.res_path(catalog["tal/gb_sit_rock"]["textures"][0]))[0], 32, "two cells wide")
+        self.assertEqual(symbols["K"]["params"]["sheet"], "res://entities/character/sheet_child_look.tres")
+        self.assertTrue(symbols["K"]["params"]["sit"])
+        self.assertEqual(symbols["K"]["params"]["unless"], "grat.child_gone")
+        self.assertEqual(symbols["n"]["params"]["if"], "grat.child_gone")
+        self.assertNotIn("shape", catalog["tal/gb_sit_rock"])
+        for sprite in ("tal/gb_picture_frame", "tal/gb_sprout"):
+            self.assertIn(sprite, catalog)
+            self.assertNotIn("shadow", catalog[sprite], "no baked shadow: the stamp stays")
+        self.assertEqual(_png_size(mapfile.res_path(catalog["tal/gb_picture_frame"]["textures"][0])), (24, 24))
+        self.assertEqual(_png_size(mapfile.res_path(catalog["tal/gb_sprout"]["textures"][0])), (12, 14))
 
     def test_the_ramp_is_five_cells_wide_through_the_band_with_steps_a_heap_and_the_blocker_at_its_foot(self):
         _, symbols, rows, spots = _grat()
