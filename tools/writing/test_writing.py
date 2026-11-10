@@ -438,6 +438,16 @@ class ActCalibrationTests(unittest.TestCase):
         beats = [("act3_home", 3000), ("strasse_enter", 3100), ("act4_home", 3500)]
         self.assertEqual(calibrate.act_origin("akt4", beats), 3100)
 
+    def test_act_five_runs_from_the_end_of_act_four_and_begins_at_the_pass(self):
+        self.assertEqual(calibrate.ACT_STARTS["akt5"], "pass_enter")
+        self.assertGreater(calibrate.start_seconds("akt5"), 600)
+        data = calibrate.act_baseline("akt5")["data"]
+        self.assertEqual(data["beats"][0]["beat"], "pass_enter")
+        self.assertEqual(data["beats"][-1]["beat"], "act5_home", "the run ends with the act")
+        self.assertEqual(data["start_seconds"], calibrate.start_seconds("akt5"))
+        beats = [("act4_home", 3000), ("pass_enter", 3100), ("act5_home", 4300)]
+        self.assertEqual(calibrate.act_origin("akt5", beats), 3100)
+
     def test_the_baselines_are_real_runs_with_more_clicks_than_a_third_of_nothing(self):
         for act in calibrate.BASELINES:
             floor = calibrate.act_baseline(act)

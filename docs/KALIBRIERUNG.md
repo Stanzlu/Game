@@ -162,6 +162,43 @@ Das Log gibt den Weg: **264 Sekunden** Spielzeit (der Stand trägt 503 davon sch
   Mira, Orin und Lio `familiar`). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte erzählt, `test_save_system`, dass das Menü ihn seit Akt V, G1, nicht mehr
   als Ende zählt (das letzte Kapitel des Baus ist `act5`), und Akt V beginnt in ihm.
 
+## Akt V nach dem Lauf des Autopiloten (P6.17, G10, ADR-073)
+
+`tools/autopilot/akt5_full.json` spielt Akt V vom eingefrorenen Ende von Akt IV (still im Haus) bis zum stillen Ende im Haus: den Aufstieg durch den Pass (die Steinmännchen, der Eisenring, die
+Aussicht, der Schiefer), das Hochtal (der Stein und seine drei Steinmännchen, die Hand, der Murmeltierbau, der Kristall), die Anlage (das Klopfen am Tor, die Halle, die Probe der drei Hebel, das
+Zifferblatt), die Last in vier Wellen, das Loslassen (Wegtreten, die Hebel fallen, die Lampe, die Kartoffel), den Grat (der Wegweiser, die Spalte mit dem Verstecken, die Kerze, der Rand), das Kind, das
+ursprüngliche Haus auf der Fläche (das Buch, die sechs Ringe, die Kreide, das Bett mit der dritten Rückblende) und den Weg hinunter ins Haus (der Pass, das Beet, die Heimkehr mit dem Wächter am Kamin und
+dem stillen Ende mit der Kapitelmarke `act5`). **Der Lauf setzt nichts voraus:** kein Flag, keine Facette und keine Quest-Stufe wird gesetzt, alles kommt aus dem Spiel (der Wächter wird am Pult losgelassen,
+darum kommt er am Ende an den Kamin). Er nimmt in jedem Gespräch die erste Antwort und beginnt in `tests/fixtures/saves/v2_akt4_end.json`. `check.sh` spielt den Lauf bei jedem Durchgang (rund 11 Sekunden)
+und verlangt 49 Marken.
+
+Das Log gibt den Weg: **424 Sekunden** Spielzeit (der Stand trägt 765 davon schon), 127 mit offenem Gespräch, 256 geklickte Zeilen (**68 %** der 378 Zeilen von Akt V, wie `calibrate.py` zählt: auch
+Zweige, die der Lauf nicht nimmt) und 14.863 Pixel Luftlinie, die der Autopilot springt statt geht. Der Weg ohne Lesen ist damit 297 Sekunden plus 169 für die Sprünge, **7,8 Minuten**.
+
+| Tempo | Akt V |
+|---|---|
+| langsam | 29,1 min |
+| normal | 23,7 min |
+| schnell | 20,2 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 52,2 min |
+
+`python3 tools/writing/calibrate.py --akt5` zeigt die Tabelle, `--record-akt5 <Log>` schreibt `calibration_akt5.json` neu (nach einem neuen Segment den Lauf wiederholen), `--akt5 --log <Log>`
+passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `pass_enter`). Dazu vier Befunde:
+
+- **Der Plan rechnet mit 90 Minuten für Akt V, das Modell mit 20 bis 29.** Der Akt hat den längsten Weg bisher (7,8 Minuten gegen 5,0 in Akt IV) bei weniger Schrift (378 Zeilen gegen 479);
+  die Lücke zu den 90 Minuten ist mit rund 4-fach die kleinste bisher (Akt IV rund 5-fach, Akt II rund 5-fach, Akt I rund 7-fach, Akt III rund 8-fach). Der äußerste Eckfall gibt 52; dein Durchlauf
+  legt Anteil, Pause und Umweg fest.
+- **Der Autopilot sieht 68 % der Zeilen** (Akt IV: 58 %): er hat in diesem Akt kaum Zweige, die Gespräche sind kurz und gehen meist geradeaus. Was der Lauf nicht sieht, steht unter GUT-Tests: die
+  Antworten der Facetten (`trust` beim Kind, `courage` am Fenster), die Wege ohne das Haus auf der Fläche, die Heimkehr ohne den Wächter, die anderen Antworten des Kindes, der Eintrag im Buch, die
+  Kartoffel beim Wächter, die Wellen der Last bei jeder Einstellung von „Mehr Zeit“ und „Begegnungstempo“.
+- **Die Textdichte liegt bei 16,0 Zeilen je Minute** (Akt IV: 21,5; Plan 9.6: 6): Akt V ist der Akt mit dem meisten Weg und Warten je Zeile. Das Loslassen allein (25,6 Sekunden Stehen) und die vier
+  Wellen der Last (rund 40 Sekunden Zug und Frist) tragen Zeit ohne eine Zeile; ein Spieler, der sich nicht abkürzt, braucht dort länger als der Autopilot, der jedes Warten genau so lang wartet,
+  wie das Spiel verlangt.
+- **Der Lauf ist der eingefrorene Stand `v2_akt5_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act5`, Quest `done` mit zehn Stufen, die sieben Facetten, 295 Flags, vier
+  Beziehungen: Tess `close`, Mira, Orin und Lio `familiar`, der Wächter am Kamin). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte
+  erzählt, `test_save_system`, dass er als Ende des Spiels zählt (`Chapter.LAST` ist `act5`: das Menü zeigt „fertig“, „Neues Spiel“ fragt zurück). In ihm endet dieser Bau; Akt VI beginnt, wenn
+  er gebaut wird, in ihm.
+
 ## Benutzen
 
 ```
@@ -170,10 +207,11 @@ python3 tools/writing/calibrate.py --akt1                            Akt I bei j
 python3 tools/writing/calibrate.py --akt2                            Akt II bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt3                            Akt III bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt4                            Akt IV bei jedem Tempo (eigener Weg)
-python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2, --record-akt3, --record-akt4 für Akt II, III, IV)
+python3 tools/writing/calibrate.py --akt5                            Akt V bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2 bis --record-akt5 für Akt II bis V)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
-python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2, --akt3, --akt4 für Akt II, III, IV)
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2 bis --akt5 für Akt II bis V)
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.
