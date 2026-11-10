@@ -6,7 +6,7 @@
 ; des Bettes, je einer auf der Linie eines Ringes (a der innerste, f der äußerste); jeder Punkt ist ein unsichtbarer Blick (Cue ring_room, ring_wall, ring_garden, ring_street, ring_town, ring_world), niemand erklärt sie.
 ; Das Fenster (Y) in der Rückwand über dem Bett ist mit Kreide zugemalt; wer die Facette courage hat, kann es frei wischen (urhaus.window_clear, sprite_when). Die blaue Kreide (k) liegt vorn links auf dem Boden (Kuriosität, Cue blue_chalk).
 ; Prüfhinweise: das Bett ist fest (zwei Zellen), alles andere liegt flach oder ist ein Punkt. Der Leistungstest läuft vom Start (@, Spalte 26, Zeile 8) im Quadrat (1,6 s rechts, 1,0 s unten, 1,6 s links, 1,0 s oben, mit Sprint):
-; rechts stößt er an die Seitenwand, unten geht er bis in die Zeile 13, links über das Kreidebild bis vor das Bett, oben zurück: die Tür liegt weit links unten (ein Test geht den Lauf nach).
+; rechts stößt er an die Seitenwand, unten an die Vorderwand, links geht er an ihr entlang bis zur Spalte 12 (die Tür liegt in der Spalte 7), oben zurück: er bleibt mehr als drei Zellen östlich von der Tür (ein Test geht den Lauf nach).
 [meta]
 style = "tal"
 ground = "res://assets/generated/maps/urhaus_ground.png"

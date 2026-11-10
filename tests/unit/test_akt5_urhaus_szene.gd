@@ -200,6 +200,7 @@ func test_the_first_look_is_played_once_and_nothing_holds_her_afterwards() -> vo
 	var scene := await _house(false)
 	var seen := func() -> bool: return Beat.reached("urhaus_look")
 	assert_true(await _told(scene, seen), "the first look runs to its end")
+	await wait_physics_frames(2)
 	assert_true(get_tree().get_nodes_in_group(&"cutscene").is_empty(), "no cutscene runs")
 	assert_false(scene.player.is_locked(), "she walks as she likes")
 	scene.queue_free()

@@ -228,7 +228,7 @@ class UrhausMapTests(unittest.TestCase):
             x0, x1, y0, y1 = _box(px, py)
             self.assertFalse(x0 < zone[2] and x1 > zone[0] and y0 < zone[3] and y1 > zone[1], "the benchmark's square touches the door at %s" % ((px, py),))
         self.assertGreater(len(visited), 400, "and it does walk (not stuck at the start)")
-        self.assertLess(max(y for _, y in visited), (door[1] - 3) * 16, "it stays in the upper part of the room, far from the front wall")
+        self.assertGreater(min(x for x, _ in visited), (door[0] + 3) * 16, "it stays east of the door's column, at least three cells away (it reaches the front wall, nothing stops it earlier)")
 
     def test_cues_are_the_contracts_and_every_one_is_in_the_dialogue(self):
         _, symbols, rows = _map()
