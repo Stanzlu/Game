@@ -1,0 +1,21 @@
+[
+  {"relative": true},
+  {"log": "Act VI, R1: the day after the mountains, from the frozen end of Act V: the morning in the house, Mira at her old camp goes her own way, the quiet house with its light that is not from here", "t": 0.0},
+  {"wait_for": {"scene": "haus"}, "timeout": 30, "log": "the end of Act V: the house", "t": 0.1},
+  {"wait_for": {"beat": "act6_morning"}, "timeout": 90, "log": "Weiter begins the day after: a few lines of things, nothing is asked", "t": 0.1},
+  {"wait_for": {"quest": "main_return_way", "stage": "empty"}, "timeout": 10, "log": "the walk back begins", "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 0.1},
+  {"enter": "tal", "log": "out into the valley", "t": 0.5},
+  {"wait_for": {"scene": "tal"}, "timeout": 30, "t": 0.1},
+  {"teleport": [47, 19], "log": "the old camp: Mira stands there with her bundle and says that she goes", "t": 0.5},
+  {"wait_for": {"beat": "act6_mira"}, "timeout": 120, "log": "she went her own way, over the bridge", "t": 0.1},
+  {"wait_for": {"flag": "valley.mira_left"}, "timeout": 10, "t": 0.1},
+  {"use": [51, 20], "face": "left", "log": "the place where her tarp hung", "t": 0.8},
+  {"enter": "haus", "log": "back in the house", "t": 0.5},
+  {"wait_for": {"scene": "haus"}, "timeout": 30, "t": 0.1},
+  {"wait_for": {"beat": "act6_quiet"}, "timeout": 90, "log": "the house is quiet: a light that is not from here, for a breath", "t": 0.1},
+  {"wait_for": {"quest": "main_return_way", "stage": "pull"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"flag": "valley.rift_light"}, "timeout": 10, "t": 0.1},
+  {"wait_for": {"idle": true}, "timeout": 30, "t": 1.0},
+  {"log": "segment finished", "quit": true, "t": 0.5}
+]

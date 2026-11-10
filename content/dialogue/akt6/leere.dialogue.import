@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bhvmvbdk60w02"
+path="res://.godot/imported/leere.dialogue-c231e012b0b723d7fcd3ff32dfe533d0.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/leere.dialogue"
+dest_files=["res://.godot/imported/leere.dialogue-c231e012b0b723d7fcd3ff32dfe533d0.tres"]
+
+[params]
+
+defaults=true

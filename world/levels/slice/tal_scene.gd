@@ -80,9 +80,18 @@ func _ready() -> void:
 	# has come home; the step is made before super() for the same reason (the entry save)
 	if WorldState.quest_stage("main_mountain_way") in ["child", "house"]:
 		WorldState.advance_quest("main_mountain_way", "home")
+	# the day after the mountains (Act VI, R1): Mira stands at her old camp from the first picture,
+	# and a game saved here begins the day with its lines; the flag is set before the map is built
+	var morning_after := ReturnBeat.morning_due()
+	if morning_after:
+		ReturnBeat.prepare_morning()
 	# the way back from the Bachlauf (B3) lands at the marker spawn_bach; super() clears the name
 	var from_bachlauf := SceneTravel.pending_spawn == "bach"
 	super()
+	if morning_after:
+		ReturnBeat.attach_morning(self, "morning_valley")
+	if MiraLeaves.due():
+		MiraLeaves.attach(self)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	if from_bachlauf:
 		Beat.mark("bachlauf_back")

@@ -1,0 +1,77 @@
+# Die Leere, Akt VI, Segment R1 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O1, O10, O12, O13, O18; Bible §8, §13, §37, §45, §51, §52; Stilblatt mira.md, Gegenbeispiele 1 bis 5). "Weiter" nach dem stillen Ende von Akt V
+# beginnt den Tag danach: das Haus ist grau und ruhig, es regnet nicht, und nichts wird verlangt. Das ist die Leere, und sie steht nur in Dingen: der Kessel, der nicht fragt, die Tür, an der nichts klopft, der Tee von
+# gestern. Kein Cue nennt sie, deutet sie oder sagt, wie es der Spielerin damit geht; Humor kommt aus den Dingen (Brief O12), nie aus ihrer Stimmung. Mira kommt zu ihrem alten Lager im Tal und geht ihren eigenen
+# Weg: sie sagt, dass sie geht, nie wohin (das Wort fällt nicht, das Ziel kennt die Spielerin), nimmt nur mit, was sie trägt (die Plane und das Brett bleiben), und bleibt nicht. Die Wege kreuzen sich, mehr nicht: kein Abschied mit Satz, kein Weinen,
+# keine Bitte, kein Trost, keine Einladung mitzukommen, keine Lehre, kein Lob, kein Tadel, keine neue Erinnerung (es ist eine Variante der letzten, gate). Der Ausgang des Streits am Tor (city.mira_parted_*, genau eines
+# gilt) liest sich als Ton, nie als Wertung: Mira ist in allen drei Fällen dieselbe. Prüflinse (Bible §15, §51): kein Kind, keine Kreide, nichts vom Gebirge, keine Ursache, keine Erklärung, was die Spielerin erlebt hat,
+# kein Wort für ihr Ziel. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind ausgeschrieben. Sprecher gibt es einen, Mira, nur in mira_leaves. Kein Cue dieser Datei setzt
+# ein Flag, eine Facette oder eine Erinnerung: die Szene setzt valley.mira_leaving, valley.mira_left, valley.rift_light, die Beats und die Stufen der Heldenquest mira_leaves liest nur die drei Ausgänge.
+
+# --- Der Tag danach, im Haus ----------------------------------------------------------------------------------------------------
+# Die Szene spielt es einmal, wenn "Weiter" im Haus beginnt. Gültig in jedem Zustand des Hauses: ob der Antreiber an der Werkbank sitzt, die Katze da ist, ein Stuhl mehr steht oder der Wächter am Kamin, sagt keine
+# Zeile. Kein Wort über gestern, ausgenommen der Tee, und keines über den Weg. Der Tag hat nichts dabei, und das Haus macht daraus nichts (ein Hauch Humor, kein Satz darüber, wie es sich anfühlt).
+
+~ morning_house
+Das Fenster ist grau. Es regnet nicht, und das Dach scheint das nicht gewohnt zu sein. [ID:lee_morn_1] [#draft]
+Der Tee von gestern steht noch auf dem Tisch. Kalt ist er geblieben, mehr hatte er nicht vor. [ID:lee_morn_2] [#draft]
+Der Kessel fragt nicht, ob jetzt Tee wäre, und das Holz neben dem Kamin hat dazu keine Meinung. [ID:lee_morn_3] [#draft]
+An der Tür klopft nichts, nicht einmal der Wind. [ID:lee_morn_4] [#draft]
+Das Licht liegt grau auf dem Boden, bis zur Tischkante, und kommt nicht weiter. [ID:lee_morn_5] [#draft]
+=> END
+
+# --- Der Tag danach, draußen ----------------------------------------------------------------------------------------------------
+# Dasselbe, wenn "Weiter" im Tal beginnt (wer das Haus nach dem Ende von Akt V verlassen und dort gespeichert hat). Gültig mit und ohne Trieb im Beet, mit und ohne Katze, in jedem Zustand des Tals: das Beet
+# und das Haus kommen nicht vor.
+
+~ morning_valley
+Auf dem Gras liegt Tau, und der Himmel ist ein einziges Grau, gleichmäßig verteilt. [ID:lee_vmorn_1] [#draft]
+Der Bach läuft vorbei, wie er es gestern getan hat, nur mit anderem Wasser. [ID:lee_vmorn_2] [#draft]
+Die Hecke tropft, ein Tropfen nach dem anderen, ohne sich abzusprechen. [ID:lee_vmorn_3] [#draft]
+=> END
+
+# --- Mira geht -----------------------------------------------------------------------------------------------------------------
+# Mira am alten Lager an der Ostseite des Bachs; die Szene spielt es als Zwischensequenz, die Plane bleibt hängen (die Karte lässt sie stehen). Am Anfang und am Ende stehen zwei gemeinsame Zeilen, dazwischen je Ausgang des Streits drei, im Ton des
+# Ausgangs (sie stehen hier hintereinander, aber das Spiel spielt nur eine Gruppe): Grenze, sachlich, ein Nicken, sie respektiert es, ohne es zu sagen (sie bittet um nichts); angeschlossen, trocken, ihr "Ich warte
+# nicht." gilt noch, und sie geht trotzdem nicht, ohne es gesagt zu haben; geschwiegen, kürzer und kühler, eine Tür, die nicht zugeschlagen wird, nie ein Wort über das Schweigen. Keine Antwort der Spielerin, auch kein "...".
+# Die zwei letzten Zeilen sind in allen Ausgängen gleich: eine trockene Tatsache (das Wetter, mit einem Echo auf ihren ersten Abend), dann das Gehen; das letzte Wort hat der Ort, die Plane im Wind.
+
+~ mira_leaves
+Mira zieht die Riemen am Bündel fest, einen nach dem anderen. Das Netz liegt obenauf, die Plane hängt noch an ihren Pflöcken. [ID:lee_mira_1] [#draft]
+Mira: Ich geh heute weiter. Die Plane bleibt. Das Brett auch. [ID:lee_mira_2] [#draft]
+if WorldState.has_flag("city.mira_parted_boundary")
+	Sie prüft den letzten Riemen und hält dir kein Ende hin. [ID:lee_mira_3] [#draft]
+	Mira: Das geht allein. [ID:lee_mira_4] [#draft]
+	Sie nickt einmal, kurz, wie am Tor. [ID:lee_mira_5] [#draft]
+elif WorldState.has_flag("city.mira_parted_joined")
+	Mira: Ich warte nicht. [ID:lee_mira_6] [#draft]
+	Sie hält dir das lose Ende des Riemens hin, bis die Schnalle sitzt. Länger nicht. [ID:lee_mira_7] [#draft]
+	Mira: Ohne Bescheid gehe ich trotzdem nicht. Das war der Bescheid. [ID:lee_mira_8] [#draft]
+elif WorldState.has_flag("city.mira_parted_silent")
+	Eine Weile sagt keiner etwas. [ID:lee_mira_9] [#draft]
+	Mira: Gepackt. [ID:lee_mira_10] [#draft]
+	Sie schließt die Schnalle am Bündel leise, wie man eine Tür schließt, hinter der jemand schläft. [ID:lee_mira_11] [#draft]
+Mira: Kein Regen heute. Ist aber nicht Donnerstag. [ID:lee_mira_12] [#draft]
+Sie zieht sich das Bündel höher auf die Schulter und nimmt den Weg. Hinter ihr schlägt die Plane einmal im Wind und hängt dann wieder still. [ID:lee_mira_13] [#draft]
+=> END
+
+# --- Das alte Lager danach -------------------------------------------------------------------------------------------------------
+# Ein Ding am Lager (Decor mit Cue, freiwillig, jedes Mal von vorn), ohne Zeitangabe, damit es am selben Tag und später gilt. Nur was zu sehen ist: die Plane an ihren Pflöcken, eine Kuhle im Gras, der Ring aus schwarzer Erde, das
+# Gestell des Netzes, der Geruch. Kein Kommentar zu Mira, kein Wort für das Fehlen.
+
+~ camp_empty
+Die Plane hängt noch an ihren Pflöcken, und darunter ist Platz für genau eine. [ID:lee_camp_1] [#draft]
+Im Gras ist eine Kuhle vom Liegen, das Gras darin etwas niedriger als ringsum. [ID:lee_camp_2] [#draft]
+Der Ring aus schwarzer Erde ist kalt, und über dem Gestell für das Netz hängt noch der Geruch von altem Rauch. [ID:lee_camp_3] [#draft]
+=> END
+
+# --- Das Haus, später ----------------------------------------------------------------------------------------------------------
+# Die Szene spielt es einmal, beim ersten Betreten des Hauses nach Miras Gehen, am selben Tag oder später. Gültig in jedem Zustand des Hauses. Das Haus sagt kein Wort über Elysia, kein "zurück" und kein
+# "heimkehren"; es zeigt ein Ding, das an etwas erinnert, ohne zu sagen, woran: ein goldenes Licht, einen Geruch nach etwas Gekochtem, das hier niemand gekocht hat, und dann ist es weg. Ein Sog aus Dingen, kein Zwang
+# (Bible §52): die letzte Zeile lässt offen, ob man dem nachgeht, und verlangt nichts. Nichts, das nach Werbung klingt.
+
+~ house_empty
+Im Haus ist es so still, dass man dem Tisch beim Stehen zuhören kann. [ID:lee_dusk_1] [#draft]
+Dann liegt für einen Augenblick ein anderes Licht auf dem Boden, wärmer und goldener, als es an diesem Fenster sein dürfte. [ID:lee_dusk_2] [#draft]
+Du atmest ein, und es riecht nach etwas Gekochtem, das hier niemand gekocht hat. [ID:lee_dusk_3] [#draft]
+Dann ist beides weg. Du könntest dem nachgehen, wohin auch immer, oder den Tisch abwischen. [ID:lee_dusk_4] [#draft]
+=> END

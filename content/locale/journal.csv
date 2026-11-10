@@ -173,3 +173,7 @@ QUEST_SIDE_PLANT_POTATO_DONE,"Der Wächter hat die Kartoffel eingetragen: mittel
 QUEST_SIDE_GRAT_SUMMIT_TITLE,Der Gipfeleintrag
 QUEST_SIDE_GRAT_SUMMIT_READ,"Auf der Fläche steht ein Pfosten mit einem Kasten, und darin liegt ein Buch, in dem viele Hände geschrieben haben. Ich habe darin gelesen, und die letzte Seite ist leer."
 QUEST_SIDE_GRAT_SUMMIT_DONE,"Ich habe etwas auf die leere Seite geschrieben. Der Bleistift hängt wieder an seiner Schnur, und das Buch liegt offen."
+QUEST_MAIN_RETURN_WAY_TITLE,Der Weg zurück
+QUEST_MAIN_RETURN_WAY_EMPTY,"Es ist grau und ruhig, und der Tee steht noch auf dem Tisch. An der Ostseite des Bachs, an Miras altem Lager, steht jemand."
+QUEST_MAIN_RETURN_WAY_GONE,"Mira ist weitergegangen. Ihr Lager steht noch da, auch die Plane. Ich sehe im Haus nach."
+QUEST_MAIN_RETURN_WAY_PULL,"Im Haus lag für einen Augenblick ein warmes Licht auf dem Boden, das nicht hierher gehört, und es roch nach etwas Gekochtem. Ich bin hier angekommen, und ich muss dem nicht nachgehen."

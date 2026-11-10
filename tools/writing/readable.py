@@ -51,6 +51,7 @@ PREFIX = {
     "akt5/kind": "G7-",
     "akt5/urhaus": "G8-",
     "akt5/heimkehr": "G9-",
+    "akt6/leere": "R1-",  # Act VI: one prefix per segment ("R1-1")
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]
