@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://fbm3jk84lfoq"
+path="res://.godot/imported/urhaus.dialogue-58ac1a19514d035a2bc9f715d62256a9.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/urhaus.dialogue"
+dest_files=["res://.godot/imported/urhaus.dialogue-58ac1a19514d035a2bc9f715d62256a9.tres"]
+
+[params]
+
+defaults=true

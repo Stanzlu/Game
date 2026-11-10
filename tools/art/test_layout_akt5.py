@@ -486,13 +486,17 @@ GRAT_SPALTE_GLYPHS = "VBCIJP"
 GRAT_KIND = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "kind.dialogue")
 GRAT_KIND_RES = "res://content/dialogue/akt5/kind.dialogue"
 GRAT_KIND_GLYPHS = "Kn"
+# G8: the house, the book and the spot that takes over the plateau's look ask the first house's own dialogue
+GRAT_URHAUS = os.path.join(mapfile.ROOT, "content", "dialogue", "akt5", "urhaus.dialogue")
+GRAT_URHAUS_RES = "res://content/dialogue/akt5/urhaus.dialogue"
+GRAT_URHAUS_GLYPHS = "jΔΣ"
 # the glyphs that stand once on the map
-GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEeVBCIJPNKn"
+GRAT_NAMED = "Dd@123q7HQMtAZGXYFsEeVBCIJPNKnj9ΩΔΣ"
 # the cues of the map by glyph (the contract of G2)
 GRAT_CUES = {"1": "cairn_1", "2": "cairn_2", "3": "cairn_3", "q": "stone_pick", "7": "valley_sign", "H": "hand_stone", "Q": "quartz",
              "M": "marmot_den", "X": "gate", "Y": "ramp_wait",
              "V": "ledge_view", "B": "fork_sign", "C": "cleft_mouth", "I": "hiding_place", "J": "candle", "P": "plateau_edge",
-             "K": "child_look", "n": "seat_empty"}
+             "K": "child_look", "n": "seat_empty", "j": "house_front", "Δ": "summit_book", "Σ": "plateau_after"}
 # things a person cannot walk through, whatever the ground: the hall, the fence, the gate, the blockers
 GRAT_SOLID_PROPS = set("AfGXY")
 # a line of sight is stopped by solid ground and by what stands tall
@@ -558,12 +562,13 @@ class GratLayoutTests(unittest.TestCase):
             params = symbols[glyph].get("params", {})
             if "cue" in params:
                 used[glyph] = params["cue"]
-                expected = GRAT_ANLAGE_RES if glyph == "X" else GRAT_SPALTE_RES if glyph in GRAT_SPALTE_GLYPHS else GRAT_KIND_RES if glyph in GRAT_KIND_GLYPHS else GRAT_DIALOGUE_RES
+                expected = GRAT_ANLAGE_RES if glyph == "X" else GRAT_SPALTE_RES if glyph in GRAT_SPALTE_GLYPHS else GRAT_KIND_RES if glyph in GRAT_KIND_GLYPHS else GRAT_URHAUS_RES if glyph in GRAT_URHAUS_GLYPHS else GRAT_DIALOGUE_RES
                 self.assertEqual(params["dialogue"], expected, glyph)
         self.assertEqual(used, GRAT_CUES)
         self.assertEqual(len(set(used.values())), len(used), "no cue twice")
-        valley = [g for g in used if g != "X" and g not in GRAT_SPALTE_GLYPHS and g not in GRAT_KIND_GLYPHS]
-        for path, glyphs in ((GRAT_DIALOGUE, valley), (GRAT_ANLAGE, ["X"]), (GRAT_SPALTE, list(GRAT_SPALTE_GLYPHS)), (GRAT_KIND, list(GRAT_KIND_GLYPHS))):
+        valley = [g for g in used if g != "X" and g not in GRAT_SPALTE_GLYPHS and g not in GRAT_KIND_GLYPHS and g not in GRAT_URHAUS_GLYPHS]
+        for path, glyphs in ((GRAT_DIALOGUE, valley), (GRAT_ANLAGE, ["X"]), (GRAT_SPALTE, list(GRAT_SPALTE_GLYPHS)), (GRAT_KIND, list(GRAT_KIND_GLYPHS)),
+                             (GRAT_URHAUS, list(GRAT_URHAUS_GLYPHS))):
             if os.path.exists(path):
                 with open(path, encoding="utf-8") as f:
                     cues = set(re.findall(r"^~ (\w+)", f.read(), re.M))
@@ -931,6 +936,52 @@ class GratLayoutTests(unittest.TestCase):
         self.assertEqual(_png_size(mapfile.res_path(catalog["tal/gb_picture_frame"]["textures"][0])), (24, 24))
         self.assertEqual(_png_size(mapfile.res_path(catalog["tal/gb_sprout"]["textures"][0])), (12, 14))
 
+    def test_g8_the_first_house_stands_on_the_plateau_once_the_child_is_gone(self):
+        _, symbols, rows, spots = _grat()
+        px0, px1, py0, py1 = layout.GRAT_PLATEAU
+        catalog = mapfile.load_catalog()
+        self.assertEqual(spots["j"], [layout.GRAT_HOUSE])
+        self.assertEqual(spots["9"], [layout.GRAT_HOUSE_DOOR])
+        self.assertEqual(spots["\u03a9"], [layout.GRAT_HOUSE_ARRIVAL])
+        self.assertEqual(spots["\u0394"], [layout.GRAT_BOOK])
+        self.assertEqual(spots["\u03a3"], [layout.GRAT_PLATEAU_SPOT])
+        hx, hy = layout.GRAT_HOUSE
+        self.assertEqual(layout.GRAT_HOUSE_DOOR, (hx, hy + 1), "the door is one cell below the house's foot")
+        self.assertEqual(layout.GRAT_HOUSE_ARRIVAL, (hx, hy + 3), "the arrival lies two cells in front of the door")
+        for cell in (layout.GRAT_HOUSE, layout.GRAT_HOUSE_DOOR, layout.GRAT_HOUSE_ARRIVAL, layout.GRAT_BOOK, layout.GRAT_PLATEAU_SPOT):
+            self.assertTrue(px0 <= cell[0] <= px1 and py0 <= cell[1] <= py1, "on the plateau: %s" % (cell,))
+        for x in range(hx - 1, hx + 2):  # the house is three cells wide and three high, on ground the layout drew, clear of the path's end
+            for y in range(hy - 2, hy + 1):
+                self.assertIn(_ground(symbols, rows[y][x]), STANDABLE, "the house at %d,%d" % (x, y))
+        walk_end = layout.GRAT_PATH_LEDGE[-1]
+        self.assertGreaterEqual(walk_end[1], hy + 1.5, "the ledge's path ends below the house, not through its door")
+        for glyph in "j9\u0394\u03a3":
+            self.assertEqual(symbols[glyph]["params"]["if"], "grat.child_gone", glyph)
+        self.assertEqual(symbols["P"]["params"]["unless"], "grat.child_gone", "the first look ends where the second begins")
+        self.assertNotIn("if", symbols["\u03a9"], "a marker is not a prop")
+        self.assertEqual(symbols["\u03a9"]["marker"], "spawn_urhaus")
+        params = symbols["9"]["params"]
+        self.assertEqual((params["target"], params["spawn"], params["auto"], params["sound"]), ("urhaus", "grat", True, "door_open"))
+        self.assertNotIn("size", params, "a door of one cell")
+        self.assertEqual(symbols["j"]["params"]["sprite"], "tal/gb_first_house")
+        self.assertEqual(symbols["\u0394"]["params"]["sprite"], "tal/gb_summit_book")
+        for sprite, size, anchor in (("tal/gb_first_house", (48, 48), [24, 40]), ("tal/gb_summit_book", (16, 24), [8, 20])):
+            self.assertEqual(_png_size(mapfile.res_path(catalog[sprite]["textures"][0])), size, sprite)
+            self.assertEqual(catalog[sprite]["anchor"], anchor, sprite)
+            self.assertNotIn("shadow", catalog[sprite], "no baked shadow: the stamp stays")
+            self.assertIn("shape", catalog[sprite], "the house and the post have a body")
+        self.assertEqual(catalog["tal/gb_first_house"]["shape"]["rect"][0], 48, "the house's body is as wide as the house")
+        # the way to the door: from the ledge's end up one cell; the spot and the book can be reached as well
+        reach = _reach(rows, symbols, (layout.GRAT_RAMP_X, 10), blocked={(x, hy) for x in range(hx - 1, hx + 2)})
+        for cell in (layout.GRAT_HOUSE_DOOR, layout.GRAT_HOUSE_ARRIVAL, layout.GRAT_BOOK, layout.GRAT_PLATEAU_SPOT):
+            self.assertIn(cell, reach, "reachable: %s" % (cell,))
+        for y in range(layout.GRAT_BOOK[1] - 1, layout.GRAT_BOOK[1] + 2):  # the post stands clear of the house's body
+            self.assertGreaterEqual(layout.GRAT_BOOK[0] - 1, hx + 1, "the book is beside the house")
+        for out, name in (("fragments", "fragment_first_house"), ("fragments", "fragment_summit_book"), ("items", "curiosity_blue_chalk")):
+            path = os.path.join(mapfile.ROOT, "assets", "generated", out, name + ".png")
+            self.assertTrue(os.path.exists(path), path)
+            self.assertEqual(_png_size(path), (16, 16))
+
     def test_the_ramp_is_five_cells_wide_through_the_band_with_steps_a_heap_and_the_blocker_at_its_foot(self):
         _, symbols, rows, spots = _grat()
         rx, ry = spots["Y"][0]
@@ -1000,8 +1051,9 @@ class GratLayoutTests(unittest.TestCase):
         # the plateau: an open stretch of ground, nothing placed on it, for the door of the first house (G8)
         for y in range(py0, py1 + 1):
             for x in range(px0, px1 + 1):
-                # G6: one invisible spot to look from at its south edge (P): no picture, no body
-                self.assertIn(rows[y][x], ".,mP", "the plateau is bare ground: %d,%d" % (x, y))
+                # G6: one invisible spot to look from at its south edge (P): no picture, no body; G8: the house with its door, the arrival,
+                # the book and the spot that takes over the look once the child is gone (all of them keep the ground they stand on)
+                self.assertIn(rows[y][x], ".,mP" + "j9ΩΔΣ", "the plateau is bare ground: %d,%d" % (x, y))
                 self.assertIn((x, y), open_reach)
         self.assertGreaterEqual((px1 - px0 + 1) * (py1 - py0 + 1), 90)
         self.assertGreaterEqual(px0, 80, "in the north-east")

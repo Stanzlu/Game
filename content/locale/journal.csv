@@ -161,9 +161,13 @@ QUEST_MAIN_MOUNTAIN_WAY_LOAD,"Der Wächter nimmt die Hebel nach und nach in Betr
 QUEST_MAIN_MOUNTAIN_WAY_LETGO,"Ich habe das Pult verlassen, und die Hebel sind von selbst gefallen, einer nach dem anderen. Die Halle steht noch, bis auf eine dunkle Lampe, und der Weg geht über den Grat weiter."
 QUEST_MAIN_MOUNTAIN_WAY_HIGH,"Ich stehe auf dem Grat, und das Tal liegt klein unter mir. Der Weg führt am Rand der Wand entlang nach Osten."
 QUEST_MAIN_MOUNTAIN_WAY_CHILD,"Ich habe auf dem Grat neben dem Kind gesessen, und als ich mich umsah, war es fort. Der Stein ist noch warm, und der Weg führt weiter nach Osten, über die Fläche."
+QUEST_MAIN_MOUNTAIN_WAY_HOUSE,"Auf der Fläche steht ein kleines Haus aus Brettern, das vorher nicht da war. Ich bin hineingegangen. Es ist ein einziges Zimmer, und es ist still dort."
 QUEST_SIDE_GRAT_STONE_TITLE,"Der Stein, der nicht liegen bleibt"
 QUEST_SIDE_GRAT_STONE_CARRY,"Am Fuß des ersten Steinmännchens im Hochtal lag ein kleiner runder Stein. Ich habe ihn eingesteckt. Obenauf ist bei jedem Steinmännchen im Tal noch Platz."
 QUEST_SIDE_GRAT_STONE_DONE,"Ich habe den Stein auf alle drei Steinmännchen gelegt. Er ist gerollt, gekippt und vom Wind weitergeschoben worden. Jetzt steckt er in meiner Tasche."
 QUEST_SIDE_PLANT_POTATO_TITLE,Die Kartoffel
 QUEST_SIDE_PLANT_POTATO_SHOW,"Aus einem Rohr der Anlage ist eine Kartoffel gerollt. Ich habe sie eingesteckt. Der Wächter hat sie noch nicht eingetragen."
 QUEST_SIDE_PLANT_POTATO_DONE,"Der Wächter hat die Kartoffel eingetragen: mittelgroß, ohne Besonderheiten, bemerkenswert durchschnittlich. Sie bleibt bei mir."
+QUEST_SIDE_GRAT_SUMMIT_TITLE,Der Gipfeleintrag
+QUEST_SIDE_GRAT_SUMMIT_READ,"Am Pfosten auf der Fläche hängt ein Buch, in dem viele Hände geschrieben haben. Ich habe darin gelesen, und die letzte Seite ist leer."
+QUEST_SIDE_GRAT_SUMMIT_DONE,"Ich habe etwas auf die leere Seite geschrieben. Der Bleistift hängt wieder an seiner Schnur, und das Buch liegt offen."

@@ -190,13 +190,10 @@ func test_every_picture_she_holds_is_one_of_the_five_and_the_sixth_is_not_there_
 	for flag in PICTURES:
 		WorldState.set_flag(flag)
 	assert_eq(ChildMeeting.held_names().size(), 5)
-	assert_false(ChildMeeting.held(5), "the picture of the first house is G8's")
+	assert_false(ChildMeeting.held(5), "the picture of the first house is G8's: empty until then")
 	WorldState.set_flag("fragment.first_house")
-	assert_eq(
-		ChildMeeting.held_names().size(),
-		5,
-		"the sixth frame is bound to its flag when G8 sets one: until then it stays empty"
-	)
+	assert_eq(ChildMeeting.held_names().size(), 6, "G8 binds the sixth frame to its flag")
+	assert_eq(ChildMeeting.held_names()[5], "first_house")
 
 
 func test_the_answers_lead_to_the_same_end_and_no_way_is_wrong() -> void:
@@ -259,11 +256,12 @@ func test_in_the_valley_the_bed_shows_a_shoot_only_after_the_scene() -> void:
 	assert_eq(tal.map.world_to_cell(sprouts[0].global_position), BED)
 
 
-func test_the_hero_stage_child_ends_the_walk_for_now() -> void:
+func test_the_hero_stage_child_leads_on_to_the_first_house() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_true(quest.can_advance("high", "child"))
-	assert_false(quest.stage("high").is_final(), "the first house (G8) hangs on the child")
-	assert_true(quest.stage("child").is_final())
+	assert_false(quest.stage("high").is_final(), "the child hangs on it")
+	assert_false(quest.stage("child").is_final(), "the first house (G8) hangs on the child")
+	assert_true(quest.can_advance("child", "house"))
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_CHILD"), "QUEST_MAIN_MOUNTAIN_WAY_CHILD")
 
 

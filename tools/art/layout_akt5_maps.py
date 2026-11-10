@@ -514,6 +514,14 @@ GRAT_EDGE = (86, 10)  # P: the south edge of the plateau (an invisible spot)
 GRAT_SEAT = (79, 10)  # N
 GRAT_CHILD = (80, 10)  # K
 GRAT_SEAT_SPOT = (78, 10)  # n
+# G8: once the child is gone a small house stands on the plateau (its middle bottom cell; the path of the ledge ends in front of it), its door
+# one cell below the house's foot, the arrival from inside two rows in front of the door, the book on its post beside it, and an invisible spot at
+# the south edge that takes over the look from `P` (also only once the child is gone). All on cells that kept their ground.
+GRAT_HOUSE = (88, 4)  # j
+GRAT_HOUSE_DOOR = (88, 5)  # 9
+GRAT_HOUSE_ARRIVAL = (88, 7)  # Ω (marker spawn_urhaus)
+GRAT_BOOK = (90, 6)  # Δ
+GRAT_PLATEAU_SPOT = (87, 10)  # Σ
 GRAT_POCKET = (69, 83, 31, 37)  # the yard of the Anlage, a pocket in the rock: x0, x1, y0, y1 (the hall is twelve cells wide, one and a half each side)
 GRAT_FENCE_Y = 38  # the fence closes the pocket from rock to rock; the gate stands in the middle of it
 GRAT_GATE = (76, 38)
@@ -546,6 +554,7 @@ GRAT_GROUND = {
     "A": ",", "Z": "^", "f": ",", "G": ",", "X": ",", "Y": ",", "F": ",", "s": ",", "E": ",", "e": ",",
     "V": ",", "B": ",", "C": ",", "I": ",", "J": ",", "P": ".",
     "N": ".", "K": ".", "n": ".",
+    "j": ".", "9": ",", "Ω": ",", "Δ": ".", "Σ": ".",
 }
 GRAT_BLOCKS = set("h^vOoAfGXY")  # a line of sight is stopped by solid ground and by what stands tall
 
@@ -787,6 +796,9 @@ def grat_build():
         put(glyph, *cell)
     # ---- G7: the stone, the child and the spot beside the stone
     for glyph, cell in (("N", GRAT_SEAT), ("K", GRAT_CHILD), ("n", GRAT_SEAT_SPOT)):
+        put(glyph, *cell)
+    # ---- G8: the small house on the plateau with its door and its arrival, the book on its post, the spot at the south edge
+    for glyph, cell in (("j", GRAT_HOUSE), ("9", GRAT_HOUSE_DOOR), ("Ω", GRAT_HOUSE_ARRIVAL), ("Δ", GRAT_BOOK), ("Σ", GRAT_PLATEAU_SPOT)):
         put(glyph, *cell)
     # ---- the three cairns of the valley, each in sight of the one before (the first in sight of the arrival), the stone at the foot of the first
     c1 = pick((29, 47), ".", 2.0, 3.4)
