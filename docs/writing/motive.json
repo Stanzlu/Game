@@ -825,9 +825,13 @@
     {
      "type": "line",
      "ref": "anl_w_3"
+    },
+    {
+     "type": "line",
+     "ref": "spa_ledge_3"
     }
    ],
-   "payoff": "Der Rauch zeigt von weitem, wie ein Ort lebt. Über dem Haus steht dünner Rauch, gerade nach oben (`bl_back_1`, Akt II); die Stadt schickt viele Fäden vor, die sich im Himmel nicht einig werden (`str_view_2`, Akt IV); die Anlage im Gebirge zeigt einen einzigen, dünn und gerade und so genau, als hätte jemand vorher überlegt, wohin er soll (`auf_view_smoke_3`, Akt V, G1). Der Text sagt nicht, wer dort feuert; die Pedanterie ist der Gag, nie seine Angst (Brief O13). Die Halle (Akt V, G3) löst den Rauch auf, ohne ihn zu erklären: der Mann, der vorher überlegt hat, wohin der Rauch soll, steht am Pult, der Stift setzt einen Strich, bevor er den Kopf hebt, und seine Stiefel stehen Spitze an Spitze (`anl_w_3`). Kein Wort über Feuer, Holz oder Schornstein; in der Halle ist nur Dampf im Bild."
+   "payoff": "Der Rauch zeigt von weitem, wie ein Ort lebt. Über dem Haus steht dünner Rauch, gerade nach oben (`bl_back_1`, Akt II); die Stadt schickt viele Fäden vor, die sich im Himmel nicht einig werden (`str_view_2`, Akt IV); die Anlage im Gebirge zeigt einen einzigen, dünn und gerade und so genau, als hätte jemand vorher überlegt, wohin er soll (`auf_view_smoke_3`, Akt V, G1). Der Text sagt nicht, wer dort feuert; die Pedanterie ist der Gag, nie seine Angst (Brief O13). Die Halle (Akt V, G3) löst den Rauch auf, ohne ihn zu erklären: der Mann, der vorher überlegt hat, wohin der Rauch soll, steht am Pult, der Stift setzt einen Strich, bevor er den Kopf hebt, und seine Stiefel stehen Spitze an Spitze (`anl_w_3`). Kein Wort über Feuer, Holz oder Schornstein; in der Halle ist nur Dampf im Bild. Vom Grat aus (Akt V, G6) ist es derselbe Faden von oben: er steigt vom Schornstein auf und endet weit unter dem Standort (`spa_ledge_3`)."
   },
   {
    "id": "gefaelliger-liste",
@@ -2380,9 +2384,21 @@
     {
      "type": "flag",
      "ref": "fragment.hand"
+    },
+    {
+     "type": "line",
+     "ref": "spa_hiding_2"
+    },
+    {
+     "type": "line",
+     "ref": "spa_hiding_4"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.hiding"
     }
    ],
-   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder."
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder. Das Verstecken (Akt V, G6) ist das zweite: eine Mulde im Fels am Ende der Spalte, ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke reicht, draußen geht etwas vorbei, und die Decke ist noch warm und bleibt es (`spa_hiding_2`, `spa_hiding_4`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, keine Ursache, kein Wort für das, was der Ort getan hat, kein Witz davor oder danach; die Spielerin legt nur die Fingerspitzen auf die Decke. Nie Voraussetzung (Brief O7): der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder."
   },
   {
    "id": "kleine-tuer",
@@ -2684,6 +2700,47 @@
     }
    ],
    "payoff": "Beschützer mit der Grundidee „Wenn du alles kontrollierst, kann nichts passieren.“ (Bible §14). Der Humor ist Pedanterie und sitzt in Zahlen, Ordnungen und Dingen: er zählt Schrauben und unterbricht sich nur, um die Stelle zu merken (`anl_knock_2`), prüft, ob Besuch verboten ist, und findet, dass er nur nicht vorgesehen ist (`anl_knock_5`), zählt jeden Besuch neu, damit die Zahl stimmt (`anl_w_4`), beantwortet seine Kontrollfrage selbst (`anl_w_7`), gibt dem Schweigen eine Nummer (`anl_w_12`) und trägt ein, dass es klappt, weil das nicht eingeplant war (`anl_right_2`). Das Eintragen des Eintragens ist nicht nötig, er hat nachgesehen (`anl_again_3`); die Schrauben sind gleich viele, das ist der Sinn von Schrauben (`anl_again_4`); das Rohr zischt im Takt des Tickens am Tor, und es ist unklar, wer von wem abschreibt (`anl_pipe_2`). Der Text lacht nie über seine Angst und nennt sie nicht; er tröstet nie, er wird nicht geheilt, und er spricht nie über das Kind, die kleine Tür oder die Spielerin als Person. Die Probe der drei Hebel (G3) hat weder Frist noch Strafe und ist nie Voraussetzung. Die Last (G4) bleibt im Ton: er stellt den Betrieb als Verfahren vor, oben verlangt, unten erledigt, und trägt die Pause ein, die er ankündigt (`anl_load_5`, `lst_wait_2`); wer „Noch nicht.“ sagt, bekommt eine neue Rubrik (`anl_again_5`); er zählt nach, bis die Zahl beide Male dieselbe ist (`lst_wave3_2`), und ab der vierten Welle rechnet er in Atemzügen, weil Sekunden zu grob sind (`lst_wave4_3`). Wer „Weiter.“ sagt, hört seinen Satz, solange er zählt (`anl_run_3`); wer um Hilfe fragt, hört ohne Umschweife, dass zwölf Hebel für zwei Hände zu viele sind und dass das Wegtreten zulässig ist, und er rät nicht dazu (`anl_run_5`). Am Ende rechnet er zweimal, weil Rechnungen dafür da sind (`lst_over_5`), trägt „nicht erfüllt“ ein und bleibt dabei, und die letzte Zeile danach ist ein Vorbehalt (`anl_over_3`). Der Text macht auch hier keinen Witz über seine Angst und kein Wort über Gefahr. Das Loslassen (G5) bleibt im Ton: das leere Pult trägt er mit der Dauer laufend ein (`los_away_2`), in die Spalte, wer den ersten Hebel gezogen hat, schreibt er niemand (`los_first_3`), und wo das Verfahren einen Zug verlangt, trägt er ein, dass er nicht zieht (`los_mid_4`); den Defekt der Lampe trägt er ein und behebt ihn nicht (`los_defect_3`). Wer „Und jetzt?“ fragt, hört, dass das Verfahren für diesen Stand keinen Schritt kennt (`anl_over_4`) und dass es zulässig ist, das Pult nicht zu bedienen, er rät aber nicht dazu (`anl_over_5`). Danach hat der Einzelfall eine eigene Seite, auf der er allein steht (`anl_done_5`), und die Kartoffel ist in allem durchschnittlich, Besonderheiten keine, was er bemerkenswert findet (`anl_potato_6`). Der Humor sitzt wieder in Spalten und Einträgen, nie in seiner Angst. Sein trockener Schluss (G9, am Herd im Haus) folgt."
+  },
+  {
+   "id": "spalte-weg",
+   "kind": "vorausdeutung",
+   "title": "Die Spalte und der Umweg (zwei Wege, keiner besser)",
+   "bible": "§15, §16, §45, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "spa_fork_2"
+    },
+    {
+     "type": "line",
+     "ref": "spa_fork_3"
+    },
+    {
+     "type": "line",
+     "ref": "spa_cleft_2"
+    },
+    {
+     "type": "line",
+     "ref": "spa_cleft_4"
+    },
+    {
+     "type": "line",
+     "ref": "spa_candle_1"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.candle_taken"
+    },
+    {
+     "type": "line",
+     "ref": "spa_plateau_9"
+    },
+    {
+     "type": "line",
+     "ref": "spa_plateau_10"
+    }
+   ],
+   "payoff": "Die Facette Mut heißt, sich zu zeigen und trotz Unsicherheit weiterzugehen (Bible §16, Brief O10); das Wort steht nie im Text. An der Gabel auf dem Grat (Akt V, G6) stehen zwei Pfeile aus Kohle, nach Norden »Umweg«, nach Süden »Spalte«, mit derselben Kohle, gleich groß und gleich dunkel; niemand hat dazugeschrieben, welcher Weg der bessere ist (`spa_fork_3`). Der Umweg führt ebenso zum Plateau. Die Spalte ist kaum drei Schultern breit, das Licht gibt nach einem Stück auf, das Ende liegt im Schatten, der Wind bleibt draußen (`spa_cleft_2`, `spa_cleft_4`): keine Aufforderung, keine Warnung, kein Wort darüber, was drinnen ist. Am Ende liegen die Mulde mit dem zweiten Bild des Kindes (`fragment.hiding`) und ein Kerzenstummel mit weißem Docht, den man einstecken oder liegen lassen kann (`spa_candle_1`). Wer bis ans Ende der Spalte geht, trägt die Facette (die Szene setzt sie, nie ein Cue); ihr Leser ist der Blick am Rand des Plateaus (`plateau_edge`): neben der unbedingten Antwort und dem Schweigen steht nur mit der Facette die Antwort, bis an den Rand zu gehen, und sie ergibt einen Blick hinunter, die Anlage klein, der Rauch gerade, der See ein Stück Himmel (`spa_plateau_9`, `spa_plateau_10`), ohne Lob und ohne Lehre. Wer die Spalte liegen lässt, verpasst keine Szene. Das Plateau selbst ist leer und sieht aus wie ein Platz, den man frei gelassen hat (`spa_plateau_5`); was dort einmal steht, wird hier nicht gesagt."
   }
  ],
  "register": [
@@ -3698,6 +3755,11 @@
    "meaning": "Sie hat sich am Ufer des Bergsees über den flachen Stein gebeugt: der Abdruck einer kleinen Hand, Wasser statt Staub, noch nicht getrocknet (Fragment 4 von 6, Akt V, G2, Bible §15). Vier Zeilen, kein Wort, keine Ursache; nie Voraussetzung (Brief O7)."
   },
   {
+   "flag": "fragment.hiding",
+   "axis": "Kind",
+   "meaning": "Sie hat in der Mulde am Ende der Spalte die Fingerspitzen auf die zusammengerollte Decke gelegt: ein Streifen Licht bis an ihren Rand, draußen geht etwas vorbei, die Decke ist noch warm (Fragment 5 von 6, Akt V, G6, Bible §15). Vier Zeilen, kein Wort, keine Ursache; nie Voraussetzung (Brief O7)."
+  },
+  {
    "flag": "grat.stone_taken",
    "axis": "Gegenstände",
    "meaning": "Sie hat den kleinen runden Stein am Fuß des ersten Steinmännchens im Hochtal eingesteckt (Nebenquest „Der Stein, der nicht liegen bleibt“, Akt V, G2). Die Szene startet daraus die Quest; erst mit dem Stein in der Tasche bieten die Steinmännchen ihm einen Platz obenauf an. Wer ihn liegen lässt, verpasst nichts."
@@ -3726,6 +3788,11 @@
    "flag": "grat.thimble_taken",
    "axis": "Gegenstände",
    "meaning": "Sie hat den Fingerhut aus dem Häufchen am Bau des Murmeltiers genommen (Kuriosität, Akt V, G2): der Hut aus Pappe sitzt danach ganz oben. Das Murmeltier ist nie zu sehen."
+  },
+  {
+   "flag": "grat.candle_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat den Kerzenstummel aus der Mulde am Ende der Spalte eingesteckt (Kuriosität, Akt V, G6): kaum zwei Finger hoch, das Wachs alt und hart, der Docht weiß. Wer ihn liegen lässt, verpasst nichts; die Karte zeigt es."
   },
   {
    "flag": "grat.gate_open",

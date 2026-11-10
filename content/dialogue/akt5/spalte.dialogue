@@ -1,0 +1,93 @@
+# Die Spalte, Akt V, Segment G6 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O7, O10, O13; Bible §15, §16, §45, §51). Das Loslassen (G5) hat den Weg über den Grat freigegeben: oben läuft ein Absatz an der Nordwand
+# entlang nach Osten, eine Felsinsel teilt den Weg (Nordzweig: der breite Umweg; Südzweig: am Eingang der Spalte vorbei), die Spalte ist ein enger Felsspalt, drei Zellen breit und sechs tief, eine Sackgasse, die zur Anlage
+# hin abfällt, und im Osten liegt eine leere Hochfläche, das Plateau. Am Ende der Spalte liegt eine Mulde im Fels, und dort ist die zweite Rückblende, das Verstecken. Wer in die Spalte geht und bis ans Ende, tut etwas
+# trotz Unsicherheit; die Szene setzt dafür die Facette Mut, hier steht nur ihr Leser (plateau_edge). Niemand muss: der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, verpasst keine Szene (O7, O10).
+# Der Ton ist still und eng (Bible §45), ohne Humor, ohne Rede, ohne Wächter, ohne Figur: Dinge, Wind, Fels, Licht. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); nichts hier
+# bewertet einen Weg, warnt vor einem Weg oder lädt zu einem ein. Zahlen sind ausgeschrieben. Nichts hier verlangt eine Antwort außer dem Blick am Rand des Plateaus, und auch dort stehen eine unbedingte Antwort und das
+# Schweigen neben der einen der Facette. Was gesetzt wird, steht am Ende der Zeilen, die Flagge zuletzt. Sprünge gibt es keine.
+
+# --- Der erste Blick ---------------------------------------------------------------------------------------------------------
+# Am oberen Ende der Rampe, ein unsichtbarer Blick (freiwillig, jedes Mal derselbe): der Absatz, das kleine Tal, die Anlage mit ihrem Rauch, der Wind. Nichts wird erklärt, nichts versprochen, nichts gesetzt. Der Rauch
+# ist der aus dem Aufstieg (auf_view_smoke_2), nur endet er jetzt weit unter dem Standort.
+
+~ ledge_view
+Der Absatz läuft an der Wand entlang nach Osten, so weit du siehst. Der Wind kommt von der Seite und bleibt. [ID:spa_ledge_1] [#draft]
+Tief unten liegt das Hochtal. Der See ist so klein, dass ein Daumen ihn zudeckt. [ID:spa_ledge_2] [#draft]
+Die Anlage steht grau in ihrer Nische. Ihr Rauch steigt als Faden vom Schornstein auf und endet weit unter dem Grat. [ID:spa_ledge_3] [#draft]
+=> END
+
+# --- Die Gabel ---------------------------------------------------------------------------------------------------------------
+# Ein Brett auf einem Pfahl, zwei Pfeile aus Kohle, nach Norden und nach Süden. Neben dem nördlichen steht »Umweg«, neben dem südlichen »Spalte«. Beide Wörter sind mit derselben Kohle geschrieben, gleich groß und gleich
+# dunkel; niemand hat dazugeschrieben, welcher Weg der bessere ist, und der Text sagt es auch nicht. Kein Urteil, kein Warnhinweis, kein Witz. Nichts wird gesetzt.
+
+~ fork_sign
+Auf einem Pfahl an der Gabel sitzt ein Brett. Zwei Pfeile sind mit Kohle daraufgemalt, einer nach Norden, einer nach Süden. [ID:spa_fork_1] [#draft]
+Neben dem Pfeil nach Norden steht »Umweg«, neben dem nach Süden »Spalte«. [ID:spa_fork_2] [#draft]
+Beide Wörter sind mit derselben Kohle geschrieben, gleich groß und gleich dunkel. Mehr steht nicht auf dem Brett. [ID:spa_fork_3] [#draft]
+=> END
+
+# --- Der Eingang der Spalte --------------------------------------------------------------------------------------------------
+# Ein unsichtbarer Blick am Südzweig, vor dem Eingang: kalter Atem aus dem Fels, drei Schultern breit, das Licht gibt nach einem Stück auf, der Boden fällt zur Anlage hin ab, das Ende liegt im Schatten. Der Wind bleibt
+# draußen. Keine Aufforderung und keine Warnung, kein Wort darüber, was drinnen ist oder ob es sich lohnt; wer hineingeht, tut es von selbst. Nichts wird gesetzt (die Facette setzt die Szene am Ende der Spalte).
+
+~ cleft_mouth
+Aus dem Fels kommt ein kalter Atem, der nach nassem Stein riecht. Hier beginnt die Spalte. [ID:spa_cleft_1] [#draft]
+Sie ist kaum drei Schultern breit. Das Licht reicht ein Stück hinein und hört dann auf. [ID:spa_cleft_2] [#draft]
+Der Boden fällt nach hinten ab, der Anlage entgegen. Das Ende liegt im Schatten. [ID:spa_cleft_3] [#draft]
+Der Wind geht über die Spalte hinweg und kommt nicht hinein. [ID:spa_cleft_4] [#draft]
+=> END
+
+# --- Das Verstecken (die zweite Rückblende, Bild des Kindes) -----------------------------------------------------------------
+# Eine Mulde im Fels am Ende der Spalte, so niedrig, dass sie der Spielerin kaum bis zur Hüfte reicht; ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke fällt; draußen geht
+# etwas vorbei, ein Geräusch ohne Ursache; die Decke ist noch warm und bleibt es. Ein stehendes Bild (Brief O7, Bible §15), nach dem Muster der Hand (hoch_hand_1 bis _5): vier Zeilen Erzählung und nicht mehr, kein Wort des
+# Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, kein Ort draußen, kein Anlass, keine Ursache, kein Gefühlswort, keine Erklärung, wofür der Ort gedient hat; kein Witz davor oder danach. Die
+# Spielerin legt nur die Fingerspitzen auf die Decke, und das Bild lässt sie los, wie es ist. Das erste Mal setzt das Flag (Collection liest es, die Karte zeigt das Bild), danach gibt es nur noch eine Zeile.
+# Nie Voraussetzung: wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder.
+
+~ hiding_place
+if WorldState.has_flag("fragment.hiding")
+	Die Mulde im Fels. Der Streifen Licht liegt, wo er lag, und die Decke ist noch warm. [ID:spa_hiding_5] [#draft]
+else
+	Am Ende der Spalte weitet sich der Fels zu einer Mulde, die dir kaum bis zur Hüfte reicht. [ID:spa_hiding_1] [#draft]
+	Durch einen Riss fällt ein einziger Streifen Licht schräg auf den Boden und reicht bis an den Rand einer zusammengerollten Decke. [ID:spa_hiding_2] [#draft]
+	Draußen geht etwas vorbei. Der Streifen Licht wird einen Augenblick dunkler, Kies knirscht, dann ist es wieder still. [ID:spa_hiding_3] [#draft]
+	Du legst die Fingerspitzen auf die Decke. Sie ist noch warm, und sie bleibt es. [ID:spa_hiding_4] [#draft]
+	do WorldState.set_flag("fragment.hiding")
+=> END
+
+# --- Kuriosität: der Kerzenstummel -------------------------------------------------------------------------------------
+# Neben der Decke in der Mulde (Decor, "unless grat.candle_taken"). Wie der Bergkristall (hoch_quartz_*): Einstecken gibt den Gegenstand und das Flag, Liegen lassen gibt nichts und kostet nichts. Kaum zwei Finger
+# hoch, das Wachs alt und hart, der Docht weiß: der Stummel ist nie angezündet worden, und der Text sagt es nicht. Keine Ursache, kein Gedanke, kein Witz; er gehört zur Mulde, ohne dass jemand es erklärt.
+
+~ candle
+Neben der Decke steht ein Kerzenstummel, kaum zwei Finger hoch. Das Wachs ist alt und hart, und der Docht ist weiß. [ID:spa_candle_1] [#draft]
+- Einstecken. [ID:spa_candle_r1] [#draft]
+	Du steckst ihn ein. Er ist glatt an den Kanten und wiegt fast nichts. [ID:spa_candle_2] [#draft]
+	do WorldState.add_item("curiosity_candle_stub")
+	do WorldState.set_flag("grat.candle_taken")
+- Liegen lassen. [ID:spa_candle_r2] [#draft]
+	Du lässt ihn stehen, wo der Streifen Licht nicht hinkommt. [ID:spa_candle_3] [#draft]
+=> END
+
+# --- Der Rand des Plateaus ---------------------------------------------------------------------------------------------------
+# Ein unsichtbarer Blick am Südrand der Hochfläche im Osten (freiwillig, immer von vorn): flach, weit, leer, der Wind ohne Widerstand, am Südrand viel Luft. Der Platz ist leer, und er sieht aus wie einer, den man frei
+# gelassen hat; mehr sagt der Text nicht (was hier einmal steht, kommt später und wird hier nicht vorweggenommen: kein Haus, keine Tür, kein Kind). Drei Antworten: das unbedingte "Umsehen." (die Fläche ist überall
+# gleich fest und leer), die Facette Mut als zusätzliche Antwort "Bis an den Rand gehen." (der Blick hinunter: die Anlage, der Rauch, der See; kein Lob, keine Lehre, kein Wort über das, was sie dafür getan hat; die
+# Facette setzt die Szene am Ende der Spalte, nie dieser Cue) und das Schweigen "…" als letzte. Wer die Facette nicht hat, sieht die Antwort nicht und verpasst keine Szene. Keine der Antworten setzt etwas.
+
+~ plateau_edge
+Der Grat läuft hier in eine Fläche aus, flach und weit, mit kleinen Steinen bedeckt. [ID:spa_plateau_1] [#draft]
+Nichts wächst darauf, und dein Schatten ist der einzige. [ID:spa_plateau_2] [#draft]
+Rundum steigt der Fels an, nur im Süden nicht. Dort ist Luft, und weit unten liegt das Tal. [ID:spa_plateau_3] [#draft]
+Der Wind hat nichts, woran er sich reiben kann, und macht hier kein Geräusch. [ID:spa_plateau_4] [#draft]
+Die Fläche ist leer. Sie sieht aus wie ein Platz, den man frei gelassen hat. [ID:spa_plateau_5] [#draft]
+- Umsehen. [ID:spa_plateau_r1] [#draft]
+	Du gehst die Fläche ab, bis an die Wand und zurück. Der Boden ist überall gleich fest, und nirgends liegt etwas. [ID:spa_plateau_6] [#draft]
+	Am Ende stehst du wieder am Südrand, und die Fläche sieht aus wie vorher. [ID:spa_plateau_7] [#draft]
+- Bis an den Rand gehen. [if WorldState.has_facet("courage") /] [ID:spa_plateau_r2] [#draft]
+	Du gehst bis an die Kante, wo die Steine aufhören. Dahinter fällt der Fels senkrecht ab, bis zu den Matten. [ID:spa_plateau_8] [#draft]
+	Du bleibst dort stehen und siehst hinunter. Die Anlage ist ein graues Kästchen, ihr Rauch ein gerader Strich. [ID:spa_plateau_9] [#draft]
+	Der See liegt da wie ein Stück Himmel, das nicht oben geblieben ist. [ID:spa_plateau_10] [#draft]
+- … [ID:spa_plateau_r3] [#draft]
+	Du schweigst. Der Wind macht kein Geräusch, und die Steine liegen, wie sie liegen. [ID:spa_plateau_11] [#draft]
+=> END
