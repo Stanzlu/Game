@@ -1,0 +1,23 @@
+# Fragment Gipfelbuch (G8): ein aufgeschlagenes Buch mit Zeilen auf der linken Seite und einer leeren rechten, ein kleiner Bleistift daneben. Eine Spur der Welt: kein Kind, keine Figur, kein Grund
+name: fragment_summit_book
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a2620 b=#7a6c58 c=#4a3a2a p=#efe8d0 l=#76706a q=#cbc2a6 e=#d8a838 n=#3a2c24
+outline: o
+---
+................
+.oooooooooooooo.
+.obbbbbbbbbbbbo.
+.occcccccccccco.
+.opllllqqpppppo.
+.opppppqqpppppo.
+.opllllqqpppppo.
+.oplllpqqpppppo.
+.opllllqqpppppo.
+.opppppqqpppppo.
+.occcccccccccco.
+.obbbbbbbeeenno.
+.obbbbbbbbbbbbo.
+.obbbbbbbbbbbbo.
+.oooooooooooooo.
+................

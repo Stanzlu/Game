@@ -1,0 +1,59 @@
+; Akt V, G8: das ursprüngliche Haus von innen (Klasse S, Zoom 1,5 wie die Halle `maschine`, die Werkstatt und die Hütte). Von Hand gesetzt, kein Generator.
+; Wände, Balken und die Vorderwand mit ihrer Tür malt das Requisit tal/uh_shell, den Boden backt tools/art/bake_ground.py content/maps/urhaus.txt. Der Raum liegt in den Zellen 4 bis 28 und 4 bis 17 (25 x 14, 400 x 224 Pixel:
+; bei Zoom 1,5 ganz im Bild): Rückwand die Zeilen 4 bis 6, Boden die Zeilen 7 bis 16 (die Spalten 5 bis 27), die Tür (D) in der Vorderwand, Zeile 17, Spalte 7; die Ankunft aus dem Hochtal (1) liegt zwei Zellen vor ihr, der Start (@) rechts oben.
+; In der Mitte steht das Bett (B, zwei Zellen breit, die linke Zelle trägt das Glyph; Cue first_house, die dritte Rückblende). Um das Bett liegen sechs Ringe aus Kreide auf dem Boden, einer in den anderen gezeichnet
+; (R, ein flaches Bild über den Zellen 5 bis 27 und 7 bis 16): der innerste um das Bett, der äußerste an den Wänden entlang. Wer von der Tür kommt, steht schon im äußersten. Die sechs Punkte a bis f liegen in der Zeile 10 östlich
+; des Bettes, je einer auf der Linie eines Ringes (a der innerste, f der äußerste); jeder Punkt ist ein unsichtbarer Blick (Cue ring_room, ring_wall, ring_garden, ring_street, ring_town, ring_world), niemand erklärt sie.
+; Das Fenster (Y) in der Rückwand über dem Bett ist mit Kreide zugemalt; wer die Facette courage hat, kann es frei wischen (urhaus.window_clear, sprite_when). Die blaue Kreide (k) liegt vorn links auf dem Boden (Kuriosität, Cue blue_chalk).
+; Prüfhinweise: das Bett ist fest (zwei Zellen), alles andere liegt flach oder ist ein Punkt. Der Leistungstest läuft vom Start (@, Spalte 26, Zeile 8) im Quadrat (1,6 s rechts, 1,0 s unten, 1,6 s links, 1,0 s oben, mit Sprint):
+; rechts stößt er an die Seitenwand, unten an die Vorderwand, links geht er an ihr entlang bis zur Spalte 12 (die Tür liegt in der Spalte 7), oben zurück: er bleibt mehr als drei Zellen östlich von der Tür (ein Test geht den Lauf nach).
+[meta]
+style = "tal"
+ground = "res://assets/generated/maps/urhaus_ground.png"
+[legend]
+# = {"atlas": [7, 0], "surface": "stone", "solid": true, "paint": "void"}
+W = {"atlas": [7, 0], "surface": "wood", "solid": true, "paint": "void"}
+_ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
+@ = {"ground": "_", "marker": "player_spawn"}
+1 = {"ground": "_", "marker": "spawn_grat"}
+S = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/uh_shell"}}
+; die Tür zurück auf die Hochfläche (zwei Zellen vor ihr kommt man an)
+D = {"ground": "_", "prop": "res://world/props/door.tscn", "params": {"target": "grat", "spawn": "urhaus", "auto": true, "sound": "door_close"}}
+; das Bett (zwei Zellen breit, das Bild steht mit der Mitte der linken Zelle; die Kollision ist seine Form): Cue first_house, die dritte Rückblende
+B = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/uh_bed", "cue": "first_house", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 28}}
+; das Kreidebild auf dem Boden: sechs Ringe, flach unter allem (das Bild steht mit seiner linken oberen Ecke in der markierten Zelle)
+R = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/uh_chalk_rings"}}
+; die sechs Punkte auf den Linien der Ringe (a innen bis f außen), unsichtbare Blicke ohne Körper
+a = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_room", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+b = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_wall", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+c = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_garden", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+d = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_street", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+e = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_town", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+f = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"cue": "ring_world", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 14}}
+; das Fenster in der Rückwand, mit Kreide zugemalt; wischt man es frei (urhaus.window_clear), zeigt es das Bild ohne Kreide
+Y = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/uh_window", "sprite_when": {"urhaus.window_clear": "tal/uh_window_clear"}, "cue": "window", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 24}}
+; die blaue Kreide (Kuriosität): liegt, bis man sie nimmt
+k = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/uh_chalk", "cue": "blue_chalk", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 12, "unless": "urhaus.chalk_taken"}}
+[map]
+#################################
+#################################
+#################################
+#################################
+####SWWWWWWWWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWWWWWWWWWWWWWW####
+####WWWWWWWWWWWWYWWWWWWWWWWWW####
+####WR______________________W####
+####W_____________________@_W####
+####W_______________________W####
+####W___________B_a_b_c_d_efW####
+####W_______________________W####
+####W_______________________W####
+####W_______________________W####
+####W_______________________W####
+####W__1___k________________W####
+####W_______________________W####
+####WWWDWWWWWWWWWWWWWWWWWWWWW####
+#################################
+#################################
+#################################
+#################################

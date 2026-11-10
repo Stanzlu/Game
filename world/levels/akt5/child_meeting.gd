@@ -4,7 +4,8 @@ extends Node
 ## at the edge of the plateau, a child sits and waits. Nothing happens until the player sits down
 ## on the flat stone beside it, in her own time. Then the grown-up stays with the child: the child
 ## hums, the six pictures of the child hang as frames in the air round the two of them (only
-## those she holds show their picture; the others stay empty, with no line and no count), one
+## those she holds show their picture; the others stay empty, with no line and no count; the sixth,
+## the first house, is the picture of G8), one
 ## answer is given or not ("Ich bin da.", the one that asks for nothing if she has trust, the
 ## silence), and the child is gone. In the valley a shoot grows in the bed (`house.garden_sprout`).
 ## The lines are `kind.dialogue`, one cue for each part; this node gives them their time, builds
@@ -71,9 +72,7 @@ static func held(index: int) -> bool:
 		4:
 			return WorldState.has_flag("fragment.hiding")
 		5:
-			# the picture of the first house is G8's: its flag is read here once G8 sets it (a flag
-			# that nothing sets would be a lie to StoryLint), and the frame stays empty until then
-			return false
+			return WorldState.has_flag("fragment.first_house")
 	return false
 
 

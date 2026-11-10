@@ -13,9 +13,13 @@ extends LookScene
 ## island leads to the plateau as well, and the picture in the hollow is only looked at).
 ## G7: at the edge of the plateau a child sits on a flat stone; whoever sits down beside it plays
 ## the central scene (`ChildMeeting`), after which the walk is on `child`.
+## G8: once the child is gone a small house stands on the plateau (the map shows it from
+## `grat.child_gone`, with its door into the `urhaus`) and a book on a post beside it; the book's
+## quest (`side_grat_summit`) begins with the reading and ends with the entry.
 
 const QUEST := "main_mountain_way"
 const STONE_QUEST := "side_grat_stone"
+const SUMMIT_QUEST := "side_grat_summit"
 ## The ledge along the northern wall (rows 2 to 10, from the top of the ramp to the plateau).
 const LEDGE := Rect2i(14, 2, 78, 9)
 ## The last two rows of the cleft (it is three cells wide and six deep, a dead end).
@@ -36,6 +40,7 @@ func _ready() -> void:
 	if WorldState.quest_stage(QUEST) == "climb":
 		WorldState.advance_quest(QUEST, "valley")
 	_sync_stone_quest()
+	_sync_summit_quest()
 	Beat.mark("grat_enter")
 
 
@@ -71,6 +76,8 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		Beat.mark("grat_hiding")
 	elif id.begins_with("grat.stone_"):
 		_sync_stone_quest()
+	elif id.begins_with("grat.summit_"):
+		_sync_summit_quest()
 
 
 ## The stone's quest follows the flags: it begins with the stone in the pocket and ends with the
@@ -92,3 +99,14 @@ func _all_tries_made() -> bool:
 		and WorldState.has_flag("grat.stone_try_2")
 		and WorldState.has_flag("grat.stone_try_3")
 	)
+
+
+## The book's quest follows the flags: it begins with the reading and ends with her entry on the
+## last page. A flag set before the quest was there (a loaded game) is caught up here.
+func _sync_summit_quest() -> void:
+	if not WorldState.has_flag("grat.summit_read"):
+		return
+	if not WorldState.is_quest_started(SUMMIT_QUEST):
+		WorldState.start_quest(SUMMIT_QUEST)
+	if WorldState.has_flag("grat.summit_signed") and WorldState.is_quest_active(SUMMIT_QUEST):
+		WorldState.advance_quest(SUMMIT_QUEST, "done")

@@ -1,0 +1,23 @@
+# Fragment das erste Haus (G8): ein Haus wie von Kinderhand, ein Quadrat mit Dreieck als Dach, eine niedrige Tür, ein Fenster, dessen Läden offen stehen, darüber ein Streifen Himmel; hell und warm, kein Kreideblau. Ein Bild des Kindes, ohne Kind, ohne Erwachsene, ohne Anlass
+name: fragment_first_house
+out: assets/generated/fragments
+size: 16x16
+palette: o=#4a3a2c s=#a6cfe8 r=#c9804a w=#f4e6c4 y=#fff2b0 k=#8a5a34 d=#7a4e2c g=#9cc468
+outline: o
+---
+................
+.oooooooooooooo.
+.osssssssssssso.
+.osssssssssssso.
+.ossssssrrsssso.
+.osssssrrrrssso.
+.ossssrrrrrrsso.
+.osssrrrrrrrrso.
+.ossrrrrrrrrrro.
+.osswwwwwwwwsso.
+.osskyykwwwwsso.
+.osskyykwddwsso.
+.osswwwwwddwsso.
+.oggggggggggggo.
+.oooooooooooooo.
+................

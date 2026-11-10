@@ -788,9 +788,21 @@
     {
      "type": "flag",
      "ref": "fragment.worn_dial"
+    },
+    {
+     "type": "line",
+     "ref": "uh_leaf_2"
+    },
+    {
+     "type": "line",
+     "ref": "uh_leaf_6"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.summit_book"
     }
    ],
-   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand. Der Aufstieg (Akt V, G1) fügt den Eisenring in der Felswand hinzu: innen blank und rund geschliffen von einem Seil, das hier oft lief; für einen Atemzug läuft eines durch den Ring und zieht etwas Schweres hinauf, dann ist er wieder leer und hält weiter (`auf_iron_ring_3`). Kein Bild des Kindes, keine Figur, kein Grund, kein Lesbares; das erste der drei Fragmente der Welt in Akt V. Die Steinmännchen am Pfad sind keine Fragmente und tragen dasselbe: von jemandem gebaut, ohne Namen, jedes dort, wo man das vorige noch sieht (`auf_cairn_first_3`), ohne ein Wort über Hilfe oder Weg. Die Anlage (Akt V, G3) fügt das abgewetzte Zifferblatt hinzu: ein Zeiger am Pult hat das Glas Jahr um Jahr gestreift, bis eine Rille blieb, immer an derselben Stelle, genau unter der Spitze, wenn er auf »Normal« steht; für einen Atemzug liegt ein Zeiger über dem anderen, hundert, tausend, alle dort (`anl_dial_3`). Kein Bild des Kindes, keine Figur, kein Grund; das zweite der drei Fragmente der Welt in Akt V."
+   "payoff": "Orte haben gedient, ohne einen Grund zu nennen: ein Pfosten, ein Brett, eine Rinne, ein Bündel Kräuter unter dem Balken (Akt II, drei Fragmente). Spuren der Welt sind 18 der 24 Fragmente (Plan 5.5); die sechs Bilder des Kindes (Bible §15) bleiben davon getrennt. Der Waldweg (Akt III, W2) fügt die Stufen im Hohlweg hinzu, von jemandem gestochen, der es für alle tat, die danach kamen. Die Hütte (Akt III, W3) fügt die Leine ohne Wäsche hinzu: für einen Atemzug hängen Tücher daran, noch nass. Die Flutlichtung (Akt III, W4) fügt die flachen Steine quer durch den Bach hinzu: jemand hat sie getragen und gelegt, und sie tragen noch. Die Straße (Akt IV, S1) fügt den Meilenstein hinzu: die Zahl abgetragen, die Kante von Füßen blank, für einen Atemzug ist er neu, und er zählt weiter, ohne dass jemand fragt. Der Platz (Akt IV, S2) fügt den Brunnenrand hinzu: Mulden im Stein, wo Eimer, Krüge und Hände standen, für einen Atemzug nass, als hätte eben jemand abgesetzt; Werkzeug hat das nicht gemacht. Die Bühne (Akt IV, S6) fügt das älteste Brett hinzu, das an ihrer Ecke lehnt: Kerben, die einmal Buchstaben waren, und zwei halbe Herzen übereinander, von jemandem angefangen und an derselben Stelle liegen gelassen; für einen Atemzug stehen sie hell im Holz, mit Spänen in den Rillen (`kon_scr_3`). Kein Bild des Kindes, keine Figur, kein lesbares Wort; das dritte Fragment der Stadt nach dem Meilenstein und dem Brunnenrand. Der Aufstieg (Akt V, G1) fügt den Eisenring in der Felswand hinzu: innen blank und rund geschliffen von einem Seil, das hier oft lief; für einen Atemzug läuft eines durch den Ring und zieht etwas Schweres hinauf, dann ist er wieder leer und hält weiter (`auf_iron_ring_3`). Kein Bild des Kindes, keine Figur, kein Grund, kein Lesbares; das erste der drei Fragmente der Welt in Akt V. Die Steinmännchen am Pfad sind keine Fragmente und tragen dasselbe: von jemandem gebaut, ohne Namen, jedes dort, wo man das vorige noch sieht (`auf_cairn_first_3`), ohne ein Wort über Hilfe oder Weg. Die Anlage (Akt V, G3) fügt das abgewetzte Zifferblatt hinzu: ein Zeiger am Pult hat das Glas Jahr um Jahr gestreift, bis eine Rille blieb, immer an derselben Stelle, genau unter der Spitze, wenn er auf »Normal« steht; für einen Atemzug liegt ein Zeiger über dem anderen, hundert, tausend, alle dort (`anl_dial_3`). Kein Bild des Kindes, keine Figur, kein Grund; das zweite der drei Fragmente der Welt in Akt V. Der Gipfeleintrag (Akt V, G8) fügt das Buch am Pfosten auf der Fläche hinzu: viele Hände haben hineingeschrieben, spitz mit Bleistift, rund mit Kohle, ein einziges Wort, zittrig bis an den Rand, schief nach rechts ansteigend, eine Zeichnung aus drei Strichen (`uh_leaf_2`, `uh_leaf_6`), alles kurz und alltäglich, Wetter, nasse Füße, ein Brot; die Seite danach ist leer. Kein Bild des Kindes, keine Figur, keine Ursache, kein Name aus dem Spiel, kein Hinweis auf das Haus; das dritte der drei Fragmente der Welt in Akt V. Die Nebenquest ist leise: wer blättert, hat das Fragment (`fragment.summit_book`) und kann etwas eintragen, ohne dass der Text sagt, was."
   },
   {
    "id": "rauch-faeden",
@@ -2424,9 +2436,21 @@
     {
      "type": "line",
      "ref": "kv_frames_1"
+    },
+    {
+     "type": "line",
+     "ref": "uh_first_2"
+    },
+    {
+     "type": "line",
+     "ref": "uh_first_3"
+    },
+    {
+     "type": "flag",
+     "ref": "fragment.first_house"
     }
    ],
-   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder. Das Verstecken (Akt V, G6) ist das zweite: eine Mulde im Fels am Ende der Spalte, ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke reicht, draußen geht etwas vorbei, und die Decke ist noch warm und bleibt es (`spa_hiding_2`, `spa_hiding_4`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, keine Ursache, kein Wort für das, was der Ort getan hat, kein Witz davor oder danach; die Spielerin legt nur die Fingerspitzen auf die Decke. Nie Voraussetzung (Brief O7): der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder. Die zentrale Szene (Akt V, G7) liest die sechs Flags einzeln und stellt für jedes Bild einen Rahmen in die Luft; nur die Rahmen der Bilder, die die Spielerin hält, zeigen ihres, die übrigen bleiben ohne Zeile und ohne Zähler, und der Text sagt nur, dass Rahmen erscheinen und bleiben (`kv_frames_1`, `kv_frames_2`; die Szene stellt sie als Bogen über die beiden)."
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder. Das Verstecken (Akt V, G6) ist das zweite: eine Mulde im Fels am Ende der Spalte, ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke reicht, draußen geht etwas vorbei, und die Decke ist noch warm und bleibt es (`spa_hiding_2`, `spa_hiding_4`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, keine Ursache, kein Wort für das, was der Ort getan hat, kein Witz davor oder danach; die Spielerin legt nur die Fingerspitzen auf die Decke. Nie Voraussetzung (Brief O7): der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder. Die zentrale Szene (Akt V, G7) liest die sechs Flags einzeln und stellt für jedes Bild einen Rahmen in die Luft; nur die Rahmen der Bilder, die die Spielerin hält, zeigen ihres, die übrigen bleiben ohne Zeile und ohne Zähler, und der Text sagt nur, dass Rahmen erscheinen und bleiben (`kv_frames_1`, `kv_frames_2`; die Szene stellt sie als Bogen über die beiden). Das ursprüngliche Haus (Akt V, G8) ist das dritte der drei neuen Bilder und das sechste des Kindes: die Spielerin setzt sich im Zimmer auf die Bettkante und legt die Hand auf die glatte Decke, für einen Atemzug sind die Linien auf dem Boden fort, es gibt nur dieses eine Zimmer und das Bett darin, das Fenster steht offen, ein Stück Himmel im Rahmen, und das Licht fällt bis aufs Kissen (`uh_first_2`, `uh_first_3`); dann liegen die Linien wieder da. Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Ursache, kein Gefühlswort, keine Erklärung, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer das Bett liegen lässt, kommt zu G9 wie jeder. Die zentrale Szene (G7) liest das Flag als sechsten Rahmen."
   },
   {
    "id": "kind-ich-bin-da",
@@ -2839,9 +2863,82 @@
     {
      "type": "line",
      "ref": "spa_plateau_10"
+    },
+    {
+     "type": "line",
+     "ref": "uh_window_r2"
+    },
+    {
+     "type": "line",
+     "ref": "uh_after_1"
     }
    ],
-   "payoff": "Die Facette Mut heißt, sich zu zeigen und trotz Unsicherheit weiterzugehen (Bible §16, Brief O10); das Wort steht nie im Text. An der Gabel auf dem Grat (Akt V, G6) stehen zwei Pfeile aus Kohle, nach Norden »Umweg«, nach Süden »Spalte«, mit derselben Kohle, gleich groß und gleich dunkel; niemand hat dazugeschrieben, welcher Weg der bessere ist (`spa_fork_3`). Der Umweg führt ebenso zum Plateau. Die Spalte ist kaum drei Schultern breit, das Licht gibt nach einem Stück auf, das Ende liegt im Schatten, der Wind bleibt draußen (`spa_cleft_2`, `spa_cleft_4`): keine Aufforderung, keine Warnung, kein Wort darüber, was drinnen ist. Am Ende liegen die Mulde mit dem zweiten Bild des Kindes (`fragment.hiding`) und ein Kerzenstummel mit weißem Docht, den man einstecken oder liegen lassen kann (`spa_candle_1`). Wer bis ans Ende der Spalte geht, trägt die Facette (die Szene setzt sie, nie ein Cue); ihr Leser ist der Blick am Rand des Plateaus (`plateau_edge`): neben der unbedingten Antwort und dem Schweigen steht nur mit der Facette die Antwort, bis an den Rand zu gehen, und sie ergibt einen Blick hinunter, die Anlage klein, der Rauch gerade, der See ein Stück Himmel (`spa_plateau_9`, `spa_plateau_10`), ohne Lob und ohne Lehre. Wer die Spalte liegen lässt, verpasst keine Szene. Das Plateau selbst ist leer und sieht aus wie ein Platz, den man frei gelassen hat (`spa_plateau_5`); was dort einmal steht, wird hier nicht gesagt."
+   "payoff": "Die Facette Mut heißt, sich zu zeigen und trotz Unsicherheit weiterzugehen (Bible §16, Brief O10); das Wort steht nie im Text. An der Gabel auf dem Grat (Akt V, G6) stehen zwei Pfeile aus Kohle, nach Norden »Umweg«, nach Süden »Spalte«, mit derselben Kohle, gleich groß und gleich dunkel; niemand hat dazugeschrieben, welcher Weg der bessere ist (`spa_fork_3`). Der Umweg führt ebenso zum Plateau. Die Spalte ist kaum drei Schultern breit, das Licht gibt nach einem Stück auf, das Ende liegt im Schatten, der Wind bleibt draußen (`spa_cleft_2`, `spa_cleft_4`): keine Aufforderung, keine Warnung, kein Wort darüber, was drinnen ist. Am Ende liegen die Mulde mit dem zweiten Bild des Kindes (`fragment.hiding`) und ein Kerzenstummel mit weißem Docht, den man einstecken oder liegen lassen kann (`spa_candle_1`). Wer bis ans Ende der Spalte geht, trägt die Facette (die Szene setzt sie, nie ein Cue); ihr Leser ist der Blick am Rand des Plateaus (`plateau_edge`): neben der unbedingten Antwort und dem Schweigen steht nur mit der Facette die Antwort, bis an den Rand zu gehen, und sie ergibt einen Blick hinunter, die Anlage klein, der Rauch gerade, der See ein Stück Himmel (`spa_plateau_9`, `spa_plateau_10`), ohne Lob und ohne Lehre. Wer die Spalte liegen lässt, verpasst keine Szene. Das Plateau selbst ist leer und sieht aus wie ein Platz, den man frei gelassen hat (`spa_plateau_5`); was dort einmal steht, wird hier nicht gesagt. Seit G8 steht dort das Haus (`uh_after_1`): der Blick am Südrand zeigt es nach dem Gehen des Kindes (`plateau_after` ersetzt dort `plateau_edge`), und die Facette hat einen zweiten Leser, die Antwort am Fenster im Haus (`uh_window_r2`), die ebenfalls nur neben der unbedingten steht und das Schweigen als letzte lässt."
+  },
+  {
+   "id": "ringe-kreide",
+   "kind": "vorausdeutung",
+   "title": "Ringe aus Kreide (das ursprüngliche Haus)",
+   "bible": "§15, §37, §38, §46, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "uh_look_3"
+    },
+    {
+     "type": "line",
+     "ref": "uh_room_2"
+    },
+    {
+     "type": "line",
+     "ref": "uh_room_3"
+    },
+    {
+     "type": "line",
+     "ref": "uh_wall_1"
+    },
+    {
+     "type": "line",
+     "ref": "uh_garden_1"
+    },
+    {
+     "type": "line",
+     "ref": "uh_street_2"
+    },
+    {
+     "type": "line",
+     "ref": "uh_town_3"
+    },
+    {
+     "type": "line",
+     "ref": "uh_world_3"
+    },
+    {
+     "type": "line",
+     "ref": "uh_window_1"
+    },
+    {
+     "type": "flag",
+     "ref": "urhaus.window_clear"
+    },
+    {
+     "type": "flag",
+     "ref": "urhaus.chalk_taken"
+    }
+   ],
+   "payoff": "Twist II (Bible §38): das ursprüngliche Haus wurde immer weiter ausgebaut, Zimmer, Mauer, Garten, Straße, Stadt, Welt, bis nichts mehr dahinter blieb. Akt V (G8) zeigt es als Boden eines einzigen Zimmers und erklärt es nie. Sechs Linien aus blauer Kreide liegen um ein kleines Bett, eine in der anderen, jede mit ihrem Bild in den Strichen: ein Viereck mit einem Wulst wie ein Kissen (`uh_room_2`), kurze versetzte Striche wie Steine (`uh_wall_1`), Stängel mit Blättern und Blüten (`uh_garden_1`), ein Weg mit Spuren in beide Richtungen (`uh_street_2`), Häuser Wand an Wand ohne Gasse und ohne offenes Fenster (`uh_town_3`) und zuletzt eine doppelte Linie an den Wänden entlang, über die Schwelle der Tür (`uh_world_3`). Der Abstand zwischen den Linien ist überall gerade ein Fuß; die letzte ist geschlossen, und hinter ihr ist nichts mehr gezeichnet und kein Platz dafür. Kein Wort nennt einen Grund, eine Person oder ein Gefühl, kein Satz sagt, was die Linien sind oder wer sie gezogen hat: sie sind nachgezogen worden, im Passiv, nie von jemandem (`uh_room_3`), und keines der sechs Bilder wird beim Namen genannt. Das Fenster in der Rückwand ist von innen zugemalt, Strich über Strich, nur an den Rändern fällt Licht durch (`uh_window_1`); wer die Facette Mut trägt, kann die Kreide wegwischen, und dahinter liegt Licht auf der Fläche, mehr nicht (`uh_wipe_3`); wer sie nicht trägt, verpasst keine Szene, und das Haus bleibt, wie es ist. Das Bett trägt das dritte Bild des Kindes (`kind-fragmente`), die blaue Kreide auf dem Boden ist eine Kuriosität, die man einstecken oder liegen lassen kann. Vorbereitet hat es das leere Plateau (`spa_plateau_5`), das aussah wie ein Platz, den man frei gelassen hat, und die geschlossene Welt Elysias, deren Schleifen und Spiegel nichts erklärten; erst die Rückkehr in Akt VI darf sie zusammenlesen. Nichts hier ist Voraussetzung für G9.",
+   "payoff_lines": [
+    "uh_room_2",
+    "uh_wall_1",
+    "uh_garden_1",
+    "uh_street_2",
+    "uh_town_3",
+    "uh_world_3",
+    "uh_room_3",
+    "uh_window_1",
+    "uh_wipe_3",
+    "spa_plateau_5"
+   ]
   }
  ],
  "register": [
@@ -3969,6 +4066,36 @@
    "flag": "house.garden_sprout",
    "axis": "Garten",
    "meaning": "Im Beet im Tal wächst ein Trieb (Akt V, G7, Brief O9). Die Szene setzt es, wenn das Kind gegangen ist; die Spielerin pflanzt nichts, es gibt keine Tagesaufgabe und keinen Zähler (Bible §29), und der Samen bleibt im Rucksack. Kein Text nennt den Trieb: man findet ihn, wenn man ins Tal zurückkommt. Akt VI und VII bauen den Gartenzustand aus; ob der Samen mitkommt, entscheidet sie im Finale (Bible §30)."
+  },
+  {
+   "flag": "fragment.first_house",
+   "axis": "Kind",
+   "meaning": "Sie hat sich im ursprünglichen Haus auf die Bettkante gesetzt und die Hand auf die glatte Decke gelegt: für einen Atemzug sind die Linien auf dem Boden fort, es gibt nur dieses eine Zimmer und das Bett darin, das Fenster steht offen, und das Licht fällt bis aufs Kissen (Fragment 6 von 6, Akt V, G8, Bible §15). Vier Zeilen, kein Wort, keine Ursache; nie Voraussetzung (Brief O7). Die zentrale Szene (G7) liest es als sechsten Rahmen."
+  },
+  {
+   "flag": "urhaus.window_clear",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat im ursprünglichen Haus (Akt V, G8) die Kreide vom Fenster in der Rückwand gewischt: die vier Scheiben sind klar, dahinter liegen die Fläche, der Himmel und das Tal, in einer Ecke bleibt ein blauer Streifen. Die Antwort steht nur mit der Facette Mut (`courage`) neben der unbedingten „Ansehen.“; `window_wipe` setzt das Flag zuletzt, `window` liest es und zeigt danach die klaren Scheiben. Wer sie nicht wischt, verpasst keine Szene, und das Haus bleibt, wie es ist."
+  },
+  {
+   "flag": "urhaus.chalk_taken",
+   "axis": "Gegenstände",
+   "meaning": "Sie hat die blaue Kreide vorn auf dem Boden des ursprünglichen Hauses eingesteckt (Kuriosität, Akt V, G8): kaum fingerlang, an einem Ende rund gerieben, die Finger danach blau. Der Text sagt nicht, wofür sie gedient hat. Wer sie liegen lässt, verpasst nichts; die Karte zeigt es."
+  },
+  {
+   "flag": "grat.summit_read",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im Buch am Pfosten auf der Fläche geblättert (Nebenquest „Der Gipfeleintrag“, Akt V, G8): viele Handschriften, kurze Einträge über Wetter, nasse Füße, ein Brot, die Seite danach leer. Der Cue `summit_leaf` setzt es nach dem Fragment `fragment.summit_book`, `summit_book` liest es und zeigt erst danach die Antwort „Etwas eintragen.“; die Szene startet die Quest daraus."
+  },
+  {
+   "flag": "grat.summit_signed",
+   "axis": "Entscheidungen",
+   "meaning": "Sie hat etwas in die leere Seite des Gipfelbuchs geschrieben (Nebenquest „Der Gipfeleintrag“, Akt V, G8): was, steht nirgends, die Schrift ist die ihre. Der Cue `summit_sign` setzt es zuletzt, `summit_book` liest es und sagt dann nur noch, dass der letzte Eintrag ihrer ist und die Seite danach wieder leer; die Szene schließt daraus die Quest. Kein Lob, keine Folge."
+  },
+  {
+   "flag": "fragment.summit_book",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im Buch am Pfosten auf der Fläche geblättert: viele Hände, jede mit ihrer Schrift, und die letzte Seite ist leer (Spur der Welt, Akt V, G8; kein Bild des Kindes). Die HUD-Karte zeigt ein aufgeschlagenes Buch mit leerer rechter Seite."
   }
  ]
 }

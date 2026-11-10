@@ -68,24 +68,32 @@ B = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 C = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "cleft_mouth", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 22}}
 I = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cleft_alcove", "cue": "hiding_place", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 16}}
 J = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_candle", "cue": "candle", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 12, "unless": "grat.candle_taken"}}
-P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "plateau_edge", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 24}}
+P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "plateau_edge", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 24, "unless": "grat.child_gone"}}
 ; G7: die zentrale Szene am Rand der Hochfläche: der flache Stein (N, zwei Zellen breit, er liegt auf der linken und der rechten Zelle; man setzt sich auf die linke), das Kind darauf neben ihr (K, sitzend, bis es gegangen ist),
 ; und ein unsichtbarer Punkt am Stein (n), den es erst gibt, wenn das Kind gegangen ist (`ChildMeeting`, Cues in kind.dialogue). Die drei Zellen behalten ihren alten Boden: der Bake bleibt.
 N = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_sit_rock", "sit": {"face": "s", "offset": [0, 0]}}}
 K = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/akt5/kind.dialogue", "cue": "child_look", "sit": true, "face": "s", "inattentive": true, "unless": "grat.child_gone"}}
 n = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "seat_empty", "dialogue": "res://content/dialogue/akt5/kind.dialogue", "radius": 20, "if": "grat.child_gone"}}
+; G8: das ursprüngliche Haus auf der Hochfläche, erst wenn das Kind gegangen ist (`grat.child_gone`): das kleine Haus (j, drei Zellen breit, sein Fuß steht auf der Zelle, Cue house_front), seine Tür (9, eine Zelle unter dem Fuß, auto, führt in den Raum `urhaus`),
+; die Ankunft von dort (Ω, zwei Zeilen vor der Tür), das Buch auf dem Pfosten daneben (Δ, Cue summit_book, die Nebenquest) und ein unsichtbarer Punkt am Südrand (Σ, Cue plateau_after), der den Blick P ablöst (P gilt nur, solange das Kind noch da ist).
+; Alles auf Zellen mit ihrem alten Boden: der Bake bleibt, die Bilder haben keinen Katalogschatten.
+j = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_first_house", "cue": "house_front", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 28, "if": "grat.child_gone"}}
+9 = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "urhaus", "spawn": "grat", "auto": true, "sound": "door_open", "if": "grat.child_gone"}}
+Ω = {"ground": ",", "marker": "spawn_urhaus"}
+Δ = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_summit_book", "cue": "summit_book", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 18, "if": "grat.child_gone"}}
+Σ = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "plateau_after", "dialogue": "res://content/dialogue/akt5/urhaus.dialogue", "radius": 24, "if": "grat.child_gone"}}
 [map]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^.......mmm^^^^^^^^^^^^^^^^^^^^^^^^^^mmmmmmm^^^^^^^^^^^^^^^....m......^^^^
 ^^^^^^^^^^^^^^...........R..L.mSmm.^^^^^^^^^^R...........mmSmmmlmmm,,,,,,,,,,,,......m.......^^^
-^^^^^^^^^^^^^^.L..R.O..L..O....Sm..R.....................Smmmmmmmm,,,,,,,,,,,,,,,............^^^
-^^^^^^^^^^^^^.....................,,.............,,,,,,,,,,,mmmmm,,,,^^^^^^^^.,,,,,.....,.mm^^^^
-^^^^^^^^^^^^^....R..L......,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,,,,,m,,,m^^^^^^^^...,,,,,,,,,,..^^^^
-^^^^^^^^^^^^^.O.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m^^^^^^^^...,,,,,,,,,mm.^^^^
+^^^^^^^^^^^^^^.L..R.O..L..O....Sm..R.....................Smmmmmmmm,,,,,,,,,,,,,,,.......j....^^^
+^^^^^^^^^^^^^.....................,,.............,,,,,,,,,,,mmmmm,,,,^^^^^^^^.,,,,,.....9.mm^^^^
+^^^^^^^^^^^^^....R..L......,,,,,,,,,,,,,,...,,,,,,,,,,,,,,,,,,,,m,,,m^^^^^^^^...,,,,,,,,,,Δ.^^^^
+^^^^^^^^^^^^^.O.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m^^^^^^^^...,,,,,,,,Ωmm.^^^^
 ^^^^^^^^^^^^^.,,,,,,,,,,,,,,,,.........,,,,,,,,.......R..mmm..,,,,,,,,,,,,,,,,,,,,,,........^^^^
 ^^^^^^^^^^^^^.,,,,V,,,,,,,.......................................B,,,,,,,,,,,,,,,...........^^^^
-^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,C,,,nNK....mP.mm..^^^^
+^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,C,,,nNK....mPΣmm..^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^....^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^

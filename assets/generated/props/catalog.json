@@ -2019,6 +2019,25 @@
    "res://assets/generated/props/tal/gb_dwarf_pine_2.png"
   ]
  },
+ "tal/gb_first_house": {
+  "anchor": [
+   24,
+   40
+  ],
+  "shape": {
+   "offset": [
+    0,
+    0
+   ],
+   "rect": [
+    48,
+    16
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_first_house.png"
+  ]
+ },
  "tal/gb_fork_sign": {
   "anchor": [
    12,
@@ -2364,6 +2383,25 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/gb_stone_mark.png"
+  ]
+ },
+ "tal/gb_summit_book": {
+  "anchor": [
+   8,
+   20
+  ],
+  "shape": {
+   "offset": [
+    0,
+    -1
+   ],
+   "rect": [
+    8,
+    6
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_summit_book.png"
   ]
  },
  "tal/gb_thimble": {
@@ -4620,6 +4658,73 @@
    "res://assets/generated/props/tal/twig_0.png",
    "res://assets/generated/props/tal/twig_1.png",
    "res://assets/generated/props/tal/twig_2.png"
+  ]
+ },
+ "tal/uh_bed": {
+  "anchor": [
+   8,
+   20
+  ],
+  "shape": {
+   "offset": [
+    8,
+    -2
+   ],
+   "rect": [
+    30,
+    12
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/uh_bed.png"
+  ]
+ },
+ "tal/uh_chalk": {
+  "anchor": [
+   6,
+   3
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/uh_chalk.png"
+  ]
+ },
+ "tal/uh_chalk_rings": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/uh_chalk_rings.png"
+  ]
+ },
+ "tal/uh_shell": {
+  "anchor": [
+   8,
+   8
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/uh_shell.png"
+  ]
+ },
+ "tal/uh_window": {
+  "anchor": [
+   12,
+   20
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/uh_window.png"
+  ]
+ },
+ "tal/uh_window_clear": {
+  "anchor": [
+   12,
+   20
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/uh_window_clear.png"
   ]
  },
  "tal/wd_beech": {
