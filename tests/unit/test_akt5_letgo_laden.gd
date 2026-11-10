@@ -37,6 +37,9 @@ func before_each() -> void:
 func after_each() -> void:
 	Settings.set_value("text.auto_advance", false, false)
 	Settings.set_value("text.speed", 1, false)
+	Settings.set_value("display.screen_shake", true, false)
+	Settings.set_value("access.timing", 0, false)
+	Settings.set_value("access.encounter_speed", 0, false)
 	SceneTravel.pending_spawn = ""
 	SceneTravel.arrival_fade = -1.0
 	SceneTravel.stay = false

@@ -9,6 +9,11 @@ extends GutTest
 var _log: Array = []
 
 
+func after_each() -> void:
+	Settings.set_value("access.timing", 0, false)
+	Settings.set_value("access.encounter_speed", 0, false)
+
+
 func _letgo() -> LetGo:
 	var model := LetGo.new()
 	autofree(model)
