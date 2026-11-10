@@ -11,6 +11,8 @@ extends LookScene
 ## goes to the very end of the cleft over the Anlage has done something in spite of the dark and
 ## the narrowness, and that is the facet `courage` (it is nobody's duty: the detour round the rock
 ## island leads to the plateau as well, and the picture in the hollow is only looked at).
+## G7: at the edge of the plateau a child sits on a flat stone; whoever sits down beside it plays
+## the central scene (`ChildMeeting`), after which the walk is on `child`.
 
 const QUEST := "main_mountain_way"
 const STONE_QUEST := "side_grat_stone"
@@ -22,6 +24,11 @@ const CLEFT_END := Rect2i(73, 15, 3, 2)
 
 func _ready() -> void:
 	super()
+	# G7: the central scene, begun by sitting down beside the child
+	var meeting := ChildMeeting.new()
+	meeting.name = "ChildMeeting"
+	meeting.scene = self
+	add_child(meeting)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	# the walk goes on in the valley (a game begun in this scene has the walk too)
 	if not WorldState.is_quest_started(QUEST):

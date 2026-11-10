@@ -158,7 +158,7 @@ func test_the_hero_stage_high_is_the_end_of_the_walk_for_now() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_true(quest.can_advance("letgo", "high"))
 	assert_false(quest.stage("letgo").is_final(), "the way over the Grat hangs on it (G6)")
-	assert_true(quest.stage("high").is_final(), "and the child on that (G7)")
+	assert_false(quest.stage("high").is_final(), "the child hangs on it (G7)")
 	assert_ne(tr("QUEST_MAIN_MOUNTAIN_WAY_HIGH"), "QUEST_MAIN_MOUNTAIN_WAY_HIGH")
 
 

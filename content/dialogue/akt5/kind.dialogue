@@ -1,0 +1,88 @@
+# Das Kind, Akt V, Segment G7 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O8, O9, O10, O13; Bible §15, §45, §51; docs/writing/stimmen/kind.md). Die zentrale Szene: Auf dem Grat, am Rand der Hochfläche, sitzt das Kind auf
+# einem flachen Stein und sieht ins Tal. Die Spielerin geht zu ihm, wann sie will; es rührt sich nicht, bis sie sich neben es setzt. Dann summt es, Rahmen erscheinen in der Luft (die Szene baut sie und legt die Bilder
+# hinein, die die Spielerin hält, der Text sagt über sie nichts), und die Spielerin darf antworten oder nicht. Danach steht das Kind irgendwann auf und ist nicht mehr da; die Szene setzt "grat.child_gone" und, ohne dass
+# ein Text davon spricht, "house.garden_sprout". Der Text kennt weder Ursache noch Täter noch Erwachsene, keine große Rede, kein Lob, keinen Trost, keine Erklärung, keinen Abschied und kein Versprechen. Zeilen ohne
+# Sprecher sind Erzählung (zweite Person, Gegenwart, ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen wären ausgeschrieben, es kommt keine vor.
+# Das Kind spricht höchstens drei Wörter je Zeile, und es antwortet nie auf das, was die Spielerin sagt: es zeigt auf etwas in der Welt oder schweigt. Kein Weg ist falsch und keiner besser: die drei Antworten haben
+# dieselbe Gestalt (ein Satz der Spielerin, eine Zeile des Kindes, ein Satz der Welt) und führen alle zu "child_gone". Die Cues dieser Datei setzen kein Flag und keine Facette; die Szene setzt alles, und "child_answer"
+# liest die Facette "trust" (zweiter Leser, O10). Das Summen ist ein Satz von wenigen Tönen und kein Dauerton (der Klang "child_hum" ist derselbe wie im Nachtwald): die Szene spielt ihn zweimal, mit der Zeile, die ihn nennt ("child_hum"), und wenn er wieder einsetzt
+# ("child_return"); dass er vor der Antwort "mitten in der Melodie" aufhört, trägt nur der Text. Darum stehen diese zwei Zeilen in eigenen Cues.
+
+# --- Das Kind ansprechen, bevor man sitzt -----------------------------------------------------------------------------------
+# Die Spielerin spricht das sitzende Kind an (Cue am Kind, solange sie nicht sitzt). Nur Erzählung: es sitzt am Rand der Fläche, an einer Stelle, wo der Fels breit und flach ist (kein Absturz im Bild), neben ihm ist
+# ein Stück Stein frei, und es sieht nicht auf. Kein Wort des Kindes und keine Aufforderung; wer geht, verpasst nichts, und nichts drängt.
+
+~ child_look
+Das Kind sitzt am Rand der Fläche, die Knie hochgezogen, die Arme darum. Es sieht ins Tal hinunter. [ID:kv_look_1] [#draft]
+Neben ihm ist noch ein Stück Stein frei, breit und oben glatt. [ID:kv_look_2] [#draft]
+Du stehst bei ihm. Der Wind geht flach über das Gras, und das Kind sieht nicht auf. [ID:kv_look_3] [#draft]
+=> END
+
+# --- Das Sitzen ---------------------------------------------------------------------------------------------------------------
+# Die Szene spielt den Cue einmal, sobald die Spielerin auf dem Stein sitzt. Ihr Sitzen ist leise; der Stein ist an ihrem Ende kühl, an seinem nicht (das sagt erst der Schluss). Das Kind rückt nicht weg. Dann
+# summt es ein paar Töne, leise, das Motiv der Tal-Musik ("melody.child_hum" kennt die Spielerin aus Akt I); die Zeile sagt nur, dass sie die Melodie kennt.
+
+~ child_seat
+Du setzt dich neben das Kind auf den Stein. Er ist kühl, und du machst kein Geräusch dabei. [ID:kv_seat_1] [#draft]
+Das Kind rückt nicht weg. Es sieht weiter ins Tal, und der Wind geht an euch beiden vorbei. [ID:kv_seat_2] [#draft]
+=> END
+
+~ child_hum
+Dann summt es ein paar Töne, kaum mehr als Atem. Du kennst die Melodie. [ID:kv_seat_3] [#draft]
+=> END
+
+# --- Die Rahmen ---------------------------------------------------------------------------------------------------------------
+# Die Szene spielt den Cue, während die Rahmen erscheinen. Nur ein ruhiger Satz über die Luft und die Rahmen, die in ihr stehen; er sagt nichts darüber, was in ihnen zu sehen ist, und nichts darüber, wie viele
+# es sind. Sie hängen als Bogen über den beiden (die Szene baut sie), und das Kind sieht weiter ins Tal.
+
+~ child_frames
+In der Luft über euch erscheinen Rahmen, einer nach dem anderen, ohne Haken und ohne Wand. [ID:kv_frames_1] [#draft]
+Die Rahmen bleiben, wo sie sind. [ID:kv_frames_2] [#draft]
+=> END
+
+# --- Die Antwort --------------------------------------------------------------------------------------------------------------
+# Die Szene spielt den Cue danach. Das Kind summt von vorn an und hört mitten in der Melodie auf, und es sagt nichts; es fragt nichts und erwartet nichts, es sieht ins Tal. Dann drei Antworten: das unbedingte
+# "Ich bin da." (Bible §15), die Facette "trust" als zusätzliche Antwort "Ich warte mit dir." (sie verlangt nichts) und das Schweigen "…" als letzte. Die drei haben dieselbe Gestalt: ein Satz der Spielerin, eine
+# Zeile des Kindes (höchstens drei Wörter, nie eine Antwort auf das Gesagte: es zeigt auf etwas oder schweigt) und ein Satz der Welt, der zeigt, was das Kind gesehen oder gehört hat. Das Kind nimmt nichts an und
+# gibt nichts zurück, es lobt nicht, es tröstet nicht, und keine der Folgen ist näher oder weiter als die anderen. Wer die Facette nicht hat, sieht die Antwort nicht und verpasst keine Szene. Nichts wird gesetzt.
+
+~ child_answer
+Es summt von vorn, und mitten in der Melodie hört es auf. [ID:kv_answer_1] [#draft]
+Das Kind sieht ins Tal. Der Wind geht durch die Rahmen hindurch. [ID:kv_answer_2] [#draft]
+- Ich bin da. [ID:kv_answer_r1] [#draft]
+	Du sagst es leise. [ID:kv_answer_3] [#draft]
+	Kind: Schau mal. [ID:kv_answer_4] [#draft]
+	Du schaust. Tief unten zieht ein Vogel über den See, klein und dunkel. [ID:kv_answer_5] [#draft]
+- Ich warte mit dir. [if WorldState.has_facet("trust") /] [ID:kv_answer_r2] [#draft]
+	Du sagst es leise und wartest dann. [ID:kv_answer_6] [#draft]
+	Kind: Hör mal. [ID:kv_answer_7] [#draft]
+	Du hörst den Wind im Gras. Dann, sehr fern, Wasser über Stein. [ID:kv_answer_8] [#draft]
+- … [ID:kv_answer_r3] [#draft]
+	Du schweigst. [ID:kv_answer_9] [#draft]
+	Kind: … [ID:kv_answer_10] [#draft]
+	Eine Wolke schiebt ihren Schatten über das Tal. Er braucht lange bis zum See. [ID:kv_answer_11] [#draft]
+=> END
+
+# --- Das Kind geht ------------------------------------------------------------------------------------------------------------
+# Die Szene spielt den Cue nach der Antwort, gleich für jede. Das Summen setzt wieder ein, an der Stelle, an der es aufgehört hat; die Spielerin sieht einen Augenblick dorthin, wohin das Kind sieht, und dann wieder
+# neben sich. Der Cue sagt das Verschwinden nicht: es geschieht nach seiner letzten Zeile (die Szene setzt "grat.child_gone", nimmt das Kind aus dem Bild und lässt die Rahmen verblassen), und die Spielerin sieht es,
+# sobald sie wieder hinsieht. Kein Wort des Kindes, kein Abschied, kein Dank, kein Versprechen, keine Erklärung, wohin oder warum. Der Stein ist an seinem einen Ende warm; er bleibt es ("seat_empty"). Was danach im
+# Tal geschieht, steht hier nicht. Die Spielerin sitzt, solange sie will; nichts in den Zeilen fordert sie zum Aufstehen auf.
+
+~ child_return
+Irgendwann setzt das Summen wieder ein, genau an der Stelle, an der es aufgehört hat. [ID:kv_gone_1] [#draft]
+=> END
+
+~ child_gone
+Du siehst einen Augenblick ins Tal, dorthin, wohin es sieht. [ID:kv_gone_2] [#draft]
+Der Stein ist an seinem einen Ende warm. Du siehst wieder neben dich. [ID:kv_gone_3] [#draft]
+=> END
+
+# --- Der Stein danach ---------------------------------------------------------------------------------------------------------
+# Der Stein am Rand der Fläche, sobald das Kind gegangen ist (Cue am Stein, nur dann): der Platz, an dem es saß, und die Stille ohne das Summen. Nichts weiter, kein Gedanke, kein Rückblick, kein Wort für das, was
+# geschehen ist; der Stein bleibt warm, wie die Decke in der Mulde, ohne dass jemand es erklärt.
+
+~ seat_empty
+Der flache Stein am Rand der Fläche. An seinem einen Ende ist er warm, wie vorher. [ID:kv_empty_1] [#draft]
+Es ist still, bis auf den Wind im Gras. [ID:kv_empty_2] [#draft]
+=> END

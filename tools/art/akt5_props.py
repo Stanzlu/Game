@@ -40,6 +40,13 @@ and six strokes beside them that are no letters; both halves weigh the same), th
 warm grey stone with an arch cut into it, dark inside, a blanket rolled up on its floor, a crack from the upper left and a strip of light that ends at the
 blanket's rim; no person, no shape: the player may stand on its cell) and the candle stub on the ground beside it (`gb_candle`, 10 x 12, no shadow, it goes
 with a flag). The picture of the hollow in the 16 x 16 fragment is `tools/art/small/fragment_hiding.pix`, the stub's icon `curiosity_candle_stub.pix`.
+
+Das Kind (G7): three quiet things and no person. The flat rock at the edge of the Grat that two can sit on (`gb_sit_rock`, 32 x 14, two cells, flat: its top
+worn smooth and pale by many sitters, a darker front, the cliff's warm grey), the plain frame that hangs in the air round the two of them (`gb_picture_frame`,
+24 x 24: wood, no hook, no shadow, no glow, and in it a dark empty ground of 16 x 16 at (4, 4) on which the scene lays the picture of a fragment; an empty
+frame is the same frame without it) and the sprout in the bed in the valley (`gb_sprout`, 12 x 14: a stem and two leaves, light green, on a little dark earth;
+a beginning and not a symbol: it does not shine and does not move). None of the three has a shadow in the catalog (the rock and the sprout stand on cells of an
+older stamp, the frame hangs in the air).
 """
 import os
 import sys
@@ -986,6 +993,121 @@ def candle_stub(ms):
     return c
 
 
+def sit_rock(ms):
+    """A flat block of the cliff's warm grey stone at the edge of the Grat, two cells wide, long enough for two to sit side by side: its top worn
+    smooth and pale (a darker, even place where many have sat, no grit in it), a lit lip where the top meets the front, the front lower and
+    darker with a few joints and a little lichen at its foot, the ends rounded by weather. Flat (it lies on the ground, figures stand above it).
+    32 x 14, anchor (8, 7): the middle of the first cell, so that it covers the cell it stands on and the one to the east."""
+    rng = np.random.default_rng(2401)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(32, 14)
+    nx = (c.xx + 0.5 - 16.0) / 15.0
+    ny = (c.yy + 0.5 - 5.0) / 4.0
+    top = (np.abs(nx) ** 4 + np.abs(ny) ** 4) <= 1.0
+    body = np.zeros_like(top)
+    for k in range(5):  # the front: the top's shape drawn four rows lower as well, and every row between
+        body |= np.roll(top, k, 0)
+    front = body & ~top
+    grain = pa.value_noise(14, 32, (3, 6), rng)
+    lit = np.clip(1.0 - (c.xx + 0.5) / 40.0, 0, 1)  # lit from the left
+    worn = c.ellipse(15.0, 5.2, 9.5, 2.6) & top  # the smooth place where people sit
+    c.paint(top, st["cliff"], 0.62 + 0.1 * lit + 0.1 * (grain - 0.5), contrast=2.0, dither=False)
+    c.paint(worn, st["cliff"], 0.88, contrast=2.0, dither=False)  # no grit in it: smoother and paler than the rest
+    c.paint(top & (c.xx < 4), st["cliff"], 0.92, contrast=2.0, dither=False)  # the left end catches the light
+    c.paint(top & (c.xx >= 27), st["cliff"], 0.5, contrast=2.0, dither=False)
+    for x, y in ((3, 3), (6, 6), (24, 2), (27, 5), (22, 7), (9, 2)):  # a little grit in the unworn rim of the top
+        c.fill(c.rect(x, y, x + 1, y + 1) & top & ~worn, st["cliff"][2])
+    # the front: lower and darker, lighter on the left, dark at the foot, the joints between the layers
+    c.paint(front, st["cliff"], 0.34 + 0.16 * lit + 0.12 * (grain - 0.5) - 0.06 * (c.yy - 8) / 4.0, contrast=2.0, dither=False)
+    c.paint(front & (c.yy >= 11), st["cliff"], 0.12, dither=False)
+    for x, y0 in ((7, 9), (13, 10), (21, 9), (26, 10)):  # a joint: a dark line that runs down and breaks
+        c.fill(c.rect(x, y0, x + 1, y0 + 2) & front, st["cliff"][0])
+    c.fill(c.rect(9, 10, 12, 11) & front, st["cliff"][1])  # a layer's line along the front
+    c.fill(c.rect(16, 9, 19, 10) & front, st["cliff"][4])
+    # the lip: the front edge of the top, lit, one row
+    lip = top & ~np.roll(top, -1, 0)
+    c.paint(lip & (c.xx >= 3) & (c.xx < 28), st["cliff"], 0.97, contrast=2.0, dither=False)
+    # lichen at the foot: a few pixels of the pale lichen green on the front, low on the left and on the right
+    for x, y in ((4, 11), (5, 11), (5, 12), (23, 12), (24, 12), (24, 11), (25, 12)):
+        c.fill(c.rect(x, y, x + 1, y + 1) & front, LICHEN[(x + y) % 2])
+    c.outline(st["outline"])
+    return c
+
+
+def picture_frame(ms):
+    """A plain frame for a picture that hangs in the air: four pieces of honey wood joined at the corners (the mitre a dark diagonal), lit on the
+    upper left and dark on the lower right, the grain along each piece, a dark line round the whole and a dark line at the inner lip; no hook, no
+    cord, no nail, no shadow, no glow. Inside, a ground of 16 x 16 pixels, dark and empty (a very faint rim at its top and its left, as if the
+    frame cast one), at (4, 4): the scene lays the picture of a fragment over it. 24 x 24, anchor (12, 12): the middle."""
+    rng = np.random.default_rng(2402)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(24, 24)
+    wood = st["wood"]
+    outer = c.rect(0, 0, 24, 24)
+    inner = c.rect(4, 4, 20, 20)
+    ring = outer & ~inner
+    horiz = ring & ((c.yy < 4) | (c.yy >= 20))
+    vert = ring & ~horiz
+    g_h = pa.value_noise(24, 24, (1, 6), rng)  # the grain: long along the piece
+    g_v = pa.value_noise(24, 24, (6, 1), rng)
+    # lit from the upper left: the upper and left pieces lighter, the lower and right pieces darker
+    side = np.where((c.yy < 4) | (c.xx < 4), 0.74, 0.46)
+    c.paint(horiz, wood, side + 0.14 * (g_h - 0.5), contrast=2.0, dither=False)
+    c.paint(vert, wood, side + 0.14 * (g_v - 0.5), contrast=2.0, dither=False)
+    # the bevel: a bright row on the outer edge's inside (rows/columns 1) on the lit sides, a dark one on the shaded sides
+    c.paint(ring & (((c.yy == 1) & (c.xx >= 1) & (c.xx < 23)) | ((c.xx == 1) & (c.yy >= 1) & (c.yy < 23))), wood, 0.94, contrast=2.0, dither=False)
+    c.paint(ring & (((c.yy == 22) & (c.xx >= 1) & (c.xx < 23)) | ((c.xx == 22) & (c.yy >= 1) & (c.yy < 23))), wood, 0.2, contrast=2.0, dither=False)
+    # the mitre at each corner: a dark diagonal, then the outer line round all of it
+    for k in range(4):
+        for (x, y) in ((k, k), (23 - k, k), (k, 23 - k), (23 - k, 23 - k)):
+            c.fill(c.rect(x, y, x + 1, y + 1), wood[1])
+    # the inner lip: one dark row all round the opening
+    lip = ring & ((c.xx == 3) | (c.xx == 20) | (c.yy == 3) | (c.yy == 20)) & (c.xx >= 3) & (c.xx < 21) & (c.yy >= 3) & (c.yy < 21)
+    c.fill(lip, wood[0])
+    c.fill(c.rect(3, 3, 4, 4), wood[0])
+    # the outer line: the style's outline colour on the outermost pixels
+    c.fill(ring & ((c.xx == 0) | (c.xx == 23) | (c.yy == 0) | (c.yy == 23)), st["outline"])
+    # the empty ground
+    c.fill(inner, np.array([27.0, 30.0, 36.0], np.float32))
+    c.fill(inner & (c.yy < 5) | inner & (c.xx < 5), np.array([19.0, 22.0, 27.0], np.float32))  # the rim the frame casts, one row/column
+    return c
+
+
+def sprout(ms):
+    """A sprout in the bed: a short stem and two leaves opening like a pair of hands, light green (the lit leaf on the right a shade lighter, the
+    left one turned a little away), on a low heap of dark earth with two pale crumbs in it. Nothing round it, no light on it, no dew. It is
+    small and it is a beginning. 12 x 14, anchor (6, 12): the foot of the stem on the earth, the middle of the picture."""
+    rng = np.random.default_rng(2403)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(12, 14)
+    # the earth: a low heap, dark, a little lighter on its top-left; two pale crumbs
+    heap = c.ellipse(6.0, 11.4, 4.9, 2.0) & (c.yy >= 10)
+    c.paint(heap, st["mud"], 0.34 + 0.2 * (c.xx < 6) + 0.1 * (pa.value_noise(14, 12, 2, rng) - 0.5), contrast=2.0, dither=False)
+    c.paint(heap & (c.yy >= 12), st["mud"], 0.1, dither=False)
+    c.fill(c.rect(3, 10, 4, 11) & heap, st["mud"][3])
+    c.fill(c.rect(8, 11, 9, 12) & heap, st["mud"][3])
+    # the stem: one pixel wide, lit, bent a hair to the left at the top
+    for x, y in ((6, 10), (6, 9), (6, 8), (6, 7), (5, 6)):
+        c.fill(c.rect(x, y, x + 1, y + 1), st["grass"][3])
+    c.fill(c.rect(6, 10, 7, 11), st["grass"][2])
+    # the two leaves: a pointed oval each, one open to the left and a little lower, one to the right and a little higher
+    def leaf(cx, cy, rx, ry, angle):
+        a = np.deg2rad(angle)
+        dx, dy = c.xx + 0.5 - cx, c.yy + 0.5 - cy
+        u = dx * np.cos(a) + dy * np.sin(a)
+        v = -dx * np.sin(a) + dy * np.cos(a)
+        return (u / rx) ** 2 + (v / ry) ** 2 <= 1.0
+    left = leaf(3.3, 5.6, 2.9, 1.5, -28.0) & ~c.rect(5, 0, 12, 14)
+    right = leaf(8.6, 4.4, 3.1, 1.6, 30.0) & ~c.rect(0, 0, 5, 14)
+    c.paint(left, st["grass"], 0.62 + 0.2 * (c.yy < 5.5), contrast=2.0, dither=False)
+    c.paint(right, st["grass"], 0.82 + 0.14 * (c.yy < 4.5), contrast=2.0, dither=False)
+    c.fill(c.rect(2, 6, 4, 7) & left, st["grass"][1])  # the underside of the left leaf, turned away
+    c.fill(c.rect(8, 5, 10, 6) & right, st["grass"][2])  # a vein on the right leaf, the length of it
+    c.fill(c.rect(5, 6, 6, 7), st["grass"][3])  # the stem reaches under the leaves
+    c.outline(st["outline"])
+    return c
+
+
 # =========================================================================== Die Anlage (G3): the gate opens, the hall (prefix `ma_`)
 # The hall of the Wächter, seen from the front like the workshop (Klasse S, zoom 1.5): a room of 25 x 14 cells (400 x 224 pixels, the map's room
 # is the cells 4 to 28 and 4 to 17). The back wall (rows 0 to 2) is cold slate-grey cut stone under an iron girder, with the pipes along its
@@ -1611,6 +1733,11 @@ def build(ms):
     ms.save("tal", "gb_fork_sign", fork_sign(ms), (12, 24), shape={"circle": 3, "offset": [0, -1]})
     ms.save("tal", "gb_cleft_alcove", cleft_alcove(ms), (12, 26))
     ms.save("tal", "gb_candle", candle_stub(ms), (5, 10))
+    # Das Kind (G7). The rock lies on cells of the old stamp, the sprout in the valley's bed and the frame in the air: none of them has a shadow, a
+    # collision or a light in the catalog (the rock is flat, so figures stand above it; the player sits on it, nothing blocks her).
+    ms.save("tal", "gb_sit_rock", sit_rock(ms), (8, 7), flat=True)
+    ms.save("tal", "gb_picture_frame", picture_frame(ms), (12, 12))
+    ms.save("tal", "gb_sprout", sprout(ms), (6, 12))
     build_hall(ms)
 
 
@@ -1622,7 +1749,7 @@ def preview(path):
     items += [scree(ms, 1821), scree(ms, 1822), scree(ms, 1823), slate_chip(ms), chalk_arrow(ms), stone_mark(ms)]
     items += [net_post(ms), net_branch(ms), iron_ring(ms), trail_sign(ms), steps(ms), planks(ms), lookout(ms), rockfall(ms), smoke(ms)]
     items += [plant_hall(ms), plant_fence(ms), plant_gate(ms), dwarf_pine(ms, 2101), hand_stone(ms), round_stone(ms), quartz(ms), marmot_den(ms),
-              thimble(ms), view_sign(ms), smoke(ms, 96), fork_sign(ms), cleft_alcove(ms), candle_stub(ms)]
+              thimble(ms), view_sign(ms), smoke(ms, 96), fork_sign(ms), cleft_alcove(ms), candle_stub(ms), sit_rock(ms), picture_frame(ms), sprout(ms)]
     sheet = Image.new("RGBA", (1400, 200), (96, 136, 88, 255))
     x = 6
     for item in items:

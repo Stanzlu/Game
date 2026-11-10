@@ -2128,6 +2128,15 @@
    "res://assets/generated/props/tal/gb_net_post.png"
   ]
  },
+ "tal/gb_picture_frame": {
+  "anchor": [
+   12,
+   12
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_picture_frame.png"
+  ]
+ },
  "tal/gb_planks": {
   "anchor": [
    40,
@@ -2288,6 +2297,16 @@
    "res://assets/generated/props/tal/gb_sign_view.png"
   ]
  },
+ "tal/gb_sit_rock": {
+  "anchor": [
+   8,
+   7
+  ],
+  "flat": true,
+  "textures": [
+   "res://assets/generated/props/tal/gb_sit_rock.png"
+  ]
+ },
  "tal/gb_slate": {
   "anchor": [
    10,
@@ -2316,6 +2335,15 @@
   "flat": true,
   "textures": [
    "res://assets/generated/props/tal/gb_smoke_plant.png"
+  ]
+ },
+ "tal/gb_sprout": {
+  "anchor": [
+   6,
+   12
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_sprout.png"
   ]
  },
  "tal/gb_steps": {

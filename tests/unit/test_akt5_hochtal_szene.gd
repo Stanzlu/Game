@@ -153,7 +153,8 @@ func test_every_thing_of_the_valley_is_there_with_its_cue_and_the_cue_is_in_the_
 	assert_eq(_decor_with(scene, "tal/gb_hand_stone").size(), 1, "one stone with a print")
 	assert_eq(_decor_with(scene, "tal/gb_plant_hall").size(), 1, "one Anlage")
 	assert_eq(_decor_with(scene, "tal/gb_smoke_plant").size(), 1, "and its smoke")
-	assert_eq(scene.find_children("*", "NpcWalker", true, false).size(), 0, "nobody is here")
+	# nobody walks here: the one who sits at the edge of the plateau (G7) is a child
+	assert_eq(scene.find_children("*", "NpcWalker", true, false).size(), 1, "one child, sitting")
 
 
 func test_it_is_a_morning_without_lights_and_without_a_cutscene() -> void:

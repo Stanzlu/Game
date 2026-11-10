@@ -69,6 +69,11 @@ C = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "c
 I = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_cleft_alcove", "cue": "hiding_place", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 16}}
 J = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_candle", "cue": "candle", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 12, "unless": "grat.candle_taken"}}
 P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "plateau_edge", "dialogue": "res://content/dialogue/akt5/spalte.dialogue", "radius": 24}}
+; G7: die zentrale Szene am Rand der Hochfläche: der flache Stein (N, zwei Zellen breit, er liegt auf der linken und der rechten Zelle; man setzt sich auf die linke), das Kind darauf neben ihr (K, sitzend, bis es gegangen ist),
+; und ein unsichtbarer Punkt am Stein (n), den es erst gibt, wenn das Kind gegangen ist (`ChildMeeting`, Cues in kind.dialogue). Die drei Zellen behalten ihren alten Boden: der Bake bleibt.
+N = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/gb_sit_rock", "sit": {"face": "s", "offset": [0, 0]}}}
+K = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/akt5/kind.dialogue", "cue": "child_look", "sit": true, "face": "s", "inattentive": true, "unless": "grat.child_gone"}}
+n = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "seat_empty", "dialogue": "res://content/dialogue/akt5/kind.dialogue", "radius": 20, "if": "grat.child_gone"}}
 [map]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -80,7 +85,7 @@ P = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "p
 ^^^^^^^^^^^^^.O.........,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,m^^^^^^^^...,,,,,,,,,mm.^^^^
 ^^^^^^^^^^^^^.,,,,,,,,,,,,,,,,.........,,,,,,,,.......R..mmm..,,,,,,,,,,,,,,,,,,,,,,........^^^^
 ^^^^^^^^^^^^^.,,,,V,,,,,,,.......................................B,,,,,,,,,,,,,,,...........^^^^
-^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,C,,,.......mP.mm..^^^^
+^^^^^^^^^^^^^^,,,,,,,,^^^^^^...R.O.O.L....^^^^^^.....^^^^^^.R........,,,,,C,,,nNK....mP.mm..^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^........^^^^^^^^^^^^^^^^^^^^^^^....^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^mmm^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,^^^^^^^^^^^^^^^^^^^^
