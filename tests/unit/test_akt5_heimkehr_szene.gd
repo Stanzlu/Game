@@ -137,15 +137,13 @@ func test_the_way_down_has_its_look_only_once_the_child_is_gone() -> void:
 	assert_not_null(spot, "and now the way down")
 	if spot != null:
 		assert_eq(scene.map.world_to_cell(spot.global_position), DESCENT)
-	var loaded_flags: Array[String] = ["grat.child_gone"]
 	scene.queue_free()
 	await wait_physics_frames(2)
-	for flag in loaded_flags:
-		WorldState.set_flag(flag)
+	# a scene built with the flag already set is what a loaded game is
 	var loaded: PassScene = PASS.instantiate()
 	add_child_autofree(loaded)
 	await wait_physics_frames(3)
-	assert_not_null(_first(loaded, "descent_pass"), "after loading too")
+	assert_not_null(_first(loaded, "descent_pass"), "built with the flag already set")
 
 
 # --- The homecoming -----------------------------------------------------------------------------
@@ -225,8 +223,27 @@ func test_the_house_of_the_slice_and_the_other_acts_is_untouched() -> void:
 	await wait_physics_frames(60)
 	assert_false(WorldState.is_quest_started(QUEST), "no walk of the mountains")
 	assert_false(Chapter.reached("act5"))
-	assert_true(get_tree().get_nodes_in_group(&"cutscene").is_empty(), "no homecoming")
+	assert_null(scene.get_node_or_null("MountainHomecoming"), "no homecoming of Act V")
 	assert_null(_first(scene, "waechter_home"))
+	scene.queue_free()
+	await wait_physics_frames(2)
+	# the homecomings of Act III and IV are theirs: the keeper does not come to them
+	for quest: String in ["main_forest_way", "main_city_way"]:
+		WorldState.new_game()
+		WorldState.set_ui_mode(GameState.UiMode.REAL)
+		WorldState.set_facet("trust")
+		WorldState.start_quest(quest)
+		var steps := 0
+		while WorldState.quest_stage(quest) != "home" and steps < 20:
+			var here := ContentDB.quest(quest).stage(WorldState.quest_stage(quest))
+			WorldState.advance_quest(quest, here.next[0])
+			steps += 1
+		assert_eq(WorldState.quest_stage(quest), "home", "%s is on its way home" % quest)
+		var other := await _house()
+		assert_null(other.get_node_or_null("MountainHomecoming"), "not in the way home of " + quest)
+		assert_false(WorldState.is_quest_started(QUEST), "and no walk of the mountains")
+		other.queue_free()
+		await wait_physics_frames(2)
 
 
 func test_the_end_of_the_act_is_the_end_of_this_build_and_the_journal_follows_it() -> void:

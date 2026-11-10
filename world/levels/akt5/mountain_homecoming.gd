@@ -21,7 +21,7 @@ const BEAT := "act5_home"
 const QUEST := "main_mountain_way"
 const KEEPER_SHEET := preload("res://entities/character/sheet_waechter_look.tres")
 const DOOR_CELL := Vector2i(19, 15)
-## His way from the door to the hearth, round the player's arrival cell and the end of the table
+## His way from the door to the hearth, round the player's arrival cell and west of the table
 ## (the map's placement "Ψ" takes over at the last cell, one step in front of the fireplace).
 const WAY_IN: Array[Vector2i] = [
 	Vector2i(18, 14), Vector2i(17, 13), Vector2i(17, 12), Vector2i(17, 11), Vector2i(17, 10)
