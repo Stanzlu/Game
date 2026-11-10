@@ -46,6 +46,7 @@ PREFIX = {
     "akt5/hochtal": "G2-",
     "akt5/anlage": "G3-",
     "akt5/last": "G4-",
+    "akt5/loslassen": "G5-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

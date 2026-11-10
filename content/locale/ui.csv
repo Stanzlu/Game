@@ -249,6 +249,7 @@ CAPTION_WHISTLE,"Tess pfeift beim Messen vor sich hin, ein Ton rutscht ihr nach 
 CAPTION_CONCERT,"Lio zupft die Laute, stolpert, setzt neu an, und zuletzt summt die Menge den Refrain mit."
 CAPTION_STRING,"Eine Saite der Laute reißt mit einem scharfen Knall, die anderen schwingen nach."
 CAPTION_CLAPS,"Ein paar Hände klatschen, nicht im Takt."
+CAPTION_MACHINE_COUNT,"Die Hebel klacken in gleichmäßigem Takt, dreimal, eine Pause, dreimal, und ein tiefer Ton schwingt leise mit."
 SETTINGS_SHOW_CONTROLS,Tastenbelegung
 CONTROLS_TITLE,Tastenbelegung
 CONTROLS_MOVE,Gehen

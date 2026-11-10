@@ -55,6 +55,9 @@ T = {"ground": "_", "prop": "res://world/props/gauge.tscn", "params": {"sprite":
 ; Lampen: zwei hängen am Träger (H, auf den Wandzellen der Zeile 6), vier stehen im Raum (L); jede hat einen Eintrag lights im Katalog, zusammen sechs, dazu gebackenes Glühen (emissive)
 H = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lamp_hang"}}
 L = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lamp"}}
+; G5: die linke hängende Lampe (Y) fällt beim Loslassen aus (plant.defect, sprite_when) und bleibt dunkel: niemand behebt es; die Kartoffel (p) rollt dann aus dem Rohr und liegt neben ihm (plant.letgo, die Nebenquest side_plant_potato)
+Y = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_lamp_hang", "sprite_when": {"plant.defect": "tal/ma_lamp_hang_dark"}}}
+p = {"ground": "_", "prop": "res://world/props/pickup.tscn", "params": {"item": "item_potato", "flag": "plant.potato_taken", "sprite": "tal/potato", "if": "plant.letgo"}}
 ; die Kessel an den Seiten (zwei Zellen breit, das Bild steht mit dem linken Ende in der markierten Zelle), das Rohr quer über dem Boden (fünf Zellen, links beginnend: ein Hindernis in der Reihe nach rechts)
 N = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_tank"}}
 U = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/ma_pipe_run"}}
@@ -68,7 +71,7 @@ s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 #################################
 ####SWWWWWWWWWWWWWWWWWWWWWWWW####
 ####WWWWWWWWWWWWWWWWWWWWWWWWW####
-####WWWWWHWWWWWWWWWWWWWHWWWWW####
+####WWWWWYWWWWWWWWWWWWWHWWWWW####
 ####WP_Q__abcdefKghijklZ_R_TW####
 ####W___A____mmmCnnnooo___@_W####
 ####W_______________________W####
@@ -77,7 +80,7 @@ s = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ####W__s_L_____________L____W####
 ####W______________U_s______W####
 ####W__V____________________W####
-####W__1____________________W####
+####W__1_p__________________W####
 ####WL_____________________LW####
 ####WWWDWWWWWWWWWWWWWWWWWWWWW####
 #################################

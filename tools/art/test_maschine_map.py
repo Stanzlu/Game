@@ -184,7 +184,8 @@ class MaschineMapTests(unittest.TestCase):
         self.assertGreater(len(sprites), 40, "a hall in its final density: the levers (24 pictures), the dials, the lamps, the steam")
         for sprite in sprites:
             self.assertIn(sprite, catalog, sprite)
-            self.assertTrue(sprite.startswith("tal/ma_"), "the prefix of the hall: " + sprite)
+            # the potato is the valley's picture (G5): the pickup of a side quest, nothing of the hall's own
+            self.assertTrue(sprite.startswith("tal/ma_") or sprite == "tal/potato", "the prefix of the hall: " + sprite)
             for texture in catalog[sprite]["textures"] + catalog[sprite].get("emissive", []):
                 self.assertTrue(os.path.exists(mapfile.res_path(texture)), texture)
 
@@ -429,21 +430,39 @@ class MaschineMapTests(unittest.TestCase):
     def test_six_lamps_each_with_one_light_and_a_glow_and_nothing_else_casts_light(self):
         _, symbols, rows = _map()
         catalog = mapfile.load_catalog()
-        self.assertEqual(len(_glyph_cells(rows, "H")), 2, "two hang from the girder")
+        # G5: the left one is Y (it goes dark with plant.defect), the right one stays H
+        self.assertEqual(len(_glyph_cells(rows, "H")) + len(_glyph_cells(rows, "Y")), 2, "two hang from the girder")
+        self.assertEqual(len(_glyph_cells(rows, "Y")), 1)
         self.assertEqual(len(_glyph_cells(rows, "L")), 4, "four stand in the room")
         lights = 0
         for glyph, _, _, entry in _placements(rows, symbols):
             e = catalog.get(entry.get("params", {}).get("sprite", ""), {})
             lights += len(e.get("lights", []))
             if "lights" in e:
-                self.assertIn(glyph, "HL", "only the lamps carry lights")
+                self.assertIn(glyph, "HLY", "only the lamps carry lights")
                 self.assertTrue(e.get("emissive"), "the lamps' glow is baked as well (the fallback without a light)")
                 self.assertEqual(len(e["lights"]), 1)
                 self.assertEqual(set(e["lights"][0]), {"offset", "color", "energy", "range"})
         self.assertEqual(lights, 6, "at most six PointLight2D (the brief's O3)")
         self.assertEqual(symbols["H"]["ground"], "W", "the hanging lamps hang on wall cells")
-        for _, y in _glyph_cells(rows, "H"):
+        for _, y in _glyph_cells(rows, "H") + _glyph_cells(rows, "Y"):
             self.assertEqual(y - ROOM[1], 2)
+        # G5: the left hanging lamp goes dark with plant.defect, in a picture without a light or a glow
+        self.assertEqual(symbols["Y"]["ground"], "W")
+        self.assertEqual(symbols["Y"]["params"]["sprite"], "tal/ma_lamp_hang")
+        self.assertEqual(symbols["Y"]["params"]["sprite_when"], {"plant.defect": "tal/ma_lamp_hang_dark"})
+        dark = catalog["tal/ma_lamp_hang_dark"]
+        self.assertNotIn("lights", dark)
+        self.assertNotIn("emissive", dark)
+        self.assertNotIn("shadow", dark, "no shadow in the catalog: the stamp stays")
+        (yx, yy), = _glyph_cells(rows, "Y")
+        self.assertEqual((yx - ROOM[0], yy - ROOM[1]), (5, 2), "the left one of the two")
+        # G5: the potato by the hissing pipe, only after the letting go (the valley's picture, a pickup)
+        (px, py), = _glyph_cells(rows, "p")
+        self.assertEqual(symbols["p"]["prop"], "res://world/props/pickup.tscn")
+        self.assertEqual(symbols["p"]["params"], {"item": "item_potato", "flag": "plant.potato_taken", "sprite": "tal/potato", "if": "plant.letgo"})
+        (vx, vy), = _glyph_cells(rows, "V")
+        self.assertLessEqual(abs(px - vx) + abs(py - vy), 3, "it lies by the pipe it rolled out of")
         for _, y in _glyph_cells(rows, "L"):
             self.assertGreaterEqual(y - ROOM[1], 8, "the standing lamps keep clear of the console")
 

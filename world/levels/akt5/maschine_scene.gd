@@ -12,10 +12,17 @@ extends LookScene
 ## locked, no one is hurried by anything but play time; whoever leaves the console is waited for.
 ## The walk of the hero moves on when she enters and again at the end of the load. Outside the
 ## trial and the run a lever is only a lever.
+## Then the way out (G5): the load has stopped and every lever stands up; whoever steps away from
+## the console and waits has done what the procedure has no step for (`LetGo`): the levers go down
+## by themselves, something goes wrong, a lamp goes out and nobody mends it, the hall settles, the
+## keeper enters it all and holds to his doubt (`plant.letgo`, the facet `trust`). From the pipe
+## on the left a potato rolls out (the side quest `side_plant_potato`).
 
 const DIALOGUE := "res://content/dialogue/akt5/anlage.dialogue"
 const LAST := "res://content/dialogue/akt5/last.dialogue"
+const LETGO := "res://content/dialogue/akt5/loslassen.dialogue"
 const QUEST := "main_mountain_way"
+const POTATO_QUEST := "side_plant_potato"
 ## The order the keeper calls (the words of `probe_offer`): Three, then One, then Two.
 const ORDER: Array[int] = [3, 1, 2]
 ## The levers in use in this segment.
@@ -29,6 +36,12 @@ const PAUSE_BEFORE_ANSWER := 0.5
 const TROUBLE_RATE := 0.5
 ## The lamps dim at most to this much of their light.
 const LAMP_LOW := 0.45
+## The burst of steam half way through the letting go: it lasts this long (play time) and the steam
+## follows it at this speed (per second, 0 to 1), slowly and never a flash.
+const SURGE_SECONDS := 4.0
+const SURGE_RATE := 0.6
+## The dial that goes to its edge in the burst is the one that trembles (the cue `gauges`).
+const SURGE_GAUGE_CUE := "gauges"
 
 var _levers: Dictionary = {}
 var _pulled: Array[int] = []
@@ -36,6 +49,9 @@ var _busy := false
 var _run: LoadRun
 var _speaking := false
 var _trouble := 0.0
+var _surge := 0.0
+var _surge_left := 0.0
+var _letgo: LetGo
 var _gauges: Array[Gauge] = []
 var _steam: Array[Decor] = []
 var _lamps: Array[Decor] = []
@@ -67,6 +83,14 @@ func _ready() -> void:
 	_run.waited.connect(_on_waited)
 	_run.returned.connect(_on_returned)
 	_run.overloaded.connect(_on_overloaded)
+	_letgo = LetGo.new()
+	_letgo.name = "LetGo"
+	add_child(_letgo)
+	_letgo.began.connect(_on_letgo_began)
+	_letgo.fell.connect(_on_letgo_fell)
+	_letgo.mid.connect(_on_letgo_mid)
+	_letgo.defect.connect(_on_letgo_defect)
+	_letgo.finished.connect(_on_letgo_finished)
 	if WorldState.has_flag("plant.overload"):
 		# the load stopped: every lever is in use and stands as it stood
 		_run.state = LoadRun.State.OVER
@@ -74,15 +98,20 @@ func _ready() -> void:
 		for number: int in _levers:
 			var each := _levers[number] as ConsoleLever
 			each.set_active(true)
-			each.set_down(false)
+			# after the letting go they stand as they fell
+			each.set_down(WorldState.has_flag("plant.letgo"))
+		if WorldState.has_flag("plant.letgo"):
+			_letgo.finish_silently()
+			_advance_to_letgo()
 	elif WorldState.has_flag("plant.load"):
 		# a game loaded in the middle of the load: it goes on from the wave she reached, when she is back
 		_run.begin(_wave_from_flags(), false)
 	if WorldState.has_flag("plant.load"):
 		_advance_to_load()
 	# the hall shows the load as it stands from the first picture (no dials swinging out on arrival)
-	_trouble = _run.trouble()
+	_trouble = _trouble_goal()
 	_apply_trouble()
+	_sync_potato_quest()
 	WorldState.flag_changed.connect(_on_flag_changed)
 	Beat.mark("maschine_enter")
 
@@ -90,6 +119,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if _run.state == LoadRun.State.RUNNING:
 		_run.step(delta, _at_console(), _talking())
+	_step_letgo(delta)
 	_follow_trouble(delta)
 
 
@@ -104,6 +134,13 @@ func _on_flag_changed(id: String, value: bool) -> void:
 		_run.begin(1, true)
 		_advance_to_load()
 		Beat.mark("maschine_load")
+	elif id == "plant.defect":
+		# the lamp's picture changed (the map builds it anew): find the lamps again
+		_refresh_effects.call_deferred()
+	elif id == "melody.machine_count":
+		AudioDirector.sfx("machine_count", -2.0, 1.0)
+	elif id.begins_with("plant.potato_"):
+		_sync_potato_quest()
 
 
 func lever(number: int) -> ConsoleLever:
@@ -116,8 +153,8 @@ func _on_pulled(number: int) -> void:
 	if _run.state == LoadRun.State.RUNNING:
 		_run.pull(number)
 		return
-	if _run.state == LoadRun.State.OVER:
-		return  # the load has stopped: the levers stand as they stood (G5 goes on from here)
+	if _run.state == LoadRun.State.OVER and not WorldState.has_flag("plant.letgo"):
+		return  # the load has stopped: the levers stand as they stood or fall by themselves
 	var pulled_lever := lever(number)
 	if not WorldState.has_flag("plant.probe") or WorldState.has_flag("plant.probe_done"):
 		# not called, or done: it is a lever, it goes down and up
@@ -236,6 +273,79 @@ func _advance_to_load() -> void:
 		WorldState.advance_quest(QUEST, "load")
 
 
+# --- The letting go (G5) ----------------------------------------------------------------------
+
+
+## The load has stopped and she is not at the console: the hall goes on without her. The clock
+## runs only while she is away and nobody speaks; whoever comes back stops it where it stands.
+func _step_letgo(delta: float) -> void:
+	if not WorldState.has_flag("plant.overload") or _letgo.state == LetGo.State.DONE:
+		return
+	var away := not _at_console()
+	if _letgo.state == LetGo.State.IDLE:
+		if away and not _talking() and not _busy:
+			_letgo.begin()
+		return
+	_letgo.step(delta, away, _talking())
+
+
+func _on_letgo_began() -> void:
+	await _say(LETGO, "letgo_away")
+
+
+## A lever goes down on its own, in the order of the trial; the first one gets his word, the last
+## one the bar that the clicks have made.
+func _on_letgo_fell(number: int, index: int) -> void:
+	_set_lever(number, true, true)
+	if index == 0:
+		await _say(LETGO, "letgo_first")
+	elif index == LetGo.ORDER.size() - 1:
+		if WorldState.has_flag("melody.machine_count"):
+			AudioDirector.sfx("machine_count", -2.0, 1.0)  # heard before: the flag does not change
+		else:
+			WorldState.set_flag("melody.machine_count")  # and the flag's change plays it
+
+
+func _on_letgo_mid() -> void:
+	_surge_left = SURGE_SECONDS
+	await _say(LETGO, "letgo_mid")
+
+
+## The lamp goes out (the map shows the dark one from the flag on) and nobody mends it.
+func _on_letgo_defect() -> void:
+	if WorldState.has_flag("plant.defect"):
+		return  # a game loaded after the lamp went out: it is out already, and nobody tells it twice
+	WorldState.set_flag("plant.defect")
+	await _say(LETGO, "letgo_defect")
+
+
+## The hall has settled: he enters it all and doubts it, then the walk goes on and a potato
+## rolls out of the pipe.
+func _on_letgo_finished() -> void:
+	await _say(LETGO, "letgo_end")
+	WorldState.set_facet("trust")
+	WorldState.set_flag("plant.letgo")
+	_advance_to_letgo()
+	Beat.mark("maschine_letgo")
+	await _say(LETGO, "letgo_potato")
+
+
+func _advance_to_letgo() -> void:
+	if WorldState.quest_stage(QUEST) == "load":
+		WorldState.advance_quest(QUEST, "letgo")
+
+
+## The potato's quest follows the flags: it begins with the potato in the pocket and ends when the
+## keeper has entered it. A flag set before the quest was there (a loaded game) is caught up here.
+func _sync_potato_quest() -> void:
+	if not WorldState.has_flag("plant.potato_taken"):
+		return
+	if not WorldState.is_quest_started(POTATO_QUEST):
+		WorldState.start_quest(POTATO_QUEST)
+	if WorldState.has_flag("plant.potato_entered") and WorldState.is_quest_active(POTATO_QUEST):
+		WorldState.advance_quest(POTATO_QUEST, "done")
+
+
 ## One cue of the keeper's, played as a cutscene (a line at a time, nothing runs meanwhile).
 func _say(path: String, cue: String) -> void:
 	_speaking = true
@@ -245,9 +355,20 @@ func _say(path: String, cue: String) -> void:
 	_speaking = false
 
 
+## The lamp that went out is another picture: the lists are made again.
+func _refresh_effects() -> void:
+	_gauges.clear()
+	_steam.clear()
+	_lamps.clear()
+	_collect_effects()
+	_apply_trouble()
+
+
 ## Every dial, a steam cloud and a lamp the hall has, found once.
 func _collect_effects() -> void:
 	for node in map.entities.get_children():
+		if node.is_queued_for_deletion():
+			continue
 		if node is Gauge:
 			_gauges.append(node as Gauge)
 		elif node is Decor:
@@ -264,18 +385,35 @@ func _collect_effects() -> void:
 ## The dials wander off their mark, the steam thickens and the lamps dim as the load is not kept:
 ## slowly and in steps of the picture, never a flash.
 func _follow_trouble(delta: float) -> void:
-	var goal := _run.trouble()
-	if is_equal_approx(_trouble, goal):
+	var surge_goal := 1.0 if _surge_left > 0.0 else 0.0
+	# the burst lasts while he speaks about it and a while longer
+	if not _speaking:
+		_surge_left = maxf(_surge_left - delta, 0.0)
+	var goal := _trouble_goal()
+	if is_equal_approx(_trouble, goal) and is_equal_approx(_surge, surge_goal):
 		return
 	_trouble = move_toward(_trouble, goal, delta * TROUBLE_RATE)
+	_surge = move_toward(_surge, surge_goal, delta * SURGE_RATE)
 	_apply_trouble()
 
 
+## How much of the load is not kept: what the levers say while the load runs or has stopped; after
+## the letting go the hall is calm whatever a lever is made to do (they are only levers again).
+func _trouble_goal() -> float:
+	return 0.0 if WorldState.has_flag("plant.letgo") else _run.trouble()
+
+
 func _apply_trouble() -> void:
+	# the burst of steam comes from the pipe on the left, and the trembling dial goes to its edge
+	var middle := map.cell_to_world(Vector2i(16, 0)).x
 	for gauge in _gauges:
-		gauge.set_trouble(_trouble)
+		var edge: bool = gauge.has_meta(&"cue") and gauge.get_meta(&"cue") == SURGE_GAUGE_CUE
+		gauge.set_trouble(maxf(_trouble, _surge) if edge else _trouble)
 	for cloud in _steam:
-		cloud.modulate.a = 0.7 + 0.3 * _trouble
-		cloud.scale = Vector2.ONE * (1.0 + 0.5 * _trouble)
+		var left := cloud.global_position.x < middle
+		var burst := _surge if left else 0.0
+		cloud.modulate.a = 0.7 + 0.3 * maxf(_trouble, burst)
+		cloud.scale = Vector2.ONE * (1.0 + 0.5 * _trouble + 0.7 * burst)
 	for lamp in _lamps:
-		lamp.light_scale = lerpf(1.0, LAMP_LOW, _trouble)
+		if is_instance_valid(lamp):
+			lamp.light_scale = lerpf(1.0, LAMP_LOW, _trouble)

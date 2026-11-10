@@ -1,0 +1,80 @@
+# Das Loslassen, Akt V, Segment G5 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O10, O13, O19, O20; Stilblatt waechter.md, Gegenbeispiele 1 bis 15). Nach dem Ende der Last (plant.overload, G4) steht die Spielerin
+# am Pult vor zwölf Hebeln, die oben stehen. Tritt sie vom Pult weg und wartet (Spielzeit, nur solange sie weg ist und nicht gesprochen wird), spielt die Szene die Cues dieser Datei: der Wächter
+# trägt das leere Pult ein, ein Hebel fällt von selbst (Drei, dann Eins, dann Zwei, die Reihenfolge der Probe aus G3, danach aufwärts, einer nach dem anderen), mitten darin geht etwas schief, eine
+# Lampe fällt aus, und am Ende steht die Halle. Hier steht nur, was die Szene spielt; die Cues, in die der Wächter beim Ansprechen springt (waechter_done, potato_entry und die Hilfe "Und jetzt?"
+# in waechter_over), stehen in anlage.dialogue, weil ihre Aufrufer dort liegen und Sprünge nur innerhalb einer Datei gehen.
+# Der Wächter wird nicht geheilt. Er greift nicht ein, er sagt, was das Verfahren verlangt, und trägt ein, dass er es nicht tut; er behebt den Defekt nie (die Lampe bleibt dunkel, "Defekt. Offen.");
+# er trägt am Ende alles ein und hält das Ergebnis für einen Einzelfall und das Verfahren für richtig. Er dankt nicht, er tröstet nicht, es gibt keine Einsicht und keine Lehre, und der Text kennt weder
+# "Vertrauen" noch "loslassen". Er ruft die Spielerin nie beim Namen und spricht nie über das Kind, die kleine Tür oder sein Warum. Der Humor ist Pedanterie (Spalten, Einträge, Zahlen), nie seine Angst.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung). Zahlen sind ausgeschrieben, auch die Nummern der Hebel und der Lampe. Keiner der Cues dieser Datei setzt oder liest
+# ein Flag: die Szene setzt "plant.letgo", "plant.defect" und die Facette "trust" (der Cue "waechter" und der Cue "waechter_done" lesen sie), "plant.potato_taken" setzt die Karte, und der Klang des
+# Taktes hängt an "melody.machine_count". Die Hebelnummern, die der Text nennt (Drei), und der Name der Lampe (Eins, die linke am Träger) gelten für die Szene; die übrigen Hebel nennt er nicht.
+
+# --- Das Warten --------------------------------------------------------------------------------------------------------------
+# Die Szene spielt den Cue einmal, wenn die Spielerin lange genug vom Pult weg war. Er trägt ein, was er sieht, und sagt kein Wort darüber, was das bedeuten könnte. Die Pause ist die aus
+# G4 ("load_wait"), nur länger: ihre Dauer steht als laufend in der Spalte.
+
+~ letgo_away
+Wächter: Pult unbesetzt. Alle zwölf Hebel stehen oben, keiner wird bedient. [ID:los_away_1] [#draft]
+Wächter: Ich trage es ein. Dauer der Pause: laufend. [ID:los_away_2] [#draft]
+=> END
+
+# --- Der erste Hebel ---------------------------------------------------------------------------------------------------------
+# Hebel Drei fällt von selbst, mit dem Klacken, das danach ein Takt wird. Er sagt die Zeile aus der Probe ("Das war nicht eingeplant. Ich trage es ein.", anl_right_2, O13) und trägt in die
+# Spalte, wer den Hebel gezogen hat, niemand ein. Kein Staunen, kein Ausruf; der Gag ist die Spalte.
+
+~ letgo_first
+Hebel Drei fällt mit einem Klacken. Niemand hat ihn berührt. [ID:los_first_1] [#draft]
+Wächter: Das war nicht eingeplant. Ich trage es ein. [ID:los_first_2] [#draft]
+Wächter: Spalte »Gezogen von«: leer. Ich schreibe: niemand. [ID:los_first_3] [#draft]
+=> END
+
+# --- Mitten drin -------------------------------------------------------------------------------------------------------------
+# Etwas geht schief: ein Stoß Dampf aus dem zischenden Rohr, ein Zeiger am Rand. Seine Hand liegt über einem Hebel und zieht nicht. Der Text kennt die Nummer des Hebels nicht (er ist statisch)
+# und sagt kein Wort über Gefahr; er nennt, was das Verfahren hier verlangt, und trägt ein, dass er es nicht tut. Die letzte Zeile ist die Probezeile des Blatts, trocken und ohne Erklärung, was
+# ihn zurückhält.
+
+~ letgo_mid
+Aus dem Rohr links bricht ein Stoß Dampf, weiß und dicht. Ein Zeiger wandert an den Rand und bleibt dort stehen. [ID:los_mid_1] [#draft]
+Die Hand des Wächters liegt über einem Hebel. Sie zieht nicht. [ID:los_mid_2] [#draft]
+Wächter: Zeiger am Rand. Das Verfahren verlangt jetzt einen Zug. [ID:los_mid_3] [#draft]
+Wächter: Ich ziehe nicht. Ich trage ein, dass ich nicht ziehe. [ID:los_mid_4] [#draft]
+Wächter: Der Dampf kam von allein. Ich schaue nur hin. [ID:los_mid_5] [#draft]
+=> END
+
+# --- Der Defekt --------------------------------------------------------------------------------------------------------------
+# Eine Lampe fällt aus, die linke am Träger, und bleibt dunkel (Defekt, den niemand repariert). Das Verfahren verlangt die Behebung; er trägt "Defekt. Offen." ein und behebt nichts, und niemand
+# sonst tut es. Die Halle steht trotzdem: das sagt die Erzählung, nicht er (sein Satz dazu steht in anlage.dialogue, "waechter_done").
+
+~ letgo_defect
+Die linke Lampe am Träger geht aus. Sie flackert nicht, sie ist einfach aus. [ID:los_defect_1] [#draft]
+Wächter: Lampe Eins. Defekt. Das Verfahren verlangt Behebung. [ID:los_defect_2] [#draft]
+Wächter: Ich trage ein: Defekt. Offen. [ID:los_defect_3] [#draft]
+Unter dem Träger wird es dämmrig, mehr nicht. Niemand geht zur Lampe, und die Hebel fallen weiter, im selben Abstand. [ID:los_defect_4] [#draft]
+=> END
+
+# --- Das Ende ----------------------------------------------------------------------------------------------------------------
+# Der letzte Hebel fällt, die Zeiger gehen zurück, der Dampf wird dünn. Er trägt alles ein und bleibt skeptisch: alle Hebel unten, alle Anzeigen normal, die Last wurde nicht gehalten, das ist kein
+# zulässiger Zustand (er trägt ihn trotzdem ein, die Form von "Das Verfahren verlangt es trotzdem", lst_over_9). Das Ergebnis ist ihm ein Einzelfall, das Verfahren bleibt richtig, und "Alles
+# vorbehaltlich einer Nachprüfung" (anl_over_3) kommt nicht noch einmal. Der Hauch: sein Blatt hat unten rechts ein Feld "Ohne Eintrag", das er auslässt wie jedes Mal, nicht anders als sonst. Kein Dank,
+# kein Trost, keine Einsicht, kein Satz darüber, was die Zeiger oder die Lampe bedeuten. Die letzte Zeile ist ein Vorbehalt.
+
+~ letgo_end
+Der letzte Hebel fällt. Die Zeiger gehen zurück, der Dampf wird dünn, und nur das Rohr links zischt wie zuvor. [ID:los_end_1] [#draft]
+Wächter: Alle Hebel unten. Alle Anzeigen im Normalbereich. [ID:los_end_2] [#draft]
+Wächter: Die Last wurde nicht gehalten. Das ist kein zulässiger Zustand. [ID:los_end_3] [#draft]
+Er füllt die Spalten aus, eine nach der anderen. Das Feld unten rechts, »Ohne Eintrag«, lässt er aus, wie jedes Mal. [ID:los_end_4] [#draft]
+Wächter: Ich trage ihn trotzdem ein. Als Einzelfall. [ID:los_end_5] [#draft]
+Der Stift kratzt, genau einmal. [ID:los_end_6] [#draft]
+Wächter: Das Verfahren ist richtig. Dieser Fall ändert daran nichts. [ID:los_end_7] [#draft]
+Wächter: Wiederholt er sich, prüfe ich neu. Bis dahin gilt das Verfahren. [ID:los_end_8] [#draft]
+=> END
+
+# --- Die Kartoffel -----------------------------------------------------------------------------------------------------------
+# Nach dem Ende, ohne ein Wort von ihm: etwas rollt aus dem zischenden Rohr links und bleibt liegen. Mehr nicht, kein Kommentar, keine Deutung (Bible §33, O13). Der Wächter sieht nicht hin; wer die
+# Kartoffel aufhebt (die Karte setzt "plant.potato_taken"), kann sie ihm zeigen ("waechter_done", "potato_entry" in anlage.dialogue).
+
+~ letgo_potato
+Aus dem zischenden Rohr links poltert etwas heraus, rollt ein Stück über den Boden und bleibt liegen. [ID:los_potato_1] [#draft]
+Eine Kartoffel. [ID:los_potato_2] [#draft]
+=> END

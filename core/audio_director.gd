@@ -71,6 +71,7 @@ const CAPTIONS := {
 	"lio_concert": "CAPTION_CONCERT",
 	"string_snap": "CAPTION_STRING",
 	"crowd_clap": "CAPTION_CLAPS",
+	"machine_count": "CAPTION_MACHINE_COUNT",
 	"rift_hum": "CAPTION_RIFT",
 	"stone_wobble": "CAPTION_WOBBLE",
 	"bird": "CAPTION_BIRD",

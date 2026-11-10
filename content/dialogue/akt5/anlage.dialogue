@@ -9,7 +9,8 @@
 # plant.probe_done setzt die Szene (der Cue "waechter" liest es); die Lage der Hebel ist allein Sache der Szene (kein Flag). Die Probe ist nie Voraussetzung: wer sie nie verlangt, verlässt die Halle
 # wie jeder, und in keinem Cue der Probe gibt es Zeit, Druck oder Strafe. Seit G4 (Die Last, docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O4, O13, O19, O20) stehen am Ende der Datei die Cues des
 # Betriebs ("load_offer", "waechter_run", "waechter_over"): "waechter" und "waechter_again" springen in sie, und Sprünge gehen nur innerhalb einer Datei. Die Cues, die die Szene während des Laufs
-# spielt, stehen in last.dialogue.
+# spielt, stehen in last.dialogue. Seit G5 (Das Loslassen, Voreinstellungen O4, O10, O13) kommen am Ende der Datei die Cues nach dem Loslassen dazu ("waechter_done", "potato_entry") und in "waechter_over"
+# die Hilfe "Und jetzt?"; was die Szene beim Loslassen selbst spielt, steht in loslassen.dialogue.
 
 # --- Das Tor -----------------------------------------------------------------------------------------------------------------
 # Der Blocker am Tor (plant_gate in hochtal.dialogue bleibt als Text stehen und wird stillgelegt). Das Tor ist zu, aber nicht gesperrt: ein Schild, keine Klinke, keine Klingel. Zwei
@@ -43,9 +44,12 @@ Wächter: Eintritt. [ID:anl_knock_6] [#draft]
 # so oft gespielt werden, wie die Spielerin will: die Wiederholung gehört zu seinem Verfahren. Er stellt die Halle in Fakten vor (zwölf Hebel, drei in Betrieb, neun stehen), stellt
 # eine Kontrollfrage und beantwortet sie selbst, und bietet die Probe an. Die Antworten sind kurz; das Schweigen "…" ist eine volle Antwort und die letzte. Wer die Probe nie
 # verlangt, kommt nie in Not (kein Flag, kein Druck, kein Zähler). Wer sie gemacht hat (plant.probe_done), liest "waechter_again"; seit G4 liest, wer den Betrieb aufgenommen hat (plant.load),
-# "waechter_run", und wer den Lauf bis zum Ende gespielt hat (plant.overload, die Szene setzt es), "waechter_over". Der Cue liest die Flags und setzt keines; der späteste Zustand steht oben.
+# "waechter_run", und wer den Lauf bis zum Ende gespielt hat (plant.overload, die Szene setzt es), "waechter_over"; seit G5 liest, wer vom Pult weggetreten ist und gewartet hat (plant.letgo, die Szene setzt
+# es am Ende des Loslassens), "waechter_done". Der Cue liest die Flags und setzt keines; der späteste Zustand steht oben.
 
 ~ waechter
+if WorldState.has_flag("plant.letgo")
+	=> waechter_done
 if WorldState.has_flag("plant.overload")
 	=> waechter_over
 if WorldState.has_flag("plant.load")
@@ -214,11 +218,63 @@ Wächter: Betrieb. Oben ist offen, unten ist erledigt. Ich zähle mit. [ID:anl_r
 	Du schweigst. Der Wächter macht einen Strich und zählt weiter. [ID:anl_run_7] [#draft]
 => END
 
-# Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht, und dieser Cue ist der Platz, an dem G5 weiterbaut. Er zählt die offenen Hebel, trägt es ein,
-# verlangt nichts und bietet nichts an (kein "Fang an." mehr, keine Antwort). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat.
+# Nach dem Ende der vierten Welle (plant.overload, die Szene setzt es nach "load_over"): der Lauf ruht. Er zählt die offenen Hebel, trägt es ein, verlangt nichts und bietet nichts an (kein "Fang an."
+# mehr). Die letzte Zeile ist sein Vorbehalt, kein Dank und keine Einsicht; er bleibt bei dem, was er eingetragen hat. Seit G5 hängen daran drei Antworten (Bible §50 "Puzzlehilfen", Brief O4): die
+# abrufbare Hilfe "Und jetzt?", ohne Umschweife und ohne Lehre (das Verfahren kennt für diesen Stand keinen Schritt, zulässig ist, vom Pult wegzutreten und abzuwarten, er hat nachgesehen und rät
+# nicht dazu; kein Wort "loslassen", kein Wort darüber, was es bringt), das unbedingte "Gut." und das Schweigen "…" als letzte Antwort. Der Cue liest und setzt nichts.
 
 ~ waechter_over
 Der Lauf ruht. Der Wächter fährt die Hebel ab, die oben stehen, und zählt halblaut. [ID:anl_over_1] [#draft]
 Wächter: Offene Hebel gezählt, Zahl eingetragen. Nicht erfüllt, wie vermerkt. [ID:anl_over_2] [#draft]
 Wächter: Alles vorbehaltlich einer Nachprüfung der Rechnung. [ID:anl_over_3] [#draft]
+- Und jetzt? [ID:anl_over_r1] [#draft]
+	Wächter: Für diesen Stand kennt das Verfahren keinen Schritt. [ID:anl_over_4] [#draft]
+	Wächter: Zulässig ist, vom Pult wegzutreten und abzuwarten. Ich habe nachgesehen. [ID:anl_over_5] [#draft]
+	Wächter: Ich rate nicht dazu. [ID:anl_over_6] [#draft]
+- Gut. [ID:anl_over_r2] [#draft]
+	Wächter: Gut ist als Eintrag nicht vorgesehen. Ich schreibe: zur Kenntnis genommen. [ID:anl_over_7] [#draft]
+- … [ID:anl_over_r3] [#draft]
+	Du schweigst. Der Wächter zählt die offenen Hebel noch einmal und kommt auf dieselbe Zahl. [ID:anl_over_8] [#draft]
+=> END
+
+# --- Nach dem Loslassen (G5) -------------------------------------------------------------------------------------------------
+# Die Hebel stehen unten, die Zeiger im Normalbereich, eine Lampe ist dunkel geblieben (die Szene hat alles gespielt, loslassen.dialogue). Der Wächter ist nicht geheilt: er prüft, zählt, trägt ein,
+# nennt den Fall einen Einzelfall und hält am Verfahren fest. Die Lampe erwähnt er in seiner Form ("Lampe Eins: defekt, unbehoben. Die Halle steht trotzdem. Ich habe es nachgeprüft."), nicht in
+# der des Defekts ("letgo_defect"). Der Gag ist die Seite der Einzelfälle, auf der nur dieser eine steht, und die Erwartung, die trotzdem eingetragen bleibt. Kein Dank, kein Lob, keine Einsicht, keine Lehre,
+# kein Wort darüber, was das Wegtreten bedeutet hat; er sagt nie "Kind", nie "Tür", nie etwas über sein Warum. Vier Antworten: das unbedingte "Es steht noch alles.", die Facette trust (eine Antwort, die
+# nichts verlangt; seine Antwort ist, dass das Feld "Ohne Eintrag" vorgesehen ist und er es noch nie benutzt hat, mehr nicht: kein Fortschritt, keine Heilung, der Facette-Setzer ist die Szene), die
+# Kartoffel (nur solange sie bei der Spielerin ist und nicht eingetragen wurde: plant.potato_taken setzt die Karte, plant.potato_entered der Cue "potato_entry") und das Schweigen "…" als letzte.
+# Die erste Antwort und das Schweigen stehen immer da (jede Gruppe braucht eine unbedingte Antwort); die Antwort der Facette und die der Kartoffel verschwinden, wenn ihre Bedingung nicht zutrifft. Der Cue setzt nichts.
+
+~ waechter_done
+Alle zwölf Hebel stehen unten. Der Wächter tippt jeden einmal mit dem Stift an und bewegt dabei die Lippen. [ID:anl_done_1] [#draft]
+Wächter: Alle unten geblieben. Der zweite Zeiger von links zittert wie vorher. Vermerkt. [ID:anl_done_2] [#draft]
+Wächter: Lampe Eins: defekt, unbehoben. Die Halle steht trotzdem. Ich habe es nachgeprüft. [ID:anl_done_3] [#draft]
+Wächter: Der Fall steht auf Seite neun, unter Einzelfälle. [ID:anl_done_4] [#draft]
+Wächter: Sonst steht dort nichts. Das passt zu einem Einzelfall. [ID:anl_done_5] [#draft]
+- Es steht noch alles. [ID:anl_done_r1] [#draft]
+	Wächter: Ja. Erwartet hatte ich etwas anderes. [ID:anl_done_6] [#draft]
+	Wächter: Die Erwartung bleibt trotzdem eingetragen. [ID:anl_done_7] [#draft]
+- Nichts einzutragen ist zulässig. [if WorldState.has_facet("trust") /] [ID:anl_done_r2] [#draft]
+	Wächter: Das Feld »Ohne Eintrag« ist vorgesehen. Ich habe es noch nie benutzt. [ID:anl_done_8] [#draft]
+	Wächter: Es steht auf jedem Blatt, unten rechts. [ID:anl_done_9] [#draft]
+- Die kam aus dem Rohr. [if WorldState.has_flag("plant.potato_taken") and not WorldState.has_flag("plant.potato_entered") /] [ID:anl_done_r3] [#draft]
+	=> potato_entry
+- … [ID:anl_done_r4] [#draft]
+	Du schweigst. Der Wächter blättert zu Seite neun und liest den einen Eintrag noch einmal. [ID:anl_done_10] [#draft]
+=> END
+
+# Die Kartoffel (Bible §33, O13): bemerkenswert durchschnittlich, nichts wird erklärt, kein Warum, kein Symbol, kein Witz über ihn. Sie kommt aus einem Rohr, das für Dampf vorgesehen ist und für nichts
+# sonst; er trägt sie in der Form seiner Spalten ein (durchschnittlich in allem, Besonderheiten keine, und das findet er bemerkenswert) und vermerkt, dass sie bei der Spielerin bleibt. Zuletzt setzt der Cue
+# plant.potato_entered (die Szene schließt die Nebenquest "side_plant_potato" daraus); der Cue endet danach, er springt nicht zurück in "waechter_done".
+
+~ potato_entry
+Du holst die Kartoffel aus der Tasche und hältst sie ihm hin. Er betrachtet sie, ohne sie zu berühren. [ID:anl_potato_1] [#draft]
+Wächter: Kartoffel. Mittelgroß. Nicht eingetragen. [ID:anl_potato_2] [#draft]
+Wächter: Aus dem Rohr links. Das Rohr ist für Dampf vorgesehen, nicht dafür. [ID:anl_potato_3] [#draft]
+Er schlägt eine leere Seite auf und schreibt oben ein einziges Wort. [ID:anl_potato_4] [#draft]
+Wächter: Größe durchschnittlich, Gewicht durchschnittlich, Farbe durchschnittlich. [ID:anl_potato_5] [#draft]
+Wächter: Besonderheiten: keine. Das ist bemerkenswert. [ID:anl_potato_6] [#draft]
+Wächter: Verbleib: bei dir. Eingetragen. [ID:anl_potato_7] [#draft]
+do WorldState.set_flag("plant.potato_entered")
 => END

@@ -31,6 +31,9 @@ and pulled), nine of them under a cloth (a prop of its own each); four dials wit
 them), the worn dial of the fragment, the bolt indicator (the cue of the small door), six lamps (the only things in the Akt with `lights`, one each, and a
 baked glow as fallback), two boilers, a pipe across the floor, the pipe that hisses and the puffs of steam (flat pictures the scene may move, fade or
 leave out, never a flash). `--preview-hall out.png` lays all of it out (3x). Nothing here is a person and nothing says what the small door is.
+
+Das Loslassen (G5): one lamp of the hall goes out and nobody mends it; `ma_lamp_hang_dark` is the hanging lamp on the same cell, the glass dark and cracked,
+without glow, light or shadow.
 """
 import os
 import sys
@@ -1138,11 +1141,16 @@ def hall_worn_dial(ms):
     return c
 
 
-def _lantern(c, cx, y0, h, emit=None):
-    """A lantern: a cap, a cage of four iron bars round a glass with a flame, a foot. Returns the mask of the glass (the glow)."""
+def _lantern(c, cx, y0, h, lit=True):
+    """A lantern: a cap, a cage of four iron bars round a glass with a flame, a foot. Returns the mask of the glass (the glow). `lit=False`
+    is the same lantern gone out: the glass is cold slate-grey, soot under the cap, no flame."""
     glass = c.rect(cx - 4, y0 + 3, cx + 4, y0 + h - 3)
-    c.paint(glass, LAMP_GLASS, 0.5 + 0.4 * (1.0 - np.abs(c.xx + 0.5 - cx) / 4.0) + 0.1 * (c.yy < y0 + h / 2), dither=False)
-    c.fill(c.rect(cx - 1, y0 + 5, cx + 1, y0 + h - 6), LAMP_GLASS[4])
+    if lit:
+        c.paint(glass, LAMP_GLASS, 0.5 + 0.4 * (1.0 - np.abs(c.xx + 0.5 - cx) / 4.0) + 0.1 * (c.yy < y0 + h / 2), dither=False)
+        c.fill(c.rect(cx - 1, y0 + 5, cx + 1, y0 + h - 6), LAMP_GLASS[4])
+    else:
+        c.paint(glass, SLATE, 0.2 + 0.3 * (1.0 - np.abs(c.xx + 0.5 - cx) / 4.0) + 0.08 * (c.yy < y0 + h / 2), dither=False)
+        c.paint(c.rect(cx - 3, y0 + 3, cx + 4, y0 + 5), BRIGHT_IRON, 0.12, dither=False)  # soot under the cap
     for bx in (cx - 5, cx + 4):
         c.paint(c.rect(bx, y0 + 2, bx + 1, y0 + h - 2), BRIGHT_IRON, 0.3, dither=False)
     c.paint(c.rect(cx - 6, y0, cx + 6, y0 + 3), BRIGHT_IRON, np.where(c.yy < y0 + 1, 0.9, 0.35), dither=False)
@@ -1163,6 +1171,27 @@ def hall_lamp_hang(ms):
     em = ms.Canvas(16, 30)
     em.fill(glass, LAMP_GLASS[3])
     return c, em
+
+
+def hall_lamp_hang_dark(ms):
+    """The hanging lamp gone out (G5: the one that fails while the levers fall, and that nobody mends): the same chain, cage, cap and foot on the same
+    16 x 30 grid and the same anchor (8, 30) as `hall_lamp_hang`, so that it stands on the cell of the lit one; the glass is dark and has a fine crack
+    (a dark line with a pale twin beside it, a short branch), no flame and nothing that glows (no emissive picture, no light). Returns the picture."""
+    c = ms.Canvas(16, 30)
+    for y in range(0, 10, 3):
+        c.fill(c.rect(7, y, 9, y + 2), BRIGHT_IRON[2])
+        c.fill(c.rect(7, y + 1, 8, y + 3), BRIGHT_IRON[3])
+    _lantern(c, 8, 10, 18, lit=False)
+    crack = [(10, 13), (10, 14), (9, 15), (9, 16), (9, 17), (8, 18), (8, 19), (7, 20), (7, 21), (6, 22)]
+    for x, y in crack:
+        c.fill(c.rect(x, y, x + 1, y + 1), SLATE[0])
+        if x + 1 < 12:
+            c.fill(c.rect(x + 1, y, x + 2, y + 1), SLATE[3])
+    for x, y in ((9, 19), (10, 20), (10, 21)):  # a short branch to the right
+        c.fill(c.rect(x, y, x + 1, y + 1), SLATE[0])
+    c.fill(c.rect(11, 20, 12, 21), SLATE[3])
+    c.outline(pa.STYLES["tal"]["outline"])
+    return c
 
 
 def hall_lamp(ms):
@@ -1403,6 +1432,8 @@ def build_hall(ms):
     lamp_light = {"offset": [0, -16], "color": "#ffd9a0", "energy": 0.9, "range": 96}
     pic, glow = hall_lamp_hang(ms)
     ms.save("tal", "ma_lamp_hang", pic, (8, 30), emissive=glow, lights=[lamp_light])
+    # G5: the lamp that fails while the levers fall: the same picture gone dark, on the same cell. No light, no glow, no shadow (the map shows it `if`).
+    ms.save("tal", "ma_lamp_hang_dark", hall_lamp_hang_dark(ms), (8, 30))
     pic, glow = hall_lamp(ms)
     ms.save("tal", "ma_lamp", pic, (8, 44), emissive=glow, shape={"circle": 4, "offset": [0, -2]}, shadow=[6, 2],
             lights=[{"offset": [0, -34], "color": "#ffd9a0", "energy": 0.85, "range": 88}])
@@ -1517,7 +1548,7 @@ def preview_hall(path):
     x, y = 10, MA_H + 20
     for pic in (hall_lever(ms, 1, False), hall_lever(ms, 1, True), hall_cover(ms), hall_bolt(ms), hall_worn_dial(ms), hall_gauge(ms, 1), hall_gauge(ms, 2),
                 hall_gauge(ms, 3), hall_gauge(ms, 4), hall_needle(ms, 1), hall_steam(ms, 3071), hall_steam(ms, 3072), hall_steam(ms, 3073),
-                hall_hiss_pipe(ms), hall_tank(ms), gate_open(ms), plant_gate(ms)):
+                hall_hiss_pipe(ms), hall_tank(ms), gate_open(ms), plant_gate(ms), hall_lamp_hang(ms)[0], hall_lamp_hang_dark(ms)):
         im = img(pic)
         if x + im.width > sheet.width:
             x, y = 10, y + 58
