@@ -173,7 +173,7 @@ func test_courage_is_set_at_the_very_end_of_the_cleft_and_not_before() -> void:
 	assert_true(Beat.reached("grat_cleft"))
 
 
-func test_the_hollow_can_be_left_alone_and_the_plateau_is_reached_by_the_detour() -> void:
+func test_a_walk_without_the_cleft_has_no_facet_and_no_fragment_and_loses_nothing() -> void:
 	# nothing is a duty: whoever does not go into the cleft has no facet and misses no scene
 	var scene := await _grat("letgo", ["plant.letgo"])
 	await _put(scene, Vector2i(86, 8))

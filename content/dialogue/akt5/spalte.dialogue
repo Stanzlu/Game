@@ -50,7 +50,7 @@ if WorldState.has_flag("fragment.hiding")
 else
 	Am Ende der Spalte weitet sich der Fels zu einer Mulde, die dir kaum bis zur Hüfte reicht. [ID:spa_hiding_1] [#draft]
 	Durch einen Riss fällt ein einziger Streifen Licht schräg auf den Boden und reicht bis an den Rand einer zusammengerollten Decke. [ID:spa_hiding_2] [#draft]
-	Draußen geht etwas vorbei. Der Streifen Licht wird einen Augenblick dunkler, Kies knirscht, dann ist es wieder still. [ID:spa_hiding_3] [#draft]
+	Draußen vor dem Riss wird der Streifen Licht einen Augenblick dunkler und kehrt zurück. Dann ist es still. [ID:spa_hiding_3] [#draft]
 	Du legst die Fingerspitzen auf die Decke. Sie ist noch warm, und sie bleibt es. [ID:spa_hiding_4] [#draft]
 	do WorldState.set_flag("fragment.hiding")
 => END
@@ -76,18 +76,18 @@ Neben der Decke steht ein Kerzenstummel, kaum zwei Finger hoch. Das Wachs ist al
 # Facette setzt die Szene am Ende der Spalte, nie dieser Cue) und das Schweigen "…" als letzte. Wer die Facette nicht hat, sieht die Antwort nicht und verpasst keine Szene. Keine der Antworten setzt etwas.
 
 ~ plateau_edge
-Der Grat läuft hier in eine Fläche aus, flach und weit, mit kleinen Steinen bedeckt. [ID:spa_plateau_1] [#draft]
-Nichts wächst darauf, und dein Schatten ist der einzige. [ID:spa_plateau_2] [#draft]
-Rundum steigt der Fels an, nur im Süden nicht. Dort ist Luft, und weit unten liegt das Tal. [ID:spa_plateau_3] [#draft]
-Der Wind hat nichts, woran er sich reiben kann, und macht hier kein Geräusch. [ID:spa_plateau_4] [#draft]
+Der Grat läuft hier in eine Fläche aus, flach und weit, mit kurzem Gras bewachsen. [ID:spa_plateau_1] [#draft]
+Nichts Hohes steht darauf, und dein Schatten ist der einzige. [ID:spa_plateau_2] [#draft]
+Im Norden und im Osten steigt der Fels an, im Süden nicht. Dort ist Luft, und weit unten liegt das Tal. [ID:spa_plateau_3] [#draft]
+Der Wind geht flach über das Gras und macht hier kaum ein Geräusch. [ID:spa_plateau_4] [#draft]
 Die Fläche ist leer. Sie sieht aus wie ein Platz, den man frei gelassen hat. [ID:spa_plateau_5] [#draft]
 - Umsehen. [ID:spa_plateau_r1] [#draft]
 	Du gehst die Fläche ab, bis an die Wand und zurück. Der Boden ist überall gleich fest, und nirgends liegt etwas. [ID:spa_plateau_6] [#draft]
 	Am Ende stehst du wieder am Südrand, und die Fläche sieht aus wie vorher. [ID:spa_plateau_7] [#draft]
 - Bis an den Rand gehen. [if WorldState.has_facet("courage") /] [ID:spa_plateau_r2] [#draft]
-	Du gehst bis an die Kante, wo die Steine aufhören. Dahinter fällt der Fels senkrecht ab, bis zu den Matten. [ID:spa_plateau_8] [#draft]
+	Du gehst bis an die Kante, wo das Gras aufhört. Dahinter fällt der Fels senkrecht ab, bis zu den Matten. [ID:spa_plateau_8] [#draft]
 	Du bleibst dort stehen und siehst hinunter. Die Anlage ist ein graues Kästchen, ihr Rauch ein gerader Strich. [ID:spa_plateau_9] [#draft]
 	Der See liegt da wie ein Stück Himmel, das nicht oben geblieben ist. [ID:spa_plateau_10] [#draft]
 - … [ID:spa_plateau_r3] [#draft]
-	Du schweigst. Der Wind macht kein Geräusch, und die Steine liegen, wie sie liegen. [ID:spa_plateau_11] [#draft]
+	Du schweigst. Der Wind geht flach über das Gras, und sonst bewegt sich nichts. [ID:spa_plateau_11] [#draft]
 => END

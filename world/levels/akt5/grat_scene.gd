@@ -44,7 +44,9 @@ func _physics_process(_delta: float) -> void:
 func _arrive_on_ledge() -> void:
 	if WorldState.quest_stage(QUEST) == "letgo":
 		WorldState.advance_quest(QUEST, "high")
-	Beat.mark("grat_ledge")
+	# the beat belongs to the walk: whoever stands here with another stage has not had it yet
+	if WorldState.quest_stage(QUEST) == "high":
+		Beat.mark("grat_ledge")
 
 
 ## The end of the cleft: the narrow way was taken to its end.

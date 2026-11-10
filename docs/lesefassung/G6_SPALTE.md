@@ -51,7 +51,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *sonst*
   - *Am Ende der Spalte weitet sich der Fels zu einer Mulde, die dir kaum bis zur Hüfte reicht.* `[#draft]`  <sub>spa_hiding_1</sub>
   - *Durch einen Riss fällt ein einziger Streifen Licht schräg auf den Boden und reicht bis an den Rand einer zusammengerollten Decke.* `[#draft]`  <sub>spa_hiding_2</sub>
-  - *Draußen geht etwas vorbei. Der Streifen Licht wird einen Augenblick dunkler, Kies knirscht, dann ist es wieder still.* `[#draft]`  <sub>spa_hiding_3</sub>
+  - *Draußen vor dem Riss wird der Streifen Licht einen Augenblick dunkler und kehrt zurück. Dann ist es still.* `[#draft]`  <sub>spa_hiding_3</sub>
   - *Du legst die Fingerspitzen auf die Decke. Sie ist noch warm, und sie bleibt es.* `[#draft]`  <sub>spa_hiding_4</sub>
 
 ### G6-5 · `candle`
@@ -74,17 +74,17 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 > gleich fest und leer), die Facette Mut als zusätzliche Antwort "Bis an den Rand gehen." (der Blick hinunter: die Anlage, der Rauch, der See; kein Lob, keine Lehre, kein Wort über das, was sie dafür getan hat; die
 > Facette setzt die Szene am Ende der Spalte, nie dieser Cue) und das Schweigen "…" als letzte. Wer die Facette nicht hat, sieht die Antwort nicht und verpasst keine Szene. Keine der Antworten setzt etwas.
 
-- *Der Grat läuft hier in eine Fläche aus, flach und weit, mit kleinen Steinen bedeckt.* `[#draft]`  <sub>spa_plateau_1</sub>
-- *Nichts wächst darauf, und dein Schatten ist der einzige.* `[#draft]`  <sub>spa_plateau_2</sub>
-- *Rundum steigt der Fels an, nur im Süden nicht. Dort ist Luft, und weit unten liegt das Tal.* `[#draft]`  <sub>spa_plateau_3</sub>
-- *Der Wind hat nichts, woran er sich reiben kann, und macht hier kein Geräusch.* `[#draft]`  <sub>spa_plateau_4</sub>
+- *Der Grat läuft hier in eine Fläche aus, flach und weit, mit kurzem Gras bewachsen.* `[#draft]`  <sub>spa_plateau_1</sub>
+- *Nichts Hohes steht darauf, und dein Schatten ist der einzige.* `[#draft]`  <sub>spa_plateau_2</sub>
+- *Im Norden und im Osten steigt der Fels an, im Süden nicht. Dort ist Luft, und weit unten liegt das Tal.* `[#draft]`  <sub>spa_plateau_3</sub>
+- *Der Wind geht flach über das Gras und macht hier kaum ein Geräusch.* `[#draft]`  <sub>spa_plateau_4</sub>
 - *Die Fläche ist leer. Sie sieht aus wie ein Platz, den man frei gelassen hat.* `[#draft]`  <sub>spa_plateau_5</sub>
 - ▸ **Umsehen.**
   - *Du gehst die Fläche ab, bis an die Wand und zurück. Der Boden ist überall gleich fest, und nirgends liegt etwas.* `[#draft]`  <sub>spa_plateau_6</sub>
   - *Am Ende stehst du wieder am Südrand, und die Fläche sieht aus wie vorher.* `[#draft]`  <sub>spa_plateau_7</sub>
 - ▸ **Bis an den Rand gehen.** *(wenn `courage`)*
-  - *Du gehst bis an die Kante, wo die Steine aufhören. Dahinter fällt der Fels senkrecht ab, bis zu den Matten.* `[#draft]`  <sub>spa_plateau_8</sub>
+  - *Du gehst bis an die Kante, wo das Gras aufhört. Dahinter fällt der Fels senkrecht ab, bis zu den Matten.* `[#draft]`  <sub>spa_plateau_8</sub>
   - *Du bleibst dort stehen und siehst hinunter. Die Anlage ist ein graues Kästchen, ihr Rauch ein gerader Strich.* `[#draft]`  <sub>spa_plateau_9</sub>
   - *Der See liegt da wie ein Stück Himmel, das nicht oben geblieben ist.* `[#draft]`  <sub>spa_plateau_10</sub>
 - ▸ **…**
-  - *Du schweigst. Der Wind macht kein Geräusch, und die Steine liegen, wie sie liegen.* `[#draft]`  <sub>spa_plateau_11</sub>
+  - *Du schweigst. Der Wind geht flach über das Gras, und sonst bewegt sich nichts.* `[#draft]`  <sub>spa_plateau_11</sub>

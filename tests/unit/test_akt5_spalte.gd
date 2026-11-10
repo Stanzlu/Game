@@ -172,6 +172,8 @@ func test_the_hiding_names_no_one_and_no_cause_and_comes_back_as_one_line() -> v
 		first.contains("Mulde") and first.contains("Streifen Licht") and first.contains("Decke")
 	)
 	assert_true(first.contains("warm"), "the one thing a body leaves")
+	for word: String in ["Kies", "knirscht", "geht", "vorbei", "Schritt", "Tritt", "Atem"]:
+		assert_false(first.contains(word), "no one passes outside and nothing sounds: %s" % word)
 	var again := await DialogueWalk.play(FILE, "hiding_place")
 	assert_eq(again.size(), 1, "a visit again is one line")
 	assert_eq(again[0], LineText.of("spa_hiding_5"))
@@ -233,6 +235,9 @@ func test_the_look_down_gives_no_praise_and_no_lesson_and_says_nothing_of_what_c
 	assert_true(told.contains("Anlage") and told.contains("See"))
 	for word: String in ["Haus", "gelernt", "geschafft", "endlich", "Tür", "Kind", "bereit"]:
 		assert_false(told.contains(word), "no %s" % word)
+	var all := await _told("plateau_edge")
+	for word: String in ["Nichts wächst", "bedeckt", "Rundum", "Steine"]:
+		assert_false(all.contains(word), "the plateau is grass, open to the west: %s" % word)
 	var plain := await _told("plateau_edge", PackedStringArray(["Umsehen"]))
 	assert_false(plain.contains("Anlage"), "the other answer does not see the Anlage from the edge")
 	var block := _block("plateau_edge")

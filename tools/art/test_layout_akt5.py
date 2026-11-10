@@ -877,6 +877,29 @@ class GratLayoutTests(unittest.TestCase):
         self.assertLess(_png_size(mapfile.res_path(smoke["textures"][0]))[1], 168, "shorter than the pass's column")
         self.assertEqual(symbols["Z"]["params"]["sprite"], "tal/gb_smoke_plant")
 
+    def test_g6_the_things_of_the_grat_stand_on_their_cells_and_the_scene_knows_the_cleft(self):
+        _, symbols, rows, spots = _grat()
+        cells = {"V": layout.GRAT_VIEW, "B": layout.GRAT_FORK_SIGN, "C": layout.GRAT_CLEFT_MOUTH, "I": layout.GRAT_ALCOVE,
+                 "J": layout.GRAT_CANDLE, "P": layout.GRAT_EDGE}
+        for glyph, cell in cells.items():
+            self.assertEqual(spots[glyph], [cell], glyph)
+        sx0, sx1, sy0, sy1 = layout.GRAT_SPALTE
+        self.assertEqual(layout.GRAT_CLEFT_MOUTH, ((sx0 + sx1) // 2, sy0 - 1), "the mouth is the cell above the cleft's middle")
+        self.assertEqual(layout.GRAT_ALCOVE, ((sx0 + sx1) // 2, sy1), "the hollow is the cleft's last row, in the middle")
+        self.assertEqual(layout.GRAT_CANDLE, (layout.GRAT_ALCOVE[0] + 1, layout.GRAT_ALCOVE[1]), "the candle beside it")
+        # the scene's two last rows of the cleft are the real ones
+        with open(os.path.join(mapfile.ROOT, "world", "levels", "akt5", "grat_scene.gd"), encoding="utf-8") as f:
+            match = re.search(r"CLEFT_END := Rect2i\((\d+), (\d+), (\d+), (\d+)\)", f.read())
+        self.assertIsNotNone(match)
+        self.assertEqual(tuple(int(g) for g in match.groups()), (sx0, sy1 - 1, sx1 - sx0 + 1, 2), "GratScene.CLEFT_END")
+        for glyph in "IJ":
+            self.assertEqual(symbols[glyph]["ground"], ",")
+            self.assertNotIn("shape", mapfile.load_catalog()[symbols[glyph]["params"]["sprite"]], "the last cells of the cleft stay walkable")
+        for out, name in (("fragments", "fragment_hiding"), ("items", "curiosity_candle_stub")):
+            path = os.path.join(mapfile.ROOT, "assets", "generated", out, name + ".png")
+            self.assertTrue(os.path.exists(path), path)
+            self.assertEqual(_png_size(path), (16, 16))
+
     def test_the_ramp_is_five_cells_wide_through_the_band_with_steps_a_heap_and_the_blocker_at_its_foot(self):
         _, symbols, rows, spots = _grat()
         rx, ry = spots["Y"][0]
