@@ -196,6 +196,10 @@ def tal():
         "<": [(4, 25)],
         "%": [(6, 25)],
         "$": [(8, 23)],
+        # Akt VI (R1): the day after the mountains Mira stands at her old camp (Λ) and goes over the bridge; the empty place
+        # is a thing to look at (ς); both cells keep their ground, so the baked tal stays
+        "Λ": [(50, 19)],
+        "ς": [(51, 20)],
     }
     for c, pts in props.items():
         for x, y in pts:

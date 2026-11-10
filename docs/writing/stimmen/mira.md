@@ -2,6 +2,12 @@
 
 **Beleg im Slice:** 106 Zeilen (86 als Mira, 20 als „Die Frau“, bis sie sich vorstellt: `tal_mira_24`).
 
+**Beleg in Akt VI (R1, `content/dialogue/akt6/leere.dialogue`):** 13 Zeilen in `mira_leaves`, davon 6 von Mira (Ø 6,0 Wörter, drei mit höchstens vier Wörtern, keine Frage, kein Ausruf), sieben Erzählzeilen
+(Plane, Bündel, Nicken, Schnalle, Riemen), dazu der Rest des Segments ohne Mira. Sie sagt, **dass** sie geht, nie wohin, und die Zeilen lesen den Ausgang des Streits am Tor als Ton, nie als Wertung: **Grenze**
+(sachlich, sie bittet um nichts, ein Nicken wie am Tor: `lee_mira_3` bis `lee_mira_5`), **angeschlossen** (trocken, ihr „Ich warte nicht.“ gilt noch, sie geht aber nicht, ohne es gesagt zu haben: `lee_mira_6` bis `lee_mira_8`),
+**geschwiegen** (kürzer und kühler, eine Tür, die nicht zugeschlagen wird, kein Wort über das Schweigen: `lee_mira_9` bis `lee_mira_11`). Am Anfang und am Ende stehen zwei Zeilen für alle drei (`lee_mira_1`, `lee_mira_2`,
+`lee_mira_12`, `lee_mira_13`): eine trockene Tatsache, dann das Gehen, und das letzte Wort hat der Ort.
+
 ## Funktion
 
 Der erste Mensch, der Nein sagt, nicht beeindruckt ist, nicht automatisch da ist, widerspricht, Abstand braucht und
@@ -22,7 +28,8 @@ und braucht die Spielfigur nicht, um zu existieren. Sie hilft, aber nur so weit,
 Fremde im Regen (nur Fakten und Verweigerung) → Name „Mira, übrigens.“ → am Feuer des Hauses (Fisch gegen Feuer; Hilfe
 als Handlung, nicht als Wort) → Abend (ein „Danke“, das sie kaum aussprechen kann; „Ans Feuer passen zwei.“) →
 „Zum Meer.“. In den folgenden Akten kreuzen sich die Wege (II, IV, VI, VII; ADR-050); sie kann gelegentlich unfair
-sein, wird nicht freundlich, nur vertrauter.
+sein, wird nicht freundlich, nur vertrauter. Akt IV: der Streit am Tor (drei Ausgänge). Akt V: nur eine Spur am Weg.
+Akt VI: sie geht, am alten Lager, ohne zu sagen wohin und ohne Abschied mit Satz; die Wege kreuzen sich, mehr nicht.
 
 ## Goldzeilen
 
@@ -41,6 +48,8 @@ sein, wird nicht freundlich, nur vertrauter.
 - `tal_eve_tarp_2` „Ans Feuer passen zwei.“
 - `tal_eve_day_12` „Das ist ungefähr jeder Tag.“
 - `tal_end_5` „Zum Meer.“
+- `lee_mira_8` „Ohne Bescheid gehe ich trotzdem nicht. Das war der Bescheid.“
+- `lee_mira_12` „Kein Regen heute. Ist aber nicht Donnerstag.“
 
 ## Gegenbeispiele (so klingt sie nie)
 

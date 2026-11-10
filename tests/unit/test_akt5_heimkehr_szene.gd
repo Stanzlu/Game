@@ -203,6 +203,7 @@ func test_a_game_after_the_end_finds_the_hearth_as_it_stood_and_plays_nothing_ag
 	WorldState.set_flag("house.guest_waechter")
 	WorldState.set_flag("chapter.act5")
 	Beat.mark("act5_home")
+	Beat.mark("act6_morning")  # the day after the end is Act VI's (R1): told already
 	var scene := await _house()
 	await wait_physics_frames(120)
 	assert_not_null(_first(scene, "waechter_home"), "he stands at the hearth")
@@ -246,8 +247,9 @@ func test_the_house_of_the_slice_and_the_other_acts_is_untouched() -> void:
 		await wait_physics_frames(2)
 
 
-func test_the_end_of_the_act_is_the_end_of_this_build_and_the_journal_follows_it() -> void:
-	assert_eq(Chapter.LAST, "act5")
+func test_the_end_of_the_act_is_no_longer_the_end_of_the_build_and_the_journal_follows_it() -> void:
+	# the day after goes on (Act VI, R1, ADR-074): the last chapter of the build moved on
+	assert_ne(Chapter.LAST, "act5")
 	assert_true(ContentDB.quest(QUEST).stage("done").is_final())
 	for key: String in ["QUEST_MAIN_MOUNTAIN_WAY_HOME", "QUEST_MAIN_MOUNTAIN_WAY_DONE"]:
 		var line := tr(key)

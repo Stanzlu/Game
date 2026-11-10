@@ -174,11 +174,20 @@ func _ready() -> void:
 	)
 	if mountain_home:
 		WorldState.clear_flag("house.guest_waechter")
+	# the day after the mountains (Act VI, R1): "Weiter" begins here, and Mira's place at the camp
+	# is set before the map of the valley is ever built
+	var morning_after := ReturnBeat.morning_due()
+	if morning_after:
+		ReturnBeat.prepare_morning()
 	super()
 	if city_home:
 		CityHomecoming.attach(self)
 	if mountain_home:
 		MountainHomecoming.attach(self)
+	if morning_after:
+		ReturnBeat.attach_morning(self, "morning_house")
+	elif ReturnBeat.quiet_due():
+		ReturnBeat.attach_quiet(self)
 	_add_window_light()
 	_add_night_surround()
 	view.bounds = Rect2(

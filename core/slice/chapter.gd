@@ -8,13 +8,13 @@ extends RefCounted
 ## start menu says so under the logo, "Neues Spiel" no longer asks). The end of Act II is not that
 ## any more: "Weiter" goes on with the morning after (ADR-070); nor is the end of Act III: the
 ## way west out of the valley goes on (ADR-071); nor is the end of Act IV: the way north into the
-## mountains goes on (ADR-073). The end of Act V is the end of this build: `act5` is LAST since
-## its first segment, and its mark comes in the house at the end of the way home (G9). LAST moves
-## with the act that ends the build;
+## mountains goes on (ADR-073); nor is the end of Act V: "Weiter" begins the day after (Act VI,
+## ADR-074). `act6` is LAST since its first segment (R1), and its mark comes in the house at the
+## end of the way home (R8). LAST moves with the act that ends the build;
 ## game code never asks for a chapter by its id before an act sets it (StoryLint).
 
 const PREFIX := "chapter."
-const LAST := "act5"
+const LAST := "act6"
 ## Flags that older builds set for a chapter: chapter id -> flag. Still read, never set again.
 const LEGACY := {"slice": "slice.finished"}
 

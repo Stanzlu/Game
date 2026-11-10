@@ -171,7 +171,8 @@ func test_the_frozen_v2_end_of_act_five_keeps_its_story() -> void:
 	assert_eq(s.ui_mode, GameState.UiMode.REAL)
 	for chapter: String in ["act1", "act2", "slice", "act3", "act4", "act5"]:
 		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
-	assert_true(Chapter.in_flags(s.flags, Chapter.LAST), "the last chapter of this build")
+	assert_false(Chapter.in_flags(s.flags, Chapter.LAST), "but the day after goes on (Act VI)")
+	assert_false(s.flags.has("beat.act6_morning"), "the day after is still to be told")
 	for facet: String in ["care", "connection", "integrity", "perception", "boundaries"]:
 		assert_true(s.facets.has(facet), "%s was her own will on the way" % facet)
 	for facet: String in ["trust", "courage"]:
