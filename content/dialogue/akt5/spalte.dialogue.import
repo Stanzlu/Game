@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://da4yx533ynb6j"
+path="res://.godot/imported/spalte.dialogue-f4a1ed9dd0bb64bc2fcaf23efe3f7771.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt5/spalte.dialogue"
+dest_files=["res://.godot/imported/spalte.dialogue-f4a1ed9dd0bb64bc2fcaf23efe3f7771.tres"]
+
+[params]
+
+defaults=true

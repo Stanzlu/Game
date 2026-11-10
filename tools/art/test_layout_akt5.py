@@ -946,14 +946,16 @@ class GratLayoutTests(unittest.TestCase):
         # the plateau: an open stretch of ground, nothing placed on it, for the door of the first house (G8)
         for y in range(py0, py1 + 1):
             for x in range(px0, px1 + 1):
-                self.assertIn(rows[y][x], ".,m", "the plateau is bare ground: %d,%d" % (x, y))
+                # G6: one invisible spot to look from at its south edge (P): no picture, no body
+                self.assertIn(rows[y][x], ".,mP", "the plateau is bare ground: %d,%d" % (x, y))
                 self.assertIn((x, y), open_reach)
         self.assertGreaterEqual((px1 - px0 + 1) * (py1 - py0 + 1), 90)
         self.assertGreaterEqual(px0, 80, "in the north-east")
         # nothing is placed in the cleft or on the island's ground but ground itself
         for y in range(sy0, sy1 + 1):
             for x in range(sx0, sx1 + 1):
-                self.assertIn(rows[y][x], ",m", "the cleft is free for G6")
+                # G6 put its mouth (C), the hollow (I) and the candle (J) into the cleft: all on ground that kept its kind
+                self.assertIn(rows[y][x], ",mIJ", "the cleft is free for G6")
 
     def test_no_boulder_hides_a_thing_with_a_cue_and_nothing_stands_on_the_way(self):
         _, symbols, rows, spots = _grat()

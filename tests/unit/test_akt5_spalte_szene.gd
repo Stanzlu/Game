@@ -46,7 +46,7 @@ func _grat(stage := "letgo", flags: Array[String] = []) -> GratScene:
 	for flag in flags:
 		WorldState.set_flag(flag)
 	WorldState.start_quest(QUEST)
-	for next in ["valley", "plant", "load", "letgo", "high"]:
+	for next: String in ["valley", "plant", "load", "letgo", "high"]:
 		if WorldState.quest_stage(QUEST) == stage:
 			break
 		WorldState.advance_quest(QUEST, next)
@@ -164,7 +164,7 @@ func test_the_hero_stage_high_is_the_end_of_the_walk_for_now() -> void:
 
 func test_courage_is_set_at_the_very_end_of_the_cleft_and_not_before() -> void:
 	var scene := await _grat("letgo", ["plant.letgo"])
-	for cell in [ON_LEDGE, MOUTH, HALF]:
+	for cell: Vector2i in [ON_LEDGE, MOUTH, HALF]:
 		await _put(scene, cell)
 		assert_false(WorldState.has_facet("courage"), "not at %s" % cell)
 	assert_false(Beat.reached("grat_cleft"))
