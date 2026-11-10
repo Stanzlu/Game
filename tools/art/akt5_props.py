@@ -34,6 +34,12 @@ leave out, never a flash). `--preview-hall out.png` lays all of it out (3x). Not
 
 Das Loslassen (G5): one lamp of the hall goes out and nobody mends it; `ma_lamp_hang_dark` is the hanging lamp on the same cell, the glass dark and cracked,
 without glow, light or shadow.
+
+Das Verstecken (G6): the Grat above the valley. A small signpost at the fork (`gb_fork_sign`: two planks, an arrow in charcoal on each, up and down, and five
+and six strokes beside them that are no letters; both halves weigh the same), the hollow at the end of the cleft (`gb_cleft_alcove`: a block of the cliff's
+warm grey stone with an arch cut into it, dark inside, a blanket rolled up on its floor, a crack from the upper left and a strip of light that ends at the
+blanket's rim; no person, no shape: the player may stand on its cell) and the candle stub on the ground beside it (`gb_candle`, 10 x 12, no shadow, it goes
+with a flag). The picture of the hollow in the 16 x 16 fragment is `tools/art/small/fragment_hiding.pix`, the stub's icon `curiosity_candle_stub.pix`.
 """
 import os
 import sys
@@ -1600,6 +1606,11 @@ def build(ms):
     ms.save("tal", "gb_thimble", thimble(ms), (5, 10))
     ms.save("tal", "gb_sign_view", view_sign(ms), (19, 44), shape={"circle": 3, "offset": [0, -1]}, shadow=[7, 2])
     ms.save("tal", "gb_smoke_plant", smoke(ms, 96), (8, 94), flat=True)
+    # Das Verstecken (G6). The candle goes with a flag and the hollow stands on a cell of the old stamp, so neither has a shadow in the catalog;
+    # the sign stands on a cell of the stamp too (the fork), with a collision of its own like the other signs and no shadow.
+    ms.save("tal", "gb_fork_sign", fork_sign(ms), (12, 24), shape={"circle": 3, "offset": [0, -1]})
+    ms.save("tal", "gb_cleft_alcove", cleft_alcove(ms), (12, 26))
+    ms.save("tal", "gb_candle", candle_stub(ms), (5, 10))
     build_hall(ms)
 
 
@@ -1611,7 +1622,7 @@ def preview(path):
     items += [scree(ms, 1821), scree(ms, 1822), scree(ms, 1823), slate_chip(ms), chalk_arrow(ms), stone_mark(ms)]
     items += [net_post(ms), net_branch(ms), iron_ring(ms), trail_sign(ms), steps(ms), planks(ms), lookout(ms), rockfall(ms), smoke(ms)]
     items += [plant_hall(ms), plant_fence(ms), plant_gate(ms), dwarf_pine(ms, 2101), hand_stone(ms), round_stone(ms), quartz(ms), marmot_den(ms),
-              thimble(ms), view_sign(ms), smoke(ms, 96)]
+              thimble(ms), view_sign(ms), smoke(ms, 96), fork_sign(ms), cleft_alcove(ms), candle_stub(ms)]
     sheet = Image.new("RGBA", (1400, 200), (96, 136, 88, 255))
     x = 6
     for item in items:
