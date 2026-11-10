@@ -509,6 +509,11 @@ GRAT_CLEFT_MOUTH = (74, 10)  # C: the mouth of the cleft (an invisible spot)
 GRAT_ALCOVE = (74, 16)  # I: the hollow in the rock at the end of the cleft (the second flashback)
 GRAT_CANDLE = (75, 16)  # J: the candle stub in the hollow (a curiosity)
 GRAT_EDGE = (86, 10)  # P: the south edge of the plateau (an invisible spot)
+# G7: the central scene at the edge of the plateau: the flat stone she sits on (two cells wide, its left cell), the child on its right cell,
+# and an invisible spot beside the stone to look at once the child is gone
+GRAT_SEAT = (79, 10)  # N
+GRAT_CHILD = (80, 10)  # K
+GRAT_SEAT_SPOT = (78, 10)  # n
 GRAT_POCKET = (69, 83, 31, 37)  # the yard of the Anlage, a pocket in the rock: x0, x1, y0, y1 (the hall is twelve cells wide, one and a half each side)
 GRAT_FENCE_Y = 38  # the fence closes the pocket from rock to rock; the gate stands in the middle of it
 GRAT_GATE = (76, 38)
@@ -540,6 +545,7 @@ GRAT_GROUND = {
     "D": ",", "d": ",", "@": ".", "1": ".", "2": ".", "3": ".", "q": ".", "7": ".", "H": ".", "Q": "m", "M": "m", "t": "m",
     "A": ",", "Z": "^", "f": ",", "G": ",", "X": ",", "Y": ",", "F": ",", "s": ",", "E": ",", "e": ",",
     "V": ",", "B": ",", "C": ",", "I": ",", "J": ",", "P": ".",
+    "N": ".", "K": ".", "n": ".",
 }
 GRAT_BLOCKS = set("h^vOoAfGXY")  # a line of sight is stopped by solid ground and by what stands tall
 
@@ -778,6 +784,9 @@ def grat_build():
     put("Y", *GRAT_RAMP_BLOCKER)
     # ---- G6: the view from the top of the ramp, the signpost at the fork, the cleft's mouth, the hollow and the candle at its end, the plateau's edge
     for glyph, cell in (("V", GRAT_VIEW), ("B", GRAT_FORK_SIGN), ("C", GRAT_CLEFT_MOUTH), ("I", GRAT_ALCOVE), ("J", GRAT_CANDLE), ("P", GRAT_EDGE)):
+        put(glyph, *cell)
+    # ---- G7: the stone, the child and the spot beside the stone
+    for glyph, cell in (("N", GRAT_SEAT), ("K", GRAT_CHILD), ("n", GRAT_SEAT_SPOT)):
         put(glyph, *cell)
     # ---- the three cairns of the valley, each in sight of the one before (the first in sight of the arrival), the stone at the foot of the first
     c1 = pick((29, 47), ".", 2.0, 3.4)
