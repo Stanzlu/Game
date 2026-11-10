@@ -1,0 +1,70 @@
+# Abstieg und Heimkehr, Akt V, Segment G9 (docs/akt5/REGIONSBRIEFE.md, Voreinstellungen O9, O10, O12, O13, O18; Bible §14, §29, §44, §45; Stilblatt waechter.md, Gegenbeispiele 1 bis 15). Nach dem Gehen des Kindes
+# geht die Spielerin hinunter: der Pass, die Straße, das Tal, das Haus (Bible §45, "Abstieg, leicht"). Der Abstieg ist der leichte, komische Teil nach dem Schwersten und sagt kein Wort über das, was oben war:
+# kein Kind, keine Kreide, keine Ringe, kein Haus auf der Fläche, keine Ursache, keine Lehre. Im Haus ist alles, wie sie es verlassen hat. Wer den Wächter am Pult losgelassen hat (die Facette trust),
+# dem klopft er an: er geht an den Kamin, den er "Herd" nennt, prüft ihn nicht ganz, sagt seinen Vorbehalt, nie einen Dank, und bleibt dort stehen. Wer ihn nicht losgelassen hat, kommt in ein stilles Haus;
+# der Kamin bleibt leer, und der Akt hängt nie an ihm (wie am Gast des Einsiedlers). Der Akt endet still im Haus, ohne Titel: Stufe, Kapitelmarke und Beat setzt die Szene in einem Block, kein Cue verabschiedet etwas.
+# Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind ausgeschrieben. Sprecher gibt es einen, den Wächter (nur in waechter_in und waechter_home; er ruft die Spielerin nie
+# beim Namen, nennt seine Angst nie, dankt nie und wird nicht geheilt; sein Humor sitzt in der Ordnung und in den Dingen, nie in seinem Körper). Der Text gilt in jedem Zustand des Hauses: ob der Antreiber an der
+# Werkbank sitzt, ob die Katze da ist, ob der Stuhl des Einsiedlers oder der von Tess steht und ob der Kamin brennt, sagt keine Zeile. Keiner der Cues dieser Datei setzt oder liest ein Flag oder eine Facette: die Szene
+# setzt house.guest_waechter, die Stufen der Heldenquest, chapter.act5 und den Beat, die Karte zeigt den Wächter am Kamin, und die Szene liest trust.
+
+# --- Der Abstieg ---------------------------------------------------------------------------------------------------------------
+# Ein unsichtbarer Blick oben im Pass, kurz unter der Tür zum Hochtal (nur mit grat.child_gone, freiwillig, jedes Mal von vorn). Derselbe Pfad von der anderen Seite, die Steinmännchen aus G1 (jedes in Sichtweite
+# des nächsten), der Bach neben dem Weg und die Bohlen. Abwärts ist leichter, und die Beine glauben es nicht ganz. Nichts erklärt, was oben war, nichts lobt, nichts deutet.
+
+~ descent_pass
+Es ist derselbe Pfad, nur von der anderen Seite. Die Steinmännchen stehen, wo sie standen, jedes in Sichtweite des nächsten, und jetzt sehen sie dir alle in den Rücken. [ID:hk5_desc_1] [#draft]
+Abwärts ist leichter. Das wissen deine Beine, aber sie glauben es nicht ganz und setzen jeden Schritt so vorsichtig, als könnte der Boden es sich anders überlegen. [ID:hk5_desc_2] [#draft]
+Der Bach läuft jetzt in deine Richtung und überholt dich bei den Bohlen, ohne sich umzusehen. [ID:hk5_desc_3] [#draft]
+=> END
+
+# --- Das Haus, still -----------------------------------------------------------------------------------------------------------
+# Die Szene spielt es beim ersten Betreten des Hauses in der Stufe home. Holz, Tee, der längst kalt ist, das Licht auf dem Boden: nichts, was von einem Zustand des Hauses abhängt, und nichts über den Weg.
+# Die Tür geht hinter ihr zu, und das Haus macht nichts daraus (ein Hauch Humor, kein Satz über Heimkehr, Trost oder Ankommen).
+
+~ home_in
+Im Haus ist es still. Es riecht nach Holz und nach Tee, der schon lange kalt ist. [ID:hk5_in_1] [#draft]
+Das Licht liegt auf dem Boden, in einem Streifen, den das Fenster zugeschnitten hat. [ID:hk5_in_2] [#draft]
+Die Tür geht hinter dir zu. Das Haus nimmt es zur Kenntnis und macht nichts daraus. [ID:hk5_in_3] [#draft]
+=> END
+
+# --- Der Wächter am Kamin (nur mit trust) --------------------------------------------------------------------------------------
+# Die Szene spielt es nur mit der Facette trust, nach dem Klopfen, wenn er vor dem Kamin steht (sie setzt danach house.guest_waechter). Er kommt mit Klemmbrett, nennt den Kamin "Herd" (bei ihm gibt es dafür
+# eine Rubrik, ein Satz über die Zuordnung) und prüft ihn nicht ganz: Einfassung, Rückwand, der Zug, die Scheite, dann nicht weiter, und das trägt er ein, in einer Rubrik, die er für diesen Fall neu anlegt
+# ("Ich trage ein, dass ich hier nicht prüfe", die Form von los_mid_4). Eine Prüfung ist keine Gefälligkeit: er erwartet keinen Dank und keinen Zwischenfall. Das letzte Wort ist ein Vorbehalt (wie anl_over_3),
+# kein Dank und keine Einsicht. Kein Wort über die Maschine, die Hebel, die Lampe, die Kartoffel, das Wort "loslassen" oder seine Angst; was er hier nicht prüft, nennt er nicht, und der Text deutet es nicht.
+
+~ waechter_in
+Der Wächter steht vor dem Kamin, das Klemmbrett im Arm. Mit dem Stift tippt er an die Einfassung und an die Rückwand, jeweils einmal. [ID:hk5_w_1] [#draft]
+Wächter: Das ist ein Kamin. Ich führe ihn unter Herd. Dort gibt es eine Rubrik. [ID:hk5_w_2] [#draft]
+Wächter: Einfassung in Ordnung. Rückwand in Ordnung. Der Zug im Rauchfang ist zulässig. [ID:hk5_w_3] [#draft]
+Wächter: Im Korb liegen Scheite. Ich zähle neun. Rinde zähle ich nicht mit. [ID:hk5_w_4] [#draft]
+Er sieht den Rauchfang hinauf, so weit man sehen kann, und hebt den Stift vom Papier. [ID:hk5_w_5] [#draft]
+Wächter: Ab hier prüfe ich nicht. Ich trage ein, dass ich hier nicht prüfe. [ID:hk5_w_6] [#draft]
+Wächter: Rubrik »Nicht ganz geprüft«. Neu angelegt. Ein Eintrag. [ID:hk5_w_7] [#draft]
+Wächter: Eine Prüfung ist keine Gefälligkeit. Dank erwarte ich keinen, einen Zwischenfall auch nicht. [ID:hk5_w_8] [#draft]
+Wächter: Ich behalte mir vor, den Rest beim nächsten Mal zu prüfen. [ID:hk5_w_9] [#draft]
+=> END
+
+# --- Das Ende, still -----------------------------------------------------------------------------------------------------------
+# Die Szene spielt es am Ende, in jedem Zustand, mit und ohne den Wächter am Kamin, und setzt danach in einem Block ohne Warten die Stufe done, die Kapitelmarke und den Beat. Darum handeln die drei Zeilen
+# nur vom Haus: das Holz, der Zug im Kamin (er geht mit und ohne Feuer und mit und ohne Gast), das Licht, das ein Stück kürzer geworden ist, und der Tee. Kein Abschied, kein Titel, kein Rückblick,
+# keine Zusammenfassung des Aktes; das letzte Wort hat das Licht, das noch bis zum Tisch reicht.
+
+~ home_close
+Irgendwo im Haus knackt das Holz, ohne dass etwas geschieht. [ID:hk5_close_1] [#draft]
+Im Kamin geht ein Zug, kaum zu hören. [ID:hk5_close_2] [#draft]
+Das Licht auf dem Boden ist ein Stück kürzer geworden. Es reicht gerade noch bis zum Tisch und zum Tee. [ID:hk5_close_3] [#draft]
+=> END
+
+# --- Der Wächter danach ---------------------------------------------------------------------------------------------------------
+# Der Wächter steht am Kamin (nur mit house.guest_waechter, die Karte; er sitzt nie, er geht nicht und er sagt nichts zum Haus). Ein Cue, ein Besuch wie der andere, keine Zustände, kein Gespräch, keine
+# Einladung, kein Dank. Ein trockener Satz in seiner Ordnung: die Spielerin steht bei ihm wie bei der Anlage unter Eins ("Eins. Du.", anl_w_2), er selbst ist hier der Besuch und zählt sich als Zwei, damit die Zahl
+# stimmt (anl_w_4); der Zug, die Scheite, und die Rubrik von eben, die nun gilt, weil er sie angelegt hat. Nichts darin deutet, warum er den oberen Teil nicht prüft.
+
+~ waechter_home
+Der Wächter steht am Kamin. Auf seinem Blatt steht unter »Nicht ganz geprüft« eine einzige Zeile. [ID:hk5_wh_1] [#draft]
+Wächter: Hier bist du Eins. Ich bin Zwei. Die Zahl stimmt. [ID:hk5_wh_2] [#draft]
+Wächter: Der Zug im Rauchfang ist weiter zulässig. Die Scheite sind unverändert. [ID:hk5_wh_3] [#draft]
+Wächter: Der obere Teil bleibt offen. Das ist so vorgesehen, seit eben. [ID:hk5_wh_4] [#draft]
+=> END

@@ -342,7 +342,12 @@ Ein Wegweiser. Die Schrift ist abgeblättert, bis auf ein Wort. [ID:tal_south_si
 => END
 
 ~ garden_bed
-Ein Gemüsebeet, seit dem Frühjahr verwildert. Unter dem Unkraut wächst trotzdem noch was. [ID:tal_bed_1]
+if WorldState.has_flag("house.garden_sprout")
+	Zwischen dem Unkraut steht ein einzelner Trieb, hellgrün, mit zwei Blättern. [ID:tal_bed_2] [#draft]
+	Er war nicht da, als du gegangen bist. Das Unkraut ringsum tut, als hätte es nichts bemerkt. [ID:tal_bed_3] [#draft]
+	Er ist klein und tut nichts weiter. Nur ein Blatt neigt sich zur Seite, als hörte es dem Bach zu. [ID:tal_bed_4] [#draft]
+else
+	Ein Gemüsebeet, seit dem Frühjahr verwildert. Unter dem Unkraut wächst trotzdem noch was. [ID:tal_bed_1]
 => END
 
 ~ rain_barrel
