@@ -123,6 +123,8 @@ func _meet() -> void:
 	await cut.wait(PAUSE)
 	await cut.say(DIALOGUE, "child_answer")
 	await cut.wait(PAUSE)
+	# the tune takes up again where it broke off
+	AudioDirector.sfx("child_hum", -8.0, 1.0)
 	await cut.say(DIALOGUE, "child_gone")
 	# the child is gone; the frames fade, and in the valley a shoot grows in the bed
 	WorldState.set_flag("grat.child_gone")

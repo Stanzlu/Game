@@ -388,9 +388,13 @@
     {
      "type": "line",
      "ref": "haus_rest_4"
+    },
+    {
+     "type": "flag",
+     "ref": "house.garden_sprout"
     }
    ],
-   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`)."
+   "payoff": "Akt V: der Garten (Plan 5.4). Der Samen hat keinen Flag; die Spielfigur trägt ihn schon, und Elysia hält ihn für den ihren (`el_wake_seed`), das Haus widerspricht (`haus_rest_4`). G7: nach der zentralen Szene wächst im Beet im Tal ein Trieb (`house.garden_sprout`, Brief O9), den kein Text nennt; die Spielerin pflanzt nichts, und der Samen bleibt im Rucksack."
   },
   {
    "id": "hausmotive",
@@ -2302,9 +2306,21 @@
     {
      "type": "line",
      "ref": "nw_wait_4"
+    },
+    {
+     "type": "line",
+     "ref": "kv_seat_3"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_gone_1"
     }
    ],
-   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus, hörbar und kein Fragment (`melody.house_hum`, Brief O5); Akt III: im Nachtwald summt es einmal, ein paar Töne, ohne Deutung (`nw_wait_4`, kein Fragment, Brief O10); Akt V: das Summen trägt die zentrale Szene, ohne ein Fragment zu sein."
+   "payoff": "Akt I: die Melodie des Kindes, danach nur noch als Summen im Dunst; Akt II: das Lied im Haus, hörbar und kein Fragment (`melody.house_hum`, Brief O5); Akt III: im Nachtwald summt es einmal, ein paar Töne, ohne Deutung (`nw_wait_4`, kein Fragment, Brief O10); Akt V: das Summen trägt die zentrale Szene, ohne ein Fragment zu sein (G7): es beginnt, wenn die Spielerin sich neben das Kind gesetzt hat (`kv_seat_3`), hört mitten in der Melodie auf, bevor sie antwortet (`kv_answer_1`), und setzt wieder ein, an derselben Stelle, bevor das Kind geht (`kv_gone_1`)."
   },
   {
    "id": "kind-warten",
@@ -2339,9 +2355,17 @@
     {
      "type": "flag",
      "ref": "forest.waited"
+    },
+    {
+     "type": "line",
+     "ref": "kv_look_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_gone_3"
     }
    ],
-   "payoff": "Akt III (W5, Nachtwald, Brief O10): ein Echo im Wald, und es bleibt eines. Eine kleine Laterne brennt am Boden und bleibt, wo sie ist, wenn man auf sie zugeht (`nw_wait_2`); wer sich neben sie setzt, hört es einmal summen, ganz leise und aus keiner Richtung (`nw_wait_4`). Kein Kind im Bild, kein Wort von ihm, keine Erklärung, kein Zähler, kein Fragment: Warten ist das Sitzen und nie eine Uhr, und wer weitergeht, verliert nichts. Akt VI: ein Blick in Elysia."
+   "payoff": "Akt III (W5, Nachtwald, Brief O10): ein Echo im Wald, und es bleibt eines. Eine kleine Laterne brennt am Boden und bleibt, wo sie ist, wenn man auf sie zugeht (`nw_wait_2`); wer sich neben sie setzt, hört es einmal summen, ganz leise und aus keiner Richtung (`nw_wait_4`). Kein Kind im Bild, kein Wort von ihm, keine Erklärung, kein Zähler, kein Fragment: Warten ist das Sitzen und nie eine Uhr, und wer weitergeht, verliert nichts. Akt V (G7): das Kind sitzt am Rand der Fläche und wartet (`kv_look_1`); es reagiert auf nichts, bis sich die Spielerin neben es setzt, und es geht irgendwann, ohne dass etwas erklärt wird, und der Text sagt es nicht einmal (`kv_gone_3`). Akt VI: ein Blick in Elysia."
   },
   {
    "id": "kind-fragmente",
@@ -2396,9 +2420,86 @@
     {
      "type": "flag",
      "ref": "fragment.hiding"
+    },
+    {
+     "type": "line",
+     "ref": "kv_frames_1"
     }
    ],
-   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder. Das Verstecken (Akt V, G6) ist das zweite: eine Mulde im Fels am Ende der Spalte, ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke reicht, draußen geht etwas vorbei, und die Decke ist noch warm und bleibt es (`spa_hiding_2`, `spa_hiding_4`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, keine Ursache, kein Wort für das, was der Ort getan hat, kein Witz davor oder danach; die Spielerin legt nur die Fingerspitzen auf die Decke. Nie Voraussetzung (Brief O7): der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder."
+   "payoff": "Akt I zeigt drei der Bilder (Flur, geschlossene Tür, leeres Zimmer), unerklärt und leise. Akt V zeigt Hand, Verstecken und das ursprüngliche Haus und fügt alle sechs zur zentralen Szene „Ich bin da.“ Jedes Fragment geht durch die Prüflinse Kind und Sensibilität (§15, §51). Nur diese sechs sind Bilder des Kindes; die Fragmente der übrigen Akte sind Spuren der Welt (`spuren-der-welt`), und `Collection.fragments()` zählt beide. Die Hand (Akt V, G2) ist das erste der drei neuen Bilder: ein Abdruck auf einem flachen Stein am Ufer des Bergsees, Wasser statt Staub, ein Tropfen am Rand, der stehen bleibt (`hoch_hand_3`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine zweite Hand, keine Ursache, kein Witz davor oder danach; nie Voraussetzung (Brief O7): wer den Stein liegen lässt, kommt zur zentralen Szene wie jeder. Das Verstecken (Akt V, G6) ist das zweite: eine Mulde im Fels am Ende der Spalte, ein einziger Streifen Licht aus einem Riss, der bis an den Rand einer zusammengerollten Decke reicht, draußen geht etwas vorbei, und die Decke ist noch warm und bleibt es (`spa_hiding_2`, `spa_hiding_4`). Vier Zeilen Erzählung, kein Wort des Kindes, kein Kind genannt, kein Erwachsener, keine Stimme, kein Schritt, keine Ursache, kein Wort für das, was der Ort getan hat, kein Witz davor oder danach; die Spielerin legt nur die Fingerspitzen auf die Decke. Nie Voraussetzung (Brief O7): der Umweg führt ebenso zum Plateau, und wer die Spalte liegen lässt, kommt zur zentralen Szene wie jeder. Die zentrale Szene (Akt V, G7) liest die sechs Flags einzeln und stellt für jedes Bild einen Rahmen in die Luft; nur die Rahmen der Bilder, die die Spielerin hält, zeigen ihres, die übrigen bleiben ohne Zeile und ohne Zähler, und der Text sagt nur, dass Rahmen erscheinen und bleiben (`kv_frames_1`, `kv_frames_2`; die Szene stellt sie als Bogen über die beiden)."
+  },
+  {
+   "id": "kind-ich-bin-da",
+   "kind": "kind",
+   "title": "Die zentrale Szene: Ich bin da",
+   "bible": "§15, §45, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "kv_look_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_look_3"
+    },
+    {
+     "type": "line",
+     "ref": "kv_seat_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_seat_3"
+    },
+    {
+     "type": "line",
+     "ref": "kv_frames_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_r1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_r2"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_4"
+    },
+    {
+     "type": "line",
+     "ref": "kv_answer_7"
+    },
+    {
+     "type": "line",
+     "ref": "kv_gone_1"
+    },
+    {
+     "type": "line",
+     "ref": "kv_gone_2"
+    },
+    {
+     "type": "line",
+     "ref": "kv_gone_3"
+    },
+    {
+     "type": "line",
+     "ref": "kv_empty_1"
+    },
+    {
+     "type": "flag",
+     "ref": "grat.child_gone"
+    },
+    {
+     "type": "flag",
+     "ref": "house.garden_sprout"
+    }
+   ],
+   "payoff": "Akt V (G7, `kind.dialogue`, Brief O8): auf dem Grat, am Rand der Hochfläche, sitzt das Kind auf einem flachen Stein und sieht ins Tal (`kv_look_1`). Es reagiert auf nichts, bis die Spielerin sich neben es setzt, wann sie will; vorher bekommt sie nur Erzählung (`kv_look_3`). Der Stein ist an ihrem Ende kühl (`kv_seat_1`), an seinem warm (`kv_gone_3`, `kv_empty_1`): es sitzt dort lange. Dann summt es ein paar Töne, das Motiv der Tal-Musik (`kv_seat_3`), und Rahmen erscheinen in der Luft über den beiden (`kv_frames_1`; die Szene legt die Bilder hinein, die die Spielerin hält, der Text sagt über die Rahmen nichts, was Inhalt, Mangel oder Menge nennt). Das Kind summt von vorn und hört mitten in der Melodie auf (`kv_answer_1`), und die Spielerin antwortet oder nicht: „Ich bin da.“ ist die unbedingte Antwort (`kv_answer_r1`), „Ich warte mit dir.“ steht nur mit der Facette `trust` daneben (`kv_answer_r2`, zweiter Leser, Brief O10), das Schweigen „…“ ist die letzte. Alle drei haben dieselbe Gestalt (ein Satz der Spielerin, eine Zeile des Kindes, ein Satz der Welt) und führen zu `child_gone`: das Kind antwortet nie auf das Gesagte, es zeigt auf etwas oder schweigt („Schau mal.“ `kv_answer_4`, „Hör mal.“ `kv_answer_7`, „…“ `kv_answer_10`), es lobt nicht, tröstet nicht, erklärt nicht, und keine Antwort ist näher oder weiter als die anderen. Dann setzt das Summen wieder ein, an derselben Stelle (`kv_gone_1`); die Spielerin sieht einen Augenblick dorthin, wohin das Kind sieht, und dann wieder neben sich (`kv_gone_2`, `kv_gone_3`). Der Text sagt das Verschwinden nicht: die Szene nimmt das Kind aus dem Bild und lässt die Rahmen verblassen, ohne Abschied, Dank und Versprechen; der Stein bleibt warm. Im Tal wächst im Beet ein Trieb, den kein Text nennt (`house.garden_sprout`, Brief O9). Die Spielerin darf sitzen bleiben, solange sie will."
   },
   {
    "id": "kleine-tuer",
@@ -3858,6 +3959,16 @@
    "flag": "fragment.worn_dial",
    "axis": "Wahrnehmung",
    "meaning": "Sie ist am abgewetzten Zifferblatt am Pult stehen geblieben: eine Rille im Glas, immer an derselben Stelle, für einen Atemzug liegt ein Zeiger über dem anderen (Spur der Welt, Akt V, G3; kein Bild des Kindes)."
+  },
+  {
+   "flag": "grat.child_gone",
+   "axis": "Kind",
+   "meaning": "Sie hat sich auf dem Grat neben das Kind gesetzt und ist geblieben (Akt V, G7, Bible §15): das Kind ist nicht mehr da, die Rahmen sind verblasst, der Stein ist an seinem einen Ende warm. Die Szene setzt es nach `child_gone` in `kind.dialogue` (der Text sagt das Verschwinden nicht, die Spielerin sieht es, wenn sie wieder neben sich sieht); die Karte zeigt danach den Platz am Stein (`seat_empty`) und keine Figur. Alle drei Antworten in `child_answer` führen hierher („Ich bin da.“, die Antwort der Facette `trust` und das Schweigen), keine ist die richtige; wer sitzen bleibt, verliert nichts. Nichts wird erklärt, es gibt keinen Abschied."
+  },
+  {
+   "flag": "house.garden_sprout",
+   "axis": "Garten",
+   "meaning": "Im Beet im Tal wächst ein Trieb (Akt V, G7, Brief O9). Die Szene setzt es, wenn das Kind gegangen ist; die Spielerin pflanzt nichts, es gibt keine Tagesaufgabe und keinen Zähler (Bible §29), und der Samen bleibt im Rucksack. Kein Text nennt den Trieb: man findet ihn, wenn man ins Tal zurückkommt. Akt VI und VII bauen den Gartenzustand aus; ob der Samen mitkommt, entscheidet sie im Finale (Bible §30)."
   }
  ]
 }
