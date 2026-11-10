@@ -76,6 +76,10 @@ func _ready() -> void:
 	if WorldState.quest_stage("main_forest_way") == "night":
 		WorldState.advance_quest("main_forest_way", "home")
 		came_home = true
+	# the way down from the mountains (Act V, G9): whoever walks into the valley after the child
+	# has come home; the step is made before super() for the same reason (the entry save)
+	if WorldState.quest_stage("main_mountain_way") in ["child", "house"]:
+		WorldState.advance_quest("main_mountain_way", "home")
 	# the way back from the Bachlauf (B3) lands at the marker spawn_bach; super() clears the name
 	var from_bachlauf := SceneTravel.pending_spawn == "bach"
 	super()

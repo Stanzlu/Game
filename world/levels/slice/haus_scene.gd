@@ -163,9 +163,22 @@ func _ready() -> void:
 	if city_home:
 		for flag: String in ["house.shelves", "house.bread", "house.guest_tess"]:
 			WorldState.clear_flag(flag)
+	# the way home from the mountains (Act V, G9): a walk that came down without the valley (an old
+	# save) is home now; a homecoming that was broken off plays again from the door: the keeper at
+	# the hearth comes with it, so the hearth is empty until he has come
+	if WorldState.quest_stage(MountainHomecoming.QUEST) in ["child", "house"]:
+		WorldState.advance_quest(MountainHomecoming.QUEST, "home")
+	var mountain_home := (
+		WorldState.quest_stage(MountainHomecoming.QUEST) == "home"
+		and not Beat.reached(MountainHomecoming.BEAT)
+	)
+	if mountain_home:
+		WorldState.clear_flag("house.guest_waechter")
 	super()
 	if city_home:
 		CityHomecoming.attach(self)
+	if mountain_home:
+		MountainHomecoming.attach(self)
 	_add_window_light()
 	_add_night_surround()
 	view.bounds = Rect2(

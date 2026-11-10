@@ -67,6 +67,7 @@ NOTCH_X = 66  # the gap in the northern wall, five cells wide (64 to 68), three 
 NOTCH_ROWS = (1, 3)
 NORTH_DOOR = (NOTCH_X, 3)  # G1's blocker stood here and the fall of rock one row behind it; G2 put the door in their place (same ground)
 NORTH_ARRIVAL = (NOTCH_X, 4)  # the arrival from the high valley, one cell south of the door
+NORTH_DESCENT = (NOTCH_X, 6)  # G9: an invisible spot to look from on the way down (`if grat.child_gone`), two cells south of the arrival; the ground is the path's
 SMOKE = (88, 14)  # the foot of the column of smoke: on the rock of the north-east, it rises into the sky above the top right
 # the fixed spots of the walk (x, y); None for y means: the first row of the shelf under the wall above it
 SPOTS = {
@@ -86,7 +87,7 @@ GROUND = {  # the ground each glyph of the map paints (the legend of pass.txt)
     "T": ".", "C": ".", "P": ".", "R": ".", "r": "m", "g": ".", "u": ".", "O": ".", "o": "m",
     "A": ".", "B": ".", "K": ".", "a": "m", "b": "m", "k": "m", "S": "m",
     "@": ".", "n": ",", "N": ",", "s": ",", "D": ",", "d": ",", "Z": "^",
-    "1": ".", "2": ".", "3": ".", "4": ",", "5": ".", "6": "y", "7": ".", "8": ".", "9": ".",
+    "1": ".", "2": ".", "3": ".", "4": ",", "5": ".", "6": "y", "7": ".", "8": ".", "9": ".", "Θ": ",",
 }
 
 
@@ -399,6 +400,7 @@ def build():
     # ---- the end: the door to the high valley in the canyon's mouth (G2), the arrival one cell south of it
     put("D", *NORTH_DOOR)
     put("d", *NORTH_ARRIVAL)
+    put("Θ", *NORTH_DESCENT)
     # ---- the smoke of the plant, on the rock of the north-east
     put("Z", *SMOKE)
     # ---- steps of wood on the ramps (at the middle of each band)

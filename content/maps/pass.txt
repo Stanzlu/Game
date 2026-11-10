@@ -64,6 +64,8 @@ Z = {"ground": "^", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 ; das Nordende (G2): die Tür ins Hochtal steht in der Lücke der Wand (Breite fünf; die Ankunft von dort liegt eine Zelle südlich). In G1 lag hier Geröll quer (Blocker mit dem Cue ridge_wait, Haufen dahinter)
 D = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "grat", "spawn": "pass", "auto": true, "size": [5, 1]}}
 d = {"ground": ",", "marker": "spawn_grat"}
+; G9: der Blick auf dem Rückweg, zwei Zellen südlich der Ankunft (unsichtbar, nur nach dem Gehen des Kindes): der Pfad von der anderen Seite
+Θ = {"ground": ",", "prop": "res://world/props/decor.tscn", "params": {"cue": "descent_pass", "dialogue": "res://content/dialogue/akt5/heimkehr.dialogue", "radius": 24, "if": "grat.child_gone"}}
 [map]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^,,,,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -71,7 +73,7 @@ d = {"ground": ",", "marker": "spawn_grat"}
 ^^^^^^^^^^^^^^.......^^^^^^^^^^^^^mm........^^^^^^^^^^^^^^^^^^^^,,D,,^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^..............mmmmmmmm...OR.......^^^^^^^^^^^mmmmm,,d,,mmmmm...^^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^.........O....mmm~mmmm................B...mmm,,,,,,,,,,mmmm....^^^^^^^^^^^^^^^^^^^
-^^^^^^^^^^^^^^^...O..........m~~~mm.O.mmmm..............,,,,,,,,,,,,,mmmm...R.^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^...O..........m~~~mm.O.mmmm..............,,,,,,,,,,Θ,,mmmm...R.^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^....R.B.....,,,,ww....ammm,,,,,......,,,,,,,,,,,,,mmbrmmom...O.^^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^.........,,,,,pww,,,,m,,,,,,,,,,,,,,,,,,,,,mmmmmmmmmmmmm.......^^^^^^^^^^^^^^^^^
 ^^^^^^^^^^^^^^^^....,.,,,,,,,,,www,,,,,,,,,,,,,,,,,,,,,,mmmm....mmmmmmm....O....^^^^^^^^^^^^^^^^
