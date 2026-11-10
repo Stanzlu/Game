@@ -66,3 +66,15 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 - **Wächter:** Hier bist du Eins. Ich bin Zwei. Die Zahl stimmt. `[#draft]`  <sub>hk5_wh_2</sub>
 - **Wächter:** Zug im Rauchfang weiter zulässig. Scheite unverändert. `[#draft]`  <sub>hk5_wh_3</sub>
 - **Wächter:** Der obere Teil bleibt offen. Das ist so vorgesehen, seit eben. `[#draft]`  <sub>hk5_wh_4</sub>
+
+## tal
+
+
+### T22 · `garden_bed`
+
+*wenn* `house.garden_sprout`
+  - *Zwischen dem Unkraut steht ein einzelner Trieb, hellgrün, mit zwei Blättern.* `[#draft]`  <sub>tal_bed_2</sub>
+  - *Er war nicht da, als du gegangen bist. Das Unkraut ringsum tut, als hätte es nichts bemerkt.* `[#draft]`  <sub>tal_bed_3</sub>
+  - *Er ist klein und tut nichts weiter. Nur ein Blatt neigt sich zur Seite, als hörte es dem Bach zu.* `[#draft]`  <sub>tal_bed_4</sub>
+*sonst*
+  - *Ein Gemüsebeet, seit dem Frühjahr verwildert. Unter dem Unkraut wächst trotzdem noch was.*  <sub>tal_bed_1</sub>
