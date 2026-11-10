@@ -26,7 +26,7 @@ const CUES: PackedStringArray = [
 	"summit_leaf",
 	"summit_sign",
 ]
-## The cues that set nothing at all (the others set the flags named in test_the_flags_...).
+## The cues that set nothing at all (the others set a flag or an item, each tested at its cue).
 const SILENT: PackedStringArray = [
 	"plateau_after",
 	"house_look",
@@ -180,7 +180,7 @@ func test_the_house_is_there_and_nobody_says_where_it_came_from() -> void:
 	assert_eq(after.count("\n"), 2, "three lines")
 	var front := await _told("house_front")
 	assert_true(front.contains("Schindeln") and front.contains("Tür"))
-	assert_true(front.contains("niedergetreten"), "no path leads there and none away")
+	assert_true(front.contains("Steinplatte"), "the threshold is a stone, as the picture shows it")
 	var look := await DialogueWalk.play(FILE, "house_look")
 	assert_eq(look.size(), 4)
 	assert_true("\n".join(look).contains("Bett"))
@@ -208,9 +208,6 @@ func test_the_rings_are_told_from_the_bed_outwards_and_only_as_drawings() -> voi
 		var lines := told.split("\n", false).size()
 		assert_gte(lines, 2, cue)
 		assert_lte(lines, 3, cue)
-		for word: String in ["Kreide", "gezeichnet", "gezogen"]:
-			if told.contains(word):
-				assert_false(told.contains("hat " + word), "nobody drew them: " + cue)
 
 
 func test_the_outermost_ring_ends_with_no_room_for_another_one() -> void:

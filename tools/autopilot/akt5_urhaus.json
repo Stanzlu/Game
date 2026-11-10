@@ -20,7 +20,7 @@
   {"quest": "main_mountain_way", "stage": "child", "t": 0.2},
   {"teleport": [87, 8], "log": "on the plateau a small house stands where nothing was", "t": 0.8},
   {"use": [87, 9], "face": "down", "log": "the look at the south edge now tells about the house", "t": 0.8},
-  {"use": [88, 6], "face": "up", "log": "the house from the front", "t": 0.8},
+  {"use": [89, 5], "face": "up", "log": "the house from the front (beside its door, which would take her in)", "t": 0.8},
   {"use": [90, 7], "face": "up", "log": "the book on its post: leafing through it, the last page is empty", "t": 0.8},
   {"wait_for": {"flag": "grat.summit_read"}, "timeout": 20, "t": 0.1},
   {"wait_for": {"flag": "fragment.summit_book"}, "timeout": 10, "log": "a trace of the world", "t": 0.1},

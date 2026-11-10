@@ -28,13 +28,12 @@ Es riecht nach Staub und nach Kreide. Dein Schritt auf den Brettern ist das einz
 => END
 
 # --- Das Haus von vorn -------------------------------------------------------------------------------------------------------
-# Cue am Haus auf der Fläche (freiwillig, immer von vorn): klein, schlicht, die Tür niedrig, die Scheibe weißlich beschlagen wie mit der flachen Hand zugestrichen, im Gras ein niedergetretener Fleck, zu dem kein Pfad führt und von
-# dem keiner wegführt. Keine Erklärung, kein Hinweis auf das Innere, nichts wird gesetzt.
+# Cue am Haus auf der Fläche (freiwillig, immer von vorn): klein, schlicht, die Tür niedrig, die Scheibe weißlich beschlagen wie mit der flachen Hand zugestrichen, eine flache Steinplatte als Schwelle, glatt getreten. Keine Erklärung, kein Hinweis auf das Innere, nichts wird gesetzt.
 
 ~ house_front
 Das Haus ist klein und schlicht, senkrechte Bretter unter einem Dach aus Schindeln, und es steht ein wenig schief. [ID:uh_front_1] [#draft]
 Die Tür ist so niedrig, dass du dich bücken müsstest. Die Scheibe des Fensters ist weißlich beschlagen, wie mit der flachen Hand zugestrichen. [ID:uh_front_2] [#draft]
-Das Gras vor der Schwelle ist niedergetreten, aber kein Pfad führt hin, und keiner führt weg. [ID:uh_front_3] [#draft]
+Vor der Tür liegt eine flache Steinplatte als Schwelle, in der Mitte glatt getreten. [ID:uh_front_3] [#draft]
 => END
 
 # --- Die sechs Linien --------------------------------------------------------------------------------------------------------
@@ -66,8 +65,8 @@ Der Weg läuft einmal ringsum und schließt sich dort, wo er anfängt. [ID:uh_st
 
 ~ ring_town
 Die fünfte Linie besteht aus kleinen Häusern, jedes ein Kästchen mit einem spitzen Dach, Wand an Wand. [ID:uh_town_1] [#draft]
-In jedem ist ein Fenster gezeichnet, ein Kreuz in einem Viereck, und keines steht offen. [ID:uh_town_2] [#draft]
-Zwischen den Häusern ist keine Gasse gelassen und keine Tür. [ID:uh_town_3] [#draft]
+Jedes ist nur ein Umriss, ohne Fenster und ohne Tür. [ID:uh_town_2] [#draft]
+Zwischen den Häusern ist keine Gasse gelassen. [ID:uh_town_3] [#draft]
 => END
 
 # Der letzte Satz sagt, dass hier nichts mehr gezeichnet ist und dass auch kein Platz dafür wäre; "Außen" und "übrig" stehen nirgends.
@@ -86,7 +85,7 @@ Hinter ihr ist nichts mehr gezeichnet, und es wäre auch kein Platz dafür. [ID:
 ~ window
 if WorldState.has_flag("urhaus.window_clear")
 	Die Scheiben sind klar, bis auf einen blauen Streifen in einer Ecke. [ID:uh_window_4] [#draft]
-	Dahinter liegen die Fläche, der Himmel und weit unten das Tal. Es ist ein Fenster, nichts weiter. [ID:uh_window_5] [#draft]
+	Dahinter liegen Gras und ein Stück Himmel, und am Rand steht ein Berg. Es ist ein Fenster, nichts weiter. [ID:uh_window_5] [#draft]
 	=> END
 Das Fenster in der Rückwand hat vier Scheiben, und jede ist von innen mit blauer Kreide überzogen. [ID:uh_window_1] [#draft]
 Strich liegt über Strich, dicht an dicht, bis vom Glas nichts mehr zu sehen ist. [ID:uh_window_2] [#draft]
@@ -104,7 +103,7 @@ Nur an den Rändern bleibt ein schmaler Streifen frei, durch den das Licht herei
 ~ window_wipe
 Du legst die Hand flach auf die Scheibe und wischst. Die Kreide geht in Streifen ab, und deine Finger werden blau. [ID:uh_wipe_1] [#draft]
 Scheibe um Scheibe wird klar, kühl und glatt unter der Hand. [ID:uh_wipe_2] [#draft]
-Dahinter liegt Licht auf der Fläche, auf dem kurzen Gras, und darüber steht der Himmel. [ID:uh_wipe_3] [#draft]
+Dahinter liegt Licht auf kurzem Gras, und darüber steht der Himmel. [ID:uh_wipe_3] [#draft]
 do WorldState.set_flag("urhaus.window_clear")
 => END
 
@@ -148,7 +147,7 @@ Vorn auf den Brettern liegt ein Stück blaue Kreide, kaum fingerlang, an einem E
 if WorldState.has_flag("grat.summit_signed")
 	Der letzte Eintrag im Buch ist deiner, und die Seite danach ist wieder leer. [ID:uh_book_3] [#draft]
 	=> END
-An einem Pfosten hängt ein Holzkasten, der Deckel schräg aufgeklappt. Ein dickes Buch liegt darin, die Seiten vom Wetter gequollen. [ID:uh_book_1] [#draft]
+Auf einem Pfosten sitzt ein Holzkasten, der Deckel schräg aufgeklappt. Ein dickes Buch liegt darin, die Seiten vom Wetter gequollen. [ID:uh_book_1] [#draft]
 Ein Bleistift hängt an einer Schnur daneben, heruntergespitzt bis auf die Länge eines Daumens. [ID:uh_book_2] [#draft]
 - Blättern. [ID:uh_book_r1] [#draft]
 	=> summit_leaf

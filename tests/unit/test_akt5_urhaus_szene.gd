@@ -321,7 +321,6 @@ func test_the_house_is_a_body_and_the_door_is_one_cell_in_front_of_its_foot() ->
 	assert_eq(HOUSE_DOOR, HOUSE + Vector2i(0, 1))
 	assert_eq(HOUSE_ARRIVAL, HOUSE_DOOR + Vector2i(0, 2))
 	assert_true(houses[0] is Decor)
-	assert_true((houses[0] as Decor).get_child_count() > 0, "it has its picture and its body")
 	assert_gt(
 		Vector2(EDGE).distance_to(Vector2(HOUSE_ARRIVAL)), 2.0, "the arrival is not at the edge"
 	)

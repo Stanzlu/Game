@@ -975,8 +975,8 @@ class GratLayoutTests(unittest.TestCase):
         reach = _reach(rows, symbols, (layout.GRAT_RAMP_X, 10), blocked={(x, hy) for x in range(hx - 1, hx + 2)})
         for cell in (layout.GRAT_HOUSE_DOOR, layout.GRAT_HOUSE_ARRIVAL, layout.GRAT_BOOK, layout.GRAT_PLATEAU_SPOT):
             self.assertIn(cell, reach, "reachable: %s" % (cell,))
-        for y in range(layout.GRAT_BOOK[1] - 1, layout.GRAT_BOOK[1] + 2):  # the post stands clear of the house's body
-            self.assertGreaterEqual(layout.GRAT_BOOK[0] - 1, hx + 1, "the book is beside the house")
+        self.assertGreaterEqual(layout.GRAT_BOOK[0] - 1, hx + 1, "the post stands beside the house's body, not in it")
+        self.assertGreater(layout.GRAT_BOOK[1], hy, "and below its foot row")
         for out, name in (("fragments", "fragment_first_house"), ("fragments", "fragment_summit_book"), ("items", "curiosity_blue_chalk")):
             path = os.path.join(mapfile.ROOT, "assets", "generated", out, name + ".png")
             self.assertTrue(os.path.exists(path), path)

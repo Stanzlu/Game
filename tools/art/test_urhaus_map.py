@@ -21,13 +21,14 @@ DECOR = "res://world/props/decor.tscn"
 # the room: the cells 4 to 28 and 4 to 17 of the map (25 x 14 cells = 400 x 224 pixels; 427 x 240 pixels are in view at zoom 1.5)
 ROOM = (4, 4, 25, 14)
 # the six rings, from the innermost: the cue of the spot on its line, the spot's glyph and cell, and the ring's bounding box in the picture's pixels
-# (the picture of the rings starts with its top left corner in the cell (5, 7))
+# (the picture of the rings starts with its top left corner in the cell (5, 7); the tops of the rings 2 to 5 lie 1 to 3 pixels lower than the contract drew them,
+# so that the lines never touch: tools/art/akt5_house_props.py)
 RINGS = [
     ("ring_room", "a", (18, 10), (168, 40, 216, 72)),
-    ("ring_wall", "b", (20, 10), (136, 30, 248, 84)),
-    ("ring_garden", "c", (22, 10), (104, 22, 280, 96)),
-    ("ring_street", "d", (24, 10), (72, 14, 312, 108)),
-    ("ring_town", "e", (26, 10), (40, 8, 344, 120)),
+    ("ring_wall", "b", (20, 10), (136, 32, 248, 84)),
+    ("ring_garden", "c", (22, 10), (104, 25, 280, 96)),
+    ("ring_street", "d", (24, 10), (72, 17, 312, 108)),
+    ("ring_town", "e", (26, 10), (40, 10, 344, 120)),
     ("ring_world", "f", (27, 10), (4, 2, 364, 156)),
 ]
 RINGS_ORIGIN = (5, 7)

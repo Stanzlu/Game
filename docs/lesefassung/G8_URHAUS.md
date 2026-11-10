@@ -30,12 +30,11 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### G8-3 · `house_front`
 
 > --- Das Haus von vorn -------------------------------------------------------------------------------------------------------
-> Cue am Haus auf der Fläche (freiwillig, immer von vorn): klein, schlicht, die Tür niedrig, die Scheibe weißlich beschlagen wie mit der flachen Hand zugestrichen, im Gras ein niedergetretener Fleck, zu dem kein Pfad führt und von
-> dem keiner wegführt. Keine Erklärung, kein Hinweis auf das Innere, nichts wird gesetzt.
+> Cue am Haus auf der Fläche (freiwillig, immer von vorn): klein, schlicht, die Tür niedrig, die Scheibe weißlich beschlagen wie mit der flachen Hand zugestrichen, eine flache Steinplatte als Schwelle, glatt getreten. Keine Erklärung, kein Hinweis auf das Innere, nichts wird gesetzt.
 
 - *Das Haus ist klein und schlicht, senkrechte Bretter unter einem Dach aus Schindeln, und es steht ein wenig schief.* `[#draft]`  <sub>uh_front_1</sub>
 - *Die Tür ist so niedrig, dass du dich bücken müsstest. Die Scheibe des Fensters ist weißlich beschlagen, wie mit der flachen Hand zugestrichen.* `[#draft]`  <sub>uh_front_2</sub>
-- *Das Gras vor der Schwelle ist niedergetreten, aber kein Pfad führt hin, und keiner führt weg.* `[#draft]`  <sub>uh_front_3</sub>
+- *Vor der Tür liegt eine flache Steinplatte als Schwelle, in der Mitte glatt getreten.* `[#draft]`  <sub>uh_front_3</sub>
 
 ### G8-4 · `ring_room`
 
@@ -67,8 +66,8 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 ### G8-8 · `ring_town`
 
 - *Die fünfte Linie besteht aus kleinen Häusern, jedes ein Kästchen mit einem spitzen Dach, Wand an Wand.* `[#draft]`  <sub>uh_town_1</sub>
-- *In jedem ist ein Fenster gezeichnet, ein Kreuz in einem Viereck, und keines steht offen.* `[#draft]`  <sub>uh_town_2</sub>
-- *Zwischen den Häusern ist keine Gasse gelassen und keine Tür.* `[#draft]`  <sub>uh_town_3</sub>
+- *Jedes ist nur ein Umriss, ohne Fenster und ohne Tür.* `[#draft]`  <sub>uh_town_2</sub>
+- *Zwischen den Häusern ist keine Gasse gelassen.* `[#draft]`  <sub>uh_town_3</sub>
 
 ### G8-9 · `ring_world`
 
@@ -87,7 +86,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 *wenn* `urhaus.window_clear`
   - *Die Scheiben sind klar, bis auf einen blauen Streifen in einer Ecke.* `[#draft]`  <sub>uh_window_4</sub>
-  - *Dahinter liegen die Fläche, der Himmel und weit unten das Tal. Es ist ein Fenster, nichts weiter.* `[#draft]`  <sub>uh_window_5</sub>
+  - *Dahinter liegen Gras und ein Stück Himmel, und am Rand steht ein Berg. Es ist ein Fenster, nichts weiter.* `[#draft]`  <sub>uh_window_5</sub>
   - *→ Ende des Szenenstücks*
 - *Das Fenster in der Rückwand hat vier Scheiben, und jede ist von innen mit blauer Kreide überzogen.* `[#draft]`  <sub>uh_window_1</sub>
 - *Strich liegt über Strich, dicht an dicht, bis vom Glas nichts mehr zu sehen ist.* `[#draft]`  <sub>uh_window_2</sub>
@@ -105,7 +104,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 
 - *Du legst die Hand flach auf die Scheibe und wischst. Die Kreide geht in Streifen ab, und deine Finger werden blau.* `[#draft]`  <sub>uh_wipe_1</sub>
 - *Scheibe um Scheibe wird klar, kühl und glatt unter der Hand.* `[#draft]`  <sub>uh_wipe_2</sub>
-- *Dahinter liegt Licht auf der Fläche, auf dem kurzen Gras, und darüber steht der Himmel.* `[#draft]`  <sub>uh_wipe_3</sub>
+- *Dahinter liegt Licht auf kurzem Gras, und darüber steht der Himmel.* `[#draft]`  <sub>uh_wipe_3</sub>
 
 ### G8-12 · `first_house`
 
@@ -145,7 +144,7 @@ Lesefassung: der Text in der Reihenfolge, in der das Spiel ihn zeigt. *Kursiv* i
 *wenn* `grat.summit_signed`
   - *Der letzte Eintrag im Buch ist deiner, und die Seite danach ist wieder leer.* `[#draft]`  <sub>uh_book_3</sub>
   - *→ Ende des Szenenstücks*
-- *An einem Pfosten hängt ein Holzkasten, der Deckel schräg aufgeklappt. Ein dickes Buch liegt darin, die Seiten vom Wetter gequollen.* `[#draft]`  <sub>uh_book_1</sub>
+- *Auf einem Pfosten sitzt ein Holzkasten, der Deckel schräg aufgeklappt. Ein dickes Buch liegt darin, die Seiten vom Wetter gequollen.* `[#draft]`  <sub>uh_book_1</sub>
 - *Ein Bleistift hängt an einer Schnur daneben, heruntergespitzt bis auf die Länge eines Daumens.* `[#draft]`  <sub>uh_book_2</sub>
 - ▸ **Blättern.**
   - *→ weiter bei* `summit_leaf`
