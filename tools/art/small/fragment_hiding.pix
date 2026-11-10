@@ -1,0 +1,23 @@
+# Fragment Verstecken (G6): eine Mulde im Fels, schmal und dunkel, gerade tief genug für jemand Kleines; ein Streifen Licht fällt von links durch einen Spalt in der Wand schräg hinein und reicht auf dem Boden bis an den Rand einer zusammengerollten Decke. Ein Bild des Kindes, ohne Kind, ohne Erwachsene, ohne Anlass
+name: fragment_hiding
+out: assets/generated/fragments
+size: 16x16
+palette: o=#1b1f27 s=#9ea4b0 t=#808796 k=#5e6574 d=#2c3440 y=#f3e8b8 l=#d8c48c b=#8a5a3e B=#5e3a2a h=#b98258
+outline: o
+---
+................
+.oooooooooooooo.
+.osssssssstttto.
+.osyysskddkttto.
+.ossyykddddktto.
+.ossyykdddddkto.
+.osttyydddddkto.
+.ottttyyddddkto.
+.otttkyyddddkto.
+.otttkdyydhhbko.
+.ottkddyyhBhbko.
+.ottkdlllhbbBko.
+.otttkkkkkkkkko.
+.okkkkkkkkkkkko.
+.oooooooooooooo.
+................

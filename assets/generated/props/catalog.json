@@ -1978,6 +1978,24 @@
    "res://assets/generated/props/tal/gb_cairn_road.png"
   ]
  },
+ "tal/gb_candle": {
+  "anchor": [
+   5,
+   10
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_candle.png"
+  ]
+ },
+ "tal/gb_cleft_alcove": {
+  "anchor": [
+   12,
+   26
+  ],
+  "textures": [
+   "res://assets/generated/props/tal/gb_cleft_alcove.png"
+  ]
+ },
  "tal/gb_dwarf_pine": {
   "anchor": [
    24,
@@ -1999,6 +2017,22 @@
    "res://assets/generated/props/tal/gb_dwarf_pine_0.png",
    "res://assets/generated/props/tal/gb_dwarf_pine_1.png",
    "res://assets/generated/props/tal/gb_dwarf_pine_2.png"
+  ]
+ },
+ "tal/gb_fork_sign": {
+  "anchor": [
+   12,
+   24
+  ],
+  "shape": {
+   "circle": 3,
+   "offset": [
+    0,
+    -1
+   ]
+  },
+  "textures": [
+   "res://assets/generated/props/tal/gb_fork_sign.png"
   ]
  },
  "tal/gb_hand_stone": {

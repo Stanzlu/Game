@@ -502,6 +502,13 @@ GRAT_RAMP_X = 16  # the ramp up to the Grat: five cells wide (14 to 18) through 
 GRAT_RAMP_BLOCKER = (GRAT_RAMP_X, 19)  # the blocker `ramp_wait`: the last ramp row, rock on both sides of it
 GRAT_RAMP_HEAP = (GRAT_RAMP_X, 18)  # the scree heap in front of the steps (it goes with the blocker)
 GRAT_RAMP_STEPS = (GRAT_RAMP_X, 14)
+# G6: the things on the Grat (they stand on cells that kept their ground: the layout, and with it the bake, does not change)
+GRAT_VIEW = (18, 9)  # V: the view at the top of the ramp (an invisible spot to look from)
+GRAT_FORK_SIGN = (65, 9)  # B: the signpost at the fork round the rock island
+GRAT_CLEFT_MOUTH = (74, 10)  # C: the mouth of the cleft (an invisible spot)
+GRAT_ALCOVE = (74, 16)  # I: the hollow in the rock at the end of the cleft (the second flashback)
+GRAT_CANDLE = (75, 16)  # J: the candle stub in the hollow (a curiosity)
+GRAT_EDGE = (86, 10)  # P: the south edge of the plateau (an invisible spot)
 GRAT_POCKET = (69, 83, 31, 37)  # the yard of the Anlage, a pocket in the rock: x0, x1, y0, y1 (the hall is twelve cells wide, one and a half each side)
 GRAT_FENCE_Y = 38  # the fence closes the pocket from rock to rock; the gate stands in the middle of it
 GRAT_GATE = (76, 38)
@@ -532,6 +539,7 @@ GRAT_GROUND = {
     "L": ".", "l": "m", "O": ".", "o": "m", "R": ".", "r": "m", "S": "m", "g": ".", "u": ".",
     "D": ",", "d": ",", "@": ".", "1": ".", "2": ".", "3": ".", "q": ".", "7": ".", "H": ".", "Q": "m", "M": "m", "t": "m",
     "A": ",", "Z": "^", "f": ",", "G": ",", "X": ",", "Y": ",", "F": ",", "s": ",", "E": ",", "e": ",",
+    "V": ",", "B": ",", "C": ",", "I": ",", "J": ",", "P": ".",
 }
 GRAT_BLOCKS = set("h^vOoAfGXY")  # a line of sight is stopped by solid ground and by what stands tall
 
@@ -768,6 +776,9 @@ def grat_build():
     put("s", *GRAT_RAMP_STEPS)
     put("F", *GRAT_RAMP_HEAP)
     put("Y", *GRAT_RAMP_BLOCKER)
+    # ---- G6: the view from the top of the ramp, the signpost at the fork, the cleft's mouth, the hollow and the candle at its end, the plateau's edge
+    for glyph, cell in (("V", GRAT_VIEW), ("B", GRAT_FORK_SIGN), ("C", GRAT_CLEFT_MOUTH), ("I", GRAT_ALCOVE), ("J", GRAT_CANDLE), ("P", GRAT_EDGE)):
+        put(glyph, *cell)
     # ---- the three cairns of the valley, each in sight of the one before (the first in sight of the arrival), the stone at the foot of the first
     c1 = pick((29, 47), ".", 2.0, 3.4)
     put("1", *c1)

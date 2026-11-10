@@ -34,6 +34,12 @@ leave out, never a flash). `--preview-hall out.png` lays all of it out (3x). Not
 
 Das Loslassen (G5): one lamp of the hall goes out and nobody mends it; `ma_lamp_hang_dark` is the hanging lamp on the same cell, the glass dark and cracked,
 without glow, light or shadow.
+
+Das Verstecken (G6): the Grat above the valley. A small signpost at the fork (`gb_fork_sign`: two planks, an arrow in charcoal on each, up and down, and five
+and six strokes beside them that are no letters; both halves weigh the same), the hollow at the end of the cleft (`gb_cleft_alcove`: a block of the cliff's
+warm grey stone with an arch cut into it, dark inside, a blanket rolled up on its floor, a crack from the upper left and a strip of light that ends at the
+blanket's rim; no person, no shape: the player may stand on its cell) and the candle stub on the ground beside it (`gb_candle`, 10 x 12, no shadow, it goes
+with a flag). The picture of the hollow in the 16 x 16 fragment is `tools/art/small/fragment_hiding.pix`, the stub's icon `curiosity_candle_stub.pix`.
 """
 import os
 import sys
@@ -863,6 +869,123 @@ def view_sign(ms):
     return c
 
 
+# =========================================================================== Das Verstecken (G6): the fork, the hollow, the candle
+CHARCOAL = ramp("#16141a", "#2a2628", "#4a4446", "#6e6666")  # a stick of charcoal drawn over wood: black, with a smudged grey
+WAX = ramp("#5e5240", "#a89878", "#d0c29c", "#ebe0c0", "#faf6e6")  # old hard wax, the item icon's colours
+WOOL = ramp("#3e2418", "#5e3a2a", "#8a5a3e", "#b98258")  # a rolled blanket: brown wool, as in the fragment
+DAYLIGHT = ramp("#a89868", "#d8c48c", "#f3e8b8", "#fff6d8")  # the strip of light that falls through the crack
+
+
+def _strokes(c, x0, step, heights, ink, bars=()):
+    """Charcoal 'writing' that is not writing: one stroke per letter (a column of pixels, `heights` = (top row, bottom row) each), a
+    crossbar on the strokes in `bars`, the strokes `step` pixels apart from `x0` on. Nothing in it can be read."""
+    for k, (y0, y1) in enumerate(heights):
+        x = x0 + k * step
+        c.fill(c.rect(x, y0, x + 1, y1 + 1), ink[1] if k % 3 else ink[0])
+        if k in bars:
+            c.fill(c.rect(x + 1, y0 + 1, x + 2, y0 + 2), ink[1])
+
+
+def fork_sign(ms):
+    """The signpost at the fork of the Grat: one post, a weathered board on it in two planks, and on each plank an arrow drawn in charcoal
+    (the upper one points up, the lower one down) with a few strokes beside it, a word each, no letter in them. The two halves weigh the
+    same: the same arrow, the same length of word, no cross, no mark, nothing to say which way is better. 24 x 26, anchor (12, 24)."""
+    rng = np.random.default_rng(2301)
+    st, ex = pa.STYLES["tal"], ms.EXTRA["tal"]
+    c = ms.Canvas(24, 26)
+    grain = pa.value_noise(26, 24, (1, 5), rng)
+    post = c.rect(10, 12, 14, 25)
+    c.paint(post, ex["plank"], np.where(c.xx < 11.5, 0.5, 0.2) + 0.1 * (grain - 0.5), dither=False)
+    c.paint(c.ellipse(12, 24.4, 6.5, 1.7), st["stone"], 0.3, dither=False)  # the stones heaped round its foot
+    board = c.rect(2, 2, 22, 17)
+    c.paint(board, ex["plank"], 0.64 + 0.12 * (1 - (c.yy - 2) / 15) + 0.12 * (grain - 0.5), contrast=2.0)
+    c.paint(c.rect(2, 2, 22, 3), ex["plank"], 0.92, dither=False)  # the lit top edge
+    c.paint(c.rect(2, 9, 22, 10), ex["plank"], 0.1, dither=False)  # the seam between the two planks
+    c.paint(c.rect(2, 16, 22, 17), ex["plank"], 0.1, dither=False)
+    # the upper arrow (point up) and the lower one (point down): a three-pixel head on a three-pixel shaft each, the shaft one stroke thick
+    for x0, x1, y in ((5, 5, 3), (4, 6, 4), (3, 7, 5)):
+        c.fill(c.rect(x0, y, x1 + 1, y + 1), CHARCOAL[1])
+    c.fill(c.rect(5, 6, 6, 9), CHARCOAL[1])
+    c.fill(c.rect(5, 10, 6, 13), CHARCOAL[1])
+    for x0, x1, y in ((3, 7, 13), (4, 6, 14), (5, 5, 15)):
+        c.fill(c.rect(x0, y, x1 + 1, y + 1), CHARCOAL[1])
+    c.fill(c.rect(5, 3, 6, 4), CHARCOAL[0])
+    c.fill(c.rect(5, 15, 6, 16), CHARCOAL[0])
+    # the words beside them: five strokes beside the upper arrow, six beside the lower one
+    _strokes(c, 10, 2, [(4, 7), (5, 7), (4, 7), (5, 8), (4, 7)], CHARCOAL, bars=(2,))
+    _strokes(c, 9, 2, [(11, 14), (12, 14), (11, 14), (11, 15), (12, 14), (11, 14)], CHARCOAL, bars=(3,))
+    for x, y in ((7, 8), (8, 13), (20, 6), (19, 15)):  # a smudge where a thumb was
+        c.fill(c.rect(x, y, x + 1, y + 1) & board, CHARCOAL[3])
+    c.fill(c.rect(21, 3, 22, 4), ex["iron"][3])
+    c.fill(c.rect(21, 15, 22, 16), ex["iron"][3])
+    c.outline(st["outline"])
+    return c
+
+
+def cleft_alcove(ms):
+    """The hollow at the end of the cleft: a block of the cliff's own warm grey stone, rounded on top, and cut into its front an arch, just
+    deep enough for someone small to crouch in. Inside it is dark; on the floor lies a blanket rolled up, its end towards the light; a thin
+    crack runs down through the stone from the upper left into the hollow, and a strip of light falls aslant from it to the floor and
+    ends at the rim of the blanket. Nothing and nobody else. 24 x 28, anchor (12, 26): the block's foot, the cell's middle at its sill."""
+    rng = np.random.default_rng(2303)
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(24, 28)
+    body = (c.rect(1, 8, 23, 27) | c.ellipse(12, 12.5, 11.5, 9.5)) & ~(c.rect(0, 25, 2, 28) | c.rect(22, 25, 24, 28))
+    f1, f2, cid = pa.worley(28, 24, 5, rng, 0.9)
+    facet = ((cid * 7919) % 97) / 97.0
+    v = 0.3 + 0.5 * c.sphere(8, 8, 17, 18) + 0.16 * (facet - 0.5) + 0.08 * (pa.value_noise(28, 24, 3, rng) - 0.5)
+    v = np.where(f2 - f1 < 0.8, v - 0.2, v)  # the dark joints between the stones
+    v = v + 0.16 * (cid != np.roll(cid, 1, 0)) - 0.14 * (cid != np.roll(cid, -1, 0))  # every stone lit along its top and dark under
+    c.paint(body, st["cliff"], v, contrast=2.0, dither=False)
+    c.paint(body & (c.yy >= 25), st["cliff"], 0.06, dither=False)  # the dark foot
+    c.paint(body & (c.yy >= 23) & (c.yy < 25), st["cliff"], 0.78, dither=False)  # the sill, lit on its top
+    # the arch cut into the front: its reveal lit on the upper left, dark on the lower right, then the hollow itself, almost black
+    arch = (c.rect(6, 13, 18, 23) | c.ellipse(12, 13, 6, 5.6)) & body
+    inner = (c.rect(7, 14, 17, 23) | c.ellipse(12, 13.6, 5, 5)) & arch
+    reveal = arch & ~inner
+    c.paint(reveal, st["cliff"], np.where((c.xx < 12) | (c.yy < 12), 0.92, 0.12), dither=False)
+    c.fill(inner, np.array([20, 18, 22], np.float32))  # the back wall
+    c.fill(inner & (c.yy >= 17), np.array([26, 24, 28], np.float32))  # a little lighter lower down
+    c.fill(inner & (c.xx < 8.5), np.array([12, 11, 15], np.float32))  # the left side of the hollow in its own shadow
+    c.fill(inner & (c.yy >= 21), np.array([56, 52, 54], np.float32))  # the floor of the hollow
+    c.fill(inner & (c.yy >= 21) & (c.yy < 22), np.array([78, 73, 72], np.float32))  # its lit front edge
+    # the blanket: a roll on the floor, lit on its left end, the end face a ring of wool
+    roll = (c.ellipse(14.5, 19.6, 3.4, 2.7) | c.rect(12, 17, 17, 22)) & inner
+    c.paint(roll, WOOL, 0.38 + 0.55 * c.sphere(12.5, 17.6, 6.5, 5.5), dither=False)
+    c.paint(roll & (c.yy >= 21), WOOL, 0.06, dither=False)
+    c.fill(c.rect(12, 18, 13, 20) & roll, WOOL[0])  # the coil of the end face
+    c.fill(c.rect(11, 17, 12, 18) & roll, WOOL[3])
+    # the crack through the stone (one pixel, from the block's upper left) and the strip of light in the hollow (two pixels, aslant): down to
+    # the floor and along it to the rim of the roll
+    for k, (x, y) in enumerate(((2, 7), (3, 8), (3, 9), (4, 10), (4, 11), (5, 12), (5, 13))):
+        c.fill(c.rect(x, y, x + 1, y + 1) & body, DAYLIGHT[3 if k % 4 == 0 else 2])
+    for y in range(13, 21):
+        x = int(round(6 + (y - 13) * 4 / 8))
+        c.fill(c.rect(x, y, x + 1, y + 1) & inner & ~roll, DAYLIGHT[2])
+        c.fill(c.rect(x + 1, y, x + 2, y + 1) & inner & ~roll, DAYLIGHT[1])
+    c.fill(c.rect(9, 21, 12, 22) & inner & ~roll, DAYLIGHT[1])  # the patch on the floor, to the roll's rim
+    c.fill(c.rect(9, 21, 11, 22) & inner & ~roll, DAYLIGHT[2])
+    c.outline(st["outline"])
+    return c
+
+
+def candle_stub(ms):
+    """A candle stub on the ground, hardly two fingers high: old hard wax, the top pressed flat, one frozen drip down its side, a short dark
+    wick with no soot on it, a little flat pool of wax at its foot. 10 x 12, anchor (5, 10)."""
+    st = pa.STYLES["tal"]
+    c = ms.Canvas(10, 12)
+    body = c.rect(2, 4, 8, 10)
+    c.paint(body, WAX, np.where(c.xx < 3.5, 0.9, np.where(c.xx >= 6, 0.22, 0.58)), contrast=2.0, dither=False)
+    c.paint(c.ellipse(5, 4.4, 3.1, 1.7), WAX, 0.86, dither=False)  # the top, pressed flat
+    c.fill(c.rect(5, 3, 6, 5), np.array([36, 30, 26], np.float32))  # the wick, a dark short line
+    c.fill(c.rect(4, 4, 5, 5), WAX[1])  # the dip round its foot
+    c.fill(c.rect(6, 5, 7, 8), WAX[3])  # the frozen drip down the front
+    c.paint(c.ellipse(5, 10.4, 4.0, 1.3), WAX, 0.5, dither=False)  # the pool at the foot
+    c.paint(c.ellipse(5, 10.8, 3.4, 0.9) & (c.xx > 5), WAX, 0.22, dither=False)
+    c.outline(st["outline"])
+    return c
+
+
 # =========================================================================== Die Anlage (G3): the gate opens, the hall (prefix `ma_`)
 # The hall of the Wächter, seen from the front like the workshop (Klasse S, zoom 1.5): a room of 25 x 14 cells (400 x 224 pixels, the map's room
 # is the cells 4 to 28 and 4 to 17). The back wall (rows 0 to 2) is cold slate-grey cut stone under an iron girder, with the pipes along its
@@ -1483,6 +1606,11 @@ def build(ms):
     ms.save("tal", "gb_thimble", thimble(ms), (5, 10))
     ms.save("tal", "gb_sign_view", view_sign(ms), (19, 44), shape={"circle": 3, "offset": [0, -1]}, shadow=[7, 2])
     ms.save("tal", "gb_smoke_plant", smoke(ms, 96), (8, 94), flat=True)
+    # Das Verstecken (G6). The candle goes with a flag and the hollow stands on a cell of the old stamp, so neither has a shadow in the catalog;
+    # the sign stands on a cell of the stamp too (the fork), with a collision of its own like the other signs and no shadow.
+    ms.save("tal", "gb_fork_sign", fork_sign(ms), (12, 24), shape={"circle": 3, "offset": [0, -1]})
+    ms.save("tal", "gb_cleft_alcove", cleft_alcove(ms), (12, 26))
+    ms.save("tal", "gb_candle", candle_stub(ms), (5, 10))
     build_hall(ms)
 
 
@@ -1494,7 +1622,7 @@ def preview(path):
     items += [scree(ms, 1821), scree(ms, 1822), scree(ms, 1823), slate_chip(ms), chalk_arrow(ms), stone_mark(ms)]
     items += [net_post(ms), net_branch(ms), iron_ring(ms), trail_sign(ms), steps(ms), planks(ms), lookout(ms), rockfall(ms), smoke(ms)]
     items += [plant_hall(ms), plant_fence(ms), plant_gate(ms), dwarf_pine(ms, 2101), hand_stone(ms), round_stone(ms), quartz(ms), marmot_den(ms),
-              thimble(ms), view_sign(ms), smoke(ms, 96)]
+              thimble(ms), view_sign(ms), smoke(ms, 96), fork_sign(ms), cleft_alcove(ms), candle_stub(ms)]
     sheet = Image.new("RGBA", (1400, 200), (96, 136, 88, 255))
     x = 6
     for item in items:

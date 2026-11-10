@@ -6,9 +6,18 @@ extends LookScene
 ## with `if`/`unless` and in the dialogue; this script starts and ends the two quests that belong to
 ## the valley (the hero's walk takes its next step on arrival, the stone that will not stay lies
 ## down once all three cairns have been tried) and marks the beats. No cutscene, no lock.
+## G6: once the keeper has written the letting go down (`plant.letgo`) the ramp is free and the Grat
+## lies over the valley. Whoever stands on its ledge has the walk's next step (`high`); whoever
+## goes to the very end of the cleft over the Anlage has done something in spite of the dark and
+## the narrowness, and that is the facet `courage` (it is nobody's duty: the detour round the rock
+## island leads to the plateau as well, and the picture in the hollow is only looked at).
 
 const QUEST := "main_mountain_way"
 const STONE_QUEST := "side_grat_stone"
+## The ledge along the northern wall (rows 2 to 10, from the top of the ramp to the plateau).
+const LEDGE := Rect2i(14, 2, 78, 9)
+## The last two rows of the cleft (it is three cells wide and six deep, a dead end).
+const CLEFT_END := Rect2i(73, 15, 3, 2)
 
 
 func _ready() -> void:
@@ -23,11 +32,36 @@ func _ready() -> void:
 	Beat.mark("grat_enter")
 
 
+func _physics_process(_delta: float) -> void:
+	var cell := map.world_to_cell(player.global_position)
+	if LEDGE.has_point(cell) and not Beat.reached("grat_ledge"):
+		_arrive_on_ledge()
+	if CLEFT_END.has_point(cell) and not WorldState.has_facet("courage"):
+		_reach_cleft_end()
+
+
+## She stands on the Grat: the walk goes one step on.
+func _arrive_on_ledge() -> void:
+	if WorldState.quest_stage(QUEST) == "letgo":
+		WorldState.advance_quest(QUEST, "high")
+	# the beat belongs to the walk: whoever stands here with another stage has not had it yet
+	if WorldState.quest_stage(QUEST) == "high":
+		Beat.mark("grat_ledge")
+
+
+## The end of the cleft: the narrow way was taken to its end.
+func _reach_cleft_end() -> void:
+	WorldState.set_facet("courage")
+	Beat.mark("grat_cleft")
+
+
 func _on_flag_changed(id: String, value: bool) -> void:
 	if not value:
 		return
 	if id == "fragment.hand":
 		Beat.mark("grat_hand")
+	elif id == "fragment.hiding":
+		Beat.mark("grat_hiding")
 	elif id.begins_with("grat.stone_"):
 		_sync_stone_quest()
 
