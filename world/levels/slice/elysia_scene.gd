@@ -30,6 +30,11 @@ const WAKE_SIT_SECONDS := 1.2
 const WAKE_TURN_SECONDS := 0.4
 ## The cue of the greeter on the map (content/maps/elysia.txt, letters N and n).
 const GREETER_CUE := "favor"
+## The return into Elysia (Act VI, R2, ADR-074): the lines of the arrival, the beat that says they
+## were told, and the walk of the way back whose stage the arrival moves on.
+const RETURN_DIALOGUE := "res://content/dialogue/akt6/spalt.dialogue"
+const RETURN_BEAT := "act6_return"
+const RETURN_QUEST := "main_return_way"
 
 var director: ElysiaDirector
 
@@ -42,9 +47,29 @@ func _ready() -> void:
 	WorldState.quest_changed.connect(_on_quest_changed)
 	if not WorldState.has_flag("elysia.woke"):
 		_wake.call_deferred()
+	elif WorldState.has_flag("elysia.returned") and not Beat.reached(RETURN_BEAT):
+		# the corner of the picture is empty until the arrival has built it up (as at the waking)
+		hud.hold_back()
+		_return_arrival.call_deferred()
 	if WorldState.is_quest_active("side_elysia_fountain"):
 		# loaded while the fountain was about to fix itself
 		_fountain_solves_itself()
+
+
+## Act VI, R2: she has come back through the gap. The picture comes up out of the dark, the corner
+## builds itself up piece by piece (level, bar, gold), the garden is as she left it, and a few lines
+## say what is there. Beat.mark autosaves, so a game closed meanwhile tells it again.
+func _return_arrival() -> void:
+	var cut := Cutscene.begin(self)
+	while ScreenFade.is_covered() or ScreenFade.is_fading():
+		await cut.wait(0.1)
+	await hud.reveal_elysia()
+	await cut.say(RETURN_DIALOGUE, "arrival")
+	# one block without a wait: the autosave that the mark asks for has all of it
+	if WorldState.quest_stage(RETURN_QUEST) == "pull":
+		WorldState.advance_quest(RETURN_QUEST, "elysia")
+	Beat.mark(RETURN_BEAT)
+	cut.end()
 
 
 func _wake() -> void:

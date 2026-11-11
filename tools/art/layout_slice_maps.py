@@ -200,6 +200,8 @@ def tal():
         # is a thing to look at (ς); both cells keep their ground, so the baked tal stays
         "Λ": [(50, 19)],
         "ς": [(51, 20)],
+        # Akt VI (R2): the gap of light where she arrived in the rain (Ϟ, next to the marker 1); the cell keeps its ground
+        "Ϟ": [(59, 9)],
     }
     for c, pts in props.items():
         for x, y in pts:

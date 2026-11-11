@@ -73,6 +73,8 @@ M = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 ; R1 (Akt VI): am Tag nach dem Gebirge steht Mira an ihrem alten Lager (Λ, solange valley.mira_leaving gilt) und geht über die Brücke; danach ist die Stelle ein Ding zum Ansehen (ς). Beide Zellen behalten ihren Boden, der Bake bleibt.
 Λ = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_mira_look.tres", "dialogue": "res://content/dialogue/akt6/leere.dialogue", "cue": "mira_leaves", "glance": true, "face": "e", "if": "valley.mira_leaving", "unless": "valley.mira_left"}}
 ς = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"cue": "camp_empty", "dialogue": "res://content/dialogue/akt6/leere.dialogue", "radius": 14, "if": "valley.mira_left"}}
+; R2 (Akt VI): der Spalt aus Licht an der Ankunftsstelle (Ϟ, nach dem stillen Haus: valley.rift_light); warm statt kühl, führt nach Elysia und fragt vorher (mode return)
+Ϟ = {"ground": ".", "prop": "res://world/props/rift.tscn", "params": {"target": "elysia", "spawn": "return", "mode": "return", "tint": [1.0, 0.82, 0.45], "if": "valley.rift_light"}}
 ; die kaputte Brücke, die Trittsteine, der Baum über dem Bach
 k = {"ground": "y", "prop": "res://world/props/decor.tscn", "params": {"sprite": "tal/planks_broken", "unless": "valley.bridge_fixed"}}
 L = {"ground": "y", "prop": "res://world/props/blocker.tscn", "params": {"size": [3, 3], "unless": "valley.bridge_fixed"}}
@@ -119,7 +121,7 @@ hhhh^^^...................................~~^^^^^^^.............hhhh
 hhhh...P.....T............................~~..^^^^..............hhhh
 hhhh.....T...............................YyyJ..P................hhhh
 hhh........P.............................~~~.....T........!...P..hhh
-hh...C...........G...................C...~~~...........T..1......hhh
+hh...C...........G...................C...~~~...........T..1Ϟ.....hhh
 hh.................E.............E......~~~........P.............hhh
 hh..........+dddd..E.............E.....~~~~...g..........,.......hhh
 hh......R...ddddd..E......H......E.....~~~.....g........,,.......hhh

@@ -329,3 +329,6 @@ BIND_NOTE_ESC,Esc öffnet die Pause und geht zurück.
 BIND_NOTE_START,Start öffnet die Pause.
 BIND_NOTE_MENUS,"In Menüs bewegen Pfeiltasten, WASD und das Steuerkreuz."
 BIND_PAD_WALK,Gehen mit dem Controller: %s
+RETURN_GAP_ASK,"Durch das Licht gehen?"
+RETURN_GAP_YES,Hindurchgehen
+RETURN_GAP_NO,Hierbleiben

@@ -74,6 +74,8 @@ d = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sh
 ; die Treppe nach Süden hinunter zum Markt (A3): wer unten ankommt, steht auf dem Absatz darüber (r)
 a = {"ground": "s", "prop": "res://world/props/door.tscn", "params": {"target": "markt", "spawn": "garden", "auto": true, "size": [3, 1]}}
 r = {"ground": ",", "marker": "spawn_markt"}
+; Akt VI (R2): wer durch den Spalt im Tal zurückkommt, steht neben dem Riss
+y = {"ground": ".", "marker": "spawn_return"}
 [map]
 hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 hhhhhhhhhhhhhhh...~~hhhhhhhhhhhhhhhhhhhhhhhhh~~...hhhhhhhhhhhhhhh
@@ -105,7 +107,7 @@ hh.,,,,,,,,,,,,,,o~~,.........O,,,O.........,~~o,,,,,,,,,,,,,,.hh
 hh....fffffff.2..~~~....Y....o.,,,.o....Y....~~~..2.fffffff....hh
 hh...ffffffffK...~~...........t,,,t...........~~...Kffffffff...hh
 hh....fffffff...~~~...........O,H,O...........~~~...fffffff....hh
-hh.....fRfgf....~~.T...R..o....,,,....o..R...T.~~....fgfRf..X..hh
+hh.....fRfgf....~~.T...R..o....,,,....o..R...T.~~....fgfRf.yX..hh
 hh......^^^^^^..~~.............,,,.............~~..^^^^^^......hh
 hh...^^^^^^^^^^^vv^^^^^^^^..b..,,,.b...^^^^^^^^vv^^^^^^^^^^^...hh
 ^^^^^^^^^^^^^^^^vv^^^^^^^^FFFFF.r.FFFFF^^^^^^^^vv^^^^^^^^^^^^^^^^

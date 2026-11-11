@@ -297,7 +297,7 @@ func test_the_house_is_quiet_after_mira_the_light_shows_once_and_the_walk_moves_
 	await wait_physics_frames(3)
 	assert_true(WorldState.has_flag("valley.rift_light"))
 	assert_eq(WorldState.quest_stage(QUEST), "pull")
-	assert_true(ContentDB.quest(QUEST).stage("pull").is_final(), "nothing after it yet (R2)")
+	assert_false(ContentDB.quest(QUEST).stage("pull").is_final(), "the gap is the next step (R2)")
 	assert_true(get_tree().get_nodes_in_group(&"cutscene").is_empty())
 	assert_false(scene.player.is_locked())
 	scene.queue_free()
@@ -329,7 +329,8 @@ func test_the_last_chapter_is_act_six_and_the_walk_has_its_stages_with_their_jou
 	assert_eq(quest.stages[0].id, "empty")
 	assert_eq(quest.stages[0].next, PackedStringArray(["gone", "pull"]))
 	assert_eq(quest.stage("gone").next, PackedStringArray(["pull"]))
-	assert_true(quest.stage("pull").is_final(), "nothing after it yet (R2)")
+	assert_eq(quest.stage("pull").next, PackedStringArray(["elysia"]))
+	assert_true(quest.stage("elysia").is_final(), "nothing after it yet (R5)")
 	var keys: PackedStringArray = [
 		"QUEST_MAIN_RETURN_WAY_TITLE",
 		"QUEST_MAIN_RETURN_WAY_EMPTY",
