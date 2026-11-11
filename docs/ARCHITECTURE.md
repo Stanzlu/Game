@@ -117,6 +117,11 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   den Marker; während der Blende öffnet kein Pausenmenü. `blocker` sperrt Wege mit Erklärung, mit
   `"offset"` auch über Zellen mit anderen Requisiten (der Bach bis zu Miras Nein, die Haustür bis zu
   ihrem Besuch). `test_content` prüft, dass jedes gelesene Flag irgendwo gesetzt wird.
+- Karten, Gespräche (Akt VI, R3): `NpcWalker` und `Decor` nehmen `"talk_when"` =
+  `{<flag>: {"dialogue": <pfad>, "cue": <cue>}}`: das erste gesetzte Flag tauscht Pfad und Cue, wenn
+  man das Ding anspricht (`Talk.pick`, also auch im laufenden Bild; ohne Flag bleibt alles, wie es
+  war). `StoryLint` prüft die Cues und zählt die Flags als gelesen; an anderen Requisiten (Schild,
+  Blocker, Tür) wirkt `"talk_when"` nicht.
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

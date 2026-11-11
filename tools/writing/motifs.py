@@ -29,7 +29,9 @@ CODE_EXTENSIONS = (".gd", ".txt", ".dialogue")
 SKIPPED_PREFIXES = ("beat.", "chapter.")
 FLAG_RE = re.compile(r'"([a-z]+\.[a-z0-9_]+)"')
 SET_CONTEXT = re.compile(r'set_flag\(|"flag"\s*:|"start_flag"\s*:|Beat\.mark|clear_flag\(')
-READ_CONTEXT = re.compile(r'has_flag\(|"if"\s*:|"unless"\s*:|sprite_when|flags\.get\(')
+READ_CONTEXT = re.compile(
+    r'has_flag\(|"if"\s*:|"unless"\s*:|sprite_when|"talk_when"\s*:|flags\.get\('
+)
 QUOTE_RE = re.compile(r"`([a-z][a-z0-9_]*)`\s+„([^“]+)“")
 
 

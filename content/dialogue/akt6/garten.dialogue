@@ -1,0 +1,119 @@
+# Elysia, wie sie war, Akt VI, Segment R3 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O5, O7, O8, O12, O17; Bible §8, §9, §10, §16, §33, §46, §51, §52; Stilblätter gaertnerin.md und elysianer.md). Die Spielerin ist zurück im
+# Garten (R2), und alles ist, wie es war: dieselben Sätze, dieselbe Gärtnerin, dieselbe Zuwendung. Was sich geändert hat, ist, wer zuhört. Der Text zeigt das nie durch einen Gedanken der Spielerin und nie durch einen Kommentar
+# der Erzählung; er lässt Elysias Sätze gleich und die Spielerin sie hören (die Wiederholung, das Vorausbieten, das Lob, das bereitliegt). Elysia ist nicht böse und zerfällt nicht (Bible §8): sie liefert weiter, was früher gewirkt hat,
+# und der Humor kommt aus der Form: dieselbe Zeile wie in Akt I, jetzt ohne Anlass. Neu sind zwei Dinge. Die Gärtnerin ist ruhiger (kein Ausrufezeichen, kürzere Sätze) und hat ein Geschenk, das sie ohne Anlass hergibt: die alten
+# Systeme kehren ungekürzt zurück (O8), die Spielerin kann es annehmen (laut, mit allem, was dazugehört) oder liegen lassen (nichts geschieht, es hält), und keiner der beiden Wege wird gelobt oder getadelt. Und am Brunnen gibt es
+# das Erste, das nichts gibt (O7): Wasser spritzen, ohne Zweck, ohne Zahl, ohne Lob; wer es tut, setzt die Facette, die die Gärtnerin später liest. Das Wort für die Facette steht nirgends im Spiel. Die Zeilen von Akt I (slice/elysia.dialogue,
+# akt1/markt.dialogue) bleiben, wie sie sind; hier stehen nur neue Cues. Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche, keine Ursache, keine Erklärung, kein Wirt, kein Richter, nichts, das
+# Elysia wertet, keine Therapie- oder Suchtsprache. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen nie im Text, auch nicht die der Belohnung. Die Spielerin spricht nur über Antworten, kurz,
+# nie mit einem Gefühl. Die Elysianer sagen nie Nein, kein Wetter, keine Zeit und nichts von einer Rückkehr: sie wissen nicht, dass sie fort war. Sprecher sind "Gärtnerin" und "Elysianer" (O17). Die Karte wählt die Cues nach dem Flag der Rückkehr
+# (elysia.returned); gesetzt wird nur, was hier steht: elysia.back_gift (gardener_gift setzt es, gardener_back liest es) und die Facette (basin_play setzt sie, gardener_again liest sie), Setzer und Leser nie im selben Cue.
+
+# --- Die Gärtnerin: das Geschenk ----------------------------------------------------------------------------------------------
+# Sie hat die Spielerin kommen sehen, bevor sie da war ("Ich wusste es", die Form von el_gard_3), spricht sie mit dem Namen an, erzählt von nichts (die Schmetterlinge fliegen ihre Runden, wie viele, sagt sie nicht) und greift in die Tasche,
+# ohne hinzusehen: das Geschenk liegt schon obenauf. Die vierte Zeile ist wortgleich mit el_gard_ret_3 (der Humor: dieselbe Zeile, jetzt ohne Anlass). Zwei Antworten, beide gleichwertig und beide mit eigenen Zeilen. Wer das Geschenk
+# genommen hat (elysia.back_gift), hört beim nächsten Ansprechen gardener_again; wer es liegen ließ, hört diesen Cue wieder, von vorn, und es ist wieder da.
+
+~ gardener_back
+if WorldState.has_flag("elysia.back_gift") and WorldState.quest_stage("side_elysia_butterflies") != "return"
+	=> gardener_again
+Gärtnerin: {{WorldState.player_name()}}. Ich wusste es. Ich hab dich kommen sehen, bevor du da warst. [ID:gar_back_1] [#draft]
+Gärtnerin: Es gibt nichts zu erzählen. Die Schmetterlinge fliegen ihre Runden, und ich sehe ihnen zu. [ID:gar_back_2] [#draft]
+Sie greift in die Tasche, ohne hinzusehen. Es liegt schon obenauf. [ID:gar_back_3] [#draft]
+Gärtnerin: Hier. Das ist für dich. Ein Kompliment. Ein echtes. [rainbow freq=0.6 sat=0.5]Legendär[/rainbow] sogar. [ID:gar_back_4] [#draft]
+- Annehmen. [ID:gar_back_r1] [#draft]
+	=> gardener_gift
+- Lass nur. [ID:gar_back_r2] [#draft]
+	=> gardener_keep
+
+# Annehmen: der Text beschreibt nur die Hand und die Sache. Die Karte, die Fanfare und die Zahl in der Ecke zeigt das Bild, nicht diese Zeilen. Sie freut sich in ihrer Form, ohne Dank im Voraus und ohne zu wissen, wie es um das Geschenk steht.
+# Was gesetzt wird, steht nach der letzten Zeile, das Flag zuletzt (wie bei el_gard_ret_3 in Akt I).
+# Wer Akt I mit den drei Schmetterlingen im Netz verlassen hat, ohne sie abzugeben (Nebenquest side_elysia_butterflies in der Stufe return), findet die Abgabe nicht mehr: die Karte ersetzt den Cue gardener für alle, die zurück sind. Dasselbe Kompliment ist
+# ihr Lohn, also schließt das Annehmen diese Quest wie in Akt I (Stufe done, die Truhe als Hinweis für die Heldenquest, der Brunnen als nächste Aufgabe) und gardener_back bietet es dann auch nach einem früheren Geschenk noch einmal an. Es gibt keine Zeile dafür: die Gärtnerin gibt, was sie gibt.
+
+~ gardener_gift
+Sie legt es dir mit beiden Händen in die Hand, wie ein Ei. Es ist warm und funkelt wie immer. [ID:gar_gift_1] [#draft]
+Gärtnerin: Golden. Und komplimentig. Es leuchtet so gern. [ID:gar_gift_2] [#draft]
+Gärtnerin: Ich hab genau gesehen, wie es leuchtete, als es in deiner Hand lag. [ID:gar_gift_3] [#draft]
+do WorldState.add_item("item_compliment")
+do WorldState.add_xp(2000)
+do WorldState.add_gold(500)
+if WorldState.quest_stage("side_elysia_butterflies") == "return"
+	do WorldState.advance_quest("side_elysia_butterflies", "done")
+	do WorldState.start_quest("side_elysia_fountain")
+	if not WorldState.has_flag("elysia.chest_tree_opened")
+		do WorldState.advance_quest("main_elysia_hero", "reward")
+do WorldState.set_flag("elysia.back_gift")
+=> END
+
+# Lass nur: sie nickt und legt es wieder weg. Nichts wird bedauert, nichts gelobt, es gibt keine Frage, ob die Spielerin sicher ist. Kein Flag, kein Gegenstand, nichts in der Ecke des Bildes. Was liegen bleibt, bleibt liegen (O8).
+
+~ gardener_keep
+Sie nickt, schließt die Hand um das Kompliment und steckt es wieder in die Tasche, vorsichtig, mit zwei Fingern. [ID:gar_keep_1] [#draft]
+Gärtnerin: Es hält. Es läuft nicht weg. [ID:gar_keep_2] [#draft]
+Gärtnerin: Es liegt immer genau da, wo ich es hingelegt hab. [ID:gar_keep_3] [#draft]
+=> END
+
+# --- Die Gärtnerin, danach -----------------------------------------------------------------------------------------------------
+# Wer das Geschenk genommen hat, bekommt kein zweites; sie sagt etwas Kleines und lässt die Spielerin sprechen. Drei Antworten mit je zwei Zeilen: das Unbedingte (ein Besuch ohne Anlass), die Antwort für den, der am Brunnen war (der Leser der
+# Facette; sie wusste es schon, ohne zu loben, und sagt einen Satz über das Wasser, nicht über die Spielerin) und das Schweigen zuletzt (sie wartet mit). Sie nennt nicht, was am Brunnen geschah, und kein Wort für das, was es war.
+
+~ gardener_again
+Gärtnerin: Die Schmetterlinge sind alle da. Ich seh sie, ohne hinzusehen. [ID:gar_again_1] [#draft]
+Gärtnerin: Es ist ein Garten. Immer derselbe Garten. [ID:gar_again_2] [#draft]
+Gärtnerin: Und du? Sag nur, was du magst. Ich weiß es sowieso. [ID:gar_again_3] [#draft]
+- Nur vorbeigekommen. [ID:gar_again_r1] [#draft]
+	Gärtnerin: Ich wusste es. Ich hab dich vorbeikommen sehen, bevor du losgegangen bist. [ID:gar_again_4] [#draft]
+	Gärtnerin: Vorbeikommen ist ein Weg. Er kommt immer bei mir vorbei. [ID:gar_again_5] [#draft]
+- Ich war am Brunnen. Das Wasser ist nass. [if WorldState.has_facet("aliveness") /] [ID:gar_again_r2] [#draft]
+	Gärtnerin: Ich wusste es, bevor du es gesagt hast. [ID:gar_again_6] [#draft]
+	Gärtnerin: Nass. Und wässerig. Das kann es besonders gut. [ID:gar_again_7] [#draft]
+- … [ID:gar_again_r3] [#draft]
+	Sie wartet mit dir und sieht den Schmetterlingen zu, bis sie abbiegen. [ID:gar_again_8] [#draft]
+	Gärtnerin: So still. Du schweigst, und der Garten hört zu. [ID:gar_again_9] [#draft]
+=> END
+
+# --- Die Elysianer -------------------------------------------------------------------------------------------------------------
+# favor_back: die Elysianer der Begrüßung, im Bau der Zeilen aus favor (Akt I): sie bieten an, bevor gefragt wird, "natürlich", "wir", "alle", kein Nein, kein Zweifel, kein Wetter, keine Zeit. Neue Sätze, derselbe Bau; die Karte spielt in beiden
+# Fassungen dieselben Zeilen, es gibt keine Antwort. Sie wissen nicht, dass die Spielerin fort war, und sagen es nicht.
+# elysian_back: die Elysianer auf ihren Wegen, die gespiegelten Paare, kürzer. Sie sind gleich geblieben; die erste Zeile ist wortgleich mit der Schleife von Akt I (el_loop_1), das ist der Witz, und die dritte lobt so, dass sie sich
+# selbst klein macht, wie el_praise_5.
+
+~ favor_back
+Elysianer: {{WorldState.player_name()}}! Du brauchst nichts zu sagen. Wir wissen es schon. [ID:gar_favor_1] [#draft]
+Elysianer: Mein Stuhl ist dein Stuhl. Ich sitze davor, auf dem Gras. Sehr gern sogar. [ID:gar_favor_2] [#draft]
+Elysianer: Alle haben etwas für dich bereitgelegt. Du musst nur nehmen. Das kannst du. [ID:gar_favor_3] [#draft]
+=> END
+
+~ elysian_back
+Elysianer: {{WorldState.player_name()}}! Schön, dich zu sehen. Wirklich schön. [ID:gar_elys_1] [#draft]
+Elysianer: Alle freuen sich. Der da drüben auch, ganz genauso wie ich. [ID:gar_elys_2] [#draft]
+Elysianer: Du stehst so schön da. Wir anderen machen es nur nach. [ID:gar_elys_3] [#draft]
+=> END
+
+# --- Das Becken ----------------------------------------------------------------------------------------------------------------
+# Die Gärtnerin hat nichts mehr zu bitten; niemand sagt der Spielerin, was sie am Wasser tun soll. Die Erzählung zeigt das Becken, das Wasser und die Hand: der Rand ist gerade so hoch, dass die Hand von allein hineinfindet. Zwei
+# unbedingte Antworten, jede mit eigenen Zeilen (keine Fake Choice, kein Schweigen nötig): Wasser spritzen (basin_play) oder Zusehen (zwei Zeilen: dasselbe Wasser, dasselbe Blütenblatt). Weder Gesten noch Orte werden bewertet.
+
+~ basin_back
+Das Becken plätschert, und niemand fragt dich, ob es zu leise ist. [ID:gar_basin_1] [#draft]
+Das Wasser steht klar bis knapp unter den Rand, und ein Blütenblatt dreht darauf seine Runde. [ID:gar_basin_2] [#draft]
+Der Rand ist breit und glatt und gerade so hoch, dass die Hand von allein ins Wasser findet. [ID:gar_basin_3] [#draft]
+- Wasser spritzen. [ID:gar_basin_r1] [#draft]
+	=> basin_play
+- Zusehen. [ID:gar_basin_r2] [#draft]
+	Das Wasser plätschert und plätschert, und es ist dasselbe Wasser. [ID:gar_basin_4] [#draft]
+	Das Blütenblatt kommt an, wo es losgefahren ist, und fährt los. [ID:gar_basin_5] [#draft]
+=> END
+
+# Das Erste in Elysia, das nichts gibt (Bible §16, O7): die Hand im Wasser, ein Schwall, Tropfen im Licht, ein Platschen, das keiner bemerkt. In der Ecke ändert sich nichts, und der Text sagt es als Ding, nicht als Satz über Lohn
+# oder Zweck. Die letzte Zeile ist leicht und nicht feierlich. Keine Zeile nennt, was es ist. Gesetzt wird nur die Facette, nach der letzten Zeile (kein XP, kein Gold, kein Gegenstand, kein Flag): die Gärtnerin liest sie in
+# gardener_again, und der Cue, der sie setzt, liest sie nie.
+
+~ basin_play
+Du tauchst die Hand ein und schlägst flach auf das Wasser. [ID:gar_play_1] [#draft]
+Ein Schwall springt auf, die Tropfen hängen einen Atemzug lang im Licht, und das Platschen bemerkt niemand. [ID:gar_play_2] [#draft]
+Die Zahl in der Ecke bleibt, wo sie ist, und der Balken daneben auch. [ID:gar_play_3] [#draft]
+Das Wasser gibt keine Antwort, es läuft dir nur den Ärmel hinunter. [ID:gar_play_4] [#draft]
+do WorldState.set_facet("aliveness")
+=> END

@@ -100,6 +100,35 @@ func test_a_map_cue_that_is_missing_is_found() -> void:
 	assert_string_contains(problems[0], "cue 'gone' is missing")
 
 
+func test_the_cues_a_prop_says_once_a_flag_is_set_are_checked_too() -> void:
+	var src := _sources()
+	src.maps["res://m/tal.txt"] = _map(
+		[
+			_placement(
+				"res://entities/npc/npc_walker.tscn",
+				{
+					"cue": "here",
+					"dialogue": DIALOGUE,
+					"talk_when": {"story.later": {"cue": "gone"}, "story.other": {"cue": "here"}},
+				}
+			)
+		]
+	)
+	var problems := StoryLint.cue_problems(src)
+	assert_eq(problems.size(), 1, "the one that is missing, not the one that is there")
+	assert_string_contains(problems[0], "cue 'gone' is missing")
+	assert_string_contains(problems[0], "talk_when story.later")
+
+
+func test_a_flag_that_only_talk_when_reads_counts_as_read() -> void:
+	var src := _sources()
+	src.dialogues["res://d/a.dialogue"] = 'do WorldState.set_flag("story.later")'
+	src.maps["res://m/tal.txt"] = _map(
+		[_placement("", {"cue": "here", "dialogue": DIALOGUE, "talk_when": {"story.later": {}}})]
+	)
+	assert_eq(StoryLint.flag_problems(src), PackedStringArray())
+
+
 func test_a_script_cue_that_is_missing_is_found_through_its_constant() -> void:
 	var src := _sources()
 	src.code["res://w/a.gd"] = (

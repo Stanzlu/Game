@@ -25,6 +25,22 @@ static func add_area(
 	return area
 
 
+## What a prop says once the story has moved on: the map param "talk_when" is
+## {"<flag>": {"dialogue": "res://…", "cue": "…"}} and the first flag that is set wins (a missing
+## "dialogue" is the prop's own). Returns [dialogue path, cue]; the prop's own pair when no flag is
+## set. Act VI gives the people of Elysia new cues this way (docs/akt6/REGIONSBRIEFE.md, R3) and
+## leaves the lines of Act I as they are; StoryLint reads the flags and checks the cues.
+static func pick(talk_when: Variant, path: String, cue: String) -> PackedStringArray:
+	if talk_when is Dictionary:
+		for flag: Variant in talk_when:
+			if WorldState.has_flag(str(flag)) and (talk_when as Dictionary)[flag] is Dictionary:
+				var spec: Dictionary = (talk_when as Dictionary)[flag]
+				return PackedStringArray(
+					[str(spec.get("dialogue", path)), str(spec.get("cue", cue))]
+				)
+	return PackedStringArray([path, cue])
+
+
 ## Shows `cue` of the dialogue file at `path`; await it to continue when the box closed.
 ## A cue requested while another conversation is open waits for it instead of being lost.
 static func present(from: Node, path: String, cue: String, actor: Node = null) -> void:

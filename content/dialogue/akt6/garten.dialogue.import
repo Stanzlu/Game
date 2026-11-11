@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://dp63wuwjii1jv"
+path="res://.godot/imported/garten.dialogue-9cd69059a2e688fefa427c06ec0adf16.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/garten.dialogue"
+dest_files=["res://.godot/imported/garten.dialogue-9cd69059a2e688fefa427c06ec0adf16.tres"]
+
+[params]
+
+defaults=true

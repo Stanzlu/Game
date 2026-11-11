@@ -14,6 +14,9 @@ extends CharacterBody2D
 ## "inattentive": true keeps it looking where it looks (the child on the Grat, who looks down
 ## into the valley whoever comes): it turns neither to the player who comes close nor to the one
 ## who talks to it.
+## "talk_when": {"<flag>": {"dialogue": "<path>", "cue": "<cue>"}} swaps the conversation for the
+## first flag that is set when it is talked to (Talk.pick; no "dialogue": its own); without a
+## flag it speaks as before, and its "cue" stays what other code finds it by.
 ## A sheet with the "work" pose (Mira's) works while it lingers at the first waypoint, turned
 ## towards "work_face" (default "w": her net hangs to the left of that point; seen from behind,
 ## facing it, the hands would be hidden and only the head nod would show).
@@ -45,6 +48,8 @@ var cue := ""
 var glances := false
 var seated := false
 var inattentive := false
+## "talk_when" of the map (Talk.pick): another cue once a flag is set; `cue` is the map's own.
+var _talk_when: Variant = {}
 var _index := 0
 ## Waypoint it reached last (-1: none, or it was blocked on the way).
 var _last_point := -1
@@ -121,6 +126,7 @@ func apply_params(params: Dictionary) -> void:
 	if params.has("cue"):
 		cue = str(params["cue"])
 		dialogue_path = str(params.get("dialogue", DEFAULT_DIALOGUE))
+		_talk_when = params.get("talk_when", {})
 		_add_talk_area()
 
 
@@ -141,10 +147,11 @@ func _add_talk_area() -> void:
 
 
 func _on_talk(actor: Node) -> void:
-	var resource := load(dialogue_path) as DialogueResource
+	var said := Talk.pick(_talk_when, dialogue_path, cue)
+	var resource := load(said[0]) as DialogueResource
 	var presenter := get_tree().get_first_node_in_group(&"dialogue_presenter")
 	if resource == null or presenter == null:
-		Log.error(Log.Category.CONTENT, "npc dialogue missing", {"path": dialogue_path, "cue": cue})
+		Log.error(Log.Category.CONTENT, "npc dialogue missing", {"path": said[0], "cue": said[1]})
 		return
 	talking = true
 	if actor is Node2D and not inattentive:
@@ -153,7 +160,7 @@ func _on_talk(actor: Node) -> void:
 	# the bob follows the dialogue box's syllables (a signal of the box; without it: no bob)
 	if presenter.has_signal(&"syllable"):
 		presenter.connect(&"syllable", _on_syllable)
-	presenter.call(&"present", resource, cue, actor)
+	presenter.call(&"present", resource, said[1], actor)
 
 
 func _on_talk_finished(presenter: Node) -> void:

@@ -207,6 +207,21 @@ static func cue_problems(src: Sources) -> PackedStringArray:
 			problems.append_array(
 				_cue_problems(src, where, str(params.get("dialogue", fallback)), str(params["cue"]))
 			)
+			# the cues a prop says once a flag is set (Talk.pick) must exist too
+			var when: Variant = params.get("talk_when", {})
+			if when is Dictionary:
+				for flag: Variant in when:
+					var spec: Variant = (when as Dictionary)[flag]
+					if spec is Dictionary:
+						var own: String = str(params.get("dialogue", fallback))
+						problems.append_array(
+							_cue_problems(
+								src,
+								where + " (talk_when %s)" % flag,
+								str((spec as Dictionary).get("dialogue", own)),
+								str((spec as Dictionary).get("cue", params["cue"]))
+							)
+						)
 	for code_path: String in src.code:
 		var text: String = src.code[code_path]
 		var consts := _consts(text)
@@ -331,6 +346,8 @@ static func flag_problems(src: Sources) -> PackedStringArray:
 				for flag: Variant in [value] if value is String else value:
 					reads[str(flag)] = map_path
 			for flag: Variant in params.get("sprite_when", {}):
+				reads[str(flag)] = map_path
+			for flag: Variant in params.get("talk_when", {}):
 				reads[str(flag)] = map_path
 			if params.has("flag"):
 				sets[str(params["flag"])] = map_path

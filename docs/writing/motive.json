@@ -3301,6 +3301,181 @@
     }
    ],
    "payoff": "Das Licht im Haus (Akt VI, R1, `lee_dusk_2`, `lee_dusk_3`) kehrt als Spalt im Tal wieder (R2, Brief O3): an der Stelle, an der die Spielerin im Regen ankam, steht ein Streifen Licht in der Luft, golden und warm, mit einem Summen aus keiner Richtung und einem Geruch nach etwas Gekochtem, schwächer als im Haus; darunter ist der Boden trocken, ein Fleck in der Größe eines Abdrucks, und ringsum ist das Gras nass vom Tau (`gap_look_1` bis `gap_look_4`). Er ist ein Ding und kein Auftrag (Bible §52): die letzte Zeile lässt offen, ob man hindurchgeht oder vorbei, und der Bach läuft in beiden Fällen weiter (`gap_look_5`); wer ihn auslässt, verpasst nichts, und der Akt wartet. Der Gang hindurch ist ein einziger Schritt, ein Licht, das zu viel für die Augen wird, ohne Schmerz und so hell, wie es einmal war, und Gras, das aufhört, nass zu sein (`gap_enter_1` bis `gap_enter_3`): kein Abschied von der Wirklichkeit, kein Rückblick, kein Entschluss in Worten. `ElysiaReturn` ist der Spiegel des Risses: wo das UI beim Übertritt Stück für Stück verschwand (Bible §11), baut es sich jetzt Stück für Stück auf, Zählwerk, Balken und Zahl, und die Musik läuft an wie ein Band (`gap_arr_2`, `gap_arr_4`, `gap_arr_5`). Der Ort ist unverändert (Bible §8, §9): dieselben Farben, dieselbe Zahl in der Ecke, dieselben Runden der Schmetterlinge, und nichts zerfällt (`gap_arr_1`, `gap_arr_3`); sein Name fällt in genau einer Zeile, wie eine Auskunft und nicht wie ein Willkommen (`gap_arr_6`). Die Spielerin kennt jetzt etwas, das der Ort nicht kennt, und der Text lässt sie das nicht sagen, nur sehen: sie sieht die Stelle, an der die Schmetterlinge abbiegen (`gap_arr_3`), und das Gras, das keinen Abdruck behält, wo der Boden im Tal ihn behielt (`gap_arr_9`, ein Echo auf `ank_ground_1`). Der Humor sitzt in den Dingen: die Fanfare, die nicht fragt, ob es gerade passt (`gap_arr_7`), das Lob, das schon bereitliegt (`gap_arr_8`); die letzte Zeile verlangt nichts (`gap_arr_10`). Kein Satz sagt, wie es der Spielerin damit geht, keine Figur spricht, und keiner erklärt, was die alten Systeme bedeuten (Brief O8); die Systeme kehren erst in den folgenden Segmenten ungekürzt und laut zurück. Das Flag `elysia.returned` setzt die Szene mit dem Gang durch den Spalt, den Beat `act6_return` nach der Ankunft; die Szene Elysias und die Segmente R3 bis R6 lesen es, und die Schleifen-Flags von Akt I bleiben stehen (ADR-065)."
+  },
+  {
+   "id": "kompliment-ohne-anlass",
+   "kind": "gag",
+   "title": "Das Kompliment ohne Anlass (Akt VI)",
+   "bible": "§8, §10, §33, §37",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_gard_ret_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_4"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_r1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_back_r2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_gift_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_gift_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_gift_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_keep_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_keep_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_keep_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_again_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_again_2"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.back_gift"
+    }
+   ],
+   "payoff": "Die Gärtnerin hat in Elysia, wie sie war, ein Geschenk, das sie ohne Anlass hergibt (Akt VI, R3, `gardener_back`, Brief O5, O8): dieselbe Zeile wie in Akt I, wortgleich (`gar_back_4` und `el_gard_ret_3`), jetzt ohne einen einzigen gefangenen Schmetterling. Sie ist ruhiger (kein Ausrufezeichen, kürzere Sätze), sie hat die Spielerin kommen sehen, bevor sie da war (`gar_back_1`, die Form von `el_gard_3`), sie erzählt von nichts, ohne eine Zahl für die Schmetterlinge (`gar_back_2`), und greift in die Tasche, ohne hinzusehen: das Kompliment liegt schon obenauf (`gar_back_3`). Der Humor kommt aus der Form, nie aus einem Satz über die Spielerin. Zwei Antworten, beide gleichwertig und keine gelobt oder getadelt: Annehmen (`gardener_gift`, die alten Systeme kehren ungekürzt zurück: der Gegenstand, die Erfahrung und das Gold, laut und mit allem, was dazugehört; der Text beschreibt nur die Hand und die Sache, Karte, Fanfare und Zahl zeigt das Bild, und sie freut sich in ihrer Form, ohne zu wissen, wie es um das Geschenk steht, `gar_gift_1` bis `gar_gift_3`) oder Lass nur (`gardener_keep`: nichts geschieht, kein Flag, kein Gegenstand, nichts in der Ecke des Bildes; sie steckt es wieder in die Tasche, es hält und läuft nicht weg, `gar_keep_2`, und es wird beim nächsten Ansprechen wieder angeboten, ohne Bedauern, ohne Lob und ohne die Frage, ob die Spielerin sicher ist). Was liegen bleibt, bleibt liegen (Brief O8); keine Zeile erklärt, was das Kompliment bedeutet, und keine Zahl steht im Text. Wer es genommen hat, hört danach `gardener_again`, nie ein zweites Geschenk: etwas Kleines über die Schmetterlinge und den Garten (`gar_again_1`, `gar_again_2`) und dieselbe Stille wie vorher. Das Flag `elysia.back_gift` setzt `gardener_gift` und liest `gardener_back` (nie im selben Cue); die Karte `elysia.txt` wählt `gardener_back` mit `elysia.returned`."
+  },
+  {
+   "id": "spielen-ohne-zweck",
+   "kind": "vorausdeutung",
+   "title": "Spielen ohne Zweck: das Becken (Akt VI)",
+   "bible": "§8, §16, §37, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "gar_basin_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_basin_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_basin_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_basin_r1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_basin_r2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_play_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_play_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_play_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_play_4"
+    },
+    {
+     "type": "line",
+     "ref": "gar_again_r2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_again_6"
+    },
+    {
+     "type": "line",
+     "ref": "gar_again_7"
+    }
+   ],
+   "payoff": "Das Erste in Elysia, das nichts gibt (Akt VI, R3, Brief O7; Bible §16 „Ich darf spielen“: „Lebendigkeit macht den Charakter nicht stärker. Sie macht das Spiel reicher.“): am Becken, an dem in Akt I die Gärtnerin um einen Gefallen bat, bittet niemand um etwas (`gar_basin_1`), der Rand ist gerade so hoch, dass die Hand von allein ins Wasser findet (`gar_basin_3`), und die Spielerin hat zwei Antworten, beide mit eigenen Zeilen: Zusehen (`gar_basin_4`, `gar_basin_5`: dasselbe Wasser, dasselbe Blütenblatt, das ankommt, wo es losfuhr) oder Wasser spritzen (`basin_play`): die Hand im Wasser, ein Schwall, Tropfen im Licht, ein Platschen, das niemand bemerkt (`gar_play_1`, `gar_play_2`); in der Ecke des Bildes ändert sich nichts, und der Text sagt es als Ding und nicht als Satz über Lohn oder Zweck (`gar_play_3`); die letzte Zeile ist leicht und nicht feierlich, das Wasser läuft einem nur den Ärmel hinunter (`gar_play_4`). Kein XP, kein Gold, kein Gegenstand, kein Flag, kein Lob. Gesetzt wird allein die achte Facette `aliveness` (kein Flag, darum nicht im Register: Setzer `basin_play`, Leser `gardener_again`, nie im selben Cue). Das Wort für die Facette steht nirgends im Spiel, und keine Zeile nennt das Tun „Spiel“, „Spaß“ oder „Freude“. Die Gärtnerin liest die Facette in einer Antwort („Ich war am Brunnen. Das Wasser ist nass.“, `gar_again_r2`): sie wusste es, bevor es gesagt war (`gar_again_6`), lobt nicht und sagt einen Satz über das Wasser und nicht über die Spielerin (`gar_again_7`); wer nicht am Becken war, hat diese Antwort nicht, und keine Antwort ist falsch. Der Brief O7 nennt weitere Setzer (ein Tanz, ein Tier), die folgen; in R3 ist das Becken der erste, nie Voraussetzung."
+  },
+  {
+   "id": "elysia-gleich",
+   "kind": "vorausdeutung",
+   "title": "Elysia ist gleich geblieben (Akt VI)",
+   "bible": "§8, §9, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_loop_1"
+    },
+    {
+     "type": "line",
+     "ref": "el_favor_2"
+    },
+    {
+     "type": "line",
+     "ref": "el_praise_5"
+    },
+    {
+     "type": "line",
+     "ref": "gar_favor_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_favor_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_favor_3"
+    },
+    {
+     "type": "line",
+     "ref": "gar_elys_1"
+    },
+    {
+     "type": "line",
+     "ref": "gar_elys_2"
+    },
+    {
+     "type": "line",
+     "ref": "gar_elys_3"
+    }
+   ],
+   "payoff": "Die Elysianer sagen in Akt VI, was sie in Akt I sagten, im selben Bau (Akt VI, R3, `favor_back`, `elysian_back`, Brief O5): sie bieten an, bevor gefragt wird (`gar_favor_1`), „Mein Bett ist dein Bett“ wird zu „Mein Stuhl ist dein Stuhl“ (`gar_favor_2`, Echo `el_favor_2`), alle haben etwas bereitgelegt, du musst nur nehmen (`gar_favor_3`); kein Nein, kein Zweifel, kein Wetter, keine Zeit, und kein Wort von einer Rückkehr: sie wissen nicht, dass die Spielerin fort war. Die erste Zeile der Elysianer auf ihren Wegen ist wortgleich mit der Schleife von Akt I (`gar_elys_1`, `el_loop_1`): das ist der Witz, und er stammt allein aus der Form. Das Paar, das sich spiegelt, freut sich „ganz genauso“ (`gar_elys_2`), und das Lob macht den Gelobten groß und sich selbst klein (`gar_elys_3`, Echo `el_praise_5`): die Spielerin hört es jetzt, die Elysianer ändern sich nicht. Nichts zerfällt und nichts wird gewertet (Bible §8); es ist der Kontrast, den das Spiel von Akt I an vorbereitet hat (`kein-nein`, `npc-bewegung`), und keine Zeile erklärt ihn."
   }
  ],
  "register": [
@@ -4482,7 +4657,12 @@
   {
    "flag": "elysia.returned",
    "axis": "Elysia",
-   "meaning": "Die Spielerin ist durch den Spalt im Tal gegangen und in Elysia angekommen (Akt VI, R2, Brief O3, O4). Die Szene setzt es mit dem Gang (`gap_enter`), der Beat `act6_return` folgt nach der Ankunft (`arrival`); kein Cue setzt es. Die Rückkehr ist freiwillig und nie Voraussetzung: wer den Spalt auslässt, bleibt in der Wirklichkeit, und der Akt wartet. Elysia und die folgenden Segmente lesen es: die Schleifen-Flags von Akt I bleiben stehen (ADR-065), der `ElysiaDirector` schaltet seine Uhr-Rückfälle ab (Brief O5), nichts zählt mit, und es hat keine Zahl im Bild."
+   "meaning": "Die Spielerin ist durch den Spalt im Tal gegangen und in Elysia angekommen (Akt VI, R2, Brief O3, O4). Die Szene setzt es mit dem Gang (`gap_enter`), der Beat `act6_return` folgt nach der Ankunft (`arrival`); kein Cue setzt es. Die Rückkehr ist freiwillig und nie Voraussetzung: wer den Spalt auslässt, bleibt in der Wirklichkeit, und der Akt wartet. Seit R3 liest es die Karte `elysia.txt` (`talk_when`): wer zurückgekehrt ist, hört bei der Gärtnerin (`gardener_back`), bei den Elysianern der Begrüßung (`favor_back`), bei den Elysianern auf ihren Wegen (`elysian_back`) und am Becken (`basin_back`) die neuen Cues aus `akt6/garten.dialogue`; die Zeilen von Akt I bleiben für jeden, der nicht zurückgekehrt ist, wie sie sind. Elysia und die folgenden Segmente lesen es: die Schleifen-Flags von Akt I bleiben stehen (ADR-065), der `ElysiaDirector` schaltet seine Uhr-Rückfälle ab (Brief O5), nichts zählt mit, und es hat keine Zahl im Bild."
+  },
+  {
+   "flag": "elysia.back_gift",
+   "axis": "Entscheidungen",
+   "meaning": "Die Spielerin hat in Elysia das Kompliment der Gärtnerin angenommen, das sie ohne Anlass hergibt (Akt VI, R3, Brief O8, `gardener_gift`): der Gegenstand, die Erfahrung und das Gold kehren ungekürzt zurück, laut und mit allem, was dazugehört; der Text beschreibt nur die Hand und die Sache. Gelesen von `gardener_back` (die Karte `elysia.txt` wählt ihn nach `elysia.returned`): wer es genommen hat, hört danach `gardener_again`, nie ein zweites Geschenk. Wer es liegen lässt (`gardener_keep`), setzt nichts: es wird beim nächsten Ansprechen wieder angeboten, ohne Bedauern und ohne Lob. Beide Wege sind gleichwertig; keine Zeile erklärt, was das Kompliment bedeutet, und keine Zahl steht im Text."
   }
  ]
 }
