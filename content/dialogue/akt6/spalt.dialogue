@@ -1,0 +1,47 @@
+# Der Spalt, Akt VI, Segment R2 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O3, O4, O5, O8, O12, O17, O20; Bible §8, §9, §11, §37, §45, §51, §52). Im Tal steht an der Stelle, an der die Spielerin im Regen
+# angekommen ist, ein Streifen Licht, golden und warm, mit einem Summen in der Luft. Er ist ein Ding und kein Auftrag: nichts zieht, nichts verlangt, wer daran vorbeigeht, verpasst nichts, und der Akt wartet
+# (Bible §52, kein Sog). Wer hindurchgeht, tritt einen Schritt, und dann ist es hell und dann schwarz; die Rückfrage zwischen Ansehen und Schritt steht in ui.csv, nicht hier. Danach ist die Spielerin dort, wo sie das Bild
+# verlassen hat, und das Zählwerk in der Ecke baut sich wieder auf. Der Ort ist so schön wie vorher und zerfällt nicht (Bible §8); der Text erklärt das nicht und wertet es nicht, er zeigt nur ein Ding, das die Spielerin
+# jetzt anders ansieht als damals. Kein Satz sagt, wie es ihr damit geht, und keiner sagt, was sie entschieden hat. Humor kommt aus den Dingen (Brief O12), nie aus ihrer Stimmung. Prüflinse (Bible §15, §51): kein Kind,
+# nichts vom Gebirge, von der Anlage oder vom ursprünglichen Haus, keine Ursache, keine Erklärung, kein Betäuber. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind
+# ausgeschrieben. Es spricht keine Figur, es gibt keine Antwort der Spielerin und keine Antwortgruppe. Kein Cue dieser Datei setzt ein Flag, eine Facette oder eine Erinnerung: die Szene setzt das Flag der Rückkehr und den Beat.
+
+# --- Der Spalt im Tal ------------------------------------------------------------------------------------------------------------
+# Ein Ding an der Ankunftsstelle, freiwillig, jedes Mal von vorn; danach kommt die Rückfrage. Der Name des Ortes fällt nicht. Das Licht ist ein Echo des Lichts im Haus, ohne es zu zitieren, und der Geruch ist wieder da, schwächer.
+# Die Zeile über den Regen erklärt ihn nicht: das Gras ringsum ist nass vom Tau, im Licht sieht es trocken aus. Die letzte Zeile lässt offen, ob man hindurchgeht oder vorbei, und der Bach läuft weiter.
+
+~ gap_look
+Dort, wo du im Regen angekommen bist, steht ein Streifen Licht in der Luft, kaum breiter als ein Finger. [ID:gap_look_1] [#draft]
+Das Gras ringsum ist nass vom Tau, und im Licht sieht es trocken aus. [ID:gap_look_2] [#draft]
+Das Licht ist golden und warm, so wie es im Haus einen Augenblick auf dem Boden lag. Dieses bleibt. [ID:gap_look_3] [#draft]
+Ein Summen liegt in der Luft, und du kennst den Klang. Dazu riecht es nach etwas Gekochtem, schwächer als im Haus. [ID:gap_look_4] [#draft]
+Du kannst hindurchgehen oder an ihm vorbei, und der Bach läuft in beiden Fällen weiter. [ID:gap_look_5] [#draft]
+=> END
+
+# --- Der Schritt ---------------------------------------------------------------------------------------------------------------
+# Eine Zwischensequenz nach der Rückfrage, vor dem Schwarz. Ein einziger Schritt, kein Abschied von der Wirklichkeit, kein Rückblick, kein Entschluss in Worten. Das Licht ist so hell, wie es einmal war.
+
+~ gap_enter
+Du tust einen Schritt in den Streifen, einen einzigen. [ID:gap_enter_1] [#draft]
+Das Licht wird zu viel für die Augen. Es tut nicht weh, es ist nur so hell, wie es einmal war. [ID:gap_enter_2] [#draft]
+Das Gras unter deinen Füßen hört auf, nass zu sein. [ID:gap_enter_3] [#draft]
+=> END
+
+# --- Die Ankunft ---------------------------------------------------------------------------------------------------------------
+# Eine Zwischensequenz, sobald sich das Zählwerk aufgebaut hat; die Spielerin steht vor dem Riss am Rand des Bildes, dort, wo sie ihn verlassen hat. Der Garten ist so, wie er war, nichts ist schlechter geworden (Bible §8).
+# Die Musik spielt schon, die Schmetterlinge drehen ihre Runden, das Zählwerk steht, wo es stand, mit derselben Zahl (sie wird nicht genannt). Der Name des Ortes steht in genau dieser einen Zeile, wie auf einem Schild
+# und nicht wie ein Willkommen. Die Spielerin kennt jetzt etwas, das der Ort nicht kennt; der Text lässt sie das nicht sagen, nur sehen. Der Humor sitzt in der Fanfare, die nicht fragt, und im Lob, das schon bereitliegt.
+# Nichts wird erklärt, nichts gelobt, nichts bedauert; die letzte Zeile verlangt nichts.
+
+~ arrival
+Der Garten ist da, genau wie du ihn verlassen hast, mit demselben Licht, denselben Farben und demselben Plätschern. [ID:gap_arr_1] [#draft]
+Die Musik spielt schon und ist im Takt, als wäre sie nie unterbrochen worden. [ID:gap_arr_2] [#draft]
+Die Schmetterlinge fliegen nicht anders als damals. Du siehst nur die Stelle, an der sie abbiegen. [ID:gap_arr_3] [#draft]
+In der Ecke des Bildes ist das Zählwerk wieder da und steht dort, wo es stand. [ID:gap_arr_4] [#draft]
+Der Balken glänzt, und die Zahl daneben ist dieselbe wie beim Gehen. [ID:gap_arr_5] [#draft]
+Der Ort hat noch seinen Namen, ohne Gruß, wie ein Schild, das niemand abnimmt. Elysia. [ID:gap_arr_6] [#draft]
+Irgendwo holt eine Fanfare Luft. Sie fragt nicht, ob es gerade passt. [ID:gap_arr_7] [#draft]
+Das Lob liegt schon bereit, nach Größe sortiert, für den Fall, dass du etwas tust. [ID:gap_arr_8] [#draft]
+Unter deinen Füßen steht das Gras gerade und behält keinen Abdruck. [ID:gap_arr_9] [#draft]
+Du stehst dort, wo du aufgehört hast, und nichts im Bild hat es eilig. [ID:gap_arr_10] [#draft]
+=> END

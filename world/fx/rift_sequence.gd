@@ -87,6 +87,9 @@ func _cross_over() -> void:
 	# Act I is over for good: the chapter mark that the slots and the return in Act VI will read
 	Chapter.mark("act1")
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
+	if WorldState.has_flag("elysia.returned"):
+		# the second crossing (Act VI): what she carries since stays with her
+		return
 	WorldState.reduce_inventory_to(KEEP)
 	for item in KEEP:
 		if not WorldState.has_item(item):
