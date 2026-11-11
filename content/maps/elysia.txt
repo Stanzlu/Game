@@ -8,13 +8,14 @@ scatter = [{"sprite": "elysia/grass_tuft", "on": ".", "spacing": 12, "jitter": 0
 ; Elysia ist spiegelsymmetrisch um Spalte 32 (Game Bible §9); Boden, Requisiten und Streu folgen.
 symmetry = 32
 [legend]
-A = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "gardener"}}
+; R3 (Akt VI): wer durch den Spalt zurückkommt (elysia.returned), hört in Elysia neue Cues (talk_when); die Zeilen von Akt I bleiben, wie sie sind
+A = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "gardener", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "gardener_back"}}}}
 1 = {"ground": ".", "prop": "res://world/props/golden_butterfly.tscn", "params": {"flag": "elysia.butterfly_first", "if": "elysia.butterflies_asked", "unless": "elysia.butterfly_first", "actions": [{"quest": "side_elysia_butterflies", "objective": "first"}]}}
 2 = {"ground": ".", "prop": "res://world/props/golden_butterfly.tscn", "params": {"flag": "elysia.butterfly_second", "if": "elysia.butterflies_asked", "unless": "elysia.butterfly_second", "actions": [{"quest": "side_elysia_butterflies", "objective": "second"}]}}
 3 = {"ground": ".", "prop": "res://world/props/golden_butterfly.tscn", "params": {"flag": "elysia.butterfly_third", "if": "elysia.butterflies_asked", "unless": "elysia.butterfly_third", "actions": [{"quest": "side_elysia_butterflies", "objective": "third"}]}}
 H = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "host"}}
 t = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/feast_table", "cue": "feast", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
-B = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "basin", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 10}}
+B = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"cue": "basin", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 10, "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "basin_back"}}}}
 k = {"ground": ".", "prop": "res://entities/npc/child_guide.tscn", "params": {"sheet": "res://entities/character/sheet_child_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "child", "glance": true, "if": "elysia.loops", "unless": "elysia.child_vanished", "start_flag": "elysia.child_met", "guide": [[0, 5], [1, 7], [5, 7], [15, 8], [17, 11], [17, 12]]}}
 . = {"atlas": [0, 0], "surface": "grass", "paint": "grass"}
 f = {"atlas": [1, 0], "surface": "grass", "paint": "meadow"}
@@ -47,13 +48,13 @@ F = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 b = {"ground": ".", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench"}}
 x = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/splash", "cue": "splash", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
 ; Elysianer laufen exakt gleich: gleiche Route, gleiches Tempo, gleicher Takt (Game Bible §9).
-E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
+E = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "elysian_back"}}}}
 ; wer dich beim Erwachen begrüßt, direkt neben dem Startpunkt und ihm zugewandt (sein Zwilling n steht gespiegelt auf der anderen Seite, ohne dass jemand kommt)
-N = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "w"}}
-n = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "e"}}
-G = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor"}}
+N = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "w", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "favor_back"}}}}
+n = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "face": "e", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "favor_back"}}}}
+G = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "favor", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "favor_back"}}}}
 ; ihr Spiegelbild auf der anderen Seite: dieselbe Route, gespiegelt, im selben Takt
-e = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
+e = {"ground": ",", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "elysian_back"}}}}
 q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_n"}}
 Q = {"ground": "=", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/rail_s"}}
 ; Truhe am Weltenbaum (Belohnung der Heldenquest), Stein am Becken (Seltenheit: —; er liegt erst, wenn sich Elysia wiederholt, A9), Riss am Inselrand.
@@ -69,8 +70,8 @@ J = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 l = {"ground": ",", "prop": "res://world/props/door.tscn", "params": {"target": "gasthaus", "spawn": "door", "prompt": "INTERACT_ENTER"}}
 m = {"ground": ".", "marker": "spawn_inn"}
 ; die beiden Elysianer an der Nordterrasse gehen jetzt auf der Wiese (Reihe 2), die Mitte gehört dem Gasthaus
-V = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
-d = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian"}}
+V = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "elysian_back"}}}}
+d = {"ground": ".", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "route": [[0, 0], [-7, 0]], "speed": 30, "dialogue": "res://content/dialogue/slice/elysia.dialogue", "cue": "elysian", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/garten.dialogue", "cue": "elysian_back"}}}}
 ; die Treppe nach Süden hinunter zum Markt (A3): wer unten ankommt, steht auf dem Absatz darüber (r)
 a = {"ground": "s", "prop": "res://world/props/door.tscn", "params": {"target": "markt", "spawn": "garden", "auto": true, "size": [3, 1]}}
 r = {"ground": ",", "marker": "spawn_markt"}

@@ -2,6 +2,10 @@
 
 **Beleg im Slice:** 21 Zeilen (Begrüßung, Loop, Lob, Gefallen).
 
+**Beleg in Akt VI (R3, `content/dialogue/akt6/garten.dialogue`):** 6 Zeilen in `favor_back` (die Begrüßung, im Bau von `favor`) und `elysian_back` (die Wege der gespiegelten Paare), Ø 10,7 Wörter, 2,7 Sätze je Zeile, „!“ in 2 von 6. **Sie sind gleich geblieben**
+und wissen nicht, dass die Spielerin fort war: kein „wieder“, kein „zurück“, kein Nein, kein Zweifel, kein Wetter, keine Zeit. Die erste Zeile von `elysian_back` ist wortgleich mit der Schleife von Akt I (`el_loop_1`): das ist der Witz, und er stammt allein
+aus der Form; die Spielerin hört es jetzt, die Elysianer ändern sich nicht.
+
 ## Funktion
 
 Der Chor von Elysia. Alle freuen sich, alle loben, niemand sagt Nein (Bible §7, §8). Sie meinen es gut; die Stimme darf
@@ -20,6 +24,8 @@ spaßig sein (Risiko 9); das Unheimliche liegt in den Wiederholungen, nie im Ton
 
 Je öfter man in Elysia ist, desto öfter hört man dasselbe (Loop, Bible §35 für die Musik, hier im Text). Nach dem Riss
 verschwinden sie aus dem Text; in Akt VI klingt die Stimme in Elysia wieder, jetzt mit dem Wissen der Spielerin.
+Akt VI (R3): dieselben Sätze im selben Bau („Mein Bett ist dein Bett“ wird „Mein Stuhl ist dein Stuhl“), das Vorausbieten und das Lob, das den Gelobten groß und sich selbst klein macht; das Paar, das sich spiegelt, freut sich „ganz genauso“,
+ohne es zu merken. Neu ist nur, wer zuhört.
 
 ## Goldzeilen
 
@@ -37,6 +43,8 @@ verschwinden sie aus dem Text; in Akt VI klingt die Stimme in Elysia wieder, jet
 - `el_favor_3` „Es gehört dir! Eigentlich gehört es dir schon immer. Ich wohne nur zur Probe darin.“
 - `el_favor_5` „Ja! Ich meine, ja. Natürlich. Alles, was du willst.“
 - `el_favor_6` „Nichts! So bescheiden. Wir bewundern das. Wir bewundern alles an dir.“
+- `gar_favor_2` „Mein Stuhl ist dein Stuhl. Ich sitze davor, auf dem Gras. Sehr gern sogar.“
+- `gar_elys_2` „Alle freuen sich. Der da drüben auch, ganz genauso wie ich.“
 
 ## Gegenbeispiele
 

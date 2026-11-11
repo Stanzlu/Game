@@ -273,7 +273,8 @@ func _add_inspect(params: Dictionary) -> void:
 			if not sound.is_empty():
 				# on the parent: a prop that changes with the story is freed under its sound
 				SoundBank.play_at(get_parent(), sound, global_position)
-			Talk.present(self, path, cue, actor)
+			var said := Talk.pick(params.get("talk_when", {}), path, cue)
+			Talk.present(self, said[0], said[1], actor)
 	)
 
 
