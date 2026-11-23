@@ -1,0 +1,44 @@
+# Das Aufstehen, Akt VI, Segment R6 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O6, O7, O12, O14, O17; Bible §14, §16, §45, §51, §52; Stilblätter gastwirt.md und betaeuber.md, Cues stand_first und host_after).
+# Der zentrale Encounter des Betäubers ist kein Kampf und keine Wahl in einem Menü: die Spielerin steht von der Bank auf, mit ihrem eigenen Schritt (eine Taste), nachdem alle drei Angebote hinter ihr liegen. Die Szene (InnTable) spielt stand_first
+# genau einmal in dem Augenblick, in dem sie aufsteht; keine Antwort heißt "Aufstehen" oder "Gehen", und in keiner Zeile wird das Aufstehen gelobt oder das Bleiben getadelt. Der Wirt hat darauf den einen Satz, den er schon immer hatte
+# ("Musst du? Wirklich?", el_host_10), und er hält nie fest: er fragt leicht, er lässt los, und was er mitgibt, ist die Suppe. Der Sprecher heißt "Gastwirt" (O17), nie "Betäuber".
+# Der Witz bleibt sein Schutz (O12): er geht gegen die Suppe und gegen ihn selbst, nie gegen die Spielerin, das Bleiben oder das Gehen. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen nie als Ziffern im Text.
+# Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche, keine Ursache, kein Richter, nichts, das Elysia, das Bleiben oder das Gehen wertet; kein Wort darüber, was der Wirt ist oder tut.
+#
+# Gesetzt wird allein elysia.stood_up (erste Zeile von stand_first); gelesen wird es von der Karte (talk_when am Wirt: host_after) und von der Szene (literal), nie im selben Cue wie sein Setzer. Die Facette aliveness wird hier nur gelesen
+# (Setzer: das Becken in Elysias Garten, akt6/garten.dialogue): eine Antwort neben den unbedingten, das Schweigen zuletzt.
+
+# --- Das Aufstehen --------------------------------------------------------------------------------------------------------------------
+# Die Musik spielt weiter, wo sie war: niemand hält sie an, niemand dreht sie auf. Er fragt leicht (wie man fragt, ob noch Salz fehlt), dann lässt er los: "… Na gut." Die Suppe, die ihr beim ersten Angebot auf den Tisch kam, hat
+# jetzt einen Deckel, den niemand gebracht hat; sie nimmt sie selbst. Sein letzter Satz über die Suppe ist ein Bau von inn_s1_2 ("Mehr verspricht sie nicht") und verspricht der Spielerin nichts. Er wischt einen Tisch, der sauber ist. Keine Antwort.
+
+~ stand_first
+do WorldState.set_flag("elysia.stood_up")
+Du stehst auf. Die Bank knarrt einmal und hält dann still. [ID:up_1] [#draft]
+Die Musik spielt genau dort weiter, wo sie war. Niemand hat sie leiser gemacht, und niemand lauter. [ID:up_2] [#draft]
+Gastwirt: Musst du? Wirklich? [ID:up_3] [#draft]
+Er fragt es leicht, so wie man fragt, ob noch Salz fehlt. Sein Tuch bleibt mitten auf dem Glas stehen. [ID:up_4] [#draft]
+Gastwirt: … Na gut. [ID:up_5] [#draft]
+Gastwirt: Aber nimm die Suppe mit. Sie kocht ohnehin für zu viele. [ID:up_6] [#draft]
+do WorldState.add_item("item_soup")
+Die Schale auf dem Tisch trägt jetzt einen Teller als Deckel, den vorhin niemand gebracht hat. Du nimmst sie mit beiden Händen, sie ist noch warm. [ID:up_7] [#draft]
+Gastwirt: Sie schmeckt dort, wo du hingehst, genauso nach Suppe. Mehr verspricht sie nicht. [ID:up_8] [#draft]
+Der Wirt wischt den Tisch, an dem du gesessen hast. Er ist schon sauber. [ID:up_9] [#draft]
+=> END
+
+# --- Der Wirt danach --------------------------------------------------------------------------------------------------------------------
+# Wer nach dem Aufstehen mit ihm spricht (die Karte wählt host_after mit elysia.stood_up), findet denselben Wirt: ohne Angebot, ohne Frage nach dem Bleiben, mit dem Witz über seine Arbeit (ein Bau von inn_host_3, "die halbe Arbeit eines Wirts": die andere Hälfte ist das Wischen).
+# Drei Antworten mit eigenen Zeilen: "Tanzen?" nur mit der Facette aliveness (das Spielen ist hier eine Idee der Spielerin, und er freut sich, ohne etwas daraus zu machen), "Danke für die Suppe." (er schiebt den Dank der Suppe zu),
+# das Schweigen zuletzt (er nimmt es, als hättest du etwas gesagt). Nichts davon setzt etwas.
+
+~ host_after
+Gastwirt: Na? Ich wisch hier nur noch kurz. Das ist die andere Hälfte der Arbeit eines Wirts. [ID:up_h1] [#draft]
+- Tanzen? [if WorldState.has_facet("aliveness") /] [ID:up_hr1] [#draft]
+	Gastwirt: Tanzen! Hier? Warte, die Bänke gehen von selbst zur Seite. [ID:up_h2] [#draft]
+	Gastwirt: Wir haben nur die eine Musik, aber getanzt hat noch nie jemand zu ihr. Sie wird ganz nervös. [ID:up_h3] [#draft]
+	Er stellt sein Glas ab, so behutsam, als könnte es die Idee zerbrechen. [ID:up_h4] [#draft]
+- Danke für die Suppe. [ID:up_hr2] [#draft]
+	Gastwirt: Danke der Suppe. Sie hat gekocht, ich hab nur zugesehen. [ID:up_h5] [#draft]
+- … [ID:up_hr3] [#draft]
+	Der Wirt nickt, als hättest du etwas gesagt, und nimmt sein Tuch wieder auf. [ID:up_h6] [#draft]
+=> END

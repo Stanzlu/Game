@@ -11,6 +11,8 @@ verpasst den Anfang.“), der Witz geht gegen die Suppe und gegen ihn selbst (�
 fest und bietet nach dem dritten Angebot nichts mehr an: einmal, ruhig und ohne Hintersinn, dass sie jederzeit gehen kann und dass es hier schön ist; danach spricht in `stay_calm` nur noch die Erzählung, und die Wärme bleibt. Das Warum steht nicht
 in seinem Mund, sondern im Kamin (`hearth_back`: die Mulde, die Decke, die Schale, ein Zettel in seiner Schrift): er erklärt nie, und die Erzählung auch nicht.
 
+**Beleg in Akt VI, R6 (`content/dialogue/akt6/aufstehen.dialogue`):** `stand_first` (neun Zeilen, vier davon sein Mund) und `host_after` (vier mögliche Sprechzeilen auf dem längsten Weg und drei Antworten). Wenn die Spielerin nach dem dritten Angebot von der Bank aufsteht, fragt er einmal, leicht, mit seinem alten Satz („Musst du? Wirklich?“, `el_host_10`), lässt los („… Na gut.“) und gibt die Suppe mit („Aber nimm die Suppe mit. Sie kocht ohnehin für zu viele.“): der Witz geht gegen die Suppe, er hält nie fest, und kein Wort lobt das Aufstehen oder tadelt das Bleiben; er wischt einen Tisch, der schon sauber ist. Danach ist er derselbe Wirt ohne Angebot („Na? Ich wisch hier nur noch kurz. Das ist die andere Hälfte der Arbeit eines Wirts.“, ein Bau von `inn_host_3`: die halbe Arbeit ist daneben stehen, die andere das Wischen); auf „Tanzen?“ freut er sich („Sie wird ganz nervös“), ohne etwas daraus zu machen, und den Dank für die Suppe schiebt er der Suppe zu.
+
 ## Funktion
 
 Der charmanteste Beschützer: warm, lustig, nicht sinister (Bible §14). Er bietet Essen, Ruhe und Schönheit an, nie
