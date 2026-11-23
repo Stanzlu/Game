@@ -349,6 +349,9 @@ static func flag_problems(src: Sources) -> PackedStringArray:
 				reads[str(flag)] = map_path
 			for flag: Variant in params.get("talk_when", {}):
 				reads[str(flag)] = map_path
+				var spec: Variant = (params["talk_when"] as Dictionary)[flag]
+				if spec is Dictionary and (spec as Dictionary).has("and"):
+					reads[str((spec as Dictionary)["and"])] = map_path
 			if params.has("flag"):
 				sets[str(params["flag"])] = map_path
 				reads[str(params["flag"])] = map_path

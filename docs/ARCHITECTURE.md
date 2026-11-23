@@ -120,8 +120,13 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
 - Karten, Gespräche (Akt VI, R3): `NpcWalker` und `Decor` nehmen `"talk_when"` =
   `{<flag>: {"dialogue": <pfad>, "cue": <cue>}}`: das erste gesetzte Flag tauscht Pfad und Cue, wenn
   man das Ding anspricht (`Talk.pick`, also auch im laufenden Bild; ohne Flag bleibt alles, wie es
-  war). `StoryLint` prüft die Cues und zählt die Flags als gelesen; an anderen Requisiten (Schild,
-  Blocker, Tür) wirkt `"talk_when"` nicht.
+  war). Ein Eintrag kann mit `"and": "<flag>"` ein zweites Flag verlangen (R4: Bäckerin und Tafel
+  erst nach dem Auftrag). `StoryLint` prüft die Cues und zählt die Flags als gelesen; an anderen
+  Requisiten (Schild, Blocker, Tür) wirkt `"talk_when"` nicht.
+- Stimme ohne Körper (Akt VI, R4): `VoiceLine` (`world/fx/voice_line.gd`) tippt eine Zeile in Spielzeit
+  über das Bild (HUD-Ebene, nicht blockierend) und bricht mitten im Wort ab, wenn der Angesprochene
+  weiter als `cut_distance` weggeht; `HallVoice` (`world/levels/akt6/hall_voice.gd`) ist der eine
+  Auftritt des Richters in der Spiegelhalle.
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

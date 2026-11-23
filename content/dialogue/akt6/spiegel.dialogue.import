@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://b18ha5034darx"
+path="res://.godot/imported/spiegel.dialogue-06b8d3527aaf9ff004f6e2195feb0c67.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/spiegel.dialogue"
+dest_files=["res://.godot/imported/spiegel.dialogue-06b8d3527aaf9ff004f6e2195feb0c67.tres"]
+
+[params]
+
+defaults=true

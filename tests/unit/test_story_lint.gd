@@ -129,6 +129,25 @@ func test_a_flag_that_only_talk_when_reads_counts_as_read() -> void:
 	assert_eq(StoryLint.flag_problems(src), PackedStringArray())
 
 
+func test_the_second_flag_of_a_talk_when_entry_counts_as_read_too() -> void:
+	var src := _sources()
+	var sets := 'do WorldState.set_flag("story.a")\ndo WorldState.set_flag("story.b")'
+	src.dialogues["res://d/a.dialogue"] = sets
+	src.maps["res://m/tal.txt"] = _map(
+		[
+			_placement(
+				"",
+				{
+					"cue": "here",
+					"dialogue": DIALOGUE,
+					"talk_when": {"story.a": {"and": "story.b"}},
+				}
+			)
+		]
+	)
+	assert_eq(StoryLint.flag_problems(src), PackedStringArray(), "both are read by the map")
+
+
 func test_a_script_cue_that_is_missing_is_found_through_its_constant() -> void:
 	var src := _sources()
 	src.code["res://w/a.gd"] = (

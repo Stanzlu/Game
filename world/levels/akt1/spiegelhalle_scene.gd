@@ -20,6 +20,8 @@ func _ready() -> void:
 		Vector2(ROOMS.position * map.data.tile_size), Vector2(ROOMS.size * map.data.tile_size)
 	)
 	director = ElysiaDirector.attach(self)
+	# Act VI: the one voice of the Richter in this act, for whoever has come back (R4)
+	HallVoice.attach(self)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	WorldState.set_flag("elysia.hall_seen")
 	Beat.mark("hall_enter")

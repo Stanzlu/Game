@@ -6,6 +6,10 @@
 und wissen nicht, dass die Spielerin fort war: kein „wieder“, kein „zurück“, kein Nein, kein Zweifel, kein Wetter, keine Zeit. Die erste Zeile von `elysian_back` ist wortgleich mit der Schleife von Akt I (`el_loop_1`): das ist der Witz, und er stammt allein
 aus der Form; die Spielerin hört es jetzt, die Elysianer ändern sich nicht.
 
+**Beleg in Akt VI (R4, `content/dialogue/akt6/markt.dialogue`):** die Stimmen des Marktes, die kein eigenes Blatt haben (Festmeisterin, Musikerin, Bäckerin, Dichter, Torwächter; der Hallenwächter ist ernster und steht in `spiegel.dialogue`), folgen diesem: 16 Sprechzeilen mit
+Ø 14,2 Wörtern, „!“ in 5 davon, darunter der Gast des Festes („Auf dich!“, `mkt_guest_1`, die kürzere Form von „Auf den Helden!“). Jeder Cue ist ein Satzbau aus Akt I, den die Spielerin jetzt hört: das Vorausbieten (das Glas, das Brot, der Gruß, das Später, das schon eingeschenkt ist),
+das Hoch, das dreimal gleich klingt, die schönste Melodie, die auch die einzige ist, der Vers, der sich auf sich selbst reimt. Ein Satz darf wortgleich mit Akt I sein, nie ein ganzer Cue; sie wissen nicht, dass die Spielerin fort war.
+
 ## Funktion
 
 Der Chor von Elysia. Alle freuen sich, alle loben, niemand sagt Nein (Bible §7, §8). Sie meinen es gut; die Stimme darf
@@ -25,7 +29,7 @@ spaßig sein (Risiko 9); das Unheimliche liegt in den Wiederholungen, nie im Ton
 Je öfter man in Elysia ist, desto öfter hört man dasselbe (Loop, Bible §35 für die Musik, hier im Text). Nach dem Riss
 verschwinden sie aus dem Text; in Akt VI klingt die Stimme in Elysia wieder, jetzt mit dem Wissen der Spielerin.
 Akt VI (R3): dieselben Sätze im selben Bau („Mein Bett ist dein Bett“ wird „Mein Stuhl ist dein Stuhl“), das Vorausbieten und das Lob, das den Gelobten groß und sich selbst klein macht; das Paar, das sich spiegelt, freut sich „ganz genauso“,
-ohne es zu merken. Neu ist nur, wer zuhört.
+ohne es zu merken. Neu ist nur, wer zuhört. Akt VI (R4): derselbe Markt im selben Bau, nur ohne Anlass: die Zuwendung liegt schon bereit, und der Satz kommt, bevor gefragt wird (siehe Beleg).
 
 ## Goldzeilen
 
@@ -45,6 +49,9 @@ ohne es zu merken. Neu ist nur, wer zuhört.
 - `el_favor_6` „Nichts! So bescheiden. Wir bewundern das. Wir bewundern alles an dir.“
 - `gar_favor_2` „Mein Stuhl ist dein Stuhl. Ich sitze davor, auf dem Gras. Sehr gern sogar.“
 - `gar_elys_2` „Alle freuen sich. Der da drüben auch, ganz genauso wie ich.“
+- `mkt_fest_5` „Später gern. Ich habe dir ein Später schon eingeschenkt. Es steht neben dem Glas.“
+- `mkt_baker_3` „Du musst nicht fragen. Ich habe deine Frage gleich mit eingebacken.“
+- `mkt_gate_1` „Willkommen! Ich habe dich schon gegrüßt, bevor du am Tor warst. Du hast es nur noch nicht gehört.“
 
 ## Gegenbeispiele
 

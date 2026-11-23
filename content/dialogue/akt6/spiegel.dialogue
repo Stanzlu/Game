@@ -1,0 +1,34 @@
+# Die Halle der Spiegel, Akt VI, Segment R4 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O5, O9, O17; Bible §8, §9, §16, §46, §51; Stilblatt elysianer.md). Die Halle steht, wie sie stand. Der Hallenwächter weiß nicht, dass die Spielerin
+# schon einmal hier war, und weist auf die Räume hin, als sähe die Halle zum ersten Mal einen Besucher; sein Ton bleibt ernst und höflich. Der große Spiegel in der Spiegelkammer zeigt die Spielerin (in Akt I zeigte er die Halle und nicht sie:
+# sh_mirror_3). Der Text sagt das nie als Gedanke und nie als Kommentar ("diesmal", "endlich", "du bist" stehen nirgends): die ersten zwei Zeilen sind wortgleich mit sh_mirror_1 und sh_mirror_2, die dritte hat ein Wort weniger als sh_mirror_3, und
+# das ist der ganze Unterschied. Danach beschreibt die Erzählung, wie die Spielerin dort steht (Haltung, Schuhe, Staub, Licht), ohne Urteil, ohne Lob und ohne ein Wort für das, was sie sieht. Weiter hinsehen: nichts ändert sich, das Bild ist ruhig,
+# kein Zeichen, kein Zucken, ein Ding im Bild, das nicht zu ihr gehört. Wegsehen: der Spiegel behält sie, nicht beleidigt, nicht gekränkt (der Bau von sh_mirror_7, neue Worte). Der Spiegel erklärt nie, das Spiel urteilt nicht (Bible §51).
+# Keine Facette, keine Marke, nichts gesetzt: Akt I hat die Wahrnehmung schon vergeben, und der Auftritt des Richters nach diesem Spiegel steht in richter.dialogue (die Szene spielt ihn, nicht dieser Cue). Prüflinse (Bible §15, §51): kein Kind,
+# nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche, keine Ursache, keine Erklärung, kein Wirt, nichts, das Elysia wertet. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung).
+
+# --- Der Hallenwächter --------------------------------------------------------------------------------------------------------------
+# Derselbe ernste, höfliche Ton wie in sh_keeper_1 bis sh_keeper_3; "Willkommen in der Halle der Spiegel." und "Das ist die einzige Ausnahme, die ich kenne." sind wortgleich mit Akt I. Er entschuldigt eine Unordnung, die es nicht gibt, und zeigt der
+# Reihe nach auf Tore, Säulen und Spiegel, zuletzt hinauf. Er gibt keinen Hinweis und fragt nichts; keine Antwort.
+
+~ keeper_back
+Hallenwächter: Willkommen in der Halle der Spiegel. Verzeih die Unordnung. Es gibt keine, aber einem Besucher sagt man es. [ID:spg_keeper_1] [#draft]
+Er weist mit der flachen Hand auf die Tore, auf die Säulen, auf die Spiegel, einen nach dem anderen, und zuletzt hinauf zum großen Spiegel. [ID:spg_keeper_2] [#draft]
+Hallenwächter: Mich zeigt die Halle nur einmal, weil ich in der Mitte stehe. Das ist die einzige Ausnahme, die ich kenne. [ID:spg_keeper_3] [#draft]
+=> END
+
+# --- Der große Spiegel ---------------------------------------------------------------------------------------------------------------
+# Die ersten beiden Zeilen sind die von Akt I, Wort für Wort; die dritte kehrt nur das Ende um. Dann steht sie im Bild: die Füße ein wenig auseinander, die Hände lose, ein Riemen über der einen Schulter (der Rucksack, den sie trägt), Staub auf den
+# Schuhen, Licht im Haar. Die zwei Antworten sind gleichwertig und haben eigene Zeilen.
+
+~ mirror_back
+Der große Spiegel zeigt die Halle hinter dir. Die Säulen, beide Seiten, das Licht aus dem Nirgendwo. [ID:spg_mirror_1] [#draft]
+Du trittst näher. Er zeigt weiter die Halle. [ID:spg_mirror_2] [#draft]
+Dich zeigt er. [ID:spg_mirror_3] [#draft]
+Du stehst in der Mitte des Bildes, die Füße ein wenig auseinander, die Hände lose, ein Riemen über der einen Schulter. [ID:spg_mirror_4] [#draft]
+Auf den Schuhen liegt Staub, und das Licht der Halle liegt dir im Haar. [ID:spg_mirror_5] [#draft]
+- Weiter hinsehen. [ID:spg_mirror_r1] [#draft]
+	Du siehst weiter hin. Es ändert sich nichts, kein Zeichen, kein Zucken, kein Nicken in der Scheibe. [ID:spg_mirror_6] [#draft]
+	Ein Staubkorn zieht durch das Licht, von links nach rechts, an deiner Schulter vorbei, und geht aus dem Bild. [ID:spg_mirror_7] [#draft]
+- Wegsehen. [ID:spg_mirror_r2] [#draft]
+	Du siehst weg. Der Spiegel behält dich im Rahmen und fragt nicht, wohin du siehst. [ID:spg_mirror_8] [#draft]
+=> END
