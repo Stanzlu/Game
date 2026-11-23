@@ -25,6 +25,8 @@ func _ready() -> void:
 		Vector2(ROOMS.position * map.data.tile_size), Vector2(ROOMS.size * map.data.tile_size)
 	)
 	director = ElysiaDirector.attach(self)
+	# Act VI: the table in the middle of the hall, for whoever has come back (R5)
+	InnTable.attach(self)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	Beat.mark("inn_enter")
 	if WorldState.has_flag("elysia.inn_sleeping"):

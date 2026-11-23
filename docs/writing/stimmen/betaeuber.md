@@ -3,6 +3,11 @@
 **Beleg nur über den Gastwirt** (`gastwirt.md`, 17 Zeilen im Slice); der Betäuber selbst tritt erst in Akt VI als
 Figur auf (Plan 5.2). Das Blatt hält fest, was über den Gastwirt hinausgeht.
 
+**Beleg in Akt VI (R5, `content/dialogue/akt6/gasthaus.dialogue`):** der Betäuber hat kein anderes Gesicht als den Wirt, und das Blatt gilt wörtlich: er bietet an und hält nie fest (kein „du darfst nicht gehen“), er benennt die Strategie nie von
+außen, ist nie sinister und trägt keinen Werbeton. Der zentrale Encounter (Bible §14) sind drei Angebote an einem Tisch, jedes ein anderes Ding (Suppe, Musik, Ruhe), jedes frei abzulehnen; zwei Probezeilen stehen als Bau im Spiel, in neuen Worten
+(`inn_s3_2` für das Gehen „jederzeit“, `inn_s3_3` für „Hier ist es schön.“). **Das Warum (Risiko 8)** steht als Ding im Kamin und nie als Erklärung (`hearth_back`: eine Mulde im Teppich, eine gefaltete Decke, eine Schale, die niemand abräumte, und ein Zettel
+in seiner Schrift mit dem Ergebnis, nie der Ursache): seine Strategie hat einmal geholfen, und die Zeilen sagen nicht, ob sie gut oder schlecht ist.
+
 ## Funktion
 
 Grundidee „Du musst das gerade nicht fühlen.“ Der charmanteste Beschützer: warm, lustig, angenehm, nicht sinister, eng mit

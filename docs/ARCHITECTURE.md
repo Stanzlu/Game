@@ -127,6 +127,9 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   über das Bild (HUD-Ebene, nicht blockierend) und bricht mitten im Wort ab, wenn der Angesprochene
   weiter als `cut_distance` weggeht; `HallVoice` (`world/levels/akt6/hall_voice.gd`) ist der eine
   Auftritt des Richters in der Spiegelhalle.
+- Der Tisch im Gasthaus (Akt VI, R5): `InnTable` (`world/levels/akt6/inn_table.gd`) fragt einmal je
+  Sitzen (`stay`), setzt je Antwort `elysia.stay_N` und schließt das Bild in Schritten, solange die
+  Spielerin sitzt (Muster der Hütte); Aufstehen gibt das Bild zurück.
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

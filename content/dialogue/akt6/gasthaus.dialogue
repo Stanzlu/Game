@@ -1,0 +1,134 @@
+# Das Gasthaus zum Immer, Akt VI, Segment R5 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O5, O6, O12, O14, O17, O18; Bible §14, §45, §51, §52, Risiko 8; Stilblätter gastwirt.md und betaeuber.md, Muster huette.dialogue, Cues stay bis stay_calm).
+# Die Spielerin ist zurück, und der Wirt wartet. Er ist der freundlichste Mensch im Raum, warm, lustig und kein bisschen sinister; seine Wärme ist echt, und das Spiel urteilt nicht über das Bleiben. Er bietet an und hält nie fest, er sagt nie "du darfst
+# nicht gehen", er erklärt nie, was Betäubung ist, und kein Wort dieser Datei ist Therapie-, Diagnose- oder Suchtsprache. Der Sprecher heißt "Gastwirt" (O17), nie "Betäuber". Er sagt in dieser Datei kein "musst": "Musst du? Wirklich?" gehört R6. Sein Humor
+# ist die Suppe und sein Schutz (O12): nie ein Witz über die Spielerin, über das Bleiben oder darüber, dass er etwas anbietet. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen nie als Ziffern im Text.
+# Die Spielerin spricht nur über Antworten, kurz, nie mit einem Gefühl. Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche, keine Ursache, kein Richter, nichts, das Elysia oder das Bleiben wertet.
+# Aufstehen steht nirgends als Antwort und wird in keiner Zeile gelobt oder getadelt: es ist die Bewegung der Spielerin (R6), nie ein Menü.
+#
+# Die Karte wählt host_back (den Wirt) und hearth_back (den Kamin) mit elysia.returned (talk_when); die Zeilen von Akt I bleiben für jeden, der nicht zurück ist. Die Szene (InnTable) spielt stay einmal je Sitzen am Tisch in der Mitte. Gesetzt wird allein
+# elysia.stay_1 bis elysia.stay_3, je als erste Zeile des Angebots (stay_1, stay_2, stay_3); gelesen werden sie von stay und stay_next, nie im selben Cue wie ihr Setzer. Die Szene liest elysia.stay_3 literal für den einen Autosave.
+
+# --- Der Wirt wartet ----------------------------------------------------------------------------------------------------------------
+# Er winkt, kaum dass sie am Tresen steht, und der Tisch in der Mitte ist gedeckt "wie immer" (nur in seinem Mund, nie als Kommentar der Erzählung). Der Bau von gh_host_3 ("Hier sind alle Plätze die besten"), neue Worte: kein besserer Platz und kein
+# schlechterer. Die Suppe ist sein Witz, und sie ist der einzige: sie kocht sich selbst, er übernimmt die Verantwortung. Kein Angebot, kein "Setz dich": er zeigt, die Spielerin entscheidet. Keine Antwort.
+
+~ host_back
+Der Wirt hebt die Hand, kaum dass du an den Tresen trittst. Er winkt mit dem ganzen Arm, obwohl du direkt vor ihm stehst. [ID:inn_host_1] [#draft]
+Gastwirt: Da bist du ja! Komm, komm. Der Tisch in der Mitte ist gedeckt, wie immer. Ein besserer Platz? Gibt es nicht. Ein schlechterer auch nicht. [ID:inn_host_2] [#draft]
+Gastwirt: Die Suppe kocht, ganz allein. Ich steh daneben und übernehme die Verantwortung. Das ist die halbe Arbeit eines Wirts. [ID:inn_host_3] [#draft]
+=> END
+
+# --- Der Kamin: das Warum als Ding --------------------------------------------------------------------------------------------------
+# Risiko 8: eine Szene, in der seine Strategie richtig war. Sie steht nur als Ding im Raum, nie als Erklärung: die Spuren einer einzigen langen Nacht, in der das Feuer, die Decke und eine Schale Suppe jemandem geholfen haben, und am Morgen ging es wieder.
+# Gezeigt an einer Mulde, einer gefalteten Decke, einer Schale, die niemand abgeräumt hat (alles andere in der Halle räumt sich von selbst ab), und einem Zettel in der Schrift des Wirts, der das Ergebnis nennt, nie die Ursache. Wer da saß, ist ein anderer, nicht
+# die Spielerin. Kein Name, kein Täter, kein Kind, keine Familie, keine Krankheit, keine Rückblende. Der Kamin ist Gastfreundschaft und keine Rechtfertigung: keine Zeile sagt, ob Betäubung gut oder schlecht ist. Das letzte Wort hat der Zettel. Keine Antwort.
+
+~ hearth_back
+Vor dem Kamin liegt ein Teppich mit einer Mulde, rund und tief, wie sie nur eine ganze Nacht Sitzen hinterlässt. [ID:inn_hearth_1] [#draft]
+Über der Sessellehne hängt eine Decke, sorgfältig gefaltet, die Ecken genau aufeinander, wie man sie am Morgen zusammenlegt. [ID:inn_hearth_2] [#draft]
+Auf dem Boden steht eine Schale, bis auf den Grund ausgelöffelt, mit einem trockenen Ring am Rand. Alles andere in der Halle räumt sich von selbst ab. [ID:inn_hearth_3] [#draft]
+Am Sims lehnt ein Zettel in der runden Schrift des Wirts, an den Rändern gelb. Er trägt nur zwei Wörter, »Hat geholfen.« [ID:inn_hearth_4] [#draft]
+=> END
+
+# --- Sitzen und Bleiben -------------------------------------------------------------------------------------------------------------
+# Die Szene startet stay, sobald sich die Spielerin an den Tisch in der Mitte setzt (einmal je Sitzen), genau wie die Hütte: der erste Besuch hat hier keinen Vorspann. Nach dem dritten Bleiben steht stay_done.
+
+~ stay
+if WorldState.has_flag("elysia.stay_3")
+	=> stay_done
+=> stay_ask
+
+# Die Frage: der Tisch ist gedeckt, die Bank warm, und niemand sagt, wie lange. Drei Antworten, jede mit eigenen Zeilen (keine Fake Choice); "Bleiben." bringt das nächste Angebot, die anderen beiden lassen die Spielerin sitzen, wie sie sitzt.
+
+~ stay_ask
+Die Bank ist warm, der Tisch gedeckt, die Löffel liegen gerade. Niemand sagt, wie lange. [ID:inn_ask_1] [#draft]
+- Bleiben. [ID:inn_ask_r1] [#draft]
+	=> stay_next
+- Nur sitzen. [ID:inn_ask_r2] [#draft]
+	Du sitzt und siehst auf das Gedeck. Niemand räuspert sich, niemand rückt etwas näher. [ID:inn_ask_2] [#draft]
+- … [ID:inn_ask_r3] [#draft]
+	Das Feuer im Kamin murmelt vor sich hin. Sonst ist nichts zu hören. [ID:inn_ask_3] [#draft]
+=> END
+
+# Der Dispatcher liest die Flags (er setzt keines): jedes Angebot kommt einmal, in dieser Reihenfolge, auch über mehrere Sitzen verteilt.
+
+~ stay_next
+if WorldState.has_flag("elysia.stay_2")
+	=> stay_3
+if WorldState.has_flag("elysia.stay_1")
+	=> stay_2
+=> stay_1
+
+# --- Das erste Angebot: Essen ---------------------------------------------------------------------------------------------------------
+# Die Suppe kommt, ohne dass sie jemand bringt, und der Wirt hat einen Witz darüber, nicht über die Spielerin: sie schmeckt nach Suppe, mehr verspricht sie nicht, und sie hält es jedes Mal (das Angebot als Vorzug, wie "Es ist dieselbe. Das ist ja das Schöne
+# daran."). Kein Wort über sie als Trost oder als Ersatz. Frei abzulehnen: wer nur sitzt, wärmt sich die Hände am Dampf, und der Wirt nimmt es als Essen; wer schweigt, hört den Wirt leiser polieren.
+
+~ stay_1
+do WorldState.set_flag("elysia.stay_1")
+Du bleibst. Auf dem Tisch steht eine Schale Suppe, und der Dampf steigt schon auf. Niemand hat sie gebracht. [ID:inn_s1_1] [#draft]
+Gastwirt: Sie schmeckt nach Suppe. Mehr verspricht sie nicht, dafür hält sie es jedes Mal. Das nenn ich Charakter. [ID:inn_s1_2] [#draft]
+Gastwirt: Iss, wann du magst, oder lass sie dampfen. Die Suppe hat Geduld. [ID:inn_s1_3] [#draft]
+- Noch bleiben. [ID:inn_s1_r1] [#draft]
+	=> stay_2
+- Nur sitzen. [ID:inn_s1_r2] [#draft]
+	Du lässt den Löffel liegen und hältst die Hände über den Dampf. [ID:inn_s1_4] [#draft]
+	Gastwirt: Auch recht! Wärmen ist auch ein Essen, und der Dampf gehört zum Haus. [ID:inn_s1_5] [#draft]
+- … [ID:inn_s1_r3] [#draft]
+	Der Dampf steigt auf, dreht sich einmal und steigt weiter. [ID:inn_s1_6] [#draft]
+	Der Wirt poliert am Tresen sein Glas, jetzt leiser, als täte er es auf Zehenspitzen. [ID:inn_s1_7] [#draft]
+=> END
+
+# --- Das zweite Angebot: Musik --------------------------------------------------------------------------------------------------------
+# Ein anderes Ding als die Suppe: die Musik, die hier spielt und immer dieselbe ist. Der Bau von el_host_again_3 ("Hier spielt immer gleich Musik."), neue Worte; sie ist schön und dieselbe, und der Wirt verkauft das als Vorzug (keiner verpasst den
+# Anfang). Kein neuer Gedanke, nichts wird lauter. Frei abzulehnen: wer nur sitzt, lässt den Fuß einmal mitwippen; wer schweigt, hört die Musik die Halle bis zu den Balken füllen.
+
+~ stay_2
+do WorldState.set_flag("elysia.stay_2")
+Du bleibst noch. Die Musik im Hintergrund hörst du erst jetzt, warm und langsam. [ID:inn_s2_1] [#draft]
+Gastwirt: Hör, unsere Musik! Wir haben nur die eine. Dafür kennt sie jeder, und keiner verpasst den Anfang. [ID:inn_s2_2] [#draft]
+Gastwirt: Hör zu oder hör nicht zu. Sie spielt für beides. [ID:inn_s2_3] [#draft]
+- Noch bleiben. [ID:inn_s2_r1] [#draft]
+	=> stay_3
+- Nur sitzen. [ID:inn_s2_r2] [#draft]
+	Du sitzt. Dein Fuß wippt einmal mit, und du lässt ihn. [ID:inn_s2_4] [#draft]
+	Die Musik tut, als hätte sie es nicht gesehen. [ID:inn_s2_5] [#draft]
+- … [ID:inn_s2_r3] [#draft]
+	Die Musik füllt die Halle bis zu den Balken und nicht weiter. [ID:inn_s2_6] [#draft]
+=> END
+
+# --- Das dritte Angebot: Ruhe ---------------------------------------------------------------------------------------------------------
+# Ein drittes, anderes Ding: das Feuer, das Fenster, das Licht, das Zimmer hinter der Tür. Es hat keine Antwort, weil es nichts zu fragen gibt: der Wirt sagt ruhig und ohne Hintersinn, dass sie jederzeit gehen kann (der Bau von "Du kannst jederzeit gehen.
+# Das hab ich nie anders gesagt.", neue Worte), und dass es hier schön ist (der Bau von "Hier ist es schön. Das hab ich nicht erfunden, das ist es einfach.", neue Worte). Danach stehen alle drei Angebote hinter ihr. Die Erzählung endet ohne Folgerung:
+# die Tür ist, wo sie war. Das Spiel speichert nach dieser Zeile einmal (die Szene, nicht der Cue).
+
+~ stay_3
+do WorldState.set_flag("elysia.stay_3")
+Du bleibst noch einmal. Das Feuer brennt ruhig, und im Fenster steht der Garten. Unter einer der zwei Türen hinter dem Tresen liegt ein Streifen warmes Licht. [ID:inn_s3_1] [#draft]
+Gastwirt: Gehen kannst du jederzeit. Etwas anderes hab ich nie behauptet. [ID:inn_s3_2] [#draft]
+Gastwirt: Schön ist es hier. Dafür kann ich nichts. Ich wische nur die Tische. [ID:inn_s3_3] [#draft]
+Die Tür nach draußen ist, wo sie war, und das Licht liegt auf dem Tisch, wie es lag. [ID:inn_s3_4] [#draft]
+=> END
+
+# --- Danach: Bleiben ohne Ende --------------------------------------------------------------------------------------------------------
+# Jedes weitere Sitzen beginnt hier. Die Angebote kommen nicht wieder (kein viertes, nichts wiederholt sich in anderen Worten), die Wärme bleibt. Der Tisch ist gedeckt, die Bank warm, niemand sagt etwas.
+
+~ stay_done
+Der Tisch ist gedeckt, die Bank warm, und das Feuer brennt. Niemand sagt etwas. [ID:inn_done_1] [#draft]
+=> stay_more
+
+~ stay_more
+- Bleiben. [ID:inn_done_r1] [#draft]
+	=> stay_calm
+- Nur sitzen. [ID:inn_done_r2] [#draft]
+	Du sitzt, und die Bank sagt nichts dazu. [ID:inn_done_2] [#draft]
+- … [ID:inn_done_r3] [#draft]
+	Der Löffel liegt neben dem Teller und hat keine Eile. [ID:inn_done_3] [#draft]
+=> END
+
+# Kurze, wechselnde Zeilen: nichts wird besser, nichts schlechter. Der Wirt wird nicht sinister, die Musik nicht lauter, das Essen nicht mehr, und niemand bietet etwas an. Bleiben bleibt erlaubt, unbegrenzt.
+
+~ stay_calm
+% Du bleibst. Die Bank bleibt warm, und am Tresen klirrt leise ein Glas. [ID:inn_calm_1] [#draft]
+% Du bleibst. Das Feuer brennt, wie es brennt. [ID:inn_calm_2] [#draft]
+% Du bleibst. Der Wirt wischt einen Tisch, ohne aufzusehen, und es klingt nach Gesellschaft. [ID:inn_calm_3] [#draft]
+=> stay_more
