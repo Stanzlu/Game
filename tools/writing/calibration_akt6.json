@@ -1,0 +1,54 @@
+{
+ "_comment": "The Akt VI run of the autopilot (tools/autopilot/akt6_full.json, instant text, fixed 30 fps): seconds of play in all, seconds with a conversation open, clicks (lines moved on) and the straight-line pixels of the walks it skipped by teleporting. The way of calibrate.py --akt6. The run starts from tests/fixtures/saves/v2_akt5_end.json, which carries 1187 s of play: taken off here, so the numbers are the act's.",
+ "seconds": 174,
+ "dialogue_seconds": 67,
+ "clicks": 135,
+ "route_px": 8524,
+ "beats": [
+  {
+   "beat": "act6_morning",
+   "seconds": 5
+  },
+  {
+   "beat": "act6_mira",
+   "seconds": 19
+  },
+  {
+   "beat": "act6_quiet",
+   "seconds": 26
+  },
+  {
+   "beat": "act6_return",
+   "seconds": 46
+  },
+  {
+   "beat": "hall_richter_first",
+   "seconds": 95
+  },
+  {
+   "beat": "hall_richter_late",
+   "seconds": 104
+  },
+  {
+   "beat": "act6_inn",
+   "seconds": 108
+  },
+  {
+   "beat": "inn_stay",
+   "seconds": 120
+  },
+  {
+   "beat": "inn_stood",
+   "seconds": 124
+  },
+  {
+   "beat": "act6_exit",
+   "seconds": 153
+  },
+  {
+   "beat": "act6_home",
+   "seconds": 169
+  }
+ ],
+ "start_seconds": 1187
+}
