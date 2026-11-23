@@ -4080,12 +4080,65 @@
     {
      "type": "line",
      "ref": "up_h5"
+    },
+    {
+     "type": "line",
+     "ref": "aus_3"
+    },
+    {
+     "type": "line",
+     "ref": "aus_9"
     }
    ],
-   "payoff": "Der Witz des Wirts ist die Suppe, nie die Spielerin (Akt VI, R6, Brief O12). In Akt I gibt er sie „für später“ mit (`el_host_9`), in R5 kocht sie sich selbst und er übernimmt die Verantwortung (`inn_host_3`), sie schmeckt nach Suppe und verspricht nicht mehr (`inn_s1_2`); beim Aufstehen kocht sie „ohnehin für zu viele“ (`up_6`), und was er ihr mitgibt, verspricht nur, überall nach Suppe zu schmecken (`up_8`). Danach gilt der Dank der Suppe, nicht ihm (`up_h5`). Die Suppe geht als Gegenstand mit in die Wirklichkeit (R7); der Wirt kommt im Haus zu Besuch und bietet nichts an (R8).",
+   "payoff": "Der Witz des Wirts ist die Suppe, nie die Spielerin (Akt VI, R6, Brief O12). In Akt I gibt er sie „für später“ mit (`el_host_9`), in R5 kocht sie sich selbst und er übernimmt die Verantwortung (`inn_host_3`), sie schmeckt nach Suppe und verspricht nicht mehr (`inn_s1_2`); beim Aufstehen kocht sie „ohnehin für zu viele“ (`up_6`), und was er ihr mitgibt, verspricht nur, überall nach Suppe zu schmecken (`up_8`). Danach gilt der Dank der Suppe, nicht ihm (`up_h5`). Die Suppe geht als Gegenstand mit in die Wirklichkeit (R7: „und die Suppe ist noch warm“, `aus_3`, und im Tal die Schale in den Händen, `aus_9`); der Wirt kommt im Haus zu Besuch und bietet nichts an (R8).",
    "payoff_lines": [
     "up_8",
     "up_h5"
+   ]
+  },
+  {
+   "id": "riss-ohne-sturz",
+   "kind": "vorausdeutung",
+   "title": "Der Riss ohne Sturz (Akt VI, der Ausgang)",
+   "bible": "§8, §11, §37, §52",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "aus_1"
+    },
+    {
+     "type": "line",
+     "ref": "aus_2"
+    },
+    {
+     "type": "line",
+     "ref": "aus_5"
+    },
+    {
+     "type": "line",
+     "ref": "aus_6"
+    },
+    {
+     "type": "line",
+     "ref": "aus_7"
+    },
+    {
+     "type": "line",
+     "ref": "aus_8"
+    },
+    {
+     "type": "line",
+     "ref": "aus_10"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.left"
+    }
+   ],
+   "payoff": "Der Weg hinaus aus Elysia wiederholt sich, und diesmal fällt nichts (Akt VI, R7, Brief O4; Bible §11: Elysias Zählwerk fiel in Akt I Stück für Stück ab, die Musik lief aus wie ein Band, Schwarz, dann der Regen). Der Riss steht dort, wo sie ihn fand (`aus_1`), fragt nichts und zieht nicht (`aus_2`); sie tut einen Schritt, und das Zählwerk in der Ecke geht, ein Teil nach dem anderen, ohne zu zittern (`aus_5`). Im Tal ist das Licht fort (`aus_6`), der Bach läuft weiter, wie er in beiden Fällen gelaufen wäre (`aus_7`, ein Echo auf `gap_look_5`), die Ecke des Bildes ist leer, kein Balken, keine Zahl (`aus_8`), und das Haus steht, wo es stand (`aus_10`). Kein Wort über Elysia, den Wirt, Stufe oder Gold, kein Urteil über das Gehen; der Text zeigt Dinge und einen Schritt. Gesetzt wird `elysia.left` (die Szene), gelesen von der Karte (der Spalt im Tal ist zu) und von `ReturnBeat`.",
+   "payoff_lines": [
+    "aus_5",
+    "aus_7"
    ]
   }
  ],
@@ -5304,6 +5357,11 @@
    "flag": "elysia.stood_up",
    "axis": "Beschützer",
    "meaning": "Sie ist nach den drei Angeboten von der Bank im Gasthaus aufgestanden, mit ihrem eigenen Schritt (Akt VI, R6, Brief O6; Bible §14: freiwillig aufstehen). Der Cue `stand_first` setzt es als erste Zeile; die Szene (`InnTable`) liest es, rückt die Heldenquest von `inn` auf `stand` und speichert einmal (Beat `inn_stood`), und die Karte liest es am Wirt: wer aufgestanden ist, hört `host_after`, den Wirt ohne Angebot (`talk_when`). Der Wirt fragt einmal, lässt los und gibt die Suppe mit; keine Zeile lobt das Aufstehen oder tadelt das Bleiben, und wer früher aufsteht oder gar nicht, verliert nichts: die Tür war immer offen und nichts im Akt hängt an diesem Flag."
+  },
+  {
+   "flag": "elysia.left",
+   "axis": "Beschützer",
+   "meaning": "Sie ist durch den Riss am Rand von Elysia in die Wirklichkeit zurückgegangen, die zweite Überquerung (Akt VI, R7, Brief O4; Muster `elysia.rift_crossed` für die erste). Die Szene (`RiftSequence`, `ReturnBeat.leave_elysia`) setzt es am Ende des Schwarz; die Karte `tal.txt` liest es (der Spalt aus Licht ist zu: `unless`), und `ReturnBeat` spielt danach die Ankunft im Tal (`exit_valley`, Beat `act6_exit`). Der Riss fragt nichts, und nichts hängt am Wirt, am Tisch oder am Aufstehen: das Flag setzt sich von jeder Stufe der Rückkehr aus, und die Quest `main_return_way` rückt von `elysia`, `inn` oder `stand` auf `home`."
   }
  ]
 }

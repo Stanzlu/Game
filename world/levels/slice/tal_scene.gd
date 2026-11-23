@@ -92,6 +92,9 @@ func _ready() -> void:
 		ReturnBeat.attach_morning(self, "morning_valley")
 	if MiraLeaves.due():
 		MiraLeaves.attach(self)
+	# the way out of Elysia (Act VI, R7): the light is gone, and the valley says what stands there
+	if ReturnBeat.exit_due():
+		ReturnBeat.attach_exit(self)
 	WorldState.flag_changed.connect(_on_flag_changed)
 	if from_bachlauf:
 		Beat.mark("bachlauf_back")

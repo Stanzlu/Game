@@ -9,24 +9,37 @@ extends Node
 ##   is not from here, for a breath (the flag `valley.rift_light`, which R2 reads: the gap in the
 ##   valley), and the walk moves on to "pull". Nothing pulls: she can leave it be.
 ##
+## - The way out (R7): she has stepped out of Elysia through the rift, and the gap of light in the
+##   valley is gone (`elysia.left`). The valley says what is where the light stood; the walk is
+##   at "home".
+##
 ## A phase of the physics step like the homecomings of Acts III to V (the pauses count play time;
 ## the lines run by themselves and hand the phase on). A game closed during the lines has marked
 ## nothing: it plays again, and everything it sets is idempotent.
 
-enum Kind { MORNING, QUIET }
+enum Kind { MORNING, QUIET, EXIT }
 enum Part { WAIT, SAY, OFF }
 
 const DIALOGUE := "res://content/dialogue/akt6/leere.dialogue"
 const QUEST := "main_return_way"
 const MORNING_BEAT := "act6_morning"
 const QUIET_BEAT := "act6_quiet"
+const EXIT_BEAT := "act6_exit"
+const EXIT_DIALOGUE := "res://content/dialogue/akt6/ausgang.dialogue"
+## The stages of the walk from which the way out leads home (nothing in the walk is a gate: the
+## inn, the table and the host were never needed).
+const LEAVING_FROM: PackedStringArray = ["elysia", "inn", "stand"]
 ## Pauses before the first line, in seconds of play time: the picture is up, the room holds still.
 const PAUSE_MORNING := 0.8
 const PAUSE_QUIET := 1.2
+const PAUSE_EXIT := 1.0
+const NAMES := {Kind.MORNING: "Morning", Kind.QUIET: "Quiet", Kind.EXIT: "Exit"}
+const PAUSES := {Kind.MORNING: PAUSE_MORNING, Kind.QUIET: PAUSE_QUIET, Kind.EXIT: PAUSE_EXIT}
 
 var _scene: GameScene
 var _kind := Kind.MORNING
 var _cue := ""
+var _path := DIALOGUE
 var _cut: Cutscene
 var _part := Part.WAIT
 var _clock := 0.0
@@ -49,6 +62,24 @@ static func quiet_due() -> bool:
 	return WorldState.has_flag("valley.mira_left") and not Beat.reached(QUIET_BEAT)
 
 
+## The state of the way out of Elysia (the second crossing, RiftSequence): the flag, and the walk
+## goes home from wherever it stood in Elysia. Idempotent.
+static func leave_elysia() -> void:
+	WorldState.set_flag("elysia.left")
+	if WorldState.quest_stage(QUEST) in LEAVING_FROM:
+		WorldState.advance_quest(QUEST, "home")
+
+
+## True when she has left Elysia and the valley has not said what stands where the light stood.
+static func exit_due() -> bool:
+	return WorldState.has_flag("elysia.left") and not Beat.reached(EXIT_BEAT)
+
+
+## Puts the arrival in the valley into the scene, unless it has been told.
+static func attach_exit(on: GameScene) -> ReturnBeat:
+	return _attach(on, Kind.EXIT, "exit_valley")
+
+
 ## Puts the morning into the scene (`cue`: its lines for this place), unless it has been told.
 static func attach_morning(on: GameScene, cue: String) -> ReturnBeat:
 	return _attach(on, Kind.MORNING, cue)
@@ -61,10 +92,11 @@ static func attach_quiet(on: GameScene) -> ReturnBeat:
 
 static func _attach(on: GameScene, kind: Kind, cue: String) -> ReturnBeat:
 	var beat := ReturnBeat.new()
-	beat.name = "ReturnBeat%s" % ("Morning" if kind == Kind.MORNING else "Quiet")
+	beat.name = "ReturnBeat%s" % NAMES[kind]
 	beat._scene = on
 	beat._kind = kind
 	beat._cue = cue
+	beat._path = EXIT_DIALOGUE if kind == Kind.EXIT else DIALOGUE
 	on.add_child(beat)
 	return beat
 
@@ -82,7 +114,7 @@ func _physics_process(delta: float) -> void:
 				_part = Part.SAY
 				_clock = 0.0
 		Part.SAY:
-			if _clock >= (PAUSE_MORNING if _kind == Kind.MORNING else PAUSE_QUIET):
+			if _clock >= float(PAUSES[_kind]):
 				_play()
 
 
@@ -98,7 +130,7 @@ func _quiet() -> bool:
 
 func _play() -> void:
 	_busy = true
-	await _cut.say(DIALOGUE, _cue)
+	await _cut.say(_path, _cue)
 	_busy = false
 	_part = Part.OFF
 	# one block without a wait: the autosave that the mark asks for is written when the cutscene
@@ -107,6 +139,8 @@ func _play() -> void:
 		if not WorldState.is_quest_started(QUEST):
 			WorldState.start_quest(QUEST)
 		Beat.mark(MORNING_BEAT)
+	elif _kind == Kind.EXIT:
+		Beat.mark(EXIT_BEAT)
 	else:
 		WorldState.set_flag("valley.rift_light")
 		if not WorldState.is_quest_started(QUEST):

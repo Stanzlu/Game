@@ -134,6 +134,10 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   aufsteht, und spielt einmal `stand_first` (`akt6/aufstehen.dialogue`: der Wirt fragt, lässt los, gibt die
   Suppe mit; `elysia.stood_up`, Quest `main_return_way` von `inn` auf `stand`, Beat `inn_stood`); der Wirt
   spricht danach `host_after` (`talk_when`).
+- Der Ausgang (Akt VI, R7): `RiftSequence` kennt zwei Überquerungen: mit `elysia.returned` ist es die sanfte
+  (`_let_go`: zwei Zwischensequenzen aus `akt6/ausgang.dialogue`, das Zählwerk lautlos Stück für Stück, die Musik
+  läuft aus, nichts gekürzt), sonst der Sturz von Akt I; `ReturnBeat.leave_elysia` setzt `elysia.left` und rückt die
+  Quest `main_return_way` auf `home`, `TalScene` spielt die Ankunft (`ReturnBeat`, Art `EXIT`, Beat `act6_exit`).
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).
