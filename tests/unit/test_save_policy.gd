@@ -159,9 +159,54 @@ func test_the_frozen_v2_end_of_act_three_keeps_its_story() -> void:
 	assert_gt(s.playtime_seconds, 480.0, "Act II's 375 seconds and the act's own")
 
 
+func test_the_frozen_v2_end_of_act_six_keeps_its_story() -> void:
+	# a real run of tools/autopilot/akt6_full.json from v2_akt5_end.json, frozen where it ends: the
+	# house after the way home, the host at the fire, the act over and the build's last chapter
+	# reached (R9, ADR-074). Nothing was set up: the soup came from the host, the facet from the water
+	var result := SaveCodec.decode(_fixture("v2_akt6_end.json"))
+	assert_true(result.ok, result.error)
+	assert_eq(result.schema_version, 2)
+	assert_eq(result.warnings, PackedStringArray(), "a v2 file needs no migration")
+	var s := result.state
+	assert_eq(s.player.map, "haus")
+	assert_eq(s.ui_mode, GameState.UiMode.REAL, "she came back out of Elysia")
+	for chapter: String in ["act1", "act2", "slice", "act3", "act4", "act5", "act6"]:
+		assert_true(Chapter.in_flags(s.flags, chapter), "%s is marked as reached" % chapter)
+	assert_true(Chapter.in_flags(s.flags, Chapter.LAST), "the last chapter of this build")
+	for facet: String in [
+		"care", "connection", "integrity", "perception", "boundaries", "trust", "courage"
+	]:
+		assert_true(s.facets.has(facet), "%s came from the acts before" % facet)
+	assert_true(s.facets.has("aliveness"), "aliveness came from the water of the basin")
+	var way: GameState.QuestProgress = s.quests["main_return_way"]
+	assert_eq(way.stage, "done")
+	assert_eq(
+		way.history,
+		PackedStringArray(["empty", "gone", "pull", "elysia", "inn", "stand", "home", "done"])
+	)
+	for quest_id: String in s.quests:
+		assert_not_null(ContentDB.quest(quest_id).stage(s.quests[quest_id].stage), quest_id)
+	for flag: String in [
+		"valley.mira_left",
+		"valley.rift_light",
+		"elysia.returned",
+		"elysia.back_gift",
+		"hall.richter_first",
+		"hall.richter_late",
+		"elysia.stay_3",
+		"elysia.stood_up",
+		"elysia.left",
+		"house.guest_host",
+		"melody.elysia_home",
+		"beat.act6_home",
+	]:
+		assert_true(s.flags.has(flag), "%s was set on the way" % flag)
+	assert_true(s.inventory.has("item_soup"), "the soup of the host came with her")
+
+
 func test_the_frozen_v2_end_of_act_five_keeps_its_story() -> void:
 	# a real run of tools/autopilot/akt5_full.json from v2_akt4_end.json, frozen where it ends: the
-	# house, the keeper at the hearth, the act over and the build's last chapter reached (G10, ADR-073)
+	# house, the keeper at the hearth, the act over (G10, ADR-073); the build goes on in Act VI (R1)
 	var result := SaveCodec.decode(_fixture("v2_akt5_end.json"))
 	assert_true(result.ok, result.error)
 	assert_eq(result.schema_version, 2)

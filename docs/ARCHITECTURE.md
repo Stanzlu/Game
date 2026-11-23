@@ -81,7 +81,7 @@ GameScene (world/game_scene.gd)          gemeinsame Komposition, Gruppe "save_co
   Helden“), Beenden. Die Fußzeile trägt den Tastenhinweis des benutzten Geräts und die Version. Unter dem
   Logo „Nach Elysia“ steht `END_OF_SLICE`, sobald der neueste lesbare Stand das letzte Kapitel trägt
   (`SaveSystem.slice_finished()`, liest `Chapter.LAST`; seit Akt III, W1, ist das Ende von Akt II nicht mehr das
-  Ende: „Weiter“ beginnt den Morgen danach, ADR-070; seit Akt III, W6, setzt die Heimkehr im Haus `chapter.act3`, und das war bis Akt IV, S1, das Ende des Builds; seit S1 ist es `chapter.act4`, das Akt IV am Ende von S8 setzt, ADR-071; seit Akt V, G1, ist es `chapter.act5`, das G9 setzen wird, ADR-073). `--start=<schlüssel>` und
+  Ende: „Weiter“ beginnt den Morgen danach, ADR-070; seit Akt III, W6, setzt die Heimkehr im Haus `chapter.act3`, und das war bis Akt IV, S1, das Ende des Builds; seit S1 ist es `chapter.act4`, das Akt IV am Ende von S8 setzt, ADR-071; seit Akt V, G1, ist es `chapter.act5`, das G9 setzt, ADR-073; seit Akt VI, R1, ist es `chapter.act6`, das R8 setzt, ADR-074). `--start=<schlüssel>` und
   `--continue` für Tests und Aufnahmen. Zwei Titel (ADR-030): „Elysia“, bis
   `SaveSystem.reached_reality()` wahr ist, danach „Nach Elysia“ (ADR-035); `--title=elysia|real`.
 
@@ -142,6 +142,9 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   Phasenautomat des Hauses (Muster `MountainHomecoming`): das Haus, der Besuch des Wirts ohne Angebot (nur mit
   `elysia.stood_up`, `house.guest_host`, Zelle Φ), der Antreiber liest das Blatt, `melody.elysia_home` (`elysia_home_0`),
   Stufe `done`, `Chapter.mark("act6")` und Beat `act6_home` still in einem Block.
+- Der Durchlauf (Akt VI, R9): `tools/autopilot/akt6_full.json` spielt den ganzen Akt von `v2_akt5_end` ohne
+  Voreinstellung (Marken in `check.sh`, Messung `tools/writing/calibration_akt6.json`); sein letzter Autosave ist
+  der eingefrorene Stand `tests/fixtures/saves/v2_akt6_end.json`, der als Ende des Spiels zählt (`Chapter.LAST`).
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

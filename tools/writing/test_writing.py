@@ -449,6 +449,16 @@ class ActCalibrationTests(unittest.TestCase):
         beats = [("act4_home", 3000), ("pass_enter", 3100), ("act5_home", 4300)]
         self.assertEqual(calibrate.act_origin("akt5", beats), 3100)
 
+    def test_act_six_runs_from_the_end_of_act_five_and_begins_the_day_after(self):
+        self.assertEqual(calibrate.ACT_STARTS["akt6"], "act6_morning")
+        self.assertGreater(calibrate.start_seconds("akt6"), 900)
+        data = calibrate.act_baseline("akt6")["data"]
+        self.assertEqual(data["beats"][0]["beat"], "act6_morning")
+        self.assertEqual(data["beats"][-1]["beat"], "act6_home", "the run ends with the act")
+        self.assertEqual(data["start_seconds"], calibrate.start_seconds("akt6"))
+        beats = [("act5_home", 3000), ("act6_morning", 3100), ("act6_home", 4300)]
+        self.assertEqual(calibrate.act_origin("akt6", beats), 3100)
+
     def test_the_baselines_are_real_runs_with_more_clicks_than_a_third_of_nothing(self):
         for act in calibrate.BASELINES:
             floor = calibrate.act_baseline(act)
@@ -456,7 +466,8 @@ class ActCalibrationTests(unittest.TestCase):
             self.assertGreater(floor["data"]["clicks"], 50)
             minutes, lines = calibrate.act_estimate(act, 1)
             self.assertTrue(8.0 < minutes < 45.0, "%s: %.1f" % (act, minutes))
-            self.assertGreater(lines, 250)
+            # Act VI has the fewest lines of the acts on purpose (Bible 45: light, quiet, a joke)
+            self.assertGreater(lines, 200 if act == "akt6" else 250)
 
 
 class ReadableTests(unittest.TestCase):

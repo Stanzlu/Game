@@ -196,8 +196,44 @@ passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `pass_enter`
   wie das Spiel verlangt.
 - **Der Lauf ist der eingefrorene Stand `v2_akt5_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act5`, Quest `done` mit zehn Stufen, die sieben Facetten, 295 Flags, vier
   Beziehungen: Tess `close`, Mira, Orin und Lio `familiar`, der Wächter am Kamin). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt und seine Geschichte
-  erzählt, `test_save_system`, dass er als Ende des Spiels zählt (`Chapter.LAST` ist `act5`: das Menü zeigt „fertig“, „Neues Spiel“ fragt zurück). In ihm endet dieser Bau; Akt VI beginnt, wenn
-  er gebaut wird, in ihm.
+  erzählt, `test_save_system`, dass er als Ende des Spiels zählt (`Chapter.LAST` ist `act5`: das Menü zeigt „fertig“, „Neues Spiel“ fragt zurück). Bis Akt VI (R1) endete in ihm dieser Bau; Akt VI beginnt in ihm.
+
+## Akt VI nach dem Lauf des Autopiloten (P6.18, R9, ADR-074)
+
+`tools/autopilot/akt6_full.json` spielt Akt VI vom eingefrorenen Ende von Akt V (still im Haus) bis zum stillen Ende im Haus: den Tag danach (die wenigen Zeilen von Dingen, Miras Abschied am alten Lager,
+das Haus mit dem Licht, das nicht von hier ist), den Spalt im Tal und den Schritt zurück nach Elysia, den Garten (das Kompliment der Gärtnerin, das Becken, die Elysianer, die vorausbieten), den Markt
+(Dichter, Festmeisterin, Torwächter), die Spiegelhalle mit der Stimme des Richters (der erste Satz, den die Spielerin im Gehen abbricht, und der eine leise beim nächsten Besuch), das Gasthaus (der Wirt, der Kamin, der Tisch mit den drei Angeboten und das
+Aufstehen mit der Suppe), den Riss am Rand des Bildes, der nichts fragt, und den Weg nach Hause (der Wirt klopft und setzt sich ans Feuer, Elysias Lied, das stille Ende mit der Kapitelmarke `act6`).
+**Der Lauf setzt nichts voraus:** kein Flag, kein Gegenstand, keine Facette und keine Quest-Stufe wird gesetzt, alles kommt aus dem Spiel (das Licht im Tal aus dem Haus, die Suppe vom Wirt, die Facette
+`aliveness` aus dem Wasser des Beckens, `elysia.stood_up` aus dem Aufstehen vom Tisch, darum klopft der Wirt am Ende). Er nimmt in jedem Gespräch die erste Antwort und beginnt in
+`tests/fixtures/saves/v2_akt5_end.json`. `check.sh` spielt den Lauf bei jedem Durchgang (rund 8 Sekunden) und verlangt 25 Marken.
+
+Das Log gibt den Weg: **174 Sekunden** Spielzeit (der Stand trägt 1.187 davon schon), 67 mit offenem Gespräch, 135 geklickte Zeilen (**58 %** der 232 Zeilen von Akt VI, wie `calibrate.py` zählt: auch
+Zweige, die der Lauf nicht nimmt, und die Antworten) und 8.524 Pixel Luftlinie, die der Autopilot springt statt geht. Der Weg ohne Lesen ist damit 107 Sekunden plus 97 für die Sprünge, **3,4 Minuten**.
+
+| Tempo | Akt VI |
+|---|---|
+| langsam | 15,3 min |
+| normal | 12,1 min |
+| schnell | 10,1 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 28,0 min |
+
+`python3 tools/writing/calibrate.py --akt6` zeigt die Tabelle, `--record-akt6 <Log>` schreibt `calibration_akt6.json` neu (nach einem neuen Segment den Lauf wiederholen), `--akt6 --log <Log>`
+passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `act6_morning`). Dazu vier Befunde:
+
+- **Der Plan rechnet mit 75 Minuten für Akt VI, das Modell mit 10 bis 15.** Akt VI hat die wenigsten Zeilen (232, Akt III: 272) und nach Akt III das kürzeste Modell (keine neue Karte, ein Weg von 3,4 Minuten
+  gegen 7,8 in Akt V; kürzer sind nur der Weg von Akt III mit 2,5 und der von Akt I mit 3,3 Minuten). Die Lücke zu den 75 Minuten ist mit rund 6-fach die mittlere (Akt V rund 4-fach, Akt IV und II rund 5-fach, Akt I rund 7-fach, Akt III rund 8-fach). Der äußerste Eckfall gibt 28;
+  dein Durchlauf legt Anteil, Pause und Umweg fest. Dass Akt VI leicht ist, gehört zum Bogen (Bible §45: die Rückkehr ist die Erholung, nicht der Höhepunkt); die Minuten, die der Plan darüber hinaus
+  nennt, sind Warten und Bleiben, die das Spiel nicht zählt (das Sitzen am Tisch ist unbegrenzt, `stay_calm`).
+- **Der Autopilot sieht 58 % der Zeilen** (Akt V: 68 %): die Gärtnerin, der Wirt und der Dichter haben Antworten und Zustände, die der Lauf nicht nimmt (das Annehmen und das Ablehnen des Kompliments, das
+  Tanzen, das Schweigen, die Antworten der Facetten). Was der Lauf nicht sieht, steht unter den GUT-Tests der Segmente (`DialogueWalk`, `BoxAnswers.pick`): die anderen Antworten
+  der Gärtnerin und des Wirts, das Ablehnen des Kompliments, die Heimkehr ohne den Wirt, der Ausgang ohne Aufstehen.
+- **Die Textdichte liegt bei 19,1 Zeilen je Minute** (Akt V: 16,0; Akt IV: 21,5; Plan 9.6: 6): Die Dichte liegt unter den Akten I bis IV (21,5 bis 25,9) und über Akt V: Akt VI hat wenig Weg, aber auch Zeit ohne Zeile. Sie tragen
+  die Heimkehr (der Wirt kommt und setzt sich, Elysias Lied von gut zehn Sekunden) und das Sitzen am Tisch, das der Lauf nach drei Angeboten beendet und ein Spieler nicht muss.
+- **Der Lauf ist der eingefrorene Stand `v2_akt6_end.json`:** sein letzter Autosave, im Haus nach dem Ende (`chapter.act6`, Quest `done` mit acht Stufen, die acht Facetten, 321 Flags, vier
+  Beziehungen: Tess `close`, Mira, Orin und Lio `familiar`, der Wirt am Kamin, die Suppe in der Tasche). Der Stand wird nie von Hand geändert; `test_save_policy` prüft, dass er ohne Reparatur lädt
+  und seine Geschichte erzählt, `test_save_system`, dass er als Ende des Spiels zählt (`Chapter.LAST` ist `act6`: das Menü zeigt „fertig“, „Neues Spiel“ fragt zurück). In ihm endet dieser Bau;
+  Akt VII beginnt, wenn er gebaut wird, in ihm.
 
 ## Benutzen
 
@@ -208,10 +244,11 @@ python3 tools/writing/calibrate.py --akt2                            Akt II bei 
 python3 tools/writing/calibrate.py --akt3                            Akt III bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt4                            Akt IV bei jedem Tempo (eigener Weg)
 python3 tools/writing/calibrate.py --akt5                            Akt V bei jedem Tempo (eigener Weg)
-python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2 bis --record-akt5 für Akt II bis V)
+python3 tools/writing/calibrate.py --akt6                            Akt VI bei jedem Tempo (eigener Weg)
+python3 tools/writing/calibrate.py --record-akt1 run.log             den Lauf von Akt I als Messung festhalten (--record-akt2 bis --record-akt6 für Akt II bis VI)
 python3 tools/writing/calibrate.py --segment WÖRTER ZEILEN WEG_MIN   ein geplantes Segment
 python3 tools/writing/calibrate.py --log durchlauf.log               Modell an einen echten Durchlauf des Slice anpassen
-python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2 bis --akt5 für Akt II bis V)
+python3 tools/writing/calibrate.py --akt1 --log durchlauf.log        dasselbe für einen echten Durchlauf von Akt I (--akt2 bis --akt6 für Akt II bis VI)
 ```
 
 `--segment 1200 150 8` heißt: 1.200 Wörter in 150 Zeilen und 8 Minuten reiner Weg ergeben 15,5 bis 18,1 Minuten.
