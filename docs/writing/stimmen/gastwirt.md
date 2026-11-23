@@ -3,6 +3,14 @@
 **Beleg im Slice:** 17 Zeilen (Suppe, Wiederkehr). Der Betäuber selbst hat ein eigenes Blatt (`betaeuber.md`); der Gastwirt
 ist sein Gesicht in Akt I (Plan 5.2).
 
+**Beleg in Akt VI (R5, `content/dialogue/akt6/gasthaus.dialogue`):** neun Sprechzeilen als Gastwirt (Ø 15,2 Wörter, 2,9 Sätze je Zeile, „!“ in 3 von 9) in `host_back` (er winkt, kaum dass sie am Tresen steht,
+der Tisch in der Mitte ist gedeckt, die Suppe kocht sich selbst) und in den drei Angeboten am Tisch (`stay_1` bis `stay_3`: Essen, Musik, Ruhe), dazu 24 Erzählzeilen um ihn und den Kamin. Er ist **derselbe Wirt, nur ohne die
+Gewissheit der Schleife und ohne Druck**: er zeigt, die Spielerin entscheidet. Die Mittel sind die alten (Doppelungen wie „Komm, komm.“, die Frage, die sich selbst beantwortet, das Angebot als Vorzug: „Dafür kennt sie jeder, und keiner
+verpasst den Anfang.“), der Witz geht gegen die Suppe und gegen ihn selbst („Ich steh daneben und übernehme die Verantwortung.“), nie gegen die Spielerin, das Bleiben oder das, was er anbietet. Die drei Angebote sind drei verschiedene Dinge
+(die Suppe, die eine Musik, das Feuer mit dem Zimmer hinter der Tür), jedes frei abzulehnen und jedes mit eigenen Zeilen für „Nur sitzen.“ und „…“. Er sagt in R5 **kein „musst“** (das eine „Musst du? Wirklich?“ gehört R6), hält nie
+fest und bietet nach dem dritten Angebot nichts mehr an: einmal, ruhig und ohne Hintersinn, dass sie jederzeit gehen kann und dass es hier schön ist; danach spricht in `stay_calm` nur noch die Erzählung, und die Wärme bleibt. Das Warum steht nicht
+in seinem Mund, sondern im Kamin (`hearth_back`: die Mulde, die Decke, die Schale, ein Zettel in seiner Schrift): er erklärt nie, und die Erzählung auch nicht.
+
 ## Funktion
 
 Der charmanteste Beschützer: warm, lustig, nicht sinister (Bible §14). Er bietet Essen, Ruhe und Schönheit an, nie
@@ -21,6 +29,8 @@ Spieler zu bleiben; es ändert sich nur nichts. Die Auflösung ist das freiwilli
 Erste Suppe (Ankommen) → wieder und wieder dieselbe (Schleife wird hörbar) → „Bleib länger.“ → Akt VI: derselbe Wirt, jetzt
 mit der Frage, ob die Spielfigur aufsteht, und dem Grund, warum Betäubung einmal geholfen hat (Plan 5.2).
 
+Akt VI, R5: der Wirt wartet, der Tisch ist gedeckt, und was früher die Schleife war, ist jetzt ein Angebot nach dem anderen: Suppe, Musik, Ruhe, jedes einmal, danach nur noch Wärme (R6: das Aufstehen, die Suppe zum Mitnehmen; R8: er sitzt im Haus am Feuer und bietet nichts an).
+
 ## Goldzeilen
 
 - `el_host_2` „Die beste Suppe von Elysia. Ich mach sie jeden Tag. Jeden Tag dieselbe. Perfektion ändert man nicht.“
@@ -35,6 +45,9 @@ mit der Frage, ob die Spielfigur aufsteht, und dem Grund, warum Betäubung einma
 - `el_host_again_1` „Noch eine Suppe? Es ist dieselbe. Das ist ja das Schöne daran.“
 - `el_host_again_2` „Setz dich doch. Bleib ein bisschen. Bleib länger.“
 - `el_host_again_3` „Hier spielt gleich Musik. Hier spielt immer gleich Musik.“
+- `inn_host_2` „Da bist du ja! Komm, komm. Der Tisch in der Mitte ist gedeckt, wie immer. Ein besserer Platz? Gibt es nicht. Ein schlechterer auch nicht.“
+- `inn_host_3` „Die Suppe kocht, ganz allein. Ich steh daneben und übernehme die Verantwortung. Das ist die halbe Arbeit eines Wirts.“
+- `inn_s3_2` „Gehen kannst du jederzeit. Etwas anderes hab ich nie behauptet.“
 
 ## Gegenbeispiele
 

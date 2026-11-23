@@ -404,7 +404,8 @@ func test_a_game_saved_in_elysia_after_the_return_loads_with_elysias_interface()
 func test_the_walk_has_the_stage_elysia_with_its_journal_and_the_gap_its_words() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_eq(quest.stage("pull").next, PackedStringArray(["elysia"]))
-	assert_true(quest.stage("elysia").is_final(), "final until the inn (R5)")
+	assert_eq(quest.stage("elysia").next, PackedStringArray(["inn"]), "the inn follows (R5)")
+	assert_true(quest.stage("inn").is_final(), "final until the standing up (R6)")
 	var line := tr("QUEST_MAIN_RETURN_WAY_ELYSIA")
 	assert_ne(line, "QUEST_MAIN_RETURN_WAY_ELYSIA")
 	for word: String in ["Leere", "Gefühl", "heilen", "loslassen"]:
