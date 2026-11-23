@@ -1,0 +1,25 @@
+# Der Richter in der Halle der Spiegel, Akt VI, Segment R4 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O9, O12, O17; Bible §14, §33, §51, Risiko 8; Stilblatt richter.md). Genau ein Auftritt in diesem Akt, und er hat zwei Teile. Beide Cues
+# spielt die Szene (HallVoice), nie ein Gespräch: die Zeilen stehen nicht in einem Dialogfeld, sondern als Text im Bild (VoiceLine, getippt in Spielzeit), jede für sich, und die erste bricht mitten im Wort ab, sobald die Spielerin weit genug
+# gegangen ist ("erstmals ist die Spielfigur schneller als er"); wer stehen bleibt, liest sie bis zum Ende. Darum trägt jeder Anfang etwas ohne sein Ende. Die Szene setzt beide Flags selbst, sobald der Teil beginnt ("hall.richter_first",
+# "hall.richter_late"); kein Cue dieser Datei setzt oder liest etwas. Er hat keinen Körper und kann nicht folgen. Alle Zeilen sind Entwürfe, Sprecher "Richter" (in Akt II hieß er "Stimme", seit Akt IV heißt er so).
+# Prüflinse (Bible §15, §51): er beschämt, das Spiel nicht, der Text stellt sich nie auf seine Seite; kein Wert, kein Versagen, kein "Du bist", kein Urteil über die Person; kein Name, kein Kind, keine Familie, keine Ursache, kein Täter.
+
+# --- Der Auftritt: die Aktenzeile ---------------------------------------------------------------------------------------------------
+# Das Gegenstück zu ric_1 bis ric_8 (Akt II sprach nur über Dinge): hier darf er über die Spielerin sprechen, solange es nur Kleinigkeiten sind, und jede ist kleiner als die davor. Die erste Zeile ist eine einzige Aktenzeile, ein Satz, der nicht
+# aufhört: ein langer Aufenthalt vor einem Spiegel, ein Gruß, der fehlte, ein Abtreten (der Schuhe, und was man sonst abtritt), ein Blinzeln, und dann das Glied, das schon keines mehr ist ("hat – und ohne –"). Das Ende, das er nicht findet, ist
+# der Witz; die ersten Zeichen reichen für sich ("Zu Protokoll: Die Angeklagte hat sich vor einem Spie"). Die zweite Zeile ruft ihr nach, nur wenn die erste abgebrochen wurde, im selben Ton und ohne Körper: "Ich war noch nicht fertig." ist sein Bau
+# von "Um Ruhe wird gebeten.", "Die Akte bleibt offen." ist wortgleich mit ric_6. Das letzte Wort hat er selbst; die Welt sagt nichts dazu.
+
+~ voice_first
+Richter: Zu Protokoll: Die Angeklagte hat vor einem Spiegel gestanden, ohne den Spiegel zu fragen, hat im Saal der Spiegel nicht gegrüßt, hat nicht abgetreten, was man abtritt, hat zweimal geblinzelt, hat – und ohne – [ID:rch_first_1] [#draft]
+Richter: Ich war noch nicht fertig. Die Akte bleibt offen. Ich komme nach, sobald ich weiß, womit. [ID:rch_first_2] [#draft]
+=> END
+
+# --- Der Auftritt: der leise Satz ------------------------------------------------------------------------------------------------------
+# Beim nächsten Betreten der Halle, nur dort, ein einziger Satz in einem Ton, den er nie hatte: leise und schlicht, ohne Aktenton, ohne Paragraf, ohne "Angeklagte" und ohne "du", und nichts über die Spielerin. Er zeigt, wovor diese Stimme einmal
+# schützte (Risiko 8: die Vorwegnahme dessen, was andere sagen könnten): sie sagte es vorher, damit es kein anderer zuerst sagt. Was "es" war, sagt der Satz nicht, und wer die anderen sind, auch nicht; keine Ursache, kein Täter, kein "früher".
+# Der Satz ist wahr, klein und nicht komisch; der Humor des Richters ist hier zu Ende, und kein Cue, keine Erzählung und kein Echo folgt ihm. Er wird nicht abgebrochen (niemand geht von ihm weg).
+
+~ voice_late
+Richter: Ich habe es nur vorher gesagt, damit es kein anderer zuerst sagt. [ID:rch_late_1] [#draft]
+=> END

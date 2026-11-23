@@ -3476,6 +3476,277 @@
     }
    ],
    "payoff": "Die Elysianer sagen in Akt VI, was sie in Akt I sagten, im selben Bau (Akt VI, R3, `favor_back`, `elysian_back`, Brief O5): sie bieten an, bevor gefragt wird (`gar_favor_1`), „Mein Bett ist dein Bett“ wird zu „Mein Stuhl ist dein Stuhl“ (`gar_favor_2`, Echo `el_favor_2`), alle haben etwas bereitgelegt, du musst nur nehmen (`gar_favor_3`); kein Nein, kein Zweifel, kein Wetter, keine Zeit, und kein Wort von einer Rückkehr: sie wissen nicht, dass die Spielerin fort war. Die erste Zeile der Elysianer auf ihren Wegen ist wortgleich mit der Schleife von Akt I (`gar_elys_1`, `el_loop_1`): das ist der Witz, und er stammt allein aus der Form. Das Paar, das sich spiegelt, freut sich „ganz genauso“ (`gar_elys_2`), und das Lob macht den Gelobten groß und sich selbst klein (`gar_elys_3`, Echo `el_praise_5`): die Spielerin hört es jetzt, die Elysianer ändern sich nicht. Nichts zerfällt und nichts wird gewertet (Bible §8); es ist der Kontrast, den das Spiel von Akt I an vorbereitet hat (`kein-nein`, `npc-bewegung`), und keine Zeile erklärt ihn."
+  },
+  {
+   "id": "fest-ohne-anlass",
+   "kind": "gag",
+   "title": "Das Fest ohne Anlass (Akt VI)",
+   "bible": "§8, §9, §33, §46",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "mk_fest_7"
+    },
+    {
+     "type": "line",
+     "ref": "mk_music_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_poet_2"
+    },
+    {
+     "type": "line",
+     "ref": "mk_gate_1"
+    },
+    {
+     "type": "line",
+     "ref": "mk_guest_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_r1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_3"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_4"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_r2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_fest_5"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_r1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_3"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_4"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_r2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_music_5"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_baker_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_baker_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_baker_3"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_r1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_3"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_r2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_poet_4"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_gate_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_gate_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_gate_3"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_guest_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_board_1"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_board_2"
+    },
+    {
+     "type": "line",
+     "ref": "mkt_board_3"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.returned"
+    }
+   ],
+   "payoff": "Der Markt sagt in Akt VI, was er in Akt I sagte, im selben Bau und ohne Anlass (Akt VI, R4, `festmaster_back`, `musician_back`, `baker_back`, `poet_back`, `gatekeeper_back`, `guest_back`, `board_back`, Brief O5, O8, O12): dieselben Figuren an denselben Orten, ein Cue je Figur, den die Karte mit `elysia.returned` wählt (`talk_when`; bei der Bäckerin und der Tafel erst, wenn der Auftrag der Tafel erledigt ist, der Händler behält seinen Cue und seinen Laden); die Zeilen von Akt I bleiben für jeden, der nicht zurückgekehrt ist. Dass sich Elysia wiederholt, sagt niemand: kein „wie immer“, kein „schon wieder“, kein Gedanke der Spielerin und kein Kommentar der Erzählung, und die Elysianer wissen nie, dass sie fort war. Die Sätze bleiben gleich im Bau, und die Spielerin hört sie: das Vorausbieten (die Festmeisterin hat das Glas, die Girlanden und das Hoch schon vorbereitet und ruft den Ruf vor dem Anstoßen, `mkt_fest_1`, `mkt_fest_2`; sie hat auch das Später schon eingeschenkt, `mkt_fest_5`; der Torwächter hat gegrüßt, bevor sie am Tor war, `mkt_gate_1`; die Bäckerin hält das Brot hin, bevor gefragt wird, und hat die Frage mit eingebacken, `mkt_baker_1` bis `mkt_baker_3`), das Hoch, das dreimal gleich klingt und beim Heben Glas für Glas gleich lang (`mkt_fest_4`), die schönste Melodie, die auch die einzige ist, mit der einen Note, die in der Mitte an derselben Stelle abbiegt (`mkt_music_3`, `mkt_music_4`), der Vers, der sich auf sich selbst reimt und beim zweiten Hören wortgleich derselbe ist (`mkt_poet_2`, `mkt_poet_3`: der Dichter merkt es nicht), der Zettel, der schief hängt und neu ist, ohne dass jemand zählt (`mkt_board_2`). Wortgleich mit Akt I sind nur Sätze, nie ein Cue (`mkt_fest_2` und `mk_fest_7`, `mkt_music_1` und `mk_music_1`, `mkt_gate_2` und `mk_gate_1`). Nichts wird gesetzt, nichts gegeben: kein Gold, keine Erfahrung, kein Gegenstand, keine Zahl im Text. Der Humor kommt aus der Form, nie aus einem Satz über die Spielerin und nie über ihre Leere, und Elysia wird nicht gewertet: sie ist nicht böse und zerfällt nicht (Bible §8)."
+  },
+  {
+   "id": "spiegel-zeigt-dich",
+   "kind": "vorausdeutung",
+   "title": "Der Spiegel zeigt dich (Akt VI)",
+   "bible": "§8, §16, §46, §51",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "sh_mirror_1"
+    },
+    {
+     "type": "line",
+     "ref": "sh_mirror_2"
+    },
+    {
+     "type": "line",
+     "ref": "sh_mirror_3"
+    },
+    {
+     "type": "line",
+     "ref": "sh_mirror_7"
+    },
+    {
+     "type": "line",
+     "ref": "spg_keeper_1"
+    },
+    {
+     "type": "line",
+     "ref": "spg_keeper_2"
+    },
+    {
+     "type": "line",
+     "ref": "spg_keeper_3"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_1"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_2"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_3"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_4"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_5"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_r1"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_6"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_7"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_r2"
+    },
+    {
+     "type": "line",
+     "ref": "spg_mirror_8"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.hall_mirror_seen"
+    }
+   ],
+   "payoff": "In Akt I zeigte der große Spiegel der Halle alles außer ihr (`sh_mirror_3`), und im Tal war die Pfütze das erste Bild der Spielerin (`tal_puddle_2`). Akt VI, R4 (`mirror_back`, `keeper_back`, Brief O5, O9): die Halle steht, wie sie stand, und der Hallenwächter weist auf Tore, Säulen und Spiegel, als sähe sie zum ersten Mal einen Besucher (`spg_keeper_1` bis `spg_keeper_3`); er weiß nicht, dass sie schon einmal hier war. Der Spiegel beginnt mit den Zeilen von Akt I, Wort für Wort (`spg_mirror_1`, `spg_mirror_2`), und die dritte kehrt nur das Ende um (`spg_mirror_3`): das ist der ganze Unterschied, und niemand sagt „diesmal“, „endlich“ oder „du bist“. Die Erzählung beschreibt, wie sie dort steht, die Füße, die Hände, der Riemen, der Staub auf den Schuhen und das Licht im Haar (`spg_mirror_4`, `spg_mirror_5`), ohne Urteil, ohne Lob und ohne ein Wort für das, was sie sieht. Weiter hinsehen: nichts ändert sich, kein Zeichen, kein Zucken, ein Staubkorn zieht durch das Licht und geht aus dem Bild (`spg_mirror_6`, `spg_mirror_7`). Wegsehen: der Spiegel behält sie im Rahmen und fragt nicht, wohin sie sieht (`spg_mirror_8`, der Bau von `sh_mirror_7`). Keine Facette, keine Marke: Wahrnehmung hat Akt I vergeben, und der Spiegel erklärt nie, was er zeigt (Bible §51)."
+  },
+  {
+   "id": "richter-nicht-mit",
+   "kind": "gag",
+   "title": "Der Richter, der nicht mitkommt (Akt VI)",
+   "bible": "§14, §33, §51, Risiko 8",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "ric_6"
+    },
+    {
+     "type": "line",
+     "ref": "rch_first_1"
+    },
+    {
+     "type": "line",
+     "ref": "rch_first_2"
+    },
+    {
+     "type": "line",
+     "ref": "rch_late_1"
+    },
+    {
+     "type": "flag",
+     "ref": "hall.richter_first"
+    },
+    {
+     "type": "flag",
+     "ref": "hall.richter_late"
+    }
+   ],
+   "payoff": "Genau ein Auftritt in Akt VI, in der Halle der Spiegel (Akt VI, R4, `voice_first`, `voice_late`, Brief O9, O12), und er hat zwei Teile. Erstmals ist die Spielfigur schneller als er: wenn sie sich vom großen Spiegel abwendet, beginnt eine Stimme ohne Körper eine einzige lange Aktenzeile (`rch_first_1`), als Text im Bild getippt und nicht im Dialogfeld; sie bricht mitten im Wort ab, sobald die Spielerin weit genug gegangen ist, und wer stehen bleibt, liest sie bis zum Ende. Es ist das Gegenstück zu Akt II (dort sprach er nur über Dinge): jetzt darf er über sie sprechen, solange es Kleinigkeiten sind, jede kleiner als die davor, ein langer Aufenthalt vor einem Spiegel, ein fehlender Gruß, das Abtreten (der Schuhe, und was man sonst abtritt), ein Blinzeln, und das Ende findet er nicht („hat – und ohne –“). Nie ein Wert, nie ein Versagen, kein „Du bist“. Nach dem Abbruch ruft er ihr nach, im selben Ton und ohne Körper: „Ich war noch nicht fertig.“ (`rch_first_2`), die Akte bleibt offen (wortgleich mit `ric_6`), und er kommt nach, sobald er weiß, womit. Wer die Zeile zu Ende gelesen hat, bekommt keinen Nachruf. Beim nächsten Betreten der Halle, nur dort, sagt er einen einzigen Satz in einem Ton, den er nie hatte: leise, schlicht, ohne Aktenton und ohne „du“, nichts über die Spielerin (`rch_late_1`). Er zeigt, wovor die Stimme einmal schützte (Risiko 8): sie sagte es vorher, damit es kein anderer zuerst sagt. Was „es“ war und wer die anderen sind, bleibt offen; keine Ursache, kein Täter, kein Name. Der Satz ist wahr, klein und nicht komisch; der Humor des Richters endet hier, und keine Zeile folgt ihm. Der Text stellt sich nie auf seine Seite (Bible §51).",
+   "payoff_lines": [
+    "rch_first_1",
+    "rch_late_1"
+   ]
   }
  ],
  "register": [
@@ -4657,12 +4928,22 @@
   {
    "flag": "elysia.returned",
    "axis": "Elysia",
-   "meaning": "Die Spielerin ist durch den Spalt im Tal gegangen und in Elysia angekommen (Akt VI, R2, Brief O3, O4). Die Szene setzt es mit dem Gang (`gap_enter`), der Beat `act6_return` folgt nach der Ankunft (`arrival`); kein Cue setzt es. Die Rückkehr ist freiwillig und nie Voraussetzung: wer den Spalt auslässt, bleibt in der Wirklichkeit, und der Akt wartet. Seit R3 liest es die Karte `elysia.txt` (`talk_when`): wer zurückgekehrt ist, hört bei der Gärtnerin (`gardener_back`), bei den Elysianern der Begrüßung (`favor_back`), bei den Elysianern auf ihren Wegen (`elysian_back`) und am Becken (`basin_back`) die neuen Cues aus `akt6/garten.dialogue`; die Zeilen von Akt I bleiben für jeden, der nicht zurückgekehrt ist, wie sie sind. Elysia und die folgenden Segmente lesen es: die Schleifen-Flags von Akt I bleiben stehen (ADR-065), der `ElysiaDirector` schaltet seine Uhr-Rückfälle ab (Brief O5), nichts zählt mit, und es hat keine Zahl im Bild."
+   "meaning": "Die Spielerin ist durch den Spalt im Tal gegangen und in Elysia angekommen (Akt VI, R2, Brief O3, O4). Die Szene setzt es mit dem Gang (`gap_enter`), der Beat `act6_return` folgt nach der Ankunft (`arrival`); kein Cue setzt es. Die Rückkehr ist freiwillig und nie Voraussetzung: wer den Spalt auslässt, bleibt in der Wirklichkeit, und der Akt wartet. Seit R3 liest es die Karte `elysia.txt` (`talk_when`): wer zurückgekehrt ist, hört bei der Gärtnerin (`gardener_back`), bei den Elysianern der Begrüßung (`favor_back`), bei den Elysianern auf ihren Wegen (`elysian_back`) und am Becken (`basin_back`) die neuen Cues aus `akt6/garten.dialogue`; die Zeilen von Akt I bleiben für jeden, der nicht zurückgekehrt ist, wie sie sind. Seit R4 liest es auch `markt.txt` (die Festmeisterin, die Musikerin, die Bäckerin, der Händler, der Dichter, der Torwächter, die Gäste und die Tafel hören ihre Cues aus `akt6/markt.dialogue`) und `spiegelhalle.txt` (der Hallenwächter und der große Spiegel, `akt6/spiegel.dialogue`); dieselbe Bedingung hängt die Stimme des Richters in die Halle (`HallVoice`, `akt6/richter.dialogue`). Elysia und die folgenden Segmente lesen es: die Schleifen-Flags von Akt I bleiben stehen (ADR-065), der `ElysiaDirector` schaltet seine Uhr-Rückfälle ab (Brief O5), nichts zählt mit, und es hat keine Zahl im Bild."
   },
   {
    "flag": "elysia.back_gift",
    "axis": "Entscheidungen",
    "meaning": "Die Spielerin hat in Elysia das Kompliment der Gärtnerin angenommen, das sie ohne Anlass hergibt (Akt VI, R3, Brief O8, `gardener_gift`): der Gegenstand, die Erfahrung und das Gold kehren ungekürzt zurück, laut und mit allem, was dazugehört; der Text beschreibt nur die Hand und die Sache. Gelesen von `gardener_back` (die Karte `elysia.txt` wählt ihn nach `elysia.returned`): wer es genommen hat, hört danach `gardener_again`, nie ein zweites Geschenk. Wer es liegen lässt (`gardener_keep`), setzt nichts: es wird beim nächsten Ansprechen wieder angeboten, ohne Bedauern und ohne Lob. Beide Wege sind gleichwertig; keine Zeile erklärt, was das Kompliment bedeutet, und keine Zahl steht im Text."
+  },
+  {
+   "flag": "hall.richter_first",
+   "axis": "Elysia",
+   "meaning": "Der Richter hat in der Halle der Spiegel angesetzt (Akt VI, R4, Brief O9): die Stimme ohne Körper beginnt ihre Aktenzeile (`voice_first`), nachdem die Spielerin in den großen Spiegel gesehen hat und sich abwendet; sie bricht mitten im Wort ab, wenn die Spielerin weit genug gegangen ist, oder kommt zu Ende, wenn sie stehen bleibt. Die Szene (`HallVoice`) setzt es, sobald die Zeile beginnt, und nie ein Dialog: er spricht genau einmal, und ein Spiel, das währenddessen geschlossen wird, spielt es nicht noch einmal. Es gibt keine Folge und keine Wertung; es öffnet nur den leisen Satz beim nächsten Betreten (`hall.richter_late`)."
+  },
+  {
+   "flag": "hall.richter_late",
+   "axis": "Elysia",
+   "meaning": "Der Richter hat seinen einen leisen Satz gesagt (Akt VI, R4, Brief O9): beim nächsten Betreten der Halle, nur dort, in einem Ton, den er nie hatte (`voice_late`): nichts über die Spielerin, er sagt, dass er es nur vorher gesagt hat, damit es kein anderer zuerst sagt. Die Szene (`HallVoice`) setzt es, sobald der Satz beginnt, und nie ein Dialog; er wird nicht abgebrochen und nicht wiederholt, und ihm folgt keine Zeile. Keine Ursache, kein Täter, kein Name (Bible §15, §51, Risiko 8)."
   }
  ]
 }

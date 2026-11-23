@@ -123,6 +123,14 @@ func test_talk_when_picks_the_first_flag_that_is_set_and_keeps_the_own_pair_othe
 	assert_eq(Talk.pick(null, OWN, "own"), PackedStringArray([OWN, "own"]), "no param at all")
 
 
+func test_talk_when_can_ask_for_a_second_flag_before_the_new_cue_stands_in() -> void:
+	var when := {"story.a": {"cue": "x", "and": "story.b"}}
+	WorldState.set_flag("story.a")
+	assert_eq(Talk.pick(when, OWN, "own"), PackedStringArray([OWN, "own"]), "the second is missing")
+	WorldState.set_flag("story.b")
+	assert_eq(Talk.pick(when, OWN, "own"), PackedStringArray([OWN, "x"]), "both hold")
+
+
 func test_the_people_of_the_garden_say_what_they_always_said_to_whoever_did_not_come_back() -> void:
 	var scene := await _elysia()
 	assert_eq(await _talk(scene, "gardener"), "gardener")

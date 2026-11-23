@@ -3,6 +3,7 @@
 ; Boden backt tools/art/bake_ground.py content/maps/spiegelhalle.txt. Alles steht zweimal, bis auf drei Dinge: den Wächter in der Mitte
 ; und je einen Gegenstand, der nur auf einer Seite liegt (Blatt, Feder): sie zu bemerken ist die Aufgabe (Wahrnehmung, Bible §16).
 ; Dazu kommt das Kind der Spur (A8) vor dem großen Spiegel, ebenfalls nur einmal.
+; R4 (Akt VI): wer durch den Spalt zurückkommt (elysia.returned), hört vom Wächter und am großen Spiegel neue Cues (talk_when, akt6/spiegel.dialogue); die Zeilen von Akt I bleiben, wie sie sind
 [meta]
 style = "elysia"
 ground = "res://assets/generated/maps/spiegelhalle_ground.png"
@@ -19,8 +20,8 @@ D = {"ground": "M", "prop": "res://world/props/door.tscn", "params": {"target": 
 ; die zwei Tore: sie bleiben zu, bis der Raum davor bemerkt hat, was nicht passt
 g = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_gate", "cue": "gate_shut", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 26, "unless": "elysia.hall_room_1"}}
 h = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_gate", "cue": "gate_shut", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 26, "unless": "elysia.hall_room_2"}}
-X = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_mirror", "cue": "mirror", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 30}}
-K = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_keeper_look.tres", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "cue": "keeper", "face": "s"}}
+X = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/hall_mirror", "cue": "mirror", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "radius": 30, "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/spiegel.dialogue", "cue": "mirror_back", "and": "elysia.hall_mirror_seen"}}}}
+K = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_keeper_look.tres", "dialogue": "res://content/dialogue/akt1/spiegelhalle.dialogue", "cue": "keeper", "face": "s", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/spiegel.dialogue", "cue": "keeper_back", "and": "elysia.hall_mirror_seen"}}}}
 I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar"}}
 l = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/lantern"}}
 C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal"}}

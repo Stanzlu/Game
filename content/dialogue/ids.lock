@@ -1215,6 +1215,36 @@ mk_tailor_6	akt1/markt.dialogue	-
 mk_tailor_7	akt1/markt.dialogue	-
 mk_tailor_8	akt1/markt.dialogue	-
 mk_tailor_9	akt1/markt.dialogue	-
+mkt_baker_1	akt6/markt.dialogue	-
+mkt_baker_2	akt6/markt.dialogue	-
+mkt_baker_3	akt6/markt.dialogue	-
+mkt_board_1	akt6/markt.dialogue	-
+mkt_board_2	akt6/markt.dialogue	-
+mkt_board_3	akt6/markt.dialogue	-
+mkt_fest_1	akt6/markt.dialogue	-
+mkt_fest_2	akt6/markt.dialogue	-
+mkt_fest_3	akt6/markt.dialogue	-
+mkt_fest_4	akt6/markt.dialogue	-
+mkt_fest_5	akt6/markt.dialogue	-
+mkt_fest_r1	akt6/markt.dialogue	-
+mkt_fest_r2	akt6/markt.dialogue	-
+mkt_gate_1	akt6/markt.dialogue	-
+mkt_gate_2	akt6/markt.dialogue	-
+mkt_gate_3	akt6/markt.dialogue	-
+mkt_guest_1	akt6/markt.dialogue	-
+mkt_music_1	akt6/markt.dialogue	-
+mkt_music_2	akt6/markt.dialogue	-
+mkt_music_3	akt6/markt.dialogue	-
+mkt_music_4	akt6/markt.dialogue	-
+mkt_music_5	akt6/markt.dialogue	-
+mkt_music_r1	akt6/markt.dialogue	-
+mkt_music_r2	akt6/markt.dialogue	-
+mkt_poet_1	akt6/markt.dialogue	-
+mkt_poet_2	akt6/markt.dialogue	-
+mkt_poet_3	akt6/markt.dialogue	-
+mkt_poet_4	akt6/markt.dialogue	-
+mkt_poet_r1	akt6/markt.dialogue	-
+mkt_poet_r2	akt6/markt.dialogue	-
 nein_antr_1	akt2/nein.dialogue	-
 nein_antr_2	akt2/nein.dialogue	-
 nein_antr_3	akt2/nein.dialogue	-
@@ -1276,6 +1306,9 @@ rath_lost_r2	akt4/rathaus.dialogue	-
 rath_lost_r3	akt4/rathaus.dialogue	-
 rath_lost_r4	akt4/rathaus.dialogue	-
 rath_lost_r5	akt4/rathaus.dialogue	-
+rch_first_1	akt6/richter.dialogue	-
+rch_first_2	akt6/richter.dialogue	-
+rch_late_1	akt6/richter.dialogue	-
 ric_1	akt2/richter.dialogue	-
 ric_2	akt2/richter.dialogue	-
 ric_3	akt2/richter.dialogue	-
@@ -1405,6 +1438,19 @@ spa_plateau_9	akt5/spalte.dialogue	-
 spa_plateau_r1	akt5/spalte.dialogue	-
 spa_plateau_r2	akt5/spalte.dialogue	-
 spa_plateau_r3	akt5/spalte.dialogue	-
+spg_keeper_1	akt6/spiegel.dialogue	-
+spg_keeper_2	akt6/spiegel.dialogue	-
+spg_keeper_3	akt6/spiegel.dialogue	-
+spg_mirror_1	akt6/spiegel.dialogue	-
+spg_mirror_2	akt6/spiegel.dialogue	-
+spg_mirror_3	akt6/spiegel.dialogue	-
+spg_mirror_4	akt6/spiegel.dialogue	-
+spg_mirror_5	akt6/spiegel.dialogue	-
+spg_mirror_6	akt6/spiegel.dialogue	-
+spg_mirror_7	akt6/spiegel.dialogue	-
+spg_mirror_8	akt6/spiegel.dialogue	-
+spg_mirror_r1	akt6/spiegel.dialogue	-
+spg_mirror_r2	akt6/spiegel.dialogue	-
 stadt_board_1	akt4/stadt.dialogue	-
 stadt_board_2	akt4/stadt.dialogue	-
 stadt_board_3	akt4/stadt.dialogue	-
@@ -2030,6 +2076,9 @@ wer_tess_9	akt4/werkstatt.dialogue	-
 retired	gh_bar_1	der Tresen hat keine Zeile: der Wirt steht dahinter, die Zeile stand ihm im Weg
 retired	haus_rest_5	tote Zeile (KNOWN_ISSUES #74), im Writing-Pass gestrichen
 retired	mk_fest_10	A7: nach dem Hoch gibt es eine feste Zeile statt zweier wechselnder (die Schleife ist wortgleich)
+retired	mkt_shop_1	merchant_back entfällt: der Laden in Akt I bleibt erreichbar
+retired	mkt_shop_2	merchant_back entfällt: der Laden in Akt I bleibt erreichbar
+retired	mkt_shop_3	merchant_back entfällt: der Laden in Akt I bleibt erreichbar
 retired	stadt_florist_1	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
 retired	stadt_florist_2	S3: die Tür des Blumenladens ersetzt den Blocker (Cue florist_wait gelöscht, die Zeilen stehen in blumenladen.dialogue)
 retired	stadt_shop_1	S4: die Tür der Werkstatt ersetzt den Blocker (Cue workshop_wait gelöscht, die Zeilen stehen in werkstatt.dialogue)

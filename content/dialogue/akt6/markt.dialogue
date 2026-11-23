@@ -1,0 +1,87 @@
+# Der Markt von Elysia, Akt VI, Segment R4 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O5, O8, O12, O17; Bible §8, §9, §33, §46, §51; Stilblatt elysianer.md). Die Spielerin ist zurück auf dem Markt, und alles steht, wie es stand:
+# das Fest, die Girlanden, dieselben Sätze, dieselben Wege. Dass sie sich wiederholen, sagt hier niemand und nie die Erzählung: die Sätze bleiben im selben Bau, und die Spielerin hört sie. Das Vorausbieten, das Hoch, das dreimal gleich
+# klingt, die schönste Melodie, die auch die einzige ist, der Vers, der sich auf sich selbst reimt: der Humor kommt aus der Form, derselbe Satz, jetzt ohne Anlass, die Zuwendung, die schon bereitliegt.
+# Elysia ist nicht böse und zerfällt nicht (Bible §8); die Elysianer wissen nie, dass die Spielerin fort war, und sagen nichts über Wetter, Rückkehr oder Wiederholung. Ein Satz darf wortgleich mit einem Satz aus Akt I sein (das Echo ist die Pointe),
+# nie ein ganzer Cue; die Zeilen von Akt I (akt1/markt.dialogue) bleiben, wie sie sind, die Karte wählt die neuen Cues mit elysia.returned (talk_when). Nichts in dieser Datei setzt etwas: kein Gold, keine Erfahrung, kein Gegenstand, kein Flag,
+# keine Facette, denn Akt I hat alles gegeben (die Belohnungen kommen in diesem Segment nicht zurück, und keine Zahl steht im Text). Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche, keine Ursache,
+# keine Erklärung, kein Wirt, kein Gasthaus, nichts, das Elysia wertet, keine Therapie- oder Suchtsprache. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen stehen ausgeschrieben oder gar nicht.
+# Die Spielerin spricht nur über Antworten, kurz, nie mit einem Gefühl; jede Antwortgruppe hat unbedingte Antworten mit eigenen Zeilen. Sprecher stehen in voices.json (O17).
+
+# Die Bäckerin und die Tafel sprechen die neuen Cues erst, wenn der Auftrag der Tafel erledigt ist (beat.market_board_done, Bedingung "and" in talk_when der Karte): bis dahin gilt der Cue von Akt I, weil dort das Brot und der Auftrag liegen. Der Händler behält seinen Cue von Akt I ganz (sein Laden).
+
+# --- Das Fest: die Festmeisterin am Brunnen -------------------------------------------------------------------------------------
+# Sie hat alles schon vorbereitet, für den Helden, und ruft, bevor das Glas oben ist (der Ruf "Auf den Helden!" ist wortgleich mit mk_fest_7, "Da ist er! Der Held des Festes!" mit mk_fest_2). Heben: ganz Elysia hebt seines im selben Augenblick,
+# der Klang ist gleich, Glas für Glas, und nur als Ding erzählt, nie als Gedanke. Später: ihr Bau von mk_fest_5 ("Später ist hier immer genau jetzt."), neue Worte: sie hat auch das Später schon eingeschenkt. Kein Ausrufezeichen über das Maß von Akt I hinaus.
+
+~ festmaster_back
+Festmeisterin: Da bist du! Der Held des Festes! Ich habe alles schon vorbereitet, das Glas, die Girlanden und das Hoch. Alles für den Helden. [ID:mkt_fest_1] [#draft]
+Festmeisterin: Auf den Helden! Auf den Helden! Auf den Helden! [ID:mkt_fest_2] [#draft]
+- Das Glas heben. [ID:mkt_fest_r1] [#draft]
+	Ganz Elysia hebt seines, im selben Augenblick. [ID:mkt_fest_3] [#draft]
+	Die Gläser stoßen reihum an, links, rechts, links, und jeder Klang ist so lang wie der davor, auf den Atemzug. [ID:mkt_fest_4] [#draft]
+- Später. [ID:mkt_fest_r2] [#draft]
+	Festmeisterin: Später gern. Ich habe dir ein Später schon eingeschenkt. Es steht neben dem Glas. [ID:mkt_fest_5] [#draft]
+=> END
+
+# --- Die Musikerin ---------------------------------------------------------------------------------------------------------------------
+# Die schönste Melodie der Stadt, die auch die einzige ist (wortgleich mit mk_music_1), und der Platz in ihr ist schon freigehalten; "Du kannst sie schon." ist wortgleich mit mk_music_4. Zuhören: die Erzählung beschreibt die Melodie als Ding
+# (sie geht auf, sie geht zu) und eine einzige Stelle darin, die jetzt zu hören ist, ohne dass jemand sie nennt: eine Note, die an derselben Stelle abbiegt. Weitergehen: ihr Bau von mk_music_6 ("Sie spielt auch, wenn du gehst."), neue Worte.
+
+~ musician_back
+Musikerin: Hör zu. Das ist die schönste Melodie der Stadt. Sie ist auch die einzige. [ID:mkt_music_1] [#draft]
+Musikerin: Ich habe dir einen Platz in ihr freigehalten. Ich bringe sie dir bei, wenn du willst. Du kannst sie schon. [ID:mkt_music_2] [#draft]
+- Zuhören. [ID:mkt_music_r1] [#draft]
+	Du hörst zu. Sie geht auf, sie geht zu, und in der Mitte biegt eine Note nach unten ab, kaum merklich. [ID:mkt_music_3] [#draft]
+	Wenn die Melodie von vorn beginnt, biegt sie an derselben Stelle ab. [ID:mkt_music_4] [#draft]
+- Weitergehen. [ID:mkt_music_r2] [#draft]
+	Musikerin: Geh nur. Ich spiele dir hinterher, bis zur Ecke und noch ein Stück um die Ecke. [ID:mkt_music_5] [#draft]
+=> END
+
+# --- Die Bäckerin (beide Stände) -------------------------------------------------------------------------------------------------------
+# Das Brot kommt, bevor gefragt wird, und ist frisch, nur aus einer anderen Richtung als in mk_baker_3 ("Frisch gebacken. Von gestern."): "gestern" und "morgen" stehen in den Zeilen von Akt I schon zusammen (mk_board_4), darum steht hier nur
+# "morgen", und das Ende ist die Zuwendung, die auch die Frage schon beantwortet hat. Sie hält das Brot hin; es wird nichts genommen und nichts gesetzt.
+
+~ baker_back
+Die Bäckerin hält dir ein Brot hin, bevor du den Mund aufgemacht hast. Es dampft noch. [ID:mkt_baker_1] [#draft]
+Bäckerin: Frisch gebacken. Von morgen. Ich backe ein bisschen voraus, dann ist es schon da. [ID:mkt_baker_2] [#draft]
+Bäckerin: Du musst nicht fragen. Ich habe deine Frage gleich mit eingebacken. [ID:mkt_baker_3] [#draft]
+=> END
+
+# --- Der Dichter -----------------------------------------------------------------------------------------------------------------------
+# Er hat es gerade fertig (wortgleich mit mk_poet_1), und der Vers reimt sich auf sich selbst: er ist von vorn und von hinten derselbe, Fest und Fest, Gast und Gast, und er sagt es mit Stolz. "Noch einmal." gibt dieselbe Zeile
+# wortgleich, die Zeile, die dieselbe ist wie die davor: das ist die Pointe, der Dichter merkt es nicht. "Danke." freut ihn in seiner Form: er macht den Hörer groß und sich klein (wie el_praise_5).
+
+~ poet_back
+Dichter: Hör zu, ich habe es gerade fertig. Es reimt sich auf sich selbst. Sicherer reimt sich nichts. [ID:mkt_poet_1] [#draft]
+Dichter: Ein Fest, ein Gast, ein Glas, ein Gast, ein Fest. [ID:mkt_poet_2] [#draft]
+- Noch einmal. [ID:mkt_poet_r1] [#draft]
+	Dichter: Ein Fest, ein Gast, ein Glas, ein Gast, ein Fest. [ID:mkt_poet_3] [#draft]
+- Danke. [ID:mkt_poet_r2] [#draft]
+	Dichter: Bitte, bitte! Du hast zugehört, also hast du mitgedichtet. Ich habe nur angefangen. [ID:mkt_poet_4] [#draft]
+=> END
+
+# --- Der Torwächter am Südtor ----------------------------------------------------------------------------------------------------------
+# Er grüßt, bevor die Spielerin am Tor ist, und fragt nie, wohin. Das Tor steht offen und stand offen (wortgleich mit mk_gate_1); nichts von einem Riss, nichts von Draußen, nichts von einem Weg. Er ist ruhig und höflich und sehr offen, wie das Tor.
+
+~ gatekeeper_back
+Torwächter: Willkommen! Ich habe dich schon gegrüßt, bevor du am Tor warst. Du hast es nur noch nicht gehört. [ID:mkt_gate_1] [#draft]
+Torwächter: Das Tor steht offen. Es stand immer offen. Ich musste es nie schließen, nicht einmal zur Probe. [ID:mkt_gate_2] [#draft]
+Torwächter: Ich frage nie, wohin. Ich stehe nur da, und das Tor steht da, und wir sind beide sehr offen. [ID:mkt_gate_3] [#draft]
+=> END
+
+# --- Die Gäste des Festes --------------------------------------------------------------------------------------------------------------
+# Ein Satz im Bau von mk_guest_1 ("Auf den Helden!"), kürzer. Er wird gesagt, bevor jemand angestoßen hat.
+
+~ guest_back
+Elysianer: Auf dich! [ID:mkt_guest_1] [#draft]
+=> END
+
+# --- Die Tafel -------------------------------------------------------------------------------------------------------------------------
+# Nur Dinge. Die Zettel hängen gerade und in schöner Schrift; einer hängt schief, und seine Tinte glänzt noch: das ist der neue, ohne dass jemand eine Zahl nennt oder es vergleicht. Der Zettel selbst sagt, was auf Zetteln steht
+# (wie mk_board_5, ohne Doppelpunkt: Erzählung).
+
+~ board_back
+Die Tafel hängt voller Zettel in schöner Schrift, alle gerade, alle gleich weit vom Rand. [ID:mkt_board_1] [#draft]
+Nur einer hängt schief, mit hochgebogener Ecke, und seine Tinte glänzt noch nass. [ID:mkt_board_2] [#draft]
+Gesucht, ein Held. Gefunden. Der Zettel bleibt trotzdem hängen. [ID:mkt_board_3] [#draft]
+=> END

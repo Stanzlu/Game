@@ -54,6 +54,9 @@ PREFIX = {
     "akt6/leere": "R1-",  # Act VI: one prefix per segment ("R1-1")
     "akt6/spalt": "R2-",
     "akt6/garten": "R3-",
+    "akt6/markt": "R4a-",  # R4 has three files: the market, the hall of mirrors, the Richter
+    "akt6/spiegel": "R4b-",
+    "akt6/richter": "R4c-",
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

@@ -27,14 +27,18 @@ static func add_area(
 
 ## What a prop says once the story has moved on: the map param "talk_when" is
 ## {"<flag>": {"dialogue": "res://…", "cue": "…"}} and the first flag that is set wins (a missing
-## "dialogue" is the prop's own). Returns [dialogue path, cue]; the prop's own pair when no flag is
-## set. Act VI gives the people of Elysia new cues this way (docs/akt6/REGIONSBRIEFE.md, R3) and
+## "dialogue" is the prop's own). An entry may name a second flag in "and" that has to hold too (a
+## new cue that stands in for one which still does something, such as handing in a quest, only
+## once that is done). Returns [dialogue path, cue]; the prop's own pair when no flag is set.
+## Act VI gives the people of Elysia new cues this way (docs/akt6/REGIONSBRIEFE.md, R3, R4) and
 ## leaves the lines of Act I as they are; StoryLint reads the flags and checks the cues.
 static func pick(talk_when: Variant, path: String, cue: String) -> PackedStringArray:
 	if talk_when is Dictionary:
 		for flag: Variant in talk_when:
 			if WorldState.has_flag(str(flag)) and (talk_when as Dictionary)[flag] is Dictionary:
 				var spec: Dictionary = (talk_when as Dictionary)[flag]
+				if spec.has("and") and not WorldState.has_flag(str(spec["and"])):
+					continue
 				return PackedStringArray(
 					[str(spec.get("dialogue", path)), str(spec.get("cue", cue))]
 				)
