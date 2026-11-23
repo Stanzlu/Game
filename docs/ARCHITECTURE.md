@@ -138,6 +138,10 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
   (`_let_go`: zwei Zwischensequenzen aus `akt6/ausgang.dialogue`, das Zählwerk lautlos Stück für Stück, die Musik
   läuft aus, nichts gekürzt), sonst der Sturz von Akt I; `ReturnBeat.leave_elysia` setzt `elysia.left` und rückt die
   Quest `main_return_way` auf `home`, `TalScene` spielt die Ankunft (`ReturnBeat`, Art `EXIT`, Beat `act6_exit`).
+- Die Heimkehr (Akt VI, R8): `ReturnHomecoming` (`world/levels/akt6/return_homecoming.gd`) ist in der Stufe `home` der
+  Phasenautomat des Hauses (Muster `MountainHomecoming`): das Haus, der Besuch des Wirts ohne Angebot (nur mit
+  `elysia.stood_up`, `house.guest_host`, Zelle Φ), der Antreiber liest das Blatt, `melody.elysia_home` (`elysia_home_0`),
+  Stufe `done`, `Chapter.mark("act6")` und Beat `act6_home` still in einem Block.
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

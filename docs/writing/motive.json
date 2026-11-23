@@ -2125,9 +2125,41 @@
     {
      "type": "flag",
      "ref": "house.workbench"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_11"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_12"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_13"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_22"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_23"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_24"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_25"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_26"
     }
    ],
-   "payoff": "Akt III, W6: er ist repariert und plant weiter. Im Haus hängt ein Blatt mit Uhrzeiten (Tee, Aussicht nur bei Sicht, Pausen mit Uhrzeit; die Katze und der Besuch hat er nicht in der Hand, und er schreibt es hin), er verschiebt das Aufstehen, wenn die Katze auf ihm liegt, und lässt zu frühen Tee gelten. Die Pausen stehen jetzt da, nicht mehr ausgewischt (wd_m3_2). Der Plan fürs Nichtstun bleibt dem Nachspiel (Bible §42, Akt VI)."
+   "payoff": "Akt III, W6: er ist repariert und plant weiter. Im Haus hängt ein Blatt mit Uhrzeiten (Tee, Aussicht nur bei Sicht, Pausen mit Uhrzeit; die Katze und der Besuch hat er nicht in der Hand, und er schreibt es hin), er verschiebt das Aufstehen, wenn die Katze auf ihm liegt, und lässt zu frühen Tee gelten. Die Pausen stehen jetzt da, nicht mehr ausgewischt (wd_m3_2). Der Plan fürs Nichtstun bleibt dem Nachspiel (Bible §42, Akt VI). Akt VI, R8: der Besuch steht auf dem Blatt, »unangemeldet« (`hk6_11`), und heute um fünf ist nichts eingetragen, er hat zweimal nachgesehen (`hk6_12`); seine Füße gehen nicht auf der Stelle (`hk6_13`). Das Blatt nach dem Ausgang (`hk6_22`) hat eine neue Zeile, um fünf Uhr steht nichts, nur der Strich, nicht ausgewischt (`hk6_23`); bei »Besuch« stehen die Gäste: der Einsiedler mit der Dauer »offen« (`hk6_26`), mit dem Wirt auch sein Name, als Dauer »nichts mitgebracht« (`hk6_24`), und ohne beide noch immer »unangemeldet« (`hk6_25`). Ein Posten fürs Nichtstun ist das nicht: das gehört dem Nachspiel (Bible §42)."
   },
   {
    "id": "katze",
@@ -4140,6 +4172,104 @@
     "aus_5",
     "aus_7"
    ]
+  },
+  {
+   "id": "wirt-ohne-angebot",
+   "kind": "vorausdeutung",
+   "title": "Der Wirt ohne Angebot (Akt VI, Heimkehr)",
+   "bible": "§14, §45, §51, §52",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_host_9"
+    },
+    {
+     "type": "line",
+     "ref": "inn_host_3"
+    },
+    {
+     "type": "line",
+     "ref": "inn_s3_2"
+    },
+    {
+     "type": "line",
+     "ref": "up_9"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_4"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_5"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_6"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_7"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_8"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_9"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_19"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_20"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_21"
+    },
+    {
+     "type": "flag",
+     "ref": "house.guest_host"
+    }
+   ],
+   "payoff": "Die Auflösung des Betäubers ist dasselbe Gesicht ohne Angebot (Akt VI, R8, Brief O14; Bible §14: „danach im Haus: er sitzt am Feuer“). Wer am Tisch im Gasthaus aufgestanden ist (`elysia.stood_up`), dem klopft er an und kommt zu Besuch (`hk6_4`): er hat nichts dabei, und es ist neu für ihn, seine Hände wissen nicht wohin (`hk6_6`, `hk6_7`), die Tür schließt (`hk6_8`), und er greift dauernd nach einem Löffel, der nicht da ist (`hk6_9`): sein Witz geht gegen seine Hände und seinen Abend, nie gegen sie, das Bleiben oder das Gehen. Er setzt sich unter den Kamin und sitzt (`hk6_5`, `hk6_19`), sieht ins Feuer „als wäre es eine Karte, die er nicht lesen muss“ (`hk6_20`), das den Rest macht (`hk6_19`), geht „gleich, oder später“, und das Feuer ist so oder so da (`hk6_21`). Er bietet nichts an, hält nichts fest, erklärt nichts und nennt nie, was er war; der Akt hängt nicht an ihm (ohne `elysia.stood_up` bleibt der Kamin leer). Die Szene setzt `house.guest_host`, die Karte zeigt ihn (Zelle Φ, wie den Wächter in Akt V).",
+   "payoff_lines": [
+    "hk6_6",
+    "hk6_21"
+   ]
+  },
+  {
+   "id": "lied-nach-hause",
+   "kind": "vorausdeutung",
+   "title": "Elysias Lied nach Hause (Akt VI, Heimkehr)",
+   "bible": "§35, §45",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "hk6_14"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_15"
+    },
+    {
+     "type": "line",
+     "ref": "hk6_16"
+    },
+    {
+     "type": "flag",
+     "ref": "melody.elysia_home"
+    }
+   ],
+   "payoff": "Musiktransformation (Akt VI, R8, Brief O15; Bible §35: Elysias Musik nimmt die Motive der Figuren auf): das Motiv des Gartens, das die Glocken der Schleife in C-Dur spielten, kommt als Lied ins Haus (`hk6_14`), dieselben Töne, langsamer, von einer Hand gespielt, und an einer Stelle zögert es (`hk6_15`). Es endet mit dem Ende der Antwort des Tals, 3-2-1 in D-dorisch (dieselben sieben Töne wie C-Dur), „dort, wo das Tal es immer enden lässt“ (`hk6_16`): die Melodie kommt nach Hause, und danach ist es still. Eine Melodie und kein Fragment, kein Zeichen, kein Lohn; Elysias Musik selbst bleibt in Elysia unverändert. Die Szene setzt `melody.elysia_home` und spielt den Klang (`elysia_home_0`, Untertitel `CAPTION_ELYSIA_HOME`).",
+   "payoff_lines": [
+    "hk6_15",
+    "hk6_16"
+   ]
   }
  ],
  "register": [
@@ -5362,6 +5492,16 @@
    "flag": "elysia.left",
    "axis": "Beschützer",
    "meaning": "Sie ist durch den Riss am Rand von Elysia in die Wirklichkeit zurückgegangen, die zweite Überquerung (Akt VI, R7, Brief O4; Muster `elysia.rift_crossed` für die erste). Die Szene (`RiftSequence`, `ReturnBeat.leave_elysia`) setzt es am Ende des Schwarz; die Karte `tal.txt` liest es (der Spalt aus Licht ist zu: `unless`), und `ReturnBeat` spielt danach die Ankunft im Tal (`exit_valley`, Beat `act6_exit`). Der Riss fragt nichts, und nichts hängt am Wirt, am Tisch oder am Aufstehen: das Flag setzt sich von jeder Stufe der Rückkehr aus, und die Quest `main_return_way` rückt von `elysia`, `inn` oder `stand` auf `home`."
+  },
+  {
+   "flag": "house.guest_host",
+   "axis": "Beschützer",
+   "meaning": "Der Wirt kam zu Besuch und sitzt am Feuer im Haus, ohne etwas anzubieten (Akt VI, R8, Brief O14; Muster `house.guest_waechter`, `house.guest_tess`). Die Szene (`ReturnHomecoming`) setzt es, wenn er sitzt, und nur für den, der am Tisch im Gasthaus aufgestanden ist (`elysia.stood_up`); die Karte `haus.txt` liest es (die Figur `Φ`, Cue `host_home`), und das Blatt an der Wand nennt ihn (`plan_board_back`). Ein unterbrochener Lauf der Heimkehr löscht es und beginnt an der Tür neu. Nichts im Akt hängt an ihm."
+  },
+  {
+   "flag": "melody.elysia_home",
+   "axis": "Fortschritt",
+   "meaning": "Elysias Lied ist im Haus erklungen (Akt VI, R8, Brief O15; Melodie und kein Fragment, Muster `melody.house_hum`): das Motiv des Gartens, langsam, mit dem Ende der Antwort des Tals. Die Szene (`ReturnHomecoming`) setzt es und spielt den Klang jedes Mal, wenn die Heimkehr spielt; kein Leser (Präfix `melody.` ist ausgenommen). Für jeden, wer ins Haus kommt, nicht nur mit dem Wirt."
   }
  ]
 }

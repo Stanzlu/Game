@@ -76,6 +76,7 @@ SFX_GROUPS = [
     (r"string_snap_", make_slice_sfx.GROUPS["snap"]),
     (r"crowd_clap_", make_slice_sfx.GROUPS["claps"]),
     (r"machine_count_", make_slice_sfx.GROUPS["machine"]),
+    (r"elysia_home_", make_slice_sfx.GROUPS["home_song"]),
     (r"purr$", make_slice_sfx.GROUPS["purr"]),
     (r"sit$|stand$", make_slice_sfx.GROUPS["cloth"]),
     (r"bird$", make_slice_sfx.GROUPS["bird"]),
@@ -159,6 +160,11 @@ CLASSES = [
     # at -4 dB): its click peaks are the lever's (about -12 dBFS as played) while its loudness, which the chord carries,
     # sits some 5 LU under the bed: a motif that is heard, not an event.
     ("beat of the plant", ["machine_count_0"], -2.0, "SFX", "haus_kalt", -6.0, -3.0),
+    # Elysia's song come home (Act VI, R8): the garden's motif on a music box, slowly, the end of the valley's answer on a
+    # piano, in the house after the way home (the fireplace's bed, like the hum of Act II). Heard over the bed as the
+    # other tunes of the Real world are (the flute, the lute), a hair over it, and a group under the hum (-21 against
+    # -20 LUFS): it comes into the room and does not fill it.
+    ("song come home", ["elysia_home_0"], -2.0, "SFX", "haus_feuer", 0.0, 6.0),
     # The Nachtwald plays no bed at all (music "silence", no ambience): the hum is the only sound there. It is measured
     # against the wood's night bed it would sit in, and it is meant to be quiet (a little under the bed, W5 O10).
     ("hum in the night wood", ["child_hum_0", "child_hum_1"], -8.0, "SFX", "wald_nacht", -4.0, 1.0),

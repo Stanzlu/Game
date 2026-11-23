@@ -6,7 +6,8 @@ and standing up, a bird landing, the drover's call; the child in Elysia humming 
 of the later main theme; the hermit's flute (Act III), Lio's lute in the street and Tess's
 whistling in the workshop, and Lio's worst concert (the lute with a crowd humming along, the string
 that breaks, a few hands clapping beside the beat; Act IV), and the beat of the plant (the levers
-that fall by themselves, three, one, two; Act V). The fire in the fireplace is a bed
+that fall by themselves, three, one, two; Act V), and Elysia's song come home to the house (the
+garden's motif on a music box, slowly, the end of the valley's answer on a piano; Act VI). The fire in the fireplace is a bed
 (make_nature.py, nature_fire_bed).
 
 Like make_sfx.py (whose building blocks it uses): mono 16-bit 44.1 kHz, loudness-normalized
@@ -22,7 +23,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from make_music import ANSWER, DORIAN, MOTIF, degree, midi_hz  # noqa: E402
+from make_music import ANSWER, DORIAN, MAJOR, MOTIF, degree, midi_hz, music_box, piano  # noqa: E402
 from make_sfx import (RATE, at, bandpass, env, highpass, knock, lowpass, mix, noise, preview,  # noqa: E402
                       reverb, secs, sine, tri, write)
 import make_nature  # noqa: E402
@@ -1046,6 +1047,36 @@ def machine_count(rng, beat=MACHINE_BEAT):
 
 
 
+# --- Elysia's song, come home (Act VI, R8) -----------------------------------------------------
+
+# The garden's motif (3-5-6-5-3-2, the bells of the loop in C major) on a music box, played by a
+# hand: slow and not quite even; a breath; then the end of the valley's answer (3-2-1 in D dorian,
+# the same seven notes as C major, so the song comes home to D) on a soft piano. The perfect loop
+# of the garden is the same notes; here somebody plays them, in a room.
+HOME_UNIT = 0.46  # seconds per eighth: the loop's eighth is 0.3 s
+HOME_END = [(3, 2), (2, 2), (1, 5)]  # degrees of D dorian, lengths in eighths
+
+
+def elysia_home(rng, unit=HOME_UNIT):
+    """Elysia's song come home, about 10 s (Act VI, R8, melody.elysia_home): see HOME_UNIT."""
+    parts = []
+    t0 = 0.25
+    for deg, eighths in MOTIF:
+        f = midi_hz(degree(60, MAJOR, deg, 0)) * rng.uniform(0.9985, 1.0015)
+        parts.append(at(music_box(f, 2.8, 0.9) * rng.uniform(0.80, 1.0), max(t0 + rng.normal(0, 0.012), 0.0)))
+        t0 += eighths * unit * rng.uniform(0.96, 1.07)
+    t0 += 0.5  # a breath
+    for deg, eighths in HOME_END:
+        f = midi_hz(degree(62, DORIAN, deg, 0)) * rng.uniform(0.9985, 1.0015)
+        parts.append(at(piano(f, 3.6, rng.uniform(0.5, 0.62), rng) * 2.4, max(t0 + rng.normal(0, 0.014), 0.0)))
+        t0 += eighths * unit * rng.uniform(0.96, 1.07)
+    total = t0 + 2.4
+    out = lowpass(mix(*parts), 5200)
+    out = room(out, 0.22, 0.5)[: int(RATE * total)]
+    t = np.arange(len(out)) / RATE
+    return out * np.minimum(1.0, t / 0.004) * np.clip((total - t) / 0.9, 0.0, 1.0)
+
+
 # Loudness per group (LUFS, K-weighted), see make_sfx.GROUPS: the Real world's foley sits a
 # few dB over the beds (-27 LUFS) so that doors, steps and animals are heard. The door,
 # water and stone targets are what their sharp peaks allow under the -1 dBFS ceiling. The plant's beat is clicks
@@ -1053,7 +1084,7 @@ def machine_count(rng, beat=MACHINE_BEAT):
 GROUPS = {"door": -18.0, "knock": -15.0, "water": -15.5, "stone": -18.0, "fire": -16.0,
           "animal": -17.0, "wood": -17.0, "child_hum": -18.0, "house_hum": -20.0, "cat": -17.0, "purr": -20.0,
           "cloth": -18.0, "bird": -16.0, "bark": -17.0, "flute": -20.0, "lute": -20.0, "whistle": -21.0,
-          "snap": -17.0, "claps": -21.0, "machine": -26.0}
+          "snap": -17.0, "claps": -21.0, "machine": -26.0, "home_song": -21.0}
 LOOPS = set()
 
 
@@ -1108,6 +1139,8 @@ def build(only=None):
     sounds["crowd_clap_0"] = (crowd_clap(np.random.default_rng(71)), "claps")
     # The beat of the plant (Act V, G5): its own random stream again
     sounds["machine_count_0"] = (machine_count(np.random.default_rng(73)), "machine")
+    # Elysia's song come home (Act VI, R8): its own random stream again
+    sounds["elysia_home_0"] = (elysia_home(np.random.default_rng(79)), "home_song")
     for name, (sig, group) in sounds.items():
         if only and not name.startswith(only):
             continue

@@ -411,7 +411,7 @@ func test_the_walk_has_the_stage_elysia_with_its_journal_and_the_gap_its_words()
 		quest.stage("elysia").next, PackedStringArray(["inn", "home"]), "the inn follows (R5)"
 	)
 	assert_eq(quest.stage("inn").next, PackedStringArray(["stand", "home"]), "the standing (R6)")
-	assert_true(quest.stage("home").is_final(), "final until the homecoming")
+	assert_eq(quest.stage("home").next, PackedStringArray(["done"]), "the homecoming follows (R8)")
 	var line := tr("QUEST_MAIN_RETURN_WAY_ELYSIA")
 	assert_ne(line, "QUEST_MAIN_RETURN_WAY_ELYSIA")
 	for word: String in ["Leere", "Gefühl", "heilen", "loslassen"]:

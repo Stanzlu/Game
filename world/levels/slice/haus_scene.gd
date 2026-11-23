@@ -174,6 +174,11 @@ func _ready() -> void:
 	)
 	if mountain_home:
 		WorldState.clear_flag("house.guest_waechter")
+	# the way home from Elysia (Act VI, R8): a homecoming that was broken off plays again from the
+	# door: the host at the fire comes with it, so the fire is empty until he has come
+	var return_home := ReturnHomecoming.due()
+	if return_home:
+		WorldState.clear_flag("house.guest_host")
 	# the day after the mountains (Act VI, R1): "Weiter" begins here, and Mira's place at the camp
 	# is set before the map of the valley is ever built
 	var morning_after := ReturnBeat.morning_due()
@@ -184,6 +189,8 @@ func _ready() -> void:
 		CityHomecoming.attach(self)
 	if mountain_home:
 		MountainHomecoming.attach(self)
+	if return_home:
+		ReturnHomecoming.attach(self)
 	if morning_after:
 		ReturnBeat.attach_morning(self, "morning_house")
 	elif ReturnBeat.quiet_due():

@@ -72,6 +72,7 @@ const CAPTIONS := {
 	"string_snap": "CAPTION_STRING",
 	"crowd_clap": "CAPTION_CLAPS",
 	"machine_count": "CAPTION_MACHINE_COUNT",
+	"elysia_home": "CAPTION_ELYSIA_HOME",
 	"rift_hum": "CAPTION_RIFT",
 	"stone_wobble": "CAPTION_WOBBLE",
 	"bird": "CAPTION_BIRD",

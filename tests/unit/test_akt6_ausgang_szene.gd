@@ -301,7 +301,7 @@ func test_the_exit_is_not_due_before_she_has_left_and_not_after_it_was_told() ->
 func test_the_walk_has_its_last_stage_with_its_journal_line() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_eq(quest.stage("stand").next, PackedStringArray(["home"]))
-	assert_true(quest.stage("home").is_final(), "final until the homecoming")
+	assert_eq(quest.stage("home").next, PackedStringArray(["done"]), "the homecoming follows (R8)")
 	var line := tr("QUEST_MAIN_RETURN_WAY_HOME")
 	assert_ne(line, "QUEST_MAIN_RETURN_WAY_HOME")
 	for word: String in ["Leere", "Gefühl", "heilen", "loslassen", "Elysia"]:
