@@ -1,0 +1,84 @@
+# Die Heimkehr, Akt VI, Segment R8 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O12, O13, O14, O15, O17, O18; Bible §14, §32, §35, §45, §51, §52; Stilblätter gastwirt.md, betaeuber.md und antreiber.md).
+# Die Spielerin ist aus Elysia zurück und geht ins Haus. Die Heimkehr ist leicht (Bible §45): das Haus ist, wie sie es ließ, und wer die Rückkehr bis zum Aufstehen am Tisch getrieben hat (elysia.stood_up), dem klopft der Wirt an. Er kommt zu Besuch und
+# bietet nichts an: das ist die Auflösung des Betäubers, dasselbe Gesicht ohne Angebot (O14). Sein Witz bleibt der eigene, er geht gegen seine Hände und seinen Abend, nie gegen die Spielerin, das Bleiben oder das Gehen. Er erklärt nichts, er lobt nichts
+# und er sagt nicht, was Betäubung war. Der Antreiber sagt nur, was auf dem Blatt steht (Brief O12: der leere Nachmittag); kein Satz über die Spielerin. Elysias Lied kommt als Ding ins Haus (O15): dieselben Töne wie im Garten, langsamer, und es
+# ist langsamer als im Garten. Wer den Wirt nicht kennt, hat ein stilles Haus und den Rest: nichts im Akt hängt an ihm. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind ausgeschrieben. Keine Antwort der Spielerin, keine
+# Antwortgruppe; kein Cue dieser Datei setzt etwas: die Szene (ReturnHomecoming) setzt das Flag des Gastes, die Melodie, die Stufe und das Kapitel. Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom Haus auf der Fläche,
+# keine Ursache, kein Richter, kein Urteil über Elysia, über das Gehen oder über das Bleiben.
+
+# --- Das Haus, wie sie es ließ ---------------------------------------------------------------------------------------------------
+# Wahr in jedem Zustand des Hauses. Das Licht ist ein gewöhnliches (ein Echo auf das Licht, das nicht hierher gehörte, ohne es zu zitieren); der Rauch steigt gerade, nichts im Raum ist ungewöhnlich.
+
+~ home_in
+Das Haus steht dort, wo du es gelassen hast, mit dem Tisch, dem Kamin und der Tür, die nicht klemmt. [ID:hk6_1] [#draft]
+Der Rauch vom Kamin steigt gerade nach oben. In der Luft liegt nichts, das nicht hierher gehört. [ID:hk6_2] [#draft]
+Auf den Dielen liegt ein Streifen Licht, der vom Fenster kommt und von sonst nirgends her. [ID:hk6_3] [#draft]
+=> END
+
+# --- Der Wirt kommt zu Besuch -----------------------------------------------------------------------------------------------------
+# Er hat geklopft und ist hereingekommen (die Szene zeigt die Tür und den Weg); die Zeilen beginnen, wenn er am Kamin sitzt. Er hat nichts dabei, und das ist die ganze Komik: seine Hände wissen nicht wohin, und es fragt ihn niemand, ob er noch
+# etwas möchte. Kein "Setz dich", kein "Hier ist alles, was du brauchst", kein Angebot, nicht einmal ein Löffel. Ein Bau von el_host_9 und inn_host_3 ohne den Teller: er ist ein Gast und weiß es nicht recht. Sein "Hier" und "später" kehren sich um:
+# das Haus ist ihr Ort, er ist nur da.
+
+~ host_in
+Es hat geklopft, nicht laut, und die Tür ist ohne Eile aufgegangen. [ID:hk6_4] [#draft]
+Jetzt sitzt der Wirt am Kamin, die Hände auf den Knien. Er hat nichts dabei. [ID:hk6_5] [#draft]
+Gastwirt: Ich hab nichts mitgebracht. Das ist neu. Ich weiß gar nicht, wohin mit den Händen. [ID:hk6_6] [#draft]
+Er dreht sie einmal um und legt sie wieder auf die Knie. [ID:hk6_7] [#draft]
+Gastwirt: Hübsch ist es hier. Kleiner als meins, dafür schließt die Tür. [ID:hk6_8] [#draft]
+Gastwirt: Ich greif dauernd nach einem Löffel, der nicht da ist. Sehr ruhig, so ein Abend ohne Löffel. [ID:hk6_9] [#draft]
+=> END
+
+# --- Der Antreiber und das Blatt -------------------------------------------------------------------------------------------------
+# Nur wenn der Wirt gekommen ist. Der Antreiber sitzt an der Werkbank (Karte, Zelle A) und liest den Besuch am Blatt ab: dort steht seit Akt III bei "Besuch" das Wort "unangemeldet". Er sagt, was auf dem Blatt steht und was nicht, nie, was es bedeutet; die
+# Füße gehen nicht auf der Stelle (ein Echo auf fl_antr_3 und fl_ask_3). Der leere Nachmittag ist sein Fortschritt: einmal nachgesehen, zweimal. Kein "!", keine Frage.
+
+~ antreiber_visit
+Am Werkbrett hebt der Antreiber den Kopf und sieht zum Blatt an der Wand. [ID:hk6_10] [#draft]
+Antreiber: Besuch. Unangemeldet. Steht drauf. [ID:hk6_11] [#draft]
+Antreiber: Heute um fünf ist nichts eingetragen. Ich hab zweimal nachgesehen. [ID:hk6_12] [#draft]
+Seine Füße bleiben, wo sie sind. [ID:hk6_13] [#draft]
+=> END
+
+# --- Elysias Lied nach Hause -----------------------------------------------------------------------------------------------------
+# Die Szene spielt das Lied (melody.elysia_home) zu der ersten Zeile. Es ist das Motiv des Gartens, langsamer, und es endet mit den Tönen, die das Tal singt: eine Melodie und kein Fragment, kein Zeichen, kein Lohn. Der Text sagt nur, was zu hören ist
+# und dass eine Hand es spielt (es zögert an einer Stelle); die Spielerin kennt es aus dem Garten, und mehr sagt keine Zeile.
+
+~ home_song
+Im Kamin knackt ein Scheit, und mit dem Knacken beginnt irgendwo im Haus ein Lied. [ID:hk6_14] [#draft]
+Du kennst es aus dem Garten, die Töne sind dieselben. Es ist langsamer, und an einer Stelle zögert es. [ID:hk6_15] [#draft]
+Es endet dort, wo das Tal es immer enden lässt, und danach ist es still. [ID:hk6_16] [#draft]
+=> END
+
+# --- Der Schluss -------------------------------------------------------------------------------------------------------------------
+# Wahr mit und ohne den Wirt. Das Ende des Aktes ist still, im Haus, ohne Titel (O18). Dinge: der Tee von gestern, kalt geblieben (R1, lee_morn_2: "Der Tee von gestern steht noch auf dem Tisch"), der Bach, ein Scheit. Kein Satz über Wärme, Heimat oder Genug.
+
+~ home_close
+Auf dem Tisch steht noch der Tee von gestern. Er ist kalt geblieben. [ID:hk6_17] [#draft]
+Draußen läuft der Bach, und im Kamin knackt noch einmal ein Scheit. [ID:hk6_18] [#draft]
+=> END
+
+# --- Der Wirt am Feuer -------------------------------------------------------------------------------------------------------------
+# Wer den Wirt ansprechen will, findet ihn am Kamin, ohne Angebot (die Karte: Zelle Φ, Cue host_home, nur mit house.guest_host). Er spricht nicht über das Gasthaus, nicht über den Tisch, nicht über das Aufstehen und nicht über die Suppe. Der Witz geht gegen den
+# Abend und gegen das Feuer, das er nicht lesen muss. Keine Antwort.
+
+~ host_home
+Gastwirt: Ich sitz nur. Das Feuer macht den Rest. [ID:hk6_19] [#draft]
+Er sieht ins Feuer, als wäre es eine Karte, die er nicht lesen muss. [ID:hk6_20] [#draft]
+Gastwirt: Gleich geh ich. Oder später. Das Feuer ist so oder so da. [ID:hk6_21] [#draft]
+=> END
+
+# --- Das Blatt, danach -------------------------------------------------------------------------------------------------------------
+# Die Karte (Zelle Y, talk_when mit elysia.left) zeigt statt plan_board (akt3/heimkehr.dialogue) diesen Cue: dasselbe Blatt mit dem roten Streifen, eine Zeile neu: der leere Nachmittag, den er eingetragen hat und der nichts enthält. Der Strich am Ende der
+# Zeile ist nicht ausgewischt (sein Siegel). Für den Einsiedler steht sein Name bei "Besuch" (Akt III), für den Wirt der seine, mit der Dauer, die zu ihm passt; ohne beide steht noch "unangemeldet" da. Ein Posten fürs Nichtstun ist das nicht: das gehört dem Nachspiel (Bible §42). Nur Dinge, nichts gezählt außer einer Uhrzeit.
+
+~ plan_board_back
+Zwischen Regal und Fenster hängt das Blatt mit dem roten Streifen. Eine Zeile ist neu. [ID:hk6_22] [#draft]
+Um fünf Uhr steht nichts, nur der Strich am Ende der Zeile. Er ist nicht ausgewischt. [ID:hk6_23] [#draft]
+if WorldState.has_flag("house.guest_hermit")
+	Bei »Besuch« steht »Einsiedler«, und als Dauer »offen«. [ID:hk6_26] [#draft]
+if WorldState.has_flag("house.guest_host")
+	Bei »Besuch« steht jetzt »Gastwirt« dabei, und als Dauer »nichts mitgebracht«. [ID:hk6_24] [#draft]
+elif not WorldState.has_flag("house.guest_hermit")
+	Bei »Besuch« steht noch immer »unangemeldet«. [ID:hk6_25] [#draft]
+=> END

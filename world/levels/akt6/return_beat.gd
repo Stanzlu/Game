@@ -72,7 +72,11 @@ static func leave_elysia() -> void:
 
 ## True when she has left Elysia and the valley has not said what stands where the light stood.
 static func exit_due() -> bool:
-	return WorldState.has_flag("elysia.left") and not Beat.reached(EXIT_BEAT)
+	return (
+		WorldState.has_flag("elysia.left")
+		and not Beat.reached(EXIT_BEAT)
+		and not Beat.reached(ReturnHomecoming.BEAT)
+	)
 
 
 ## Puts the arrival in the valley into the scene, unless it has been told.

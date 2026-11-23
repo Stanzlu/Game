@@ -27,6 +27,8 @@ einmal sinnvoll war (Risiko 8; `sl_antr_why_2`).
   kein Wort über das Warum und keines über den Wald. Der Text liest nie, wie er ins Haus kam (am Feuer geblieben oder vorausgegangen); nur der Tee
   unterscheidet: wer ihn im Wald gesetzt hat, hört die Dauer, sonst wartet der Tee auf jemanden, der ihn macht.
 
+- Akt VI, R8: Er liest den Besuch vom Blatt (»unangemeldet«, `hk6_11`) und hat heute um fünf nichts eingetragen, zweimal nachgesehen (`hk6_12`); die Füße gehen nicht auf der Stelle (`hk6_13`). Drei Zeilen, kein „!“, keine Frage; der leere Nachmittag ist die nächste Stufe des Gags (ein Posten fürs Nichtstun gehört dem Nachspiel, Bible §42).
+
 ## Verlauf
 
 Start (Plan, Liste) → Antreiben (Lob als Druck: „Du machst das gut. Noch ein bisschen besser, dann reicht es.“) →

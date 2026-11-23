@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://b36vyadifby0e"
+path="res://.godot/imported/heimkehr.dialogue-7d758bef92bb2ee136a3ca103c4c82b1.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/heimkehr.dialogue"
+dest_files=["res://.godot/imported/heimkehr.dialogue-7d758bef92bb2ee136a3ca103c4c82b1.tres"]
+
+[params]
+
+defaults=true

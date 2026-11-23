@@ -60,6 +60,7 @@ PREFIX = {
     "akt6/gasthaus": "R5-",  # the file name "gasthaus" belongs to Act I as well (akt1/gasthaus.dialogue): the folder keeps it apart
     "akt6/aufstehen": "R6-",
     "akt6/ausgang": "R7-",
+    "akt6/heimkehr": "R8-",  # Act V has a heimkehr.dialogue too (akt5/heimkehr): the folder keeps it apart
 }
 # The order in which the slice plays its places; other files follow by name.
 ORDER = ["elysia", "tal", "antreiber", "haus"]

@@ -10,6 +10,8 @@ in seiner Schrift mit dem Ergebnis, nie der Ursache): seine Strategie hat einmal
 
 **Beleg in Akt VI, R6 (`content/dialogue/akt6/aufstehen.dialogue`):** die Auflösung seines zentralen Encounters (Bible §14) ist ein Schritt der Spielerin, kein Gespräch: sie steht von der Bank auf, und er lässt sie gehen, mit der Frage, die er immer hatte, und der Suppe in der Hand („… Na gut. Aber nimm die Suppe mit.“, `up_5`, `up_6`). Er hält nie fest, benennt seine Strategie nie, ändert sich nicht und wird danach nicht kleiner: im Haus sitzt er später am Feuer, ohne Angebot (R8).
 
+**Beleg in Akt VI, R8 (`content/dialogue/akt6/heimkehr.dialogue`):** „Danach im Haus: er sitzt am Feuer“ (Plan 5.2) ist gebaut: der Betäuber ist als Wirt zu Besuch, ohne etwas anzubieten, und das ist die Auflösung: kein Wort über das, was er war, kein Urteil, keine Rechtfertigung, ein Mensch, der nicht weiß, wohin mit den Händen. Er ändert sich nicht und wird nicht kleiner; sein Platz am Feuer ist ein Gastplatz wie der des Wächters in Akt V.
+
 ## Funktion
 
 Grundidee „Du musst das gerade nicht fühlen.“ Der charmanteste Beschützer: warm, lustig, angenehm, nicht sinister, eng mit
