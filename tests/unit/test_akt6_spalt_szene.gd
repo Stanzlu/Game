@@ -367,8 +367,11 @@ func test_the_old_rift_does_not_take_what_she_has_gathered_since_the_return() ->
 	var sequence := RiftSequence.play(scene, "look_tal", false)
 	sequence.time_scale = 0.02
 	sequence.travel = false
+	var done := [false]
+	sequence.finished.connect(func() -> void: done[0] = true)
 	sequence.run()
-	await wait_for_signal(sequence.finished, 5.0)
+	# the way out tells a few lines first (R7); the step is hers
+	assert_true(await _told(scene, func() -> bool: return done[0]), "the way out is told")
 	assert_eq(WorldState.ui_mode(), GameState.UiMode.REAL, "out again")
 	assert_true(WorldState.has_item("curiosity_feather"), "what she carries stays with her")
 
@@ -404,9 +407,11 @@ func test_a_game_saved_in_elysia_after_the_return_loads_with_elysias_interface()
 func test_the_walk_has_the_stage_elysia_with_its_journal_and_the_gap_its_words() -> void:
 	var quest := ContentDB.quest(QUEST)
 	assert_eq(quest.stage("pull").next, PackedStringArray(["elysia"]))
-	assert_eq(quest.stage("elysia").next, PackedStringArray(["inn"]), "the inn follows (R5)")
-	assert_eq(quest.stage("inn").next, PackedStringArray(["stand"]), "the standing follows (R6)")
-	assert_true(quest.stage("stand").is_final(), "final until the way home")
+	assert_eq(
+		quest.stage("elysia").next, PackedStringArray(["inn", "home"]), "the inn follows (R5)"
+	)
+	assert_eq(quest.stage("inn").next, PackedStringArray(["stand", "home"]), "the standing (R6)")
+	assert_true(quest.stage("home").is_final(), "final until the homecoming")
 	var line := tr("QUEST_MAIN_RETURN_WAY_ELYSIA")
 	assert_ne(line, "QUEST_MAIN_RETURN_WAY_ELYSIA")
 	for word: String in ["Leere", "Gefühl", "heilen", "loslassen"]:

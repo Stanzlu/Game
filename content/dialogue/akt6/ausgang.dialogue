@@ -1,0 +1,35 @@
+# Der Ausgang, Akt VI, Segment R7 (docs/akt6/REGIONSBRIEFE.md, Voreinstellungen O3, O4, O12, O19, O20; Bible §8, §11, §37, §45, §51, §52).
+# Der Riss am Rand des Bildes ist derselbe, durch den die Spielerin Elysia einmal verlassen hat; diesmal ohne Sturz. Er fragt nichts (nach dem Wirt, der einmal gefragt hat, fragt kein Ding mehr), er zieht nicht, er hat keine Eile, und die Ecke
+# des Bildes, die in Akt I zerfiel, lässt sie gehen, ein Teil nach dem anderen, ohne zu zittern. Der Text zeigt nur Dinge und Handgriffe: er erklärt nicht, was Elysia ist, was die Spielerin hinter sich lässt oder was sie mitnimmt, er lobt den
+# Schritt nicht, und er sagt kein Wort darüber, wie es ihr geht. Was sie trägt, kommt mit (der Stein, der Samen und, wenn sie die Suppe genommen hat, die Suppe); Erfahrung und Gold stehen im Stand, und in der Wirklichkeit zeigt nichts sie.
+# Humor kommt aus den Dingen (Brief O12), nie aus ihrer Stimmung. Prüflinse (Bible §15, §51): kein Kind, nichts vom Gebirge, von der Anlage oder vom ursprünglichen Haus, keine Ursache, kein Betäuber, kein Wirt, kein Urteil über Elysia und kein
+# Urteil über das Gehen oder das Bleiben. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind ausgeschrieben. Es spricht keine Figur, es gibt keine Antwort der Spielerin und keine Antwortgruppe.
+# Kein Cue dieser Datei setzt ein Flag, einen Gegenstand, eine Facette oder eine Erinnerung: die Szene setzt das Flag des Ausgangs, rückt die Heldenquest und markiert den Beat. Gelesen wird allein, ob die Spielerin die Suppe trägt (Gegenstand).
+
+# --- Der Schritt ---------------------------------------------------------------------------------------------------------------
+# Eine Zwischensequenz nach der Berührung, vor dem Schwarz. Der Riss ist ein Ding, das offen ist; die letzte Zeile ist der Schritt und das, was das Zählwerk dabei tut. Kein Rückblick, kein Abschied von dem Ort, kein Entschluss in Worten.
+# Die Zeile über das, was sie trägt, kommt in zwei Fassungen (mit und ohne Suppe) und verspricht nichts: "Was du trägst, kommt mit" ist eine Tatsache der Tasche.
+
+~ exit_step
+Der Riss steht am Rand des Bildes, kaum breiter als ein Atemzug, dort, wo du ihn damals gefunden hast. [ID:aus_1] [#draft]
+Er fragt nichts. Er zieht nicht, und er hat keine Eile. [ID:aus_2] [#draft]
+if WorldState.has_item("item_soup")
+	Was du trägst, kommt mit, und die Suppe ist noch warm. [ID:aus_3] [#draft]
+else
+	Was du trägst, kommt mit. [ID:aus_4] [#draft]
+Du tust einen Schritt, einen einzigen. In der Ecke des Bildes geht das Zählwerk, ein Teil nach dem anderen, ohne zu zittern. [ID:aus_5] [#draft]
+=> END
+
+# --- Die Ankunft im Tal --------------------------------------------------------------------------------------------------------
+# Eine Zwischensequenz, sobald das Bild aus dem Schwarz da ist; die Spielerin steht dort, wo sie im Regen angekommen ist und wo der Streifen Licht stand (R2). Das Licht ist fort, und der Text sagt nur, was an der Stelle ist: Gras, nass vom Tau (ein Bau von
+# gap_look_2) und ein Bach, der in beiden Fällen weitergelaufen wäre (ein Bau von gap_look_5, das Echo auf "hindurchgehen oder vorbei"). Das Zählwerk fehlt: kein Satz über Stufe oder Gold und keiner über Fortschritt, nur die leere Ecke (ein Bau von gap_arr_5, "Der Balken glänzt, und die Zahl daneben"). Wer die Suppe trägt, hat sie noch warm.
+# Die letzte Zeile ist das Haus, an dem Ort, wo es steht, und verlangt nichts: R8 beginnt, wenn sie hineingeht.
+
+~ exit_valley
+Das Licht ist fort. Dort, wo es stand, wächst Gras, nass vom Tau, und es sieht so nass aus, wie es ist. [ID:aus_6] [#draft]
+Der Bach läuft weiter, wie er in beiden Fällen gelaufen wäre. [ID:aus_7] [#draft]
+Die Ecke des Bildes ist leer, kein Balken, keine Zahl. [ID:aus_8] [#draft]
+if WorldState.has_item("item_soup")
+	Die Schale in deinen Händen ist noch warm, auch hier. [ID:aus_9] [#draft]
+Das Haus steht dort, wo es stand, und der Weg zu ihm ist derselbe. [ID:aus_10] [#draft]
+=> END

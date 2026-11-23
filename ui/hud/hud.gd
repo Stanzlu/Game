@@ -842,8 +842,10 @@ func _quiet_line(def: ItemDef) -> void:
 # --- Rift -------------------------------------------------------------------------------
 
 
-## Removes the next Elysia element (glitch, then gone). Returns false when none is left.
-func vanish_next(calm := false) -> bool:
+## Removes the next Elysia element (glitch, then gone). Returns false when none is left. `quiet`
+## leaves out the glitch sound: the gentle way out of Elysia (Act VI, R7) lets the corner go
+## silently.
+func vanish_next(calm := false, quiet := false) -> bool:
 	for element_name in VANISH_ORDER:
 		if element_name in _vanished:
 			continue
@@ -864,7 +866,8 @@ func vanish_next(calm := false) -> bool:
 			tween.tween_property(node, ^"position", home, 0.0)
 			tween.tween_property(node, ^"modulate:a", 0.0, 0.12)
 		tween.tween_callback(node.hide)
-		AudioDirector.sfx("glitch", 0.0)
+		if not quiet:
+			AudioDirector.sfx("glitch", 0.0)
 		Log.info(Log.Category.UI, "hud element gone", {"element": element_name})
 		return true
 	return false

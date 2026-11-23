@@ -6,6 +6,13 @@ extends Node
 ## then the Real world with rain. Afterwards the UI is in REAL mode and the inventory holds
 ## only the stone and a seed. Respects screen shake and reduced flashing (no freezes then).
 ## Elysia itself does not decay: its world stays as it is (Game Bible §8, §9).
+##
+## The second crossing (Act VI, R7, docs/akt6/REGIONSBRIEFE.md): whoever came back through the
+## gap in the valley (`elysia.returned`) leaves the same way, and gently. Nothing stutters, nothing
+## shakes, the music runs out like a song and not like a tape, the corner of the picture lets her go
+## one piece at a time and without a sound of its own, and the rift asks nothing (two short scenes
+## of ausgang.dialogue: the step here, the valley's in `ReturnBeat`). What she carries stays with
+## her; the way out is marked in the state (`ReturnBeat.leave_elysia`).
 
 signal finished
 
@@ -15,6 +22,12 @@ const STUTTER_SECONDS := 0.12
 ## Black between the fade-out and the new scene: long enough to be a breath, no longer.
 const DARK_PAUSE := 0.6
 const KEEP: PackedStringArray = ["item_stone", "item_seed"]
+## The gentle way out: the pause between the pieces of the corner, the music's run-out, the valley's
+## picture coming up (a morning, no rain).
+const GENTLE_PAUSE := 1.1
+const GENTLE_MUSIC_FADE := 3.0
+const GENTLE_ARRIVAL_FADE := 3.0
+const LAST_LINE_GOES := 0.2
 ## The Real world comes up slowly out of the dark, rain first.
 const ARRIVAL_FADE := 3.5
 
@@ -54,18 +67,18 @@ func run() -> void:
 	Log.info(Log.Category.WORLD_STATE, "rift sequence start", {"target": target})
 	_running = true
 	key = StringName("rift_%d" % get_instance_id())
-	add_to_group(&"cutscene")
 	var calm := Settings.get_bool("display.reduce_flashing")
+	var gentle := WorldState.has_flag("elysia.returned")
+	if not gentle:
+		add_to_group(&"cutscene")
 	scene.player.lock(key)
 	SaveSystem.block(key)
-	scene.view.shake(2.0, 1.4)
-	AudioDirector.tape_stop(3.4 * time_scale)
-	while scene.hud.vanish_next(calm):
-		if not calm:
-			_stutter()
-		await _wait(PAUSE_BETWEEN_ELEMENTS)
+	if gentle:
+		await _let_go()
+	else:
+		await _fall_apart(calm)
 	AudioDirector.set_ambience(null, -6.0, 1.6 * time_scale)
-	await _wait(1.8)
+	await _wait(1.8 if not gentle else 1.2)
 	ScreenFade.fade_out(1.6 * time_scale)
 	await _wait(1.6)
 	await _wait(DARK_PAUSE)
@@ -77,9 +90,34 @@ func run() -> void:
 	SaveSystem.unblock(key)
 	if travel:
 		SceneTravel.pending_spawn = spawn
-		SceneTravel.arrival_fade = ARRIVAL_FADE
+		SceneTravel.arrival_fade = GENTLE_ARRIVAL_FADE if gentle else ARRIVAL_FADE
 		get_tree().change_scene_to_file(SceneRegistry.path(target))
 	finished.emit()
+
+
+## The first crossing: the world stutters, the corner falls apart, the music stops like a tape.
+func _fall_apart(calm: bool) -> void:
+	scene.view.shake(2.0, 1.4)
+	AudioDirector.tape_stop(3.4 * time_scale)
+	while scene.hud.vanish_next(calm):
+		if not calm:
+			_stutter()
+		await _wait(PAUSE_BETWEEN_ELEMENTS)
+
+
+## The second crossing (R7): the rift asks nothing, the step is hers, and the corner lets her go.
+func _let_go() -> void:
+	var cut := Cutscene.begin(scene)
+	await cut.say(ReturnBeat.EXIT_DIALOGUE, "exit_step")
+	# the box fades out in 0.1 s of the scene that is about to change the picture
+	await cut.wait(LAST_LINE_GOES)
+	cut.end()
+	# the lines were a conversation (the pause menu may open then, as for every cutscene that only
+	# talks); the rest holds menus closed
+	add_to_group(&"cutscene")
+	AudioDirector.stop_music(GENTLE_MUSIC_FADE * time_scale)
+	while scene.hud.vanish_next(true, true):
+		await _wait(GENTLE_PAUSE)
 
 
 func _cross_over() -> void:
@@ -89,6 +127,7 @@ func _cross_over() -> void:
 	WorldState.set_ui_mode(GameState.UiMode.REAL)
 	if WorldState.has_flag("elysia.returned"):
 		# the second crossing (Act VI): what she carries since stays with her
+		ReturnBeat.leave_elysia()
 		return
 	WorldState.reduce_inventory_to(KEEP)
 	for item in KEEP:

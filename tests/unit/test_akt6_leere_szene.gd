@@ -330,9 +330,12 @@ func test_the_last_chapter_is_act_six_and_the_walk_has_its_stages_with_their_jou
 	assert_eq(quest.stages[0].next, PackedStringArray(["gone", "pull"]))
 	assert_eq(quest.stage("gone").next, PackedStringArray(["pull"]))
 	assert_eq(quest.stage("pull").next, PackedStringArray(["elysia"]))
-	assert_eq(quest.stage("elysia").next, PackedStringArray(["inn"]), "the inn follows (R5)")
-	assert_eq(quest.stage("inn").next, PackedStringArray(["stand"]), "the standing follows (R6)")
-	assert_true(quest.stage("stand").is_final(), "and nothing after it yet")
+	assert_eq(
+		quest.stage("elysia").next, PackedStringArray(["inn", "home"]), "the inn follows (R5)"
+	)
+	assert_eq(quest.stage("inn").next, PackedStringArray(["stand", "home"]), "the standing (R6)")
+	assert_eq(quest.stage("stand").next, PackedStringArray(["home"]), "and the way home (R7)")
+	assert_true(quest.stage("home").is_final(), "and nothing after it yet")
 	var keys: PackedStringArray = [
 		"QUEST_MAIN_RETURN_WAY_TITLE",
 		"QUEST_MAIN_RETURN_WAY_EMPTY",

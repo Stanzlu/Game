@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ctn42t822bywl"
+path="res://.godot/imported/ausgang.dialogue-b974dc2f3ca07994b24eef29a5a320c6.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/ausgang.dialogue"
+dest_files=["res://.godot/imported/ausgang.dialogue-b974dc2f3ca07994b24eef29a5a320c6.tres"]
+
+[params]
+
+defaults=true
