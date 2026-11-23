@@ -15,7 +15,7 @@ _ = {"atlas": [6, 0], "surface": "wood", "paint": "planks_h"}
 ; die Hülle (Wände, Fenster, Regale, Uhr) liegt unter allem; der Boden wird aus der Karte gebacken (tools/art/bake_ground.py)
 S = {"ground": "#", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_shell"}}
 ; der Gastwirt hinter dem Tresen; der Tresen ist eine Kante, kein Möbelstück zum Ansehen
-h = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "host", "face": "s", "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/gasthaus.dialogue", "cue": "host_back", "and": "elysia.inn_met"}}}}
+h = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_host_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "host", "face": "s", "talk_when": {"elysia.stood_up": {"dialogue": "res://content/dialogue/akt6/aufstehen.dialogue", "cue": "host_after", "and": "elysia.inn_met"}, "elysia.returned": {"dialogue": "res://content/dialogue/akt6/gasthaus.dialogue", "cue": "host_back", "and": "elysia.inn_met"}}}}
 b = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_bar"}}
 ; Elysia ist auch hier spiegelsymmetrisch um Spalte 20 (Game Bible §9): jedes Ding steht zweimal
 w = {"ground": "W", "prop": "res://world/props/decor.tscn", "params": {"cue": "window", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 22}}
@@ -26,7 +26,7 @@ T = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 E = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "w"}}
 e = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "e"}}
 L = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/guest_book", "cue": "guestbook", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 20}}
-; R5 (Akt VI): wer zurück ist (elysia.returned), findet in der Mitte der Halle einen gedeckten Tisch und zwei Bänke; der Wirt und der Kamin sprechen neu (talk_when, akt6/gasthaus.dialogue)
+; R5 (Akt VI): wer zurück ist (elysia.returned), findet in der Mitte der Halle einen gedeckten Tisch und zwei Bänke; der Wirt und der Kamin sprechen neu (talk_when, akt6/gasthaus.dialogue); R6: wer vom Tisch aufgestanden ist (elysia.stood_up), findet den Wirt ohne Angebot (host_after, akt6/aufstehen.dialogue)
 t = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_table", "if": "elysia.returned"}}
 n = {"ground": "M", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench", "if": "elysia.returned"}}
 ; die Zimmer: ihre Türen gehen auf, wenn der Gastwirt es sagt (elysia.inn_room)

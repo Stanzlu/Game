@@ -130,6 +130,10 @@ weg     encounters/antreiber/slice_antreiber.tscn   SliceAntreiber: der Weg zum 
 - Der Tisch im Gasthaus (Akt VI, R5): `InnTable` (`world/levels/akt6/inn_table.gd`) fragt einmal je
   Sitzen (`stay`), setzt je Antwort `elysia.stay_N` und schließt das Bild in Schritten, solange die
   Spielerin sitzt (Muster der Hütte); Aufstehen gibt das Bild zurück.
+- Das Aufstehen (Akt VI, R6): dieselbe `InnTable` merkt, wenn die Spielerin nach `elysia.stay_3` von der Bank
+  aufsteht, und spielt einmal `stand_first` (`akt6/aufstehen.dialogue`: der Wirt fragt, lässt los, gibt die
+  Suppe mit; `elysia.stood_up`, Quest `main_return_way` von `inn` auf `stand`, Beat `inn_stood`); der Wirt
+  spricht danach `host_after` (`talk_when`).
 - Neue Requisiten: `stepping_stone` (runde kippen, zurück ans Ufer), `golden_butterfly`, `goat`
   (`"perch"` hebt sie auf den Holzstapel), `fireplace`, `blocker`; `Talk` (Interaktionsfläche und
   Dialog über den Presenter); `ChildGuide` (NpcWalker, der vorausgeht, wartet und das Hauptmotiv summt).

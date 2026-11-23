@@ -3428,9 +3428,25 @@
     {
      "type": "line",
      "ref": "gar_again_7"
+    },
+    {
+     "type": "line",
+     "ref": "up_hr1"
+    },
+    {
+     "type": "line",
+     "ref": "up_h2"
+    },
+    {
+     "type": "line",
+     "ref": "up_h3"
+    },
+    {
+     "type": "line",
+     "ref": "up_h4"
     }
    ],
-   "payoff": "Das Erste in Elysia, das nichts gibt (Akt VI, R3, Brief O7; Bible §16 „Ich darf spielen“: „Lebendigkeit macht den Charakter nicht stärker. Sie macht das Spiel reicher.“): am Becken, an dem in Akt I die Gärtnerin um einen Gefallen bat, bittet niemand um etwas (`gar_basin_1`), der Rand ist gerade so hoch, dass die Hand von allein ins Wasser findet (`gar_basin_3`), und die Spielerin hat zwei Antworten, beide mit eigenen Zeilen: Zusehen (`gar_basin_4`, `gar_basin_5`: dasselbe Wasser, dasselbe Blütenblatt, das ankommt, wo es losfuhr) oder Wasser spritzen (`basin_play`): die Hand im Wasser, ein Schwall, Tropfen im Licht, ein Platschen, das niemand bemerkt (`gar_play_1`, `gar_play_2`); in der Ecke des Bildes ändert sich nichts, und der Text sagt es als Ding und nicht als Satz über Lohn oder Zweck (`gar_play_3`); die letzte Zeile ist leicht und nicht feierlich, das Wasser läuft einem nur den Ärmel hinunter (`gar_play_4`). Kein XP, kein Gold, kein Gegenstand, kein Flag, kein Lob. Gesetzt wird allein die achte Facette `aliveness` (kein Flag, darum nicht im Register: Setzer `basin_play`, Leser `gardener_again`, nie im selben Cue). Das Wort für die Facette steht nirgends im Spiel, und keine Zeile nennt das Tun „Spiel“, „Spaß“ oder „Freude“. Die Gärtnerin liest die Facette in einer Antwort („Ich war am Brunnen. Das Wasser ist nass.“, `gar_again_r2`): sie wusste es, bevor es gesagt war (`gar_again_6`), lobt nicht und sagt einen Satz über das Wasser und nicht über die Spielerin (`gar_again_7`); wer nicht am Becken war, hat diese Antwort nicht, und keine Antwort ist falsch. Der Brief O7 nennt weitere Setzer (ein Tanz, ein Tier), die folgen; in R3 ist das Becken der erste, nie Voraussetzung."
+   "payoff": "Das Erste in Elysia, das nichts gibt (Akt VI, R3, Brief O7; Bible §16 „Ich darf spielen“: „Lebendigkeit macht den Charakter nicht stärker. Sie macht das Spiel reicher.“): am Becken, an dem in Akt I die Gärtnerin um einen Gefallen bat, bittet niemand um etwas (`gar_basin_1`), der Rand ist gerade so hoch, dass die Hand von allein ins Wasser findet (`gar_basin_3`), und die Spielerin hat zwei Antworten, beide mit eigenen Zeilen: Zusehen (`gar_basin_4`, `gar_basin_5`: dasselbe Wasser, dasselbe Blütenblatt, das ankommt, wo es losfuhr) oder Wasser spritzen (`basin_play`): die Hand im Wasser, ein Schwall, Tropfen im Licht, ein Platschen, das niemand bemerkt (`gar_play_1`, `gar_play_2`); in der Ecke des Bildes ändert sich nichts, und der Text sagt es als Ding und nicht als Satz über Lohn oder Zweck (`gar_play_3`); die letzte Zeile ist leicht und nicht feierlich, das Wasser läuft einem nur den Ärmel hinunter (`gar_play_4`). Kein XP, kein Gold, kein Gegenstand, kein Flag, kein Lob. Gesetzt wird allein die achte Facette `aliveness` (kein Flag, darum nicht im Register: Setzer `basin_play`, Leser `gardener_again` und seit R6 `host_after`, nie im selben Cue). Das Wort für die Facette steht nirgends im Spiel, und keine Zeile nennt das Tun „Spiel“, „Spaß“ oder „Freude“. Die Gärtnerin liest die Facette in einer Antwort („Ich war am Brunnen. Das Wasser ist nass.“, `gar_again_r2`): sie wusste es, bevor es gesagt war (`gar_again_6`), lobt nicht und sagt einen Satz über das Wasser und nicht über die Spielerin (`gar_again_7`); wer nicht am Becken war, hat diese Antwort nicht, und keine Antwort ist falsch. Der Brief O7 nennt weitere Setzer (ein Tanz, ein Tier), die folgen; in R3 ist das Becken der erste, nie Voraussetzung. Seit R6 liest die Facette auch der Wirt (Akt VI, R6, `host_after`): die Antwort „Tanzen?“ (`up_hr1`) steht nur mit ihr neben „Danke für die Suppe.“ und dem Schweigen, er freut sich, ohne etwas daraus zu machen (`up_h2` bis `up_h4`), und lädt zu nichts ein; wer die Facette nicht hat, hat die Antwort nicht, und keine ist falsch."
   },
   {
    "id": "elysia-gleich",
@@ -3975,6 +3991,101 @@
    "payoff": "Das Warum des Betäubers steht als Ding im Raum, nie als Erklärung (Akt VI, R5, `hearth_back`, Brief O6; Risiko 8: eine Szene, in der seine Strategie richtig war). Das Feuer, das in Akt I nie Holz brauchte (`gh_hearth_1`), hat Spuren einer einzigen langen Nacht: vor dem Kamin eine Mulde im Teppich, rund und tief, wie sie nur eine ganze Nacht Sitzen hinterlässt (`inn_hearth_1`), eine Decke, sorgfältig gefaltet, so wie man sie am Morgen zusammenlegt (`inn_hearth_2`), eine Schale, bis auf den Grund ausgelöffelt und nie abgeräumt, während sich alles andere in der Halle von selbst abräumt (`inn_hearth_3`), und ein Zettel in der Schrift des Wirts mit zwei Wörtern, die das Ergebnis nennen und nie die Ursache, „Hat geholfen.“ (`inn_hearth_4`). Feuer, Decke und Suppe haben einmal jemandem geholfen, und am Morgen ging es wieder: gezeigt, nie gesagt. Wer da saß, ist ein anderer, nicht die Spielerin; keine Ursache, kein Täter, kein Name, kein Kind, keine Familie, keine Krankheit, keine Rückblende. Der Kamin ist Gastfreundschaft und keine Rechtfertigung: keine Zeile sagt, ob Betäubung gut oder schlecht ist, und der Wirt spricht nie darüber. Das letzte Wort hat der Zettel.",
    "payoff_lines": [
     "inn_hearth_4"
+   ]
+  },
+  {
+   "id": "aufstehen-eigener-schritt",
+   "kind": "vorausdeutung",
+   "title": "Das Aufstehen als eigener Schritt (Akt VI, der Wirt)",
+   "bible": "§14, §45, §51, §52",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "inn_s3_2"
+    },
+    {
+     "type": "line",
+     "ref": "up_1"
+    },
+    {
+     "type": "line",
+     "ref": "up_2"
+    },
+    {
+     "type": "line",
+     "ref": "up_3"
+    },
+    {
+     "type": "line",
+     "ref": "up_4"
+    },
+    {
+     "type": "line",
+     "ref": "up_5"
+    },
+    {
+     "type": "line",
+     "ref": "up_6"
+    },
+    {
+     "type": "line",
+     "ref": "up_7"
+    },
+    {
+     "type": "line",
+     "ref": "up_8"
+    },
+    {
+     "type": "line",
+     "ref": "up_9"
+    },
+    {
+     "type": "flag",
+     "ref": "elysia.stood_up"
+    }
+   ],
+   "payoff": "Der zentrale Encounter des Betäubers löst sich auf (Akt VI, R6, Brief O6; Bible §14: freiwillig aufstehen). Nach dem dritten Angebot sagt der Wirt einmal, dass sie jederzeit gehen kann (`inn_s3_2`), und hält nichts: wenn sie von der Bank aufsteht, mit ihrem eigenen Schritt und nie durch eine Antwort in einem Menü, bleibt die Bank still (`up_1`), die Musik spielt genau dort weiter, wo sie war (`up_2`), und er fragt einmal, leicht, wie man fragt, ob noch Salz fehlt (`up_3`, `up_4`): „Musst du? Wirklich?“, sein alter Satz aus Akt I. Dann lässt er los: „… Na gut.“ (`up_5`), und gibt ihr die Suppe mit (`up_6`, `up_7`), der Teller als Deckel, den niemand gebracht hat. Er wischt einen Tisch, der schon sauber ist (`up_9`). Nichts davon lobt das Aufstehen, nichts tadelt das Bleiben (Bible §51), und der Wirt wird weder sinister noch erklärt. Die Szene setzt `elysia.stood_up` (erste Zeile), rückt die Heldenquest von `inn` auf `stand` und speichert einmal; wer früher aufsteht, hört nichts, und nichts hängt am Aufstehen (die Tür war immer offen).",
+   "payoff_lines": [
+    "up_5",
+    "up_6",
+    "up_9"
+   ]
+  },
+  {
+   "id": "suppe-mitnehmen",
+   "kind": "gag",
+   "title": "Die Suppe zum Mitnehmen (Akt VI, der Wirt)",
+   "bible": "§14, §32, §33",
+   "appears": [
+    {
+     "type": "line",
+     "ref": "el_host_9"
+    },
+    {
+     "type": "line",
+     "ref": "inn_host_3"
+    },
+    {
+     "type": "line",
+     "ref": "inn_s1_2"
+    },
+    {
+     "type": "line",
+     "ref": "up_6"
+    },
+    {
+     "type": "line",
+     "ref": "up_8"
+    },
+    {
+     "type": "line",
+     "ref": "up_h5"
+    }
+   ],
+   "payoff": "Der Witz des Wirts ist die Suppe, nie die Spielerin (Akt VI, R6, Brief O12). In Akt I gibt er sie „für später“ mit (`el_host_9`), in R5 kocht sie sich selbst und er übernimmt die Verantwortung (`inn_host_3`), sie schmeckt nach Suppe und verspricht nicht mehr (`inn_s1_2`); beim Aufstehen kocht sie „ohnehin für zu viele“ (`up_6`), und was er ihr mitgibt, verspricht nur, überall nach Suppe zu schmecken (`up_8`). Danach gilt der Dank der Suppe, nicht ihm (`up_h5`). Die Suppe geht als Gegenstand mit in die Wirklichkeit (R7); der Wirt kommt im Haus zu Besuch und bietet nichts an (R8).",
+   "payoff_lines": [
+    "up_8",
+    "up_h5"
    ]
   }
  ],
@@ -5187,7 +5298,12 @@
   {
    "flag": "elysia.stay_3",
    "axis": "Beschützer",
-   "meaning": "Sie ist am Tisch ein drittes Mal geblieben, drittes Angebot: die Ruhe, ohne Antwort (Akt VI, R5, Brief O6; Muster `forest.hut_stay_3`). Der Wirt sagt einmal, ruhig und ohne Hintersinn, dass sie jederzeit gehen kann; die Tür ist, wo sie war, und das Spiel speichert einmal (die Szene liest das Flag). Danach kommt kein Angebot mehr (`stay` springt zu `stay_done`), die Wärme bleibt (`stay_calm`), und Bleiben ist erlaubt, unbegrenzt, nur ohne Fortschritt: nichts wird besser, nichts schlechter. Aufstehen setzt nichts und ist nie eine Antwort in einem Menü."
+   "meaning": "Sie ist am Tisch ein drittes Mal geblieben, drittes Angebot: die Ruhe, ohne Antwort (Akt VI, R5, Brief O6; Muster `forest.hut_stay_3`). Der Wirt sagt einmal, ruhig und ohne Hintersinn, dass sie jederzeit gehen kann; die Tür ist, wo sie war, und das Spiel speichert einmal (die Szene liest das Flag). Danach kommt kein Angebot mehr (`stay` springt zu `stay_done`), die Wärme bleibt (`stay_calm`), und Bleiben ist erlaubt, unbegrenzt, nur ohne Fortschritt: nichts wird besser, nichts schlechter. Aufstehen ist nie eine Antwort in einem Menü: es ist die Bewegung der Spielerin, und was sie nach diesem Angebot setzt, steht bei `elysia.stood_up` (R6)."
+  },
+  {
+   "flag": "elysia.stood_up",
+   "axis": "Beschützer",
+   "meaning": "Sie ist nach den drei Angeboten von der Bank im Gasthaus aufgestanden, mit ihrem eigenen Schritt (Akt VI, R6, Brief O6; Bible §14: freiwillig aufstehen). Der Cue `stand_first` setzt es als erste Zeile; die Szene (`InnTable`) liest es, rückt die Heldenquest von `inn` auf `stand` und speichert einmal (Beat `inn_stood`), und die Karte liest es am Wirt: wer aufgestanden ist, hört `host_after`, den Wirt ohne Angebot (`talk_when`). Der Wirt fragt einmal, lässt los und gibt die Suppe mit; keine Zeile lobt das Aufstehen oder tadelt das Bleiben, und wer früher aufsteht oder gar nicht, verliert nichts: die Tür war immer offen und nichts im Akt hängt an diesem Flag."
   }
  ]
 }

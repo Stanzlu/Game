@@ -8,6 +8,8 @@ außen, ist nie sinister und trägt keinen Werbeton. Der zentrale Encounter (Bib
 (`inn_s3_2` für das Gehen „jederzeit“, `inn_s3_3` für „Hier ist es schön.“). **Das Warum (Risiko 8)** steht als Ding im Kamin und nie als Erklärung (`hearth_back`: eine Mulde im Teppich, eine gefaltete Decke, eine Schale, die niemand abräumte, und ein Zettel
 in seiner Schrift mit dem Ergebnis, nie der Ursache): seine Strategie hat einmal geholfen, und die Zeilen sagen nicht, ob sie gut oder schlecht ist.
 
+**Beleg in Akt VI, R6 (`content/dialogue/akt6/aufstehen.dialogue`):** die Auflösung seines zentralen Encounters (Bible §14) ist ein Schritt der Spielerin, kein Gespräch: sie steht von der Bank auf, und er lässt sie gehen, mit der Frage, die er immer hatte, und der Suppe in der Hand („… Na gut. Aber nimm die Suppe mit.“, `up_5`, `up_6`). Er hält nie fest, benennt seine Strategie nie, ändert sich nicht und wird danach nicht kleiner: im Haus sitzt er später am Feuer, ohne Angebot (R8).
+
 ## Funktion
 
 Grundidee „Du musst das gerade nicht fühlen.“ Der charmanteste Beschützer: warm, lustig, angenehm, nicht sinister, eng mit

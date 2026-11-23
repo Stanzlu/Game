@@ -274,6 +274,9 @@ func test_after_the_third_offer_staying_has_no_end_and_nothing_changes() -> void
 	)
 	scene.player.stand_up()
 	await wait_physics_frames(3)
+	# standing up with all three behind her is the host's scene (test_akt6_aufstehen_szene)
+	await _answering(scene, PackedStringArray(), _closed(scene))
+	await wait_physics_frames(3)
 	var xp := WorldState.state.elysia.xp
 	var gold := WorldState.state.elysia.gold
 	await _sit(scene)
@@ -288,7 +291,9 @@ func test_after_the_third_offer_staying_has_no_end_and_nothing_changes() -> void
 	assert_eq(scene.view.zoom, scene.view_zoom, "staying on again does not close the picture in")
 	assert_eq(WorldState.state.elysia.xp, xp, "staying gives nothing")
 	assert_eq(WorldState.state.elysia.gold, gold)
-	assert_eq(WorldState.quest_stage(QUEST), "inn", "and takes nothing: the walk waits")
+	assert_eq(
+		WorldState.quest_stage(QUEST), "stand", "and takes nothing: the walk stays where it is"
+	)
 	assert_eq(scene.player.state, Player.State.SIT, "nobody has stood her up")
 
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bhnitc2k7bhc7"
+path="res://.godot/imported/aufstehen.dialogue-64670a9973c6e429522b3673ff13bb2f.tres"
+
+[deps]
+
+source_file="res://content/dialogue/akt6/aufstehen.dialogue"
+dest_files=["res://.godot/imported/aufstehen.dialogue-64670a9973c6e429522b3673ff13bb2f.tres"]
+
+[params]
+
+defaults=true
