@@ -208,20 +208,22 @@ Aufstehen mit der Suppe), den Riss am Rand des Bildes, der nichts fragt, und den
 `aliveness` aus dem Wasser des Beckens, `elysia.stood_up` aus dem Aufstehen vom Tisch, darum klopft der Wirt am Ende). Er nimmt in jedem Gespräch die erste Antwort und beginnt in
 `tests/fixtures/saves/v2_akt5_end.json`. `check.sh` spielt den Lauf bei jedem Durchgang (rund 8 Sekunden) und verlangt 25 Marken.
 
-Das Log gibt den Weg: **174 Sekunden** Spielzeit (der Stand trägt 1.187 davon schon), 67 mit offenem Gespräch, 135 geklickte Zeilen (**58 %** der 232 Zeilen von Akt VI, wie `calibrate.py` zählt: auch
+Das Log gibt den Weg: **174 Sekunden** Spielzeit (der Stand trägt 1.187 davon schon), 67 mit offenem Gespräch, 135 geklickte Zeilen (**58 %** der 232 Zeilen von Akt VI zur Zeit von R9, wie `calibrate.py` zählt: auch
 Zweige, die der Lauf nicht nimmt, und die Antworten) und 8.524 Pixel Luftlinie, die der Autopilot springt statt geht. Der Weg ohne Lesen ist damit 107 Sekunden plus 97 für die Sprünge, **3,4 Minuten**.
 
 | Tempo | Akt VI |
 |---|---|
-| langsam | 15,3 min |
-| normal | 12,1 min |
-| schnell | 10,1 min |
-| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 28,0 min |
+| langsam | 16,3 min |
+| normal | 12,8 min |
+| schnell | 10,6 min |
+| Obergrenze (alles gesehen, langsam, Pause 2 s, Umweg ×2,5) | 30,0 min |
+
+(Stand R9: 232 Zeilen, 15,3 / 12,1 / 10,1 / 28,0 Minuten. Seit R10 zählt das Modell die 23 Zeilen der Sammelstücke mit (255 Zeilen); der Lauf `akt6_full.json` spielt sie nicht, darum bleiben Weg und Messung des Laufs unverändert, und nur die Spalte der Zeilen wächst. Der Autopilot sah 135 von 255 Zeilen, **53 %**; die Dichte liegt bei 19,9 Zeilen je Minute.)
 
 `python3 tools/writing/calibrate.py --akt6` zeigt die Tabelle, `--record-akt6 <Log>` schreibt `calibration_akt6.json` neu (nach einem neuen Segment den Lauf wiederholen), `--akt6 --log <Log>`
 passt das Modell an einen echten Durchlauf an (gezählt ab dem Beat `act6_morning`). Dazu vier Befunde:
 
-- **Der Plan rechnet mit 75 Minuten für Akt VI, das Modell mit 10 bis 15.** Akt VI hat die wenigsten Zeilen (232, Akt III: 272) und nach Akt III das kürzeste Modell (keine neue Karte, ein Weg von 3,4 Minuten
+- **Der Plan rechnet mit 75 Minuten für Akt VI, das Modell mit 10 bis 15.** Akt VI hat die wenigsten Zeilen (255 mit den Sammelstücken von R10, Akt III: 272) und nach Akt III das kürzeste Modell (keine neue Karte, ein Weg von 3,4 Minuten
   gegen 7,8 in Akt V; kürzer sind nur der Weg von Akt III mit 2,5 und der von Akt I mit 3,3 Minuten). Die Lücke zu den 75 Minuten ist mit rund 6-fach die mittlere (Akt V rund 4-fach, Akt IV und II rund 5-fach, Akt I rund 7-fach, Akt III rund 8-fach). Der äußerste Eckfall gibt 28;
   dein Durchlauf legt Anteil, Pause und Umweg fest. Dass Akt VI leicht ist, gehört zum Bogen (Bible §45: die Rückkehr ist die Erholung, nicht der Höhepunkt); die Minuten, die der Plan darüber hinaus
   nennt, sind Warten und Bleiben, die das Spiel nicht zählt (das Sitzen am Tisch ist unbegrenzt, `stay_calm`).

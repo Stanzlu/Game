@@ -1,0 +1,23 @@
+# Fragment Tisch (Akt VI): eine Tischplatte von oben, Ringe von Bechern, einer auf dem anderen; eine Spur der Welt, keine Figur, kein Grund
+name: fragment_table_rings
+out: assets/generated/fragments
+size: 16x16
+palette: o=#2a1a0e w=#c79a62 r=#8a5e32 d=#6e4a28
+outline: o
+---
+................
+................
+.oooooooooooooo.
+owwwwwwwwwwwwwwo
+owwwrrrwwwrrrwwo
+owwrwrrrwrrrrrwo
+owwrrwwrrrwwwrwo
+owwrrwwrrrwwwrwo
+owwwrrrwrrrrrrwo
+owwwwrrrwwrrrwwo
+owwwwwwwwwwwwwwo
+owwwwwwwwwwwwwwo
+oddddddddddddddo
+.oooooooooooooo.
+................
+................

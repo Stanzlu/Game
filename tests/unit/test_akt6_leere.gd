@@ -124,7 +124,7 @@ func _played(outcome: String) -> PackedStringArray:
 # --- The file -----------------------------------------------------------------------------------
 
 
-func test_the_file_tells_the_cues_in_draft_with_unique_ids_and_sets_nothing() -> void:
+func test_the_file_tells_the_cues_in_draft_with_unique_ids_and_sets_only_one_trace() -> void:
 	var names: PackedStringArray = []
 	for hit in RegEx.create_from_string("(?m)^~ ([a-z0-9_]+)$").search_all(_source()):
 		names.append(hit.get_string(1))
@@ -141,7 +141,10 @@ func test_the_file_tells_the_cues_in_draft_with_unique_ids_and_sets_nothing() ->
 	assert_lte(ids.size(), 34)
 	assert_null(RegEx.create_from_string("=> (?!END)").search(_source()), "no jumps")
 	assert_false(_source().contains("set_facet"), "the text only reads: nothing")
-	assert_null(RegEx.create_from_string("(?m)^\\s*do\\s").search(_source()), "and sets nothing")
+	# the one thing that is set is the trace of the empty camp (R10, a trace of the world)
+	var mutations := RegEx.create_from_string("(?m)^\\s*do\\s").search_all(_source())
+	assert_eq(mutations.size(), 1, "and sets one trace and nothing else")
+	assert_eq(_source().count('set_flag("fragment.empty_camp")'), 1)
 	for call: String in ["add_memory", "set_relationship", "add_item", "add_xp", "start_quest"]:
 		assert_false(_source().contains(call), "no %s: the scene does what is to be done" % call)
 	assert_false(_spoken().contains("\n- "), "no answers: she says nothing, nobody is asked")
@@ -155,6 +158,9 @@ func test_the_file_tells_the_cues_in_draft_with_unique_ids_and_sets_nothing() ->
 			var kept := JSON.stringify(WorldState.state.to_dict())
 			var seen := await DialogueWalk.play(FILE, cue)
 			assert_gte(seen.size(), 3, "%s has its lines" % cue)
+			if cue == "camp_empty":
+				assert_true(WorldState.has_flag("fragment.empty_camp"), "the camp is a trace")
+				WorldState.clear_flag("fragment.empty_camp")
 			assert_eq(WorldState.state.flags, before, "%s sets no flag" % cue)
 			assert_eq(JSON.stringify(WorldState.state.to_dict()), kept, "%s changes nothing" % cue)
 			assert_eq(WorldState.state.facets.size(), 0, "%s sets no facet" % cue)

@@ -25,9 +25,9 @@ K = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite":
 T = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_table"}}
 E = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "w"}}
 e = {"ground": "M", "prop": "res://entities/npc/npc_walker.tscn", "params": {"sheet": "res://entities/character/sheet_elysian_look.tres", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "cue": "guest", "sit": true, "face": "e"}}
-L = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/guest_book", "cue": "guestbook", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 20}}
+L = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/guest_book", "cue": "guestbook", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 20, "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/sammlung.dialogue", "cue": "guestbook_back", "and": "elysia.inn_book_signed"}}}}
 ; R5 (Akt VI): wer zurück ist (elysia.returned), findet in der Mitte der Halle einen gedeckten Tisch und zwei Bänke; der Wirt und der Kamin sprechen neu (talk_when, akt6/gasthaus.dialogue); R6: wer vom Tisch aufgestanden ist (elysia.stood_up), findet den Wirt ohne Angebot (host_after, akt6/aufstehen.dialogue)
-t = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_table", "if": "elysia.returned"}}
+t = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_table", "if": "elysia.returned", "cue": "table_look", "dialogue": "res://content/dialogue/akt6/sammlung.dialogue", "radius": 20}}
 n = {"ground": "M", "prop": "res://world/props/bench.tscn", "params": {"sprite": "elysia/bench", "if": "elysia.returned"}}
 ; die Zimmer: ihre Türen gehen auf, wenn der Gastwirt es sagt (elysia.inn_room)
 r = {"ground": "_", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/inn_door", "cue": "room_locked", "dialogue": "res://content/dialogue/akt1/gasthaus.dialogue", "radius": 22, "unless": "elysia.inn_room"}}

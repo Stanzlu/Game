@@ -32,7 +32,7 @@ h = {"atlas": [4, 0], "surface": "grass", "solid": true, "paint": "hedge"}
 W = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/sacred_tree"}}
 ; Der Weltenbaum steht mitten im Becken, unerreichbar: seine Zeile hängt an einem unsichtbaren Punkt (D) am Südufer.
 D = {"ground": "~", "prop": "res://world/props/decor.tscn", "params": {"cue": "sacred_tree", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
-I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar", "cue": "pillar", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 16}}
+I = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/pillar", "cue": "pillar", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 16, "talk_when": {"elysia.returned": {"dialogue": "res://content/dialogue/akt6/sammlung.dialogue", "cue": "pillar_back"}}}}
 C = {"ground": "M", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/crystal", "cue": "crystal", "dialogue": "res://content/dialogue/slice/elysia.dialogue", "radius": 18}}
 T = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree"}}
 U = {"ground": ".", "prop": "res://world/props/decor.tscn", "params": {"sprite": "elysia/tree_blue"}}
