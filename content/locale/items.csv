@@ -67,6 +67,12 @@ CURIOSITY_CONCERT_POSTER_NAME,Ein Konzertplakat
 CURIOSITY_CONCERT_POSTER_DESC,"Gelbliches Papier, mit Kohle beschrieben, die Zeilen laufen schräg bergauf. »Eintritt frei«, steht darauf, und etwas kleiner »Ausstieg auch«."
 CURIOSITY_SLATE_CHIP_NAME,Ein Schieferplättchen
 CURIOSITY_SLATE_CHIP_DESC,"Dünn und grau, ein Pfeil hineingeritzt. Wer ihn geritzt hat, hat sich danach nicht mehr geäußert."
+CURIOSITY_BASIN_PEBBLE_NAME,Ein Kiesel vom Beckengrund
+CURIOSITY_BASIN_PEBBLE_DESC,"Glatt, rund und grau, aus einem Becken, das nie trübe wird. Er ist auch außerhalb des Wassers nicht trocken geworden."
+CURIOSITY_GUEST_PENCIL_NAME,Ein Stiftstummel
+CURIOSITY_GUEST_PENCIL_DESC,"Bis auf einen Rest heruntergeschrieben, am Ende ein Stück Schnur. Das Gästebuch hat noch eine freie Zeile und keine Eile."
+CURIOSITY_FOUNTAIN_COIN_NAME,Eine glatte Münze
+CURIOSITY_FOUNTAIN_COIN_DESC,"Golden und frisch, als wäre sie eben erst gefallen. Wo ein Wappen sein sollte, ist nichts, und das sitzt sehr genau in der Mitte."
 ITEM_RESTLESS_STONE_NAME,Ein runder Stein
 ITEM_RESTLESS_STONE_DESC,"Rund und grau, so groß wie ein Ei. Er hat keine einzige Kante, was ihm beim Liegen nicht hilft."
 CURIOSITY_QUARTZ_NAME,Ein Bergkristall

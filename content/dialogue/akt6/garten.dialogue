@@ -93,7 +93,7 @@ Elysianer: Du stehst so schön da. Wir anderen machen es nur nach. [ID:gar_elys_
 
 # --- Das Becken ----------------------------------------------------------------------------------------------------------------
 # Die Gärtnerin hat nichts mehr zu bitten; niemand sagt der Spielerin, was sie am Wasser tun soll. Die Erzählung zeigt das Becken, das Wasser und die Hand: der Rand ist gerade so hoch, dass die Hand von allein hineinfindet. Zwei
-# unbedingte Antworten, jede mit eigenen Zeilen (keine Fake Choice, kein Schweigen nötig): Wasser spritzen (basin_play) oder Zusehen (zwei Zeilen: dasselbe Wasser, dasselbe Blütenblatt). Weder Gesten noch Orte werden bewertet.
+# unbedingte Antworten, jede mit eigenen Zeilen (keine Fake Choice, kein Schweigen nötig): Wasser spritzen (basin_play) oder Zusehen (zwei Zeilen: dasselbe Wasser, dasselbe Blütenblatt); dazwischen, solange er am Grund liegt, der Kiesel (R10, eine Kuriosität: nehmen ist nicht spielen). Weder Gesten noch Orte werden bewertet.
 
 ~ basin_back
 Das Becken plätschert, und niemand fragt dich, ob es zu leise ist. [ID:gar_basin_1] [#draft]
@@ -101,6 +101,11 @@ Das Wasser steht klar bis knapp unter den Rand, und ein Blütenblatt dreht darau
 Der Rand ist breit und glatt und gerade so hoch, dass die Hand von allein ins Wasser findet. [ID:gar_basin_3] [#draft]
 - Wasser spritzen. [ID:gar_basin_r1] [#draft]
 	=> basin_play
+- Einen Kiesel vom Grund holen. [if not WorldState.has_flag("elysia.pebble_taken") /] [ID:gar_basin_r3] [#draft]
+	Du krempelst den Ärmel hoch und greifst bis zum Grund. Dort liegen Kiesel, alle gleich rund und gleich grau. [ID:gar_basin_6] [#draft]
+	Du nimmst einen. Er ist kühl und liegt gut in der Hand, und die Lücke am Grund schließt sich, ohne dass einer rutscht. [ID:gar_basin_7] [#draft]
+	do WorldState.add_item("curiosity_basin_pebble")
+	do WorldState.set_flag("elysia.pebble_taken")
 - Zusehen. [ID:gar_basin_r2] [#draft]
 	Das Wasser plätschert und plätschert, und es ist dasselbe Wasser. [ID:gar_basin_4] [#draft]
 	Das Blütenblatt kommt an, wo es losgefahren ist, und fährt los. [ID:gar_basin_5] [#draft]

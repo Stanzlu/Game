@@ -155,8 +155,10 @@ func test_nothing_is_a_digit_a_verdict_or_a_word_for_what_happens_at_the_basin()
 
 func test_what_is_set_is_the_gift_and_the_facet_and_each_only_where_it_belongs() -> void:
 	var source := _source()
-	assert_eq(source.count("set_flag("), 1, "one flag, the gift")
+	# two flags: the gift (R3) and the pebble from the bottom of the basin (R10, a curiosity)
+	assert_eq(source.count("set_flag("), 2, "the gift and the pebble")
 	assert_eq(source.count('set_flag("elysia.back_gift")'), 1)
+	assert_eq(source.count('set_flag("elysia.pebble_taken")'), 1)
 	assert_eq(source.count("set_facet("), 1, "one facet")
 	assert_eq(source.count('set_facet("aliveness")'), 1)
 	# the setter of a thing and its reader never stand in the same cue
@@ -266,11 +268,16 @@ func test_the_elysians_say_their_sentences_as_always_and_never_that_she_was_gone
 		assert_true(line.contains("{{WorldState.player_name()}}") or not line.contains("{{"))
 
 
-func test_the_basin_shows_the_water_and_gives_nothing_and_says_nothing_about_it() -> void:
+func test_the_basin_shows_the_water_and_playing_gives_nothing_and_says_nothing_about_it() -> void:
 	var back := _written("basin_back")
-	assert_eq(back.size(), 7, "three lines, two answers, the watching's two lines")
+	assert_eq(
+		back.size(), 10, "three lines, three answers, the pebble's two lines, the watching's two"
+	)
 	assert_eq(back[3], "Wasser spritzen.")
-	assert_eq(back[4], "Zusehen.")
+	assert_true(
+		back[4].begins_with("Einen Kiesel vom Grund holen."), "the pebble is the second answer"
+	)
+	assert_eq(back[7], "Zusehen.", "the unconditional answer stays")
 	for line: String in back.slice(0, 3):
 		assert_false(line.contains(":"), "narration only: " + line)
 		assert_false(line.contains("!") or line.contains("?"), line)

@@ -5459,6 +5459,36 @@
    "meaning": "Die Spielerin hat in Elysia das Kompliment der Gärtnerin angenommen, das sie ohne Anlass hergibt (Akt VI, R3, Brief O8, `gardener_gift`): der Gegenstand, die Erfahrung und das Gold kehren ungekürzt zurück, laut und mit allem, was dazugehört; der Text beschreibt nur die Hand und die Sache. Gelesen von `gardener_back` (die Karte `elysia.txt` wählt ihn nach `elysia.returned`): wer es genommen hat, hört danach `gardener_again`, nie ein zweites Geschenk. Wer es liegen lässt (`gardener_keep`), setzt nichts: es wird beim nächsten Ansprechen wieder angeboten, ohne Bedauern und ohne Lob. Beide Wege sind gleichwertig; keine Zeile erklärt, was das Kompliment bedeutet, und keine Zahl steht im Text."
   },
   {
+   "flag": "elysia.pebble_taken",
+   "axis": "Entscheidungen",
+   "meaning": "Die Spielerin hat im Garten einen Kiesel vom Grund des Beckens genommen (Akt VI, Sammelstücke, `basin_back`, dritte Antwort): eine Kuriosität (`curiosity_basin_pebble`), in Elysia das, was Elysia als Beute gäbe, und hier nur ein Ding. Gesetzt und gelesen von derselben Antwort (sie verschwindet danach); nie Voraussetzung, nie gezählt, nichts folgt daraus."
+  },
+  {
+   "flag": "elysia.pencil_taken",
+   "axis": "Entscheidungen",
+   "meaning": "Die Spielerin hat im Gasthaus den Stiftstummel vom Gästebuch abgebunden (Akt VI, Sammelstücke, `guestbook_back`, nur nach dem Unterschreiben aus Akt I): eine Kuriosität (`curiosity_guest_pencil`). Gesetzt und gelesen von derselben Antwort; nie Voraussetzung, nichts folgt daraus."
+  },
+  {
+   "flag": "elysia.coin_taken",
+   "axis": "Entscheidungen",
+   "meaning": "Die Spielerin hat auf dem Markt eine Münze vom Grund des Brunnens gefischt (Akt VI, Sammelstücke, `fountain_back`): eine Kuriosität (`curiosity_fountain_coin`), glatt und golden, ohne Wappen. Der Handel von Akt I (eine Münze für zehn Gold) bleibt als Antwort daneben stehen. Gesetzt und gelesen von derselben Antwort; nie Voraussetzung, nichts folgt daraus."
+  },
+  {
+   "flag": "fragment.empty_camp",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie ist am alten Lager im Tal stehen geblieben: die Plane an ihren Pflöcken, die Kuhle im Gras, der kalte Ring aus schwarzer Erde (Spur der Welt, Akt VI, Sammelstücke, `camp_empty`, die Leere; kein Bild des Kindes, keine Figur im Bild, keine Ursache). Das Bild zeigt nur Plane, Pflöcke und Kuhle."
+  },
+  {
+   "flag": "fragment.still_shadow",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat in Elysia eine Weile den Schatten der Säule angesehen: er endet an derselben Fuge, an der er immer endet, und rückt keinen Fingerbreit (Spur der Welt, Akt VI, Sammelstücke, `pillar_back`, die Schleife; keine Figur, keine Ursache). Der Text sagt nicht, was das heißt."
+  },
+  {
+   "flag": "fragment.table_rings",
+   "axis": "Wahrnehmung",
+   "meaning": "Sie hat im Gasthaus die Platte des Tisches in der Mitte angesehen: blank gescheuert, nur die Ringe von Bechern sind geblieben, jeder genau auf dem vorigen (Spur der Welt, Akt VI, Sammelstücke, `table_look`, der Tisch; keine Figur, keine Ursache). Der Text sagt nicht, wer die Becher hinstellte."
+  },
+  {
    "flag": "hall.richter_first",
    "axis": "Elysia",
    "meaning": "Der Richter hat in der Halle der Spiegel angesetzt (Akt VI, R4, Brief O9): die Stimme ohne Körper beginnt ihre Aktenzeile (`voice_first`), nachdem die Spielerin in den großen Spiegel gesehen hat und sich abwendet; sie bricht mitten im Wort ab, wenn die Spielerin weit genug gegangen ist, oder kommt zu Ende, wenn sie stehen bleibt. Die Szene (`HallVoice`) setzt es, sobald die Zeile beginnt, und nie ein Dialog: er spricht genau einmal, und ein Spiel, das währenddessen geschlossen wird, spielt es nicht noch einmal. Es gibt keine Folge und keine Wertung; es öffnet nur den leisen Satz beim nächsten Betreten (`hall.richter_late`)."

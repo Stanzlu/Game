@@ -5,7 +5,7 @@
 # keine Bitte, kein Trost, keine Einladung mitzukommen, keine Lehre, kein Lob, kein Tadel, keine neue Erinnerung (es ist eine Variante der letzten, gate). Der Ausgang des Streits am Tor (city.mira_parted_*, genau eines
 # gilt) liest sich als Ton, nie als Wertung: Mira ist in allen drei Fällen dieselbe. Prüflinse (Bible §15, §51): kein Kind, keine Kreide, nichts vom Gebirge, keine Ursache, keine Erklärung, was die Spielerin erlebt hat,
 # kein Wort für ihr Ziel. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt, Frage, Ausruf und Auslassung); Zahlen sind ausgeschrieben. Sprecher gibt es einen, Mira, nur in mira_leaves. Kein Cue dieser Datei setzt
-# ein Flag, eine Facette oder eine Erinnerung: die Szene setzt valley.mira_leaving, valley.mira_left, valley.rift_light, die Beats und die Stufen der Heldenquest mira_leaves liest nur die drei Ausgänge.
+# eine Facette oder eine Erinnerung, und nur camp_empty setzt ein Flag, die Spur fragment.empty_camp (R10): die Szene setzt valley.mira_leaving, valley.mira_left, valley.rift_light, die Beats und die Stufen der Heldenquest mira_leaves liest nur die drei Ausgänge.
 
 # --- Der Tag danach, im Haus ----------------------------------------------------------------------------------------------------
 # Die Szene spielt es einmal, wenn "Weiter" im Haus beginnt. Gültig in jedem Zustand des Hauses: ob der Antreiber an der Werkbank sitzt, die Katze da ist, ein Stuhl mehr steht oder der Wächter am Kamin, sagt keine
@@ -62,6 +62,7 @@ Sie zieht sich das Bündel höher auf die Schulter und nimmt den Weg. Hinter ihr
 Die Plane hängt noch an ihren Pflöcken, und darunter ist Platz für genau eine. [ID:lee_camp_1] [#draft]
 Im Gras ist eine Kuhle vom Liegen, das Gras darin etwas niedriger als ringsum. [ID:lee_camp_2] [#draft]
 Der Ring aus schwarzer Erde ist kalt, und über dem Gestell für das Netz hängt noch der Geruch von altem Rauch. [ID:lee_camp_3] [#draft]
+do WorldState.set_flag("fragment.empty_camp")
 => END
 
 # --- Das Haus, später ----------------------------------------------------------------------------------------------------------

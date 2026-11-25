@@ -1,0 +1,23 @@
+# Fragment Lager (Akt VI): eine Plane an zwei Pflöcken über einer Kuhle im Gras; eine Spur der Welt, keine Figur, kein Grund
+name: fragment_empty_camp
+out: assets/generated/fragments
+size: 16x16
+palette: o=#1c2a1c t=#7d8a74 l=#a9b59d k=#4c5846 p=#6b5232 g=#6b8a4a d=#3f5a30
+outline: o
+---
+................
+................
+.oooooooooooooo.
+oppttttttttttppo
+opptlltttttttppo
+oppottttttttkppo
+oppootttttkkoppo
+oppo.okkkkoooppo
+oppo..oooo..oppo
+oppo........oppo
+oppo........oppo
+oppooooooooooppo
+ogggddddddddgggo
+oggddddddddddggo
+oggggggggggggggo
+.oooooooooooooo.

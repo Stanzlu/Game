@@ -1,0 +1,59 @@
+# Die Sammelstücke von Akt VI (docs/akt6/REGIONSBRIEFE.md, Abschnitt „R10 Sammelstücke“; Plan 5.5; Bible §31, §46, §51). Drei Kuriositäten (der Stiftstummel vom Gästebuch, die Münze vom Brunnengrund auf dem Markt, der Kiesel vom Beckengrund
+# im Garten) und drei Spuren der Welt (das Lager im Tal, der Schatten der Säule, die Ringe auf dem Tisch). Die Kuriositäten sind in Elysia das, was Elysia als Beute gäbe, und hier nur ein Ding: das HUD zeigt in Elysia die Beutekarte mit Funkeln, der Text sagt nichts darüber.
+# Die Spuren der Welt sind nie ein Kind, keine Figur und keine Ursache (Prüflinse §15, §51): Dinge, die an einem Ort stehen und sagen, was an ihm wiederholt wurde, ohne zu sagen, von wem und warum. Zeilen ohne Sprecher sind Erzählung (ohne Doppelpunkt,
+# Frage, Ausruf und Auslassung); Zahlen stehen ausgeschrieben oder gar nicht. Die Cues ersetzen auf der Karte (talk_when mit elysia.returned) nur Beschreibungen, die keine Funktion von Akt I tragen: das Gästebuch erst, wenn es unterschrieben ist (and: elysia.inn_book_signed),
+# damit das Unterschreiben nie verdrängt wird; der Brunnen auf dem Markt behält seine Münze für zehn Gold (die erste Antwort von mk_fountain_r1 steht hier mit eigenem Wortlaut). Der Kiesel vom Beckengrund steht als dritte Antwort in garten.dialogue (basin_back).
+# Das Camp im Tal (fragment.empty_camp) steht in leere.dialogue (camp_empty). Gesetzt wird nur, was die Karte oder die Szene liest (die Flags elysia.pencil_taken und elysia.coin_taken lesen die Antworten selbst); fragment.* sind Spuren.
+
+# --- Das Gästebuch: der Stiftstummel ----------------------------------------------------------------------------------------------
+# Nach dem Unterschreiben (Akt I). Der Stift hängt an seiner Schnur und ist bis auf einen Stummel heruntergeschrieben, die Schnur ist so lang wie am ersten Tag: nichts im Gasthaus nutzt sich ab, nur der Stift, der benutzt wird. Wer ihn abgebunden hat, findet den Knoten (die Zeilen folgen dem Flag, die Antwort verschwindet); das Blättern ist der unbedingte Weg weiter und setzt nichts.
+
+~ guestbook_back
+Das Gästebuch liegt auf seinem Pult, aufgeschlagen. [ID:sam_book_1] [#draft]
+if WorldState.has_flag("elysia.pencil_taken")
+	An der Schnur hängt nur noch ein loser Knoten, und das Buch sieht davon nicht ärmer aus. [ID:sam_book_4] [#draft]
+else
+	An seiner Schnur hängt der Stift, bis auf einen Stummel heruntergeschrieben. Die Schnur dagegen ist so lang wie am ersten Tag. [ID:sam_book_2] [#draft]
+- Den Stummel abbinden. [if not WorldState.has_flag("elysia.pencil_taken") /] [ID:sam_book_r1] [#draft]
+	Der Knoten ist locker, als hätte ihn nie jemand fest gezogen. Der Stummel liegt in deiner Hand, mit einem Stück Schnur am Ende. [ID:sam_book_3] [#draft]
+	do WorldState.add_item("curiosity_guest_pencil")
+	do WorldState.set_flag("elysia.pencil_taken")
+- Im Buch blättern. [ID:sam_book_r2] [#draft]
+	Auf jeder Seite steht dein Name, und jedes Mal ist er genau gleich geschrieben. [ID:sam_book_5] [#draft]
+=> END
+
+# --- Der Brunnen auf dem Markt: die Münze vom Grund ---------------------------------------------------------------------------------
+# Er ersetzt die Beschreibung von Akt I (mk_fountain_1) für den, der zurück ist, und behält ihre Münze für zehn Gold (andere Worte, derselbe Handel). Auf dem Grund liegen Münzen wie am ersten Tag; eine herauszufischen ist die Kuriosität.
+
+~ fountain_back
+Der Brunnen plätschert, und auf seinem Grund liegen Münzen, golden und frisch, als wäre jede erst vor einem Atemzug hineingefallen. [ID:sam_fountain_1] [#draft]
+Keine liegt schief, und keine liegt auf einer anderen. [ID:sam_fountain_2] [#draft]
+- Eine Münze vom Grund fischen. [if not WorldState.has_flag("elysia.coin_taken") /] [ID:sam_fountain_r1] [#draft]
+	Du angelst eine heraus. Sie ist glatt und kühl vom Wasser, und wo ein Wappen sein sollte, ist nichts. [ID:sam_fountain_3] [#draft]
+	Im Wasser schließt sich die Lücke so gleichmäßig, dass du nicht mehr weißt, welche fehlt. [ID:sam_fountain_4] [#draft]
+	do WorldState.add_item("curiosity_fountain_coin")
+	do WorldState.set_flag("elysia.coin_taken")
+- Eine Münze hineinwerfen, zehn Gold. [if WorldState.gold() >= 10 /] [ID:sam_fountain_r2] [#draft]
+	Die Münze sinkt und legt sich neben die anderen, ohne einen Fingerbreit zu rutschen. [ID:sam_fountain_5] [#draft]
+	do WorldState.spend_gold(10)
+- Weitergehen. [ID:sam_fountain_r3] [#draft]
+=> END
+
+# --- Die Säule: der Schatten, der nicht rückt ---------------------------------------------------------------------------------------
+# Spur der Welt, Schleife. Elysia ist makellos (Bible §8), und der Schatten der Säule liegt, wo er immer liegt. Keine Figur, keine Uhr, kein Satz darüber, was das heißt. Er ersetzt die eine Beschreibung von Akt I (el_pillar_1), die nichts trägt.
+
+~ pillar_back
+Die Säule ist makellos, an keiner Kante bestoßen, an keiner Stelle abgerieben. [ID:sam_pillar_1] [#draft]
+Ihr Schatten liegt ihr zu Füßen und reicht bis an dieselbe Fuge im Pflaster, an die er immer reicht. [ID:sam_pillar_2] [#draft]
+Du siehst eine Weile zu. Der Schatten rückt keinen Fingerbreit. [ID:sam_pillar_3] [#draft]
+do WorldState.set_flag("fragment.still_shadow")
+=> END
+
+# --- Der Tisch im Gasthaus: die Ringe ----------------------------------------------------------------------------------------------
+# Spur der Welt, der Tisch (R5). Der Tisch in der Mitte steht seit R5 für alle, die zurück sind; unter dem Gedeck sind die Ringe von Bechern geblieben, einer auf dem anderen. Nichts sagt, wer die Becher hinstellte und warum immer dorthin.
+
+~ table_look
+Der Tisch ist gedeckt, und unter dem Gedeck sind die Ringe von Bechern geblieben, dicht an dicht. [ID:sam_table_1] [#draft]
+Jeder Ring liegt genau auf dem vorigen, auf das Haar. [ID:sam_table_2] [#draft]
+do WorldState.set_flag("fragment.table_rings")
+=> END
